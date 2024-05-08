@@ -53,7 +53,7 @@
                                     <div class="card disable-rounded-right mb-0 p-2 h-100 d-flex justify-content-center">
                                         <div class="card-header pb-1">
                                             <div class="card-title">
-                                                <h4 class="text-center mb-2">1738i Platform</h4>
+                                                <h4 class="text-center mb-2"> tahsinERP platform</h4>
                                             </div>
                                         </div>
                                         <div class="card-content">
@@ -63,7 +63,7 @@
                                                     @Html.AntiForgeryToken()
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                     <div class="form-group mb-50">
-                                                        <label class="text-bold-600">Email address</label>
+                                                        <label class="text-bold-600">Username</label>
                                                         @Html.TextBoxFor(u => u.UName, new { @class = "form-control", @placeholder = "Username" })
                                                         @Html.ValidationMessageFor(m => m.UName)
                                                     </div>
@@ -75,7 +75,7 @@
                                                     <div class="form-group d-flex flex-md-row flex-column justify-content-between align-items-center">
                                                         <div class="text-left">
                                                             @Html.CheckBoxFor(u => u.KeepMeSigned, new { @checked = "checked" })
-                                                            @*<input type="checkbox" class="form-check-input" id="exampleCheck1">*@
+                                                            
                                                             <label class="checkboxsmall">
                                                                 <small>
                                                                     Keep me logged

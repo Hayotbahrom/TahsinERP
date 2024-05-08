@@ -1,4 +1,4 @@
-﻿@model List <tahsinERP.ViewModels.UserViewModel>
+﻿@model List<tahsinERP.ViewModels.UserViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -23,25 +23,22 @@
                             <div class="col-12 col-sm-12 col-lg-4">
                                 <label for="users-list-role">Role</label>
                                 <fieldset class="form-group">
-                                    <select class="form-control" id="users-list-role">
-                                        <option value="">Any</option>
-                                        <option value="User">User</option>
-                                        <option value="Staff">Staff</option>
-                                    </select>
+                                    @Html.DropDownList("RoleList", ViewBag.RoleList as SelectList, new { @class = "form-control", @id = "roleDropdown" })
                                 </fieldset>
                             </div>
                             <div class="col-12 col-sm-12 col-lg-4">
                                 <label for="users-list-status">Status</label>
                                 <fieldset class="form-group">
                                     <select class="form-control" id="users-list-status">
-                                        <option value="">Any</option>
-                                        <option value="Active">Active</option>
-                                        <option value="Banned">Deactivated</option>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "User", new { status = "Active" })">Active</a>
+                                        <a class="dropdown-item" href="@Url.Action("Index", "User", new { status = "Inactive" })">Inactive</a>
                                     </select>
                                 </fieldset>
                             </div>
                             <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
-                                <button type="reset" class="btn btn-primary btn-block glow users-list-clear mb-0">Clear</button>
+                                <a href="~/User" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
+                                    Clear
+                                </a>
                             </div>
                         </div>
                     </form>
@@ -99,3 +96,13 @@
         </div>
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#roleDropdown').change(function () {
+            var selectedRole = $(this).val();
+            window.location.href = '@Url.Action("Index", "User")?roleID=' + selectedRole;
+        });
+    });
+</script>

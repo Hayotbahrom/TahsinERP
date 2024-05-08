@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
@@ -17,23 +16,62 @@ namespace tahsinERP.Controllers
         byte[] avatar;
         int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         // GET: Users
-        public ActionResult Index()
+        public ActionResult Index(string roleID = null, string status = null)
         {
             string query;
-            query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
+            if (status != null)
+            {
+                if (status.CompareTo("Active") == 0)
+                {
+                    query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
                    + "FROM USERS u "
                    + "JOIN USERROLES rs "
                    + "ON u.ID = rs.UserID "
                    + "JOIN ROLES r "
                    + "ON rs.RoleID = r.ID "
-                   + "WHERE u.IsDeleted = 0";
-
+                   + "WHERE u.IsDeleted = 0"
+                   + " AND u.IsActive = 1";
+                }
+                else
+                {
+                    query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
+                   + "FROM USERS u "
+                   + "JOIN USERROLES rs "
+                   + "ON u.ID = rs.UserID "
+                   + "JOIN ROLES r "
+                   + "ON rs.RoleID = r.ID "
+                   + "WHERE u.IsDeleted = 0"
+                   + " AND u.IsActive = 0";
+                }
+            }
+            else if (roleID != null)
+            {
+                query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
+                   + "FROM USERS u "
+                   + "JOIN USERROLES rs "
+                   + "ON u.ID = rs.UserID "
+                   + "JOIN ROLES r "
+                   + "ON rs.RoleID = r.ID "
+                   + "WHERE u.IsDeleted = 0"
+                   + " AND u.IsActive = 1 AND r.ID=" + roleID;
+            }
+            else
+            {
+                query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
+                   + "FROM USERS u "
+                   + "JOIN USERROLES rs "
+                   + "ON u.ID = rs.UserID "
+                   + "JOIN ROLES r "
+                   + "ON rs.RoleID = r.ID "
+                   + "WHERE u.IsDeleted = 0"
+                   + " AND u.IsActive = 1";
+            }
             IEnumerable<UserViewModel> data = db.Database.SqlQuery<UserViewModel>(query);
+            ViewBag.RoleList = PopulateRoleSelectList(roleID);
             return View(data.ToList());
         }
         public ActionResult Create()
         {
-            //PopulateLDAPUserDropDownList();
             PopulateRoleDropDownList();
             return View();
         }
@@ -53,6 +91,7 @@ namespace tahsinERP.Controllers
                 user.Email = userVM.Email;
                 user.IsActive = true;
                 user.IsDeleted = false;
+                user.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
 
                 db.USERS.Add(user);
                 db.SaveChanges();
@@ -97,12 +136,20 @@ namespace tahsinERP.Controllers
             PopulateRoleDropDownList();
             return View();
         }
-        private void PopulateRoleDropDownList(object selectedRole = null)
+        private void PopulateRoleDropDownList(string selectedRole = null)
         {
             var rolesQuery = from d in db.ROLES
                              orderby d.RName
                              select d;
             ViewBag.RoleID = new SelectList(rolesQuery, "ID", "RName", selectedRole);
+        }
+
+        private SelectList PopulateRoleSelectList(string selectedRole = null)
+        {
+            var rolesQuery = from r in db.ROLES
+                             orderby r.RName
+                             select r;
+            return new SelectList(rolesQuery, "ID", "RName", selectedRole);
         }
     }
 }

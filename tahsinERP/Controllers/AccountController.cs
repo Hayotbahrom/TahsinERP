@@ -51,24 +51,24 @@ namespace tahsinERP.Controllers
 
                     if (IsValidUser)
                     {
-                        //if (user.KeepMeSigned)
-                        //    FormsAuthentication.SetAuthCookie(user.UName, false);
-                        //else
-                        //{
-                        var authTicket = new FormsAuthenticationTicket(1, user.UName, DateTime.Now, DateTime.Now.AddHours(1), false, userData);
-                        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-
-                        var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
-                            encryptedTicket)
+                        if (user.KeepMeSigned)
+                            FormsAuthentication.SetAuthCookie(user.UName, false);
+                        else
                         {
-                            HttpOnly = true,
-                            Secure = FormsAuthentication.RequireSSL,
-                            Path = FormsAuthentication.FormsCookiePath,
-                            Domain = FormsAuthentication.CookieDomain,
-                            Expires = authTicket.Expiration
-                        };
-                        Response.Cookies.Set(cookie);
-                        //}
+                            var authTicket = new FormsAuthenticationTicket(1, user.UName, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
+                            string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+
+                            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
+                                encryptedTicket)
+                            {
+                                HttpOnly = true,
+                                Secure = FormsAuthentication.RequireSSL,
+                                Path = FormsAuthentication.FormsCookiePath,
+                                Domain = FormsAuthentication.CookieDomain,
+                                Expires = authTicket.Expiration
+                            };
+                            Response.Cookies.Set(cookie);
+                        }
                         return RedirectToAction("Index", "Home");
                     }
                 }
