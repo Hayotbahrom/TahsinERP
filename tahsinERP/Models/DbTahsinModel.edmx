@@ -1,0 +1,1893 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBTHSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BOMS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="ChildID" Type="int" />
+          <Property Name="GrandChildID" Type="int" />
+          <Property Name="ChildUsageQty" Type="float" />
+          <Property Name="ChildUsageUnit" Type="varchar" MaxLength="15" />
+          <Property Name="GrandChildUsageQty" Type="float" />
+          <Property Name="GrandChildUsageUnit" Type="varchar" MaxLength="15" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="COMPANIES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="text" />
+          <Property Name="DUNS" Type="varchar" MaxLength="50" />
+          <Property Name="Telephone" Type="varchar" MaxLength="25" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="CUSTOMERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="text" />
+          <Property Name="Country" Type="varchar" MaxLength="30" />
+          <Property Name="Telephone" Type="varchar" MaxLength="25" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="ContactPersonName" Type="varchar" MaxLength="30" />
+          <Property Name="DirectorName" Type="varchar" MaxLength="30" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="DUNS" Type="varchar" MaxLength="50" />
+          <Property Name="Type" Type="varchar" MaxLength="10" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PART1738DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PackID" Type="int" Nullable="false" />
+          <Property Name="RegDate" Type="datetime" />
+          <Property Name="IsApproved" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="UntilDate" Type="datetime" />
+          <Property Name="ApproverUserID" Type="int" />
+          <Property Name="Comments" Type="text" />
+          <Property Name="1738" Type="varbinary(max)" />
+          <Property Name="UploadedByUserID" Type="int" />
+        </EntityType>
+        <EntityType Name="PARTIMAGES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Image" Type="image" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="PARTPACKS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartID" Type="int" />
+          <Property Name="PrPackMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="Securement" Type="varchar" MaxLength="50" />
+          <Property Name="Dunnage" Type="varchar" MaxLength="50" />
+          <Property Name="PrLength" Type="float" />
+          <Property Name="PrWidth" Type="float" />
+          <Property Name="PrHeight" Type="float" />
+          <Property Name="PrWeight" Type="float" />
+          <Property Name="PrPackQty" Type="float" />
+          <Property Name="ScPackMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="ScLength" Type="float" />
+          <Property Name="ScWidth" Type="float" />
+          <Property Name="ScHeight" Type="float" />
+          <Property Name="ScWeight" Type="float" />
+          <Property Name="PalletType" Type="varchar" MaxLength="50" />
+          <Property Name="PltLength" Type="float" />
+          <Property Name="PltWidth" Type="float" />
+          <Property Name="PltHeight" Type="float" />
+          <Property Name="PltWeight" Type="float" />
+          <Property Name="ScPackQty" Type="float" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="RegDate" Type="datetime" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="PNo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PWeight" Type="float" />
+          <Property Name="PLength" Type="float" />
+          <Property Name="PWidth" Type="float" />
+          <Property Name="PHeight" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="25" />
+          <Property Name="Type" Type="varchar" MaxLength="25" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="PNo2" Type="varchar" MaxLength="20" />
+          <Property Name="PNo3" Type="varchar" MaxLength="20" />
+          <Property Name="PNo4" Type="varchar" MaxLength="20" />
+          <Property Name="PackID" Type="int" />
+        </EntityType>
+        <EntityType Name="PCONTRACTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IssuedDate" Type="date" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="SupplierID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="30" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Incoterms" Type="varchar" MaxLength="15" />
+          <Property Name="PaymentTerms" Type="varchar" MaxLength="50" />
+          <Property Name="MOQ" Type="float" />
+          <Property Name="MaximumCapacity" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="30" />
+          <Property Name="DueDate" Type="date" />
+        </EntityType>
+        <EntityType Name="PERMISSIONS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Model" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ViewPermit" Type="bit" />
+          <Property Name="ChangePermit" Type="bit" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="PRODUCT1738DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PackID" Type="int" Nullable="false" />
+          <Property Name="RegDate" Type="datetime" />
+          <Property Name="IsApproved" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="UntilDate" Type="datetime" />
+          <Property Name="UploadedByUserID" Type="int" />
+          <Property Name="ApproverUserID" Type="int" />
+          <Property Name="Comments" Type="text" />
+          <Property Name="1738" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="PRODUCTIMAGES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProdID" Type="int" Nullable="false" />
+          <Property Name="Image" Type="image" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="PRODUCTPACKS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProdID" Type="int" />
+          <Property Name="PrPackMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="Securement" Type="varchar" MaxLength="50" />
+          <Property Name="Dunnage" Type="varchar" MaxLength="50" />
+          <Property Name="PrLength" Type="float" />
+          <Property Name="PrWidth" Type="float" />
+          <Property Name="PrHeight" Type="float" />
+          <Property Name="PrWeight" Type="float" />
+          <Property Name="PrPackQty" Type="float" />
+          <Property Name="ScPackMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="ScLength" Type="float" />
+          <Property Name="ScWidth" Type="float" />
+          <Property Name="ScHeight" Type="float" />
+          <Property Name="ScWeight" Type="float" />
+          <Property Name="PalletType" Type="varchar" MaxLength="50" />
+          <Property Name="PltLength" Type="float" />
+          <Property Name="PltWidth" Type="float" />
+          <Property Name="PltHeight" Type="float" />
+          <Property Name="PltWeight" Type="float" />
+          <Property Name="ScPackQty" Type="float" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="RegDate" Type="datetime" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="PRODUCTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PNo" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Weight" Type="float" />
+          <Property Name="Length" Type="float" />
+          <Property Name="Width" Type="float" />
+          <Property Name="Height" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="20" />
+          <Property Name="Type" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="PNo2" Type="varchar" MaxLength="15" />
+          <Property Name="PNo3" Type="varchar" MaxLength="15" />
+          <Property Name="PNo4" Type="varchar" MaxLength="15" />
+          <Property Name="PackID" Type="int" />
+        </EntityType>
+        <EntityType Name="ROLES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RName" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="SCONTRACTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IssuedDate" Type="date" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="ProdID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="30" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Incoterms" Type="varchar" MaxLength="15" />
+          <Property Name="PaymentTerms" Type="varchar" MaxLength="50" />
+          <Property Name="Unit" Type="varchar" MaxLength="30" />
+          <Property Name="DueDate" Type="date" />
+        </EntityType>
+        <EntityType Name="SPL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProdID" Type="int" Nullable="false" />
+          <Property Name="CarModel1" Type="varchar" MaxLength="20" />
+          <Property Name="Option1" Type="varchar" MaxLength="50" />
+          <Property Name="Option1UsageQty" Type="float" />
+          <Property Name="Option1UsageUnit" Type="varchar" MaxLength="20" />
+          <Property Name="CarModel2" Type="varchar" MaxLength="20" />
+          <Property Name="Option2" Type="varchar" MaxLength="50" />
+          <Property Name="Option2UsageQty" Type="float" />
+          <Property Name="Option2UsageUnit" Type="varchar" MaxLength="20" />
+          <Property Name="CarModel3" Type="varchar" MaxLength="20" />
+          <Property Name="Option3" Type="varchar" MaxLength="50" />
+          <Property Name="Option3UsageQty" Type="float" />
+          <Property Name="Option3UsageUnit" Type="varchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="SUPPLIERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="text" />
+          <Property Name="Country" Type="varchar" MaxLength="30" />
+          <Property Name="Telephone" Type="varchar" MaxLength="25" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="ContactPersonName" Type="varchar" MaxLength="30" />
+          <Property Name="DirectorName" Type="varchar" MaxLength="30" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="DUNS" Type="varchar" MaxLength="50" />
+          <Property Name="Type" Type="varchar" MaxLength="10" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="USER_ENTRIES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" />
+          <Property Name="IP" Type="varchar" MaxLength="20" />
+          <Property Name="MAC" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="USERROLES">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Uname" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="FullName" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="HashCode" Type="varchar" MaxLength="30" />
+          <Property Name="CompanyID" Type="int" />
+        </EntityType>
+        <Association Name="FK_BOMS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
+          <End Role="BOMS" Type="Self.BOMS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS">
+              <PropertyRef Name="ChildID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMS_PARTS_2">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
+          <End Role="BOMS" Type="Self.BOMS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS">
+              <PropertyRef Name="GrandChildID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="0..1" />
+          <End Role="BOMS" Type="Self.BOMS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART1738DOCS_PARTPACKS">
+          <End Role="PARTPACKS" Type="Self.PARTPACKS" Multiplicity="1" />
+          <End Role="PART1738DOCS" Type="Self.PART1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTPACKS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART1738DOCS">
+              <PropertyRef Name="PackID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART1738DOCS_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="0..1" />
+          <End Role="PART1738DOCS" Type="Self.PART1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART1738DOCS">
+              <PropertyRef Name="ApproverUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART1738DOCS_USERS1">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="0..1" />
+          <End Role="PART1738DOCS" Type="Self.PART1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART1738DOCS">
+              <PropertyRef Name="UploadedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PARTIMAGES_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="PARTIMAGES" Type="Self.PARTIMAGES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PARTIMAGES">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PARTPACKS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
+          <End Role="PARTPACKS" Type="Self.PARTPACKS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PARTPACKS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
+          <End Role="PCONTRACTS" Type="Self.PCONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PCONTRACTS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_CUSTOMERS">
+          <End Role="CUSTOMERS" Type="Self.CUSTOMERS" Multiplicity="1" />
+          <End Role="SCONTRACTS" Type="Self.SCONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SCONTRACTS">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="PCONTRACTS" Type="Self.PCONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PCONTRACTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_SUPPLIERS">
+          <End Role="SUPPLIERS" Type="Self.SUPPLIERS" Multiplicity="1" />
+          <End Role="PCONTRACTS" Type="Self.PCONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SUPPLIERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PCONTRACTS">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PERMISSIONS_ROLES">
+          <End Role="ROLES" Type="Self.ROLES" Multiplicity="0..1" />
+          <End Role="PERMISSIONS" Type="Self.PERMISSIONS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROLES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PERMISSIONS">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT1738DOCS_PRODUCTPACKS">
+          <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACKS" Multiplicity="1" />
+          <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTPACKS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT1738DOCS">
+              <PropertyRef Name="PackID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT1738DOCS_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="0..1" />
+          <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT1738DOCS">
+              <PropertyRef Name="ApproverUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT1738DOCS_USERS_2">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="0..1" />
+          <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT1738DOCS">
+              <PropertyRef Name="UploadedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCTIMAGES_PARTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="PRODUCTIMAGES" Type="Self.PRODUCTIMAGES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCTIMAGES">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCTPACKS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="0..1" />
+          <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACKS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCTPACKS">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCONTRACTS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
+          <End Role="SCONTRACTS" Type="Self.SCONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SCONTRACTS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCONTRACTS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="SCONTRACTS" Type="Self.SCONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SCONTRACTS">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPL_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="SPL" Type="Self.SPL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPL">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USER_ENTRIES_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="1" />
+          <End Role="USER_ENTRIES" Type="Self.USER_ENTRIES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USER_ENTRIES">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USERROLES_ROLES">
+          <End Role="ROLES" Type="Self.ROLES" Multiplicity="1" />
+          <End Role="USERROLES" Type="Self.USERROLES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROLES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USERROLES">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USERROLES_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="1" />
+          <End Role="USERROLES" Type="Self.USERROLES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USERROLES">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USERS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="0..1" />
+          <End Role="USERS" Type="Self.USERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USERS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBTHSNModelStoreContainer">
+          <EntitySet Name="BOMS" EntityType="Self.BOMS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="COMPANIES" EntityType="Self.COMPANIES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PART1738DOCS" EntityType="Self.PART1738DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PARTIMAGES" EntityType="Self.PARTIMAGES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PARTPACKS" EntityType="Self.PARTPACKS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PARTS" EntityType="Self.PARTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PCONTRACTS" EntityType="Self.PCONTRACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PERMISSIONS" EntityType="Self.PERMISSIONS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCT1738DOCS" EntityType="Self.PRODUCT1738DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCTIMAGES" EntityType="Self.PRODUCTIMAGES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCTPACKS" EntityType="Self.PRODUCTPACKS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCTS" EntityType="Self.PRODUCTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ROLES" EntityType="Self.ROLES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SCONTRACTS" EntityType="Self.SCONTRACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SPL" EntityType="Self.SPL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SUPPLIERS" EntityType="Self.SUPPLIERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USER_ENTRIES" EntityType="Self.USER_ENTRIES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USERROLES" EntityType="Self.USERROLES" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [USERROLES].[UserID] AS [UserID], 
+    [USERROLES].[RoleID] AS [RoleID]
+    FROM [dbo].[USERROLES] AS [USERROLES]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_BOMS_PARTS" Association="Self.FK_BOMS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="BOMS" EntitySet="BOMS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMS_PARTS_2" Association="Self.FK_BOMS_PARTS_2">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="BOMS" EntitySet="BOMS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMS_PRODUCTS" Association="Self.FK_BOMS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="BOMS" EntitySet="BOMS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART1738DOCS_PARTPACKS" Association="Self.FK_PART1738DOCS_PARTPACKS">
+            <End Role="PARTPACKS" EntitySet="PARTPACKS" />
+            <End Role="PART1738DOCS" EntitySet="PART1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART1738DOCS_USERS" Association="Self.FK_PART1738DOCS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PART1738DOCS" EntitySet="PART1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART1738DOCS_USERS1" Association="Self.FK_PART1738DOCS_USERS1">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PART1738DOCS" EntitySet="PART1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PARTIMAGES_PARTS" Association="Self.FK_PARTIMAGES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="PARTIMAGES" EntitySet="PARTIMAGES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PARTPACKS_PARTS" Association="Self.FK_PARTPACKS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="PARTPACKS" EntitySet="PARTPACKS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_COMPANIES" Association="Self.FK_PCONTRACTS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_CUSTOMERS" Association="Self.FK_PCONTRACTS_CUSTOMERS">
+            <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_PARTS" Association="Self.FK_PCONTRACTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_SUPPLIERS" Association="Self.FK_PCONTRACTS_SUPPLIERS">
+            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
+            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PERMISSIONS_ROLES" Association="Self.FK_PERMISSIONS_ROLES">
+            <End Role="ROLES" EntitySet="ROLES" />
+            <End Role="PERMISSIONS" EntitySet="PERMISSIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT1738DOCS_PRODUCTPACKS" Association="Self.FK_PRODUCT1738DOCS_PRODUCTPACKS">
+            <End Role="PRODUCTPACKS" EntitySet="PRODUCTPACKS" />
+            <End Role="PRODUCT1738DOCS" EntitySet="PRODUCT1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT1738DOCS_USERS" Association="Self.FK_PRODUCT1738DOCS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PRODUCT1738DOCS" EntitySet="PRODUCT1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT1738DOCS_USERS_2" Association="Self.FK_PRODUCT1738DOCS_USERS_2">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PRODUCT1738DOCS" EntitySet="PRODUCT1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTIMAGES_PARTS" Association="Self.FK_PRODUCTIMAGES_PARTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="PRODUCTIMAGES" EntitySet="PRODUCTIMAGES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTPACKS_PRODUCTS" Association="Self.FK_PRODUCTPACKS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="PRODUCTPACKS" EntitySet="PRODUCTPACKS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCONTRACTS_COMPANIES" Association="Self.FK_SCONTRACTS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCONTRACTS_PRODUCTS" Association="Self.FK_SCONTRACTS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPL_PRODUCTS" Association="Self.FK_SPL_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="SPL" EntitySet="SPL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USER_ENTRIES_USERS" Association="Self.FK_USER_ENTRIES_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="USER_ENTRIES" EntitySet="USER_ENTRIES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USERROLES_ROLES" Association="Self.FK_USERROLES_ROLES">
+            <End Role="ROLES" EntitySet="ROLES" />
+            <End Role="USERROLES" EntitySet="USERROLES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USERROLES_USERS" Association="Self.FK_USERROLES_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="USERROLES" EntitySet="USERROLES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USERS_COMPANIES" Association="Self.FK_USERS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="USERS" EntitySet="USERS" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBTHSNModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BOM">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="ChildID" Type="Int32" />
+          <Property Name="GrandChildID" Type="Int32" />
+          <Property Name="ChildUsageQty" Type="Double" />
+          <Property Name="ChildUsageUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="GrandChildUsageQty" Type="Double" />
+          <Property Name="GrandChildUsageUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_BOMS_PARTS" FromRole="BOMS" ToRole="PARTS" />
+          <NavigationProperty Name="PART1" Relationship="Self.FK_BOMS_PARTS_2" FromRole="BOMS" ToRole="PARTS" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_BOMS_PRODUCTS" FromRole="BOMS" ToRole="PRODUCTS" />
+        </EntityType>
+        <EntityType Name="COMPANy">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DUNS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="PCONTRACTS" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="PCONTRACTS" />
+          <NavigationProperty Name="SCONTRACTS" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="SCONTRACTS" />
+          <NavigationProperty Name="USERS" Relationship="Self.FK_USERS_COMPANIES" FromRole="COMPANIES" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="CUSTOMER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactPersonName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DirectorName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="DUNS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SCONTRACTS" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="CUSTOMERS" ToRole="SCONTRACTS" />
+        </EntityType>
+        <EntityType Name="PART1738DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PackID" Type="Int32" Nullable="false" />
+          <Property Name="RegDate" Type="DateTime" Precision="3" />
+          <Property Name="IsApproved" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="UntilDate" Type="DateTime" Precision="3" />
+          <Property Name="ApproverUserID" Type="Int32" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="C1738" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="UploadedByUserID" Type="Int32" />
+          <NavigationProperty Name="PARTPACK" Relationship="Self.FK_PART1738DOCS_PARTPACKS" FromRole="PART1738DOCS" ToRole="PARTPACKS" />
+          <NavigationProperty Name="USER" Relationship="Self.FK_PART1738DOCS_USERS" FromRole="PART1738DOCS" ToRole="USERS" />
+          <NavigationProperty Name="USER1" Relationship="Self.FK_PART1738DOCS_USERS1" FromRole="PART1738DOCS" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="PARTIMAGE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_PARTIMAGES_PARTS" FromRole="PARTIMAGES" ToRole="PARTS" />
+        </EntityType>
+        <EntityType Name="PARTPACK">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int32" />
+          <Property Name="PrPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Securement" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Dunnage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrLength" Type="Double" />
+          <Property Name="PrWidth" Type="Double" />
+          <Property Name="PrHeight" Type="Double" />
+          <Property Name="PrWeight" Type="Double" />
+          <Property Name="PrPackQty" Type="Double" />
+          <Property Name="ScPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScLength" Type="Double" />
+          <Property Name="ScWidth" Type="Double" />
+          <Property Name="ScHeight" Type="Double" />
+          <Property Name="ScWeight" Type="Double" />
+          <Property Name="PalletType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PltLength" Type="Double" />
+          <Property Name="PltWidth" Type="Double" />
+          <Property Name="PltHeight" Type="Double" />
+          <Property Name="PltWeight" Type="Double" />
+          <Property Name="ScPackQty" Type="Double" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RegDate" Type="DateTime" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PART1738DOCS" Relationship="Self.FK_PART1738DOCS_PARTPACKS" FromRole="PARTPACKS" ToRole="PART1738DOCS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_PARTPACKS_PARTS" FromRole="PARTPACKS" ToRole="PARTS" />
+        </EntityType>
+        <EntityType Name="PART">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="PNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PWeight" Type="Double" />
+          <Property Name="PLength" Type="Double" />
+          <Property Name="PWidth" Type="Double" />
+          <Property Name="PHeight" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="PNo2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PNo3" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PNo4" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PackID" Type="Int32" />
+          <NavigationProperty Name="BOMS" Relationship="Self.FK_BOMS_PARTS" FromRole="PARTS" ToRole="BOMS" />
+          <NavigationProperty Name="BOMS1" Relationship="Self.FK_BOMS_PARTS_2" FromRole="PARTS" ToRole="BOMS" />
+          <NavigationProperty Name="PARTIMAGES" Relationship="Self.FK_PARTIMAGES_PARTS" FromRole="PARTS" ToRole="PARTIMAGES" />
+          <NavigationProperty Name="PARTPACKS" Relationship="Self.FK_PARTPACKS_PARTS" FromRole="PARTS" ToRole="PARTPACKS" />
+          <NavigationProperty Name="PCONTRACTS" Relationship="Self.FK_PCONTRACTS_PARTS" FromRole="PARTS" ToRole="PCONTRACTS" />
+        </EntityType>
+        <EntityType Name="PCONTRACT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IssuedDate" Type="DateTime" Precision="0" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="SupplierID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Incoterms" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PaymentTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MOQ" Type="Double" />
+          <Property Name="MaximumCapacity" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="PCONTRACTS" ToRole="COMPANIES" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_PCONTRACTS_PARTS" FromRole="PCONTRACTS" ToRole="PARTS" />
+          <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="PCONTRACTS" ToRole="SUPPLIERS" />
+        </EntityType>
+        <EntityType Name="PERMISSION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ViewPermit" Type="Boolean" />
+          <Property Name="ChangePermit" Type="Boolean" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="ROLE" Relationship="Self.FK_PERMISSIONS_ROLES" FromRole="PERMISSIONS" ToRole="ROLES" />
+        </EntityType>
+        <EntityType Name="PRODUCT1738DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PackID" Type="Int32" Nullable="false" />
+          <Property Name="RegDate" Type="DateTime" Precision="3" />
+          <Property Name="IsApproved" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="UntilDate" Type="DateTime" Precision="3" />
+          <Property Name="UploadedByUserID" Type="Int32" />
+          <Property Name="ApproverUserID" Type="Int32" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="C1738" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="PRODUCTPACK" Relationship="Self.FK_PRODUCT1738DOCS_PRODUCTPACKS" FromRole="PRODUCT1738DOCS" ToRole="PRODUCTPACKS" />
+          <NavigationProperty Name="USER" Relationship="Self.FK_PRODUCT1738DOCS_USERS" FromRole="PRODUCT1738DOCS" ToRole="USERS" />
+          <NavigationProperty Name="USER1" Relationship="Self.FK_PRODUCT1738DOCS_USERS_2" FromRole="PRODUCT1738DOCS" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="PRODUCTIMAGE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProdID" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_PRODUCTIMAGES_PARTS" FromRole="PRODUCTIMAGES" ToRole="PRODUCTS" />
+        </EntityType>
+        <EntityType Name="PRODUCTPACK">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProdID" Type="Int32" />
+          <Property Name="PrPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Securement" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Dunnage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrLength" Type="Double" />
+          <Property Name="PrWidth" Type="Double" />
+          <Property Name="PrHeight" Type="Double" />
+          <Property Name="PrWeight" Type="Double" />
+          <Property Name="PrPackQty" Type="Double" />
+          <Property Name="ScPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScLength" Type="Double" />
+          <Property Name="ScWidth" Type="Double" />
+          <Property Name="ScHeight" Type="Double" />
+          <Property Name="ScWeight" Type="Double" />
+          <Property Name="PalletType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PltLength" Type="Double" />
+          <Property Name="PltWidth" Type="Double" />
+          <Property Name="PltHeight" Type="Double" />
+          <Property Name="PltWeight" Type="Double" />
+          <Property Name="ScPackQty" Type="Double" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RegDate" Type="DateTime" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PRODUCT1738DOCS" Relationship="Self.FK_PRODUCT1738DOCS_PRODUCTPACKS" FromRole="PRODUCTPACKS" ToRole="PRODUCT1738DOCS" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_PRODUCTPACKS_PRODUCTS" FromRole="PRODUCTPACKS" ToRole="PRODUCTS" />
+        </EntityType>
+        <EntityType Name="PRODUCT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Weight" Type="Double" />
+          <Property Name="Length" Type="Double" />
+          <Property Name="Width" Type="Double" />
+          <Property Name="Height" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="PNo2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PNo3" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PNo4" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PackID" Type="Int32" />
+          <NavigationProperty Name="BOMS" Relationship="Self.FK_BOMS_PRODUCTS" FromRole="PRODUCTS" ToRole="BOMS" />
+          <NavigationProperty Name="PRODUCTIMAGES" Relationship="Self.FK_PRODUCTIMAGES_PARTS" FromRole="PRODUCTS" ToRole="PRODUCTIMAGES" />
+          <NavigationProperty Name="PRODUCTPACKS" Relationship="Self.FK_PRODUCTPACKS_PRODUCTS" FromRole="PRODUCTS" ToRole="PRODUCTPACKS" />
+          <NavigationProperty Name="SCONTRACTS" Relationship="Self.FK_SCONTRACTS_PRODUCTS" FromRole="PRODUCTS" ToRole="SCONTRACTS" />
+          <NavigationProperty Name="SPLs" Relationship="Self.FK_SPL_PRODUCTS" FromRole="PRODUCTS" ToRole="SPL" />
+        </EntityType>
+        <EntityType Name="ROLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PERMISSIONS" Relationship="Self.FK_PERMISSIONS_ROLES" FromRole="ROLES" ToRole="PERMISSIONS" />
+          <NavigationProperty Name="USERS" Relationship="Self.USERROLES" FromRole="ROLES" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="SCONTRACT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IssuedDate" Type="DateTime" Precision="0" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="ProdID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Incoterms" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PaymentTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="SCONTRACTS" ToRole="COMPANIES" />
+          <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="SCONTRACTS" ToRole="CUSTOMERS" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_SCONTRACTS_PRODUCTS" FromRole="SCONTRACTS" ToRole="PRODUCTS" />
+        </EntityType>
+        <EntityType Name="SPL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProdID" Type="Int32" Nullable="false" />
+          <Property Name="CarModel1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Option1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Option1UsageQty" Type="Double" />
+          <Property Name="Option1UsageUnit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CarModel2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Option2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Option2UsageQty" Type="Double" />
+          <Property Name="Option2UsageUnit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CarModel3" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Option3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Option3UsageQty" Type="Double" />
+          <Property Name="Option3UsageUnit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_SPL_PRODUCTS" FromRole="SPL" ToRole="PRODUCTS" />
+        </EntityType>
+        <EntityType Name="SUPPLIER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactPersonName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DirectorName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="DUNS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PCONTRACTS" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="SUPPLIERS" ToRole="PCONTRACTS" />
+        </EntityType>
+        <EntityType Name="USER_ENTRIES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Precision="3" />
+          <Property Name="IP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MAC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="USER" Relationship="Self.FK_USER_ENTRIES_USERS" FromRole="USER_ENTRIES" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="USER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Uname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="HashCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyID" Type="Int32" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_USERS_COMPANIES" FromRole="USERS" ToRole="COMPANIES" />
+          <NavigationProperty Name="PART1738DOCS" Relationship="Self.FK_PART1738DOCS_USERS" FromRole="USERS" ToRole="PART1738DOCS" />
+          <NavigationProperty Name="PART1738DOCS1" Relationship="Self.FK_PART1738DOCS_USERS1" FromRole="USERS" ToRole="PART1738DOCS" />
+          <NavigationProperty Name="PRODUCT1738DOCS" Relationship="Self.FK_PRODUCT1738DOCS_USERS" FromRole="USERS" ToRole="PRODUCT1738DOCS" />
+          <NavigationProperty Name="PRODUCT1738DOCS1" Relationship="Self.FK_PRODUCT1738DOCS_USERS_2" FromRole="USERS" ToRole="PRODUCT1738DOCS" />
+          <NavigationProperty Name="USER_ENTRIES" Relationship="Self.FK_USER_ENTRIES_USERS" FromRole="USERS" ToRole="USER_ENTRIES" />
+          <NavigationProperty Name="ROLES" Relationship="Self.USERROLES" FromRole="USERS" ToRole="ROLES" />
+        </EntityType>
+        <Association Name="FK_BOMS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
+          <End Role="BOMS" Type="Self.BOM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS">
+              <PropertyRef Name="ChildID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMS_PARTS_2">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
+          <End Role="BOMS" Type="Self.BOM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS">
+              <PropertyRef Name="GrandChildID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="0..1" />
+          <End Role="BOMS" Type="Self.BOM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="1" />
+          <End Role="PCONTRACTS" Type="Self.PCONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PCONTRACTS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCONTRACTS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="1" />
+          <End Role="SCONTRACTS" Type="Self.SCONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SCONTRACTS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USERS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="0..1" />
+          <End Role="USERS" Type="Self.USER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USERS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_CUSTOMERS">
+          <End Role="CUSTOMERS" Type="Self.CUSTOMER" Multiplicity="1" />
+          <End Role="SCONTRACTS" Type="Self.SCONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SCONTRACTS">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART1738DOCS_PARTPACKS">
+          <End Role="PARTPACKS" Type="Self.PARTPACK" Multiplicity="1" />
+          <End Role="PART1738DOCS" Type="Self.PART1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTPACKS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART1738DOCS">
+              <PropertyRef Name="PackID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART1738DOCS_USERS">
+          <End Role="USERS" Type="Self.USER" Multiplicity="0..1" />
+          <End Role="PART1738DOCS" Type="Self.PART1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART1738DOCS">
+              <PropertyRef Name="ApproverUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART1738DOCS_USERS1">
+          <End Role="USERS" Type="Self.USER" Multiplicity="0..1" />
+          <End Role="PART1738DOCS" Type="Self.PART1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART1738DOCS">
+              <PropertyRef Name="UploadedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PARTIMAGES_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="PARTIMAGES" Type="Self.PARTIMAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PARTIMAGES">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PARTPACKS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
+          <End Role="PARTPACKS" Type="Self.PARTPACK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PARTPACKS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="PCONTRACTS" Type="Self.PCONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PCONTRACTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_SUPPLIERS">
+          <End Role="SUPPLIERS" Type="Self.SUPPLIER" Multiplicity="1" />
+          <End Role="PCONTRACTS" Type="Self.PCONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SUPPLIERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PCONTRACTS">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PERMISSIONS_ROLES">
+          <End Role="ROLES" Type="Self.ROLE" Multiplicity="0..1" />
+          <End Role="PERMISSIONS" Type="Self.PERMISSION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROLES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PERMISSIONS">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT1738DOCS_PRODUCTPACKS">
+          <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACK" Multiplicity="1" />
+          <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTPACKS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT1738DOCS">
+              <PropertyRef Name="PackID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT1738DOCS_USERS">
+          <End Role="USERS" Type="Self.USER" Multiplicity="0..1" />
+          <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT1738DOCS">
+              <PropertyRef Name="ApproverUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCT1738DOCS_USERS_2">
+          <End Role="USERS" Type="Self.USER" Multiplicity="0..1" />
+          <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCT1738DOCS">
+              <PropertyRef Name="UploadedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCTIMAGES_PARTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="1" />
+          <End Role="PRODUCTIMAGES" Type="Self.PRODUCTIMAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCTIMAGES">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCTPACKS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="0..1" />
+          <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCTPACKS">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCONTRACTS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="1" />
+          <End Role="SCONTRACTS" Type="Self.SCONTRACT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SCONTRACTS">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPL_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="1" />
+          <End Role="SPL" Type="Self.SPL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SPL">
+              <PropertyRef Name="ProdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USER_ENTRIES_USERS">
+          <End Role="USERS" Type="Self.USER" Multiplicity="1" />
+          <End Role="USER_ENTRIES" Type="Self.USER_ENTRIES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USER_ENTRIES">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="USERROLES">
+          <End Role="ROLES" Type="Self.ROLE" Multiplicity="*" />
+          <End Role="USERS" Type="Self.USER" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="DBTHSNEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BOMS" EntityType="Self.BOM" />
+          <EntitySet Name="COMPANIES" EntityType="Self.COMPANy" />
+          <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMER" />
+          <EntitySet Name="PART1738DOCS" EntityType="Self.PART1738DOCS" />
+          <EntitySet Name="PARTIMAGES" EntityType="Self.PARTIMAGE" />
+          <EntitySet Name="PARTPACKS" EntityType="Self.PARTPACK" />
+          <EntitySet Name="PARTS" EntityType="Self.PART" />
+          <EntitySet Name="PCONTRACTS" EntityType="Self.PCONTRACT" />
+          <EntitySet Name="PERMISSIONS" EntityType="Self.PERMISSION" />
+          <EntitySet Name="PRODUCT1738DOCS" EntityType="Self.PRODUCT1738DOCS" />
+          <EntitySet Name="PRODUCTIMAGES" EntityType="Self.PRODUCTIMAGE" />
+          <EntitySet Name="PRODUCTPACKS" EntityType="Self.PRODUCTPACK" />
+          <EntitySet Name="PRODUCTS" EntityType="Self.PRODUCT" />
+          <EntitySet Name="ROLES" EntityType="Self.ROLE" />
+          <EntitySet Name="SCONTRACTS" EntityType="Self.SCONTRACT" />
+          <EntitySet Name="SPLs" EntityType="Self.SPL" />
+          <EntitySet Name="SUPPLIERS" EntityType="Self.SUPPLIER" />
+          <EntitySet Name="USER_ENTRIES" EntityType="Self.USER_ENTRIES" />
+          <EntitySet Name="USERS" EntityType="Self.USER" />
+          <AssociationSet Name="FK_BOMS_PARTS" Association="Self.FK_BOMS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="BOMS" EntitySet="BOMS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMS_PARTS_2" Association="Self.FK_BOMS_PARTS_2">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="BOMS" EntitySet="BOMS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMS_PRODUCTS" Association="Self.FK_BOMS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="BOMS" EntitySet="BOMS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_COMPANIES" Association="Self.FK_PCONTRACTS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCONTRACTS_COMPANIES" Association="Self.FK_SCONTRACTS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USERS_COMPANIES" Association="Self.FK_USERS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="USERS" EntitySet="USERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_CUSTOMERS" Association="Self.FK_PCONTRACTS_CUSTOMERS">
+            <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART1738DOCS_PARTPACKS" Association="Self.FK_PART1738DOCS_PARTPACKS">
+            <End Role="PARTPACKS" EntitySet="PARTPACKS" />
+            <End Role="PART1738DOCS" EntitySet="PART1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART1738DOCS_USERS" Association="Self.FK_PART1738DOCS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PART1738DOCS" EntitySet="PART1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART1738DOCS_USERS1" Association="Self.FK_PART1738DOCS_USERS1">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PART1738DOCS" EntitySet="PART1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PARTIMAGES_PARTS" Association="Self.FK_PARTIMAGES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="PARTIMAGES" EntitySet="PARTIMAGES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PARTPACKS_PARTS" Association="Self.FK_PARTPACKS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="PARTPACKS" EntitySet="PARTPACKS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_PARTS" Association="Self.FK_PCONTRACTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_SUPPLIERS" Association="Self.FK_PCONTRACTS_SUPPLIERS">
+            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
+            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PERMISSIONS_ROLES" Association="Self.FK_PERMISSIONS_ROLES">
+            <End Role="ROLES" EntitySet="ROLES" />
+            <End Role="PERMISSIONS" EntitySet="PERMISSIONS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT1738DOCS_PRODUCTPACKS" Association="Self.FK_PRODUCT1738DOCS_PRODUCTPACKS">
+            <End Role="PRODUCTPACKS" EntitySet="PRODUCTPACKS" />
+            <End Role="PRODUCT1738DOCS" EntitySet="PRODUCT1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT1738DOCS_USERS" Association="Self.FK_PRODUCT1738DOCS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PRODUCT1738DOCS" EntitySet="PRODUCT1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCT1738DOCS_USERS_2" Association="Self.FK_PRODUCT1738DOCS_USERS_2">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PRODUCT1738DOCS" EntitySet="PRODUCT1738DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTIMAGES_PARTS" Association="Self.FK_PRODUCTIMAGES_PARTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="PRODUCTIMAGES" EntitySet="PRODUCTIMAGES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTPACKS_PRODUCTS" Association="Self.FK_PRODUCTPACKS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="PRODUCTPACKS" EntitySet="PRODUCTPACKS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCONTRACTS_PRODUCTS" Association="Self.FK_SCONTRACTS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPL_PRODUCTS" Association="Self.FK_SPL_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="SPL" EntitySet="SPLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USER_ENTRIES_USERS" Association="Self.FK_USER_ENTRIES_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="USER_ENTRIES" EntitySet="USER_ENTRIES" />
+          </AssociationSet>
+          <AssociationSet Name="USERROLES" Association="Self.USERROLES">
+            <End Role="ROLES" EntitySet="ROLES" />
+            <End Role="USERS" EntitySet="USERS" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBTHSNModelStoreContainer" CdmEntityContainer="DBTHSNEntities">
+          <EntitySetMapping Name="BOMS">
+            <EntityTypeMapping TypeName="DBTHSNModel.BOM">
+              <MappingFragment StoreEntitySet="BOMS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ChildID" ColumnName="ChildID" />
+                <ScalarProperty Name="GrandChildID" ColumnName="GrandChildID" />
+                <ScalarProperty Name="ChildUsageQty" ColumnName="ChildUsageQty" />
+                <ScalarProperty Name="ChildUsageUnit" ColumnName="ChildUsageUnit" />
+                <ScalarProperty Name="GrandChildUsageQty" ColumnName="GrandChildUsageQty" />
+                <ScalarProperty Name="GrandChildUsageUnit" ColumnName="GrandChildUsageUnit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COMPANIES">
+            <EntityTypeMapping TypeName="DBTHSNModel.COMPANy">
+              <MappingFragment StoreEntitySet="COMPANIES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DUNS" ColumnName="DUNS" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CUSTOMERS">
+            <EntityTypeMapping TypeName="DBTHSNModel.CUSTOMER">
+              <MappingFragment StoreEntitySet="CUSTOMERS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactPersonName" ColumnName="ContactPersonName" />
+                <ScalarProperty Name="DirectorName" ColumnName="DirectorName" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DUNS" ColumnName="DUNS" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PART1738DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PART1738DOCS">
+              <MappingFragment StoreEntitySet="PART1738DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PackID" ColumnName="PackID" />
+                <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UntilDate" ColumnName="UntilDate" />
+                <ScalarProperty Name="ApproverUserID" ColumnName="ApproverUserID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="C1738" ColumnName="1738" />
+                <ScalarProperty Name="UploadedByUserID" ColumnName="UploadedByUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PARTIMAGES">
+            <EntityTypeMapping TypeName="DBTHSNModel.PARTIMAGE">
+              <MappingFragment StoreEntitySet="PARTIMAGES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PARTPACKS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PARTPACK">
+              <MappingFragment StoreEntitySet="PARTPACKS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PrPackMaterial" ColumnName="PrPackMaterial" />
+                <ScalarProperty Name="Securement" ColumnName="Securement" />
+                <ScalarProperty Name="Dunnage" ColumnName="Dunnage" />
+                <ScalarProperty Name="PrLength" ColumnName="PrLength" />
+                <ScalarProperty Name="PrWidth" ColumnName="PrWidth" />
+                <ScalarProperty Name="PrHeight" ColumnName="PrHeight" />
+                <ScalarProperty Name="PrWeight" ColumnName="PrWeight" />
+                <ScalarProperty Name="PrPackQty" ColumnName="PrPackQty" />
+                <ScalarProperty Name="ScPackMaterial" ColumnName="ScPackMaterial" />
+                <ScalarProperty Name="ScLength" ColumnName="ScLength" />
+                <ScalarProperty Name="ScWidth" ColumnName="ScWidth" />
+                <ScalarProperty Name="ScHeight" ColumnName="ScHeight" />
+                <ScalarProperty Name="ScWeight" ColumnName="ScWeight" />
+                <ScalarProperty Name="PalletType" ColumnName="PalletType" />
+                <ScalarProperty Name="PltLength" ColumnName="PltLength" />
+                <ScalarProperty Name="PltWidth" ColumnName="PltWidth" />
+                <ScalarProperty Name="PltHeight" ColumnName="PltHeight" />
+                <ScalarProperty Name="PltWeight" ColumnName="PltWeight" />
+                <ScalarProperty Name="ScPackQty" ColumnName="ScPackQty" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PART">
+              <MappingFragment StoreEntitySet="PARTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PNo" ColumnName="PNo" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="PWeight" ColumnName="PWeight" />
+                <ScalarProperty Name="PLength" ColumnName="PLength" />
+                <ScalarProperty Name="PWidth" ColumnName="PWidth" />
+                <ScalarProperty Name="PHeight" ColumnName="PHeight" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="PNo2" ColumnName="PNo2" />
+                <ScalarProperty Name="PNo3" ColumnName="PNo3" />
+                <ScalarProperty Name="PNo4" ColumnName="PNo4" />
+                <ScalarProperty Name="PackID" ColumnName="PackID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PCONTRACTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PCONTRACT">
+              <MappingFragment StoreEntitySet="PCONTRACTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Incoterms" ColumnName="Incoterms" />
+                <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
+                <ScalarProperty Name="MaximumCapacity" ColumnName="MaximumCapacity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PERMISSIONS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PERMISSION">
+              <MappingFragment StoreEntitySet="PERMISSIONS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ViewPermit" ColumnName="ViewPermit" />
+                <ScalarProperty Name="ChangePermit" ColumnName="ChangePermit" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCT1738DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PRODUCT1738DOCS">
+              <MappingFragment StoreEntitySet="PRODUCT1738DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PackID" ColumnName="PackID" />
+                <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UntilDate" ColumnName="UntilDate" />
+                <ScalarProperty Name="UploadedByUserID" ColumnName="UploadedByUserID" />
+                <ScalarProperty Name="ApproverUserID" ColumnName="ApproverUserID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="C1738" ColumnName="1738" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTIMAGES">
+            <EntityTypeMapping TypeName="DBTHSNModel.PRODUCTIMAGE">
+              <MappingFragment StoreEntitySet="PRODUCTIMAGES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProdID" ColumnName="ProdID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTPACKS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PRODUCTPACK">
+              <MappingFragment StoreEntitySet="PRODUCTPACKS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProdID" ColumnName="ProdID" />
+                <ScalarProperty Name="PrPackMaterial" ColumnName="PrPackMaterial" />
+                <ScalarProperty Name="Securement" ColumnName="Securement" />
+                <ScalarProperty Name="Dunnage" ColumnName="Dunnage" />
+                <ScalarProperty Name="PrLength" ColumnName="PrLength" />
+                <ScalarProperty Name="PrWidth" ColumnName="PrWidth" />
+                <ScalarProperty Name="PrHeight" ColumnName="PrHeight" />
+                <ScalarProperty Name="PrWeight" ColumnName="PrWeight" />
+                <ScalarProperty Name="PrPackQty" ColumnName="PrPackQty" />
+                <ScalarProperty Name="ScPackMaterial" ColumnName="ScPackMaterial" />
+                <ScalarProperty Name="ScLength" ColumnName="ScLength" />
+                <ScalarProperty Name="ScWidth" ColumnName="ScWidth" />
+                <ScalarProperty Name="ScHeight" ColumnName="ScHeight" />
+                <ScalarProperty Name="ScWeight" ColumnName="ScWeight" />
+                <ScalarProperty Name="PalletType" ColumnName="PalletType" />
+                <ScalarProperty Name="PltLength" ColumnName="PltLength" />
+                <ScalarProperty Name="PltWidth" ColumnName="PltWidth" />
+                <ScalarProperty Name="PltHeight" ColumnName="PltHeight" />
+                <ScalarProperty Name="PltWeight" ColumnName="PltWeight" />
+                <ScalarProperty Name="ScPackQty" ColumnName="ScPackQty" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RegDate" ColumnName="RegDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PRODUCT">
+              <MappingFragment StoreEntitySet="PRODUCTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PNo" ColumnName="PNo" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="PNo2" ColumnName="PNo2" />
+                <ScalarProperty Name="PNo3" ColumnName="PNo3" />
+                <ScalarProperty Name="PNo4" ColumnName="PNo4" />
+                <ScalarProperty Name="PackID" ColumnName="PackID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ROLES">
+            <EntityTypeMapping TypeName="DBTHSNModel.ROLE">
+              <MappingFragment StoreEntitySet="ROLES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RName" ColumnName="RName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SCONTRACTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.SCONTRACT">
+              <MappingFragment StoreEntitySet="SCONTRACTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ProdID" ColumnName="ProdID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Incoterms" ColumnName="Incoterms" />
+                <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPLs">
+            <EntityTypeMapping TypeName="DBTHSNModel.SPL">
+              <MappingFragment StoreEntitySet="SPL">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProdID" ColumnName="ProdID" />
+                <ScalarProperty Name="CarModel1" ColumnName="CarModel1" />
+                <ScalarProperty Name="Option1" ColumnName="Option1" />
+                <ScalarProperty Name="Option1UsageQty" ColumnName="Option1UsageQty" />
+                <ScalarProperty Name="Option1UsageUnit" ColumnName="Option1UsageUnit" />
+                <ScalarProperty Name="CarModel2" ColumnName="CarModel2" />
+                <ScalarProperty Name="Option2" ColumnName="Option2" />
+                <ScalarProperty Name="Option2UsageQty" ColumnName="Option2UsageQty" />
+                <ScalarProperty Name="Option2UsageUnit" ColumnName="Option2UsageUnit" />
+                <ScalarProperty Name="CarModel3" ColumnName="CarModel3" />
+                <ScalarProperty Name="Option3" ColumnName="Option3" />
+                <ScalarProperty Name="Option3UsageQty" ColumnName="Option3UsageQty" />
+                <ScalarProperty Name="Option3UsageUnit" ColumnName="Option3UsageUnit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SUPPLIERS">
+            <EntityTypeMapping TypeName="DBTHSNModel.SUPPLIER">
+              <MappingFragment StoreEntitySet="SUPPLIERS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactPersonName" ColumnName="ContactPersonName" />
+                <ScalarProperty Name="DirectorName" ColumnName="DirectorName" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DUNS" ColumnName="DUNS" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USER_ENTRIES">
+            <EntityTypeMapping TypeName="DBTHSNModel.USER_ENTRIES">
+              <MappingFragment StoreEntitySet="USER_ENTRIES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="MAC" ColumnName="MAC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USERS">
+            <EntityTypeMapping TypeName="DBTHSNModel.USER">
+              <MappingFragment StoreEntitySet="USERS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Uname" ColumnName="Uname" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="HashCode" ColumnName="HashCode" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="USERROLES" TypeName="DBTHSNModel.USERROLES" StoreEntitySet="USERROLES">
+            <EndProperty Name="ROLES">
+              <ScalarProperty Name="ID" ColumnName="RoleID" />
+            </EndProperty>
+            <EndProperty Name="USERS">
+              <ScalarProperty Name="ID" ColumnName="UserID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

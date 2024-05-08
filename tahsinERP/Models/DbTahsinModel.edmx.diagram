@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="61c0e285411f4cad994e540d6a64cd30" Name="Diagram1">
+        <EntityTypeShape EntityType="DBTHSNModel.BOM" Width="1.5" PointX="9" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.COMPANy" Width="1.5" PointX="0.75" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.CUSTOMER" Width="1.5" PointX="3.75" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART1738DOCS" Width="1.5" PointX="8.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PARTIMAGE" Width="1.5" PointX="6" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PARTPACK" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART" Width="1.5" PointX="3.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PCONTRACT" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PERMISSION" Width="1.5" PointX="6" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCT1738DOCS" Width="1.5" PointX="11.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTIMAGE" Width="1.5" PointX="9" PointY="28.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTPACK" Width="1.5" PointX="9" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCT" Width="1.5" PointX="6.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.ROLE" Width="1.5" PointX="3.75" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.SCONTRACT" Width="1.5" PointX="6" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.SPL" Width="1.5" PointX="9" PointY="31" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.SUPPLIER" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.USER_ENTRIES" Width="1.5" PointX="8.25" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.USER" Width="1.5" PointX="6" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="DBTHSNModel.FK_BOMS_PARTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_BOMS_PARTS_2" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_BOMS_PRODUCTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PCONTRACTS_COMPANIES" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_SCONTRACTS_COMPANIES" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_USERS_COMPANIES" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PCONTRACTS_CUSTOMERS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PART1738DOCS_PARTPACKS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PART1738DOCS_USERS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PART1738DOCS_USERS1" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PARTIMAGES_PARTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PARTPACKS_PARTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PCONTRACTS_PARTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PCONTRACTS_SUPPLIERS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PERMISSIONS_ROLES" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PRODUCT1738DOCS_PRODUCTPACKS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PRODUCT1738DOCS_USERS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PRODUCT1738DOCS_USERS_2" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PRODUCTIMAGES_PARTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PRODUCTPACKS_PRODUCTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_SCONTRACTS_PRODUCTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_SPL_PRODUCTS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_USER_ENTRIES_USERS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.USERROLES" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
