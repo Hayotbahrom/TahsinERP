@@ -128,7 +128,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Helper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -205,6 +208,7 @@
       <DependentUpon>DbTahsinModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app-assets\css-rtl\bootstrap-extended.css" />
@@ -1354,6 +1358,7 @@
     <Content Include="app-assets\images\logo\frest-logo.png" />
     <Content Include="app-assets\images\logo\logo-light.png" />
     <Content Include="app-assets\images\logo\logo.png" />
+    <Content Include="app-assets\images\logo\tahsin_logo.png" />
     <Content Include="app-assets\images\pages\1-apex.png" />
     <Content Include="app-assets\images\pages\2-stack.png" />
     <Content Include="app-assets\images\pages\3-convex.png" />
@@ -1841,6 +1846,9 @@
     <Content Include="app-assets\vendors\js\ui\screenfull.min.js" />
     <Content Include="app-assets\vendors\js\ui\unison.min.js" />
     <Content Include="app-assets\vendors\js\vendors.min.js" />
+    <Content Include="assets\css\style-rtl.css" />
+    <Content Include="assets\css\style.css" />
+    <Content Include="assets\js\scripts.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -1908,6 +1916,8 @@
     <Content Include="Models\DbTahsinModel.edmx.diagram">
       <DependentUpon>DbTahsinModel.edmx</DependentUpon>
     </Content>
+    <Content Include="assets\scss\style-rtl.scss" />
+    <Content Include="assets\scss\style.scss" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -2194,6 +2204,9 @@
     <Content Include="src\scss\plugins\ui\_breakpoints.scss" />
     <Content Include="src\scss\themes\dark-layout.scss" />
     <Content Include="src\scss\themes\semi-dark-layout.scss" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
