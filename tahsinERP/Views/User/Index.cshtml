@@ -23,16 +23,13 @@
                             <div class="col-12 col-sm-12 col-lg-4">
                                 <label for="users-list-role">Role</label>
                                 <fieldset class="form-group">
-                                    @Html.DropDownList("RoleList", ViewBag.RoleList as SelectList, new { @class = "form-control", @id = "roleDropdown" })
+                                    @Html.DropDownList("RoleId", ViewBag.RoleList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
                                 </fieldset>
                             </div>
-                            <div class="col-12 col-sm-12 col-lg-4">
-                                <label for="users-list-status">Status</label>
+                            <div class="col-1 col-sm-5 col-lg-1">
+                                <label></label>
                                 <fieldset class="form-group">
-                                    <select class="form-control" id="users-list-status">
-                                        <a class="dropdown-item" href="@Url.Action("Index", "User", new { status = "Active" })">Active</a>
-                                        <a class="dropdown-item" href="@Url.Action("Index", "User", new { status = "Inactive" })">Inactive</a>
-                                    </select>
+                                    <a href="@Url.Action("Index", "User", new { status = "InActive" })" role="link">inactive users</a>
                                 </fieldset>
                             </div>
                             <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
@@ -49,10 +46,11 @@
                             <div class="card-body">
                                 <!-- datatable start -->
                                 <div class="table-responsive">
-                                    <table id="users-list-datatable" class="table">
+                                    <table id="users-list-datatable" class="table invoice-data-table dt-responsive nowrap">
                                         <thead>
                                             <tr>
-                                                <th>id</th>
+                                                <th></th>
+                                                <th></th>
                                                 <th>username</th>
                                                 <th>name</th>
                                                 <th>email</th>
@@ -65,7 +63,8 @@
                                             @foreach (var item in Model)
                                             {
                                                 <tr>
-                                                    <td>@item.ID</td>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td>
                                                         <a href="~/User/Details/@item.ID">@item.UName</a>
                                                     </td>
@@ -78,9 +77,14 @@
                                                     }
                                                     else
                                                     {
-                                                        <td><span class="badge badge-light-danger">Deactivated</span></td>
+                                                        <td><span class="badge badge-light-danger">Inactive</span></td>
                                                     }
-                                                    <td><a href="@Url.Action("Edit", "User", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a></td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="@Url.Action("Edit", "User", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                            <a href="@Url.Action("Delete", "User", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -99,10 +103,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#roleDropdown').change(function () {
-            var selectedRole = $(this).val();
-            window.location.href = '@Url.Action("Index", "User")?roleID=' + selectedRole;
-        });
-    });
+        function refreshDataTable() {
+            const roleId = document.getElementById("RoleId").value;
+
+            window.location.href = '@Url.Action("Index", "User")?roleID=' + roleId;
+        }
 </script>

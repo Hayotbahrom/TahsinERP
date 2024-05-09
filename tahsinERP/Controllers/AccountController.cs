@@ -51,10 +51,10 @@ namespace tahsinERP.Controllers
 
                     if (IsValidUser)
                     {
-                        if (user.KeepMeSigned)
-                            FormsAuthentication.SetAuthCookie(user.UName, false);
-                        else
-                        {
+                        //if (user.KeepMeSigned)
+                        //    FormsAuthentication.SetAuthCookie(user.UName, false);
+                        //else
+                        //{
                             var authTicket = new FormsAuthenticationTicket(1, user.UName, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
                             string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
@@ -68,7 +68,7 @@ namespace tahsinERP.Controllers
                                 Expires = authTicket.Expiration
                             };
                             Response.Cookies.Set(cookie);
-                        }
+                        //}
                         return RedirectToAction("Index", "Home");
                     }
                 }

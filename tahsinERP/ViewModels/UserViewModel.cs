@@ -26,7 +26,7 @@ namespace tahsinERP.ViewModels
         public bool KeepMeSigned { get; set; }
         public List<USER> userList { get; set; }
         public int SelectedRoleId { get; set; }
-        public IEnumerable<SelectListItem> Roles { get; set; }
+        public List<string> Roles { get; set; }
 
     }
 }

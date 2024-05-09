@@ -31,7 +31,7 @@ namespace tahsinERP.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public bool IsActive { get; set; }
         public string HashCode { get; set; }
         public Nullable<int> CompanyID { get; set; }
     

@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Security;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -16,63 +17,51 @@ namespace tahsinERP.Controllers
         byte[] avatar;
         int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         // GET: Users
-        public ActionResult Index(string roleID = null, string status = null)
+        public ActionResult Index(string roleID, string status)
         {
             string query;
-            if (status != null)
-            {
-                if (status.CompareTo("Active") == 0)
-                {
-                    query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
-                   + "FROM USERS u "
-                   + "JOIN USERROLES rs "
-                   + "ON u.ID = rs.UserID "
-                   + "JOIN ROLES r "
-                   + "ON rs.RoleID = r.ID "
-                   + "WHERE u.IsDeleted = 0"
-                   + " AND u.IsActive = 1";
-                }
-                else
-                {
-                    query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
-                   + "FROM USERS u "
-                   + "JOIN USERROLES rs "
-                   + "ON u.ID = rs.UserID "
-                   + "JOIN ROLES r "
-                   + "ON rs.RoleID = r.ID "
-                   + "WHERE u.IsDeleted = 0"
-                   + " AND u.IsActive = 0";
-                }
-            }
-            else if (roleID != null)
+            if (!string.IsNullOrEmpty(roleID))
             {
                 query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
-                   + "FROM USERS u "
-                   + "JOIN USERROLES rs "
-                   + "ON u.ID = rs.UserID "
-                   + "JOIN ROLES r "
-                   + "ON rs.RoleID = r.ID "
-                   + "WHERE u.IsDeleted = 0"
-                   + " AND u.IsActive = 1 AND r.ID=" + roleID;
+               + "FROM USERS u "
+               + "JOIN USERROLES rs "
+               + "ON u.ID = rs.UserID "
+               + "JOIN ROLES r "
+               + "ON rs.RoleID = r.ID "
+               + "WHERE u.IsDeleted = 0"
+               + " AND u.IsActive = 1 AND r.ID=" + roleID;
+            }
+            else if (!string.IsNullOrEmpty(status))
+            {
+                query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
+               + "FROM USERS u "
+               + "JOIN USERROLES rs "
+               + "ON u.ID = rs.UserID "
+               + "JOIN ROLES r "
+               + "ON rs.RoleID = r.ID "
+               + "WHERE u.IsDeleted = 0"
+               + " AND u.IsActive = 0";
             }
             else
             {
                 query = "SELECT u.ID, U.Uname, u.FullName, u.Email, u.IsActive, r.RName as Role "
-                   + "FROM USERS u "
-                   + "JOIN USERROLES rs "
-                   + "ON u.ID = rs.UserID "
-                   + "JOIN ROLES r "
-                   + "ON rs.RoleID = r.ID "
-                   + "WHERE u.IsDeleted = 0"
-                   + " AND u.IsActive = 1";
+               + "FROM USERS u "
+               + "JOIN USERROLES rs "
+               + "ON u.ID = rs.UserID "
+               + "JOIN ROLES r "
+               + "ON rs.RoleID = r.ID "
+               + "WHERE u.IsDeleted = 0"
+               + " AND u.IsActive = 1";
             }
+
             IEnumerable<UserViewModel> data = db.Database.SqlQuery<UserViewModel>(query);
-            ViewBag.RoleList = PopulateRoleSelectList(roleID);
+            ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName", roleID);
+
             return View(data.ToList());
         }
         public ActionResult Create()
         {
-            PopulateRoleDropDownList();
+            ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName");
             return View();
         }
         [HttpPost]
@@ -133,23 +122,8 @@ namespace tahsinERP.Controllers
             {
                 ModelState.AddModelError(ex.Message, "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-            PopulateRoleDropDownList();
+            ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName");
             return View();
-        }
-        private void PopulateRoleDropDownList(string selectedRole = null)
-        {
-            var rolesQuery = from d in db.ROLES
-                             orderby d.RName
-                             select d;
-            ViewBag.RoleID = new SelectList(rolesQuery, "ID", "RName", selectedRole);
-        }
-
-        private SelectList PopulateRoleSelectList(string selectedRole = null)
-        {
-            var rolesQuery = from r in db.ROLES
-                             orderby r.RName
-                             select r;
-            return new SelectList(rolesQuery, "ID", "RName", selectedRole);
         }
     }
 }
