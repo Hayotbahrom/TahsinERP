@@ -1,10 +1,7 @@
 ﻿using _1738i.Controllers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Net;
-using System.Runtime.Remoting.Messaging;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -38,18 +35,20 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                USER getUser = db.USERS.Where(u => u.Uname.Equals(user.UName)).FirstOrDefault();
+                USER getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
                 if (getUser != null)
                 {
                     var hashCode = getUser.HashCode;
                     var serializer = new JavaScriptSerializer();
                     string userData = "";
-                    //Password Hasing Process Call Helper Class Method    
-                    var encodingPasswordString = Helper.EncodePassword(user.Password, hashCode);
+                    var encodingPasswordString = "";
+                    //Password Hasing Process Call Helper Class Method
+                    if (!string.IsNullOrEmpty(user.Password))
+                        encodingPasswordString = Helper.EncodePassword(user.Password, hashCode);
 
                     bool IsValidUser = db.USERS
-                   .Any(u => u.Uname.ToLower() == user
-                   .UName.ToLower() && u.Password.Equals(encodingPasswordString));
+                   .Any(u => u.Email.ToLower() == user
+                   .Email.ToLower() && u.Password.Equals(encodingPasswordString));
 
                     foreach (var rrole in getUser.ROLES)
                     {
@@ -59,7 +58,7 @@ namespace tahsinERP.Controllers
 
                     if (IsValidUser)
                     {
-                        var authTicket = new FormsAuthenticationTicket(1, user.UName, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
+                        var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
                         string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
                         var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
@@ -77,7 +76,7 @@ namespace tahsinERP.Controllers
                     }
                 }
             }
-            ModelState.AddModelError("", "invalid Username or Password");
+            ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri");
             return View();
         }
 

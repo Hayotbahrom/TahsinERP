@@ -52,8 +52,9 @@
                                 <div class="col-md-6 col-12 px-0">
                                     <div class="card disable-rounded-right mb-0 p-2 h-100 d-flex justify-content-center">
                                         <div class="card-header pb-1">
-                                            <div class="card-title">
-                                                <h4 class="text-center mb-2"> tahsinERP platform</h4>
+                                            <div>
+                                                <h4>tahsinERP tizimi</h4>
+                                                <h6>Xush kelibsiz!</h6>
                                             </div>
                                         </div>
                                         <div class="card-content">
@@ -63,28 +64,17 @@
                                                     @Html.AntiForgeryToken()
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                     <div class="form-group mb-50">
-                                                        <label class="text-bold-600">Username</label>
-                                                        @Html.TextBoxFor(u => u.UName, new { @class = "form-control", @placeholder = "Username" })
-                                                        @Html.ValidationMessageFor(m => m.UName)
+                                                        <label class="text-bold-600">E-mail</label>
+                                                        @Html.TextBoxFor(u => u.Email, new { @class = "form-control", @placeholder = "E-mail" })
+                                                        @Html.ValidationMessageFor(m => m.Email)
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="text-bold-600">Password</label>
-                                                        @Html.PasswordFor(u => u.Password, new { @class = "form-control", @placeholder = "Password" })
+                                                        <label class="text-bold-600">Kalit so'zi</label>
+                                                        @Html.PasswordFor(u => u.Password, new { @class = "form-control", @placeholder = "Kalit so'zi(пароль)" })
                                                         @Html.ValidationMessageFor(m => m.Password)
                                                     </div>
                                                     <div class="form-group d-flex flex-md-row flex-column justify-content-between align-items-center">
-                                                        <div class="text-left">
-                                                            @Html.CheckBoxFor(u => u.KeepMeSigned, new { @checked = "checked" })
-                                                            
-                                                            <label class="checkboxsmall">
-                                                                <small>
-                                                                    Keep me logged
-                                                                    in
-                                                                </small>
-                                                            </label>
-
-                                                        </div>
-                                                        <div class="text-right"><a href="" class="card-link"><small>Forgot Password?</small></a></div>
+                                                        <div class="text-right"><a href="" class="card-link"><small>Kalit so'zini unutdingizmi?</small></a></div>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary glow w-100 position-relative">Login<i id="icon-arrow" class="bx bx-right-arrow-alt"></i></button>
                                                 }
