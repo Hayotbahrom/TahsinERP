@@ -16,8 +16,8 @@ namespace tahsinERP.Models
     {
         public int ID { get; set; }
         public string Model { get; set; }
-        public Nullable<bool> ViewPermit { get; set; }
-        public Nullable<bool> ChangePermit { get; set; }
+        public bool ViewPermit { get; set; }
+        public bool ChangePermit { get; set; }
         public Nullable<int> RoleID { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
