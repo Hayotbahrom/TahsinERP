@@ -12,17 +12,12 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BOM
+    public partial class P_CONTRACT_DOCS
     {
         public int ID { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public Nullable<int> ChildID { get; set; }
-        public Nullable<int> GrandChildID { get; set; }
-        public Nullable<double> ChildUsageQty { get; set; }
-        public string ChildUsageUnit { get; set; }
-        public Nullable<double> GrandChildUsageQty { get; set; }
-        public string GrandChildUsageUnit { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public Nullable<int> ContractID { get; set; }
+        public byte[] Doc { get; set; }
+    
+        public virtual P_CONTRACTS P_CONTRACTS { get; set; }
     }
 }

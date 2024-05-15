@@ -12,26 +12,24 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PCONTRACT
+    public partial class S_CONTRACTS
     {
         public int ID { get; set; }
         public string ContractNo { get; set; }
         public Nullable<System.DateTime> IssuedDate { get; set; }
         public int CompanyID { get; set; }
-        public int SupplierID { get; set; }
-        public int PartID { get; set; }
+        public int CustomerID { get; set; }
+        public int ProdID { get; set; }
         public Nullable<double> Price { get; set; }
         public string Currency { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Incoterms { get; set; }
         public string PaymentTerms { get; set; }
-        public Nullable<double> MOQ { get; set; }
-        public Nullable<double> MaximumCapacity { get; set; }
         public string Unit { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
-        public virtual PART PART { get; set; }
-        public virtual SUPPLIER SUPPLIER { get; set; }
+        public virtual CUSTOMER CUSTOMER { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

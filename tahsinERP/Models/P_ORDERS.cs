@@ -12,34 +12,37 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SUPPLIER
+    public partial class P_ORDERS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SUPPLIER()
+        public P_ORDERS()
         {
-            this.P_CONTRACTS = new HashSet<P_CONTRACTS>();
             this.P_INVOICES = new HashSet<P_INVOICES>();
-            this.P_ORDERS = new HashSet<P_ORDERS>();
+            this.P_ORDER_DOCS = new HashSet<P_ORDER_DOCS>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string ContactPersonName { get; set; }
-        public string DirectorName { get; set; }
+        public string OrderNo { get; set; }
+        public Nullable<System.DateTime> IssuedDate { get; set; }
+        public Nullable<int> CompanyID { get; set; }
+        public Nullable<int> SupplierID { get; set; }
+        public Nullable<int> ContractID { get; set; }
+        public Nullable<int> PartID { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public Nullable<double> PartPrice { get; set; }
+        public string Currency { get; set; }
+        public Nullable<double> TotalPrice { get; set; }
+        public string Unit { get; set; }
+        public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public string DUNS { get; set; }
-        public string Type { get; set; }
-        public string City { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_CONTRACTS> P_CONTRACTS { get; set; }
+        public virtual COMPANy COMPANy { get; set; }
+        public virtual P_CONTRACTS P_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICES> P_INVOICES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_ORDERS> P_ORDERS { get; set; }
+        public virtual ICollection<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
+        public virtual PART PART { get; set; }
+        public virtual SUPPLIER SUPPLIER { get; set; }
     }
 }

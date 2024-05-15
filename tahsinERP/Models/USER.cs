@@ -17,11 +17,13 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public USER()
         {
+            this.PART_WRHS = new HashSet<PART_WRHS>();
             this.PART1738DOCS = new HashSet<PART1738DOCS>();
             this.PART1738DOCS1 = new HashSet<PART1738DOCS>();
             this.PRODUCT1738DOCS = new HashSet<PRODUCT1738DOCS>();
             this.PRODUCT1738DOCS1 = new HashSet<PRODUCT1738DOCS>();
             this.USER_ENTRIES = new HashSet<USER_ENTRIES>();
+            this.USER_LICENSES = new HashSet<USER_LICENSES>();
             this.ROLES = new HashSet<ROLE>();
         }
     
@@ -31,11 +33,13 @@ namespace tahsinERP.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public bool IsActive { get; set; }
+        public Nullable<bool> IsActive { get; set; }
         public string HashCode { get; set; }
         public Nullable<int> CompanyID { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART1738DOCS> PART1738DOCS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -46,6 +50,8 @@ namespace tahsinERP.Models
         public virtual ICollection<PRODUCT1738DOCS> PRODUCT1738DOCS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<USER_ENTRIES> USER_ENTRIES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<USER_LICENSES> USER_LICENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ROLE> ROLES { get; set; }
     }

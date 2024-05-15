@@ -12,28 +12,25 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CUSTOMER
+    public partial class PROD_SHOPS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CUSTOMER()
+        public PROD_SHOPS()
         {
-            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
+            this.P_WRHS_EXPENSES = new HashSet<P_WRHS_EXPENSES>();
+            this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string ContactPersonName { get; set; }
-        public string DirectorName { get; set; }
+        public Nullable<int> CompanyID { get; set; }
+        public string ShopName { get; set; }
+        public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public string DUNS { get; set; }
-        public string Type { get; set; }
-        public string City { get; set; }
     
+        public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
+        public virtual ICollection<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
     }
 }

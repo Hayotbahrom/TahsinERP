@@ -17,10 +17,10 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PRODUCT()
         {
-            this.BOMS = new HashSet<BOM>();
             this.PRODUCTIMAGES = new HashSet<PRODUCTIMAGE>();
             this.PRODUCTPACKS = new HashSet<PRODUCTPACK>();
-            this.SCONTRACTS = new HashSet<SCONTRACT>();
+            this.PRODUCTPLANS = new HashSet<PRODUCTPLAN>();
+            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
             this.SPLs = new HashSet<SPL>();
         }
     
@@ -41,13 +41,13 @@ namespace tahsinERP.Models
         public Nullable<int> PackID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BOM> BOMS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCTPACK> PRODUCTPACKS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SCONTRACT> SCONTRACTS { get; set; }
+        public virtual ICollection<PRODUCTPLAN> PRODUCTPLANS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPL> SPLs { get; set; }
     }

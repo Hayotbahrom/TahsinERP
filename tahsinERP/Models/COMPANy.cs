@@ -17,8 +17,12 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public COMPANy()
         {
-            this.PCONTRACTS = new HashSet<PCONTRACT>();
-            this.SCONTRACTS = new HashSet<SCONTRACT>();
+            this.COMPANY_LICENSES = new HashSet<COMPANY_LICENSES>();
+            this.F_CONTRACTS = new HashSet<F_CONTRACTS>();
+            this.P_ORDERS = new HashSet<P_ORDERS>();
+            this.P_CONTRACTS = new HashSet<P_CONTRACTS>();
+            this.PROD_SHOPS = new HashSet<PROD_SHOPS>();
+            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
             this.USERS = new HashSet<USER>();
         }
     
@@ -33,9 +37,17 @@ namespace tahsinERP.Models
         public Nullable<bool> IsActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PCONTRACT> PCONTRACTS { get; set; }
+        public virtual ICollection<COMPANY_LICENSES> COMPANY_LICENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SCONTRACT> SCONTRACTS { get; set; }
+        public virtual ICollection<F_CONTRACTS> F_CONTRACTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_ORDERS> P_ORDERS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_CONTRACTS> P_CONTRACTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_SHOPS> PROD_SHOPS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<USER> USERS { get; set; }
     }

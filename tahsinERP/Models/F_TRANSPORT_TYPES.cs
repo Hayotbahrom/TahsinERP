@@ -12,28 +12,27 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CUSTOMER
+    public partial class F_TRANSPORT_TYPES
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CUSTOMER()
+        public F_TRANSPORT_TYPES()
         {
-            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
+            this.F_WAYBILLS = new HashSet<F_WAYBILLS>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string ContactPersonName { get; set; }
-        public string DirectorName { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
-        public string DUNS { get; set; }
-        public string Type { get; set; }
-        public string City { get; set; }
+        public string TransportType { get; set; }
+        public Nullable<double> ExtLgth { get; set; }
+        public Nullable<double> ExtWdth { get; set; }
+        public Nullable<double> ExtHght { get; set; }
+        public Nullable<double> IntLgth { get; set; }
+        public Nullable<double> IntWdth { get; set; }
+        public Nullable<double> IntHght { get; set; }
+        public string Unit { get; set; }
+        public Nullable<double> CapableOfLifting { get; set; }
+        public Nullable<double> TransportWeight { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
+        public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }
     }
 }

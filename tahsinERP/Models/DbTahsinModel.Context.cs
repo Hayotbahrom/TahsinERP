@@ -27,22 +27,43 @@ namespace tahsinERP.Models
     
         public virtual DbSet<BOM> BOMS { get; set; }
         public virtual DbSet<COMPANy> COMPANIES { get; set; }
+        public virtual DbSet<COMPANY_LICENSES> COMPANY_LICENSES { get; set; }
         public virtual DbSet<CUSTOMER> CUSTOMERS { get; set; }
+        public virtual DbSet<F_CONTRACTS> F_CONTRACTS { get; set; }
+        public virtual DbSet<F_TRANSPORT_TYPES> F_TRANSPORT_TYPES { get; set; }
+        public virtual DbSet<F_WAYBILL_DOCS> F_WAYBILL_DOCS { get; set; }
+        public virtual DbSet<F_WAYBILLS> F_WAYBILLS { get; set; }
+        public virtual DbSet<FORWARDER> FORWARDERS { get; set; }
+        public virtual DbSet<P_CONTRACT_DOCS> P_CONTRACT_DOCS { get; set; }
+        public virtual DbSet<P_CONTRACTS> P_CONTRACTS { get; set; }
+        public virtual DbSet<P_INVOICE_DOCS> P_INVOICE_DOCS { get; set; }
+        public virtual DbSet<P_INVOICE_PACKINGLISTS> P_INVOICE_PACKINGLISTS { get; set; }
+        public virtual DbSet<P_INVOICES> P_INVOICES { get; set; }
+        public virtual DbSet<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
+        public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
+        public virtual DbSet<P_PACKINGLIST_DOCS> P_PACKINGLIST_DOCS { get; set; }
+        public virtual DbSet<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
+        public virtual DbSet<P_WRHS_INCOME_DOCS> P_WRHS_INCOME_DOCS { get; set; }
+        public virtual DbSet<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
+        public virtual DbSet<PART_WRHS> PART_WRHS { get; set; }
         public virtual DbSet<PART1738DOCS> PART1738DOCS { get; set; }
         public virtual DbSet<PARTIMAGE> PARTIMAGES { get; set; }
         public virtual DbSet<PARTPACK> PARTPACKS { get; set; }
+        public virtual DbSet<PARTPLAN> PARTPLANS { get; set; }
         public virtual DbSet<PART> PARTS { get; set; }
-        public virtual DbSet<PCONTRACT> PCONTRACTS { get; set; }
         public virtual DbSet<PERMISSION> PERMISSIONS { get; set; }
+        public virtual DbSet<PROD_SHOPS> PROD_SHOPS { get; set; }
         public virtual DbSet<PRODUCT1738DOCS> PRODUCT1738DOCS { get; set; }
         public virtual DbSet<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
         public virtual DbSet<PRODUCTPACK> PRODUCTPACKS { get; set; }
+        public virtual DbSet<PRODUCTPLAN> PRODUCTPLANS { get; set; }
         public virtual DbSet<PRODUCT> PRODUCTS { get; set; }
         public virtual DbSet<ROLE> ROLES { get; set; }
-        public virtual DbSet<SCONTRACT> SCONTRACTS { get; set; }
+        public virtual DbSet<S_CONTRACTS> S_CONTRACTS { get; set; }
         public virtual DbSet<SPL> SPLs { get; set; }
         public virtual DbSet<SUPPLIER> SUPPLIERS { get; set; }
         public virtual DbSet<USER_ENTRIES> USER_ENTRIES { get; set; }
+        public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
     }
 }

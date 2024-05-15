@@ -12,28 +12,22 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CUSTOMER
+    public partial class FORWARDER
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CUSTOMER()
+        public FORWARDER()
         {
-            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
+            this.F_CONTRACTS = new HashSet<F_CONTRACTS>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string ContactPersonName { get; set; }
-        public string DirectorName { get; set; }
+        public string ForwarderName { get; set; }
+        public string Director { get; set; }
+        public string ContactPerson { get; set; }
+        public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public string DUNS { get; set; }
-        public string Type { get; set; }
-        public string City { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
+        public virtual ICollection<F_CONTRACTS> F_CONTRACTS { get; set; }
     }
 }

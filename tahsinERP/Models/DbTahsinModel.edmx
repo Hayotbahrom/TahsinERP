@@ -34,6 +34,17 @@
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="COMPANY_LICENSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="LicenseKey" Type="varchar(max)" />
+          <Property Name="IssueDate" Type="date" />
+          <Property Name="DueDate" Type="date" />
+          <Property Name="Description" Type="text" />
+        </EntityType>
         <EntityType Name="CUSTOMERS">
           <Key>
             <PropertyRef Name="ID" />
@@ -50,6 +61,236 @@
           <Property Name="DUNS" Type="varchar" MaxLength="50" />
           <Property Name="Type" Type="varchar" MaxLength="10" />
           <Property Name="City" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="F_CONTRACTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="ForwarderID" Type="int" />
+          <Property Name="IssueDate" Type="date" />
+          <Property Name="DueDate" Type="date" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="20" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="F_TRANSPORT_TYPES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ExtLgth" Type="float" />
+          <Property Name="ExtWdth" Type="float" />
+          <Property Name="ExtHght" Type="float" />
+          <Property Name="IntLgth" Type="float" />
+          <Property Name="IntWdth" Type="float" />
+          <Property Name="IntHght" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="20" />
+          <Property Name="CapableOfLifting" Type="float" />
+          <Property Name="TransportWeight" Type="float" />
+        </EntityType>
+        <EntityType Name="F_WAYBILL_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WaybillID" Type="int" Nullable="false" />
+          <Property Name="Doc" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="F_WAYBILLS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WaybillNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContractID" Type="int" />
+          <Property Name="TransportTypeID" Type="int" />
+          <Property Name="InvoiceID" Type="int" />
+          <Property Name="PackingListID" Type="int" />
+          <Property Name="CBM" Type="float" />
+          <Property Name="GrWeight" Type="float" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="FORWARDERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ForwarderName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Director" Type="varchar" MaxLength="50" />
+          <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="P_CONTRACT_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractID" Type="int" />
+          <Property Name="Doc" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="P_CONTRACTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IssuedDate" Type="date" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="SupplierID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="30" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Incoterms" Type="varchar" MaxLength="15" />
+          <Property Name="PaymentTerms" Type="varchar" MaxLength="50" />
+          <Property Name="MOQ" Type="float" />
+          <Property Name="MaximumCapacity" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="30" />
+          <Property Name="DueDate" Type="date" />
+        </EntityType>
+        <EntityType Name="P_INVOICE_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="Doc" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="P_INVOICE_PACKINGLISTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="PackingListNo" Type="varchar" MaxLength="50" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="PrLength" Type="float" />
+          <Property Name="PrWidth" Type="float" />
+          <Property Name="PrHeight" Type="float" />
+          <Property Name="PrCBM" Type="float" />
+          <Property Name="PrGrWeight" Type="float" />
+          <Property Name="PrPackMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="ScPackMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="ScLength" Type="float" />
+          <Property Name="ScWidth" Type="float" />
+          <Property Name="ScHeight" Type="float" />
+          <Property Name="ScCBM" Type="float" />
+          <Property Name="ScGrWeight" Type="float" />
+          <Property Name="PltType" Type="varchar" MaxLength="50" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="P_INVOICES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContractID" Type="int" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="SupplierID" Type="int" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="PartPrice" Type="float" />
+          <Property Name="TotalPrice" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="10" />
+          <Property Name="InvoiceDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="P_ORDER_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="Doc" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="P_ORDERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IssuedDate" Type="datetime" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="SupplierID" Type="int" />
+          <Property Name="ContractID" Type="int" />
+          <Property Name="PartID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="PartPrice" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="15" />
+          <Property Name="TotalPrice" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="15" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="P_PACKINGLIST_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PackingListID" Type="int" Nullable="false" />
+          <Property Name="Doc" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="P_WRHS_EXPENSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="30" />
+          <Property Name="PiecePrice" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="50" />
+          <Property Name="TotalPrice" Type="float" />
+          <Property Name="RecieverWhID" Type="int" />
+          <Property Name="ShopID" Type="int" />
+          <Property Name="WHID" Type="int" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="Description" Type="text" />
+        </EntityType>
+        <EntityType Name="P_WRHS_INCOME_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IncomeID" Type="int" Nullable="false" />
+          <Property Name="Doc" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="P_WRHS_INCOMES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="WHID" Type="int" />
+          <Property Name="PartID" Type="int" />
+          <Property Name="InvoiceID" Type="int" />
+          <Property Name="WaybillID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Unit" Type="varchar" MaxLength="20" />
+          <Property Name="PiecePrice" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="35" />
+          <Property Name="TotalPrice" Type="float" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="Description" Type="text" />
+          <Property Name="ShopID" Type="int" />
+        </EntityType>
+        <EntityType Name="PART_WRHS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WHName" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="MRP" Type="int" />
         </EntityType>
         <EntityType Name="PART1738DOCS">
           <Key>
@@ -105,6 +346,18 @@
           <Property Name="RegDate" Type="datetime" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="PARTPLANS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartID" Type="int" />
+          <Property Name="PlannedQty" Type="float" />
+          <Property Name="IssueDate" Type="datetime" />
+          <Property Name="DueDate" Type="datetime" />
+          <Property Name="Label" Type="varchar" MaxLength="50" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
         <EntityType Name="PARTS">
           <Key>
             <PropertyRef Name="ID" />
@@ -124,26 +377,8 @@
           <Property Name="PNo3" Type="varchar" MaxLength="20" />
           <Property Name="PNo4" Type="varchar" MaxLength="20" />
           <Property Name="PackID" Type="int" />
-        </EntityType>
-        <EntityType Name="PCONTRACTS">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ContractNo" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IssuedDate" Type="date" />
-          <Property Name="CompanyID" Type="int" Nullable="false" />
-          <Property Name="SupplierID" Type="int" Nullable="false" />
-          <Property Name="PartID" Type="int" Nullable="false" />
-          <Property Name="Price" Type="float" />
-          <Property Name="Currency" Type="varchar" MaxLength="30" />
-          <Property Name="Amount" Type="float" />
-          <Property Name="Incoterms" Type="varchar" MaxLength="15" />
-          <Property Name="PaymentTerms" Type="varchar" MaxLength="50" />
-          <Property Name="MOQ" Type="float" />
-          <Property Name="MaximumCapacity" Type="float" />
-          <Property Name="Unit" Type="varchar" MaxLength="30" />
-          <Property Name="DueDate" Type="date" />
+          <Property Name="IsInhouse" Type="bit" />
+          <Property Name="ShopID" Type="int" />
         </EntityType>
         <EntityType Name="PERMISSIONS">
           <Key>
@@ -156,6 +391,28 @@
           <Property Name="RoleID" Type="int" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="PROD_SHOPS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="ShopName" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PARTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PROD_SHOPS_PARTS">
+          <Property Name="ShopID" Type="int" />
+          <Property Name="PartID" Type="int" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PROD_SHOPS_PRODUCTS">
+          <Property Name="ShopID" Type="int" />
+          <Property Name="ProductID" Type="int" />
+        </EntityType>-->
         <EntityType Name="PRODUCT1738DOCS">
           <Key>
             <PropertyRef Name="ID" />
@@ -210,6 +467,18 @@
           <Property Name="RegDate" Type="datetime" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="PRODUCTPLANS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="PlannedQty" Type="float" />
+          <Property Name="Label" Type="varchar" MaxLength="50" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="IssueDate" Type="datetime" />
+          <Property Name="DueDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="PRODUCTS">
           <Key>
             <PropertyRef Name="ID" />
@@ -239,7 +508,7 @@
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
-        <EntityType Name="SCONTRACTS">
+        <EntityType Name="S_CONTRACTS">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -305,6 +574,17 @@
           <Property Name="IP" Type="varchar" MaxLength="20" />
           <Property Name="MAC" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="USER_LICENSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="LicenseKey" Type="varchar(max)" />
+          <Property Name="IssueDate" Type="date" />
+          <Property Name="DueDate" Type="date" />
+          <Property Name="Description" Type="text" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="USERROLES">
@@ -329,39 +609,387 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="HashCode" Type="varchar" MaxLength="30" />
           <Property Name="CompanyID" Type="int" />
         </EntityType>
-        <Association Name="FK_BOMS_PARTS">
-          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
-          <End Role="BOMS" Type="Self.BOMS" Multiplicity="*" />
+        <Association Name="FK_COMPANY_LICENSES_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
+          <End Role="COMPANY_LICENSES" Type="Self.COMPANY_LICENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="COMPANY_LICENSES">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_CONTRACTS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="0..1" />
+          <End Role="F_CONTRACTS" Type="Self.F_CONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_CONTRACTS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_CONTRACTS_FORWARDERS">
+          <End Role="FORWARDERS" Type="Self.FORWARDERS" Multiplicity="0..1" />
+          <End Role="F_CONTRACTS" Type="Self.F_CONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FORWARDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_CONTRACTS">
+              <PropertyRef Name="ForwarderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILL_DOCS_F_WAYBILLS">
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="1" />
+          <End Role="F_WAYBILL_DOCS" Type="Self.F_WAYBILL_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_WAYBILLS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILL_DOCS">
+              <PropertyRef Name="WaybillID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_F_CONTRACTS">
+          <End Role="F_CONTRACTS" Type="Self.F_CONTRACTS" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_F_TRANSPORT_TYPES">
+          <End Role="F_TRANSPORT_TYPES" Type="Self.F_TRANSPORT_TYPES" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_TRANSPORT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="TransportTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="PackingListID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_CONTRACT_DOCS_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
+          <End Role="P_CONTRACT_DOCS" Type="Self.P_CONTRACT_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_CONTRACT_DOCS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_DOCS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="1" />
+          <End Role="P_INVOICE_DOCS" Type="Self.P_INVOICE_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_DOCS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PACKINGLISTS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="1" />
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PACKINGLISTS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PARTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="BOMS">
-              <PropertyRef Name="ChildID" />
+            <Dependent Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BOMS_PARTS_2">
-          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
-          <End Role="BOMS" Type="Self.BOMS" Multiplicity="*" />
+        <Association Name="FK_P_INVOICES_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICES_P_ORDERS">
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICES_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PARTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="BOMS">
-              <PropertyRef Name="GrandChildID" />
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BOMS_PRODUCTS">
-          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="0..1" />
-          <End Role="BOMS" Type="Self.BOMS" Multiplicity="*" />
+        <Association Name="FK_P_INVOICES_SUPPLIERS">
+          <End Role="SUPPLIERS" Type="Self.SUPPLIERS" Multiplicity="0..1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PRODUCTS">
+            <Principal Role="SUPPLIERS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="BOMS">
-              <PropertyRef Name="ParentID" />
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDER_DOCS_P_ORDERS">
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="1" />
+          <End Role="P_ORDER_DOCS" Type="Self.P_ORDER_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDER_DOCS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDERS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDERS_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDERS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDERS_SUPPLIERS">
+          <End Role="SUPPLIERS" Type="Self.SUPPLIERS" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SUPPLIERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="1" />
+          <End Role="P_PACKINGLIST_DOCS" Type="Self.P_PACKINGLIST_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_PACKINGLIST_DOCS">
+              <PropertyRef Name="PackingListID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSES_PART_WRHS">
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART_WRHS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="WHID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSES_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSES_PROD_SHOPS">
+          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROD_SHOPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="ShopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES">
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="1" />
+          <End Role="P_WRHS_INCOME_DOCS" Type="Self.P_WRHS_INCOME_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_WRHS_INCOMES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOME_DOCS">
+              <PropertyRef Name="IncomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_F_WAYBILLS">
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_WAYBILLS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="WaybillID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_PART_WRHS">
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART_WRHS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="WHID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_PROD_SHOPS">
+          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROD_SHOPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="ShopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART_WRHS_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="0..1" />
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART_WRHS">
+              <PropertyRef Name="MRP" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -425,50 +1053,62 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PARTPLANS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
+          <End Role="PARTPLANS" Type="Self.PARTPLANS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PARTPLANS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PCONTRACTS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
-          <End Role="PCONTRACTS" Type="Self.PCONTRACTS" Multiplicity="*" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="PCONTRACTS">
+            <Dependent Role="P_CONTRACTS">
               <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PCONTRACTS_CUSTOMERS">
           <End Role="CUSTOMERS" Type="Self.CUSTOMERS" Multiplicity="1" />
-          <End Role="SCONTRACTS" Type="Self.SCONTRACTS" Multiplicity="*" />
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CUSTOMERS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="SCONTRACTS">
+            <Dependent Role="S_CONTRACTS">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PCONTRACTS_PARTS">
           <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
-          <End Role="PCONTRACTS" Type="Self.PCONTRACTS" Multiplicity="*" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PARTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="PCONTRACTS">
+            <Dependent Role="P_CONTRACTS">
               <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PCONTRACTS_SUPPLIERS">
           <End Role="SUPPLIERS" Type="Self.SUPPLIERS" Multiplicity="1" />
-          <End Role="PCONTRACTS" Type="Self.PCONTRACTS" Multiplicity="*" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SUPPLIERS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="PCONTRACTS">
+            <Dependent Role="P_CONTRACTS">
               <PropertyRef Name="SupplierID" />
             </Dependent>
           </ReferentialConstraint>
@@ -485,6 +1125,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <!--Errors Found During Generation:
+error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_PROD_SHOPS_PARTS_PARTS" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_PROD_SHOPS_PARTS_PROD_SHOPS" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_PROD_SHOPS_PRODUCTS_PROD_SHOPS" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_PROD_SHOPS_PRODUCTS_PRODUCTS" />-->
         <Association Name="FK_PRODUCT1738DOCS_PRODUCTPACKS">
           <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACKS" Multiplicity="1" />
           <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
@@ -533,6 +1185,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PRODUCTION_SHOPS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="0..1" />
+          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PROD_SHOPS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PRODUCTPACKS_PRODUCTS">
           <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="0..1" />
           <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACKS" Multiplicity="*" />
@@ -545,26 +1209,38 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PRODUCTPLANS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="PRODUCTPLANS" Type="Self.PRODUCTPLANS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PRODUCTPLANS">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SCONTRACTS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
-          <End Role="SCONTRACTS" Type="Self.SCONTRACTS" Multiplicity="*" />
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="SCONTRACTS">
+            <Dependent Role="S_CONTRACTS">
               <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SCONTRACTS_PRODUCTS">
           <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
-          <End Role="SCONTRACTS" Type="Self.SCONTRACTS" Multiplicity="*" />
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PRODUCTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="SCONTRACTS">
+            <Dependent Role="S_CONTRACTS">
               <PropertyRef Name="ProdID" />
             </Dependent>
           </ReferentialConstraint>
@@ -589,6 +1265,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="USER_ENTRIES">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USER_LICENSES_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="1" />
+          <End Role="USER_LICENSES" Type="Self.USER_LICENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USER_LICENSES">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -632,22 +1320,43 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
         <EntityContainer Name="DBTHSNModelStoreContainer">
           <EntitySet Name="BOMS" EntityType="Self.BOMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMPANIES" EntityType="Self.COMPANIES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="COMPANY_LICENSES" EntityType="Self.COMPANY_LICENSES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="F_CONTRACTS" EntityType="Self.F_CONTRACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="F_TRANSPORT_TYPES" EntityType="Self.F_TRANSPORT_TYPES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="F_WAYBILL_DOCS" EntityType="Self.F_WAYBILL_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="F_WAYBILLS" EntityType="Self.F_WAYBILLS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FORWARDERS" EntityType="Self.FORWARDERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_CONTRACT_DOCS" EntityType="Self.P_CONTRACT_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_CONTRACTS" EntityType="Self.P_CONTRACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_INVOICE_DOCS" EntityType="Self.P_INVOICE_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_INVOICE_PACKINGLISTS" EntityType="Self.P_INVOICE_PACKINGLISTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_INVOICES" EntityType="Self.P_INVOICES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_ORDER_DOCS" EntityType="Self.P_ORDER_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_WRHS_EXPENSES" EntityType="Self.P_WRHS_EXPENSES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_WRHS_INCOME_DOCS" EntityType="Self.P_WRHS_INCOME_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_WRHS_INCOMES" EntityType="Self.P_WRHS_INCOMES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PART_WRHS" EntityType="Self.PART_WRHS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PART1738DOCS" EntityType="Self.PART1738DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PARTIMAGES" EntityType="Self.PARTIMAGES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PARTPACKS" EntityType="Self.PARTPACKS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PARTPLANS" EntityType="Self.PARTPLANS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PARTS" EntityType="Self.PARTS" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PCONTRACTS" EntityType="Self.PCONTRACTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PERMISSIONS" EntityType="Self.PERMISSIONS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROD_SHOPS" EntityType="Self.PROD_SHOPS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRODUCT1738DOCS" EntityType="Self.PRODUCT1738DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRODUCTIMAGES" EntityType="Self.PRODUCTIMAGES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRODUCTPACKS" EntityType="Self.PRODUCTPACKS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCTPLANS" EntityType="Self.PRODUCTPLANS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRODUCTS" EntityType="Self.PRODUCTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ROLES" EntityType="Self.ROLES" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SCONTRACTS" EntityType="Self.SCONTRACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="S_CONTRACTS" EntityType="Self.S_CONTRACTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SPL" EntityType="Self.SPL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SUPPLIERS" EntityType="Self.SUPPLIERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USER_ENTRIES" EntityType="Self.USER_ENTRIES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USER_LICENSES" EntityType="Self.USER_LICENSES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USERROLES" EntityType="Self.USERROLES" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -655,17 +1364,133 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
     [USERROLES].[RoleID] AS [RoleID]
     FROM [dbo].[USERROLES] AS [USERROLES]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_BOMS_PARTS" Association="Self.FK_BOMS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="BOMS" EntitySet="BOMS" />
+          <AssociationSet Name="FK_COMPANY_LICENSES_COMPANIES" Association="Self.FK_COMPANY_LICENSES_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="COMPANY_LICENSES" EntitySet="COMPANY_LICENSES" />
           </AssociationSet>
-          <AssociationSet Name="FK_BOMS_PARTS_2" Association="Self.FK_BOMS_PARTS_2">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="BOMS" EntitySet="BOMS" />
+          <AssociationSet Name="FK_F_CONTRACTS_COMPANIES" Association="Self.FK_F_CONTRACTS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="F_CONTRACTS" EntitySet="F_CONTRACTS" />
           </AssociationSet>
-          <AssociationSet Name="FK_BOMS_PRODUCTS" Association="Self.FK_BOMS_PRODUCTS">
-            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
-            <End Role="BOMS" EntitySet="BOMS" />
+          <AssociationSet Name="FK_F_CONTRACTS_FORWARDERS" Association="Self.FK_F_CONTRACTS_FORWARDERS">
+            <End Role="FORWARDERS" EntitySet="FORWARDERS" />
+            <End Role="F_CONTRACTS" EntitySet="F_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILL_DOCS_F_WAYBILLS" Association="Self.FK_F_WAYBILL_DOCS_F_WAYBILLS">
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+            <End Role="F_WAYBILL_DOCS" EntitySet="F_WAYBILL_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_F_CONTRACTS" Association="Self.FK_F_WAYBILLS_F_CONTRACTS">
+            <End Role="F_CONTRACTS" EntitySet="F_CONTRACTS" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_F_TRANSPORT_TYPES" Association="Self.FK_F_WAYBILLS_F_TRANSPORT_TYPES">
+            <End Role="F_TRANSPORT_TYPES" EntitySet="F_TRANSPORT_TYPES" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" Association="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_P_INVOICES" Association="Self.FK_F_WAYBILLS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_CONTRACT_DOCS_P_CONTRACTS" Association="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS">
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_CONTRACT_DOCS" EntitySet="P_CONTRACT_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_DOCS_P_INVOICES" Association="Self.FK_P_INVOICE_DOCS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_INVOICE_DOCS" EntitySet="P_INVOICE_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_P_INVOICES" Association="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_PARTS" Association="Self.FK_P_INVOICE_PACKINGLISTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_P_CONTRACTS" Association="Self.FK_P_INVOICES_P_CONTRACTS">
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_P_ORDERS" Association="Self.FK_P_INVOICES_P_ORDERS">
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_PARTS" Association="Self.FK_P_INVOICES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_SUPPLIERS" Association="Self.FK_P_INVOICES_SUPPLIERS">
+            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDER_DOCS_P_ORDERS" Association="Self.FK_P_ORDER_DOCS_P_ORDERS">
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+            <End Role="P_ORDER_DOCS" EntitySet="P_ORDER_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDERS_COMPANIES" Association="Self.FK_P_ORDERS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDERS_P_CONTRACTS" Association="Self.FK_P_ORDERS_P_CONTRACTS">
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDERS_PARTS" Association="Self.FK_P_ORDERS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDERS_SUPPLIERS" Association="Self.FK_P_ORDERS_SUPPLIERS">
+            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" Association="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+            <End Role="P_PACKINGLIST_DOCS" EntitySet="P_PACKINGLIST_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSES_PART_WRHS" Association="Self.FK_P_WRHS_EXPENSES_PART_WRHS">
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSES_PARTS" Association="Self.FK_P_WRHS_EXPENSES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSES_PROD_SHOPS" Association="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS">
+            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" Association="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES">
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+            <End Role="P_WRHS_INCOME_DOCS" EntitySet="P_WRHS_INCOME_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_F_WAYBILLS" Association="Self.FK_P_WRHS_INCOMES_F_WAYBILLS">
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_P_INVOICES" Association="Self.FK_P_WRHS_INCOMES_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PART_WRHS" Association="Self.FK_P_WRHS_INCOMES_PART_WRHS">
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PARTS" Association="Self.FK_P_WRHS_INCOMES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PROD_SHOPS" Association="Self.FK_P_WRHS_INCOMES_PROD_SHOPS">
+            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART_WRHS_USERS" Association="Self.FK_PART_WRHS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
           </AssociationSet>
           <AssociationSet Name="FK_PART1738DOCS_PARTPACKS" Association="Self.FK_PART1738DOCS_PARTPACKS">
             <End Role="PARTPACKS" EntitySet="PARTPACKS" />
@@ -687,21 +1512,25 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PARTS" EntitySet="PARTS" />
             <End Role="PARTPACKS" EntitySet="PARTPACKS" />
           </AssociationSet>
+          <AssociationSet Name="FK_PARTPLANS_PARTS" Association="Self.FK_PARTPLANS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="PARTPLANS" EntitySet="PARTPLANS" />
+          </AssociationSet>
           <AssociationSet Name="FK_PCONTRACTS_COMPANIES" Association="Self.FK_PCONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
-            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_PCONTRACTS_CUSTOMERS" Association="Self.FK_PCONTRACTS_CUSTOMERS">
             <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
-            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_PCONTRACTS_PARTS" Association="Self.FK_PCONTRACTS_PARTS">
             <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_PCONTRACTS_SUPPLIERS" Association="Self.FK_PCONTRACTS_SUPPLIERS">
             <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
-            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_PERMISSIONS_ROLES" Association="Self.FK_PERMISSIONS_ROLES">
             <End Role="ROLES" EntitySet="ROLES" />
@@ -723,17 +1552,25 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
             <End Role="PRODUCTIMAGES" EntitySet="PRODUCTIMAGES" />
           </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTION_SHOPS_COMPANIES" Association="Self.FK_PRODUCTION_SHOPS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
+          </AssociationSet>
           <AssociationSet Name="FK_PRODUCTPACKS_PRODUCTS" Association="Self.FK_PRODUCTPACKS_PRODUCTS">
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
             <End Role="PRODUCTPACKS" EntitySet="PRODUCTPACKS" />
           </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTPLANS_PRODUCTS" Association="Self.FK_PRODUCTPLANS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="PRODUCTPLANS" EntitySet="PRODUCTPLANS" />
+          </AssociationSet>
           <AssociationSet Name="FK_SCONTRACTS_COMPANIES" Association="Self.FK_SCONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
-            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_SCONTRACTS_PRODUCTS" Association="Self.FK_SCONTRACTS_PRODUCTS">
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
-            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_SPL_PRODUCTS" Association="Self.FK_SPL_PRODUCTS">
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
@@ -742,6 +1579,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <AssociationSet Name="FK_USER_ENTRIES_USERS" Association="Self.FK_USER_ENTRIES_USERS">
             <End Role="USERS" EntitySet="USERS" />
             <End Role="USER_ENTRIES" EntitySet="USER_ENTRIES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USER_LICENSES_USERS" Association="Self.FK_USER_LICENSES_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="USER_LICENSES" EntitySet="USER_LICENSES" />
           </AssociationSet>
           <AssociationSet Name="FK_USERROLES_ROLES" Association="Self.FK_USERROLES_ROLES">
             <End Role="ROLES" EntitySet="ROLES" />
@@ -775,9 +1616,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="GrandChildUsageUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsDeleted" Type="Boolean" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_BOMS_PARTS" FromRole="BOMS" ToRole="PARTS" />
-          <NavigationProperty Name="PART1" Relationship="Self.FK_BOMS_PARTS_2" FromRole="BOMS" ToRole="PARTS" />
-          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_BOMS_PRODUCTS" FromRole="BOMS" ToRole="PRODUCTS" />
         </EntityType>
         <EntityType Name="COMPANy">
           <Key>
@@ -792,9 +1630,25 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Telephone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
-          <NavigationProperty Name="PCONTRACTS" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="PCONTRACTS" />
-          <NavigationProperty Name="SCONTRACTS" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="SCONTRACTS" />
+          <NavigationProperty Name="COMPANY_LICENSES" Relationship="Self.FK_COMPANY_LICENSES_COMPANIES" FromRole="COMPANIES" ToRole="COMPANY_LICENSES" />
+          <NavigationProperty Name="F_CONTRACTS" Relationship="Self.FK_F_CONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="F_CONTRACTS" />
+          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_COMPANIES" FromRole="COMPANIES" ToRole="P_ORDERS" />
+          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="P_CONTRACTS" />
+          <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_PRODUCTION_SHOPS_COMPANIES" FromRole="COMPANIES" ToRole="PROD_SHOPS" />
+          <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="S_CONTRACTS" />
           <NavigationProperty Name="USERS" Relationship="Self.FK_USERS_COMPANIES" FromRole="COMPANIES" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="COMPANY_LICENSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="LicenseKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IssueDate" Type="DateTime" Precision="0" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_COMPANY_LICENSES_COMPANIES" FromRole="COMPANY_LICENSES" ToRole="COMPANIES" />
         </EntityType>
         <EntityType Name="CUSTOMER">
           <Key>
@@ -812,7 +1666,290 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="DUNS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SCONTRACTS" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="CUSTOMERS" ToRole="SCONTRACTS" />
+          <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="CUSTOMERS" ToRole="S_CONTRACTS" />
+        </EntityType>
+        <EntityType Name="F_CONTRACTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="ForwarderID" Type="Int32" />
+          <Property Name="IssueDate" Type="DateTime" Precision="0" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_F_CONTRACTS_COMPANIES" FromRole="F_CONTRACTS" ToRole="COMPANIES" />
+          <NavigationProperty Name="FORWARDER" Relationship="Self.FK_F_CONTRACTS_FORWARDERS" FromRole="F_CONTRACTS" ToRole="FORWARDERS" />
+          <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILLS_F_CONTRACTS" FromRole="F_CONTRACTS" ToRole="F_WAYBILLS" />
+        </EntityType>
+        <EntityType Name="F_TRANSPORT_TYPES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransportType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExtLgth" Type="Double" />
+          <Property Name="ExtWdth" Type="Double" />
+          <Property Name="ExtHght" Type="Double" />
+          <Property Name="IntLgth" Type="Double" />
+          <Property Name="IntWdth" Type="Double" />
+          <Property Name="IntHght" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CapableOfLifting" Type="Double" />
+          <Property Name="TransportWeight" Type="Double" />
+          <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILLS_F_TRANSPORT_TYPES" FromRole="F_TRANSPORT_TYPES" ToRole="F_WAYBILLS" />
+        </EntityType>
+        <EntityType Name="F_WAYBILL_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WaybillID" Type="Int32" Nullable="false" />
+          <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILL_DOCS_F_WAYBILLS" FromRole="F_WAYBILL_DOCS" ToRole="F_WAYBILLS" />
+        </EntityType>
+        <EntityType Name="F_WAYBILLS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WaybillNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ContractID" Type="Int32" />
+          <Property Name="TransportTypeID" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" />
+          <Property Name="PackingListID" Type="Int32" />
+          <Property Name="CBM" Type="Double" />
+          <Property Name="GrWeight" Type="Double" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="F_CONTRACTS" Relationship="Self.FK_F_WAYBILLS_F_CONTRACTS" FromRole="F_WAYBILLS" ToRole="F_CONTRACTS" />
+          <NavigationProperty Name="F_TRANSPORT_TYPES" Relationship="Self.FK_F_WAYBILLS_F_TRANSPORT_TYPES" FromRole="F_WAYBILLS" ToRole="F_TRANSPORT_TYPES" />
+          <NavigationProperty Name="F_WAYBILL_DOCS" Relationship="Self.FK_F_WAYBILL_DOCS_F_WAYBILLS" FromRole="F_WAYBILLS" ToRole="F_WAYBILL_DOCS" />
+          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" FromRole="F_WAYBILLS" ToRole="P_INVOICE_PACKINGLISTS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_F_WAYBILLS_P_INVOICES" FromRole="F_WAYBILLS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_F_WAYBILLS" FromRole="F_WAYBILLS" ToRole="P_WRHS_INCOMES" />
+        </EntityType>
+        <EntityType Name="FORWARDER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ForwarderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Director" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="F_CONTRACTS" Relationship="Self.FK_F_CONTRACTS_FORWARDERS" FromRole="FORWARDERS" ToRole="F_CONTRACTS" />
+        </EntityType>
+        <EntityType Name="P_CONTRACT_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractID" Type="Int32" />
+          <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS" FromRole="P_CONTRACT_DOCS" ToRole="P_CONTRACTS" />
+        </EntityType>
+        <EntityType Name="P_CONTRACTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IssuedDate" Type="DateTime" Precision="0" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="SupplierID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Incoterms" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PaymentTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MOQ" Type="Double" />
+          <Property Name="MaximumCapacity" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="P_CONTRACTS" ToRole="COMPANIES" />
+          <NavigationProperty Name="P_CONTRACT_DOCS" Relationship="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_CONTRACT_DOCS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_ORDERS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_PCONTRACTS_PARTS" FromRole="P_CONTRACTS" ToRole="PARTS" />
+          <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="P_CONTRACTS" ToRole="SUPPLIERS" />
+        </EntityType>
+        <EntityType Name="P_INVOICE_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICE_DOCS_P_INVOICES" FromRole="P_INVOICE_DOCS" ToRole="P_INVOICES" />
+        </EntityType>
+        <EntityType Name="P_INVOICE_PACKINGLISTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="PackingListNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="PrLength" Type="Double" />
+          <Property Name="PrWidth" Type="Double" />
+          <Property Name="PrHeight" Type="Double" />
+          <Property Name="PrCBM" Type="Double" />
+          <Property Name="PrGrWeight" Type="Double" />
+          <Property Name="PrPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScLength" Type="Double" />
+          <Property Name="ScWidth" Type="Double" />
+          <Property Name="ScHeight" Type="Double" />
+          <Property Name="ScCBM" Type="Double" />
+          <Property Name="ScGrWeight" Type="Double" />
+          <Property Name="PltType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="F_WAYBILLS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="PARTS" />
+          <NavigationProperty Name="P_PACKINGLIST_DOCS" Relationship="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_PACKINGLIST_DOCS" />
+        </EntityType>
+        <EntityType Name="P_INVOICES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ContractID" Type="Int32" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="PartPrice" Type="Double" />
+          <Property Name="TotalPrice" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILLS_P_INVOICES" FromRole="P_INVOICES" ToRole="F_WAYBILLS" />
+          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_INVOICES_P_CONTRACTS" FromRole="P_INVOICES" ToRole="P_CONTRACTS" />
+          <NavigationProperty Name="P_INVOICE_DOCS" Relationship="Self.FK_P_INVOICE_DOCS_P_INVOICES" FromRole="P_INVOICES" ToRole="P_INVOICE_DOCS" />
+          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES" FromRole="P_INVOICES" ToRole="P_INVOICE_PACKINGLISTS" />
+          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_INVOICES_P_ORDERS" FromRole="P_INVOICES" ToRole="P_ORDERS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICES_PARTS" FromRole="P_INVOICES" ToRole="PARTS" />
+          <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_P_INVOICES_SUPPLIERS" FromRole="P_INVOICES" ToRole="SUPPLIERS" />
+          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_P_INVOICES" FromRole="P_INVOICES" ToRole="P_WRHS_INCOMES" />
+        </EntityType>
+        <EntityType Name="P_ORDER_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDER_DOCS_P_ORDERS" FromRole="P_ORDER_DOCS" ToRole="P_ORDERS" />
+        </EntityType>
+        <EntityType Name="P_ORDERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IssuedDate" Type="DateTime" Precision="3" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="ContractID" Type="Int32" />
+          <Property Name="PartID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="PartPrice" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TotalPrice" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_P_ORDERS_COMPANIES" FromRole="P_ORDERS" ToRole="COMPANIES" />
+          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_ORDERS_P_CONTRACTS" FromRole="P_ORDERS" ToRole="P_CONTRACTS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_P_ORDERS" FromRole="P_ORDERS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="P_ORDER_DOCS" Relationship="Self.FK_P_ORDER_DOCS_P_ORDERS" FromRole="P_ORDERS" ToRole="P_ORDER_DOCS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_ORDERS_PARTS" FromRole="P_ORDERS" ToRole="PARTS" />
+          <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_P_ORDERS_SUPPLIERS" FromRole="P_ORDERS" ToRole="SUPPLIERS" />
+        </EntityType>
+        <EntityType Name="P_PACKINGLIST_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PackingListID" Type="Int32" Nullable="false" />
+          <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" FromRole="P_PACKINGLIST_DOCS" ToRole="P_INVOICE_PACKINGLISTS" />
+        </EntityType>
+        <EntityType Name="P_WRHS_EXPENSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PiecePrice" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TotalPrice" Type="Double" />
+          <Property Name="RecieverWhID" Type="Int32" />
+          <Property Name="ShopID" Type="Int32" />
+          <Property Name="WHID" Type="Int32" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_P_WRHS_EXPENSES_PART_WRHS" FromRole="P_WRHS_EXPENSES" ToRole="PART_WRHS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_EXPENSES_PARTS" FromRole="P_WRHS_EXPENSES" ToRole="PARTS" />
+          <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS" FromRole="P_WRHS_EXPENSES" ToRole="PROD_SHOPS" />
+        </EntityType>
+        <EntityType Name="P_WRHS_INCOME_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IncomeID" Type="Int32" Nullable="false" />
+          <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" FromRole="P_WRHS_INCOME_DOCS" ToRole="P_WRHS_INCOMES" />
+        </EntityType>
+        <EntityType Name="P_WRHS_INCOMES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WHID" Type="Int32" />
+          <Property Name="PartID" Type="Int32" />
+          <Property Name="InvoiceID" Type="Int32" />
+          <Property Name="WaybillID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PiecePrice" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="TotalPrice" Type="Double" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ShopID" Type="Int32" />
+          <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_P_WRHS_INCOMES_F_WAYBILLS" FromRole="P_WRHS_INCOMES" ToRole="F_WAYBILLS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_WRHS_INCOMES_P_INVOICES" FromRole="P_WRHS_INCOMES" ToRole="P_INVOICES" />
+          <NavigationProperty Name="P_WRHS_INCOME_DOCS" Relationship="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" FromRole="P_WRHS_INCOMES" ToRole="P_WRHS_INCOME_DOCS" />
+          <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_P_WRHS_INCOMES_PART_WRHS" FromRole="P_WRHS_INCOMES" ToRole="PART_WRHS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_INCOMES_PARTS" FromRole="P_WRHS_INCOMES" ToRole="PARTS" />
+          <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_P_WRHS_INCOMES_PROD_SHOPS" FromRole="P_WRHS_INCOMES" ToRole="PROD_SHOPS" />
+        </EntityType>
+        <EntityType Name="PART_WRHS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WHName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="MRP" Type="Int32" />
+          <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSES_PART_WRHS" FromRole="PART_WRHS" ToRole="P_WRHS_EXPENSES" />
+          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_PART_WRHS" FromRole="PART_WRHS" ToRole="P_WRHS_INCOMES" />
+          <NavigationProperty Name="USER" Relationship="Self.FK_PART_WRHS_USERS" FromRole="PART_WRHS" ToRole="USERS" />
         </EntityType>
         <EntityType Name="PART1738DOCS">
           <Key>
@@ -874,6 +2011,19 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PART1738DOCS" Relationship="Self.FK_PART1738DOCS_PARTPACKS" FromRole="PARTPACKS" ToRole="PART1738DOCS" />
           <NavigationProperty Name="PART" Relationship="Self.FK_PARTPACKS_PARTS" FromRole="PARTPACKS" ToRole="PARTS" />
         </EntityType>
+        <EntityType Name="PARTPLAN">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int32" />
+          <Property Name="PlannedQty" Type="Double" />
+          <Property Name="IssueDate" Type="DateTime" Precision="3" />
+          <Property Name="DueDate" Type="DateTime" Precision="3" />
+          <Property Name="Label" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_PARTPLANS_PARTS" FromRole="PARTPLANS" ToRole="PARTS" />
+        </EntityType>
         <EntityType Name="PART">
           <Key>
             <PropertyRef Name="ID" />
@@ -893,34 +2043,17 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="PNo3" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="PNo4" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="PackID" Type="Int32" />
-          <NavigationProperty Name="BOMS" Relationship="Self.FK_BOMS_PARTS" FromRole="PARTS" ToRole="BOMS" />
-          <NavigationProperty Name="BOMS1" Relationship="Self.FK_BOMS_PARTS_2" FromRole="PARTS" ToRole="BOMS" />
+          <Property Name="IsInhouse" Type="Boolean" />
+          <Property Name="ShopID" Type="Int32" />
+          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_PCONTRACTS_PARTS" FromRole="PARTS" ToRole="P_CONTRACTS" />
+          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_PARTS" FromRole="PARTS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_PARTS" FromRole="PARTS" ToRole="P_ORDERS" />
+          <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSES_PARTS" FromRole="PARTS" ToRole="P_WRHS_EXPENSES" />
+          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_PARTS" FromRole="PARTS" ToRole="P_WRHS_INCOMES" />
           <NavigationProperty Name="PARTIMAGES" Relationship="Self.FK_PARTIMAGES_PARTS" FromRole="PARTS" ToRole="PARTIMAGES" />
           <NavigationProperty Name="PARTPACKS" Relationship="Self.FK_PARTPACKS_PARTS" FromRole="PARTS" ToRole="PARTPACKS" />
-          <NavigationProperty Name="PCONTRACTS" Relationship="Self.FK_PCONTRACTS_PARTS" FromRole="PARTS" ToRole="PCONTRACTS" />
-        </EntityType>
-        <EntityType Name="PCONTRACT">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IssuedDate" Type="DateTime" Precision="0" />
-          <Property Name="CompanyID" Type="Int32" Nullable="false" />
-          <Property Name="SupplierID" Type="Int32" Nullable="false" />
-          <Property Name="PartID" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Amount" Type="Double" />
-          <Property Name="Incoterms" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="PaymentTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MOQ" Type="Double" />
-          <Property Name="MaximumCapacity" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="DueDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="COMPANy" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="PCONTRACTS" ToRole="COMPANIES" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_PCONTRACTS_PARTS" FromRole="PCONTRACTS" ToRole="PARTS" />
-          <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="PCONTRACTS" ToRole="SUPPLIERS" />
+          <NavigationProperty Name="PARTPLANS" Relationship="Self.FK_PARTPLANS_PARTS" FromRole="PARTS" ToRole="PARTPLANS" />
         </EntityType>
         <EntityType Name="PERMISSION">
           <Key>
@@ -933,6 +2066,19 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="RoleID" Type="Int32" />
           <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="ROLE" Relationship="Self.FK_PERMISSIONS_ROLES" FromRole="PERMISSIONS" ToRole="ROLES" />
+        </EntityType>
+        <EntityType Name="PROD_SHOPS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="ShopName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_PRODUCTION_SHOPS_COMPANIES" FromRole="PROD_SHOPS" ToRole="COMPANIES" />
+          <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS" FromRole="PROD_SHOPS" ToRole="P_WRHS_EXPENSES" />
+          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_PROD_SHOPS" FromRole="PROD_SHOPS" ToRole="P_WRHS_INCOMES" />
         </EntityType>
         <EntityType Name="PRODUCT1738DOCS">
           <Key>
@@ -994,6 +2140,19 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PRODUCT1738DOCS" Relationship="Self.FK_PRODUCT1738DOCS_PRODUCTPACKS" FromRole="PRODUCTPACKS" ToRole="PRODUCT1738DOCS" />
           <NavigationProperty Name="PRODUCT" Relationship="Self.FK_PRODUCTPACKS_PRODUCTS" FromRole="PRODUCTPACKS" ToRole="PRODUCTS" />
         </EntityType>
+        <EntityType Name="PRODUCTPLAN">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="PlannedQty" Type="Double" />
+          <Property Name="Label" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="IssueDate" Type="DateTime" Precision="3" />
+          <Property Name="DueDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_PRODUCTPLANS_PRODUCTS" FromRole="PRODUCTPLANS" ToRole="PRODUCTS" />
+        </EntityType>
         <EntityType Name="PRODUCT">
           <Key>
             <PropertyRef Name="ID" />
@@ -1013,10 +2172,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="PNo3" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="PNo4" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="PackID" Type="Int32" />
-          <NavigationProperty Name="BOMS" Relationship="Self.FK_BOMS_PRODUCTS" FromRole="PRODUCTS" ToRole="BOMS" />
           <NavigationProperty Name="PRODUCTIMAGES" Relationship="Self.FK_PRODUCTIMAGES_PARTS" FromRole="PRODUCTS" ToRole="PRODUCTIMAGES" />
           <NavigationProperty Name="PRODUCTPACKS" Relationship="Self.FK_PRODUCTPACKS_PRODUCTS" FromRole="PRODUCTS" ToRole="PRODUCTPACKS" />
-          <NavigationProperty Name="SCONTRACTS" Relationship="Self.FK_SCONTRACTS_PRODUCTS" FromRole="PRODUCTS" ToRole="SCONTRACTS" />
+          <NavigationProperty Name="PRODUCTPLANS" Relationship="Self.FK_PRODUCTPLANS_PRODUCTS" FromRole="PRODUCTS" ToRole="PRODUCTPLANS" />
+          <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_SCONTRACTS_PRODUCTS" FromRole="PRODUCTS" ToRole="S_CONTRACTS" />
           <NavigationProperty Name="SPLs" Relationship="Self.FK_SPL_PRODUCTS" FromRole="PRODUCTS" ToRole="SPL" />
         </EntityType>
         <EntityType Name="ROLE">
@@ -1030,7 +2189,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PERMISSIONS" Relationship="Self.FK_PERMISSIONS_ROLES" FromRole="ROLES" ToRole="PERMISSIONS" />
           <NavigationProperty Name="USERS" Relationship="Self.USERROLES" FromRole="ROLES" ToRole="USERS" />
         </EntityType>
-        <EntityType Name="SCONTRACT">
+        <EntityType Name="S_CONTRACTS">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -1047,9 +2206,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="PaymentTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DueDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="COMPANy" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="SCONTRACTS" ToRole="COMPANIES" />
-          <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="SCONTRACTS" ToRole="CUSTOMERS" />
-          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_SCONTRACTS_PRODUCTS" FromRole="SCONTRACTS" ToRole="PRODUCTS" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="S_CONTRACTS" ToRole="COMPANIES" />
+          <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="S_CONTRACTS" ToRole="CUSTOMERS" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_SCONTRACTS_PRODUCTS" FromRole="S_CONTRACTS" ToRole="PRODUCTS" />
         </EntityType>
         <EntityType Name="SPL">
           <Key>
@@ -1089,7 +2248,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="DUNS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="PCONTRACTS" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="SUPPLIERS" ToRole="PCONTRACTS" />
+          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="SUPPLIERS" ToRole="P_CONTRACTS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_SUPPLIERS" FromRole="SUPPLIERS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_SUPPLIERS" FromRole="SUPPLIERS" ToRole="P_ORDERS" />
         </EntityType>
         <EntityType Name="USER_ENTRIES">
           <Key>
@@ -1101,6 +2262,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="IP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="MAC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="USER" Relationship="Self.FK_USER_ENTRIES_USERS" FromRole="USER_ENTRIES" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="USER_LICENSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="LicenseKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IssueDate" Type="DateTime" Precision="0" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="USER" Relationship="Self.FK_USER_LICENSES_USERS" FromRole="USER_LICENSES" ToRole="USERS" />
         </EntityType>
         <EntityType Name="USER">
           <Key>
@@ -1116,69 +2289,83 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="HashCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="CompanyID" Type="Int32" />
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_USERS_COMPANIES" FromRole="USERS" ToRole="COMPANIES" />
+          <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_PART_WRHS_USERS" FromRole="USERS" ToRole="PART_WRHS" />
           <NavigationProperty Name="PART1738DOCS" Relationship="Self.FK_PART1738DOCS_USERS" FromRole="USERS" ToRole="PART1738DOCS" />
           <NavigationProperty Name="PART1738DOCS1" Relationship="Self.FK_PART1738DOCS_USERS1" FromRole="USERS" ToRole="PART1738DOCS" />
           <NavigationProperty Name="PRODUCT1738DOCS" Relationship="Self.FK_PRODUCT1738DOCS_USERS" FromRole="USERS" ToRole="PRODUCT1738DOCS" />
           <NavigationProperty Name="PRODUCT1738DOCS1" Relationship="Self.FK_PRODUCT1738DOCS_USERS_2" FromRole="USERS" ToRole="PRODUCT1738DOCS" />
           <NavigationProperty Name="USER_ENTRIES" Relationship="Self.FK_USER_ENTRIES_USERS" FromRole="USERS" ToRole="USER_ENTRIES" />
+          <NavigationProperty Name="USER_LICENSES" Relationship="Self.FK_USER_LICENSES_USERS" FromRole="USERS" ToRole="USER_LICENSES" />
           <NavigationProperty Name="ROLES" Relationship="Self.USERROLES" FromRole="USERS" ToRole="ROLES" />
         </EntityType>
-        <Association Name="FK_BOMS_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
-          <End Role="BOMS" Type="Self.BOM" Multiplicity="*" />
+        <Association Name="FK_COMPANY_LICENSES_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="1" />
+          <End Role="COMPANY_LICENSES" Type="Self.COMPANY_LICENSES" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PARTS">
+            <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="BOMS">
-              <PropertyRef Name="ChildID" />
+            <Dependent Role="COMPANY_LICENSES">
+              <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BOMS_PARTS_2">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
-          <End Role="BOMS" Type="Self.BOM" Multiplicity="*" />
+        <Association Name="FK_F_CONTRACTS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="0..1" />
+          <End Role="F_CONTRACTS" Type="Self.F_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PARTS">
+            <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="BOMS">
-              <PropertyRef Name="GrandChildID" />
+            <Dependent Role="F_CONTRACTS">
+              <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BOMS_PRODUCTS">
-          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="0..1" />
-          <End Role="BOMS" Type="Self.BOM" Multiplicity="*" />
+        <Association Name="FK_P_ORDERS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PRODUCTS">
+            <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="BOMS">
-              <PropertyRef Name="ParentID" />
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PCONTRACTS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="1" />
-          <End Role="PCONTRACTS" Type="Self.PCONTRACT" Multiplicity="*" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="PCONTRACTS">
+            <Dependent Role="P_CONTRACTS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRODUCTION_SHOPS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="0..1" />
+          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PROD_SHOPS">
               <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SCONTRACTS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="1" />
-          <End Role="SCONTRACTS" Type="Self.SCONTRACT" Multiplicity="*" />
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="SCONTRACTS">
+            <Dependent Role="S_CONTRACTS">
               <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1197,13 +2384,385 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
         </Association>
         <Association Name="FK_PCONTRACTS_CUSTOMERS">
           <End Role="CUSTOMERS" Type="Self.CUSTOMER" Multiplicity="1" />
-          <End Role="SCONTRACTS" Type="Self.SCONTRACT" Multiplicity="*" />
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CUSTOMERS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="SCONTRACTS">
+            <Dependent Role="S_CONTRACTS">
               <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_CONTRACTS_FORWARDERS">
+          <End Role="FORWARDERS" Type="Self.FORWARDER" Multiplicity="0..1" />
+          <End Role="F_CONTRACTS" Type="Self.F_CONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FORWARDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_CONTRACTS">
+              <PropertyRef Name="ForwarderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_F_CONTRACTS">
+          <End Role="F_CONTRACTS" Type="Self.F_CONTRACTS" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_F_TRANSPORT_TYPES">
+          <End Role="F_TRANSPORT_TYPES" Type="Self.F_TRANSPORT_TYPES" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_TRANSPORT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="TransportTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILL_DOCS_F_WAYBILLS">
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="1" />
+          <End Role="F_WAYBILL_DOCS" Type="Self.F_WAYBILL_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_WAYBILLS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILL_DOCS">
+              <PropertyRef Name="WaybillID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="PackingListID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_F_WAYBILLS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="0..1" />
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="F_WAYBILLS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_F_WAYBILLS">
+          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_WAYBILLS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="WaybillID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_CONTRACT_DOCS_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
+          <End Role="P_CONTRACT_DOCS" Type="Self.P_CONTRACT_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_CONTRACT_DOCS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICES_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDERS_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_CONTRACTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PCONTRACTS_SUPPLIERS">
+          <End Role="SUPPLIERS" Type="Self.SUPPLIER" Multiplicity="1" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SUPPLIERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_CONTRACTS">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_DOCS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="1" />
+          <End Role="P_INVOICE_DOCS" Type="Self.P_INVOICE_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_DOCS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PACKINGLISTS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="1" />
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PACKINGLISTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="1" />
+          <End Role="P_PACKINGLIST_DOCS" Type="Self.P_PACKINGLIST_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_PACKINGLIST_DOCS">
+              <PropertyRef Name="PackingListID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICES_P_ORDERS">
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICES_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICES_SUPPLIERS">
+          <End Role="SUPPLIERS" Type="Self.SUPPLIER" Multiplicity="0..1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SUPPLIERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDER_DOCS_P_ORDERS">
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="1" />
+          <End Role="P_ORDER_DOCS" Type="Self.P_ORDER_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDER_DOCS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDERS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDERS_SUPPLIERS">
+          <End Role="SUPPLIERS" Type="Self.SUPPLIER" Multiplicity="0..1" />
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SUPPLIERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDERS">
+              <PropertyRef Name="SupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSES_PART_WRHS">
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART_WRHS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="WHID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSES_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSES_PROD_SHOPS">
+          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROD_SHOPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="ShopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES">
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="1" />
+          <End Role="P_WRHS_INCOME_DOCS" Type="Self.P_WRHS_INCOME_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_WRHS_INCOMES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOME_DOCS">
+              <PropertyRef Name="IncomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_PART_WRHS">
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART_WRHS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="WHID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOMES_PROD_SHOPS">
+          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROD_SHOPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOMES">
+              <PropertyRef Name="ShopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART_WRHS_USERS">
+          <End Role="USERS" Type="Self.USER" Multiplicity="0..1" />
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART_WRHS">
+              <PropertyRef Name="MRP" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1267,27 +2826,15 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PCONTRACTS_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
-          <End Role="PCONTRACTS" Type="Self.PCONTRACT" Multiplicity="*" />
+        <Association Name="FK_PARTPLANS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
+          <End Role="PARTPLANS" Type="Self.PARTPLAN" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PARTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="PCONTRACTS">
+            <Dependent Role="PARTPLANS">
               <PropertyRef Name="PartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PCONTRACTS_SUPPLIERS">
-          <End Role="SUPPLIERS" Type="Self.SUPPLIER" Multiplicity="1" />
-          <End Role="PCONTRACTS" Type="Self.PCONTRACT" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SUPPLIERS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PCONTRACTS">
-              <PropertyRef Name="SupplierID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1363,14 +2910,26 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SCONTRACTS_PRODUCTS">
+        <Association Name="FK_PRODUCTPLANS_PRODUCTS">
           <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="1" />
-          <End Role="SCONTRACTS" Type="Self.SCONTRACT" Multiplicity="*" />
+          <End Role="PRODUCTPLANS" Type="Self.PRODUCTPLAN" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PRODUCTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="SCONTRACTS">
+            <Dependent Role="PRODUCTPLANS">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCONTRACTS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="1" />
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_CONTRACTS">
               <PropertyRef Name="ProdID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1399,6 +2958,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_USER_LICENSES_USERS">
+          <End Role="USERS" Type="Self.USER" Multiplicity="1" />
+          <End Role="USER_LICENSES" Type="Self.USER_LICENSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USER_LICENSES">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="USERROLES">
           <End Role="ROLES" Type="Self.ROLE" Multiplicity="*" />
           <End Role="USERS" Type="Self.USER" Multiplicity="*" />
@@ -1406,42 +2977,67 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
         <EntityContainer Name="DBTHSNEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="BOMS" EntityType="Self.BOM" />
           <EntitySet Name="COMPANIES" EntityType="Self.COMPANy" />
+          <EntitySet Name="COMPANY_LICENSES" EntityType="Self.COMPANY_LICENSES" />
           <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMER" />
+          <EntitySet Name="F_CONTRACTS" EntityType="Self.F_CONTRACTS" />
+          <EntitySet Name="F_TRANSPORT_TYPES" EntityType="Self.F_TRANSPORT_TYPES" />
+          <EntitySet Name="F_WAYBILL_DOCS" EntityType="Self.F_WAYBILL_DOCS" />
+          <EntitySet Name="F_WAYBILLS" EntityType="Self.F_WAYBILLS" />
+          <EntitySet Name="FORWARDERS" EntityType="Self.FORWARDER" />
+          <EntitySet Name="P_CONTRACT_DOCS" EntityType="Self.P_CONTRACT_DOCS" />
+          <EntitySet Name="P_CONTRACTS" EntityType="Self.P_CONTRACTS" />
+          <EntitySet Name="P_INVOICE_DOCS" EntityType="Self.P_INVOICE_DOCS" />
+          <EntitySet Name="P_INVOICE_PACKINGLISTS" EntityType="Self.P_INVOICE_PACKINGLISTS" />
+          <EntitySet Name="P_INVOICES" EntityType="Self.P_INVOICES" />
+          <EntitySet Name="P_ORDER_DOCS" EntityType="Self.P_ORDER_DOCS" />
+          <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" />
+          <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" />
+          <EntitySet Name="P_WRHS_EXPENSES" EntityType="Self.P_WRHS_EXPENSES" />
+          <EntitySet Name="P_WRHS_INCOME_DOCS" EntityType="Self.P_WRHS_INCOME_DOCS" />
+          <EntitySet Name="P_WRHS_INCOMES" EntityType="Self.P_WRHS_INCOMES" />
+          <EntitySet Name="PART_WRHS" EntityType="Self.PART_WRHS" />
           <EntitySet Name="PART1738DOCS" EntityType="Self.PART1738DOCS" />
           <EntitySet Name="PARTIMAGES" EntityType="Self.PARTIMAGE" />
           <EntitySet Name="PARTPACKS" EntityType="Self.PARTPACK" />
+          <EntitySet Name="PARTPLANS" EntityType="Self.PARTPLAN" />
           <EntitySet Name="PARTS" EntityType="Self.PART" />
-          <EntitySet Name="PCONTRACTS" EntityType="Self.PCONTRACT" />
           <EntitySet Name="PERMISSIONS" EntityType="Self.PERMISSION" />
+          <EntitySet Name="PROD_SHOPS" EntityType="Self.PROD_SHOPS" />
           <EntitySet Name="PRODUCT1738DOCS" EntityType="Self.PRODUCT1738DOCS" />
           <EntitySet Name="PRODUCTIMAGES" EntityType="Self.PRODUCTIMAGE" />
           <EntitySet Name="PRODUCTPACKS" EntityType="Self.PRODUCTPACK" />
+          <EntitySet Name="PRODUCTPLANS" EntityType="Self.PRODUCTPLAN" />
           <EntitySet Name="PRODUCTS" EntityType="Self.PRODUCT" />
           <EntitySet Name="ROLES" EntityType="Self.ROLE" />
-          <EntitySet Name="SCONTRACTS" EntityType="Self.SCONTRACT" />
+          <EntitySet Name="S_CONTRACTS" EntityType="Self.S_CONTRACTS" />
           <EntitySet Name="SPLs" EntityType="Self.SPL" />
           <EntitySet Name="SUPPLIERS" EntityType="Self.SUPPLIER" />
           <EntitySet Name="USER_ENTRIES" EntityType="Self.USER_ENTRIES" />
+          <EntitySet Name="USER_LICENSES" EntityType="Self.USER_LICENSES" />
           <EntitySet Name="USERS" EntityType="Self.USER" />
-          <AssociationSet Name="FK_BOMS_PARTS" Association="Self.FK_BOMS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="BOMS" EntitySet="BOMS" />
+          <AssociationSet Name="FK_COMPANY_LICENSES_COMPANIES" Association="Self.FK_COMPANY_LICENSES_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="COMPANY_LICENSES" EntitySet="COMPANY_LICENSES" />
           </AssociationSet>
-          <AssociationSet Name="FK_BOMS_PARTS_2" Association="Self.FK_BOMS_PARTS_2">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="BOMS" EntitySet="BOMS" />
+          <AssociationSet Name="FK_F_CONTRACTS_COMPANIES" Association="Self.FK_F_CONTRACTS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="F_CONTRACTS" EntitySet="F_CONTRACTS" />
           </AssociationSet>
-          <AssociationSet Name="FK_BOMS_PRODUCTS" Association="Self.FK_BOMS_PRODUCTS">
-            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
-            <End Role="BOMS" EntitySet="BOMS" />
+          <AssociationSet Name="FK_P_ORDERS_COMPANIES" Association="Self.FK_P_ORDERS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
           </AssociationSet>
           <AssociationSet Name="FK_PCONTRACTS_COMPANIES" Association="Self.FK_PCONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
-            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTION_SHOPS_COMPANIES" Association="Self.FK_PRODUCTION_SHOPS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
           </AssociationSet>
           <AssociationSet Name="FK_SCONTRACTS_COMPANIES" Association="Self.FK_SCONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
-            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_USERS_COMPANIES" Association="Self.FK_USERS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
@@ -1449,7 +3045,131 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </AssociationSet>
           <AssociationSet Name="FK_PCONTRACTS_CUSTOMERS" Association="Self.FK_PCONTRACTS_CUSTOMERS">
             <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
-            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_CONTRACTS_FORWARDERS" Association="Self.FK_F_CONTRACTS_FORWARDERS">
+            <End Role="FORWARDERS" EntitySet="FORWARDERS" />
+            <End Role="F_CONTRACTS" EntitySet="F_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_F_CONTRACTS" Association="Self.FK_F_WAYBILLS_F_CONTRACTS">
+            <End Role="F_CONTRACTS" EntitySet="F_CONTRACTS" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_F_TRANSPORT_TYPES" Association="Self.FK_F_WAYBILLS_F_TRANSPORT_TYPES">
+            <End Role="F_TRANSPORT_TYPES" EntitySet="F_TRANSPORT_TYPES" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILL_DOCS_F_WAYBILLS" Association="Self.FK_F_WAYBILL_DOCS_F_WAYBILLS">
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+            <End Role="F_WAYBILL_DOCS" EntitySet="F_WAYBILL_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" Association="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_F_WAYBILLS_P_INVOICES" Association="Self.FK_F_WAYBILLS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_F_WAYBILLS" Association="Self.FK_P_WRHS_INCOMES_F_WAYBILLS">
+            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_CONTRACT_DOCS_P_CONTRACTS" Association="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS">
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_CONTRACT_DOCS" EntitySet="P_CONTRACT_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_P_CONTRACTS" Association="Self.FK_P_INVOICES_P_CONTRACTS">
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDERS_P_CONTRACTS" Association="Self.FK_P_ORDERS_P_CONTRACTS">
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_PARTS" Association="Self.FK_PCONTRACTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PCONTRACTS_SUPPLIERS" Association="Self.FK_PCONTRACTS_SUPPLIERS">
+            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
+            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_DOCS_P_INVOICES" Association="Self.FK_P_INVOICE_DOCS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_INVOICE_DOCS" EntitySet="P_INVOICE_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_P_INVOICES" Association="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_PARTS" Association="Self.FK_P_INVOICE_PACKINGLISTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" Association="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+            <End Role="P_PACKINGLIST_DOCS" EntitySet="P_PACKINGLIST_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_P_ORDERS" Association="Self.FK_P_INVOICES_P_ORDERS">
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_PARTS" Association="Self.FK_P_INVOICES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_SUPPLIERS" Association="Self.FK_P_INVOICES_SUPPLIERS">
+            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_P_INVOICES" Association="Self.FK_P_WRHS_INCOMES_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDER_DOCS_P_ORDERS" Association="Self.FK_P_ORDER_DOCS_P_ORDERS">
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+            <End Role="P_ORDER_DOCS" EntitySet="P_ORDER_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDERS_PARTS" Association="Self.FK_P_ORDERS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDERS_SUPPLIERS" Association="Self.FK_P_ORDERS_SUPPLIERS">
+            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSES_PART_WRHS" Association="Self.FK_P_WRHS_EXPENSES_PART_WRHS">
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSES_PARTS" Association="Self.FK_P_WRHS_EXPENSES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSES_PROD_SHOPS" Association="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS">
+            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" Association="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES">
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+            <End Role="P_WRHS_INCOME_DOCS" EntitySet="P_WRHS_INCOME_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PART_WRHS" Association="Self.FK_P_WRHS_INCOMES_PART_WRHS">
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PARTS" Association="Self.FK_P_WRHS_INCOMES_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PROD_SHOPS" Association="Self.FK_P_WRHS_INCOMES_PROD_SHOPS">
+            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART_WRHS_USERS" Association="Self.FK_PART_WRHS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
           </AssociationSet>
           <AssociationSet Name="FK_PART1738DOCS_PARTPACKS" Association="Self.FK_PART1738DOCS_PARTPACKS">
             <End Role="PARTPACKS" EntitySet="PARTPACKS" />
@@ -1471,13 +3191,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PARTS" EntitySet="PARTS" />
             <End Role="PARTPACKS" EntitySet="PARTPACKS" />
           </AssociationSet>
-          <AssociationSet Name="FK_PCONTRACTS_PARTS" Association="Self.FK_PCONTRACTS_PARTS">
+          <AssociationSet Name="FK_PARTPLANS_PARTS" Association="Self.FK_PARTPLANS_PARTS">
             <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PCONTRACTS_SUPPLIERS" Association="Self.FK_PCONTRACTS_SUPPLIERS">
-            <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
-            <End Role="PCONTRACTS" EntitySet="PCONTRACTS" />
+            <End Role="PARTPLANS" EntitySet="PARTPLANS" />
           </AssociationSet>
           <AssociationSet Name="FK_PERMISSIONS_ROLES" Association="Self.FK_PERMISSIONS_ROLES">
             <End Role="ROLES" EntitySet="ROLES" />
@@ -1503,9 +3219,13 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
             <End Role="PRODUCTPACKS" EntitySet="PRODUCTPACKS" />
           </AssociationSet>
+          <AssociationSet Name="FK_PRODUCTPLANS_PRODUCTS" Association="Self.FK_PRODUCTPLANS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="PRODUCTPLANS" EntitySet="PRODUCTPLANS" />
+          </AssociationSet>
           <AssociationSet Name="FK_SCONTRACTS_PRODUCTS" Association="Self.FK_SCONTRACTS_PRODUCTS">
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
-            <End Role="SCONTRACTS" EntitySet="SCONTRACTS" />
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
           </AssociationSet>
           <AssociationSet Name="FK_SPL_PRODUCTS" Association="Self.FK_SPL_PRODUCTS">
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
@@ -1514,6 +3234,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <AssociationSet Name="FK_USER_ENTRIES_USERS" Association="Self.FK_USER_ENTRIES_USERS">
             <End Role="USERS" EntitySet="USERS" />
             <End Role="USER_ENTRIES" EntitySet="USER_ENTRIES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USER_LICENSES_USERS" Association="Self.FK_USER_LICENSES_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="USER_LICENSES" EntitySet="USER_LICENSES" />
           </AssociationSet>
           <AssociationSet Name="USERROLES" Association="Self.USERROLES">
             <End Role="ROLES" EntitySet="ROLES" />
@@ -1557,6 +3281,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="COMPANY_LICENSES">
+            <EntityTypeMapping TypeName="DBTHSNModel.COMPANY_LICENSES">
+              <MappingFragment StoreEntitySet="COMPANY_LICENSES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="LicenseKey" ColumnName="LicenseKey" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CUSTOMERS">
             <EntityTypeMapping TypeName="DBTHSNModel.CUSTOMER">
               <MappingFragment StoreEntitySet="CUSTOMERS">
@@ -1572,6 +3308,253 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="DUNS" ColumnName="DUNS" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="F_CONTRACTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.F_CONTRACTS">
+              <MappingFragment StoreEntitySet="F_CONTRACTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="ForwarderID" ColumnName="ForwarderID" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="F_TRANSPORT_TYPES">
+            <EntityTypeMapping TypeName="DBTHSNModel.F_TRANSPORT_TYPES">
+              <MappingFragment StoreEntitySet="F_TRANSPORT_TYPES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TransportType" ColumnName="TransportType" />
+                <ScalarProperty Name="ExtLgth" ColumnName="ExtLgth" />
+                <ScalarProperty Name="ExtWdth" ColumnName="ExtWdth" />
+                <ScalarProperty Name="ExtHght" ColumnName="ExtHght" />
+                <ScalarProperty Name="IntLgth" ColumnName="IntLgth" />
+                <ScalarProperty Name="IntWdth" ColumnName="IntWdth" />
+                <ScalarProperty Name="IntHght" ColumnName="IntHght" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="CapableOfLifting" ColumnName="CapableOfLifting" />
+                <ScalarProperty Name="TransportWeight" ColumnName="TransportWeight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="F_WAYBILL_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.F_WAYBILL_DOCS">
+              <MappingFragment StoreEntitySet="F_WAYBILL_DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="WaybillID" ColumnName="WaybillID" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="F_WAYBILLS">
+            <EntityTypeMapping TypeName="DBTHSNModel.F_WAYBILLS">
+              <MappingFragment StoreEntitySet="F_WAYBILLS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="WaybillNo" ColumnName="WaybillNo" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="TransportTypeID" ColumnName="TransportTypeID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="PackingListID" ColumnName="PackingListID" />
+                <ScalarProperty Name="CBM" ColumnName="CBM" />
+                <ScalarProperty Name="GrWeight" ColumnName="GrWeight" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FORWARDERS">
+            <EntityTypeMapping TypeName="DBTHSNModel.FORWARDER">
+              <MappingFragment StoreEntitySet="FORWARDERS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ForwarderName" ColumnName="ForwarderName" />
+                <ScalarProperty Name="Director" ColumnName="Director" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_CONTRACT_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_CONTRACT_DOCS">
+              <MappingFragment StoreEntitySet="P_CONTRACT_DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_CONTRACTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_CONTRACTS">
+              <MappingFragment StoreEntitySet="P_CONTRACTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Incoterms" ColumnName="Incoterms" />
+                <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
+                <ScalarProperty Name="MaximumCapacity" ColumnName="MaximumCapacity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_INVOICE_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_INVOICE_DOCS">
+              <MappingFragment StoreEntitySet="P_INVOICE_DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_INVOICE_PACKINGLISTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_INVOICE_PACKINGLISTS">
+              <MappingFragment StoreEntitySet="P_INVOICE_PACKINGLISTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="PackingListNo" ColumnName="PackingListNo" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PrLength" ColumnName="PrLength" />
+                <ScalarProperty Name="PrWidth" ColumnName="PrWidth" />
+                <ScalarProperty Name="PrHeight" ColumnName="PrHeight" />
+                <ScalarProperty Name="PrCBM" ColumnName="PrCBM" />
+                <ScalarProperty Name="PrGrWeight" ColumnName="PrGrWeight" />
+                <ScalarProperty Name="PrPackMaterial" ColumnName="PrPackMaterial" />
+                <ScalarProperty Name="ScPackMaterial" ColumnName="ScPackMaterial" />
+                <ScalarProperty Name="ScLength" ColumnName="ScLength" />
+                <ScalarProperty Name="ScWidth" ColumnName="ScWidth" />
+                <ScalarProperty Name="ScHeight" ColumnName="ScHeight" />
+                <ScalarProperty Name="ScCBM" ColumnName="ScCBM" />
+                <ScalarProperty Name="ScGrWeight" ColumnName="ScGrWeight" />
+                <ScalarProperty Name="PltType" ColumnName="PltType" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_INVOICES">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_INVOICES">
+              <MappingFragment StoreEntitySet="P_INVOICES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PartPrice" ColumnName="PartPrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_ORDER_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_ORDER_DOCS">
+              <MappingFragment StoreEntitySet="P_ORDER_DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_ORDERS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_ORDERS">
+              <MappingFragment StoreEntitySet="P_ORDERS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PartPrice" ColumnName="PartPrice" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_PACKINGLIST_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_PACKINGLIST_DOCS">
+              <MappingFragment StoreEntitySet="P_PACKINGLIST_DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PackingListID" ColumnName="PackingListID" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_WRHS_EXPENSES">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_EXPENSES">
+              <MappingFragment StoreEntitySet="P_WRHS_EXPENSES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="PiecePrice" ColumnName="PiecePrice" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="RecieverWhID" ColumnName="RecieverWhID" />
+                <ScalarProperty Name="ShopID" ColumnName="ShopID" />
+                <ScalarProperty Name="WHID" ColumnName="WHID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_WRHS_INCOME_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_INCOME_DOCS">
+              <MappingFragment StoreEntitySet="P_WRHS_INCOME_DOCS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IncomeID" ColumnName="IncomeID" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_WRHS_INCOMES">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_INCOMES">
+              <MappingFragment StoreEntitySet="P_WRHS_INCOMES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="WHID" ColumnName="WHID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="WaybillID" ColumnName="WaybillID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="PiecePrice" ColumnName="PiecePrice" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ShopID" ColumnName="ShopID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PART_WRHS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PART_WRHS">
+              <MappingFragment StoreEntitySet="PART_WRHS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="WHName" ColumnName="WHName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1632,6 +3615,19 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PARTPLANS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PARTPLAN">
+              <MappingFragment StoreEntitySet="PARTPLANS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PlannedQty" ColumnName="PlannedQty" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PARTS">
             <EntityTypeMapping TypeName="DBTHSNModel.PART">
               <MappingFragment StoreEntitySet="PARTS">
@@ -1650,27 +3646,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="PNo3" ColumnName="PNo3" />
                 <ScalarProperty Name="PNo4" ColumnName="PNo4" />
                 <ScalarProperty Name="PackID" ColumnName="PackID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PCONTRACTS">
-            <EntityTypeMapping TypeName="DBTHSNModel.PCONTRACT">
-              <MappingFragment StoreEntitySet="PCONTRACTS">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-                <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Incoterms" ColumnName="Incoterms" />
-                <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
-                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
-                <ScalarProperty Name="MaximumCapacity" ColumnName="MaximumCapacity" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="IsInhouse" ColumnName="IsInhouse" />
+                <ScalarProperty Name="ShopID" ColumnName="ShopID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1682,6 +3659,17 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="ViewPermit" ColumnName="ViewPermit" />
                 <ScalarProperty Name="ChangePermit" ColumnName="ChangePermit" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROD_SHOPS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PROD_SHOPS">
+              <MappingFragment StoreEntitySet="PROD_SHOPS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1743,6 +3731,19 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTPLANS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PRODUCTPLAN">
+              <MappingFragment StoreEntitySet="PRODUCTPLANS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="PlannedQty" ColumnName="PlannedQty" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PRODUCTS">
             <EntityTypeMapping TypeName="DBTHSNModel.PRODUCT">
               <MappingFragment StoreEntitySet="PRODUCTS">
@@ -1774,9 +3775,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SCONTRACTS">
-            <EntityTypeMapping TypeName="DBTHSNModel.SCONTRACT">
-              <MappingFragment StoreEntitySet="SCONTRACTS">
+          <EntitySetMapping Name="S_CONTRACTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.S_CONTRACTS">
+              <MappingFragment StoreEntitySet="S_CONTRACTS">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
                 <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
@@ -1841,6 +3842,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="DateTime" ColumnName="DateTime" />
                 <ScalarProperty Name="IP" ColumnName="IP" />
                 <ScalarProperty Name="MAC" ColumnName="MAC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USER_LICENSES">
+            <EntityTypeMapping TypeName="DBTHSNModel.USER_LICENSES">
+              <MappingFragment StoreEntitySet="USER_LICENSES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LicenseKey" ColumnName="LicenseKey" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

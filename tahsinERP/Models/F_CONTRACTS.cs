@@ -12,28 +12,28 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CUSTOMER
+    public partial class F_CONTRACTS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CUSTOMER()
+        public F_CONTRACTS()
         {
-            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
+            this.F_WAYBILLS = new HashSet<F_WAYBILLS>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string ContactPersonName { get; set; }
-        public string DirectorName { get; set; }
+        public string ContractNo { get; set; }
+        public Nullable<int> CompanyID { get; set; }
+        public Nullable<int> ForwarderID { get; set; }
+        public Nullable<System.DateTime> IssueDate { get; set; }
+        public Nullable<System.DateTime> DueDate { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public string Currency { get; set; }
+        public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public string DUNS { get; set; }
-        public string Type { get; set; }
-        public string City { get; set; }
     
+        public virtual COMPANy COMPANy { get; set; }
+        public virtual FORWARDER FORWARDER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
+        public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }
     }
 }
