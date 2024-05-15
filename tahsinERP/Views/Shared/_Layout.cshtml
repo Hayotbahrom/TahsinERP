@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/extensions/dragula.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/extensions/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css">
@@ -27,11 +28,12 @@
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/dashboard-analytics.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/dashboard-ecommerce.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-invoice.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
     <!-- END: Page CSS-->
     <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="~/app-assets/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
     <!-- END: Custom CSS-->
 </head>
 <body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
@@ -175,7 +177,7 @@
                         </li>
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name">Zafar Hakimov</span><span class="user-status text-muted">Available</span></div><span><img class="round" src="~/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
+                                <div class="user-nav d-sm-flex d-none"><span class="user-name">@User.Identity.Name</span><span class="user-status text-muted">Available</span></div><span><img class="round" src="~/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right pb-0">
                                 <a class="dropdown-item" href="#"><i class="bx bx-user mr-50"></i> Edit Profile</a><a class="dropdown-item" href="#"><i class="bx bx-envelope mr-50"></i> My Inbox</a><a class="dropdown-item" href="#"><i class="bx bx-check-square mr-50"></i> Task</a><a class="dropdown-item" href="#"><i class="bx bx-message mr-50"></i> Chats</a>
@@ -187,6 +189,7 @@
             </div>
         </div>
     </nav>
+    
     @* <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
     <!-- END: Header-->
     <!-- BEGIN: Main Menu-->
@@ -432,12 +435,7 @@
                     <a href="#"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Akkaunt Sozlamalari</span></a>
                 </li>
                 <li class=" nav-item">
-                    <a href="#"><i class="bx bx-user-plus"></i><span class="menu-title" data-i18n="User">Foydalanuvchilar</span></a>
-                    <ul class="menu-content">
-                        <li>
-                            <a href="~/User"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="List">Ro'yxati</span></a>
-                        </li>
-                    </ul>
+                    <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
                 </li>
             </ul>
         </div>
@@ -455,7 +453,7 @@
     <!-- BEGIN: Footer-->
     <footer class="footer footer-static footer-light">
         <p class="clearfix mb-0">
-            <span class="float-left d-inline-block">2024 &copy; tahsin ERP</span>
+            <span class="float-left d-inline-block">@DateTime.Now.Year &copy; tahsin ERP</span>
         </p>
     </footer>
     <!-- END: Footer-->
@@ -467,7 +465,7 @@
     <!-- BEGIN Vendor JS-->
     <!-- BEGIN: Page Vendor JS-->
     <script src="~/app-assets/vendors/js/charts/apexcharts.min.js"></script>
-    <script src="~/app-assets/vendors/js/extensions/dragula.min.js"></script>
+    <script src="~/app-assets/vendors/js/extensions/swiper.min.js"></script>
     <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
     <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
     <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
@@ -475,14 +473,16 @@
     <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
     <!-- END: Page Vendor JS-->
     <!-- BEGIN: Theme JS-->
-    <script src="~/src/js/core/app-menu.js"></script>
-    <script src="~/src/js/core/app.js"></script>
-    <script src="~/src/js/scripts/components.js"></script>
-    <script src="~/src/js/scripts/footer.js"></script>
+    <script src="~/app-assets/js/scripts/configs/vertical-menu-light.js"></script>
+    <script src="~/app-assets/js/core/app-menu.js"></script>
+    <script src="~/app-assets/js/core/app.js"></script>
+    <script src="~/app-assets/js/scripts/components.js"></script>
+    <script src="~/app-assets/js/scripts/footer.js"></script>
     <!-- END: Theme JS-->
     <!-- BEGIN: Page JS-->
-    <script src="~/src/js/scripts/pages/dashboard-analytics.js"></script>
-    <script src="~/src/js/scripts/pages/app-invoice.js"></script>
+    <script src="~/app-assets/js/scripts/pages/dashboard-analytics.js"></script>
+    <script src="~/app-assets/js/scripts/pages/dashboard-ecommerce.js"></script>
+    <script src="~/app-assets/js/scripts/pages/app-invoice.js"></script>
     <!-- END: Page JS-->
 
 </body>

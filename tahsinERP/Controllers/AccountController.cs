@@ -9,6 +9,7 @@ using System.Web.Security;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Http;
 
 namespace tahsinERP.Controllers
 {
@@ -21,6 +22,7 @@ namespace tahsinERP.Controllers
 
         [DllImport("Ws2_32.dll")]
         private static extern int inet_addr(string ip);
+        private IHttpContextAccessor _httpContextAccessor;
         public ActionResult Index()
         {
             return View();
@@ -40,7 +42,6 @@ namespace tahsinERP.Controllers
                 {
                     var hashCode = getUser.HashCode;
                     var serializer = new JavaScriptSerializer();
-                    string userData = "";
                     var encodingPasswordString = "";
                     //Password Hasing Process Call Helper Class Method
                     if (!string.IsNullOrEmpty(user.Password))
@@ -50,15 +51,15 @@ namespace tahsinERP.Controllers
                    .Any(u => u.Email.ToLower() == user
                    .Email.ToLower() && u.Password.Equals(encodingPasswordString));
 
-                    foreach (var rrole in getUser.ROLES)
-                    {
-                        role = rrole.RName;
-                    }
-                    userData = role;
+                    //foreach (var rrole in getUser.ROLES)
+                    //{
+                    //    role = rrole.RName;
+                    //}
+                    //userData = role;
 
                     if (IsValidUser)
                     {
-                        var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData);
+                        var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, getUser.FullName);
                         string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
                         var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
@@ -79,7 +80,6 @@ namespace tahsinERP.Controllers
             ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri");
             return View();
         }
-
         private void SetUserEntry(int userID)
         {
             try
@@ -116,7 +116,6 @@ namespace tahsinERP.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
         }
-
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();

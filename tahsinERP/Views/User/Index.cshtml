@@ -1,7 +1,7 @@
 ﻿@model List<tahsinERP.ViewModels.UserViewModel>
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
 <div class="app-content content">
     <div class="content-overlay"></div>
@@ -11,12 +11,15 @@
         <div class="content-body">
             <!-- users list start -->
             <section class="invoice-list-wrapper">
-                <div class="invoice-create-btn mb-1">
-                    <a href="~/User/Create" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
-                        Add
-                        User
-                    </a>
-                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="invoice-create-btn mb-1">
+                        <a href="~/User/Create" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
+                            Add
+                            User
+                        </a>
+                    </div>
+                }
                 <div class="users-list-filter px-1">
                     <form>
                         <div class="row border rounded py-2 mb-2">

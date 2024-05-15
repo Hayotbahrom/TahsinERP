@@ -11,9 +11,10 @@ namespace tahsinERP.ViewModels
     public class UserViewModel
     {
         public int ID { get; set; }
-        [Required(ErrorMessage = "Loginni kiriting")]
         public string UName { get; set; }
         public string FullName { get; set; }
+
+        [Required(ErrorMessage = "Emailni kiriting")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Input password")]
         [DataType(DataType.Upload)]

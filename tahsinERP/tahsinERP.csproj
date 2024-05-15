@@ -51,12 +51,37 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -129,9 +154,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\Helper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UsersRoleProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1992,73 +2020,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="src\js\core\app-menu.js" />
-    <Content Include="src\js\core\app.js" />
-    <Content Include="src\js\core\libraries\bootstrap.min.js" />
-    <Content Include="src\js\core\libraries\jquery.min.js" />
-    <Content Include="src\js\scripts\cards\widgets.js" />
-    <Content Include="src\js\scripts\charts\chart-apex.js" />
-    <Content Include="src\js\scripts\charts\chart-chartist.js" />
-    <Content Include="src\js\scripts\charts\chart-chartjs.js" />
-    <Content Include="src\js\scripts\charts\gmaps\maps.js" />
-    <Content Include="src\js\scripts\components.js" />
-    <Content Include="src\js\scripts\configs\horizontal-menu.js" />
-    <Content Include="src\js\scripts\configs\vertical-menu-dark.js" />
-    <Content Include="src\js\scripts\configs\vertical-menu-light.js" />
-    <Content Include="src\js\scripts\customizer.js" />
-    <Content Include="src\js\scripts\datatables\datatable.js" />
-    <Content Include="src\js\scripts\documentation.js" />
-    <Content Include="src\js\scripts\editors\editor-quill.js" />
-    <Content Include="src\js\scripts\extensions\calendar\app-calendar.js" />
-    <Content Include="src\js\scripts\extensions\calendar\calendars-data.js" />
-    <Content Include="src\js\scripts\extensions\calendar\schedules.js" />
-    <Content Include="src\js\scripts\extensions\drag-drop.js" />
-    <Content Include="src\js\scripts\extensions\dropzone.js" />
-    <Content Include="src\js\scripts\extensions\ext-component-block-ui.js" />
-    <Content Include="src\js\scripts\extensions\ext-component-media-player.js" />
-    <Content Include="src\js\scripts\extensions\ext-component-miscellaneous.js" />
-    <Content Include="src\js\scripts\extensions\ext-component-treeview.js" />
-    <Content Include="src\js\scripts\extensions\i18n.js" />
-    <Content Include="src\js\scripts\extensions\noui-slider.js" />
-    <Content Include="src\js\scripts\extensions\sweet-alerts.js" />
-    <Content Include="src\js\scripts\extensions\sweet-alerts.min.js" />
-    <Content Include="src\js\scripts\extensions\swiper.js" />
-    <Content Include="src\js\scripts\extensions\toastr.js" />
-    <Content Include="src\js\scripts\extensions\tour.js" />
-    <Content Include="src\js\scripts\extensions\unslider.js" />
-    <Content Include="src\js\scripts\footer.js" />
-    <Content Include="src\js\scripts\forms\basic-inputs.js" />
-    <Content Include="src\js\scripts\forms\form-repeater.js" />
-    <Content Include="src\js\scripts\forms\form-tooltip-valid.js" />
-    <Content Include="src\js\scripts\forms\number-input.js" />
-    <Content Include="src\js\scripts\forms\select\form-select2.js" />
-    <Content Include="src\js\scripts\forms\validation\form-validation.js" />
-    <Content Include="src\js\scripts\forms\wizard-steps.js" />
-    <Content Include="src\js\scripts\modal\components-modal.js" />
-    <Content Include="src\js\scripts\navs\navs.js" />
-    <Content Include="src\js\scripts\pages\3-columns-left-sidebar.js" />
-    <Content Include="src\js\scripts\pages\app-chat.js" />
-    <Content Include="src\js\scripts\pages\app-email.js" />
-    <Content Include="src\js\scripts\pages\app-file-manager.js" />
-    <Content Include="src\js\scripts\pages\app-invoice.js" />
-    <Content Include="src\js\scripts\pages\app-kanban.js" />
-    <Content Include="src\js\scripts\pages\app-todo.js" />
-    <Content Include="src\js\scripts\pages\bootstrap-toast.js" />
-    <Content Include="src\js\scripts\pages\coming-soon.js" />
-    <Content Include="src\js\scripts\pages\content-sidebar.js" />
-    <Content Include="src\js\scripts\pages\dashboard-analytics.js" />
-    <Content Include="src\js\scripts\pages\dashboard-ecommerce.js" />
-    <Content Include="src\js\scripts\pages\faq.js" />
-    <Content Include="src\js\scripts\pages\page-account-settings.js" />
-    <Content Include="src\js\scripts\pages\page-knowledge-base.js" />
-    <Content Include="src\js\scripts\pages\page-search.js" />
-    <Content Include="src\js\scripts\pages\page-user-profile.js" />
-    <Content Include="src\js\scripts\pages\page-users.js" />
-    <Content Include="src\js\scripts\pages\sk-content-sidebar.js" />
-    <Content Include="src\js\scripts\pages\table-extended.js" />
-    <Content Include="src\js\scripts\pickers\dateTime\pick-a-datetime.js" />
-    <Content Include="src\js\scripts\popover\popover.js" />
-    <Content Include="src\js\scripts\tooltip\tooltip.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -2073,203 +2034,12 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="src\scss\bootstrap-extended.scss" />
-    <Content Include="src\scss\bootstrap-extended\mixins\_buttons.scss" />
-    <Content Include="src\scss\bootstrap-extended\mixins\_forms.scss" />
-    <Content Include="src\scss\bootstrap-extended\mixins\_label.scss" />
-    <Content Include="src\scss\bootstrap-extended\mixins\_navs.scss" />
-    <Content Include="src\scss\bootstrap-extended\mixins\_type.scss" />
-    <Content Include="src\scss\bootstrap-extended\_alert.scss" />
-    <Content Include="src\scss\bootstrap-extended\_animation.scss" />
-    <Content Include="src\scss\bootstrap-extended\_badge.scss" />
-    <Content Include="src\scss\bootstrap-extended\_breadcrumb.scss" />
-    <Content Include="src\scss\bootstrap-extended\_buttons.scss" />
-    <Content Include="src\scss\bootstrap-extended\_card.scss" />
-    <Content Include="src\scss\bootstrap-extended\_carousel.scss" />
-    <Content Include="src\scss\bootstrap-extended\_code.scss" />
-    <Content Include="src\scss\bootstrap-extended\_collapse.scss" />
-    <Content Include="src\scss\bootstrap-extended\_dropdown.scss" />
-    <Content Include="src\scss\bootstrap-extended\_forms.scss" />
-    <Content Include="src\scss\bootstrap-extended\_grid.scss" />
-    <Content Include="src\scss\bootstrap-extended\_list-group.scss" />
-    <Content Include="src\scss\bootstrap-extended\_media.scss" />
-    <Content Include="src\scss\bootstrap-extended\_mixins.scss" />
-    <Content Include="src\scss\bootstrap-extended\_modal.scss" />
-    <Content Include="src\scss\bootstrap-extended\_nav.scss" />
-    <Content Include="src\scss\bootstrap-extended\_navbar.scss" />
-    <Content Include="src\scss\bootstrap-extended\_pagination.scss" />
-    <Content Include="src\scss\bootstrap-extended\_popover.scss" />
-    <Content Include="src\scss\bootstrap-extended\_progress.scss" />
-    <Content Include="src\scss\bootstrap-extended\_reboot.scss" />
-    <Content Include="src\scss\bootstrap-extended\_spinners.scss" />
-    <Content Include="src\scss\bootstrap-extended\_tables.scss" />
-    <Content Include="src\scss\bootstrap-extended\_toast.scss" />
-    <Content Include="src\scss\bootstrap-extended\_tooltip.scss" />
-    <Content Include="src\scss\bootstrap-extended\_type.scss" />
-    <Content Include="src\scss\bootstrap-extended\_utilities.scss" />
-    <Content Include="src\scss\bootstrap.scss" />
-    <Content Include="src\scss\bootstrap\bootstrap-grid.scss" />
-    <Content Include="src\scss\bootstrap\bootstrap-reboot.scss" />
-    <Content Include="src\scss\bootstrap\bootstrap.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_alert.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_background-variant.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_badge.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_border-radius.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_box-shadow.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_breakpoints.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_buttons.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_caret.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_clearfix.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_deprecate.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_float.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_forms.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_gradients.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_grid-framework.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_grid.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_hover.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_image.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_list-group.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_lists.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_nav-divider.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_pagination.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_reset-text.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_resize.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_screen-reader.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_size.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_table-row.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_text-emphasis.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_text-hide.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_text-truncate.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_transition.scss" />
-    <Content Include="src\scss\bootstrap\mixins\_visibility.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_align.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_background.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_borders.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_clearfix.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_display.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_embed.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_flex.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_float.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_overflow.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_position.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_screenreaders.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_shadows.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_sizing.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_spacing.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_stretched-link.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_text.scss" />
-    <Content Include="src\scss\bootstrap\utilities\_visibility.scss" />
-    <Content Include="src\scss\bootstrap\vendor\_rfs.scss" />
-    <Content Include="src\scss\bootstrap\_alert.scss" />
-    <Content Include="src\scss\bootstrap\_badge.scss" />
-    <Content Include="src\scss\bootstrap\_breadcrumb.scss" />
-    <Content Include="src\scss\bootstrap\_button-group.scss" />
-    <Content Include="src\scss\bootstrap\_buttons.scss" />
-    <Content Include="src\scss\bootstrap\_card.scss" />
-    <Content Include="src\scss\bootstrap\_carousel.scss" />
-    <Content Include="src\scss\bootstrap\_close.scss" />
-    <Content Include="src\scss\bootstrap\_code.scss" />
-    <Content Include="src\scss\bootstrap\_custom-forms.scss" />
-    <Content Include="src\scss\bootstrap\_dropdown.scss" />
-    <Content Include="src\scss\bootstrap\_forms.scss" />
-    <Content Include="src\scss\bootstrap\_functions.scss" />
-    <Content Include="src\scss\bootstrap\_grid.scss" />
-    <Content Include="src\scss\bootstrap\_images.scss" />
-    <Content Include="src\scss\bootstrap\_input-group.scss" />
-    <Content Include="src\scss\bootstrap\_jumbotron.scss" />
-    <Content Include="src\scss\bootstrap\_list-group.scss" />
-    <Content Include="src\scss\bootstrap\_media.scss" />
-    <Content Include="src\scss\bootstrap\_mixins.scss" />
-    <Content Include="src\scss\bootstrap\_modal.scss" />
-    <Content Include="src\scss\bootstrap\_nav.scss" />
-    <Content Include="src\scss\bootstrap\_navbar.scss" />
-    <Content Include="src\scss\bootstrap\_pagination.scss" />
-    <Content Include="src\scss\bootstrap\_popover.scss" />
-    <Content Include="src\scss\bootstrap\_print.scss" />
-    <Content Include="src\scss\bootstrap\_progress.scss" />
-    <Content Include="src\scss\bootstrap\_reboot.scss" />
-    <Content Include="src\scss\bootstrap\_root.scss" />
-    <Content Include="src\scss\bootstrap\_spinners.scss" />
-    <Content Include="src\scss\bootstrap\_tables.scss" />
-    <Content Include="src\scss\bootstrap\_toasts.scss" />
-    <Content Include="src\scss\bootstrap\_tooltip.scss" />
-    <Content Include="src\scss\bootstrap\_transitions.scss" />
-    <Content Include="src\scss\bootstrap\_type.scss" />
-    <Content Include="src\scss\bootstrap\_utilities.scss" />
-    <Content Include="src\scss\bootstrap\_variables.scss" />
-    <Content Include="src\scss\colors.scss" />
-    <Content Include="src\scss\components.scss" />
-    <Content Include="src\scss\components\avatar.scss" />
-    <Content Include="src\scss\components\bootstrap-social.scss" />
-    <Content Include="src\scss\components\chart.scss" />
-    <Content Include="src\scss\components\chips.scss" />
-    <Content Include="src\scss\components\customizer.scss" />
-    <Content Include="src\scss\components\demo.scss" />
-    <Content Include="src\scss\components\divider.scss" />
-    <Content Include="src\scss\components\error.scss" />
-    <Content Include="src\scss\components\helper.scss" />
-    <Content Include="src\scss\components\search.scss" />
-    <Content Include="src\scss\components\widget-chat.scss" />
-    <Content Include="src\scss\components\widget-timeline.scss" />
-    <Content Include="src\scss\core\colors\palette-noui.scss" />
-    <Content Include="src\scss\core\colors\_palette-variables.scss" />
-    <Content Include="src\scss\core\colors\_palette.scss" />
-    <Content Include="src\scss\core\layouts\_content.scss" />
-    <Content Include="src\scss\core\layouts\_footer.scss" />
-    <Content Include="src\scss\core\layouts\_main-menu.scss" />
-    <Content Include="src\scss\core\layouts\_sidebar.scss" />
-    <Content Include="src\scss\core\menu\menu-types\horizontal-menu.scss" />
-    <Content Include="src\scss\core\menu\menu-types\vertical-menu.scss" />
-    <Content Include="src\scss\core\menu\menu-types\vertical-overlay-menu.scss" />
-    <Content Include="src\scss\core\menu\_navigation.scss" />
-    <Content Include="src\scss\core\mixins\_alert.scss" />
-    <Content Include="src\scss\core\mixins\_hex2rgb.scss" />
-    <Content Include="src\scss\core\mixins\_main-menu-mixin.scss" />
-    <Content Include="src\scss\core\mixins\_transitions.scss" />
-    <Content Include="src\scss\core\variables\_chartist-variables.scss" />
-    <Content Include="src\scss\core\variables\_components-variables.scss" />
-    <Content Include="src\scss\core\variables\_variables.scss" />
-    <Content Include="src\scss\custom-rtl.scss" />
-    <Content Include="src\scss\pages\app-chat.scss" />
-    <Content Include="src\scss\pages\app-email.scss" />
-    <Content Include="src\scss\pages\app-file-manager.scss" />
-    <Content Include="src\scss\pages\app-invoice.scss" />
-    <Content Include="src\scss\pages\app-kanban.scss" />
-    <Content Include="src\scss\pages\app-todo.scss" />
-    <Content Include="src\scss\pages\authentication.scss" />
-    <Content Include="src\scss\pages\chart-chartist.scss" />
-    <Content Include="src\scss\pages\coming-soon.scss" />
-    <Content Include="src\scss\pages\dashboard-analytics.scss" />
-    <Content Include="src\scss\pages\dashboard-ecommerce.scss" />
-    <Content Include="src\scss\pages\faq.scss" />
-    <Content Include="src\scss\pages\page-knowledge-base.scss" />
-    <Content Include="src\scss\pages\page-user-profile.scss" />
-    <Content Include="src\scss\pages\page-users.scss" />
-    <Content Include="src\scss\pages\search.scss" />
-    <Content Include="src\scss\pages\widgets.scss" />
-    <Content Include="src\scss\plugins\animate\animate.scss" />
-    <Content Include="src\scss\plugins\calendars\app-calendar.scss" />
-    <Content Include="src\scss\plugins\extensions\context-menu.scss" />
-    <Content Include="src\scss\plugins\extensions\drag-and-drop.scss" />
-    <Content Include="src\scss\plugins\extensions\ext-component-treeview.scss" />
-    <Content Include="src\scss\plugins\extensions\noui-slider.scss" />
-    <Content Include="src\scss\plugins\extensions\swiper.scss" />
-    <Content Include="src\scss\plugins\extensions\toastr.scss" />
-    <Content Include="src\scss\plugins\file-uploaders\dropzone.scss" />
-    <Content Include="src\scss\plugins\forms\select2\_select2.scss" />
-    <Content Include="src\scss\plugins\forms\tags\_basic-input.scss" />
-    <Content Include="src\scss\plugins\forms\validation\form-validation.scss" />
-    <Content Include="src\scss\plugins\forms\wizard.scss" />
-    <Content Include="src\scss\plugins\pickers\_daterange.scss" />
-    <Content Include="src\scss\plugins\pickers\_pick-a-date.scss" />
-    <Content Include="src\scss\plugins\tables\_datatables.scss" />
-    <Content Include="src\scss\plugins\tour\tour.scss" />
-    <Content Include="src\scss\plugins\ui\_breakpoints.scss" />
-    <Content Include="src\scss\themes\dark-layout.scss" />
-    <Content Include="src\scss\themes\semi-dark-layout.scss" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\_AdminPanelLayout.cshtml" />
+    <Content Include="Views\AdminPanel\Index.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
