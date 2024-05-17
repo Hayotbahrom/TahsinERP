@@ -1,9 +1,9 @@
 ﻿@model tahsinERP.ViewModels.UserViewModel
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
-@using (Html.BeginForm("Create", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
 
     @Html.AntiForgeryToken()
@@ -29,8 +29,13 @@
                                                 @Html.ValidationMessageFor(model => model.UName, "", new { @class = "text-danger" })
                                             </div>
                                             <br />
+                                            <div class="col-sm-6 col-12 order-2 order-sm-2 d-flex justify-content-end">
+                                                <h4 class="text-primary">User photo</h4>
+                                                <img alt="" src="@ViewBag.Base64String" style="height:72px;width:72px;" />
+                                            </div>
                                             <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
                                                 <h4 class="text-primary">User photo</h4>
+                                                @Html.LabelFor(model => model.File.FileName, new { @class = "form-control" })
                                                 <input type="file" id="userPhotoUpload" name="userPhotoUpload" />
                                                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
                                             </div>

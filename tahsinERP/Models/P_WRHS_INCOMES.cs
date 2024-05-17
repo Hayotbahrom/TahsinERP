@@ -40,7 +40,7 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_INCOME_DOCS> P_WRHS_INCOME_DOCS { get; set; }
         public virtual PART_WRHS PART_WRHS { get; set; }
-        public virtual PART PART { get; set; }
+        public virtual PARTS PARTS { get; set; }
         public virtual PROD_SHOPS PROD_SHOPS { get; set; }
     }
 }

@@ -12,17 +12,13 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BOM
+    public partial class PRODUCTIMAGES
     {
         public int ID { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public Nullable<int> ChildID { get; set; }
-        public Nullable<int> GrandChildID { get; set; }
-        public Nullable<double> ChildUsageQty { get; set; }
-        public string ChildUsageUnit { get; set; }
-        public Nullable<double> GrandChildUsageQty { get; set; }
-        public string GrandChildUsageUnit { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public int ProdID { get; set; }
+        public byte[] Image { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+    
+        public virtual PRODUCTS PRODUCTS { get; set; }
     }
 }

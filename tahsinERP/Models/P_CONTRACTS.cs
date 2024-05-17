@@ -38,14 +38,14 @@ namespace tahsinERP.Models
         public string Unit { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
+        public virtual COMPANIES COMPANIES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_DOCS> P_CONTRACT_DOCS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICES> P_INVOICES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_ORDERS> P_ORDERS { get; set; }
-        public virtual PART PART { get; set; }
-        public virtual SUPPLIER SUPPLIER { get; set; }
+        public virtual PARTS PARTS { get; set; }
+        public virtual SUPPLIERS SUPPLIERS { get; set; }
     }
 }

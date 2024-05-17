@@ -28,8 +28,8 @@ namespace tahsinERP.Models
         public string Unit { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
-        public virtual CUSTOMER CUSTOMER { get; set; }
-        public virtual PRODUCT PRODUCT { get; set; }
+        public virtual COMPANIES COMPANIES { get; set; }
+        public virtual CUSTOMERS CUSTOMERS { get; set; }
+        public virtual PRODUCTS PRODUCTS { get; set; }
     }
 }

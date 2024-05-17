@@ -26,8 +26,8 @@ namespace tahsinERP.Models
         public byte[] C1738 { get; set; }
         public Nullable<int> UploadedByUserID { get; set; }
     
-        public virtual PARTPACK PARTPACK { get; set; }
-        public virtual USER USER { get; set; }
-        public virtual USER USER1 { get; set; }
+        public virtual PARTPACKS PARTPACKS { get; set; }
+        public virtual USERS USERS { get; set; }
+        public virtual USERS USERS1 { get; set; }
     }
 }

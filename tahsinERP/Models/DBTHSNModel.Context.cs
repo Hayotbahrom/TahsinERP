@@ -25,15 +25,15 @@ namespace tahsinERP.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<BOM> BOMS { get; set; }
-        public virtual DbSet<COMPANy> COMPANIES { get; set; }
+        public virtual DbSet<BOMS> BOMS { get; set; }
+        public virtual DbSet<COMPANIES> COMPANIES { get; set; }
         public virtual DbSet<COMPANY_LICENSES> COMPANY_LICENSES { get; set; }
-        public virtual DbSet<CUSTOMER> CUSTOMERS { get; set; }
+        public virtual DbSet<CUSTOMERS> CUSTOMERS { get; set; }
         public virtual DbSet<F_CONTRACTS> F_CONTRACTS { get; set; }
         public virtual DbSet<F_TRANSPORT_TYPES> F_TRANSPORT_TYPES { get; set; }
         public virtual DbSet<F_WAYBILL_DOCS> F_WAYBILL_DOCS { get; set; }
         public virtual DbSet<F_WAYBILLS> F_WAYBILLS { get; set; }
-        public virtual DbSet<FORWARDER> FORWARDERS { get; set; }
+        public virtual DbSet<FORWARDERS> FORWARDERS { get; set; }
         public virtual DbSet<P_CONTRACT_DOCS> P_CONTRACT_DOCS { get; set; }
         public virtual DbSet<P_CONTRACTS> P_CONTRACTS { get; set; }
         public virtual DbSet<P_INVOICE_DOCS> P_INVOICE_DOCS { get; set; }
@@ -47,23 +47,24 @@ namespace tahsinERP.Models
         public virtual DbSet<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
         public virtual DbSet<PART_WRHS> PART_WRHS { get; set; }
         public virtual DbSet<PART1738DOCS> PART1738DOCS { get; set; }
-        public virtual DbSet<PARTIMAGE> PARTIMAGES { get; set; }
-        public virtual DbSet<PARTPACK> PARTPACKS { get; set; }
-        public virtual DbSet<PARTPLAN> PARTPLANS { get; set; }
-        public virtual DbSet<PART> PARTS { get; set; }
-        public virtual DbSet<PERMISSION> PERMISSIONS { get; set; }
+        public virtual DbSet<PARTIMAGES> PARTIMAGES { get; set; }
+        public virtual DbSet<PARTPACKS> PARTPACKS { get; set; }
+        public virtual DbSet<PARTPLANS> PARTPLANS { get; set; }
+        public virtual DbSet<PARTS> PARTS { get; set; }
+        public virtual DbSet<PERMISSIONS> PERMISSIONS { get; set; }
         public virtual DbSet<PROD_SHOPS> PROD_SHOPS { get; set; }
         public virtual DbSet<PRODUCT1738DOCS> PRODUCT1738DOCS { get; set; }
-        public virtual DbSet<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
-        public virtual DbSet<PRODUCTPACK> PRODUCTPACKS { get; set; }
-        public virtual DbSet<PRODUCTPLAN> PRODUCTPLANS { get; set; }
-        public virtual DbSet<PRODUCT> PRODUCTS { get; set; }
-        public virtual DbSet<ROLE> ROLES { get; set; }
+        public virtual DbSet<PRODUCTIMAGES> PRODUCTIMAGES { get; set; }
+        public virtual DbSet<PRODUCTPACKS> PRODUCTPACKS { get; set; }
+        public virtual DbSet<PRODUCTPLANS> PRODUCTPLANS { get; set; }
+        public virtual DbSet<PRODUCTS> PRODUCTS { get; set; }
+        public virtual DbSet<ROLES> ROLES { get; set; }
         public virtual DbSet<S_CONTRACTS> S_CONTRACTS { get; set; }
-        public virtual DbSet<SPL> SPLs { get; set; }
-        public virtual DbSet<SUPPLIER> SUPPLIERS { get; set; }
+        public virtual DbSet<SPL> SPL { get; set; }
+        public virtual DbSet<SUPPLIERS> SUPPLIERS { get; set; }
         public virtual DbSet<USER_ENTRIES> USER_ENTRIES { get; set; }
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
-        public virtual DbSet<USER> USERS { get; set; }
+        public virtual DbSet<USERIMAGES> USERIMAGES { get; set; }
+        public virtual DbSet<USERS> USERS { get; set; }
     }
 }

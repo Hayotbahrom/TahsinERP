@@ -29,7 +29,7 @@ namespace tahsinERP.Models
         public string Description { get; set; }
     
         public virtual PART_WRHS PART_WRHS { get; set; }
-        public virtual PART PART { get; set; }
+        public virtual PARTS PARTS { get; set; }
         public virtual PROD_SHOPS PROD_SHOPS { get; set; }
     }
 }

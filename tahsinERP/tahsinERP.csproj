@@ -163,140 +163,143 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BOM.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\BOMS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\COMPANy.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\COMPANIES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\COMPANY_LICENSES.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CUSTOMER.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\CUSTOMERS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DBTahsinModel.Context.cs">
+    <Compile Include="Models\DBTHSNModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DBTahsinModel.Context.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DBTahsinModel.cs">
+    <Compile Include="Models\DBTHSNModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DBTahsinModel.Designer.cs">
+    <Compile Include="Models\DBTHSNModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DBTahsinModel.edmx</DependentUpon>
+      <DependentUpon>DBTHSNModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\FORWARDER.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\FORWARDERS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\F_CONTRACTS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\F_TRANSPORT_TYPES.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\F_WAYBILLS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\F_WAYBILL_DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PART.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PART1738DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PARTIMAGE.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\PARTIMAGES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PARTPACK.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\PARTPACKS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PARTPLAN.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\PARTPLANS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PARTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PART_WRHS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PERMISSION.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PRODUCT.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\PERMISSIONS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PRODUCT1738DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PRODUCTIMAGE.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\PRODUCTIMAGES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PRODUCTPACK.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\PRODUCTPACKS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PRODUCTPLAN.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\PRODUCTPLANS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PRODUCTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PROD_SHOPS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_CONTRACTS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_CONTRACT_DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_INVOICES.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_INVOICE_DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_INVOICE_PACKINGLISTS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_ORDERS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_ORDER_DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_PACKINGLIST_DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_WRHS_EXPENSES.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_WRHS_INCOMES.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_WRHS_INCOME_DOCS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ROLE.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\ROLES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SPL.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SUPPLIER.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\SUPPLIERS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\S_CONTRACTS.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\USER.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+    <Compile Include="Models\USERIMAGES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\USERS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\USER_ENTRIES.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\USER_LICENSES.cs">
-      <DependentUpon>DBTahsinModel.tt</DependentUpon>
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
@@ -1948,15 +1951,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\DBTahsinModel.Context.tt">
+    <Content Include="Models\DBTHSNModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DBTahsinModel.edmx</DependentUpon>
-      <LastGenOutput>DBTahsinModel.Context.cs</LastGenOutput>
+      <DependentUpon>DBTHSNModel.edmx</DependentUpon>
+      <LastGenOutput>DBTHSNModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\DBTahsinModel.tt">
+    <Content Include="Models\DBTHSNModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DBTahsinModel.edmx</DependentUpon>
-      <LastGenOutput>DBTahsinModel.cs</LastGenOutput>
+      <DependentUpon>DBTHSNModel.edmx</DependentUpon>
+      <LastGenOutput>DBTHSNModel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -2002,12 +2005,12 @@
     <Content Include="app-assets\vendors\js\editors\quill\assets\snow\tooltip.styl" />
     <Content Include="assets\scss\style-rtl.scss" />
     <Content Include="assets\scss\style.scss" />
-    <EntityDeploy Include="Models\DBTahsinModel.edmx">
+    <EntityDeploy Include="Models\DBTHSNModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DBTahsinModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>DBTHSNModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\DBTahsinModel.edmx.diagram">
-      <DependentUpon>DBTahsinModel.edmx</DependentUpon>
+    <Content Include="Models\DBTHSNModel.edmx.diagram">
+      <DependentUpon>DBTHSNModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2040,6 +2043,7 @@
     <Content Include="Views\Shared\_AdminPanelLayout.cshtml" />
     <Content Include="Views\AdminPanel\Index.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

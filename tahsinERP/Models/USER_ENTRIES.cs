@@ -20,6 +20,6 @@ namespace tahsinERP.Models
         public string IP { get; set; }
         public string MAC { get; set; }
     
-        public virtual USER USER { get; set; }
+        public virtual USERS USERS { get; set; }
     }
 }

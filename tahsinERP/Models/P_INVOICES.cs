@@ -43,8 +43,8 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICE_PACKINGLISTS> P_INVOICE_PACKINGLISTS { get; set; }
         public virtual P_ORDERS P_ORDERS { get; set; }
-        public virtual PART PART { get; set; }
-        public virtual SUPPLIER SUPPLIER { get; set; }
+        public virtual PARTS PARTS { get; set; }
+        public virtual SUPPLIERS SUPPLIERS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
     }

@@ -37,7 +37,7 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                USER getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
+                USERS getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
                 if (getUser != null)
                 {
                     var hashCode = getUser.HashCode;
@@ -50,12 +50,6 @@ namespace tahsinERP.Controllers
                     bool IsValidUser = db.USERS
                    .Any(u => u.Email.ToLower() == user
                    .Email.ToLower() && u.Password.Equals(encodingPasswordString));
-
-                    //foreach (var rrole in getUser.ROLES)
-                    //{
-                    //    role = rrole.RName;
-                    //}
-                    //userData = role;
 
                     if (IsValidUser)
                     {

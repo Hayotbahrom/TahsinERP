@@ -21,6 +21,6 @@ namespace tahsinERP.Models
         public Nullable<System.DateTime> DueDate { get; set; }
         public string Description { get; set; }
     
-        public virtual USER USER { get; set; }
+        public virtual USERS USERS { get; set; }
     }
 }

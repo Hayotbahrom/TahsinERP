@@ -12,47 +12,43 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class USER
+    public partial class COMPANIES
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public USER()
+        public COMPANIES()
         {
-            this.PART_WRHS = new HashSet<PART_WRHS>();
-            this.PART1738DOCS = new HashSet<PART1738DOCS>();
-            this.PART1738DOCS1 = new HashSet<PART1738DOCS>();
-            this.PRODUCT1738DOCS = new HashSet<PRODUCT1738DOCS>();
-            this.PRODUCT1738DOCS1 = new HashSet<PRODUCT1738DOCS>();
-            this.USER_ENTRIES = new HashSet<USER_ENTRIES>();
-            this.USER_LICENSES = new HashSet<USER_LICENSES>();
-            this.ROLES = new HashSet<ROLE>();
+            this.COMPANY_LICENSES = new HashSet<COMPANY_LICENSES>();
+            this.F_CONTRACTS = new HashSet<F_CONTRACTS>();
+            this.P_ORDERS = new HashSet<P_ORDERS>();
+            this.P_CONTRACTS = new HashSet<P_CONTRACTS>();
+            this.PROD_SHOPS = new HashSet<PROD_SHOPS>();
+            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
+            this.USERS = new HashSet<USERS>();
         }
     
         public int ID { get; set; }
-        public string Uname { get; set; }
-        public string FullName { get; set; }
-        public string Password { get; set; }
+        public string Name { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+        public string DUNS { get; set; }
+        public string Telephone { get; set; }
         public string Email { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public string HashCode { get; set; }
-        public Nullable<int> CompanyID { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
+        public virtual ICollection<COMPANY_LICENSES> COMPANY_LICENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART1738DOCS> PART1738DOCS { get; set; }
+        public virtual ICollection<F_CONTRACTS> F_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART1738DOCS> PART1738DOCS1 { get; set; }
+        public virtual ICollection<P_ORDERS> P_ORDERS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCT1738DOCS> PRODUCT1738DOCS { get; set; }
+        public virtual ICollection<P_CONTRACTS> P_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCT1738DOCS> PRODUCT1738DOCS1 { get; set; }
+        public virtual ICollection<PROD_SHOPS> PROD_SHOPS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<USER_ENTRIES> USER_ENTRIES { get; set; }
+        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<USER_LICENSES> USER_LICENSES { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ROLE> ROLES { get; set; }
+        public virtual ICollection<USERS> USERS { get; set; }
     }
 }
