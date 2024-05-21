@@ -29,7 +29,7 @@
                                                 @Html.ValidationMessageFor(model => model.UName, "", new { @class = "text-danger" })
                                                 <h6 class="invoice-to">E-mail</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @type = "float", @placeholder = "E-mail" })
+                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "E-mail" })
                                                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                                                 </fieldset>
                                             </div>
@@ -62,18 +62,21 @@
                                                 </fieldset>
                                                 <h6 class="invoice-to">Password</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @type = "float", @placeholder = "Password" })
+                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
                                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Confirm Password</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @type = "float", @placeholder = "Password" })
+                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
                                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                                 </fieldset>
-                                                <h6 class="invoice-to">Activity</h6>
-                                                <fieldset class="invoice-address form-group">
-                                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
+                                                <h6>Activity</h6>
+                                                <fieldset class="form-group">
+                                                    @Html.CheckBoxFor(model => model.IsActive)
                                                     @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
+                                                    <span class="switch-label w-100">
+                                                        Is active?
+                                                    </span>
                                                 </fieldset>
                                                 <ul class="list-group list-group-flush">
                                                     <li class="list-group-item border-0 pb-0">

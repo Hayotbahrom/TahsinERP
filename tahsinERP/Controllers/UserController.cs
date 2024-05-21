@@ -231,5 +231,36 @@ namespace tahsinERP.Controllers
             ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName");
             return View();
         }
+        public ActionResult Details(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UserViewModel userviewmodel = new UserViewModel();
+            USERS user = db.USERS.Find(ID);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                userviewmodel.UName = user.Uname;
+                userviewmodel.Email = user.Email;
+                userviewmodel.FullName = user.FullName;
+                userviewmodel.IsActive = user.IsActive;
+                foreach (var role in user.ROLES)
+                {
+                    userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault().ToString();
+                }
+            }
+            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
+            if (userimage != null)
+            {
+                ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
+            }
+            ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName", userviewmodel.RoleID);
+            return View(userviewmodel);
+        }
     }
 }
