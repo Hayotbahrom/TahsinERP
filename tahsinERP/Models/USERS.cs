@@ -11,7 +11,7 @@ namespace tahsinERP.Models
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class USERS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -27,7 +27,7 @@ namespace tahsinERP.Models
             this.USERIMAGES = new HashSet<USERIMAGES>();
             this.ROLES = new HashSet<ROLES>();
         }
-
+    
         public int ID { get; set; }
         public string Uname { get; set; }
         public string FullName { get; set; }
@@ -37,7 +37,7 @@ namespace tahsinERP.Models
         public bool IsActive { get; set; }
         public string HashCode { get; set; }
         public int CompanyID { get; set; }
-
+    
         public virtual COMPANIES COMPANIES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }

@@ -27,17 +27,24 @@
                                                 <h4 class="text-primary">Username</h4>
                                                 @Html.TextBoxFor(model => model.UName, new { @class = "form-control", @placeholder = "Username" })
                                                 @Html.ValidationMessageFor(model => model.UName, "", new { @class = "text-danger" })
+                                                <h6 class="invoice-to">E-mail</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @type = "float", @placeholder = "E-mail" })
+                                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                </fieldset>
                                             </div>
+                                        </div>
+                                        <div class="row invoice-info">
                                             <br />
-                                            <div class="col-sm-6 col-12 order-2 order-sm-2 d-flex justify-content-end">
-                                                <h4 class="text-primary">User photo</h4>
-                                                <img alt="" src="@ViewBag.Base64String" style="height:72px;width:72px;" />
-                                            </div>
-                                            <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
-                                                <h4 class="text-primary">User photo</h4>
-                                                @Html.LabelFor(model => model.File.FileName, new { @class = "form-control" })
-                                                <input type="file" id="userPhotoUpload" name="userPhotoUpload" />
-                                                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                <fieldset>
+                                                    <h4 class="text-primary">User photo</h4>
+                                                    <img alt="" src="@ViewBag.Base64String" style="height:150px;width:150px;" />
+                                                </fieldset>
+                                                <fieldset>
+                                                    <input type="file" id="userPhotoUpload" name="userPhotoUpload" />
+                                                    @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                </fieldset>
                                             </div>
                                         </div>
                                         <div class="row invoice-info">
@@ -63,10 +70,10 @@
                                                     @Html.PasswordFor(model => model.Password, new { @class = "form-control", @type = "float", @placeholder = "Password" })
                                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                                 </fieldset>
-                                                <h6 class="invoice-to">E-mail</h6>
+                                                <h6 class="invoice-to">Activity</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @type = "float", @placeholder = "E-mail" })
-                                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                    @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
                                                 </fieldset>
                                                 <ul class="list-group list-group-flush">
                                                     <li class="list-group-item border-0 pb-0">
