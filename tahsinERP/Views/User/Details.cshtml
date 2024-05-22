@@ -7,55 +7,146 @@
     <div class="content-overlay"></div>
     <div class="content-wrapper">
         <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h5 class="content-header-title float-left pr-1 mb-0">Foydalanuvchi haqida sahifa</h5>
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Admin Panel</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    Foydalanuvchi ma'lumotlari
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="content-body">
-            <!-- app invoice View Page -->
-            <section class="invoice-edit-wrapper">
+            <!-- account setting page start -->
+            <section id="page-account-settings">
                 <div class="row">
-                    <!-- invoice view page -->
-                    <div class="col-xl-9 col-md-8 col-12">
-                        <div class="card">
-                            <div class="card-content">
-                                <div class="card-body pb-0 mx-25">
-                                    <div class="row my-2 py-50">
-                                        <div class="col-sm-6 col-12 order-2 order-sm-1">
-                                            <h4 class="text-primary">Username</h4>
-                                            <span><b>Username</b>: @Html.DisplayFor(model => model.UName, new { @class = "form-control"})</span>
-                                            <h6 class="invoice-to">E-mail</h6>
-                                            <fieldset class="invoice-address form-group">
-                                                @Html.DisplayFor(model => model.Email, new { @class = "form-control"})
-                                            </fieldset>
-                                        </div>
-                                        <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
-                                            <fieldset>
-                                                <h4 class="text-primary">User photo</h4>
-                                                <img alt="" src="@ViewBag.Base64String" style="height:150px;width:150px;" />
-                                            </fieldset>
-                                        </div>
-                                        </div>
-                                        <div class="row invoice-info">
-                                            <div class="col-lg-12 col-md-6 mt-25">
-                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                <hr>
-                                                <h6 class="invoice-to">Part name</h6>
-                                                <fieldset class="invoice-address form-group">
-                                                    @Html.DisplayFor(model => model.FullName, new { @class = "form-control"})
-                                                </fieldset>
-                                                <h6 class="invoice-to">Role</h6>
-                                                <fieldset class="invoice-address form-group">
-                                                    @Html.DropDownList("RoleID", null, htmlAttributes: new { @class = "form-control"})
-                                                </fieldset>
-                                                <h6>Activity</h6>
-                                                <fieldset class="form-group">
-                                                    @Html.DisplayFor(model => model.IsActive)
-                                                    <span class="switch-label w-100">
-                                                        Is active?
-                                                    </span>
-                                                </fieldset>
+                    <div class="col-12">
+                        <div class="row">
+                            <!-- left menu section -->
+                            <div class="col-md-3 mb-2 mb-md-0 pills-stacked">
+                                <ul class="nav nav-pills flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center active" id="account-pill-general" data-toggle="pill" href="#account-vertical-general" aria-expanded="true">
+                                            <i class="bx bx-cog"></i>
+                                            <span>Foydalanuvchi ma'lumotlari</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center" id="account-pill-info" data-toggle="pill" href="#account-vertical-info" aria-expanded="false">
+                                            <i class="bx bx-info-circle"></i>
+                                            <span>Uni faolligi to'g'risida ma'lumot</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- right content section -->
+                            <div class="col-md-9">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <div class="tab-content">
+                                                <div role="tabpanel" class="tab-pane active" id="account-vertical-general" aria-labelledby="account-pill-general" aria-expanded="true">
+                                                    <div class="card-content">
+                                                        <div class="card-body pb-0 mx-25">
+                                                            <div class="row my-2 py-50">
+                                                                <div class="col-sm-6 col-12 order-2 order-sm-1">
+                                                                    <h4 class="text-primary">Foydalanuvchi ma'lumotlari</h4>
+                                                                    <span><b>Username</b>: @Html.DisplayFor(model => model.UName, new { @class = "form-control" })</span>
+                                                                    <hr />
+                                                                    <span><b>Email</b>: @Html.DisplayFor(model => model.Email, new { @class = "form-control" })</span>
+                                                                </div>
+                                                                <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
+                                                                    <fieldset>
+                                                                        <h4 class="text-primary">Foydalanuvchi rasmi</h4>
+                                                                        <img alt="" src="@ViewBag.Base64String" style="height:150px;width:150px;" />
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row invoice-info">
+                                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                                    <hr>
+                                                                    <span><b>Ismi sharifi</b>: @Html.DisplayFor(model => model.FullName, new { @class = "form-control" })</span>
+                                                                    <hr />
+                                                                    <span><b>Roli</b>: @Html.DisplayFor(model => model.Role, new { @class = "form-control" })</span>
+                                                                    <hr />
+                                                                    <h6>Faolligi</h6>
+                                                                    <fieldset class="form-group">
+                                                                        @Html.DisplayFor(model => model.IsActive)
+                                                                        <span class="switch-label w-100">
+                                                                            Ayni paytda faolmi?
+                                                                        </span>
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="account-vertical-info" role="tabpanel" aria-labelledby="account-pill-info" aria-expanded="false">
+                                                    <form novalidate>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        <h4 class="card-title">Foydalanuvchining tizimga ulangan vaqti va ma'lumotlari'</h4>
+                                                                    </div>
+                                                                    <div class="card-content">
+                                                                        <div class="card-body card-dashboard">
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-striped dataex-html5-selectors">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Sanasi</th>
+                                                                                            <th>Vaqti</th>
+                                                                                            <th>IP manzili</th>
+                                                                                            <th>MAC manzili</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @foreach (var item in Model.sessions)
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td>@item.DateTime.ToString("yyyy-MM-dd")</td>
+                                                                                                <td>@item.DateTime.ToString("HH:mm:ss")</td>
+                                                                                                <td>@item.IP</td>
+                                                                                                <td>@item.MAC</td>
+                                                                                            </tr>
+                                                                                        }
+                                                                                    </tbody>
+                                                                                    <tfoot>
+                                                                                        <tr>
+                                                                                            <th>Sanasi</th>
+                                                                                            <th>Vaqti</th>
+                                                                                            <th>IP manzili</th>
+                                                                                            <th>MAC manzili</th>
+                                                                                        </tr>
+                                                                                    </tfoot>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                        <hr>
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>

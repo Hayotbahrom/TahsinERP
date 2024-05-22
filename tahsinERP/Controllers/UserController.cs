@@ -7,8 +7,6 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
-using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -239,27 +237,32 @@ namespace tahsinERP.Controllers
             }
             UserViewModel userviewmodel = new UserViewModel();
             USERS user = db.USERS.Find(ID);
+            USER_ENTRIES entry = db.USER_ENTRIES.Where(ue => ue.UserID == user.ID).FirstOrDefault();
             if (user == null)
             {
                 return HttpNotFound();
             }
             else
             {
+                userviewmodel.ID = user.ID;
                 userviewmodel.UName = user.Uname;
                 userviewmodel.Email = user.Email;
                 userviewmodel.FullName = user.FullName;
                 userviewmodel.IsActive = user.IsActive;
                 foreach (var role in user.ROLES)
                 {
-                    userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault().ToString();
+                    userviewmodel.Role = db.ROLES.Where(r => r.ID == role.ID).Select(r => r.RName).FirstOrDefault();
                 }
+                userviewmodel.sessions = user.USER_ENTRIES.ToList();
+                //userviewmodel.datetime = entry.DateTime;
+                //userviewmodel.IP_adrr = entry.IP;
+                //userviewmodel.MAC_adrr = entry.MAC;
             }
             USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
             if (userimage != null)
             {
                 ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
             }
-            ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName", userviewmodel.RoleID);
             return View(userviewmodel);
         }
     }
