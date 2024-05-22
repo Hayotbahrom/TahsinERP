@@ -16,7 +16,7 @@ namespace tahsinERP.ViewModels
 
         [Required(ErrorMessage = "Emailni kiriting")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Input password")]
+        [Required(ErrorMessage = "Kalit so'zni kiriting")]
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
         public int companyID { get; set; }
@@ -28,6 +28,10 @@ namespace tahsinERP.ViewModels
         public List<USERS> userList { get; set; }
         public int SelectedRoleId { get; set; }
         public List<string> Roles { get; set; }
+        public string IP_adrr { get; set; }
+        public string MAC_adrr { get; set; }
+        public DateTime datetime{ get; set; }
+        public List<USER_ENTRIES> sessions { get; set; } 
 
     }
 }
