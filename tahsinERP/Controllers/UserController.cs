@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -17,7 +18,7 @@ namespace tahsinERP.Controllers
     {
         DBTHSNEntities db = new DBTHSNEntities();
         byte[] avatar;
-        int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
+        int userPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         // GET: Users
         public ActionResult Index(string roleID, string status)
         {
@@ -80,7 +81,7 @@ namespace tahsinERP.Controllers
                 user.Password = password;
                 user.FullName = userVM.FullName;
                 user.Email = userVM.Email;
-                user.IsActive = true;
+                user.IsActive = userVM.IsActive;
                 user.IsDeleted = false;
                 user.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
 
@@ -97,14 +98,13 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
                     }
                 }
-
                 if (Request.Files["userPhotoUpload"].ContentLength > 0)
                 {
-                    if (Request.Files["userPhotoUpload"].InputStream.Length < partPhotoMaxLength)
+                    if (Request.Files["userPhotoUpload"].InputStream.Length < userPhotoMaxLength)
                     {
                         USERIMAGES userImage = new USERIMAGES();
-                        avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        avatar = new byte[Request.Files["userPhotoUpload"].InputStream.Length];
+                        Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
                         userImage.UserID = user.ID;
                         userImage.Image = avatar;
 
@@ -147,7 +147,7 @@ namespace tahsinERP.Controllers
                 userviewmodel.IsActive = user.IsActive;
                 foreach (var role in user.ROLES)
                 {
-                    userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault().ToString(); ;
+                    userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault().ToString();
                 }
             }
             USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
@@ -160,9 +160,107 @@ namespace tahsinERP.Controllers
         }
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? ID, FormCollection collection)
+        public ActionResult Edit(int? ID, UserViewModel uvm)
         {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //UserViewModel pvm = new UserViewModel();
+            var userToUpdate = db.USERS.Find(ID);
+            USERIMAGES uImage = db.USERIMAGES.Where(ui => ui.UserID == ID).FirstOrDefault();
+            string roleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + uvm.RoleID + " and userid = " + ID + "").FirstOrDefault().ToString();
+            string existingRoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where userid = " + ID + "").FirstOrDefault().ToString();
+            var keyNew = Helper.GeneratePassword(10);
+            var password = Helper.EncodePassword(uvm.Password, keyNew);
+            userToUpdate.HashCode = keyNew;
+            userToUpdate.Password = password;
+            //ROLES selectedRole = db.ROLES.Where(r => r.ID == Convert.ToInt32(roleID)).FirstOrDefault();
+            if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
+            {
+                try
+                {
+                    if (roleID.CompareTo("0") == 0)
+                    {
+                        if (roleID.CompareTo(existingRoleID) != 0)
+                        {
+                            int noOfRowInserted = db.Database.ExecuteSqlCommand("INSERT INTO USERROLES ([UserID],[RoleID]) VALUES(" + ID + "," + uvm.RoleID + ")");
+                            int noOfRowDeleted = db.Database.ExecuteSqlCommand("DELETE FROM USERROLES WHERE UserID = " + ID + " AND RoleID = " + existingRoleID + "");
+                            db.SaveChanges();
+                        }
+                    }
+                    if (Request.Files["userPhotoUpload"].ContentLength > 0)
+                    {
+                        if (Request.Files["userPhotoUpload"].InputStream.Length < userPhotoMaxLength)
+                        {
+                            avatar = new byte[Request.Files["userPhotoUpload"].InputStream.Length];
+                            Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                            if (uImage == null)
+                            {
+                                USERIMAGES uImageNew = new USERIMAGES();
+                                uImageNew.UserID = (int)ID;
+                                uImageNew.Image = avatar;
+
+                                db.USERIMAGES.Add(uImageNew);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                uImage.UserID = (int)ID;
+                                uImage.Image = avatar;
+
+                                db.Entry(uImage).State = System.Data.Entity.EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Unable to load photo, it's more than 2MB. Try again, and if the problem persists, see your system administrator.");
+                            throw new RetryLimitExceededException();
+                        }
+                    }
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName");
             return View();
+        }
+        public ActionResult Details(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UserViewModel userviewmodel = new UserViewModel();
+            USERS user = db.USERS.Find(ID);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                userviewmodel.UName = user.Uname;
+                userviewmodel.Email = user.Email;
+                userviewmodel.FullName = user.FullName;
+                userviewmodel.IsActive = user.IsActive;
+                foreach (var role in user.ROLES)
+                {
+                    userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault().ToString();
+                }
+            }
+            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
+            if (userimage != null)
+            {
+                ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
+            }
+            ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName", userviewmodel.RoleID);
+            return View(userviewmodel);
         }
     }
 }

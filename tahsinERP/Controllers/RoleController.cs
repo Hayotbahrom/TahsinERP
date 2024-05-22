@@ -8,6 +8,7 @@ namespace tahsinERP.Controllers
 {
     public class RoleController : Controller
     {
+        DBTHSNEntities db = new DBTHSNEntities();
         // GET: Role
         DBTHSNEntities db = new DBTHSNEntities();
         public ActionResult Index()
@@ -68,6 +69,22 @@ namespace tahsinERP.Controllers
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int? ID, FormCollection collection)
+        {
+            return View();
+        }
+        public ActionResult Create()
+        {
+            return View();
+        }
+        public ActionResult Edit()
+        {
+            return View();
+        }
+        public ActionResult Delete()
+        {
+            return View();
+        }
+        public ActionResult Details(int ID)
         {
             return View();
         }
