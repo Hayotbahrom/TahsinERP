@@ -1,8 +1,118 @@
-﻿
+﻿@model tahsinERP.Models.ROLES
 @{
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- app invoice View Page -->
+            <section class="invoice-edit-wrapper">
+                <div class="row">
+                    <!-- invoice view page -->
+                    <div class="col-xl-9 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            <hr>
+                                            <h6 class="invoice-to">Part name</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.TextBoxFor(model => model.RName, new { @class = "form-control", @placeholder = "Role Nomi" })
+                                                @Html.ValidationMessageFor(model => model.RName, "", new { @class = "text-danger" })
+                                            </fieldset>
+                                            <h6 class="invoice-to">Batafsil</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Batafsil" })
+                                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                            </fieldset>
 
-<h2>Delete</h2>
+                                            <br />
+                                            <!-- Link -->
+                                            <a href="@Url.Action("PermissionsOfRole", "Role")" type="button" class="btn btn-outline-primary block" data-toggle="modal" data-target="#default">Edit Rol</a>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-danger" name="Delete" type="submit" value="Delete">
+                                                        <i class='bx bx-save'></i>
+                                                        Delete
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title" id="myModalLabel1">Basic Modal</h3>
+                                                        <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
+                                                            <i class="bx bx-x"></i>
+                                                        </button>
+                                                    </div>
+                                                    @foreach (var permission in Model.PERMISSIONS)
+                                                    {
+
+
+                                                         <div class="modal-body">
+                                                             <div class="modal-content p-3 p-md-5">
+                                                                 <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                 <div class="modal-body">
+                                                                     <div class="text-center mb-4">
+                                                                         <h3 class="role-title">Edit Role</h3>
+                                                                         <p>Set role permissions</p>
+                                                                     </div>
+                                                                     <form id="addRoleForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" onsubmit="return false" novalidate="novalidate">
+                                                                         <div class="col-12 mb-4 fv-plugins-icon-container">
+                                                                             <label class="form-label" for="modalRoleName">Role Name</label>
+                                                                             <input type="text" id="modalRoleName" name="modalRoleName" class="form-control" placeholder="Enter a role name" tabindex="-1">
+                                                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                                                                         </div>
+                                                                         <div class="col-12">
+                                                                             <h5>Role Permissions</h5>
+                                                                             <div class="table-responsive">
+                                                                                 <table class="table table-flush-spacing">
+                                                                                     <tbody>
+                                                                                         <tr>
+                                                                                             <td class="text-nowrap fw-medium">
+                                                                                                 @Model.PERMISSIONS.Where(p=>p.ID==Model.ID)
+                                                                                             </td>
+                                                                                         </tr>
+                                                                                     </tbody>
+                                                                                 </table>
+                                                                             </div>
+                                                                         </div>
+                                                                     </form>
+                                                                 </div>
+                                                             </div> 
+                                                         </div>
+                                                    }
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                                                            <i class="bx bx-x d-block d-sm-none"></i>
+                                                            <span class="d-none d-sm-block">Close</span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary ml-1" data-dismiss="modal">
+                                                            <i class="bx bx-check d-block d-sm-none"></i>
+                                                            <span class="d-none d-sm-block">Accept</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+}
 

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.Security;
 using tahsinERP.Models;
 
 namespace tahsinERP.Controllers
@@ -10,16 +14,17 @@ namespace tahsinERP.Controllers
     {
         DBTHSNEntities db = new DBTHSNEntities();
         // GET: Role
-        DBTHSNEntities db = new DBTHSNEntities();
         public ActionResult Index()
         {
             var roles = db.ROLES.Where(r => r.IsDeleted == false).ToList();
             return View(roles);
         }
+
         public ActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Create(ROLES role)
         {
@@ -40,53 +45,102 @@ namespace tahsinERP.Controllers
             {
                 ModelState.AddModelError(ex.Message, "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-            return View();
+            return RedirectToAction("Index");
         }
 
-        public ActionResult Edit(int? ID)
+        [HttpGet]
+        public ActionResult Edit(ROLES role)
         {
-            if (ID == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
-            ROLES role = new ROLES();
-
-            var editrole = db.ROLES.Find(ID);
-            if (editrole == null)
+            var roles = db.ROLES.FirstOrDefault(x => x.ID == role.ID); 
+            if (role == null)
             {
                 return HttpNotFound();
             }
-            else
-            {
-                role.RName = editrole.RName;
-                role.Description = editrole.Description;
-            }
 
-            return View(role);
+            return View(roles);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? ID, FormCollection collection)
+        public ActionResult Edit(int id)
         {
+            var roleToUpdate = db.ROLES.Find(id);
+
+            if (TryUpdateModel(roleToUpdate, "", new string[] { "RName", "Description" }))
+            {
+                try
+                {
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException)
+                {
+
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            } 
             return View();
+            
+            
         }
-        public ActionResult Create()
+
+        [HttpGet]
+        public ActionResult Delete(ROLES roles)
         {
-            return View();
+            var role = db.ROLES.FirstOrDefault(x => x.ID == roles.ID);
+            if(role == null)
+            {
+                return HttpNotFound();
+            }
+            return View(role);
         }
-        public ActionResult Edit()
+
+
+        [HttpDelete, ActionName("Delete")]
+        public ActionResult Delete(int? ID)
         {
-            return View();
+            var roleToUpdate = db.ROLES.Find(ID);
+            ROLES role = db.ROLES.Find(ID);
+            role.IsDeleted = true;
+            if (TryUpdateModel(role, "", new string[] { "IsDeleted" }))
+            {
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            return RedirectToAction("Index");
         }
-        public ActionResult Delete()
+
+        public ActionResult Details(int? ID)
         {
-            return View();
+            if(ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var role = db.ROLES.Find(ID);
+            ROLES roles = new ROLES();
+
+            roles.ID = role.ID;
+            roles.RName = role.RName;
+            roles.Description = role.Description;
+
+            return View(roles);
+
         }
-        public ActionResult Details(int ID)
+
+        public ActionResult PermissionsOfRole()
         {
-            return View();
+            var roles = db.PERMISSIONS.Where(r => r.IsDeleted == false).ToList();
+            return View(roles);
         }
     }
+
 }

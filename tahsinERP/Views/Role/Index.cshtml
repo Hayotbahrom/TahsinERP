@@ -13,7 +13,7 @@
             <!-- users list start -->
             <section class="invoice-list-wrapper">
                     <div class="invoice-create-btn mb-1">
-                        <a href="~/User/Create" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
+                        <a href="@Url.Action("Create","Role")" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
                             Add
                             Role
                         </a>
@@ -47,11 +47,11 @@
                                                     <td>
                                                         <div>
                                                             <a href="@Url.Action("Edit", "Role", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                            <a href="@Url.Action("Delete", "Role", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                            <a href="@Url.Action("Delete","Role", new { id = item.ID })"><i class="bx bx-trash"></i></a>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            }
+                                             }
                                         </tbody>
                                     </table>
                                 </div>
