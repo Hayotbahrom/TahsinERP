@@ -1,8 +1,123 @@
-﻿
+﻿@model tahsinERP.Models.ROLES
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
+@using (Html.BeginForm("Edit", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- app invoice View Page -->
+                <section class="invoice-edit-wrapper">
+                    <div class="row">
+                        <!-- invoice view page -->
+                        <div class="col-xl-9 col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row invoice-info">
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <hr>
+                                                <h6 class="invoice-to">Rol Nomi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.RName, new { @class = "form-control", @placeholder = "Role Nomi" })
+                                                    @Html.ValidationMessageFor(model => model.RName, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Batafsil</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Batafsil" })
+                                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <div class="col-lg-12 col-md-9 mt-12">
+                                                    <a href="@Url.Action("Index", "Role")" type="button" class="btn btn-outline-primary block" data-toggle="modal" data-target="#default">Edit Rol</a>
+                                                </div>
 
-<h2>Edit</h2>
-
+                                                <div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close rounded-pill btn-pinned " data-dismiss="modal" aria-label="Close">x</button>
+                                                            </div>
+                                                            <div>
+                                                                <div class="modal-content p-3 p-md-5">
+                                                                    <div  class="modal-body">
+                                                                        <form id="addRoleForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" onsubmit="return false" novalidate="novalidate">
+                                                                            <div class="col-md-12 col-sm-12">
+                                                                                <h5>Role Permissions</h5>
+                                                                                <div class="table-responsive" style="height:100%">
+                                                                                    <table class="table invoice-data-table dt-responsive nowrap" style="height:100% max-content auto" >
+                                                                                        <thead>
+                                                                                            <th>Permission Modal</th>
+                                                                                            <th>ViewPermission</th> 
+                                                                                            <th>ChangePermission</th>
+                                                                                            <th></th>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            @foreach (var permission in Model.PERMISSIONS)
+                                                                                            {
+                                                                                                <tr>
+                                                                                                    <td class="text-nowrap fw-medium">
+                                                                                                        @permission.Model
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <div class="d-flex">
+                                                                                                            <div class="form-check m-3 m-lg-5">
+                                                                                                                <input class="form-check-input" type="checkbox" />
+                                                                                                                <label class="form-check-label"> @permission.ViewPermit</label>
+                                                                                                            </div>
+                                                                                                            <div class="form-check m-3 m-lg-5">
+                                                                                                                <input class="form-check-input" type="checkbox" />
+                                                                                                                <label class="form-check-label"> @permission.ChangePermit</label>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            }
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                                                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                                                    <span class="d-none d-sm-block">Close</span>
+                                                                </button>
+                                                                <button type="button" class="btn btn-primary ml-1" data-dismiss="modal">
+                                                                    <i class="bx bx-check d-block d-sm-none"></i>
+                                                                    <span class="d-none d-sm-block">Accept</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item border-0 pb-0">
+                                                        <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                            <i class='bx bx-save'></i>
+                                                            Save
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}

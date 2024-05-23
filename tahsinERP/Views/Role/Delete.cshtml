@@ -1,8 +1,58 @@
-﻿
+﻿@model tahsinERP.Models.ROLES
 @{
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
-
-<h2>Delete</h2>
-
+@using (Html.BeginForm("Delete", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- app invoice View Page -->
+                <section class="invoice-edit-wrapper">
+                    <div class="row">
+                        <!-- invoice view page -->
+                        <div class="col-xl-9 col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row invoice-info">
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <hr>
+                                                <h6 class="invoice-to">Part name</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.RName, new { @class = "form-control", @placeholder = "Role Nomi" })
+                                                    @Html.ValidationMessageFor(model => model.RName, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Batafsil</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Batafsil" })
+                                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <!-- Link -->
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-danger" name="delete" type="submit" value="Delete">
+                                                        <i class='bx bx-save'></i>
+                                                        Delete
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
