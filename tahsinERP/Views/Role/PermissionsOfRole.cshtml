@@ -1,23 +1,59 @@
-﻿<div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+﻿@model tahsinERP.Models.PERMISSIONS
+
+@{
+    ViewBag.Title = "PermissionsOfRole";
+    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
+}
+
+<div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="myModalLabel1">Basic Modal</h3>
-                <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
-                    <i class="bx bx-x"></i>
-                </button>
+                <button type="button" class="close rounded-pill btn-pinned " data-dismiss="modal" aria-label="Close">x</button>
             </div>
             <div class="modal-body">
-                <p>
-                    Bonbon caramels muffin. Chocolate bar oat cake cookie pastry dragée pastry. Carrot cake
-                    chocolate tootsie roll chocolate bar candy canes biscuit.
-
-                    Gummies bonbon apple pie fruitcake icing biscuit apple pie jelly-o sweet roll. Toffee sugar
-                    plum sugar plum jelly-o jujubes bonbon dessert carrot cake. Cookie dessert tart muffin topping
-                    donut icing fruitcake. Sweet roll cotton candy dragée danish Candy canes chocolate bar cookie.
-                    Gingerbread apple pie oat cake. Carrot cake fruitcake bear claw. Pastry gummi bears
-                    marshmallow jelly-o.
-                </p>
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-body">
+                        <form id="addRoleForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" onsubmit="return false" novalidate="novalidate">
+                            <div class="col-12">
+                                <h5>Role Permissions</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-flush-spacing">
+                                        <thead>
+                                        <th>Permission Modal</th>
+                                        <th></th>
+                                        <th>ViewPermission</th>
+                                        <th></th>
+                                        <th>ChangePermission</th>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var permission in Model.Model)
+                                            {
+                                                <tr>
+                                                    <td class="text-nowrap fw-medium">
+                                                        @permission
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="form-check m-3 m-lg-5">
+                                                                <input class="form-check-input" type="checkbox" />
+                                                                <label class="form-check-label"> 1</label>
+                                                            </div>
+                                                            <div class="form-check m-3 m-lg-5">
+                                                                <input class="form-check-input" type="checkbox" />
+                                                                <label class="form-check-label"> 2</label>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
@@ -32,3 +68,11 @@
         </div>
     </div>
 </div>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item border-0 pb-0">
+        <button class="btn btn-danger" name="Delete" type="submit" value="Delete">
+            <i class='bx bx-save'></i>
+            Delete
+        </button>
+    </li>
+</ul>

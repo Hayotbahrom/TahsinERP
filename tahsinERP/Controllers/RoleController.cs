@@ -85,7 +85,6 @@ namespace tahsinERP.Controllers
             
             
         }
-
         [HttpGet]
         public ActionResult Delete(ROLES roles)
         {
@@ -98,13 +97,13 @@ namespace tahsinERP.Controllers
         }
 
 
-        [HttpDelete, ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID)
         {
-            var roleToUpdate = db.ROLES.Find(ID);
             ROLES role = db.ROLES.Find(ID);
             role.IsDeleted = true;
-            if (TryUpdateModel(role, "", new string[] { "IsDeleted" }))
+            if (TryUpdateModel(role,"", new string[] { "IsDeleted" }))
             {
                 try
                 {
@@ -116,7 +115,7 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            return RedirectToAction("Index");
+            return View();
         }
 
         public ActionResult Details(int? ID)
@@ -131,9 +130,7 @@ namespace tahsinERP.Controllers
             roles.ID = role.ID;
             roles.RName = role.RName;
             roles.Description = role.Description;
-
             return View(roles);
-
         }
 
         public ActionResult PermissionsOfRole()
