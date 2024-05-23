@@ -1,5 +1,4 @@
-﻿using _1738i.Controllers;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -10,13 +9,15 @@ using tahsinERP.Models;
 using tahsinERP.ViewModels;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Http;
+using System.Data.Entity.Infrastructure;
+using System.Configuration;
 
 namespace tahsinERP.Controllers
 {
     public class AccountController : Controller
     {
-        string role = "";
-        DBTHSNEntities db = new DBTHSNEntities();
+
+        private DBTHSNEntities db = new DBTHSNEntities();
         [DllImport("Iphlpapi.dll")]
         private static extern int SendARP(int dest, int host, ref long mac, ref int length);
 
@@ -50,7 +51,7 @@ namespace tahsinERP.Controllers
                     bool IsValidUser = db.USERS
                    .Any(u => u.Email.ToLower() == user
                    .Email.ToLower() && u.Password.Equals(encodingPasswordString));
-
+                    USERIMAGES image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
                     if (IsValidUser)
                     {
                         var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, getUser.FullName);
@@ -66,6 +67,19 @@ namespace tahsinERP.Controllers
                             Expires = authTicket.Expiration
                         };
                         Response.Cookies.Set(cookie);
+
+                        if (image != null)
+                        {
+                            var userImageCookie = new HttpCookie("UserImageId", image.ID.ToString())
+                            {
+                                HttpOnly = true,
+                                Secure = FormsAuthentication.RequireSSL,
+                                Path = "/", // Setting the path to root so it's accessible throughout the site
+                                Expires = authTicket.Expiration // Adjust the expiration as needed
+                            };
+                            Response.Cookies.Set(userImageCookie);
+                        }
+
                         SetUserEntry(getUser.ID);
                         return RedirectToAction("Index", "Home");
                     }
@@ -115,10 +129,102 @@ namespace tahsinERP.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
-
-        public ActionResult AccountSettings()
+        public ActionResult GetUserImage(int id)
         {
-            return View();
+            var image = db.USERIMAGES.FirstOrDefault(ui => ui.ID == id);
+            if (image != null)
+            {
+                return File(image.Image, "image/png"); // Adjust the MIME type if necessary
+            }
+            return HttpNotFound();
+        }
+        public ActionResult Settings(string eMail)
+        {
+            USERS currentUser = db.USERS.Where(u => u.Email == eMail).FirstOrDefault();
+            UserViewModel userViewModel = new UserViewModel();
+
+            userViewModel.UName = currentUser.Uname;
+            userViewModel.Password = currentUser.Password;
+            userViewModel.Email = currentUser.Email;
+            userViewModel.FullName = currentUser.FullName;
+            userViewModel.IsActive = currentUser.IsActive;
+            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == currentUser.ID).FirstOrDefault();
+            if (userimage != null)
+            {
+                ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
+            }
+            return View(userViewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveSettings(UserViewModel uvm)
+        {
+            byte[] avatar;
+            int userPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
+            if (uvm.Email == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            USERS userToUpdate = db.USERS.Where(u => u.Email == uvm.Email).FirstOrDefault();
+            if (userToUpdate == null)
+            {
+                return HttpNotFound();
+            }
+            if (!string.IsNullOrEmpty(uvm.Password))
+            {
+                var keyNew = Helper.GeneratePassword(10);
+                var password = Helper.EncodePassword(uvm.Password, keyNew);
+                userToUpdate.HashCode = keyNew;
+                userToUpdate.Password = password;
+            }
+            USERIMAGES uImage = db.USERIMAGES.Where(ui => ui.UserID == userToUpdate.ID).FirstOrDefault();
+            if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
+            {
+                try
+                {
+                    if (uImage != null)
+                        if (Request.Files["userPhotoUpload"].ContentLength > 0)
+                        {
+                            if (Request.Files["userPhotoUpload"].InputStream.Length < userPhotoMaxLength)
+                            {
+                                avatar = new byte[Request.Files["userPhotoUpload"].InputStream.Length];
+                                Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                if (uImage == null)
+                                {
+                                    USERIMAGES uImageNew = new USERIMAGES
+                                    {
+                                        UserID = userToUpdate.ID,
+                                        Image = avatar
+                                    };
+
+                                    db.USERIMAGES.Add(uImageNew);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    uImage.UserID = userToUpdate.ID;
+                                    uImage.Image = avatar;
+
+                                    db.Entry(uImage).State = System.Data.Entity.EntityState.Modified;
+                                    db.SaveChanges();
+                                }
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Unable to load photo, it's more than 2MB. Try again, and if the problem persists, see your system administrator.");
+                                throw new RetryLimitExceededException();
+                            }
+                        }
+                    db.SaveChanges();
+                    return Redirect("/Home");
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            return View(uvm);
         }
     }
 }

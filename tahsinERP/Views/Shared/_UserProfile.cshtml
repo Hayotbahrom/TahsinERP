@@ -1,0 +1,10 @@
+﻿@{
+    var userImageUrl = Url.Content("~/app-assets/images/portrait/small/avatar-s-11.jpg"); // Default user image
+    var userImageCookie = Request.Cookies["UserImageId"];
+    if (userImageCookie != null)
+    {
+        var imageId = userImageCookie.Value;
+        userImageUrl = Url.Action("GetUserImage", "Account", new { id = imageId });
+    }
+}
+<span><img class="round" src="@userImageUrl" alt="avatar" height="40" width="40" /></span>

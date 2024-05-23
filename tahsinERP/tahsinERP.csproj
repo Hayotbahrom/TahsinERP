@@ -277,6 +277,7 @@
     <Compile Include="Models\P_WRHS_INCOME_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RoleGiver.cs" />
     <Compile Include="Models\ROLES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -2049,8 +2050,10 @@
     <Content Include="Views\Role\Delete.cshtml" />
     <Content Include="Views\Role\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
-    <Content Include="Views\Account\AccountSettings.cshtml" />
+    <Content Include="Views\Account\Settings.cshtml" />
     <Content Include="Views\Role\PermissionsOfRole.cshtml" />
+    <Content Include="Views\Shared\_UserProfile.cshtml" />
+    <Content Include="Views\User\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

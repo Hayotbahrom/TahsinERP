@@ -95,8 +95,6 @@ namespace tahsinERP.Controllers
             }
             return View(role);
         }
-
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID)
@@ -117,7 +115,6 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
         public ActionResult Details(int? ID)
         {
             if(ID == null)

@@ -1,0 +1,76 @@
+﻿@model tahsinERP.ViewModels.UserViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
+}
+@using (Html.BeginForm("Delete", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- app invoice View Page -->
+                <section class="invoice-edit-wrapper">
+                    <div class="row">
+                        <!-- invoice view page -->
+                        <div class="col-xl-9 col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+
+                                        <div class="row my-2 py-50">
+                                            <div class="col-sm-6 col-12 order-2 order-sm-1">
+                                                <h4 class="text-primary">Foydalanuvchi nomi</h4>
+                                                <span><b>Username</b>: @Html.DisplayFor(model => model.UName, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <h6 class="invoice-to">E-mail</h6>
+                                                <span><b>Email</b>: @Html.DisplayFor(model => model.Email, new { @class = "form-control" })</span>
+                                            </div>
+                                            <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
+                                                <fieldset>
+                                                    <h4 class="text-primary">Foydalanuvchi rasmi</h4>
+                                                    <img alt="" src="@ViewBag.Base64String" style="height:150px;width:150px;" />
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div class="row invoice-info">
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                <hr>
+                                                <span><b>Ismi sharifi</b>: @Html.DisplayFor(model => model.FullName, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Roli</b>: @Html.DisplayFor(model => model.Role, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <h6>Faolligi</h6>
+                                                <fieldset class="form-group">
+                                                    @Html.DisplayFor(model => model.IsActive)
+                                                    <span class="switch-label w-100">
+                                                        Ayni paytda faolmi?
+                                                    </span>
+                                                </fieldset>
+
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item border-0 pb-0">
+                                                        <button class="btn btn-danger btn-block subtotal-preview-btn" name="save" type="submit" value="Delete">
+                                                            <i class='bx bx-trash'></i>
+                                                            O'chirish
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}

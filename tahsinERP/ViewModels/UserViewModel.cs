@@ -22,7 +22,7 @@ namespace tahsinERP.ViewModels
         public int companyID { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
-        public string RoleID { get; set; }
+        public int RoleID { get; set; }
         public bool IsActive { get; set; }
         public bool KeepMeSigned { get; set; }
         public List<USERS> userList { get; set; }

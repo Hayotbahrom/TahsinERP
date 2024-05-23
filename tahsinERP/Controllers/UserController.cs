@@ -1,5 +1,4 @@
-﻿using _1738i.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -7,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.Security;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -14,9 +14,9 @@ namespace tahsinERP.Controllers
 {
     public class UserController : Controller
     {
-        DBTHSNEntities db = new DBTHSNEntities();
-        byte[] avatar;
-        int userPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
+        private DBTHSNEntities db = new DBTHSNEntities();
+        private byte[] avatar;
+        private int userPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         // GET: Users
         public ActionResult Index(string roleID, string status)
         {
@@ -145,7 +145,7 @@ namespace tahsinERP.Controllers
                 userviewmodel.IsActive = user.IsActive;
                 foreach (var role in user.ROLES)
                 {
-                    userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault().ToString();
+                    userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault();
                 }
             }
             USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
@@ -164,7 +164,6 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //UserViewModel pvm = new UserViewModel();
             var userToUpdate = db.USERS.Find(ID);
             USERIMAGES uImage = db.USERIMAGES.Where(ui => ui.UserID == ID).FirstOrDefault();
             string roleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + uvm.RoleID + " and userid = " + ID + "").FirstOrDefault().ToString();
@@ -173,7 +172,6 @@ namespace tahsinERP.Controllers
             var password = Helper.EncodePassword(uvm.Password, keyNew);
             userToUpdate.HashCode = keyNew;
             userToUpdate.Password = password;
-            //ROLES selectedRole = db.ROLES.Where(r => r.ID == Convert.ToInt32(roleID)).FirstOrDefault();
             if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
             {
                 try
@@ -254,9 +252,6 @@ namespace tahsinERP.Controllers
                     userviewmodel.Role = db.ROLES.Where(r => r.ID == role.ID).Select(r => r.RName).FirstOrDefault();
                 }
                 userviewmodel.sessions = user.USER_ENTRIES.ToList();
-                //userviewmodel.datetime = entry.DateTime;
-                //userviewmodel.IP_adrr = entry.IP;
-                //userviewmodel.MAC_adrr = entry.MAC;
             }
             USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
             if (userimage != null)
@@ -264,6 +259,59 @@ namespace tahsinERP.Controllers
                 ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
             }
             return View(userviewmodel);
+        }
+        public ActionResult Delete(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UserViewModel userviewmodel = new UserViewModel();
+            USERS user = db.USERS.Find(ID);
+            USER_ENTRIES entry = db.USER_ENTRIES.Where(ue => ue.UserID == user.ID).FirstOrDefault();
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                userviewmodel.ID = user.ID;
+                userviewmodel.UName = user.Uname;
+                userviewmodel.Email = user.Email;
+                userviewmodel.FullName = user.FullName;
+                userviewmodel.IsActive = user.IsActive;
+                foreach (var role in user.ROLES)
+                {
+                    userviewmodel.Role = db.ROLES.Where(r => r.ID == role.ID).Select(r => r.RName).FirstOrDefault();
+                }
+                userviewmodel.sessions = user.USER_ENTRIES.ToList();
+            }
+            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
+            if (userimage != null)
+            {
+                ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
+            }
+            return View(userviewmodel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int? ID, FormCollection collection)
+        {
+            USERS user= db.USERS.Find(ID);
+            user.IsDeleted = true;
+            if (TryUpdateModel(user, "", new string[] { "IsDeleted" }))
+            {
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            return View();
         }
     }
 }

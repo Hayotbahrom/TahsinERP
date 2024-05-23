@@ -15,8 +15,7 @@
                 {
                     <div class="invoice-create-btn mb-1">
                         <a href="~/User/Create" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
-                            Add
-                            User
+                            Foydalanuvchini qo'shish
                         </a>
                     </div>
                 }
@@ -32,12 +31,12 @@
                             <div class="col-1 col-sm-5 col-lg-1">
                                 <label></label>
                                 <fieldset class="form-group">
-                                    <a href="@Url.Action("Index", "User", new { status = "InActive" })" role="link">inactive users</a>
+                                    <a href="@Url.Action("Index", "User", new { status = "InActive" })" role="link">faolligi o'chirib qo'yilgan foydalanuvchilar</a>
                                 </fieldset>
                             </div>
                             <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
                                 <a href="~/User" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
-                                    Clear
+                                    Ro'yxatni yangilash
                                 </a>
                             </div>
                         </div>
@@ -55,11 +54,11 @@
                                                 <th></th>
                                                 <th></th>
                                                 <th>username</th>
-                                                <th>name</th>
+                                                <th>F.I.Sh</th>
                                                 <th>email</th>
-                                                <th>role</th>
-                                                <th>status</th>
-                                                <th>edit</th>
+                                                <th>roli</th>
+                                                <th>faolligi</th>
+                                                <th>amallar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -76,11 +75,11 @@
                                                     <td>@item.Role</td>
                                                     @if (item.IsActive)
                                                     {
-                                                        <td><span class="badge badge-light-success">Active</span></td>
+                                                        <td><span class="badge badge-light-success">Faol</span></td>
                                                     }
                                                     else
                                                     {
-                                                        <td><span class="badge badge-light-danger">Inactive</span></td>
+                                                        <td><span class="badge badge-light-danger">Nofaol</span></td>
                                                     }
                                                     <td>
                                                         <div>
