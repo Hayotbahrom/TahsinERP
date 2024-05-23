@@ -115,5 +115,10 @@ namespace tahsinERP.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
+
+        public ActionResult AccountSettings()
+        {
+            return View();
+        }
     }
 }
