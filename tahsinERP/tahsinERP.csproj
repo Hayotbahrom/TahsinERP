@@ -157,6 +157,7 @@
     <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\Helper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\PModuleController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -2059,6 +2060,7 @@
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\Role\Permissions.cshtml" />
     <Content Include="Views\PModule\Index.cshtml" />
+    <Content Include="Views\Permission\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

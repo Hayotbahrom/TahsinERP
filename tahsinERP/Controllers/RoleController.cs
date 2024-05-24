@@ -142,12 +142,6 @@ namespace tahsinERP.Controllers
             roles.Description = role.Description;
             return View(roles);
         }
-
-        public ActionResult PermissionsOfRole()
-        {
-            var roles = db.PERMISSIONS.ToList();
-            return View(roles);
-        }
     }
 
 }
