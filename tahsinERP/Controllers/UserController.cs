@@ -172,6 +172,7 @@ namespace tahsinERP.Controllers
             var password = Helper.EncodePassword(uvm.Password, keyNew);
             userToUpdate.HashCode = keyNew;
             userToUpdate.Password = password;
+            userToUpdate.IsActive = uvm.IsActive;
             if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
             {
                 try
