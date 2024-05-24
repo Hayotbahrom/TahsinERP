@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 using tahsinERP.Models;
 
 namespace tahsinERP.ViewModels
@@ -30,8 +28,8 @@ namespace tahsinERP.ViewModels
         public List<string> Roles { get; set; }
         public string IP_adrr { get; set; }
         public string MAC_adrr { get; set; }
-        public DateTime datetime{ get; set; }
-        public List<USER_ENTRIES> sessions { get; set; } 
+        public DateTime datetime { get; set; }
+        public List<USER_ENTRIES> sessions { get; set; }
 
     }
 }
