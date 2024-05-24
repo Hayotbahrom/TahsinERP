@@ -34,7 +34,8 @@
                                                     @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
                                                 </fieldset>
                                             </div>
-                                        </div><div class="row my-2 py-50">
+                                        </div>
+                                        <div class="row my-2 py-50">
                                             <div class="col-sm-6 col-12 order-2 order-sm-1">
                                                 <h4 class="text-primary">Username</h4>
                                                 @Html.TextBoxFor(model => model.UName, new { @class = "form-control", @placeholder = "Username" })
@@ -70,13 +71,17 @@
                                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6>Activity</h6>
-                                                <fieldset class="form-group">
-                                                    @Html.CheckBoxFor(model => model.IsActive)
-                                                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
-                                                    <span class="switch-label w-100">
-                                                        Is active?
-                                                    </span>
-                                                </fieldset>
+                                                <ul class="list-unstyled mb-0">
+                                                    <li class="d-inline-block mr-2 mb-1">
+                                                        <fieldset>
+                                                            <div class="checkbox checkbox-secondary checkbox-glow">
+                                                                @Html.CheckBoxFor(Model => Model.IsActive, new { @type ="checkbox", @id="checkboxGlow2"})
+                                                                <label for="checkboxGlow2">Faolmi?</label>
+                                                            </div>
+                                                        </fieldset>
+                                                    </li>
+                                                </ul>
+
                                                 <ul class="list-group list-group-flush">
                                                     <li class="list-group-item border-0 pb-0">
                                                         <button class="btn btn-primary btn-block subtotal-preview-btn" name="save" type="submit" value="Edit">
