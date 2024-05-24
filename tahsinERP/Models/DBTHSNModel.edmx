@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DBTHSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DBTHSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BOMS">
           <Key>
             <PropertyRef Name="ID" />
@@ -380,16 +380,22 @@
           <Property Name="IsInhouse" Type="bit" />
           <Property Name="ShopID" Type="int" />
         </EntityType>
+        <EntityType Name="PERMISSIONMODULES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Module" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="PERMISSIONS">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Model" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ViewPermit" Type="bit" />
           <Property Name="ChangePermit" Type="bit" />
           <Property Name="RoleID" Type="int" />
-          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="PermissionModuleID" Type="int" />
         </EntityType>
         <EntityType Name="PROD_SHOPS">
           <Key>
@@ -401,18 +407,6 @@
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PARTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PROD_SHOPS_PARTS">
-          <Property Name="ShopID" Type="int" />
-          <Property Name="PartID" Type="int" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PROD_SHOPS_PRODUCTS">
-          <Property Name="ShopID" Type="int" />
-          <Property Name="ProductID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PRODUCT1738DOCS">
           <Key>
             <PropertyRef Name="ID" />
@@ -1121,6 +1115,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PERMISSIONS_PERMISSIONMODULES">
+          <End Role="PERMISSIONMODULES" Type="Self.PERMISSIONMODULES" Multiplicity="0..1" />
+          <End Role="PERMISSIONS" Type="Self.PERMISSIONS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PERMISSIONMODULES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PERMISSIONS">
+              <PropertyRef Name="PermissionModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PERMISSIONS_ROLES">
           <End Role="ROLES" Type="Self.ROLES" Multiplicity="0..1" />
           <End Role="PERMISSIONS" Type="Self.PERMISSIONS" Multiplicity="*" />
@@ -1133,18 +1139,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PARTS_PARTS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PARTS_PROD_SHOPS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PRODUCTS_PROD_SHOPS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PRODUCTS_PRODUCTS" />-->
         <Association Name="FK_PRODUCT1738DOCS_PRODUCTPACKS">
           <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACKS" Multiplicity="1" />
           <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
@@ -1364,6 +1358,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="PARTPACKS" EntityType="Self.PARTPACKS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PARTPLANS" EntityType="Self.PARTPLANS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PARTS" EntityType="Self.PARTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PERMISSIONMODULES" EntityType="Self.PERMISSIONMODULES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PERMISSIONS" EntityType="Self.PERMISSIONS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PROD_SHOPS" EntityType="Self.PROD_SHOPS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRODUCT1738DOCS" EntityType="Self.PRODUCT1738DOCS" Schema="dbo" store:Type="Tables" />
@@ -1553,6 +1548,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
           </AssociationSet>
+          <AssociationSet Name="FK_PERMISSIONS_PERMISSIONMODULES" Association="Self.FK_PERMISSIONS_PERMISSIONMODULES">
+            <End Role="PERMISSIONMODULES" EntitySet="PERMISSIONMODULES" />
+            <End Role="PERMISSIONS" EntitySet="PERMISSIONS" />
+          </AssociationSet>
           <AssociationSet Name="FK_PERMISSIONS_ROLES" Association="Self.FK_PERMISSIONS_ROLES">
             <End Role="ROLES" EntitySet="ROLES" />
             <End Role="PERMISSIONS" EntitySet="PERMISSIONS" />
@@ -1622,8 +1621,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="USERS" EntitySet="USERS" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DBTHSNModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -2085,12 +2083,12 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ViewPermit" Type="Boolean" />
           <Property Name="ChangePermit" Type="Boolean" />
           <Property Name="RoleID" Type="Int32" />
-          <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="ROLES" Relationship="Self.FK_PERMISSIONS_ROLES" FromRole="PERMISSIONS" ToRole="ROLES" />
+          <Property Name="PermissionModuleID" Type="Int32" />
+          <NavigationProperty Name="PERMISSIONMODULE" Relationship="DBTHSNModel.FK_PERMISSIONS_PERMISSIONMODULES" FromRole="PERMISSIONS" ToRole="PERMISSIONMODULE" />
         </EntityType>
         <EntityType Name="PROD_SHOPS">
           <Key>
@@ -3295,7 +3293,32 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="ROLES" EntitySet="ROLES" />
             <End Role="USERS" EntitySet="USERS" />
           </AssociationSet>
+          <EntitySet Name="PERMISSIONMODULES" EntityType="DBTHSNModel.PERMISSIONMODULE" />
+          <AssociationSet Name="FK_PERMISSIONS_PERMISSIONMODULES" Association="DBTHSNModel.FK_PERMISSIONS_PERMISSIONMODULES">
+            <End Role="PERMISSIONMODULE" EntitySet="PERMISSIONMODULES" />
+            <End Role="PERMISSIONS" EntitySet="PERMISSIONS" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="PERMISSIONMODULE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Module" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PERMISSIONS" Relationship="DBTHSNModel.FK_PERMISSIONS_PERMISSIONMODULES" FromRole="PERMISSIONMODULE" ToRole="PERMISSIONS" />
+        </EntityType>
+        <Association Name="FK_PERMISSIONS_PERMISSIONMODULES">
+          <End Type="DBTHSNModel.PERMISSIONMODULE" Role="PERMISSIONMODULE" Multiplicity="0..1" />
+          <End Type="DBTHSNModel.PERMISSIONS" Role="PERMISSIONS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PERMISSIONMODULE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PERMISSIONS">
+              <PropertyRef Name="PermissionModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3706,12 +3729,11 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySetMapping Name="PERMISSIONS">
             <EntityTypeMapping TypeName="DBTHSNModel.PERMISSIONS">
               <MappingFragment StoreEntitySet="PERMISSIONS">
+                <ScalarProperty Name="PermissionModuleID" ColumnName="PermissionModuleID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Model" ColumnName="Model" />
                 <ScalarProperty Name="ViewPermit" ColumnName="ViewPermit" />
                 <ScalarProperty Name="ChangePermit" ColumnName="ChangePermit" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3941,6 +3963,14 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               <ScalarProperty Name="ID" ColumnName="UserID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="PERMISSIONMODULES">
+            <EntityTypeMapping TypeName="DBTHSNModel.PERMISSIONMODULE">
+              <MappingFragment StoreEntitySet="PERMISSIONMODULES">
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -3955,7 +3985,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

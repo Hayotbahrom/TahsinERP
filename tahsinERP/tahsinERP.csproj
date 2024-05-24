@@ -157,6 +157,7 @@
     <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\Helper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PModuleController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UsersRoleProvider.cs" />
@@ -221,6 +222,9 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PART_WRHS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PERMISSIONMODULE.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PERMISSIONS.cs">
@@ -2051,9 +2055,10 @@
     <Content Include="Views\Role\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Account\Settings.cshtml" />
-    <Content Include="Views\Role\PermissionsOfRole.cshtml" />
     <Content Include="Views\Shared\_UserProfile.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
+    <Content Include="Views\Role\Permissions.cshtml" />
+    <Content Include="Views\PModule\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

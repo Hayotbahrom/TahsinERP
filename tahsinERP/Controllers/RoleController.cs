@@ -33,10 +33,23 @@ namespace tahsinERP.Controllers
                 ROLES roles = new ROLES();
                 roles.RName = role.RName;
                 roles.Description = role.Description;
-                roles.PERMISSIONS = role.PERMISSIONS;
                 role.IsDeleted = false;
 
                 db.ROLES.Add(roles);
+                int[] permissionModulesID = new int[50];
+                int i = 0;
+                foreach(var item in db.PERMISSIONMODULES.ToList())
+                {
+                    permissionModulesID[i] = item.ID;
+                    
+                    PERMISSIONS newPermission = new PERMISSIONS();
+                    newPermission.PermissionModuleID = permissionModulesID[i];
+                    newPermission.ChangePermit = false;
+                    newPermission.ViewPermit = true;
+                    newPermission.RoleID = role.ID;
+                    db.PERMISSIONS.Add(newPermission);
+                    i++;
+                }
                 db.SaveChanges();
 
                 return View(roles);
@@ -132,7 +145,7 @@ namespace tahsinERP.Controllers
 
         public ActionResult PermissionsOfRole()
         {
-            var roles = db.PERMISSIONS.Where(r => r.IsDeleted == false).ToList();
+            var roles = db.PERMISSIONS.ToList();
             return View(roles);
         }
     }

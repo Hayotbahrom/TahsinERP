@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d51febac5df9424f9fa22a3acbc178d5" Name="Diagram1" ZoomLevel="42">
+      <Diagram DiagramId="d51febac5df9424f9fa22a3acbc178d5" Name="Diagram1" ZoomLevel="82">
         <EntityTypeShape EntityType="DBTHSNModel.BOMS" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.COMPANIES" Width="1.5" PointX="0.75" PointY="32.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.COMPANY_LICENSES" Width="1.5" PointX="3" PointY="31.875" IsExpanded="true" />
@@ -104,6 +104,8 @@
         <AssociationConnector Association="DBTHSNModel.FK_USER_LICENSES_USERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_USERIMAGES_USERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.USERROLES" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DBTHSNModel.PERMISSIONMODULE" Width="1.5" PointX="3.375" PointY="0.875" />
+        <AssociationConnector Association="DBTHSNModel.FK_PERMISSIONS_PERMISSIONMODULES" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

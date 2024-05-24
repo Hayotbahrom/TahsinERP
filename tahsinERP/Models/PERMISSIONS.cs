@@ -15,12 +15,12 @@ namespace tahsinERP.Models
     public partial class PERMISSIONS
     {
         public int ID { get; set; }
-        public string Model { get; set; }
-        public Nullable<bool> ViewPermit { get; set; }
-        public Nullable<bool> ChangePermit { get; set; }
-        public Nullable<int> RoleID { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool ViewPermit { get; set; }
+        public bool ChangePermit { get; set; }
+        public int RoleID { get; set; }
+        public int PermissionModuleID { get; set; }
     
         public virtual ROLES ROLES { get; set; }
+        public virtual PERMISSIONMODULE PERMISSIONMODULE { get; set; }
     }
 }

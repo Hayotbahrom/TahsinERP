@@ -12,23 +12,18 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ROLES
+    public partial class PERMISSIONMODULE
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ROLES()
+        public PERMISSIONMODULE()
         {
             this.PERMISSIONS = new HashSet<PERMISSIONS>();
-            this.USERS = new HashSet<USERS>();
         }
     
         public int ID { get; set; }
-        public string RName { get; set; }
-        public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public string Module { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PERMISSIONS> PERMISSIONS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<USERS> USERS { get; set; }
     }
 }

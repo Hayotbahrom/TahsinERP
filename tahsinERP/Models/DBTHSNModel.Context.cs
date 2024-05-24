@@ -66,5 +66,6 @@ namespace tahsinERP.Models
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USERIMAGES> USERIMAGES { get; set; }
         public virtual DbSet<USERS> USERS { get; set; }
+        public virtual DbSet<PERMISSIONMODULE> PERMISSIONMODULES { get; set; }
     }
 }
