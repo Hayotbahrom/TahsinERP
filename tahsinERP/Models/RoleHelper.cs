@@ -2,7 +2,7 @@
 
 namespace tahsinERP.Models
 {
-    public static class RoleGiver
+    public static class RoleHelper
     {
         public static string[] GetUserRoles(string username)
         {

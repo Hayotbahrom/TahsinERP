@@ -291,7 +291,7 @@
     <Compile Include="Models\P_WRHS_INCOME_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\RoleGiver.cs" />
+    <Compile Include="Models\RoleHelper.cs" />
     <Compile Include="Models\ROLES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
