@@ -2074,6 +2074,7 @@
     <Content Include="Views\Permission\Permissions.cshtml" />
     <Content Include="Views\PModule\Create.cshtml" />
     <Content Include="Views\PModule\Edit.cshtml" />
+    <Content Include="Views\Shared\Eror400.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

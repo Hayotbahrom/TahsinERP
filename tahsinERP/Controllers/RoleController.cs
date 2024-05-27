@@ -28,7 +28,7 @@ namespace tahsinERP.Controllers
                 ROLES roles = new ROLES();
                 roles.RName = role.RName;
                 roles.Description = role.Description;
-                role.IsDeleted = false;
+                roles.IsDeleted = false;
 
                 db.ROLES.Add(roles);
                 int[] permissionModulesID = new int[50];
@@ -47,7 +47,7 @@ namespace tahsinERP.Controllers
                 }
                 db.SaveChanges();
 
-                return View(roles);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
