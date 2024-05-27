@@ -6,7 +6,6 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -298,7 +297,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection collection)
         {
-            USERS user= db.USERS.Find(ID);
+            USERS user = db.USERS.Find(ID);
             user.IsDeleted = true;
             if (TryUpdateModel(user, "", new string[] { "IsDeleted" }))
             {

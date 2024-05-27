@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System;
 using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -151,28 +146,38 @@ namespace tahsinERP.Controllers
             //model.changePermit = permission.ChangePermit;
             //model.viewPermit = permission.ViewPermit;
 
-            return View();
+            return View(thisRole);
         }
         [HttpPost]
-        public ActionResult SavePermissions(List<PERMISSIONS> permissions)
+        [ValidateAntiForgeryToken]
+        public ActionResult Permissions(int? roleID, FormCollection fvm)
         {
-            if (ModelState.IsValid)
+            var permissions = db.PERMISSIONS.Where(pr => pr.RoleID == roleID).ToList();
+            foreach (var permission in permissions)
             {
-                foreach (var permissionToEdit in permissions)
+                bool changePermit = permission.ChangePermit;
+                bool viewPermit = permission.ViewPermit;
+
+                // Update the database with the new permission values
+                var perm = db.PERMISSIONS.Find(permission.ID);
+                if (perm != null)
                 {
-                    var item = db.PERMISSIONS.Find(permissionToEdit.ID);
-                    if (item != null)
-                    {
-                        item.ChangePermit = permissionToEdit.ChangePermit;
-                        item.ViewPermit = permissionToEdit.ViewPermit;
-                        
-                        db.Entry(item).State = EntityState.Modified;
-                    }
+                    perm.ChangePermit = changePermit;
+                    perm.ViewPermit = viewPermit;
+                    db.Entry(perm).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            return View("Index", permissions);
+
+            // Redirect to a relevant page after saving the changes
+            return RedirectToAction("Index");
+        }
+
+        public class PermissionViewModel
+        {
+            public int PermissionId { get; set; }
+            public bool ChangePermit { get; set; }
+            public bool ViewPermit { get; set; }
         }
     }
 

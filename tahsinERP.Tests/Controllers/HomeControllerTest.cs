@@ -1,10 +1,5 @@
-﻿ using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
-using tahsinERP;
 using tahsinERP.Controllers;
 
 namespace tahsinERP.Tests.Controllers
