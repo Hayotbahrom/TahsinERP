@@ -317,6 +317,7 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2070,6 +2071,9 @@
     <Content Include="Views\Role\Permissions.cshtml" />
     <Content Include="Views\PModule\Index.cshtml" />
     <Content Include="Views\Permission\Edit.cshtml" />
+    <Content Include="Views\Permission\Permissions.cshtml" />
+    <Content Include="Views\PModule\Create.cshtml" />
+    <Content Include="Views\PModule\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
