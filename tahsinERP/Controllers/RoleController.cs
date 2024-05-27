@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -149,36 +151,25 @@ namespace tahsinERP.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Permissions(int? roleID, FormCollection fvm)
+        public ActionResult SavePermissions(List<PERMISSIONS> permissions)
         {
-            var permissions = db.PERMISSIONS.Where(pr => pr.RoleID == roleID).ToList();
-            foreach (var permission in permissions)
+            if (ModelState.IsValid)
             {
-                bool changePermit = permission.ChangePermit;
-                bool viewPermit = permission.ViewPermit;
-
-                // Update the database with the new permission values
-                var perm = db.PERMISSIONS.Find(permission.ID);
-                if (perm != null)
+                foreach (var permissionToEdit in permissions)
                 {
-                    perm.ChangePermit = changePermit;
-                    perm.ViewPermit = viewPermit;
-                    db.Entry(perm).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    var item = db.PERMISSIONS.Find(permissionToEdit.ID);
+                    if (item != null)
+                    {
+                        item.ChangePermit = permissionToEdit.ChangePermit;
+                        item.ViewPermit = permissionToEdit.ViewPermit;
+
+                        db.Entry(item).State = EntityState.Modified;
+                    }
                 }
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-
-            // Redirect to a relevant page after saving the changes
-            return RedirectToAction("Index");
-        }
-
-        public class PermissionViewModel
-        {
-            public int PermissionId { get; set; }
-            public bool ChangePermit { get; set; }
-            public bool ViewPermit { get; set; }
+            return View("Index", permissions);
         }
     }
-
 }
