@@ -146,7 +146,7 @@ namespace tahsinERP.Controllers
             //model.changePermit = permission.ChangePermit;
             //model.viewPermit = permission.ViewPermit;
 
-            return View(thisRole);
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
