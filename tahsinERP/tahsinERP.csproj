@@ -316,6 +316,7 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2059,7 +2060,6 @@
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Role\Create.cshtml" />
-    <Content Include="Views\Role\Edit.cshtml" />
     <Content Include="Views\Role\Delete.cshtml" />
     <Content Include="Views\Role\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
@@ -2068,6 +2068,7 @@
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\Role\Permissions.cshtml" />
     <Content Include="Views\PModule\Index.cshtml" />
+    <Content Include="Views\Role\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -30,8 +30,33 @@
                                                 @Html.DisplayFor(model => model.Description, new { @class = "form-control" })
                                             </fieldset>
                                             <h6 class="invoice-to">Permissions</h6>
-                                            
-                                            
+                                            <div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-light mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Module</th>
+                                                                <th>O'zgartirish</th>
+                                                                <th>Ko'rish</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var permission in Model.PERMISSIONS)
+                                                            {
+                                                                <tr>
+                                                                    <td>@permission.PERMISSIONMODULE.Module</td>
+                                                                    <td>
+                                                                        <input type="checkbox" disabled="disabled" value="true" @(permission.ChangePermit ? "checked" : "") />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="checkbox" disabled="disabled" value="true" @(permission.ViewPermit ? "checked" : "") />
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>

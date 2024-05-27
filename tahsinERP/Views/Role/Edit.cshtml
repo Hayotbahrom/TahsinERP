@@ -3,16 +3,17 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
-@using (Html.BeginForm("Edit", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
-            </div>
-            <div class="content-body">
-                <!-- app invoice View Page -->
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- app invoice View Page -->
+            @using (Html.BeginForm("Edit", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
                 <section class="invoice-edit-wrapper">
                     <div class="row">
                         <!-- invoice view page -->
@@ -35,9 +36,9 @@
                                                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <div class="col-lg-12 col-md-9 mt-12">
-                                                    <a href="@Url.Action("Permissions/"+Model.ID, "Role")" type="button" class="btn btn-outline-primary block" data-toggle="modal" data-target="#default">Ruxsatlarini o'zgartirish</a>
+                                                    <a href="#" type="button" class="btn btn-outline-primary block" data-toggle="modal" data-target="#default">Ruxsatlarini o'zgartirish</a>
                                                 </div>
-                                                @Html.Partial("Permissions")
+
                                             </div>
                                         </div>
                                         <hr>
@@ -55,7 +56,9 @@
                         </div>
                     </div>
                 </section>
-            </div>
+            }
         </div>
     </div>
-}
+</div>
+
+@Html.Partial("Permissions", Model.PERMISSIONS.ToList())

@@ -9,12 +9,13 @@ using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
     public class RoleController : Controller
     {
-        DBTHSNEntities db = new DBTHSNEntities();
+        private DBTHSNEntities db = new DBTHSNEntities();
         // GET: Role
         public ActionResult Index()
         {
@@ -63,33 +64,34 @@ namespace tahsinERP.Controllers
         [HttpGet]
         public ActionResult Edit(ROLES role)
         {
-
             var roles = db.ROLES.FirstOrDefault(x => x.ID == role.ID);
             if (role == null)
             {
                 return HttpNotFound();
             }
-
             return View(roles);
         }
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id)
         {
-            var roleToUpdate = db.ROLES.Find(id);
-
-            if (TryUpdateModel(roleToUpdate, "", new string[] { "RName", "Description" }))
+            if (ModelState.IsValid)
             {
-                try
-                {
-                    db.SaveChanges();
+                var roleToUpdate = db.ROLES.Find(id);
 
-                    return RedirectToAction("Index");
-                }
-                catch (RetryLimitExceededException)
+                if (TryUpdateModel(roleToUpdate, "", new string[] { "RName", "Description" }))
                 {
+                    try
+                    {
+                        db.SaveChanges();
 
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
                 }
             }
             return View();
@@ -136,44 +138,41 @@ namespace tahsinERP.Controllers
             roles.ID = role.ID;
             roles.RName = role.RName;
             roles.Description = role.Description;
+            roles.PERMISSIONS = role.PERMISSIONS;
             return View(roles);
         }
-        public ActionResult Permissions(int? roleID)
+        public ActionResult Permissions()
         {
-            var thisRole = db.ROLES.Find(roleID);
+            //RoleViewModel model = new RoleViewModel();
 
-            return View(thisRole);
+            //PERMISSIONS permission = db.PERMISSIONS.Where(p => p.RoleID == roleID).FirstOrDefault();
+            //model.ID = permission.ID;
+            //model.module = permission.PERMISSIONMODULE.Module;
+            //model.changePermit = permission.ChangePermit;
+            //model.viewPermit = permission.ViewPermit;
+
+            return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Permissions(int? roleID, FormCollection fvm)
+        public ActionResult SavePermissions(List<PERMISSIONS> permissions)
         {
-            var permissions = db.PERMISSIONS.Where(pr => pr.RoleID == roleID).ToList();
-            foreach (var permission in permissions)
+            if (ModelState.IsValid)
             {
-                bool changePermit = permission.ChangePermit;
-                bool viewPermit = permission.ViewPermit;
-
-                // Update the database with the new permission values
-                var perm = db.PERMISSIONS.Find(permission.ID);
-                if (perm != null)
+                foreach (var permissionToEdit in permissions)
                 {
-                    perm.ChangePermit = changePermit;
-                    perm.ViewPermit = viewPermit;
-                    db.Entry(perm).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    var item = db.PERMISSIONS.Find(permissionToEdit.ID);
+                    if (item != null)
+                    {
+                        item.ChangePermit = permissionToEdit.ChangePermit;
+                        item.ViewPermit = permissionToEdit.ViewPermit;
+                        
+                        db.Entry(item).State = EntityState.Modified;
+                    }
                 }
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-
-            // Redirect to a relevant page after saving the changes
-            return RedirectToAction("Index");
-        }
-
-        public class PermissionViewModel
-        {
-            public int PermissionId { get; set; }
-            public bool ChangePermit { get; set; }
-            public bool ViewPermit { get; set; }
+            return View("Index", permissions);
         }
     }
 
