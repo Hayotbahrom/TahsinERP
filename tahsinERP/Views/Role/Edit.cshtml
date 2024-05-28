@@ -3,7 +3,7 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Role"))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Roles"))
 {
     <div class="app-content content">
         <div class="content-overlay"></div>
@@ -63,4 +63,8 @@
         </div>
     </div>
     @Html.Partial("Permissions", Model.PERMISSIONS.ToList())
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }

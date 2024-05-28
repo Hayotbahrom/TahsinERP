@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Web.Mvc;
 using System.Web.Security;
 
 namespace tahsinERP.Models
@@ -30,6 +31,7 @@ namespace tahsinERP.Models
         }
         public static bool IsChangePermitted(string username, string moduleName)
         {
+            
             string roleName = GetUserRoles(username)[0];
             ROLES role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
             if (role != null)
