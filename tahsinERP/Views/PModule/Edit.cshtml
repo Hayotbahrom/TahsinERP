@@ -6,54 +6,73 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PermissionModule"))
 {
-    using (Html.BeginForm("Edit", "PModule", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
-        <div class="app-content content">
-            <div class="content-overlay"></div>
-            <div class="content-wrapper">
-                <div class="content-header row">
+    @Html.AntiForgeryToken()
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/AdminPanel/Index">Admin Panel</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        <a href="~/PModule/Index">Ruhsatlar to'plami</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Modulni o'zgartirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="content-body">
-                    <!-- app invoice View Page -->
-                    <section class="invoice-edit-wrapper">
-                        <div class="row">
-                            <!-- invoice view page -->
-                            <div class="col-xl-9 col-md-8 col-12">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <div class="card-body pb-0 mx-25">
-                                            <div class="row invoice-info">
-                                                <div class="col-lg-12 col-md-6 mt-25">
-                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                    <hr>
-                                                    <h6 class="invoice-to">Model nomi</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Module, new { @class = "form-control", @placeholder = "Model nomi" })
-                                                        @Html.ValidationMessageFor(model => model.Module, "", new { @class = "text-danger" })
-                                                    </fieldset>
-                                                </div>
+            </div>
+            <div class="content-body">
+                <!-- app invoice View Page -->
+                <section class="invoice-edit-wrapper">
+                    <div class="row">
+                        <!-- invoice view page -->
+                        <div class="col-xl-9 col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row invoice-info">
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <hr>
+                                                <h6 class="invoice-to">Modul nomi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Module, new { @class = "form-control", @placeholder = "Modul nomi" })
+                                                    @Html.ValidationMessageFor(model => model.Module, "", new { @class = "text-danger" })
+                                                </fieldset>
                                             </div>
-                                            <hr>
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item border-0 pb-0">
-                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
-                                                        <i class='bx bx-save'></i>
-                                                        Saqlash
-                                                    </button>
-                                                    <br />
-                                                </li>
-                                            </ul>
                                         </div>
+                                        <hr>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item border-0 pb-0">
+                                                <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                    <i class='bx bx-save'></i>
+                                                    Saqlash
+                                                </button>
+                                                <br />
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                </div>
+                    </div>
+                </section>
             </div>
         </div>
-    }
+    </div>
 }
 else
 {
