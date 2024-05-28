@@ -5,13 +5,33 @@
 }
 @using (Html.BeginForm("Edit", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-
     @Html.AntiForgeryToken()
-
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
             <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index">Admin Panel</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/User/index">Foydalanuvchilar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Foydalanuvchi ma'lumotlarini ozgartirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="content-body">
                 <!-- app invoice View Page -->
@@ -62,7 +82,7 @@
                                                 </fieldset>
                                                 <h6 class="invoice-to">Password</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @required="required" })
+                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @required = "required" })
                                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Confirm Password</h6>
@@ -75,7 +95,7 @@
                                                     <li class="d-inline-block mr-2 mb-1">
                                                         <fieldset>
                                                             <div class="checkbox checkbox-secondary checkbox-glow">
-                                                                @Html.CheckBoxFor(Model => Model.IsActive, new { @type ="checkbox", @id="checkboxGlow2"})
+                                                                @Html.CheckBoxFor(Model => Model.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
                                                                 <label for="checkboxGlow2">Faolmi?</label>
                                                             </div>
                                                         </fieldset>

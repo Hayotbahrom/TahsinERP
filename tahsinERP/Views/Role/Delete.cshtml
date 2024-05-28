@@ -3,8 +3,6 @@
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Role"))
-{
     @using (Html.BeginForm("Delete", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
@@ -12,6 +10,28 @@
             <div class="content-overlay"></div>
             <div class="content-wrapper">
                 <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb p-0 mb-0">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item ">
+                                            <a href="~/AdminPanel/Index">Admin Panel</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            <a href="~/Role/Index">Rollar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Rol malumotlarini o'chirish
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="content-body">
                     <!-- app invoice View Page -->
@@ -58,4 +78,3 @@
             </div>
         </div>
     }
-}

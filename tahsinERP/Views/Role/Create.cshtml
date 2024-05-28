@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Role"))
-{
     @using (Html.BeginForm("Create", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="app-content content">
@@ -58,4 +56,3 @@
             </div>
         </div>
     }
-}
