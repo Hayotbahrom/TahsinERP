@@ -31,7 +31,7 @@ namespace tahsinERP.Controllers
                 ROLES roles = new ROLES();
                 roles.RName = role.RName;
                 roles.Description = role.Description;
-                role.IsDeleted = false;
+                roles.IsDeleted = false;
 
                 db.ROLES.Add(roles);
                 int[] permissionModulesID = new int[50];
@@ -50,7 +50,7 @@ namespace tahsinERP.Controllers
                 }
                 db.SaveChanges();
 
-                return View(roles);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -140,14 +140,6 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Permissions()
         {
-            //RoleViewModel model = new RoleViewModel();
-
-            //PERMISSIONS permission = db.PERMISSIONS.Where(p => p.RoleID == roleID).FirstOrDefault();
-            //model.ID = permission.ID;
-            //model.module = permission.PERMISSIONMODULE.Module;
-            //model.changePermit = permission.ChangePermit;
-            //model.viewPermit = permission.ViewPermit;
-
             return View();
         }
         [HttpPost]

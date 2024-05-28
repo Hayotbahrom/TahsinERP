@@ -171,6 +171,7 @@
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UsersRoleProvider.cs" />
+    <Compile Include="Controllers\ViewNotAuthorizedController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2070,7 +2071,14 @@
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\Role\Permissions.cshtml" />
     <Content Include="Views\PModule\Index.cshtml" />
+    <Content Include="Views\Permission\Edit.cshtml" />
+    <Content Include="Views\Permission\Permissions.cshtml" />
+    <Content Include="Views\PModule\Create.cshtml" />
+    <Content Include="Views\PModule\Edit.cshtml" />
+    <Content Include="Views\Shared\Eror400.cshtml" />
+    <Content Include="Views\PModule\Details.cshtml" />
     <Content Include="Views\Role\Edit.cshtml" />
+    <Content Include="Views\ViewNotAuthorized\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
