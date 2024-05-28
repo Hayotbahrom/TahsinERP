@@ -562,7 +562,7 @@
     }
     else
     {
-        @RenderBody()
+        Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
     }
 </body>
 </html>

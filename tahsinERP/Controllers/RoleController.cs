@@ -140,14 +140,6 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Permissions()
         {
-            //RoleViewModel model = new RoleViewModel();
-
-            //PERMISSIONS permission = db.PERMISSIONS.Where(p => p.RoleID == roleID).FirstOrDefault();
-            //model.ID = permission.ID;
-            //model.module = permission.PERMISSIONMODULE.Module;
-            //model.changePermit = permission.ChangePermit;
-            //model.viewPermit = permission.ViewPermit;
-
             return View();
         }
         [HttpPost]
