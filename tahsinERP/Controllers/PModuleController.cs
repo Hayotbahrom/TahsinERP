@@ -9,7 +9,7 @@ namespace tahsinERP.Controllers
 {
     public class PModuleController : Controller
     {
-        DBTHSNEntities db = new DBTHSNEntities();
+        private static DBTHSNEntities db = new DBTHSNEntities();
         // GET: PModule
         [HttpGet]
         public ActionResult Index()
@@ -36,7 +36,7 @@ namespace tahsinERP.Controllers
             return View();
         }
 
-        [HttpPost,ActionName("Create")]
+        [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(PERMISSIONMODULE permissionModule)
         {
@@ -66,13 +66,13 @@ namespace tahsinERP.Controllers
             return View(pmodule);
         }
 
-        [HttpPost,ActionName("Edit")]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int Id)
         {
             var pModule = db.PERMISSIONMODULES.Find(Id);
 
-            if (TryUpdateModel(pModule, "", new string[] {  "Module" }))
+            if (TryUpdateModel(pModule, "", new string[] { "Module" }))
             {
                 try
                 {
@@ -98,7 +98,7 @@ namespace tahsinERP.Controllers
             if (permissionModule != null)
             {
                 var permissions = db.PERMISSIONS
-                    .Where(p => p.PermissionModuleID ==Id)
+                    .Where(p => p.PermissionModuleID == Id)
                     .ToList();
 
                 var roleIds = permissions.Select(p => p.RoleID).Distinct().ToList();
@@ -125,5 +125,32 @@ namespace tahsinERP.Controllers
 
             return RedirectToAction("Index");
         }
+        public ActionResult Details(int id)
+        {
+            var permissionModule = db.PERMISSIONMODULES
+                                      .FirstOrDefault(pm => pm.ID == id);
+            if (permissionModule == null)
+            {
+                return HttpNotFound();
+            }
+
+            var permissions = db.PERMISSIONS
+                                .Where(p => p.PermissionModuleID == id)
+                                .ToList();
+            var roles = db.ROLES.ToList();
+
+            var viewModel = new PermissionModuleViewModel
+            {
+                ID = permissionModule.ID,
+                Module = permissionModule.Module,
+                RoleNames = string.Join(", ", permissions
+                                            .Select(p => roles
+                                                         .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
+                                            .Distinct())
+            };
+
+            return View(viewModel);
+        }
+
     }
 }
