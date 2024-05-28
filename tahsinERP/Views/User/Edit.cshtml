@@ -62,12 +62,12 @@
                                                 </fieldset>
                                                 <h6 class="invoice-to">Password</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
+                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @required="required" })
                                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Confirm Password</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
+                                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @required = "required" })
                                                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6>Activity</h6>
