@@ -2070,6 +2070,7 @@
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\Role\Permissions.cshtml" />
     <Content Include="Views\PModule\Index.cshtml" />
+    <Content Include="Views\Role\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
