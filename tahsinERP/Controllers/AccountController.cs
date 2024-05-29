@@ -50,7 +50,7 @@ namespace tahsinERP.Controllers
 
                     bool IsValidUser = db.USERS
                    .Any(u => u.Email.ToLower() == user
-                   .Email.ToLower() && u.Password.Equals(encodingPasswordString));
+                   .Email.ToLower() && u.Password.Equals(encodingPasswordString) && u.IsActive==true);
                     USERIMAGES image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
                     if (IsValidUser)
                     {
@@ -85,7 +85,7 @@ namespace tahsinERP.Controllers
                     }
                 }
             }
-            ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri");
+            ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri yoki faolligingiz ochirilgan");
             return View();
         }
         private void SetUserEntry(int userID)
