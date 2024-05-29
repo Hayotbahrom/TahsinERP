@@ -41,152 +41,159 @@
     <!-- END: Custom CSS-->
 </head>
 <body class="vertical-layout vertical-menu-modern semi-dark-layout 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-layout="semi-dark-layout" data-col="2-columns">
-    <!-- BEGIN: Header-->
-    <div class="header-navbar-shadow"></div>
-    <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top ">
-        <div class="navbar-wrapper">
-            <div class="navbar-container content">
-                <div class="navbar-collapse" id="navbar-mobile">
-                    <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon bx bx-menu"></i></a></li>
-                        </ul>
-                        <ul class="nav navbar-nav bookmark-icons">
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="#" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon bx bx-chat"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="#" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon bx bx-check-circle"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="#" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon bx bx-calendar-alt"></i></a></li>
-                        </ul>
-                        <ul class="nav navbar-nav bookmark-icons">
-                            <li>
-                                <a href="~/Home">Oddiy panelga qaytish</a>
+    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "AdminPanel"))
+    {
+        <!-- BEGIN: Header-->
+        <div class="header-navbar-shadow"></div>
+        <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top ">
+            <div class="navbar-wrapper">
+                <div class="navbar-container content">
+                    <div class="navbar-collapse" id="navbar-mobile">
+                        <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
+                            <ul class="nav navbar-nav">
+                                <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon bx bx-menu"></i></a></li>
+                            </ul>
+                            <ul class="nav navbar-nav bookmark-icons">
+                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="#" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon bx bx-chat"></i></a></li>
+                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="#" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon bx bx-check-circle"></i></a></li>
+                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="#" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon bx bx-calendar-alt"></i></a></li>
+                            </ul>
+                            <ul class="nav navbar-nav bookmark-icons">
+                                <li>
+                                    <a href="~/Home">Oddiy panelga qaytish</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <ul class="nav navbar-nav float-right">
+                            <li class="dropdown dropdown-language nav-item">
+                                <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-uz mr-50"></i><span class="selected-language" data-language="uz">O'zbekcha</span></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" href="" data-language="en"><i class="flag-icon flag-icon-us mr-50"></i>English</a><a class="dropdown-item" href="" data-language="ru"><i class="flag-icon flag-icon-ru mr-50"></i>Русский</a><a class="dropdown-item" href="" data-language="uz"><i class="flag-icon flag-icon-uz mr-50"></i>O'zbekcha</a></div>
+                            </li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon bx bx-fullscreen"></i></a></li>
+                            <li class="dropdown dropdown-user nav-item">
+                                <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                                    <div class="user-nav d-sm-flex d-none">
+                                        <span class="user-name">@User.Identity.Name</span>
+                                        @for (int i = 0; i < RoleHelper.GetUserRoles(User.Identity.Name).Length; i++)
+                                        {
+                                            <span class="user-status text-muted">@RoleHelper.GetUserRoles(User.Identity.Name)[i]</span>
+                                        }
+                                    </div>
+                                    @Html.Partial("_UserProfile")
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right pb-0">
+                                    <a class="dropdown-item" href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })"><i class="bx bx-user mr-50"></i> Profil sozlamalari</a>
+                                    @*<a class="dropdown-item" href="#"><i class="bx bx-envelope mr-50"></i> My Inbox</a>*@
+                                    <a class="dropdown-item" href="#"><i class="bx bx-check-square mr-50"></i> Topshiriqlar</a>
+                                    @*<a class="dropdown-item" href="#"><i class="bx bx-message mr-50"></i> Chats</a>*@
+                                    <div class="dropdown-divider mb-0"></div><a class="dropdown-item" href="~/Account/Logout"><i class="bx bx-power-off mr-50"></i> Tizimdan chiqish</a>
+                                </div>
                             </li>
                         </ul>
                     </div>
-                    <ul class="nav navbar-nav float-right">
-                        <li class="dropdown dropdown-language nav-item">
-                            <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-uz mr-50"></i><span class="selected-language" data-language="uz">O'zbekcha</span></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" href="" data-language="en"><i class="flag-icon flag-icon-us mr-50"></i>English</a><a class="dropdown-item" href="" data-language="ru"><i class="flag-icon flag-icon-ru mr-50"></i>Русский</a><a class="dropdown-item" href="" data-language="uz"><i class="flag-icon flag-icon-uz mr-50"></i>O'zbekcha</a></div>
-                        </li>
-                        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon bx bx-fullscreen"></i></a></li>
-                        <li class="dropdown dropdown-user nav-item">
-                            <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none">
-                                    <span class="user-name">@User.Identity.Name</span>
-                                    @for (int i = 0; i < RoleHelper.GetUserRoles(User.Identity.Name).Length; i++)
-                                    {
-                                        <span class="user-status text-muted">@RoleHelper.GetUserRoles(User.Identity.Name)[i]</span>
-                                    }
-                                </div>
-                                @Html.Partial("_UserProfile")
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right pb-0">
-                                <a class="dropdown-item" href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })"><i class="bx bx-user mr-50"></i> Profil sozlamalari</a>
-                                @*<a class="dropdown-item" href="#"><i class="bx bx-envelope mr-50"></i> My Inbox</a>*@
-                                <a class="dropdown-item" href="#"><i class="bx bx-check-square mr-50"></i> Topshiriqlar</a>
-                                @*<a class="dropdown-item" href="#"><i class="bx bx-message mr-50"></i> Chats</a>*@
-                                <div class="dropdown-divider mb-0"></div><a class="dropdown-item" href="~/Account/Logout"><i class="bx bx-power-off mr-50"></i> Tizimdan chiqish</a>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
+        </nav>
+        <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+            <div class="navbar-header">
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item mr-auto">
+                        <a class="navbar-brand" href="/AdminPanel">
+                            <h6 style="color:white;">tahsinERP - Admin paneli</h6>
+                        </a>
+                    </li>
+                    <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="bx bx-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon bx bx-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="bx-disc"></i></a></li>
+                </ul>
+            </div>
+            <div class="shadow-bottom"></div>
+            <div class="main-menu-content">
+                <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
+                    <li class=" nav-item">
+                        <a href="~/User"><i class="bx bx-user-plus"></i><span class="menu-title" data-i18n="User">Foydalanuvchilar</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a href="#"><i class="bx bx-check-shield"></i><span class="menu-title" data-i18n="User">Rollar va ruxsatlar</span></a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="~/Role"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Rollar</span></a>
+                            </li>
+                        </ul>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="~/PModule"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ruxsatlar to'plami</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class=" nav-item">
+                        <a href="#"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Sozlamalar</span></a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </nav>
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
-        <div class="navbar-header">
-            <ul class="nav navbar-nav flex-row">
-                <li class="nav-item mr-auto">
-                    <a class="navbar-brand" href="/AdminPanel">
-                        <h6 style="color:white;">tahsinERP - Admin paneli</h6>
-                    </a>
-                </li>
-                <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="bx bx-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon bx bx-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="bx-disc"></i></a></li>
-            </ul>
+        <div>
+            @RenderBody()
         </div>
-        <div class="shadow-bottom"></div>
-        <div class="main-menu-content">
-            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
-                <li class=" nav-item">
-                    <a href="~/User"><i class="bx bx-user-plus"></i><span class="menu-title" data-i18n="User">Foydalanuvchilar</span></a>
-                </li>
-                <li class=" nav-item">
-                    <a href="#"><i class="bx bx-check-shield"></i><span class="menu-title" data-i18n="User">Rollar va ruxsatlar</span></a>
-                    <ul class="menu-content">
-                        <li>
-                            <a href="~/Role"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Rollar</span></a>
-                        </li>
-                    </ul>
-                    <ul class="menu-content">
-                        <li>
-                            <a href="~/PModule"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ruxsatlar to'plami</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class=" nav-item">
-                    <a href="#"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Sozlamalar</span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div>
-        @RenderBody()
-    </div>
-    <div class="sidenav-overlay"></div>
-    <div class="drag-target"></div>
+        <div class="sidenav-overlay"></div>
+        <div class="drag-target"></div>
 
-    <!-- BEGIN: Footer-->
-    <footer class="footer footer-static footer-light">
-        <p class="clearfix mb-0">
-            <span class="float-left d-inline-block">@DateTime.Now.Year &copy; tahsin ERP</span>
-        </p>
-    </footer>
+        <!-- BEGIN: Footer-->
+        <footer class="footer footer-static footer-light">
+            <p class="clearfix mb-0">
+                <span class="float-left d-inline-block">@DateTime.Now.Year &copy; tahsin ERP</span>
+            </p>
+        </footer>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-        @Scripts.Render("~/bundles/jquery")
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/jquery")
+        }
+
+        <!-- BEGIN: Vendor JS-->
+        <script src="~/app-assets/vendors/js/vendors.min.js"></script>
+        <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
+        <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
+        <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
+        <!-- BEGIN Vendor JS-->
+        <!-- BEGIN: Page Vendor JS-->
+        <script src="~/app-assets/vendors/js/charts/apexcharts.min.js"></script>
+        <script src="~/app-assets/vendors/js/extensions/swiper.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+        <script src="~/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+        <!-- END: Page Vendor JS-->
+        <!-- BEGIN: Theme JS-->
+        <script src="~/app-assets/js/scripts/configs/vertical-menu-dark.js"></script>
+        <script src="~/app-assets/js/core/app-menu.js"></script>
+        <script src="~/app-assets/js/core/app.js"></script>
+        <script src="~/app-assets/js/scripts/components.js"></script>
+        <script src="~/app-assets/js/scripts/footer.js"></script>
+        <!-- END: Theme JS-->
+        <!-- BEGIN: Page JS-->
+        <script src="~/app-assets/js/scripts/pages/app-invoice.js"></script>
+        <script src="~/app-assets/js/scripts/forms/select/form-select2.js"></script>
+        <script src="~/app-assets/js/scripts/pages/page-account-settings.js"></script>
+        <script src="~/app-assets/js/scripts/datatables/datatable.js"></script>
+        <script src="~/app-assets/js/scripts/modal/components-modal.js"></script>
+        <!-- END: Page JS-->
     }
-
-    <!-- BEGIN: Vendor JS-->
-    <script src="~/app-assets/vendors/js/vendors.min.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
-    <!-- BEGIN Vendor JS-->
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="~/app-assets/vendors/js/charts/apexcharts.min.js"></script>
-    <script src="~/app-assets/vendors/js/extensions/swiper.min.js"></script>
-    <script src="~/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="~/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
-    <script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
-    <script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
-    <script src="~/app-assets/vendors/js/extensions/dropzone.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
-    <script src="~/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
-    <!-- END: Page Vendor JS-->
-    <!-- BEGIN: Theme JS-->
-    <script src="~/app-assets/js/scripts/configs/vertical-menu-dark.js"></script>
-    <script src="~/app-assets/js/core/app-menu.js"></script>
-    <script src="~/app-assets/js/core/app.js"></script>
-    <script src="~/app-assets/js/scripts/components.js"></script>
-    <script src="~/app-assets/js/scripts/footer.js"></script>
-    <!-- END: Theme JS-->
-    <!-- BEGIN: Page JS-->
-    <script src="~/app-assets/js/scripts/pages/app-invoice.js"></script>
-    <script src="~/app-assets/js/scripts/forms/select/form-select2.js"></script>
-    <script src="~/app-assets/js/scripts/pages/page-account-settings.js"></script>
-    <script src="~/app-assets/js/scripts/datatables/datatable.js"></script>
-    <script src="~/app-assets/js/scripts/modal/components-modal.js"></script>
-    <!-- END: Page JS-->
-</body>
+    else
+    {
+        Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+    }
+    </body>
 </html>

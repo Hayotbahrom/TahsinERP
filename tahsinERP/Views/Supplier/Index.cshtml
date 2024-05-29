@@ -1,13 +1,12 @@
-﻿@model List<tahsinERP.ViewModels.UserViewModel>
+﻿@model List<tahsinERP.Models.SUPPLIERS>
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Users"))
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Suppliers"))
 {
     bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Users"))
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Suppliers"))
     {
         changePermit = true;
     }
@@ -21,13 +20,13 @@
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb p-0 mb-0">
                                     <li class="breadcrumb-item">
-                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        Admin Panel
+                                        Sahifalar
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Foydalanuvchilar
+                                        Ta'minotchilar
                                     </li>
                                 </ol>
                             </div>
@@ -41,8 +40,8 @@
                     @if (changePermit)
                     {
                         <div class="invoice-create-btn mb-1">
-                            <a href="~/User/Create" class="col-lg-offset-2 btn btn-success" role="button" aria-pressed="true">
-                                Foydalanuvchini qo'shish
+                            <a href="~/Supplier/Create" class="col-lg-offset-2 btn btn-success" role="button" aria-pressed="true">
+                                Ta'minotchini qo'shish
                             </a>
                         </div>
                     }
@@ -52,17 +51,11 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label for="users-list-role">Role</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("RoleId", ViewBag.RoleList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
-                                    </fieldset>
-                                </div>
-                                <div class="col-1 col-sm-5 col-lg-1">
-                                    <label></label>
-                                    <fieldset class="form-group">
-                                        <a href="@Url.Action("Index", "User", new { status = "InActive" })" role="link">faolligi o'chirib qo'yilgan foydalanuvchilar</a>
+                                        @Html.DropDownList("SourceList", ViewBag.RoleList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
-                                    <a href="~/User" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
+                                    <a href="~/Supplier" class="btn btn-primary glow invoice-create" role="button" aria-pressed="true">
                                         Ro'yxatni yangilash
                                     </a>
                                 </div>
@@ -78,16 +71,15 @@
                                         <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    @if (changePermit)
-                                                    {
-                                                        <th></th>
-                                                        <th></th>
-                                                    }
-                                                    <th>username</th>
-                                                    <th>F.I.Sh</th>
-                                                    <th>email</th>
-                                                    <th>roli</th>
-                                                    <th>faolligi</th>
+                                                    <th rowspan="4" class="align-top">Nomi</th>
+                                                    <th colspan="2">Davlati</th>
+                                                    <th colspan="1">Ma'lumoti</th>
+                                                </tr>
+                                                <tr>                                                    <th>Nomi</th>
+                                                    <th>Turi</th>
+                                                    <th>Davlati</th>
+                                                    <th>Shahri</th>
+                                                    <th>DUNS</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -98,25 +90,13 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <tr>
-                                                        @if (changePermit)
-                                                        {
-                                                            <td></td>
-                                                            <td></td>
-                                                        }
                                                         <td>
-                                                            <a href="~/User/Details/@item.ID">@item.UName</a>
+                                                            <a href="~/Supplier/Details/@item.ID">@item.Name</a>
                                                         </td>
-                                                        <td>@item.FullName</td>
-                                                        <td>@item.Email</td>
-                                                        <td>@item.Role</td>
-                                                        @if (item.IsActive)
-                                                        {
-                                                            <td><span class="badge badge-light-success">Faol</span></td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td><span class="badge badge-light-danger">Nofaol</span></td>
-                                                        }
+                                                        <td>@item.Type</td>
+                                                        <td>@item.Country</td>
+                                                        <td>@item.City</td>
+                                                        <td>@item.DUNS</td>
                                                         @if (changePermit)
                                                         {
                                                             <td>
@@ -129,6 +109,19 @@
                                                     </tr>
                                                 }
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Nomi</th>
+                                                    <th>Turi</th>
+                                                    <th>Davlati</th>
+                                                    <th>Shahri</th>
+                                                    <th>DUNS</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                     <!-- datatable ends -->
@@ -145,9 +138,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
         function refreshDataTable() {
-            const roleId = document.getElementById("RoleId").value;
+            const source = document.getElementById("SourceList").value;
 
-            window.location.href = '@Url.Action("Index", "User")?roleID=' + roleId;
+            window.location.href = '@Url.Action("Index", "Supplier")?type=' + source;
         }
     </script>
 }
