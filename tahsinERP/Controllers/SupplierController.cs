@@ -29,5 +29,28 @@ namespace tahsinERP.Controllers
                 return View(list);
             }
         }
+
+        public ActionResult Create()
+        {
+            ViewBag.RoleID = new SelectList(new List<SelectListItem>
+            {
+                new SelectListItem { Text = "True", Value = "true" },
+                new SelectListItem { Text = "False", Value = "false" }
+            }, "Value", "Text");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(SUPPLIERS supplier)
+        {
+            
+            return View();
+        }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
     }
 }
