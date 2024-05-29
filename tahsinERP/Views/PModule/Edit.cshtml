@@ -52,7 +52,12 @@
                                                     @Html.TextBoxFor(model => model.Module, new { @class = "form-control", @placeholder = "Modul nomi" })
                                                     @Html.ValidationMessageFor(model => model.Module, "", new { @class = "text-danger" })
                                                 </fieldset>
+                                                <h6 class="invoice-to">Rollarga birikishi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownList("RoleID", null, htmlAttributes: new { @class = "select2 form-control", multiple="multiple" })
+                                                </fieldset>
                                             </div>
+
                                         </div>
                                         <hr>
                                         <ul class="list-group list-group-flush">

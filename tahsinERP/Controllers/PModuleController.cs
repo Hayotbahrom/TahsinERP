@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Security;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -55,7 +57,6 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
         public ActionResult Edit(PERMISSIONMODULE permissionModule)
         {
             var pmodule = db.PERMISSIONMODULES.FirstOrDefault(x => x.ID == permissionModule.ID);
@@ -63,9 +64,12 @@ namespace tahsinERP.Controllers
             {
                 return HttpNotFound();
             }
+            List<ROLES> selectedRoles = db.ROLES.Join(db.PERMISSIONS, role => role.ID, permission => permission.RoleID, (role, permission) => new { role, permission }).Join(db.PERMISSIONMODULES, combined => combined.permission.PermissionModuleID, pm => pm.ID, (combined, pm) => new { combined.role, pm }).Where(combined => combined.pm.ID == pmodule.ID).Select(combined => combined.role).ToList();
+           
+            ViewBag.RoleID = new MultiSelectList(db.ROLES, "ID", "RName", selectedRoles);
+
             return View(pmodule);
         }
-
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int Id)
