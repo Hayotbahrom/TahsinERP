@@ -260,7 +260,7 @@
                         <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
                         <ul class="menu-content">
                             <li>
-                                <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ma'lumotlar</span></a>
+                                <a href="/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Umumiy ro'yxati</span></a>
                             </li>
                             <li>
                                 <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">Import</span></a>
@@ -477,18 +477,32 @@
         </footer>
         <!-- END: Footer-->
 
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/jquery")
+        }
 
         <!-- BEGIN: Vendor JS-->
         <script src="~/app-assets/vendors/js/vendors.min.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
         <!-- END Vendor JS-->
 
 
         <!-- BEGIN: Page Vendor JS-->
         <script src="~/app-assets/vendors/js/charts/apexcharts.min.js"></script>
         <script src="~/app-assets/vendors/js/extensions/swiper.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+        <script src="~/app-assets/vendors/js/extensions/dropzone.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
@@ -510,6 +524,7 @@
         <script src="~/app-assets/js/scripts/pages/dashboard-ecommerce.js"></script>
         <script src="~/app-assets/js/scripts/pages/app-invoice.js"></script>
         <script src="~/app-assets/js/scripts/datatables/datatable.js"></script>
+        <script src="~/app-assets/js/scripts/forms/select/form-select2.js"></script>
         <!-- END: Page JS-->
     }
     else

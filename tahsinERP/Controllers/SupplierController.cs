@@ -13,59 +13,48 @@ namespace tahsinERP.Controllers
     public class SupplierController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = new string[2] { "Import","Lokal" };
+        private string[] sources = new string[3] { "", "Import", "Lokal" };
         // GET: Supplier
-        public ActionResult Index(string source)
+        public ActionResult Index(string type)
         {
-            if (!string.IsNullOrEmpty(source))
+            if (!string.IsNullOrEmpty(type))
             {
-                List<SUPPLIERS> list = db.SUPPLIERS.Where(s => s.IsDeleted == false && s.Type.CompareTo(source) == 0).ToList();
-                ViewBag.SourceList = new SelectList(sources);
+                List<SUPPLIERS> list = db.SUPPLIERS.Where(s => s.IsDeleted == false && s.Type.CompareTo(type) == 0).ToList();
+                ViewBag.SourceList = new SelectList(sources, type);
                 return View(list);
             }
             else
             {
                 List<SUPPLIERS> list = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
-                ViewBag.SourceList = new SelectList(sources);
+                ViewBag.SourceList = new SelectList(sources, type);
                 return View(list);
             }
         }
 
         public ActionResult Create()
         {
-            ViewBag.SourceList = new SelectList(sources);
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SUPPLIERS supplier)
+        public ActionResult Create([Bind(Include = "Name, DUNS, Type, Country, City, Address, Telephone, E_mail, ContactPerson, Director, IsDeleted")] SUPPLIERS supplier)
         {
             try
             {
-                SUPPLIERS new_supplier = new SUPPLIERS();
-                new_supplier.Name = supplier.Name;
-                new_supplier.Type = "Lokal";
-                new_supplier.Country = supplier.Country;
-                new_supplier.City = supplier.City;
-                new_supplier.Address = supplier.Address;
-                new_supplier.Telephone = supplier.Telephone;
-                new_supplier.Email = supplier.Email;
-                new_supplier.ContactPersonName = supplier.ContactPersonName;
-                new_supplier.DirectorName = supplier.DirectorName;
-                new_supplier.DUNS = supplier.DUNS;
-                new_supplier.IsDeleted = false;
-
-                db.SUPPLIERS.Add(new_supplier);
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    supplier.IsDeleted = false;
+                    db.SUPPLIERS.Add(supplier);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(ex.Message, ex);
             }
-            return RedirectToAction("Index");
+            return View(supplier);
         }
 
         public ActionResult Edit()

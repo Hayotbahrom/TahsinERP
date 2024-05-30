@@ -51,7 +51,7 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label for="users-list-role">Role</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SourceList", ViewBag.RoleList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
@@ -140,7 +140,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
         function refreshDataTable() {
-            const source = document.getElementById("SourceList").value;
+            const source = document.getElementById("SourceID").value;
 
             window.location.href = '@Url.Action("Index", "Supplier")?type=' + source;
         }
