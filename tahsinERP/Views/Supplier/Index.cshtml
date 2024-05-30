@@ -3,10 +3,10 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Suppliers"))
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Users"))  
 {
     bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Suppliers"))
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Users"))
     {
         changePermit = true;
     }
@@ -103,8 +103,8 @@
                                                         {
                                                             <td>
                                                                 <div>
-                                                                    <a href="@Url.Action("Edit", "User", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                    <a href="@Url.Action("Delete", "User", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                    <a href="@Url.Action("Edit", "Supplier", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "Supplier", new { id = item.ID })"><i class="bx bx-trash"></i></a>
                                                                 </div>
                                                             </td>
                                                         }
