@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Security.AccessControl;
 using System.Web;
 using System.Web.Mvc;
@@ -68,9 +70,32 @@ namespace tahsinERP.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Edit()
+        public  ActionResult Details(int? Id)
         {
-            return View();
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var supplier = db.SUPPLIERS.Find(Id);
+            if (supplier == null)
+            {
+                return HttpNotFound();
+            }
+            SUPPLIERS suppliers = new SUPPLIERS();
+
+            suppliers.Name = supplier.Name;
+            suppliers.DUNS = supplier.DUNS;
+            suppliers.Type = supplier.Type;
+            suppliers.Address = supplier.Address;
+            suppliers.Country = supplier.Country;
+            suppliers.Telephone = supplier.Telephone;
+            suppliers.City  = supplier.City;
+            suppliers.ContactPersonName = supplier.ContactPersonName;
+            suppliers.DirectorName = supplier.DirectorName;
+            suppliers.Email = supplier.Email;
+
+            return View(suppliers);
         }
+        
     }
 }
