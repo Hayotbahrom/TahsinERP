@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Web;
@@ -32,11 +33,7 @@ namespace tahsinERP.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.RoleID = new SelectList(new List<SelectListItem>
-            {
-                new SelectListItem { Text = "True", Value = "true" },
-                new SelectListItem { Text = "False", Value = "false" }
-            }, "Value", "Text");
+            ViewBag.SourceList = new SelectList(sources);
             return View();
         }
 
@@ -44,8 +41,31 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(SUPPLIERS supplier)
         {
-            
-            return View();
+            try
+            {
+                SUPPLIERS new_supplier = new SUPPLIERS();
+                new_supplier.Name = supplier.Name;
+                new_supplier.Type = "Lokal";
+                new_supplier.Country = supplier.Country;
+                new_supplier.City = supplier.City;
+                new_supplier.Address = supplier.Address;
+                new_supplier.Telephone = supplier.Telephone;
+                new_supplier.Email = supplier.Email;
+                new_supplier.ContactPersonName = supplier.ContactPersonName;
+                new_supplier.DirectorName = supplier.DirectorName;
+                new_supplier.DUNS = supplier.DUNS;
+                new_supplier.IsDeleted = false;
+
+                db.SUPPLIERS.Add(new_supplier);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(ex.Message, ex);
+            }
+            return RedirectToAction("Index");
         }
 
         public ActionResult Edit()

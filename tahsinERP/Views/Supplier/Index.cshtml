@@ -68,18 +68,19 @@
                                 <div class="card-body">
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                        <table class="table table-striped table-bordered complex-headers" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th rowspan="4" class="align-top">Nomi</th>
-                                                    <th colspan="2">Davlati</th>
-                                                    <th colspan="1">Ma'lumoti</th>
+                                                    <th colspan="2" class="align-top">Nomi</th>
+                                                    <th colspan="3">Davlati</th>
+                                                    <th colspan="1"></th>
                                                 </tr>
-                                                <tr>                                                    <th>Nomi</th>
+                                                <tr>
+                                                    <th>Nomi</th>
+                                                    <th>DUNS</th>
                                                     <th>Turi</th>
                                                     <th>Davlati</th>
                                                     <th>Shahri</th>
-                                                    <th>DUNS</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -93,10 +94,11 @@
                                                         <td>
                                                             <a href="~/Supplier/Details/@item.ID">@item.Name</a>
                                                         </td>
+                                                        <td><a href="~/Supplier/Details/@item.ID">@item.DUNS</a></td>
                                                         <td>@item.Type</td>
                                                         <td>@item.Country</td>
                                                         <td>@item.City</td>
-                                                        <td>@item.DUNS</td>
+
                                                         @if (changePermit)
                                                         {
                                                             <td>
@@ -112,13 +114,13 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>Nomi</th>
+                                                    <th>DUNS</th>
                                                     <th>Turi</th>
                                                     <th>Davlati</th>
                                                     <th>Shahri</th>
-                                                    <th>DUNS</th>
                                                     @if (changePermit)
                                                     {
-                                                        <th>amallar</th>
+                                                        <th>Amallar</th>
                                                     }
                                                 </tr>
                                             </tfoot>
