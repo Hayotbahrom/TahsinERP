@@ -33,7 +33,7 @@
 <!-- END: Head-->
 <!-- BEGIN: Body-->
 
-<body class="vertical-layout vertical-menu-modern 1-column  navbar-sticky footer-static bg-full-screen-image  blank-page blank-page" data-open="click" data-menu="vertical-menu-modern" data-col="1-column">
+<body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 1-column  navbar-sticky footer-static bg-full-screen-image  blank-page blank-page" data-open="click" data-menu="vertical-menu-modern" data-col="1-column">
     <!-- BEGIN: Content-->
     <div class="app-content content">
         <div class="content-overlay"></div>
@@ -41,24 +41,27 @@
             <div class="content-header row">
             </div>
             <div class="content-body">
-                <!-- error 500 -->
+                <!-- not authorized start -->
                 <section class="row flexbox-container">
-                    <div class="col-xl-6 col-md-7 col-9">
-                        <!-- w-100 for IE specific -->
+                    <div class="col-xl-7 col-md-8 col-12">
                         <div class="card bg-transparent shadow-none">
                             <div class="card-content">
                                 <div class="card-body text-center bg-transparent miscellaneous">
-                                    <img src="~/app-assets/images/pages/500.png" class="img-fluid my-3" alt="branding logo">
-                                    <h1 class="error-title mt-1">Sizning akkauntingizdan bu oynaga kirishga ruxsat yoq!</h1>
-                                    <p class="p-2">
-                                        <a href="mailto:"admin@uzsmg.uz"><span> admin@uzsmg.uz </span></a> ga bog''laning
+                                    <img src="~/app-assets/images/pages/not-authorized.png" class="img-fluid" alt="not authorized" width="400">
+                                    <h1 class="my-2 error-title">Sizga ruxsat berilmagan!</h1>
+                                    <p>
+                                        Siz ushbu katalog yoki sahifani ko'rish uchun ruxsatga ega emassiz
+                                        sababini aniqlash yoki muammoni hal etish uchun tizim administratoriga bog'laning.
                                     </p>
+                                    <a href="~/Home" class="btn btn-primary round glow mt-2">Asosiy sahifa</a>
+                                    <a href="mailto:admin@uzsmg.uz" class="btn btn-info round glow mt-2">Tizim administratoriga bog'lanish</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
-                <!-- error 500 end -->
+                <!-- not authorized end -->
+
             </div>
         </div>
     </div>

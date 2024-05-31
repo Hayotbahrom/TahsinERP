@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Security.AccessControl;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -58,8 +61,7 @@ namespace tahsinERP.Controllers
             }
             return View(supplier);
         }
-
-        public  ActionResult Details(int? Id)
+        public ActionResult Details(int? Id)
         {
             if (Id == null)
             {
@@ -70,21 +72,107 @@ namespace tahsinERP.Controllers
             {
                 return HttpNotFound();
             }
-            SUPPLIERS suppliers = new SUPPLIERS();
 
-            suppliers.Name = supplier.Name;
-            suppliers.DUNS = supplier.DUNS;
-            suppliers.Type = supplier.Type;
-            suppliers.Address = supplier.Address;
-            suppliers.Country = supplier.Country;
-            suppliers.Telephone = supplier.Telephone;
-            suppliers.City  = supplier.City;
-            suppliers.ContactPersonName = supplier.ContactPersonName;
-            suppliers.DirectorName = supplier.DirectorName;
-            suppliers.Email = supplier.Email;
-
-            return View(suppliers);
+            return View(supplier);
+            //return RedirectToAction("SupplierParts?supplierId="+supplier.ID);
         }
-        
+        public ActionResult Edit(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var supplier = db.SUPPLIERS.Find(Id);
+            if (supplier == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Type = new SelectList(sources, supplier.Type);
+            return View(supplier);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(SUPPLIERS supplier)
+        {
+            if (ModelState.IsValid)
+            {
+                SUPPLIERS supplierToUpdate = db.SUPPLIERS.Find(supplier.ID);
+                if (supplierToUpdate != null)
+                {
+                    supplierToUpdate.IsDeleted = false;
+                    supplierToUpdate.Type = supplier.Type;
+                    if (TryUpdateModel(supplierToUpdate, "", new string[] { "Name", "DUNS", "Type", "Country", "City", "Address", "Telephone", "Email", "ContactPersonName", "DirectorName", "IsDeleted" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        }
+                    }
+                }
+                return View(supplierToUpdate);
+            }
+            return View();
+        }
+        public ActionResult SupplierParts(int? supplierId)
+        {
+            if (supplierId == null)
+            {
+                // Handle missing SupplierID (e.g., show an error message)
+                return View("Error");
+            }
+
+            var supplierData = db.Database.SqlQuery<GetSupplierParts_Result>(
+                "EXEC GetSupplierParts @SupplierID",
+                new SqlParameter("@SupplierID", supplierId)
+            ).ToList();
+
+            return View(supplierData);
+        }
+        public ActionResult Delete(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var supplier = db.SUPPLIERS.Find(Id);
+            if (supplier == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(supplier);
+            //return RedirectToAction("SupplierParts?supplierId="+supplier.ID);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int? ID, FormCollection gfs)
+        {
+            if (ModelState.IsValid)
+            {
+                SUPPLIERS supplierToUpdate = db.SUPPLIERS.Find(ID);
+                if (supplierToUpdate != null)
+                {
+                    supplierToUpdate.IsDeleted = true;
+                    if (TryUpdateModel(supplierToUpdate, "", new string[] { "IsDeleted" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        }
+                    }
+                }
+            }
+            return View();
+        }
     }
 }

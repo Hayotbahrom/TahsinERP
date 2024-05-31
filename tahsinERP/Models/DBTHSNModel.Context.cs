@@ -12,6 +12,8 @@ namespace tahsinERP.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class DBTHSNEntities : DbContext
     {
@@ -67,5 +69,14 @@ namespace tahsinERP.Models
         public virtual DbSet<USERIMAGES> USERIMAGES { get; set; }
         public virtual DbSet<USERS> USERS { get; set; }
         public virtual DbSet<PERMISSIONMODULE> PERMISSIONMODULES { get; set; }
+    
+        public virtual ObjectResult<GetSupplierParts_Result> GetSupplierParts(Nullable<int> supplierID)
+        {
+            var supplierIDParameter = supplierID.HasValue ?
+                new ObjectParameter("SupplierID", supplierID) :
+                new ObjectParameter("SupplierID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSupplierParts_Result>("GetSupplierParts", supplierIDParameter);
+        }
     }
 }

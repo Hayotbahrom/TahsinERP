@@ -1331,6 +1331,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetSupplierParts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SupplierID" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="DBTHSNModelStoreContainer">
           <EntitySet Name="BOMS" EntityType="Self.BOMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMPANIES" EntityType="Self.COMPANIES" Schema="dbo" store:Type="Tables" />
@@ -3298,6 +3301,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PERMISSIONMODULE" EntitySet="PERMISSIONMODULES" />
             <End Role="PERMISSIONS" EntitySet="PERMISSIONS" />
           </AssociationSet>
+          <FunctionImport Name="GetSupplierParts" ReturnType="Collection(DBTHSNModel.GetSupplierParts_Result)">
+            <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="PERMISSIONMODULE">
           <Key>
@@ -3319,6 +3325,12 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GetSupplierParts_Result">
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="PName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ShopName" Nullable="true" MaxLength="50" />
+          <Property Type="Binary" Name="Image" Nullable="true" MaxLength="Max" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3971,6 +3983,16 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetSupplierParts" FunctionName="DBTHSNModel.Store.GetSupplierParts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBTHSNModel.GetSupplierParts_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

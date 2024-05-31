@@ -45,51 +45,51 @@
                                             <hr>
                                             <h6 class="invoice-to">Nomi</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Nomi" })
+                                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control round", @placeholder = "Nomi" })
                                                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">DUNS</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.DUNS, new { @class = "form-control", @placeholder = "DUNS" })
+                                                @Html.TextBoxFor(model => model.DUNS, new { @class = "form-control round", @placeholder = "DUNS" })
                                                 @Html.ValidationMessageFor(model => model.DUNS, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">Turi</h6>
                                             <fieldset class="form-group">
-                                                @Html.DropDownListFor(model => model.Type, new SelectList(new string[3] { "","Import", "Local" }), new { @class = "form-control" })
+                                                @Html.DropDownListFor(model => model.Type, new SelectList(new string[3] { "","Import", "Local" }), new { @class = "form-control round" })
                                             </fieldset>
                                             <h6 class="invoice-to">Mamlakat</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.Country, new { @class = "form-control", @placeholder = "Mamlakat" })
+                                                @Html.TextBoxFor(model => model.Country, new { @class = "form-control round", @placeholder = "Mamlakat" })
                                                 @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">Shahar</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.City, new { @class = "form-control", @placeholder = "Shahar" })
+                                                @Html.TextBoxFor(model => model.City, new { @class = "form-control round", @placeholder = "Shahar" })
                                                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">Manzil</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.Address, new { @class = "form-control", @placeholder = "Manzil" })
+                                                @Html.TextBoxFor(model => model.Address, new { @class = "form-control round", @placeholder = "Manzil" })
                                                 @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">Telefon raqami</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.Telephone, new { @class = "form-control", @placeholder = "Telefon raqami" })
+                                                @Html.TextBoxFor(model => model.Telephone, new { @class = "form-control round", @placeholder = "Telefon raqami" })
                                                 @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">E-mail</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Elektron manzil" })
+                                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control round", @placeholder = "Elektron manzil" })
                                                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">Aloqa uchun hodim</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.ContactPersonName, new { @class = "form-control", @placeholder = "Aloqa uchun hodim" })
+                                                @Html.TextBoxFor(model => model.ContactPersonName, new { @class = "form-control round", @placeholder = "Aloqa uchun hodim" })
                                                 @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <h6 class="invoice-to">Direktor ismi</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.DirectorName, new { @class = "form-control", @placeholder = "Direktor ismi" })
+                                                @Html.TextBoxFor(model => model.DirectorName, new { @class = "form-control round", @placeholder = "Direktor ismi" })
                                                 @Html.ValidationMessageFor(model => model.DirectorName, "", new { @class = "text-danger" })
                                             </fieldset>
                                             <ul class="list-group list-group-flush">

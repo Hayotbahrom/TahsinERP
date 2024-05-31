@@ -10,16 +10,12 @@
 namespace tahsinERP.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class USER_ENTRIES
+    public partial class GetSupplierParts_Result
     {
-        public int ID { get; set; }
-        public int UserID { get; set; }
-        public Nullable<System.DateTime> DateTime { get; set; }
-        public string IP { get; set; }
-        public string MAC { get; set; }
-    
-        public virtual USERS USERS { get; set; }
+        public string Name { get; set; }
+        public string PName { get; set; }
+        public string ShopName { get; set; }
+        public byte[] Image { get; set; }
     }
 }

@@ -3,10 +3,10 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Users"))  
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Suppliers"))
 {
     bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Users"))
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Suppliers"))
     {
         changePermit = true;
     }
@@ -40,9 +40,12 @@
                     @if (changePermit)
                     {
                         <div class="invoice-create-btn mb-1">
-                            <a href="~/Supplier/Create" class="col-lg-offset-2 btn btn-success" role="button" aria-pressed="true">
-                                Ta'minotchini qo'shish
-                            </a>
+                            <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Supplier/Create';">
+                                <span class="align-middle ml-25">Ta'minotchini qo'shish</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary mr-1 mb-1" onclick="window.location.href='#';">
+                                <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali ta'minotchilarni qo'shish</span>
+                            </button>
                         </div>
                     }
                     <div class="users-list-filter px-1">

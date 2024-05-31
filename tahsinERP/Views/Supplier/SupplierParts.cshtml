@@ -1,0 +1,42 @@
+﻿@model tahsinERP.ViewModels.SupplierPartsViewModel
+@{
+    Layout = null;
+}
+<div class="col-lg-12 col-md-6 mt-25">
+    <hr />
+    <h4 class="text-primary">Korxona yetkazib beruvchi maxsulotlar</h4>
+    <div class="table-responsive">
+        <table class="table table-striped dataex-html5-selectors">
+            <thead>
+                <tr>
+                    <th>Detal raqami</th>
+                    <th>Nomi</th>
+                    <th>Ishlab chiqarish tsexi</th>
+                    <th>Chizmasi</th>
+                    <th>Rasmi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@foreach (var item in Model)
+                {*@
+                    <tr>
+                        <td>@Model.PartNumber</td>
+                        <td>@Model.PartName</td>
+                        <td>@Model.ShopName</td>
+                        <td></td>
+                        <td>@Model.ImageLink</td>
+                    </tr>
+
+                @*}*@
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Sanasi</th>
+                    <th>Vaqti</th>
+                    <th>IP manzili</th>
+                    <th>MAC manzili</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
