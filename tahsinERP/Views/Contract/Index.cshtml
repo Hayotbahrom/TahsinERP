@@ -1,0 +1,168 @@
+﻿@model List<tahsinERP.Models.P_CONTRACTS>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Contract"))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Contract"))
+    {
+        changePermit = true;
+    }
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        Sahifalar
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Shartnomalar
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- users list start -->
+                <section class="invoice-list-wrapper">
+                    @if (changePermit)
+                    {
+                        <div class="invoice-create-btn mb-1">
+                            <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Contract/Create';">
+                                <span class="align-middle ml-25">Shartnomani qo'shish</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary mr-1 mb-1" onclick="window.location.href='#';">
+                                <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali shartnomalarni qo'shish</span>
+                            </button>
+                        </div>
+                    }
+                    <div class="users-list-filter px-1">
+                        <form>
+                            <div class="row border rounded py-2 mb-2">
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label for="users-list-role">Role</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                                    <a href="~/Contract" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                        Shartnomani yangilash
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <!-- datatable start -->
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table table-striped table-bordered complex-headers" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Kontakt raqami</th>
+                                                    <th>Shartnoma sanasi</th>
+                                                    <th>Kompaniya ID</th>
+                                                    <th>Ta'minotchi nomi</th>
+                                                    <th>Qismlar nomi</th>
+                                                    <th>Narx</th>
+                                                    <th>Valyuta</th>
+                                                    <th>Incoterms</th>
+                                                    <th>Paymenterm</th>
+                                                    <th>MOQ</th>
+                                                    <th>MaximumCapacity</th>
+                                                    <th>Unit</th>
+                                                    <th>DueDate</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>@item.ContractNo</td>
+                                                        <td>@item.IssuedDate</td>
+                                                        <td>@item.COMPANIES.Name</td>
+                                                        <td>@item.SUPPLIERS.Name</td>
+                                                        <td>@item.PARTS.PName</td>
+                                                        <td>@item.Amount</td>
+                                                        <td>@item.Currency</td>
+                                                        <td>@item.Incoterms</td>
+                                                        <td>@item.PaymentTerms</td>
+                                                        <td>@item.MOQ</td>
+                                                        <td>@item.MaximumCapacity</td>
+                                                        <td>@item.Unit</td>
+                                                        <td>@item.DueDate</td>
+                                                        @if (changePermit)
+                                                        {
+                                                            <td>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "Contract", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "Contract", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Kontakt raqam</th>
+                                                    <th>Narx</th>
+                                                    <th>Valyuta</th>
+                                                    <th>Incoterms</th>
+                                                    <th>Paymenterm</th>
+                                                    <th>MOQ</th>
+                                                    <th>MaximumCapacity</th>
+                                                    <th>DueDate</th>
+                                                    <th>Unit</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>Amallar</th>
+                                                    }
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <!-- datatable ends -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- users list ends -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function refreshDataTable() {
+            const source = document.getElementById("SourceID").value;
+
+            window.location.href = '@Url.Action("Index", "Contract")?type=' + source;
+        }
+    </script>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
