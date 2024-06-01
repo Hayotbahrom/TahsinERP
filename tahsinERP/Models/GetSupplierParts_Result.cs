@@ -13,7 +13,7 @@ namespace tahsinERP.Models
     
     public partial class GetSupplierParts_Result
     {
-        public string Name { get; set; }
+        public string PNo { get; set; }
         public string PName { get; set; }
         public string ShopName { get; set; }
         public byte[] Image { get; set; }

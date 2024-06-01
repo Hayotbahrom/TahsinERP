@@ -1,9 +1,10 @@
-﻿@model tahsinERP.ViewModels.SupplierPartsViewModel
-@{
+﻿@{
     Layout = null;
 }
 <div class="col-lg-12 col-md-6 mt-25">
     <hr />
+    <br />
+    <br />
     <h4 class="text-primary">Korxona yetkazib beruvchi maxsulotlar</h4>
     <div class="table-responsive">
         <table class="table table-striped dataex-html5-selectors">
@@ -17,17 +18,21 @@
                 </tr>
             </thead>
             <tbody>
-                @*@foreach (var item in Model)
-                {*@
+                @foreach (var item in ViewBag.partList)
+                {
                     <tr>
-                        <td>@Model.PartNumber</td>
-                        <td>@Model.PartName</td>
-                        <td>@Model.ShopName</td>
+                        <td>
+                            <a href="~/Part/Details/@item.ID">@item.PNo</a>
+                        </td>
+                        <td>@item.PName</td>
+                        <td>
+                            <a href="~/Shop/Details/@item.ID"> @item.ShopName</a>
+                        </td>
                         <td></td>
-                        <td>@Model.ImageLink</td>
+                        <td></td>
                     </tr>
 
-                @*}*@
+                }
             </tbody>
             <tfoot>
                 <tr>
