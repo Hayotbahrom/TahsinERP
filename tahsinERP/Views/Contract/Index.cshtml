@@ -77,7 +77,7 @@
                                                 <tr>
                                                     <th>Kontakt raqami</th>
                                                     <th>Shartnoma sanasi</th>
-                                                    <th>Kompaniya ID</th>
+                                                    <th>Kompaniya nomi</th>
                                                     <th>Ta'minotchi nomi</th>
                                                     <th>Qismlar nomi</th>
                                                     <th>Narx</th>
@@ -98,11 +98,13 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <tr>
-                                                        <td>@item.ContractNo</td>
+                                                        <td>
+                                                            <a href="~/Contract/Details/@item.ID">@item.ContractNo</a>  
+                                                        </td>
                                                         <td>@item.IssuedDate</td>
                                                         <td>@item.COMPANIES.Name</td>
                                                         <td>@item.SUPPLIERS.Name</td>
-                                                        <td>@item.PARTS.PName</td>
+                                                        <td>@item.PartID</td>
                                                         <td>@item.Amount</td>
                                                         <td>@item.Currency</td>
                                                         <td>@item.Incoterms</td>
@@ -125,18 +127,22 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Kontakt raqam</th>
+                                                    <th>Kontakt raqami</th>
+                                                    <th>Shartnoma sanasi</th>
+                                                    <th>Kompaniya nomi</th>
+                                                    <th>Ta'minotchi nomi</th>
+                                                    <th>Qismlar nomi</th>
                                                     <th>Narx</th>
                                                     <th>Valyuta</th>
                                                     <th>Incoterms</th>
                                                     <th>Paymenterm</th>
                                                     <th>MOQ</th>
                                                     <th>MaximumCapacity</th>
-                                                    <th>DueDate</th>
                                                     <th>Unit</th>
+                                                    <th>DueDate</th>
                                                     @if (changePermit)
                                                     {
-                                                        <th>Amallar</th>
+                                                        <th>amallar</th>
                                                     }
                                                 </tr>
                                             </tfoot>

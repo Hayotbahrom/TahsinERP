@@ -2096,6 +2096,8 @@
     <Content Include="Views\Supplier\Delete.cshtml" />
     <Content Include="Views\Contract\Index.cshtml" />
     <Content Include="Views\Contract\Create.cshtml" />
+    <Content Include="Views\Contract\Details.cshtml" />
+    <Content Include="Views\Contract\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
