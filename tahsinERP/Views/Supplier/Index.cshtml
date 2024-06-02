@@ -43,7 +43,7 @@
                             <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Supplier/Create';">
                                 <span class="align-middle ml-25">Ta'minotchini qo'shish</span>
                             </button>
-                            <button type="button" class="btn btn-outline-primary mr-1 mb-1" onclick="window.location.href='#';">
+                            <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton">
                                 <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali ta'minotchilarni qo'shish</span>
                             </button>
                         </div>
@@ -71,7 +71,7 @@
                                 <div class="card-body">
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        <table class="table table-striped table-bordered complex-headers" style="width:100%">
+                                        <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th colspan="2" class="align-top">Nomi</th>

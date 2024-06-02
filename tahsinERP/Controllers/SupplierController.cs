@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -72,9 +74,23 @@ namespace tahsinERP.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.partList = SupplierParts(supplier.ID);
             return View(supplier);
-            //return RedirectToAction("SupplierParts?supplierId="+supplier.ID);
+        }
+        public List<GetSupplierParts_Result> SupplierParts(int? supplierId)
+        {
+            if (supplierId == null)
+            {
+                // Handle missing SupplierID (e.g., show an error message)
+                return null;
+            }
+
+            var supplierData = db.Database.SqlQuery<GetSupplierParts_Result>(
+                "EXEC GetSupplierParts @SupplierID",
+                new SqlParameter("@SupplierID", supplierId)
+            ).ToList();
+
+            return supplierData;
         }
         public ActionResult Edit(int? Id)
         {
@@ -117,21 +133,6 @@ namespace tahsinERP.Controllers
                 return View(supplierToUpdate);
             }
             return View();
-        }
-        public ActionResult SupplierParts(int? supplierId)
-        {
-            if (supplierId == null)
-            {
-                // Handle missing SupplierID (e.g., show an error message)
-                return View("Error");
-            }
-
-            var supplierData = db.Database.SqlQuery<GetSupplierParts_Result>(
-                "EXEC GetSupplierParts @SupplierID",
-                new SqlParameter("@SupplierID", supplierId)
-            ).ToList();
-
-            return View(supplierData);
         }
         public ActionResult Delete(int? Id)
         {

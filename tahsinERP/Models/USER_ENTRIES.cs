@@ -17,6 +17,7 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public int UserID { get; set; }
         public System.DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; }
         public string IP { get; set; }
         public string MAC { get; set; }
     

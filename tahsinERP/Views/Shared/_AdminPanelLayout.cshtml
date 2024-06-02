@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/extensions/dragula.min.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/extensions/swiper.min.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link href="~/app-assets/vendors/css/tables/datatable/datatables.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/forms/select/select2.min.css">
@@ -153,11 +153,6 @@
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
-        <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
-        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
-        <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
-        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
-        <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
         <!-- BEGIN Vendor JS-->
         <!-- BEGIN: Page Vendor JS-->
         <script src="~/app-assets/vendors/js/charts/apexcharts.min.js"></script>
@@ -170,6 +165,9 @@
         <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
@@ -195,5 +193,5 @@
     {
         Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
     }
-    </body>
+</body>
 </html>
