@@ -147,31 +147,36 @@ namespace tahsinERP.Controllers
             return View(contract);
             //return RedirectToAction("SupplierParts?supplierId="+supplier.ID);
         }
+
+        // Delete Shartnomani to'liq o'chirish qismi bo'ldi, ba'zi detallarini o'chirishga to'liq qilingani yo'q
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection gfs)
         {
             if (ModelState.IsValid)
             {
-                P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(ID);
-                if (contractToUpdate != null)
+                P_CONTRACTS contractToDelete = db.P_CONTRACTS.Find(ID);
+                if (contractToDelete != null)
                 {
-                    if (TryUpdateModel(contractToUpdate, "", new string[] { "IsDeleted" }))
+                    try
                     {
-                        try
-                        {
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                        }
+                        db.P_CONTRACTS.Remove(contractToDelete);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
                     }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Contract not found.");
                 }
             }
             return View();
         }
+
 
     }
 }
