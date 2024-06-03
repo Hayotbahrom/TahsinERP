@@ -49,7 +49,7 @@
                             </button>
                         </div>
                     }
-                    <div class="users-list-filter px-1">
+                    @*<div class="users-list-filter px-1">
                         <form>
                             <div class="row border rounded py-2 mb-2">
                                 <div class="col-12 col-sm-12 col-lg-4">
@@ -65,7 +65,7 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div>*@
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
@@ -75,19 +75,15 @@
                                         <table class="table table-striped table-bordered complex-headers" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th>Kontakt raqami</th>
-                                                    <th>Shartnoma sanasi</th>
+                                                    <th>Shartnoma raqami</th>
                                                     <th>Kompaniya nomi</th>
                                                     <th>Ta'minotchi nomi</th>
                                                     <th>Qismlar nomi</th>
                                                     <th>Narx</th>
                                                     <th>Valyuta</th>
-                                                    <th>Incoterms</th>
-                                                    <th>Paymenterm</th>
-                                                    <th>MOQ</th>
-                                                    <th>MaximumCapacity</th>
-                                                    <th>Unit</th>
-                                                    <th>DueDate</th>
+                                                    <th>To'lov muddati</th>
+                                                    <th>Shartnoma tuzilgan sanasi</th>
+                                                    <th>Shartnoma muddati</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -101,17 +97,14 @@
                                                         <td>
                                                             <a href="~/Contract/Details/@item.ID">@item.ContractNo</a>  
                                                         </td>
-                                                        <td>@item.IssuedDate</td>
                                                         <td>@item.COMPANIES.Name</td>
                                                         <td>@item.SUPPLIERS.Name</td>
+                                                        <!--shu yerda PARTS ni olib bera olmayapti, shuning uchun partId hollida qoldi-->
                                                         <td>@item.PartID</td>
                                                         <td>@item.Amount</td>
                                                         <td>@item.Currency</td>
-                                                        <td>@item.Incoterms</td>
                                                         <td>@item.PaymentTerms</td>
-                                                        <td>@item.MOQ</td>
-                                                        <td>@item.MaximumCapacity</td>
-                                                        <td>@item.Unit</td>
+                                                        <td>@item.IssuedDate</td>
                                                         <td>@item.DueDate</td>
                                                         @if (changePermit)
                                                         {
@@ -128,18 +121,14 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>Kontakt raqami</th>
-                                                    <th>Shartnoma sanasi</th>
                                                     <th>Kompaniya nomi</th>
                                                     <th>Ta'minotchi nomi</th>
                                                     <th>Qismlar nomi</th>
                                                     <th>Narx</th>
                                                     <th>Valyuta</th>
-                                                    <th>Incoterms</th>
-                                                    <th>Paymenterm</th>
-                                                    <th>MOQ</th>
-                                                    <th>MaximumCapacity</th>
-                                                    <th>Unit</th>
-                                                    <th>DueDate</th>
+                                                    <th>To'lov muddati'</th>
+                                                    <th>Shartnoma tuzilgan sanasi</th>
+                                                    <th>Shartnoma muddati</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
