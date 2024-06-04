@@ -38,7 +38,7 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                USERS getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
+                USER getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
                 if (getUser != null)
                 {
                     var hashCode = getUser.HashCode;
@@ -51,7 +51,7 @@ namespace tahsinERP.Controllers
                     bool IsValidUser = db.USERS
                    .Any(u => u.Email.ToLower() == user
                    .Email.ToLower() && u.Password.Equals(encodingPasswordString) && u.IsActive==true);
-                    USERIMAGES image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
+                    USERIMAGE image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
                     if (IsValidUser)
                     {
                         var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, getUser.FullName);
@@ -140,7 +140,7 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Settings(string eMail)
         {
-            USERS currentUser = db.USERS.Where(u => u.Email == eMail).FirstOrDefault();
+            USER currentUser = db.USERS.Where(u => u.Email == eMail).FirstOrDefault();
             UserViewModel userViewModel = new UserViewModel();
 
             userViewModel.UName = currentUser.Uname;
@@ -148,7 +148,7 @@ namespace tahsinERP.Controllers
             userViewModel.Email = currentUser.Email;
             userViewModel.FullName = currentUser.FullName;
             userViewModel.IsActive = currentUser.IsActive;
-            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == currentUser.ID).FirstOrDefault();
+            USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == currentUser.ID).FirstOrDefault();
             if (userimage != null)
             {
                 ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
@@ -165,7 +165,7 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            USERS userToUpdate = db.USERS.Where(u => u.Email == uvm.Email).FirstOrDefault();
+            USER userToUpdate = db.USERS.Where(u => u.Email == uvm.Email).FirstOrDefault();
             if (userToUpdate == null)
             {
                 return HttpNotFound();
@@ -177,7 +177,7 @@ namespace tahsinERP.Controllers
                 userToUpdate.HashCode = keyNew;
                 userToUpdate.Password = password;
             }
-            USERIMAGES uImage = db.USERIMAGES.Where(ui => ui.UserID == userToUpdate.ID).FirstOrDefault();
+            USERIMAGE uImage = db.USERIMAGES.Where(ui => ui.UserID == userToUpdate.ID).FirstOrDefault();
             if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
             {
                 try
@@ -191,7 +191,7 @@ namespace tahsinERP.Controllers
                                 Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
                                 if (uImage == null)
                                 {
-                                    USERIMAGES uImageNew = new USERIMAGES
+                                    USERIMAGE uImageNew = new USERIMAGE
                                     {
                                         UserID = userToUpdate.ID,
                                         Image = avatar

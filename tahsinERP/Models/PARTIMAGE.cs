@@ -12,12 +12,13 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class USERIMAGES
+    public partial class PARTIMAGE
     {
         public int ID { get; set; }
+        public int PartID { get; set; }
         public byte[] Image { get; set; }
-        public int UserID { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
-        public virtual USERS USERS { get; set; }
+        public virtual PART PART { get; set; }
     }
 }

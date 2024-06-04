@@ -17,6 +17,9 @@
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/forms/select/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/pickers/pickadate/pickadate.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/pickers/daterange/daterangepicker.css">
     <!-- END: Vendor CSS-->
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
@@ -271,7 +274,7 @@
                         <a href="#"><i class="bx bxs-book-bookmark"></i><span class="menu-title" data-i18n="Content">Shartnomalar</span></a>
                         <ul class="menu-content">
                             <li>
-                                <a href="~/Contract"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                <a href="~/PContract"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
                             </li>
                             <li>
                                 <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">Прямой</span></a>
@@ -471,10 +474,11 @@
         </footer>
         <!-- END: Footer-->
 
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-            @Scripts.Render("~/bundles/jquery")
-        }
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+
+
+        @RenderSection("scripts", required: false)
 
         <!-- BEGIN: Vendor JS-->
         <script src="~/app-assets/vendors/js/vendors.min.js"></script>
@@ -494,16 +498,26 @@
         <script src="~/app-assets/vendors/js/extensions/swiper.min.js"></script>
         <script src="~/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
         <script src="~/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
-        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
-        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
         <script src="~/app-assets/vendors/js/extensions/dropzone.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
         <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBgjNW0WA93qphgZW-joXVR6VC3IiYFjfo"></script>
         <script src="~/app-assets/vendors/js/charts/gmaps.min.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.time.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/daterange/moment.min.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/daterange/daterangepicker.js"></script>
         <!-- END: Page Vendor JS-->
 
 
@@ -522,6 +536,8 @@
         <script src="~/app-assets/js/scripts/datatables/datatable.js"></script>
         <script src="~/app-assets/js/scripts/forms/select/form-select2.js"></script>
         <script src="~/app-assets/js/scripts/charts/gmaps/maps.js"></script>
+        <script src="~/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js"></script>
+        <script src="~/app-assets/js/scripts/forms/form-tooltip-valid.js"></script>
         <!-- END: Page JS-->
     }
     else

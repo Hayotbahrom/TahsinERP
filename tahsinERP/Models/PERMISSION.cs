@@ -12,17 +12,15 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BOMS
+    public partial class PERMISSION
     {
         public int ID { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public Nullable<int> ChildID { get; set; }
-        public Nullable<int> GrandChildID { get; set; }
-        public Nullable<double> ChildUsageQty { get; set; }
-        public string ChildUsageUnit { get; set; }
-        public Nullable<double> GrandChildUsageQty { get; set; }
-        public string GrandChildUsageUnit { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool ViewPermit { get; set; }
+        public bool ChangePermit { get; set; }
+        public int RoleID { get; set; }
+        public int PermissionModuleID { get; set; }
+    
+        public virtual PERMISSIONMODULE PERMISSIONMODULE { get; set; }
+        public virtual ROLE ROLE { get; set; }
     }
 }

@@ -36,13 +36,13 @@ namespace tahsinERP.Models
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
-        public virtual COMPANIES COMPANIES { get; set; }
+        public virtual COMPANy COMPANy { get; set; }
         public virtual P_CONTRACTS P_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICES> P_INVOICES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
-        public virtual PARTS PARTS { get; set; }
-        public virtual SUPPLIERS SUPPLIERS { get; set; }
+        public virtual PART PART { get; set; }
+        public virtual SUPPLIER SUPPLIER { get; set; }
     }
 }

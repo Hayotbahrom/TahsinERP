@@ -12,16 +12,13 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PARTPLANS
+    public partial class PRODUCTIMAGE
     {
         public int ID { get; set; }
-        public Nullable<int> PartID { get; set; }
-        public Nullable<double> PlannedQty { get; set; }
-        public Nullable<System.DateTime> IssueDate { get; set; }
-        public Nullable<System.DateTime> DueDate { get; set; }
-        public string Label { get; set; }
+        public int ProdID { get; set; }
+        public byte[] Image { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
-        public virtual PARTS PARTS { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

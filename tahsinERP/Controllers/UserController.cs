@@ -70,7 +70,7 @@ namespace tahsinERP.Controllers
         {
             try
             {
-                USERS user = new USERS();
+                USER user = new USER();
                 user.Uname = userVM.UName;
                 var keyNew = Helper.GeneratePassword(10);
                 var password = Helper.EncodePassword(userVM.Password, keyNew);
@@ -85,7 +85,7 @@ namespace tahsinERP.Controllers
                 db.USERS.Add(user);
                 db.SaveChanges();
 
-                ROLES selectedRole = db.ROLES.Where(r => r.ID.Equals(userVM.RoleID)).FirstOrDefault();
+                ROLE selectedRole = db.ROLES.Where(r => r.ID.Equals(userVM.RoleID)).FirstOrDefault();
                 if (selectedRole != null)
                 {
                     int roleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + selectedRole.ID + " and userid = " + user.ID + "").FirstOrDefault();
@@ -99,7 +99,7 @@ namespace tahsinERP.Controllers
                 {
                     if (Request.Files["userPhotoUpload"].InputStream.Length < userPhotoMaxLength)
                     {
-                        USERIMAGES userImage = new USERIMAGES();
+                        USERIMAGE userImage = new USERIMAGE();
                         avatar = new byte[Request.Files["userPhotoUpload"].InputStream.Length];
                         Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
                         userImage.UserID = user.ID;
@@ -130,7 +130,7 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             UserViewModel userviewmodel = new UserViewModel();
-            USERS user = db.USERS.Find(ID);
+            USER user = db.USERS.Find(ID);
             if (user == null)
             {
                 return HttpNotFound();
@@ -147,7 +147,7 @@ namespace tahsinERP.Controllers
                     userviewmodel.RoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + role.ID + " and userid = " + user.ID + "").FirstOrDefault();
                 }
             }
-            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
+            USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
             if (userimage != null)
             {
                 ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
@@ -164,7 +164,7 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userToUpdate = db.USERS.Find(ID);
-            USERIMAGES uImage = db.USERIMAGES.Where(ui => ui.UserID == ID).FirstOrDefault();
+            USERIMAGE uImage = db.USERIMAGES.Where(ui => ui.UserID == ID).FirstOrDefault();
             string roleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + uvm.RoleID + " and userid = " + ID + "").FirstOrDefault().ToString();
             string existingRoleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where userid = " + ID + "").FirstOrDefault().ToString();
             var keyNew = Helper.GeneratePassword(10);
@@ -193,7 +193,7 @@ namespace tahsinERP.Controllers
                             Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
                             if (uImage == null)
                             {
-                                USERIMAGES uImageNew = new USERIMAGES();
+                                USERIMAGE uImageNew = new USERIMAGE();
                                 uImageNew.UserID = (int)ID;
                                 uImageNew.Image = avatar;
 
@@ -234,7 +234,7 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             UserViewModel userviewmodel = new UserViewModel();
-            USERS user = db.USERS.Find(ID);
+            USER user = db.USERS.Find(ID);
             USER_ENTRIES entry = db.USER_ENTRIES.Where(ue => ue.UserID == user.ID).FirstOrDefault();
             if (user == null)
             {
@@ -253,7 +253,7 @@ namespace tahsinERP.Controllers
                 }
                 userviewmodel.sessions = user.USER_ENTRIES.ToList();
             }
-            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
+            USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
             if (userimage != null)
             {
                 ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
@@ -267,7 +267,7 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             UserViewModel userviewmodel = new UserViewModel();
-            USERS user = db.USERS.Find(ID);
+            USER user = db.USERS.Find(ID);
             USER_ENTRIES entry = db.USER_ENTRIES.Where(ue => ue.UserID == user.ID).FirstOrDefault();
             if (user == null)
             {
@@ -286,7 +286,7 @@ namespace tahsinERP.Controllers
                 }
                 userviewmodel.sessions = user.USER_ENTRIES.ToList();
             }
-            USERIMAGES userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
+            USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
             if (userimage != null)
             {
                 ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
@@ -297,7 +297,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection collection)
         {
-            USERS user = db.USERS.Find(ID);
+            USER user = db.USERS.Find(ID);
             user.IsDeleted = true;
             if (TryUpdateModel(user, "", new string[] { "IsDeleted" }))
             {

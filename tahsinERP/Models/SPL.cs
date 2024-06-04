@@ -31,6 +31,6 @@ namespace tahsinERP.Models
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
-        public virtual PRODUCTS PRODUCTS { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

@@ -31,8 +31,8 @@ namespace tahsinERP.Models
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
-        public virtual COMPANIES COMPANIES { get; set; }
-        public virtual FORWARDERS FORWARDERS { get; set; }
+        public virtual COMPANy COMPANy { get; set; }
+        public virtual FORWARDER FORWARDER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }
     }

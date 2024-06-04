@@ -12,43 +12,43 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PRODUCTS
+    public partial class COMPANy
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PRODUCTS()
+        public COMPANy()
         {
-            this.PRODUCTIMAGES = new HashSet<PRODUCTIMAGES>();
-            this.PRODUCTPACKS = new HashSet<PRODUCTPACKS>();
-            this.PRODUCTPLANS = new HashSet<PRODUCTPLANS>();
+            this.COMPANY_LICENSES = new HashSet<COMPANY_LICENSES>();
+            this.F_CONTRACTS = new HashSet<F_CONTRACTS>();
+            this.P_ORDERS = new HashSet<P_ORDERS>();
+            this.P_CONTRACTS = new HashSet<P_CONTRACTS>();
+            this.PROD_SHOPS = new HashSet<PROD_SHOPS>();
             this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
-            this.SPL = new HashSet<SPL>();
+            this.USERS = new HashSet<USER>();
         }
     
         public int ID { get; set; }
-        public string PNo { get; set; }
         public string Name { get; set; }
-        public Nullable<double> Weight { get; set; }
-        public Nullable<double> Length { get; set; }
-        public Nullable<double> Width { get; set; }
-        public Nullable<double> Height { get; set; }
-        public string Unit { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
-        public string PNo2 { get; set; }
-        public string PNo3 { get; set; }
-        public string PNo4 { get; set; }
-        public Nullable<int> PackID { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+        public string DUNS { get; set; }
+        public string Telephone { get; set; }
+        public string Email { get; set; }
+        public Nullable<bool> IsActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCTIMAGES> PRODUCTIMAGES { get; set; }
+        public virtual ICollection<COMPANY_LICENSES> COMPANY_LICENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCTPACKS> PRODUCTPACKS { get; set; }
+        public virtual ICollection<F_CONTRACTS> F_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCTPLANS> PRODUCTPLANS { get; set; }
+        public virtual ICollection<P_ORDERS> P_ORDERS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_CONTRACTS> P_CONTRACTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_SHOPS> PROD_SHOPS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SPL> SPL { get; set; }
+        public virtual ICollection<USER> USERS { get; set; }
     }
 }

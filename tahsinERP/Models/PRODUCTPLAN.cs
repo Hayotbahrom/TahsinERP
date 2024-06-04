@@ -12,15 +12,16 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PERMISSIONS
+    public partial class PRODUCTPLAN
     {
         public int ID { get; set; }
-        public bool ViewPermit { get; set; }
-        public bool ChangePermit { get; set; }
-        public int RoleID { get; set; }
-        public int PermissionModuleID { get; set; }
+        public int ProductID { get; set; }
+        public Nullable<double> PlannedQty { get; set; }
+        public string Label { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
+        public Nullable<System.DateTime> IssueDate { get; set; }
+        public Nullable<System.DateTime> DueDate { get; set; }
     
-        public virtual ROLES ROLES { get; set; }
-        public virtual PERMISSIONMODULE PERMISSIONMODULE { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

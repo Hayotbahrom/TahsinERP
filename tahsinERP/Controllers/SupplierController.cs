@@ -26,13 +26,13 @@ namespace tahsinERP.Controllers
         {
             if (!string.IsNullOrEmpty(type))
             {
-                List<SUPPLIERS> list = db.SUPPLIERS.Where(s => s.IsDeleted == false && s.Type.CompareTo(type) == 0).ToList();
+                List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false && s.Type.CompareTo(type) == 0).ToList();
                 ViewBag.SourceList = new SelectList(sources, type);
                 return View(list);
             }
             else
             {
-                List<SUPPLIERS> list = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
+                List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
                 ViewBag.SourceList = new SelectList(sources, type);
                 return View(list);
             }
@@ -45,7 +45,7 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, DUNS, Type, Country, City, Address, Telephone, E_mail, ContactPerson, Director, IsDeleted")] SUPPLIERS supplier)
+        public ActionResult Create([Bind(Include = "Name, DUNS, Type, Country, City, Address, Telephone, E_mail, ContactPerson, Director, IsDeleted")] SUPPLIER supplier)
         {
             try
             {
@@ -108,11 +108,11 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SUPPLIERS supplier)
+        public ActionResult Edit(SUPPLIER supplier)
         {
             if (ModelState.IsValid)
             {
-                SUPPLIERS supplierToUpdate = db.SUPPLIERS.Find(supplier.ID);
+                SUPPLIER supplierToUpdate = db.SUPPLIERS.Find(supplier.ID);
                 if (supplierToUpdate != null)
                 {
                     supplierToUpdate.IsDeleted = false;
@@ -155,7 +155,7 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                SUPPLIERS supplierToUpdate = db.SUPPLIERS.Find(ID);
+                SUPPLIER supplierToUpdate = db.SUPPLIERS.Find(ID);
                 if (supplierToUpdate != null)
                 {
                     supplierToUpdate.IsDeleted = true;

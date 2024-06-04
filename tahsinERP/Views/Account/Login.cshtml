@@ -63,22 +63,22 @@
                                                 {
                                                     @Html.AntiForgeryToken()
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                    <div class="form-group mb-50">
-                                                        <label class="text-bold-600">E-mail</label>
-                                                        @Html.TextBoxFor(u => u.Email, new { @class = "form-control", @placeholder = "E-mail" })
-                                                        @Html.ValidationMessageFor(m => m.Email)
-                                                    </div>
+                                                <div class="form-group mb-50">
+                                                    <label class="text-bold-600">E-mail</label>
+                                                    @Html.TextBoxFor(u => u.Email, new { @class = "form-control round", @placeholder = "E-mail" })
+                                                    @Html.ValidationMessageFor(m => m.Email)
+                                                </div>
                                                     <div class="form-group">
                                                         <label class="text-bold-600">Kalit so'zi</label>
-                                                        @Html.PasswordFor(u => u.Password, new { @class = "form-control", @placeholder = "Kalit so'zi(пароль)" })
+                                                        @Html.PasswordFor(u => u.Password, new { @class = "form-control round", @placeholder = "Kalit so'zi(пароль)" })
                                                         @Html.ValidationMessageFor(m => m.Password)
                                                     </div>
+                                                    <hr /> 
                                                     <div class="form-group d-flex flex-md-row flex-column justify-content-between align-items-center">
                                                         <div class="text-right"><a href="" class="card-link"><small>Kalit so'zini unutdingizmi?</small></a></div>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary glow w-100 position-relative">Login<i id="icon-arrow" class="bx bx-right-arrow-alt"></i></button>
+                                                    <button type="submit" class="btn btn-light-secondary glow w-100 position-relative round">Login<i id="icon-arrow" class="bx bx-right-arrow-alt"></i></button>
                                                 }
-                                                <hr>
                                             </div>
                                         </div>
                                     </div>

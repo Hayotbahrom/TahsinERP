@@ -64,7 +64,7 @@ namespace tahsinERP.Controllers
             {
                 return HttpNotFound();
             }
-            List<ROLES> selectedRoles = db.ROLES.Join(db.PERMISSIONS, role => role.ID, permission => permission.RoleID, (role, permission) => new { role, permission }).Join(db.PERMISSIONMODULES, combined => combined.permission.PermissionModuleID, pm => pm.ID, (combined, pm) => new { combined.role, pm }).Where(combined => combined.pm.ID == pmodule.ID).Select(combined => combined.role).ToList();
+            List<ROLE> selectedRoles = db.ROLES.Join(db.PERMISSIONS, role => role.ID, permission => permission.RoleID, (role, permission) => new { role, permission }).Join(db.PERMISSIONMODULES, combined => combined.permission.PermissionModuleID, pm => pm.ID, (combined, pm) => new { combined.role, pm }).Where(combined => combined.pm.ID == pmodule.ID).Select(combined => combined.role).ToList();
            
             ViewBag.RoleID = new MultiSelectList(db.ROLES, "ID", "RName", selectedRoles);
 

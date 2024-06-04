@@ -12,23 +12,22 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ROLES
+    public partial class FORWARDER
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ROLES()
+        public FORWARDER()
         {
-            this.PERMISSIONS = new HashSet<PERMISSIONS>();
-            this.USERS = new HashSet<USERS>();
+            this.F_CONTRACTS = new HashSet<F_CONTRACTS>();
         }
     
         public int ID { get; set; }
-        public string RName { get; set; }
+        public string ForwarderName { get; set; }
+        public string Director { get; set; }
+        public string ContactPerson { get; set; }
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PERMISSIONS> PERMISSIONS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<USERS> USERS { get; set; }
+        public virtual ICollection<F_CONTRACTS> F_CONTRACTS { get; set; }
     }
 }

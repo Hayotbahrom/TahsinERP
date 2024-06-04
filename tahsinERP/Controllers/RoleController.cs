@@ -24,11 +24,11 @@ namespace tahsinERP.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(ROLES role)
+        public ActionResult Create(ROLE role)
         {
             try
             {
-                ROLES roles = new ROLES();
+                ROLE roles = new ROLE();
                 roles.RName = role.RName;
                 roles.Description = role.Description;
                 roles.IsDeleted = false;
@@ -40,7 +40,7 @@ namespace tahsinERP.Controllers
                 {
                     permissionModulesID[i] = item.ID;
 
-                    PERMISSIONS newPermission = new PERMISSIONS();
+                    PERMISSION newPermission = new PERMISSION();
                     newPermission.PermissionModuleID = permissionModulesID[i];
                     newPermission.ChangePermit = false;
                     newPermission.ViewPermit = true;
@@ -59,7 +59,7 @@ namespace tahsinERP.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        public ActionResult Edit(ROLES role)
+        public ActionResult Edit(ROLE role)
         {
             var roles = db.ROLES.FirstOrDefault(x => x.ID == role.ID);
             if (role == null)
@@ -94,7 +94,7 @@ namespace tahsinERP.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult Delete(ROLES roles)
+        public ActionResult Delete(ROLE roles)
         {
             var role = db.ROLES.FirstOrDefault(x => x.ID == roles.ID);
             if (role == null)
@@ -107,7 +107,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID)
         {
-            ROLES role = db.ROLES.Find(ID);
+            ROLE role = db.ROLES.Find(ID);
             role.IsDeleted = true;
             if (TryUpdateModel(role, "", new string[] { "IsDeleted" }))
             {
@@ -130,7 +130,7 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var role = db.ROLES.Find(ID);
-            ROLES roles = new ROLES();
+            ROLE roles = new ROLE();
 
             roles.ID = role.ID;
             roles.RName = role.RName;
@@ -143,7 +143,7 @@ namespace tahsinERP.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SavePermissions(List<PERMISSIONS> permissions)
+        public ActionResult SavePermissions(List<PERMISSION> permissions)
         {
             if (ModelState.IsValid)
             {

@@ -71,20 +71,7 @@ $(document).ready(function() {
     *       js of Add Row        *
     ******************************/
 
-    var t = $('.add-rows').DataTable();
-    var counter = 2;
-
-    $('#addRow').on( 'click', function () {
-        t.row.add( [
-            counter +'.1',
-            counter +'.2',
-            counter +'.3',
-            counter +'.4',
-            counter +'.5'
-        ] ).draw( false );
-
-        counter++;
-    });
+    
 
 
     /**************************************************************

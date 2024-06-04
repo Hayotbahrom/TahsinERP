@@ -31,6 +31,6 @@ namespace tahsinERP.Models
         public virtual ICollection<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
-        public virtual USERS USERS { get; set; }
+        public virtual USER USER { get; set; }
     }
 }

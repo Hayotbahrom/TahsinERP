@@ -15,10 +15,10 @@ namespace tahsinERP.Models
         public static bool IsViewPermitted(string username, string moduleName)
         {
             string roleName = GetUserRoles(username)[0];
-            ROLES role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
+            ROLE role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
             if (role != null)
             {
-                PERMISSIONS permit = GetPermissionsOfRole(role, moduleName);
+                PERMISSION permit = GetPermissionsOfRole(role, moduleName);
                 if (permit != null)
                 {
                     if (permit.ViewPermit)
@@ -33,10 +33,10 @@ namespace tahsinERP.Models
         {
             
             string roleName = GetUserRoles(username)[0];
-            ROLES role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
+            ROLE role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
             if (role != null)
             {
-                PERMISSIONS permit = GetPermissionsOfRole(role, moduleName);
+                PERMISSION permit = GetPermissionsOfRole(role, moduleName);
                 if (permit != null)
                 {
                     if (permit.ChangePermit)
@@ -47,7 +47,7 @@ namespace tahsinERP.Models
             }
             return false;
         }
-        private static PERMISSIONS GetPermissionsOfRole(ROLES role, string moduleName)
+        private static PERMISSION GetPermissionsOfRole(ROLE role, string moduleName)
         {
             PERMISSIONMODULE module = db.PERMISSIONMODULES.Where(pm => pm.Module.CompareTo(moduleName) == 0).FirstOrDefault();
             if (module != null)

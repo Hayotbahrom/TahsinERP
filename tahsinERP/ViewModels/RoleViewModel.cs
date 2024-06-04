@@ -10,11 +10,11 @@ namespace tahsinERP.ViewModels
     {
         
         public int ID { get; set; }
-        public ROLES role { get; set; }
+        public ROLE role { get; set; }
         public string module{ get; set; }
         public bool viewPermit { get; set; }
         public bool changePermit { get; set; }
-        public List<PERMISSIONS> PERMISSIONS { get; set; }
+        public List<PERMISSION> PERMISSIONS { get; set; }
         public string RName { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }

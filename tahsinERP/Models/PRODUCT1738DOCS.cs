@@ -26,8 +26,8 @@ namespace tahsinERP.Models
         public string Comments { get; set; }
         public byte[] C1738 { get; set; }
     
-        public virtual PRODUCTPACKS PRODUCTPACKS { get; set; }
-        public virtual USERS USERS { get; set; }
-        public virtual USERS USERS1 { get; set; }
+        public virtual PRODUCTPACK PRODUCTPACK { get; set; }
+        public virtual USER USER { get; set; }
+        public virtual USER USER1 { get; set; }
     }
 }

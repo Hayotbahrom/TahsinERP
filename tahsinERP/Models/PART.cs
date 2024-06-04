@@ -12,10 +12,10 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PARTS
+    public partial class PART
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PARTS()
+        public PART()
         {
             this.P_CONTRACTS = new HashSet<P_CONTRACTS>();
             this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
@@ -23,9 +23,9 @@ namespace tahsinERP.Models
             this.P_ORDERS = new HashSet<P_ORDERS>();
             this.P_WRHS_EXPENSES = new HashSet<P_WRHS_EXPENSES>();
             this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
-            this.PARTIMAGES = new HashSet<PARTIMAGES>();
-            this.PARTPACKS = new HashSet<PARTPACKS>();
-            this.PARTPLANS = new HashSet<PARTPLANS>();
+            this.PARTIMAGES = new HashSet<PARTIMAGE>();
+            this.PARTPACKS = new HashSet<PARTPACK>();
+            this.PARTPLANS = new HashSet<PARTPLAN>();
         }
     
         public int ID { get; set; }
@@ -38,13 +38,10 @@ namespace tahsinERP.Models
         public string Unit { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
-        public string PNo2 { get; set; }
-        public string PNo3 { get; set; }
-        public string PNo4 { get; set; }
+        public bool IsDeleted { get; set; }
         public Nullable<int> PackID { get; set; }
-        public Nullable<bool> IsInhouse { get; set; }
         public Nullable<int> ShopID { get; set; }
+        public bool IsInHouse { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACTS> P_CONTRACTS { get; set; }
@@ -59,10 +56,12 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PARTIMAGES> PARTIMAGES { get; set; }
+        public virtual ICollection<PARTIMAGE> PARTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PARTPACKS> PARTPACKS { get; set; }
+        public virtual ICollection<PARTPACK> PARTPACKS { get; set; }
+        public virtual PARTPACK PARTPACK { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PARTPLANS> PARTPLANS { get; set; }
+        public virtual ICollection<PARTPLAN> PARTPLANS { get; set; }
+        public virtual PROD_SHOPS PROD_SHOPS { get; set; }
     }
 }
