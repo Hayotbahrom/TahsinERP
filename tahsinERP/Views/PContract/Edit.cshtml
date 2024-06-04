@@ -3,11 +3,11 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using (Html.BeginForm("Edit", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
-    {
 
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
+{
+    using (Html.BeginForm("Edit", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">

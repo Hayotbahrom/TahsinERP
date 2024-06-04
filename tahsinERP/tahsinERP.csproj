@@ -2220,6 +2220,7 @@
     <Content Include="Views\PContract\Edit.cshtml" />
     <Content Include="Views\PContract\Delete.cshtml" />
     <Content Include="Views\PContract\UploadWithExcel.cshtml" />
+    <Content Include="Views\PContract\EditPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.IO;
@@ -285,6 +287,69 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
+
+        public ActionResult EditPart(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var contract = db.P_CONTRACTS.Find(Id);
+            if (contract == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.partList = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contract.ContractNo) == 0).ToList();
+            return View(contract);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPart(P_CONTRACTS contract)
+        {
+            if (ModelState.IsValid)
+            {
+                P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(contract.ID);
+                if (contractToUpdate != null)
+                {
+                    contractToUpdate.PartID = contract.PartID;
+                    contractToUpdate.Price = contract.Price;
+                    contractToUpdate.Currency = contract.Currency;
+                    contractToUpdate.Amount = contract.Amount;
+                    contractToUpdate.MOQ = contract.MOQ;
+                    contractToUpdate.MaximumCapacity = contract.MaximumCapacity;
+                    contractToUpdate.Unit = contract.Unit;
+
+                    if (TryUpdateModel(contractToUpdate, "", new string[] { "PartID", "Price", "Currency", "Amount", "MOQ", "MaximumCapacity", "Unit" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (DbEntityValidationException ex)
+                        {
+                            foreach (var validationErrors in ex.EntityValidationErrors)
+                            {
+                                foreach (var validationError in validationErrors.ValidationErrors)
+                                {
+                                    ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
+                                }
+                            }
+                            ModelState.AddModelError("", "Validation failed. Check the details and try again.");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        }
+                    }
+                }
+                return View(contractToUpdate);
+            }
+            return View(contract);
+        }
+
 
         public ActionResult Delete(int? Id)
         {
