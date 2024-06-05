@@ -355,7 +355,7 @@ namespace tahsinERP.Controllers
                     contractPartToUpdate.Unit = contractPart.Unit;
                     contractPartToUpdate.MOQ = contractPart.MOQ;
                     contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price;
-                 
+
 
                     if (TryUpdateModel(contractPartToUpdate, "", new string[] { "ContractID, PartID, Price,Quantity,Unit, Amount, MOQ" }))
                     {
@@ -404,7 +404,7 @@ namespace tahsinERP.Controllers
                     {
                         db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Delete");
                     }
                     catch (RetryLimitExceededException)
                     {
@@ -421,7 +421,7 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeletePart(int? ID, FormCollection gfs)
+        public ActionResult DeletePart(int? ID)
         {
             if (ModelState.IsValid)
             {
@@ -447,5 +447,6 @@ namespace tahsinERP.Controllers
 
             return View();
         }
+
     }
 }
