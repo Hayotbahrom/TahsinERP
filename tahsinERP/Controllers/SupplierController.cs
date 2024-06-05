@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,13 +8,9 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Security.AccessControl;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using tahsinERP.Models;
-using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -21,6 +18,7 @@ namespace tahsinERP.Controllers
     {
         private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = new string[3] { "", "Import", "Lokal" };
+        private string supplierName = "";
         // GET: Supplier
         public ActionResult Index(string type)
         {
@@ -37,12 +35,10 @@ namespace tahsinERP.Controllers
                 return View(list);
             }
         }
-
         public ActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name, DUNS, Type, Country, City, Address, Telephone, E_mail, ContactPerson, Director, IsDeleted")] SUPPLIER supplier)
@@ -174,6 +170,138 @@ namespace tahsinERP.Controllers
                 }
             }
             return View();
+        }
+        public ActionResult Download()
+        {
+            SAMPLE_FILES taminotchilar = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("taminotchilar.xlsx") == 0).FirstOrDefault();
+            if (taminotchilar != null)
+                return File(taminotchilar.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return View();
+        }
+        public ActionResult UploadWithExcel()
+        {
+            ViewBag.IsFileUploaded = false;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult UploadWithExcel(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                if (Path.GetExtension(file.FileName).ToLower() == ".xlsx")
+                {
+                    try
+                    {
+                        var dataTable = new DataTable();
+                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                        using (var package = new ExcelPackage(file.InputStream))
+                        {
+                            var worksheet = package.Workbook.Worksheets[0];
+                            var rowCount = worksheet.Dimension.Rows;
+                            var colCount = worksheet.Dimension.Columns;
+
+                            for (int col = 1; col <= colCount; col++)
+                            {
+                                dataTable.Columns.Add(worksheet.Cells[1, col].Text);
+                            }
+
+                            for (int row = 2; row <= rowCount; row++)
+                            {
+                                var dataRow = dataTable.NewRow();
+                                for (int col = 1; col <= colCount; col++)
+                                {
+                                    dataRow[col - 1] = worksheet.Cells[row, col].Text;
+                                }
+                                dataTable.Rows.Add(dataRow);
+                            }
+                        }
+
+                        ViewBag.DataTable = dataTable;
+                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                        ViewBag.IsFileUploaded = true;
+
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            supplierName = row["Name"].ToString();
+
+                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
+                            if (supplier != null)
+                                ViewBag.ExistingRecordsCount = 1;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Message = $"Faylni yuklashda quyidagicha muammo tug'ildi: {ex.Message}";
+                        return View("UploadWithExcel");
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Format noto'g'ri. Faqat .xlsx fayllarni yuklash mumkin.";
+                    return View("UploadWithExcel");
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Fayl bo'm-bo'sh yoki yuklanmadi!";
+                return View("UploadWithExcel");
+            }
+            return View("UploadWithExcel");
+        }
+        public ActionResult ClearDataTable()
+        {
+            // Clear the DataTable and related ViewBag properties
+            ViewBag.DataTable = null;
+            ViewBag.DataTableModel = null;
+            ViewBag.IsFileUploaded = false;
+            ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
+
+            // Return the UploadWithExcel view
+            return View("UploadWithExcel");
+        }
+        [HttpPost]
+        public ActionResult Save(string dataTableModel)
+        {
+            if (!string.IsNullOrEmpty(dataTableModel))
+            {
+                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
+                // Save to the database
+                try
+                {
+                    foreach (DataRow row in tableModel.Rows)
+                    {
+                        supplierName = row["Name"].ToString();
+                        SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
+
+                        if (supplier == null)
+                        {
+                            SUPPLIER new_supplier = new SUPPLIER();
+                            new_supplier.Name = supplierName;
+                            new_supplier.Address = row["Address"].ToString();
+                            new_supplier.Country = row["Country"].ToString();
+                            new_supplier.City = row["City"].ToString();
+                            new_supplier.Type = row["Type"].ToString();
+                            new_supplier.DUNS = row["DUNS"].ToString();
+                            new_supplier.Email = row["Email"].ToString();
+                            new_supplier.Telephone = row["Telephone"].ToString();
+                            new_supplier.ContactPersonName = row["ContactPersonName"].ToString();
+                            new_supplier.DirectorName = row["DirectorName"].ToString();
+                            new_supplier.IsDeleted = false;
+
+                            db.SUPPLIERS.Add(new_supplier);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

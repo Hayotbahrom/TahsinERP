@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
 {
     using (Html.BeginForm("EditPart", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -53,7 +51,7 @@
 
                                                     <h6 class="invoice-to">Shartnoma raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DisplayFor(model => model.P_CONTRACTS.ContractNo, new { htmlAttributes = new { @class = "form-control round" } })
+                                                        @Html.DisplayFor(model => model.P_CONTRACTS.ContractNo, new { htmlAttributes = new { @class = "form-control round", @disabled = "disabled" } })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Detal nomi</h6>
