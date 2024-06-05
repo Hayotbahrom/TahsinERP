@@ -285,17 +285,15 @@ namespace tahsinERP.Controllers
                 P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(contract.ID);
                 if (contractToUpdate != null)
                 {
-                    contractToUpdate.IssuedDate = contract.IssuedDate;
                     contractToUpdate.ContractNo = contract.ContractNo;
-                    contractToUpdate.CompanyID = contract.CompanyID;
-                    contractToUpdate.SupplierID = contract.SupplierID;
+                    //contractToUpdate.SupplierID = contract.SupplierID;
+                    contractToUpdate.IssuedDate = contract.IssuedDate;
+                    contractToUpdate.DueDate = contract.DueDate;
                     contractToUpdate.Currency = contract.Currency;
-                    contractToUpdate.Amount = contract.Amount;
                     contractToUpdate.Incoterms = contract.Incoterms;
                     contractToUpdate.PaymentTerms = contract.PaymentTerms;
-                    contractToUpdate.DueDate = contract.DueDate;
 
-                    if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate" }))
+                    if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, SupplierID, Price, Currency, Amount, Incoterms, PaymentTerms, DueDate" }))
                     {
                         try
                         {
@@ -309,6 +307,70 @@ namespace tahsinERP.Controllers
                     }
                 }
                 return View(contractToUpdate);
+            }
+            return View();
+        }
+
+        public ActionResult EditPart(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var contractPart = db.P_CONTRACT_PARTS.Find(ID);
+            if (contractPart == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Retrieve the list of all available parts
+            var allParts = db.PARTS.Select(p => new SelectListItem
+            {
+                Value = p.ID.ToString(), // Assuming PartID is the ID property of the part
+                Text = p.PName // Assuming PName is the name property of the part
+            }).ToList();
+
+            // Pass the list of all available part names to the view
+            ViewBag.PartList = allParts;
+
+            return View(contractPart);
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPart(P_CONTRACT_PARTS contractPart)
+        {
+            if (ModelState.IsValid)
+            {
+                P_CONTRACT_PARTS contractPartToUpdate = db.P_CONTRACT_PARTS.Find(contractPart.ID);
+                if (contractPartToUpdate != null)
+                {
+                    contractPartToUpdate.PartID = contractPart.PartID;
+                    contractPartToUpdate.Price = contractPart.Price;
+                    contractPartToUpdate.Quantity = contractPart.Quantity;
+                    contractPartToUpdate.Unit = contractPart.Unit;
+                    contractPartToUpdate.MOQ = contractPart.MOQ;
+                    contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price;
+                 
+
+                    if (TryUpdateModel(contractPartToUpdate, "", new string[] { "ContractID, PartID, Price,Quantity,Unit, Amount, MOQ" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        }
+                    }
+                }
+                return View(contractPartToUpdate);
             }
             return View();
         }
@@ -357,6 +419,33 @@ namespace tahsinERP.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePart(int? ID, FormCollection gfs)
+        {
+            if (ModelState.IsValid)
+            {
+                P_CONTRACT_PARTS contractPartToDelete = db.P_CONTRACT_PARTS.Find(ID);
+                if (contractPartToDelete != null)
+                {
+                    try
+                    {
+                        db.P_CONTRACT_PARTS.Remove(contractPartToDelete);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "ContractPart not found.");
+                }
+            }
 
+            return View();
+        }
     }
 }

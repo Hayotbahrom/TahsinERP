@@ -13,7 +13,7 @@
     {
 
        @Html.AntiForgeryToken()
-       <div class="app-content content">
+        <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
                 <div class="content-header row">
@@ -53,12 +53,12 @@
 
                                                     <h6 class="invoice-to">Shartnoma raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DisplayFor(model => model.ContractNo, new { htmlAttributes = new { @class = "form-control round" } })
+                                                        @Html.DisplayFor(model => model.P_CONTRACTS.ContractNo, new { htmlAttributes = new { @class = "form-control round" } })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Detal ID</h6>
+                                                    <h6 class="invoice-to">Detal nomi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.PartID, new { @class = "form-control round", @placeholder = "Qismlar ID" })
+                                                        @Html.DropDownListFor(model => model.PartID, (IEnumerable<SelectListItem>)ViewBag.PartList, new { @class = "form-control round" })
                                                         @Html.ValidationMessageFor(model => model.PartID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
@@ -68,15 +68,9 @@
                                                         @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Valyuta </h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Valyuta" })
-                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
                                                     <h6 class="invoice-to">Miqdori</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @placeholder = "Miqdori" })
+                                                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control round", @placeholder = "Miqdori" })
                                                         @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                                                     </fieldset>
 
@@ -86,15 +80,9 @@
                                                         @Html.ValidationMessageFor(model => model.MOQ, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Maksimum imkoniyat</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.MaximumCapacity, new { @class = "form-control round", @placeholder = "Maximum imkoniyat" })
-                                                        @Html.ValidationMessageFor(model => model.PaymentTerms, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "O'lchov birligi" })
+                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Maximum imkoniyat" })
                                                         @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
                                                     </fieldset>
 
@@ -125,3 +113,4 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+

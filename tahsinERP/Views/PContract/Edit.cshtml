@@ -8,6 +8,7 @@
 {
     using (Html.BeginForm("Edit", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+        @Html.AntiForgeryToken()
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
@@ -95,8 +96,6 @@
                                                                     <table class="table table-striped dataex-html5-selectors" style="width:100%">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th></th>
-                                                                                <th></th>
                                                                                 <th>Detal raqami</th>
                                                                                 <th>Detal nomi</th>
                                                                                 <th>Dona narxi</th>
@@ -110,20 +109,17 @@
                                                                             @foreach (var item in ViewBag.partList)
                                                                             {
                                                                                 <tr>
-                                                                                    <td></td>
-                                                                                    <td></td>
                                                                                     <td>
                                                                                         <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
                                                                                     </td>
-                                                                                    <th>@item.PART.PName</th>
-                                                                                    <th>@item.Price</th>
-                                                                                    <th>@item.Unit</th>
-                                                                                    <th>@item.Amount</th>
-                                                                                    <th>@item.MOQ</th>
+                                                                                    <td>@item.PART.PName</td>
+                                                                                    <td>@item.Price</td>
+                                                                                    <td>@item.Unit</td>
+                                                                                    <td>@item.Amount</td>
+                                                                                    <td>@item.MOQ</td>  
                                                                                     <td>
                                                                                         <div>
                                                                                             <a href="@Url.Action("EditPart", "PContract", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                                            <a href="@Url.Action("DeletePart", "PContract", new { id = item.ID })"><i class="bx bx-trash"></i></a>
                                                                                         </div>
                                                                                     </td>
                                                                                 </tr>
@@ -139,9 +135,9 @@
                                         </section>
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item border-0 pb-0">
-                                                <button class="btn btn-primary btn-block subtotal-preview-btn" name="save" type="submit" value="Edit">
+                                                <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
                                                     <i class='bx bx-save'></i>
-                                                    Save
+                                                    Saqlash
                                                 </button>
                                             </li>
                                         </ul>

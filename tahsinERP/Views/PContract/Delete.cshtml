@@ -87,8 +87,6 @@
                                                                         <table class="table table-striped dataex-html5-selectors" style="width:100%">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th></th>
-                                                                                    <th></th>
                                                                                     <th>Detal raqami</th>
                                                                                     <th>Detal nomi</th>
                                                                                     <th>Dona narxi</th>
@@ -102,16 +100,14 @@
                                                                                 @foreach (var item in ViewBag.partList)
                                                                                 {
                                                                                     <tr>
-                                                                                        <td></td>
-                                                                                        <td></td>
                                                                                         <td>
                                                                                             <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
                                                                                         </td>
-                                                                                        <th>@item.PART.PName</th>
-                                                                                        <th>@item.Price</th>
-                                                                                        <th>@item.Unit</th>
-                                                                                        <th>@item.Amount</th>
-                                                                                        <th>@item.MOQ</th>
+                                                                                        <td>@item.PART.PName</td>
+                                                                                        <td>@item.Price</td>
+                                                                                        <td>@item.Unit</td>
+                                                                                        <td>@item.Amount</td>
+                                                                                        <td>@item.MOQ</td>
                                                                                         <td>
                                                                                             <div>
                                                                                                 <a href="@Url.Action("DeletePart", "PContract", new { id = item.ID })"><i class="bx bx-trash"></i></a>
