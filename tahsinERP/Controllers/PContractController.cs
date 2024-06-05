@@ -19,12 +19,9 @@ namespace tahsinERP.Controllers
 {
     public class PContractController : Controller
     {
-
         private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = new string[3] { "", "Import", "Lokal" };
-        string supplierName, contractNo, partNo = "";
-
-
+        private string supplierName, contractNo, partNo = "";
         // GET: Contracts
         public ActionResult Index(string type)
         {

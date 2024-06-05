@@ -1596,6 +1596,7 @@
     <Content Include="app-assets\images\ico\favicon.ico" />
     <Content Include="app-assets\images\logo\favicon.ico" />
     <Content Include="app-assets\images\logo\frest-logo.png" />
+    <Content Include="app-assets\images\logo\logo-32x32.png" />
     <Content Include="app-assets\images\logo\logo-light.png" />
     <Content Include="app-assets\images\logo\logo.png" />
     <Content Include="app-assets\images\logo\tahsin_logo.png" />
@@ -2098,6 +2099,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="icon.ico" />
     <Content Include="Models\DBTHSNModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DBTHSNModel.edmx</DependentUpon>
@@ -2230,6 +2232,7 @@
     <Content Include="Views\PContract\Delete.cshtml" />
     <Content Include="Views\PContract\UploadWithExcel.cshtml" />
     <Content Include="Views\PContract\EditPart.cshtml" />
+    <Content Include="Views\Supplier\UploadWithExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2245,6 +2248,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
