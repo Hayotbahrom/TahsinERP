@@ -18,7 +18,7 @@ namespace tahsinERP.Models
         public P_CONTRACTS()
         {
             this.P_CONTRACT_DOCS = new HashSet<P_CONTRACT_DOCS>();
-            this.P_INVOICES = new HashSet<P_INVOICES>();
+            this.P_CONTRACT_PARTS = new HashSet<P_CONTRACT_PARTS>();
             this.P_ORDERS = new HashSet<P_ORDERS>();
         }
     
@@ -27,23 +27,18 @@ namespace tahsinERP.Models
         public DateTime IssuedDate { get; set; }
         public int CompanyID { get; set; }
         public int SupplierID { get; set; }
-        public int PartID { get; set; }
-        public Nullable<double> Price { get; set; }
         public string Currency { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Incoterms { get; set; }
         public string PaymentTerms { get; set; }
-        public Nullable<double> MOQ { get; set; }
-        public Nullable<double> MaximumCapacity { get; set; }
-        public string Unit { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime DueDate {get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_DOCS> P_CONTRACT_DOCS { get; set; }
-        public virtual PART PART { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_INVOICES> P_INVOICES { get; set; }
+        public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_ORDERS> P_ORDERS { get; set; }
         public virtual SUPPLIER SUPPLIER { get; set; }

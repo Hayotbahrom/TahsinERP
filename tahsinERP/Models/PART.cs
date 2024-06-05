@@ -17,10 +17,10 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PART()
         {
-            this.P_CONTRACTS = new HashSet<P_CONTRACTS>();
+            this.P_CONTRACT_PARTS = new HashSet<P_CONTRACT_PARTS>();
             this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
-            this.P_INVOICES = new HashSet<P_INVOICES>();
-            this.P_ORDERS = new HashSet<P_ORDERS>();
+            this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
+            this.P_ORDER_PARTS = new HashSet<P_ORDER_PARTS>();
             this.P_WRHS_EXPENSES = new HashSet<P_WRHS_EXPENSES>();
             this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
             this.PARTIMAGES = new HashSet<PARTIMAGE>();
@@ -44,13 +44,13 @@ namespace tahsinERP.Models
         public bool IsInHouse { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_CONTRACTS> P_CONTRACTS { get; set; }
+        public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICE_PACKINGLISTS> P_INVOICE_PACKINGLISTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_INVOICES> P_INVOICES { get; set; }
+        public virtual ICollection<P_INVOICE_PARTS> P_INVOICE_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_ORDERS> P_ORDERS { get; set; }
+        public virtual ICollection<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

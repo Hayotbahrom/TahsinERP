@@ -19,6 +19,7 @@ namespace tahsinERP.Models
         {
             this.P_INVOICES = new HashSet<P_INVOICES>();
             this.P_ORDER_DOCS = new HashSet<P_ORDER_DOCS>();
+            this.P_ORDER_PARTS = new HashSet<P_ORDER_PARTS>();
         }
     
         public int ID { get; set; }
@@ -27,12 +28,8 @@ namespace tahsinERP.Models
         public Nullable<int> CompanyID { get; set; }
         public Nullable<int> SupplierID { get; set; }
         public Nullable<int> ContractID { get; set; }
-        public Nullable<int> PartID { get; set; }
         public Nullable<double> Amount { get; set; }
-        public Nullable<double> PartPrice { get; set; }
         public string Currency { get; set; }
-        public Nullable<double> TotalPrice { get; set; }
-        public string Unit { get; set; }
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
@@ -42,7 +39,8 @@ namespace tahsinERP.Models
         public virtual ICollection<P_INVOICES> P_INVOICES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
-        public virtual PART PART { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         public virtual SUPPLIER SUPPLIER { get; set; }
     }
 }

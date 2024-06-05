@@ -37,11 +37,14 @@ namespace tahsinERP.Models
         public virtual DbSet<F_WAYBILLS> F_WAYBILLS { get; set; }
         public virtual DbSet<FORWARDER> FORWARDERS { get; set; }
         public virtual DbSet<P_CONTRACT_DOCS> P_CONTRACT_DOCS { get; set; }
+        public virtual DbSet<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
         public virtual DbSet<P_CONTRACTS> P_CONTRACTS { get; set; }
         public virtual DbSet<P_INVOICE_DOCS> P_INVOICE_DOCS { get; set; }
         public virtual DbSet<P_INVOICE_PACKINGLISTS> P_INVOICE_PACKINGLISTS { get; set; }
+        public virtual DbSet<P_INVOICE_PARTS> P_INVOICE_PARTS { get; set; }
         public virtual DbSet<P_INVOICES> P_INVOICES { get; set; }
         public virtual DbSet<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
+        public virtual DbSet<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
         public virtual DbSet<P_PACKINGLIST_DOCS> P_PACKINGLIST_DOCS { get; set; }
         public virtual DbSet<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
@@ -71,13 +74,13 @@ namespace tahsinERP.Models
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
     
-        public virtual ObjectResult<GetSupplierParts_Result> GetSupplierParts(Nullable<int> supplierID)
+        public virtual int GetSupplierParts(Nullable<int> supplierID)
         {
             var supplierIDParameter = supplierID.HasValue ?
                 new ObjectParameter("SupplierID", supplierID) :
                 new ObjectParameter("SupplierID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSupplierParts_Result>("GetSupplierParts", supplierIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetSupplierParts", supplierIDParameter);
         }
     }
 }

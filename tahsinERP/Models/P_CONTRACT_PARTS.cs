@@ -12,14 +12,18 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class USER_ENTRIES
+    public partial class P_CONTRACT_PARTS
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
-        public Nullable<System.DateTime> DateTime { get; set; }
-        public string IP { get; set; }
-        public string MAC { get; set; }
+        public int ContractID { get; set; }
+        public int PartID { get; set; }
+        public double Price { get; set; }
+        public double Quantity { get; set; }
+        public string Unit { get; set; }
+        public double Amount { get; set; }
+        public Nullable<double> MOQ { get; set; }
     
-        public virtual USER USER { get; set; }
+        public virtual P_CONTRACTS P_CONTRACTS { get; set; }
+        public virtual PART PART { get; set; }
     }
 }

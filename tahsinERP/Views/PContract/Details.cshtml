@@ -70,8 +70,14 @@
                                             <fieldset class="invoice-address form-group">
                                                 @Html.TextBoxFor(model => model.PaymentTerms, new { @class = "form-control round", @disabled = "disabled" })
                                             </fieldset>
-
-
+                                            <h6 class="invoice-to">Valyuta</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @disabled = "disabled" })
+                                            </fieldset>
+                                            <h6 class="invoice-to">Umumiy summasi</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round"})
+                                            </fieldset>
                                         </div>
                                     </div>
                                     <section id="column-selectors">
@@ -90,11 +96,9 @@
                                                                             <th>Detal raqami</th>
                                                                             <th>Detal nomi</th>
                                                                             <th>Dona narxi</th>
-                                                                            <th>Valyuta</th>
                                                                             <th>O'lchov birligi</th>
                                                                             <th>Miqdori</th>
                                                                             <th>MOQ</th>
-                                                                            <th>Maksimal imkoniyat</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -104,13 +108,11 @@
                                                                                 <td>
                                                                                     <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
                                                                                 </td>
-                                                                                <th>@item.PART.PName</th>
-                                                                                <th>@item.Price</th>
-                                                                                <th>@item.Currency</th>
-                                                                                <th>@item.Unit</th>
-                                                                                <th>@item.Amount</th>
-                                                                                <th>@item.MOQ</th>
-                                                                                <th>@item.MaximumCapacity</th>
+                                                                                <td>@item.PART.PName</td>
+                                                                                <td>@item.Price</td>
+                                                                                <td>@item.Unit</td>
+                                                                                <td>@item.Amount</td>
+                                                                                <td>@item.MOQ</td>
                                                                             </tr>
                                                                         }
                                                                     </tbody>

@@ -135,6 +135,19 @@
           <Property Name="ContractID" Type="int" />
           <Property Name="Doc" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="P_CONTRACT_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="Unit" Type="varchar" MaxLength="25" />
+          <Property Name="Amount" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="MOQ" Type="float" />
+        </EntityType>
         <EntityType Name="P_CONTRACTS">
           <Key>
             <PropertyRef Name="ID" />
@@ -144,16 +157,12 @@
           <Property Name="IssuedDate" Type="date" />
           <Property Name="CompanyID" Type="int" Nullable="false" />
           <Property Name="SupplierID" Type="int" Nullable="false" />
-          <Property Name="PartID" Type="int" Nullable="false" />
-          <Property Name="Price" Type="float" />
           <Property Name="Currency" Type="varchar" MaxLength="30" />
           <Property Name="Amount" Type="float" />
           <Property Name="Incoterms" Type="varchar" MaxLength="15" />
           <Property Name="PaymentTerms" Type="varchar" MaxLength="50" />
-          <Property Name="MOQ" Type="float" />
-          <Property Name="MaximumCapacity" Type="float" />
-          <Property Name="Unit" Type="varchar" MaxLength="30" />
           <Property Name="DueDate" Type="date" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="P_INVOICE_DOCS">
           <Key>
@@ -186,21 +195,32 @@
           <Property Name="PltType" Type="varchar" MaxLength="50" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="P_INVOICE_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="Unit" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Currency" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="TotalPrice" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="P_INVOICES">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InvoiceNo" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="ContractID" Type="int" />
           <Property Name="OrderID" Type="int" Nullable="false" />
-          <Property Name="PartID" Type="int" Nullable="false" />
           <Property Name="SupplierID" Type="int" />
           <Property Name="Amount" Type="float" Nullable="false" />
-          <Property Name="PartPrice" Type="float" />
-          <Property Name="TotalPrice" Type="float" />
-          <Property Name="Unit" Type="varchar" MaxLength="10" />
           <Property Name="InvoiceDate" Type="date" Nullable="false" />
+          <Property Name="Currency" Type="varchar" MaxLength="30" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="P_ORDER_DOCS">
           <Key>
@@ -209,6 +229,19 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
           <Property Name="Doc" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="P_ORDER_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="TotalPrice" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Unit" Type="varchar" MaxLength="25" />
+          <Property Name="MOQ" Type="float" />
         </EntityType>
         <EntityType Name="P_ORDERS">
           <Key>
@@ -220,12 +253,8 @@
           <Property Name="CompanyID" Type="int" />
           <Property Name="SupplierID" Type="int" />
           <Property Name="ContractID" Type="int" />
-          <Property Name="PartID" Type="int" />
           <Property Name="Amount" Type="float" />
-          <Property Name="PartPrice" Type="float" />
           <Property Name="Currency" Type="varchar" MaxLength="15" />
-          <Property Name="TotalPrice" Type="float" />
-          <Property Name="Unit" Type="varchar" MaxLength="15" />
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
@@ -736,14 +765,26 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_CONTRACTS_PARTS">
+        <Association Name="FK_P_CONTRACT_PARTS_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="1" />
+          <End Role="P_CONTRACT_PARTS" Type="Self.P_CONTRACT_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_CONTRACT_PARTS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_CONTRACT_PARTS_PARTS">
           <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
-          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
+          <End Role="P_CONTRACT_PARTS" Type="Self.P_CONTRACT_PARTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PARTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="P_CONTRACTS">
+            <Dependent Role="P_CONTRACT_PARTS">
               <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
@@ -784,15 +825,39 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_INVOICES_P_CONTRACTS">
-          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
+        <Association Name="FK_P_INVOICE_PARTS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="1" />
+          <End Role="P_INVOICE_PARTS" Type="Self.P_INVOICE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PARTS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="P_INVOICE_PARTS" Type="Self.P_INVOICE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICES_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="0..1" />
           <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="P_CONTRACTS">
+            <Principal Role="COMPANIES">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="P_INVOICES">
-              <PropertyRef Name="ContractID" />
+              <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -805,18 +870,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="P_INVOICES">
               <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_INVOICES_PARTS">
-          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
-          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_INVOICES">
-              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -844,6 +897,30 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_P_ORDER_PARTS_P_ORDERS">
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="1" />
+          <End Role="P_ORDER_PARTS" Type="Self.P_ORDER_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDER_PARTS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDER_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="P_ORDER_PARTS" Type="Self.P_ORDER_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDER_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_P_ORDERS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="0..1" />
           <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
@@ -865,18 +942,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="P_ORDERS">
               <PropertyRef Name="ContractID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_ORDERS_PARTS">
-          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
-          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_ORDERS">
-              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1398,11 +1463,14 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="F_WAYBILLS" EntityType="Self.F_WAYBILLS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FORWARDERS" EntityType="Self.FORWARDERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_CONTRACT_DOCS" EntityType="Self.P_CONTRACT_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_CONTRACT_PARTS" EntityType="Self.P_CONTRACT_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_CONTRACTS" EntityType="Self.P_CONTRACTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_INVOICE_DOCS" EntityType="Self.P_INVOICE_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_INVOICE_PACKINGLISTS" EntityType="Self.P_INVOICE_PACKINGLISTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_INVOICE_PARTS" EntityType="Self.P_INVOICE_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_INVOICES" EntityType="Self.P_INVOICES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_ORDER_DOCS" EntityType="Self.P_ORDER_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_ORDER_PARTS" EntityType="Self.P_ORDER_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_WRHS_EXPENSES" EntityType="Self.P_WRHS_EXPENSES" Schema="dbo" store:Type="Tables" />
@@ -1473,9 +1541,13 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
             <End Role="P_CONTRACT_DOCS" EntitySet="P_CONTRACT_DOCS" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_CONTRACTS_PARTS" Association="Self.FK_P_CONTRACTS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
+          <AssociationSet Name="FK_P_CONTRACT_PARTS_P_CONTRACTS" Association="Self.FK_P_CONTRACT_PARTS_P_CONTRACTS">
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_CONTRACT_PARTS" EntitySet="P_CONTRACT_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_CONTRACT_PARTS_PARTS" Association="Self.FK_P_CONTRACT_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_CONTRACT_PARTS" EntitySet="P_CONTRACT_PARTS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_INVOICE_DOCS_P_INVOICES" Association="Self.FK_P_INVOICE_DOCS_P_INVOICES">
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
@@ -1489,16 +1561,20 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="PARTS" EntitySet="PARTS" />
             <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_INVOICES_P_CONTRACTS" Association="Self.FK_P_INVOICES_P_CONTRACTS">
-            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+          <AssociationSet Name="FK_P_INVOICE_PARTS_P_INVOICES" Association="Self.FK_P_INVOICE_PARTS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_INVOICE_PARTS" EntitySet="P_INVOICE_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PARTS_PARTS" Association="Self.FK_P_INVOICE_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_INVOICE_PARTS" EntitySet="P_INVOICE_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_COMPANIES" Association="Self.FK_P_INVOICES_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
           </AssociationSet>
           <AssociationSet Name="FK_P_INVOICES_P_ORDERS" Association="Self.FK_P_INVOICES_P_ORDERS">
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
-            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_INVOICES_PARTS" Association="Self.FK_P_INVOICES_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
           </AssociationSet>
           <AssociationSet Name="FK_P_INVOICES_SUPPLIERS" Association="Self.FK_P_INVOICES_SUPPLIERS">
@@ -1509,16 +1585,20 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
             <End Role="P_ORDER_DOCS" EntitySet="P_ORDER_DOCS" />
           </AssociationSet>
+          <AssociationSet Name="FK_P_ORDER_PARTS_P_ORDERS" Association="Self.FK_P_ORDER_PARTS_P_ORDERS">
+            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+            <End Role="P_ORDER_PARTS" EntitySet="P_ORDER_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDER_PARTS_PARTS" Association="Self.FK_P_ORDER_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_ORDER_PARTS" EntitySet="P_ORDER_PARTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_P_ORDERS_COMPANIES" Association="Self.FK_P_ORDERS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_ORDERS_P_CONTRACTS" Association="Self.FK_P_ORDERS_P_CONTRACTS">
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
-            <End Role="P_ORDERS" EntitySet="P_ORDERS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_ORDERS_PARTS" Association="Self.FK_P_ORDERS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_ORDERS_SUPPLIERS" Association="Self.FK_P_ORDERS_SUPPLIERS">
@@ -1721,6 +1801,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="IsActive" Type="Boolean" />
           <NavigationProperty Name="COMPANY_LICENSES" Relationship="Self.FK_COMPANY_LICENSES_COMPANIES" FromRole="COMPANIES" ToRole="COMPANY_LICENSES" />
           <NavigationProperty Name="F_CONTRACTS" Relationship="Self.FK_F_CONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="F_CONTRACTS" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_COMPANIES" FromRole="COMPANIES" ToRole="P_INVOICES" />
           <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_COMPANIES" FromRole="COMPANIES" ToRole="P_ORDERS" />
           <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="P_CONTRACTS" />
           <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_PRODUCTION_SHOPS_COMPANIES" FromRole="COMPANIES" ToRole="PROD_SHOPS" />
@@ -1843,6 +1924,21 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS" FromRole="P_CONTRACT_DOCS" ToRole="P_CONTRACTS" />
         </EntityType>
+        <EntityType Name="P_CONTRACT_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="Unit" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="MOQ" Type="Double" />
+          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_CONTRACT_PARTS_P_CONTRACTS" FromRole="P_CONTRACT_PARTS" ToRole="P_CONTRACTS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_CONTRACT_PARTS_PARTS" FromRole="P_CONTRACT_PARTS" ToRole="PARTS" />
+        </EntityType>
         <EntityType Name="P_CONTRACTS">
           <Key>
             <PropertyRef Name="ID" />
@@ -1852,20 +1948,15 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="IssuedDate" Type="DateTime" Precision="0" />
           <Property Name="CompanyID" Type="Int32" Nullable="false" />
           <Property Name="SupplierID" Type="Int32" Nullable="false" />
-          <Property Name="PartID" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Amount" Type="Double" />
           <Property Name="Incoterms" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="PaymentTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MOQ" Type="Double" />
-          <Property Name="MaximumCapacity" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="P_CONTRACTS" ToRole="COMPANIES" />
           <NavigationProperty Name="P_CONTRACT_DOCS" Relationship="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_CONTRACT_DOCS" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_P_CONTRACTS_PARTS" FromRole="P_CONTRACTS" ToRole="PARTS" />
-          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="P_CONTRACT_PARTS" Relationship="Self.FK_P_CONTRACT_PARTS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_CONTRACT_PARTS" />
           <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_ORDERS" />
           <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="P_CONTRACTS" ToRole="SUPPLIERS" />
         </EntityType>
@@ -1905,27 +1996,40 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="PARTS" />
           <NavigationProperty Name="P_PACKINGLIST_DOCS" Relationship="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_PACKINGLIST_DOCS" />
         </EntityType>
+        <EntityType Name="P_INVOICE_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="Unit" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TotalPrice" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICE_PARTS_P_INVOICES" FromRole="P_INVOICE_PARTS" ToRole="P_INVOICES" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICE_PARTS_PARTS" FromRole="P_INVOICE_PARTS" ToRole="PARTS" />
+        </EntityType>
         <EntityType Name="P_INVOICES">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ContractID" Type="Int32" />
           <Property Name="OrderID" Type="Int32" Nullable="false" />
-          <Property Name="PartID" Type="Int32" Nullable="false" />
           <Property Name="SupplierID" Type="Int32" />
           <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="PartPrice" Type="Double" />
-          <Property Name="TotalPrice" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Currency" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_P_INVOICES_COMPANIES" FromRole="P_INVOICES" ToRole="COMPANIES" />
           <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILLS_P_INVOICES" FromRole="P_INVOICES" ToRole="F_WAYBILLS" />
-          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_INVOICES_P_CONTRACTS" FromRole="P_INVOICES" ToRole="P_CONTRACTS" />
           <NavigationProperty Name="P_INVOICE_DOCS" Relationship="Self.FK_P_INVOICE_DOCS_P_INVOICES" FromRole="P_INVOICES" ToRole="P_INVOICE_DOCS" />
           <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES" FromRole="P_INVOICES" ToRole="P_INVOICE_PACKINGLISTS" />
+          <NavigationProperty Name="P_INVOICE_PARTS" Relationship="Self.FK_P_INVOICE_PARTS_P_INVOICES" FromRole="P_INVOICES" ToRole="P_INVOICE_PARTS" />
           <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_INVOICES_P_ORDERS" FromRole="P_INVOICES" ToRole="P_ORDERS" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICES_PARTS" FromRole="P_INVOICES" ToRole="PARTS" />
           <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_P_INVOICES_SUPPLIERS" FromRole="P_INVOICES" ToRole="SUPPLIERS" />
           <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_P_INVOICES" FromRole="P_INVOICES" ToRole="P_WRHS_INCOMES" />
         </EntityType>
@@ -1938,6 +2042,21 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDER_DOCS_P_ORDERS" FromRole="P_ORDER_DOCS" ToRole="P_ORDERS" />
         </EntityType>
+        <EntityType Name="P_ORDER_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="TotalPrice" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Unit" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="MOQ" Type="Double" />
+          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDER_PARTS_P_ORDERS" FromRole="P_ORDER_PARTS" ToRole="P_ORDERS" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_ORDER_PARTS_PARTS" FromRole="P_ORDER_PARTS" ToRole="PARTS" />
+        </EntityType>
         <EntityType Name="P_ORDERS">
           <Key>
             <PropertyRef Name="ID" />
@@ -1948,19 +2067,15 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="CompanyID" Type="Int32" />
           <Property Name="SupplierID" Type="Int32" />
           <Property Name="ContractID" Type="Int32" />
-          <Property Name="PartID" Type="Int32" />
           <Property Name="Amount" Type="Double" />
-          <Property Name="PartPrice" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="TotalPrice" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_P_ORDERS_COMPANIES" FromRole="P_ORDERS" ToRole="COMPANIES" />
           <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_ORDERS_P_CONTRACTS" FromRole="P_ORDERS" ToRole="P_CONTRACTS" />
           <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_P_ORDERS" FromRole="P_ORDERS" ToRole="P_INVOICES" />
           <NavigationProperty Name="P_ORDER_DOCS" Relationship="Self.FK_P_ORDER_DOCS_P_ORDERS" FromRole="P_ORDERS" ToRole="P_ORDER_DOCS" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_P_ORDERS_PARTS" FromRole="P_ORDERS" ToRole="PARTS" />
+          <NavigationProperty Name="P_ORDER_PARTS" Relationship="Self.FK_P_ORDER_PARTS_P_ORDERS" FromRole="P_ORDERS" ToRole="P_ORDER_PARTS" />
           <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_P_ORDERS_SUPPLIERS" FromRole="P_ORDERS" ToRole="SUPPLIERS" />
         </EntityType>
         <EntityType Name="P_PACKINGLIST_DOCS">
@@ -2132,10 +2247,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="PackID" Type="Int32" />
           <Property Name="ShopID" Type="Int32" />
           <Property Name="IsInHouse" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_P_CONTRACTS_PARTS" FromRole="PARTS" ToRole="P_CONTRACTS" />
+          <NavigationProperty Name="P_CONTRACT_PARTS" Relationship="Self.FK_P_CONTRACT_PARTS_PARTS" FromRole="PARTS" ToRole="P_CONTRACT_PARTS" />
           <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
-          <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICES_PARTS" FromRole="PARTS" ToRole="P_INVOICES" />
-          <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_PARTS" FromRole="PARTS" ToRole="P_ORDERS" />
+          <NavigationProperty Name="P_INVOICE_PARTS" Relationship="Self.FK_P_INVOICE_PARTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PARTS" />
+          <NavigationProperty Name="P_ORDER_PARTS" Relationship="Self.FK_P_ORDER_PARTS_PARTS" FromRole="PARTS" ToRole="P_ORDER_PARTS" />
           <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSES_PARTS" FromRole="PARTS" ToRole="P_WRHS_EXPENSES" />
           <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_PARTS" FromRole="PARTS" ToRole="P_WRHS_INCOMES" />
           <NavigationProperty Name="PARTIMAGES" Relationship="Self.FK_PARTIMAGES_PARTS" FromRole="PARTS" ToRole="PARTIMAGES" />
@@ -2438,6 +2553,18 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_P_INVOICES_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="0..1" />
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICES">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_P_ORDERS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="0..1" />
           <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
@@ -2606,27 +2733,27 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_CONTRACTS_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
-          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_CONTRACTS">
-              <PropertyRef Name="PartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_INVOICES_P_CONTRACTS">
-          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
-          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
+        <Association Name="FK_P_CONTRACT_PARTS_P_CONTRACTS">
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="1" />
+          <End Role="P_CONTRACT_PARTS" Type="Self.P_CONTRACT_PARTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="P_CONTRACTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="P_INVOICES">
+            <Dependent Role="P_CONTRACT_PARTS">
               <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_CONTRACT_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_CONTRACT_PARTS" Type="Self.P_CONTRACT_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_CONTRACT_PARTS">
+              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2702,6 +2829,30 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_P_INVOICE_PARTS_P_INVOICES">
+          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="1" />
+          <End Role="P_INVOICE_PARTS" Type="Self.P_INVOICE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PARTS">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_INVOICE_PARTS" Type="Self.P_INVOICE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_P_INVOICES_P_ORDERS">
           <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="1" />
           <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
@@ -2711,18 +2862,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Principal>
             <Dependent Role="P_INVOICES">
               <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_INVOICES_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
-          <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_INVOICES">
-              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2762,14 +2901,26 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_ORDERS_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
-          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
+        <Association Name="FK_P_ORDER_PARTS_P_ORDERS">
+          <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="1" />
+          <End Role="P_ORDER_PARTS" Type="Self.P_ORDER_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_ORDER_PARTS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_ORDER_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_ORDER_PARTS" Type="Self.P_ORDER_PARTS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PARTS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="P_ORDERS">
+            <Dependent Role="P_ORDER_PARTS">
               <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
@@ -3149,11 +3300,14 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="F_WAYBILLS" EntityType="Self.F_WAYBILLS" />
           <EntitySet Name="FORWARDERS" EntityType="Self.FORWARDER" />
           <EntitySet Name="P_CONTRACT_DOCS" EntityType="Self.P_CONTRACT_DOCS" />
+          <EntitySet Name="P_CONTRACT_PARTS" EntityType="Self.P_CONTRACT_PARTS" />
           <EntitySet Name="P_CONTRACTS" EntityType="Self.P_CONTRACTS" />
           <EntitySet Name="P_INVOICE_DOCS" EntityType="Self.P_INVOICE_DOCS" />
           <EntitySet Name="P_INVOICE_PACKINGLISTS" EntityType="Self.P_INVOICE_PACKINGLISTS" />
+          <EntitySet Name="P_INVOICE_PARTS" EntityType="Self.P_INVOICE_PARTS" />
           <EntitySet Name="P_INVOICES" EntityType="Self.P_INVOICES" />
           <EntitySet Name="P_ORDER_DOCS" EntityType="Self.P_ORDER_DOCS" />
+          <EntitySet Name="P_ORDER_PARTS" EntityType="Self.P_ORDER_PARTS" />
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" />
           <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" />
           <EntitySet Name="P_WRHS_EXPENSES" EntityType="Self.P_WRHS_EXPENSES" />
@@ -3189,6 +3343,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <AssociationSet Name="FK_F_CONTRACTS_COMPANIES" Association="Self.FK_F_CONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="F_CONTRACTS" EntitySet="F_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICES_COMPANIES" Association="Self.FK_P_INVOICES_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
           </AssociationSet>
           <AssociationSet Name="FK_P_ORDERS_COMPANIES" Association="Self.FK_P_ORDERS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
@@ -3246,13 +3404,13 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
             <End Role="P_CONTRACT_DOCS" EntitySet="P_CONTRACT_DOCS" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_CONTRACTS_PARTS" Association="Self.FK_P_CONTRACTS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
+          <AssociationSet Name="FK_P_CONTRACT_PARTS_P_CONTRACTS" Association="Self.FK_P_CONTRACT_PARTS_P_CONTRACTS">
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
+            <End Role="P_CONTRACT_PARTS" EntitySet="P_CONTRACT_PARTS" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_INVOICES_P_CONTRACTS" Association="Self.FK_P_INVOICES_P_CONTRACTS">
-            <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
-            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+          <AssociationSet Name="FK_P_CONTRACT_PARTS_PARTS" Association="Self.FK_P_CONTRACT_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_CONTRACT_PARTS" EntitySet="P_CONTRACT_PARTS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_ORDERS_P_CONTRACTS" Association="Self.FK_P_ORDERS_P_CONTRACTS">
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
@@ -3278,12 +3436,16 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
             <End Role="P_PACKINGLIST_DOCS" EntitySet="P_PACKINGLIST_DOCS" />
           </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PARTS_P_INVOICES" Association="Self.FK_P_INVOICE_PARTS_P_INVOICES">
+            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
+            <End Role="P_INVOICE_PARTS" EntitySet="P_INVOICE_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PARTS_PARTS" Association="Self.FK_P_INVOICE_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_INVOICE_PARTS" EntitySet="P_INVOICE_PARTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_P_INVOICES_P_ORDERS" Association="Self.FK_P_INVOICES_P_ORDERS">
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
-            <End Role="P_INVOICES" EntitySet="P_INVOICES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_INVOICES_PARTS" Association="Self.FK_P_INVOICES_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
           </AssociationSet>
           <AssociationSet Name="FK_P_INVOICES_SUPPLIERS" Association="Self.FK_P_INVOICES_SUPPLIERS">
@@ -3298,9 +3460,13 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
             <End Role="P_ORDER_DOCS" EntitySet="P_ORDER_DOCS" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_ORDERS_PARTS" Association="Self.FK_P_ORDERS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
+          <AssociationSet Name="FK_P_ORDER_PARTS_P_ORDERS" Association="Self.FK_P_ORDER_PARTS_P_ORDERS">
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
+            <End Role="P_ORDER_PARTS" EntitySet="P_ORDER_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_ORDER_PARTS_PARTS" Association="Self.FK_P_ORDER_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_ORDER_PARTS" EntitySet="P_ORDER_PARTS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_ORDERS_SUPPLIERS" Association="Self.FK_P_ORDERS_SUPPLIERS">
             <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
@@ -3426,19 +3592,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="ROLES" EntitySet="ROLES" />
             <End Role="USERS" EntitySet="USERS" />
           </AssociationSet>
-          <FunctionImport Name="GetSupplierParts" ReturnType="Collection(DBTHSNModel.GetSupplierParts_Result)">
+          <FunctionImport Name="GetSupplierParts">
             <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="GetSupplierParts_Result">
-          <Property Type="Int32" Name="PartID" Nullable="false" />
-          <Property Type="String" Name="PNo" Nullable="false" MaxLength="20" />
-          <Property Type="String" Name="PName" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="ShopID" Nullable="false" />
-          <Property Type="String" Name="ShopName" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="ImageID" Nullable="false" />
-          <Property Type="Binary" Name="Image" Nullable="true" MaxLength="Max" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3585,6 +3742,20 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="P_CONTRACT_PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_CONTRACT_PARTS">
+              <MappingFragment StoreEntitySet="P_CONTRACT_PARTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="P_CONTRACTS">
             <EntityTypeMapping TypeName="DBTHSNModel.P_CONTRACTS">
               <MappingFragment StoreEntitySet="P_CONTRACTS">
@@ -3593,16 +3764,12 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Incoterms" ColumnName="Incoterms" />
                 <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
-                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
-                <ScalarProperty Name="MaximumCapacity" ColumnName="MaximumCapacity" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3639,20 +3806,32 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="P_INVOICE_PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_INVOICE_PARTS">
+              <MappingFragment StoreEntitySet="P_INVOICE_PARTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="P_INVOICES">
             <EntityTypeMapping TypeName="DBTHSNModel.P_INVOICES">
               <MappingFragment StoreEntitySet="P_INVOICES">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
-                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="PartPrice" ColumnName="PartPrice" />
-                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3665,6 +3844,20 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="P_ORDER_PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_ORDER_PARTS">
+              <MappingFragment StoreEntitySet="P_ORDER_PARTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="P_ORDERS">
             <EntityTypeMapping TypeName="DBTHSNModel.P_ORDERS">
               <MappingFragment StoreEntitySet="P_ORDERS">
@@ -3674,12 +3867,8 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
                 <ScalarProperty Name="ContractID" ColumnName="ContractID" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="PartPrice" ColumnName="PartPrice" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
@@ -4097,19 +4286,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               <ScalarProperty Name="ID" ColumnName="UserID" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="GetSupplierParts" FunctionName="DBTHSNModel.Store.GetSupplierParts">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="DBTHSNModel.GetSupplierParts_Result">
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
-                <ScalarProperty Name="PNo" ColumnName="PNo" />
-                <ScalarProperty Name="PName" ColumnName="PName" />
-                <ScalarProperty Name="ShopID" ColumnName="ShopID" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="ImageID" ColumnName="ImageID" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSupplierParts" FunctionName="DBTHSNModel.Store.GetSupplierParts" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

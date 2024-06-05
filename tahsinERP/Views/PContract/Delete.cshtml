@@ -21,7 +21,7 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        <a href="~/Contract">Shartnomalar</a>
+                                        <a href="~/PContract">Shartnomalar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
                                         @Model.ContractNo raqamli shartnomani o'chirish
@@ -52,8 +52,6 @@
                                                 <br />
                                                 <span><b>Amal qilish sanasi</b>: @Html.DisplayFor(model => model.DueDate, new { @class = "form-control" })</span>
                                                 <br />
-                                                <span><b>Narxi</b>: @Html.DisplayFor(model => model.Price, new { @class = "form-control" })</span>
-                                                <br />
                                                 <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
                                                 <br />
                                                 <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
@@ -61,57 +59,85 @@
                                                 <span><b>Incoterms</b>: @Html.DisplayFor(model => model.Incoterms, new { @class = "form-control" })</span>
                                                 <br />
                                                 <span><b>PaymentTerms</b>: @Html.DisplayFor(model => model.PaymentTerms, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>MOQ</b>: @Html.DisplayFor(model => model.MOQ, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>Maximum sig'im</b>: @Html.DisplayFor(model => model.MaximumCapacity, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>Unit</b>: @Html.DisplayFor(model => model.Unit, new { @class = "form-control" })</span>
                                                 <hr />
                                                 <section>
                                                     <div>
                                                         <h6 class="text-primary">Taminotchi  ma'lumotlari</h6>
-                                                        <span><b>Nomi</b>: @Html.DisplayFor(model => model.SUPPLIERS.Name, new { @class = "form-control" })</span>
+                                                        <span><b>Nomi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
                                                         <br />
-                                                        <span><b>DUNS</b>: @Html.DisplayFor(model => model.SUPPLIERS.DUNS, new { @class = "form-control" })</span>
-                                                        <br />
-                                                        <hr />
-                                                    </div>
-                                                </section>
-
-                                                <section>
-                                                    <div>
-                                                        <h6 class="text-primary">Kompaniya  ma'lumotlari</h6>
-                                                        <span><b>Nomi</b>: @Html.DisplayFor(model => model.COMPANIES.Name, new { @class = "form-control" })</span>
-                                                        <br />
-                                                        <span><b>DUNS</b>: @Html.DisplayFor(model => model.COMPANIES.DUNS, new { @class = "form-control" })</span>
+                                                        <span><b>DUNS</b>: @Html.DisplayFor(model => model.SUPPLIER.DUNS, new { @class = "form-control" })</span>
                                                         <br />
                                                         <hr />
                                                     </div>
                                                 </section>
-                                                <h6 class="text-primary">Qismlar malumotlari</h6>
-                                                @* PARTS ga bog'langanqismini chiqarib bera olmayapti*@
-                                                @*<span><b>Nomi</b>: @Html.DisplayFor(model => model.PARTS.PName, new { @class = "form-control" })</span>
-                <br />
-                <span><b>Turi</b>: @Html.DisplayFor(model => model.PARTS.Type, new { @class = "form-control" })</span>
-                <br />*@
                                             </div>
-                                            @*@Html.Partial("SupplierParts")*@
+                                            <section id="column-selectors">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h4 class="card-title">Shartnoma predmeti</h4>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body card-dashboard">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th></th>
+                                                                                    <th></th>
+                                                                                    <th>Detal raqami</th>
+                                                                                    <th>Detal nomi</th>
+                                                                                    <th>Dona narxi</th>
+                                                                                    <th>O'lchov birligi</th>
+                                                                                    <th>Miqdori</th>
+                                                                                    <th>MOQ</th>
+                                                                                    <th>amallar</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var item in ViewBag.partList)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td>
+                                                                                            <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                        </td>
+                                                                                        <th>@item.PART.PName</th>
+                                                                                        <th>@item.Price</th>
+                                                                                        <th>@item.Unit</th>
+                                                                                        <th>@item.Amount</th>
+                                                                                        <th>@item.MOQ</th>
+                                                                                        <td>
+                                                                                            <div>
+                                                                                                <a href="@Url.Action("DeletePart", "PContract", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete">
+                                                        <i class='bx bx-trash'></i>
+                                                        O'chirish
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         </div>
-
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item border-0 pb-0">
-                                                <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete">
-                                                    <i class='bx bx-trash'></i>
-                                                    O'chirish
-                                                </button>
-                                            </li>
-                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </section>
             </div>
         </div>

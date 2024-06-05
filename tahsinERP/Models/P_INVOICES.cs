@@ -20,30 +20,30 @@ namespace tahsinERP.Models
             this.F_WAYBILLS = new HashSet<F_WAYBILLS>();
             this.P_INVOICE_DOCS = new HashSet<P_INVOICE_DOCS>();
             this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
+            this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
             this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
         }
     
         public int ID { get; set; }
         public string InvoiceNo { get; set; }
-        public Nullable<int> ContractID { get; set; }
         public int OrderID { get; set; }
-        public int PartID { get; set; }
         public Nullable<int> SupplierID { get; set; }
         public double Amount { get; set; }
-        public Nullable<double> PartPrice { get; set; }
-        public Nullable<double> TotalPrice { get; set; }
-        public string Unit { get; set; }
         public System.DateTime InvoiceDate { get; set; }
+        public string Currency { get; set; }
+        public Nullable<int> CompanyID { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
+        public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }
-        public virtual P_CONTRACTS P_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICE_DOCS> P_INVOICE_DOCS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICE_PACKINGLISTS> P_INVOICE_PACKINGLISTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_INVOICE_PARTS> P_INVOICE_PARTS { get; set; }
         public virtual P_ORDERS P_ORDERS { get; set; }
-        public virtual PART PART { get; set; }
         public virtual SUPPLIER SUPPLIER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }

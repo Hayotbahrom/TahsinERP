@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -6,16 +6,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.WebPages;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -32,23 +30,16 @@ namespace tahsinERP.Controllers
         {
             if (!string.IsNullOrEmpty(type))
             {
-                List<P_CONTRACTS> list = db.P_CONTRACTS.Join(db.SUPPLIERS, c => c.SupplierID, s => s.ID, (c, s) => new { Contract = c, Supplier = s }).
-                    Where(cs => cs.Supplier.Type.CompareTo(type) == 0).
-                    Select(cs => cs.Contract).ToList();
+                List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
                 ViewBag.SourceList = new SelectList(sources, type);
                 return View(list);
             }
             else
             {
-                List<P_CONTRACTS> list = db.P_CONTRACTS.ToList();
+                List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.IsDeleted == false).ToList();
                 ViewBag.SourceList = new SelectList(sources, type);
                 return View(list);
             }
-        }
-        public ActionResult Create()
-        {
-            ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
-            return View();
         }
         public ActionResult Download()
         {
@@ -109,9 +100,13 @@ namespace tahsinERP.Controllers
 
                             SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
                             PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
-                            P_CONTRACTS checkContract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.PART.PNo.CompareTo(partNo) == 0 && pc.SUPPLIER.Name.CompareTo(supplierName) == 0).FirstOrDefault();
-                            if (checkContract != null)
-                                ViewBag.ExistingRecordsCount = 1;
+                            P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.SUPPLIER.Name.CompareTo(supplierName) == 0).FirstOrDefault();
+                            if (contract != null)
+                            {
+                                P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.PartID == part.ID && pcp.ContractID == contract.ID).FirstOrDefault();
+                                if (contractPart != null)
+                                    ViewBag.ExistingRecordsCount = 1;
+                            }
 
                         }
                     }
@@ -148,42 +143,73 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Save(string dataTableModel)
         {
-
             if (!string.IsNullOrEmpty(dataTableModel))
             {
                 var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
-
                 // Save to the database
                 try
                 {
                     foreach (DataRow row in tableModel.Rows)
                     {
                         contractNo = row["ContractNo"].ToString();
+                        supplierName = row["Supplier Name"].ToString();
+                        partNo = row["Part Number"].ToString();
 
                         SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
                         PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
 
-                        P_CONTRACTS contract = new P_CONTRACTS();
-                        if (supplier != null && part != null)
+                        P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0).FirstOrDefault();
+
+                        //
+                        if (contract == null)
                         {
-                            contract.ContractNo = contractNo;
-                            contract.SupplierID = supplier.ID;
-                            contract.IssuedDate = DateTime.Parse(row["IssuedDate"].ToString());
-                            contract.DueDate = DateTime.Parse(row["DueDate"].ToString());
-                            contract.Incoterms = row["Incoterms"].ToString();
-                            contract.PaymentTerms = row["PaymentTerms"].ToString();
-                            contract.PartID = part.ID;
-                            contract.Price = Convert.ToDouble(row["Price"].ToString());
-                            contract.Currency = row["Currency"].ToString();
-                            contract.Amount = Convert.ToDouble(row["Amount"].ToString());
-                            contract.Unit = row["Unit"].ToString();
-                            contract.MOQ = Convert.ToDouble(row["MOQ"].ToString());
-                            contract.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
+                            P_CONTRACTS new_contract = new P_CONTRACTS();
+                            new_contract.ContractNo = contractNo;
+                            new_contract.SupplierID = supplier.ID;
+                            new_contract.IssuedDate = DateTime.Parse(row["IssuedDate"].ToString());
+                            new_contract.DueDate = DateTime.Parse(row["DueDate"].ToString());
+                            new_contract.Incoterms = row["Incoterms"].ToString();
+                            new_contract.PaymentTerms = row["PaymentTerms"].ToString();
+                            new_contract.Currency = row["Currency"].ToString();
+                            new_contract.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
+                            new_contract.IsDeleted = false;
 
-                            db.P_CONTRACTS.Add(contract);
-                            db.SaveChanges();
+                            db.P_CONTRACTS.Add(new_contract);
+
+                            P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == new_contract.ID && pcp.PartID == part.ID).FirstOrDefault();
+                            if (contractPart == null)
+                            {
+                                P_CONTRACT_PARTS new_contractPart = new P_CONTRACT_PARTS();
+                                new_contractPart.PartID = part.ID;
+                                new_contractPart.ContractID = new_contract.ID;
+                                new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
+                                new_contractPart.Unit = row["Unit"].ToString();
+                                new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
+                                new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+
+                                db.P_CONTRACT_PARTS.Add(new_contractPart);
+
+                                db.SaveChanges();
+                            }
                         }
+                        else
+                        {
+                            P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == contract.ID && pcp.PartID == part.ID).FirstOrDefault();
+                            if (contractPart == null)
+                            {
+                                P_CONTRACT_PARTS new_contractPart = new P_CONTRACT_PARTS();
+                                new_contractPart.PartID = part.ID;
+                                new_contractPart.ContractID = contract.ID;
+                                new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
+                                new_contractPart.Unit = row["Unit"].ToString();
+                                new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
+                                new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
+                                db.P_CONTRACT_PARTS.Add(new_contractPart);
+
+                                db.SaveChanges();
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -193,6 +219,11 @@ namespace tahsinERP.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+        public ActionResult Create()
+        {
+            ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -215,33 +246,34 @@ namespace tahsinERP.Controllers
             return View(contract);
         }
 
-        public ActionResult Details(int? Id)
+        public ActionResult Details(int? ID)
         {
-            if (Id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var contract = db.P_CONTRACTS.Find(Id);
+            var contract = db.P_CONTRACTS.Find(ID);
             if (contract == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.partList = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contract.ContractNo) == 0).ToList();
+            else
+                ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
             return View(contract);
         }
-
-        public ActionResult Edit(int? Id)
+        public ActionResult Edit(int? ID)
         {
-            if (Id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var contract = db.P_CONTRACTS.Find(Id);
+            var contract = db.P_CONTRACTS.Find(ID);
             if (contract == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.partList = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contract.ContractNo) == 0).ToList();
+            else
+                ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
             return View(contract);
         }
         [HttpPost]
@@ -257,15 +289,10 @@ namespace tahsinERP.Controllers
                     contractToUpdate.ContractNo = contract.ContractNo;
                     contractToUpdate.CompanyID = contract.CompanyID;
                     contractToUpdate.SupplierID = contract.SupplierID;
-                    contractToUpdate.PartID = contract.PartID;
-                    contractToUpdate.Price = contract.Price;
                     contractToUpdate.Currency = contract.Currency;
                     contractToUpdate.Amount = contract.Amount;
                     contractToUpdate.Incoterms = contract.Incoterms;
                     contractToUpdate.PaymentTerms = contract.PaymentTerms;
-                    contractToUpdate.MOQ = contract.MOQ;
-                    contractToUpdate.MaximumCapacity = contract.MaximumCapacity;
-                    contractToUpdate.Unit = contract.Unit;
                     contractToUpdate.DueDate = contract.DueDate;
 
                     if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate" }))
@@ -285,24 +312,21 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
-        public ActionResult Delete(int? Id)
+        public ActionResult Delete(int? ID)
         {
-            if (Id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var contract = db.P_CONTRACTS.Find(Id);
+            var contract = db.P_CONTRACTS.Find(ID);
             if (contract == null)
             {
                 return HttpNotFound();
             }
-
+            else
+                ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
             return View(contract);
-            //return RedirectToAction("SupplierParts?supplierId="+supplier.ID);
         }
-
-        // Delete Shartnomani to'liq o'chirish qismi bo'ldi, ba'zi detallarini o'chirishga to'liq qilingani yo'q
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection gfs)
@@ -312,9 +336,10 @@ namespace tahsinERP.Controllers
                 P_CONTRACTS contractToDelete = db.P_CONTRACTS.Find(ID);
                 if (contractToDelete != null)
                 {
+                    contractToDelete.IsDeleted = true;
                     try
                     {
-                        db.P_CONTRACTS.Remove(contractToDelete);
+                        db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                         return RedirectToAction("Index");
                     }
