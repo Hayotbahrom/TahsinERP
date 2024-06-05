@@ -312,7 +312,8 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-        public ActionResult Delete(int? ID)
+
+        public ActionResult Delete(int? Id)
         {
             if (ID == null)
             {

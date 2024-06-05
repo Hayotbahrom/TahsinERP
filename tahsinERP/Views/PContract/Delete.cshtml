@@ -4,9 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("Delete", "Contract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
 {
-    @Html.AntiForgeryToken()
+    using (Html.BeginForm("Delete", "Contract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
 
     <div class="app-content content">
         <div class="content-overlay"></div>
