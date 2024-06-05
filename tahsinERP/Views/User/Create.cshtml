@@ -54,8 +54,8 @@
                                                     @Html.ValidationMessageFor(model => model.UName, "", new { @class = "text-danger" })
                                                     <h6 class="invoice-to">E-mail</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "E-mail" })
-                                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "E-mail", type = "email", @required = "required" })
+                                                        @Html.ValidationMessageFor(model => model.Email, "Noto'g'ri E-mail format", new { @class = "text-danger" })
                                                     </fieldset>
                                                 </div>
                                                 <br />
