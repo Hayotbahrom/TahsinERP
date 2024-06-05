@@ -76,7 +76,7 @@
                                             </fieldset>
                                             <h6 class="invoice-to">Umumiy summasi</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round"})
+                                                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @disabled = "disabled" })
                                             </fieldset>
                                         </div>
                                     </div>
@@ -133,4 +133,8 @@
             </div>
         </div>
     </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }

@@ -7,7 +7,7 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
 {
-    using (Html.BeginForm("Delete", "Contract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("Delete", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
 
@@ -145,5 +145,10 @@
             </div>
         </div>
     </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
 

@@ -315,11 +315,11 @@ namespace tahsinERP.Controllers
 
         public ActionResult Delete(int? Id)
         {
-            if (ID == null)
+            if (Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var contract = db.P_CONTRACTS.Find(ID);
+            var contract = db.P_CONTRACTS.Find(Id);
             if (contract == null)
             {
                 return HttpNotFound();

@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.P_CONTRACTS
+﻿@model tahsinERP.Models.P_CONTRACT_PARTS
 
 @{
     ViewBag.Title = "EditPart";
@@ -121,3 +121,7 @@
     }
 }
 
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
