@@ -320,22 +320,16 @@ namespace tahsinERP.Controllers
             {
                 return HttpNotFound();
             }
-
-            // Retrieve the list of all available parts
             var allParts = db.PARTS.Select(p => new SelectListItem
             {
-                Value = p.ID.ToString(), // Assuming PartID is the ID property of the part
-                Text = p.PName // Assuming PName is the name property of the part
+                Value = p.ID.ToString(),
+                Text = p.PNo
             }).ToList();
 
-            // Pass the list of all available part names to the view
             ViewBag.PartList = allParts;
 
             return View(contractPart);
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -351,10 +345,10 @@ namespace tahsinERP.Controllers
                     contractPartToUpdate.Quantity = contractPart.Quantity;
                     contractPartToUpdate.Unit = contractPart.Unit;
                     contractPartToUpdate.MOQ = contractPart.MOQ;
-                    contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price;
+                    //contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price; SQL o'zi chiqarib beradi
 
 
-                    if (TryUpdateModel(contractPartToUpdate, "", new string[] { "ContractID, PartID, Price,Quantity,Unit, Amount, MOQ" }))
+                    if (TryUpdateModel(contractPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ" }))
                     {
                         try
                         {
@@ -400,8 +394,13 @@ namespace tahsinERP.Controllers
                     try
                     {
                         db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
+                        var contractParts = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
+                        foreach (var contractPart in contractParts)
+                        {
+                            db.P_CONTRACT_PARTS.Remove(contractPart);
+                        }
                         db.SaveChanges();
-                        return RedirectToAction("Delete");
+                        return RedirectToAction("Index");
                     }
                     catch (RetryLimitExceededException)
                     {
@@ -410,19 +409,17 @@ namespace tahsinERP.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Contract not found.");
+                    ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
                 }
             }
             return View();
         }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult DeletePart(int? ID)
         {
+            P_CONTRACT_PARTS contractPartToDelete = db.P_CONTRACT_PARTS.Find(ID);
             if (ModelState.IsValid)
             {
-                P_CONTRACT_PARTS contractPartToDelete = db.P_CONTRACT_PARTS.Find(ID);
                 if (contractPartToDelete != null)
                 {
                     try
@@ -441,9 +438,7 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "ContractPart not found.");
                 }
             }
-
-            return View();
+            return View(contractPartToDelete);
         }
-
     }
 }

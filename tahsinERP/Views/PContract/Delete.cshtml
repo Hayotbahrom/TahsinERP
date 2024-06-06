@@ -4,13 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
 {
-    using (Html.BeginForm("Delete", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
-
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -36,114 +31,118 @@
                 </div>
             </div>
             <div class="content-body">
-                <!-- app invoice View Page -->
-                <section class="invoice-edit-wrapper">
-                    <div class="row">
-                        <!-- invoice view page -->
-                        <div class="col-xl-9 col-md-8 col-12">
-                            <div class="card">
-                                <div class="card-content">
-                                    <div class="card-body pb-0 mx-25">
-                                        <div class="row invoice-info">
-                                            <div class="col-lg-12 col-md-6 mt-25">
-                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                <h4 class="text-primary">Shartnoma  ma'lumotlari</h4>
-                                                <hr />
-                                                <span><b>Shartnoma raqami</b>: @Html.DisplayFor(model => model.ContractNo, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>Belgilangan sanasi</b>: @Html.DisplayFor(model => model.IssuedDate, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>Amal qilish sanasi</b>: @Html.DisplayFor(model => model.DueDate, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>Incoterms</b>: @Html.DisplayFor(model => model.Incoterms, new { @class = "form-control" })</span>
-                                                <br />
-                                                <span><b>PaymentTerms</b>: @Html.DisplayFor(model => model.PaymentTerms, new { @class = "form-control" })</span>
-                                                <hr />
-                                                <section>
-                                                    <div>
-                                                        <h6 class="text-primary">Taminotchi  ma'lumotlari</h6>
-                                                        <span><b>Nomi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
-                                                        <br />
-                                                        <span><b>DUNS</b>: @Html.DisplayFor(model => model.SUPPLIER.DUNS, new { @class = "form-control" })</span>
-                                                        <br />
-                                                        <hr />
+                <div class="row">
+                    <div class="col-xl-9 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            <h4 class="text-primary">Shartnoma  ma'lumotlari</h4>
+                                            <hr />
+                                            <span><b>Shartnoma raqami</b>: @Html.DisplayFor(model => model.ContractNo, new { @class = "form-control" })</span>
+                                            <br />
+                                            <span><b>Belgilangan sanasi</b>: @Html.DisplayFor(model => model.IssuedDate, new { @class = "form-control" })</span>
+                                            <br />
+                                            <span><b>Amal qilish sanasi</b>: @Html.DisplayFor(model => model.DueDate, new { @class = "form-control" })</span>
+                                            <br />
+                                            <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
+                                            <br />
+                                            <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
+                                            <br />
+                                            <span><b>Incoterms</b>: @Html.DisplayFor(model => model.Incoterms, new { @class = "form-control" })</span>
+                                            <br />
+                                            <span><b>PaymentTerms</b>: @Html.DisplayFor(model => model.PaymentTerms, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <section>
+                                                <div>
+                                                    <h6 class="text-primary">Taminotchi  ma'lumotlari</h6>
+                                                    <span><b>Nomi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
+                                                    <br />
+                                                    <span><b>DUNS</b>: @Html.DisplayFor(model => model.SUPPLIER.DUNS, new { @class = "form-control" })</span>
+                                                    <br />
+                                                    <hr />
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                    <section id="column-selectors">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title">Shartnoma predmeti</h4>
                                                     </div>
-                                                </section>
-                                            </div>
-                                            <section id="column-selectors">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="card">
-                                                            <div class="card-header">
-                                                                <h4 class="card-title">Shartnoma predmeti</h4>
-                                                            </div>
-                                                            <div class="card-content">
-                                                                <div class="card-body card-dashboard">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table table-striped dataex-html5-selectors" style="width:100%">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Detal raqami</th>
-                                                                                    <th>Detal nomi</th>
-                                                                                    <th>Dona narxi</th>
-                                                                                    <th>O'lchov birligi</th>
-                                                                                    <th>Miqdori</th>
-                                                                                    <th>MOQ</th>
-                                                                                    <th>amallar</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @foreach (var item in ViewBag.partList)
-                                                                                {
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
-                                                                                        </td>
-                                                                                        <td>@item.PART.PName</td>
-                                                                                        <td>@item.Price</td>
-                                                                                        <td>@item.Unit</td>
-                                                                                        <td>@item.Amount</td>
-                                                                                        <td>@item.MOQ</td>
-                                                                                        <td>
-                                                                                            <div>
-                                                                                                <a href="@Url.Action("DeletePart", "PContract", new { id = item.ID })" onclick="return confirm('Are you sure you want to delete this part?')"><i class="bx bx-trash"></i></a>
-                                                                                            </div>
-                                                                                        </td>
+                                                    <div class="card-content">
+                                                        <div class="card-body card-dashboard">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Detal raqami</th>
+                                                                            <th>Detal nomi</th>
+                                                                            <th>Dona narxi</th>
+                                                                            <th>O'lchov birligi</th>
+                                                                            <th>Miqdori</th>
+                                                                            <th>MOQ</th>
+                                                                            <th>amallar</th>
+                                                                        </tr>
+                                                                    </thead>
 
-                                                                                    </tr>
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
+                                                                    @using (Html.BeginForm("DeletePart", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                                    {
+                                                                        <tbody>
+                                                                            @foreach (var item in ViewBag.partList)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                    </td>
+                                                                                    <td>@item.PART.PName</td>
+                                                                                    <td>@item.Price</td>
+                                                                                    <td>@item.Unit</td>
+                                                                                    <td>@item.Amount</td>
+                                                                                    <td>@item.MOQ</td>
+                                                                                    <td>
+                                                                                        <div>
+                                                                                            <a href="@Url.Action("DeletePart", "PContract", new { id = item.ID })" type="submit" onclick="return confirm('Shartnomadan ushbu ehtiyot qismni ochirib yuborishga ishonchingiz komilmi?')"><i class="bx bx-trash"></i></a>
+                                                                                        </div>
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    }
+                                                                </table>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </section>
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item border-0 pb-0">
-                                                    <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this part?')">
-                                                        <i class='bx bx-trash'></i>
-                                                        O'chirish
-                                                    </button>
-
-                                                </li>
-                                            </ul>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </section>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item border-0 pb-0">
+                                            @using (Html.BeginForm("Delete", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu shartnomani ochirib yuborishga ishonchingiz komilmi?')">
+                                                    <i class='bx bx-trash'></i>
+                                                    O'chirish
+                                                </button>
+                                            }
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                </section>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    }
+
 }
 else
 {

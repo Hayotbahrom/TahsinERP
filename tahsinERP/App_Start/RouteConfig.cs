@@ -14,6 +14,11 @@ namespace tahsinERP
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "DeletePart",
+                url: "PContract/DeletePart/{id}",
+                defaults: new { controller = "PContract", action = "DeletePart" }
+);
         }
     }
 }
