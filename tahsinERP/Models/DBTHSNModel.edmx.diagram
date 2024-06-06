@@ -15,7 +15,7 @@
         <EntityTypeShape EntityType="DBTHSNModel.F_WAYBILLS" Width="1.5" PointX="12.75" PointY="41.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.FORWARDER" Width="1.5" PointX="0.75" PointY="45.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACT_DOCS" Width="1.5" PointX="8.25" PointY="44.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACT_PARTS" Width="1.5" PointX="13.5" PointY="56.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACT_PARTS" Width="1.875" PointX="13.5" PointY="56.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACTS" Width="1.5" PointX="6" PointY="39.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_DOCS" Width="1.5" PointX="8.25" PointY="35.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_PACKINGLISTS" Width="1.5" PointX="10.5" PointY="47.25" IsExpanded="true" />

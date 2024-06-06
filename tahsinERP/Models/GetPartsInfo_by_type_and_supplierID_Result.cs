@@ -10,21 +10,17 @@
 namespace tahsinERP.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class P_CONTRACT_PARTS
+    public partial class GetPartsInfo_by_type_and_supplierID_Result
     {
-        public int ID { get; set; }
-        public int ContractID { get; set; }
         public int PartID { get; set; }
-        public double Price { get; set; }
-        public double Quantity { get; set; }
-        public string Unit { get; set; }
-        public double Amount { get; set; }
-        public double MOQ { get; set; }
-        public bool ActivePart { get; set; }
-    
-        public virtual P_CONTRACTS P_CONTRACTS { get; set; }
-        public virtual PART PART { get; set; }
+        public string PNo { get; set; }
+        public string PName { get; set; }
+        public string SupplierName { get; set; }
+        public int SupplierID { get; set; }
+        public string ContractNo { get; set; }
+        public int ContractID { get; set; }
+        public string Grade { get; set; }
+        public string Coating { get; set; }
     }
 }

@@ -100,6 +100,7 @@
                                                                             <th>O'lchov birligi</th>
                                                                             <th>Miqdori</th>
                                                                             <th>MOQ</th>
+                                                                            <th>Faolligi</th>
                                                                             <th>amallar</th>
                                                                         </tr>
                                                                     </thead>
@@ -115,6 +116,14 @@
                                                                                 <td>@item.Unit</td>
                                                                                 <td>@item.Amount</td>
                                                                                 <td>@item.MOQ</td>
+                                                                                @if (item.ActivePart)
+                                                                                {
+                                                                                    <td><span class="badge badge-light-success">Faol</span></td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td><span class="badge badge-light-danger">Nofaol</span></td>
+                                                                                }
                                                                                 <td>
                                                                                     <div>
                                                                                         <a href="@Url.Action("EditPart", "PContract", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>

@@ -83,7 +83,16 @@
                                                         @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Maximum imkoniyat" })
                                                         @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
                                                     </fieldset>
-
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li class="d-inline-block mr-2 mb-1">
+                                                            <fieldset>
+                                                                <div class="checkbox checkbox-secondary checkbox-glow">
+                                                                    @Html.CheckBoxFor(Model => Model.ActivePart, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                                    <label for="checkboxGlow2">Faolmi?</label>
+                                                                </div>
+                                                            </fieldset>
+                                                        </li>
+                                                    </ul>
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
                                                             <button class="btn btn-primary btn-block subtotal-preview-btn" name="EditPart" type="submit" value="EditPart">

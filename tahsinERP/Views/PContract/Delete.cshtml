@@ -86,6 +86,7 @@
                                                                             <th>O'lchov birligi</th>
                                                                             <th>Miqdori</th>
                                                                             <th>MOQ</th>
+                                                                            <th>Faolligi</th>
                                                                             <th>amallar</th>
                                                                         </tr>
                                                                     </thead>
@@ -101,6 +102,14 @@
                                                                                 <td>@item.Unit</td>
                                                                                 <td>@item.Amount</td>
                                                                                 <td>@item.MOQ</td>
+                                                                                @if (item.ActivePart)
+                                                                                {
+                                                                                    <td><span class="badge badge-light-success">Faol</span></td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td><span class="badge badge-light-danger">Nofaol</span></td>
+                                                                                }
                                                                                 <td>
                                                                                     <!-- Delete button -->
                                                                                     <a href="~/PContract/DeletePart/@item.ID" onclick="return confirm('Ushbu shartnomani ochirib yuborishga ishonchingiz komilmi?')">

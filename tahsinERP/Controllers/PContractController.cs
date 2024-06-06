@@ -97,7 +97,7 @@ namespace tahsinERP.Controllers
 
                             SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
                             PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
-                            P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.SUPPLIER.Name.CompareTo(supplierName) == 0 && pc.IsDeleted == false).FirstOrDefault();
+                            P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.SupplierID == supplier.ID && pc.IsDeleted == false).FirstOrDefault();
                             if (contract != null)
                             {
                                 P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.PartID == part.ID && pcp.ContractID == contract.ID).FirstOrDefault();
@@ -183,8 +183,10 @@ namespace tahsinERP.Controllers
                                 new_contractPart.Unit = row["Unit"].ToString();
                                 new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                 new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+                                new_contractPart.ActivePart = true;
 
                                 db.P_CONTRACT_PARTS.Add(new_contractPart);
+                                int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + contract.ID + " AND PartID =" + part.ID + "");
 
                                 db.SaveChanges();
                             }
@@ -203,6 +205,7 @@ namespace tahsinERP.Controllers
                                 new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                 db.P_CONTRACT_PARTS.Add(new_contractPart);
+                                int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + contract.ID + " AND PartID =" + part.ID + "");
 
                                 db.SaveChanges();
                             }
@@ -307,7 +310,6 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)
@@ -345,10 +347,11 @@ namespace tahsinERP.Controllers
                     contractPartToUpdate.Quantity = contractPart.Quantity;
                     contractPartToUpdate.Unit = contractPart.Unit;
                     contractPartToUpdate.MOQ = contractPart.MOQ;
+                    contractPartToUpdate.ActivePart = contractPart.ActivePart;
                     //contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price; SQL o'zi chiqarib beradi
 
 
-                    if (TryUpdateModel(contractPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ" }))
+                    if (TryUpdateModel(contractPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, ActivePart" }))
                     {
                         try
                         {
@@ -365,7 +368,6 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
         public ActionResult Delete(int? Id)
         {
             if (Id == null)

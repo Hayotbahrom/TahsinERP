@@ -42,6 +42,13 @@ namespace tahsinERP.Models
         public Nullable<int> PackID { get; set; }
         public Nullable<int> ShopID { get; set; }
         public bool IsInHouse { get; set; }
+        public string Marka { get; set; }
+        public string Standart { get; set; }
+        public string Coating { get; set; }
+        public string Grade { get; set; }
+        public Nullable<double> Gauge { get; set; }
+        public Nullable<double> Thickness { get; set; }
+        public Nullable<double> Pitch { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
