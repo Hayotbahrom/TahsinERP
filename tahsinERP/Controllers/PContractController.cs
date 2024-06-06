@@ -97,7 +97,7 @@ namespace tahsinERP.Controllers
 
                             SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
                             PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
-                            P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.SUPPLIER.Name.CompareTo(supplierName) == 0).FirstOrDefault();
+                            P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.SUPPLIER.Name.CompareTo(supplierName) == 0 && pc.IsDeleted == false).FirstOrDefault();
                             if (contract != null)
                             {
                                 P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.PartID == part.ID && pcp.ContractID == contract.ID).FirstOrDefault();
@@ -155,7 +155,7 @@ namespace tahsinERP.Controllers
                         SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
                         PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
 
-                        P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0).FirstOrDefault();
+                        P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.IsDeleted == false).FirstOrDefault();
 
                         //
                         if (contract == null)
@@ -414,10 +414,9 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-        [HttpPost]
-        public ActionResult DeletePart(int? ID)
+        public ActionResult DeletePart(int? id)
         {
-            P_CONTRACT_PARTS contractPartToDelete = db.P_CONTRACT_PARTS.Find(ID);
+            P_CONTRACT_PARTS contractPartToDelete = db.P_CONTRACT_PARTS.Find(id);
             if (ModelState.IsValid)
             {
                 if (contractPartToDelete != null)

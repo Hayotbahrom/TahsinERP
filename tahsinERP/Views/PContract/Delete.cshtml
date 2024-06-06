@@ -89,31 +89,27 @@
                                                                             <th>amallar</th>
                                                                         </tr>
                                                                     </thead>
-
-                                                                    @using (Html.BeginForm("DeletePart", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                                                                    {
-                                                                        <tbody>
-                                                                            @foreach (var item in ViewBag.partList)
-                                                                            {
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
-                                                                                    </td>
-                                                                                    <td>@item.PART.PName</td>
-                                                                                    <td>@item.Price</td>
-                                                                                    <td>@item.Unit</td>
-                                                                                    <td>@item.Amount</td>
-                                                                                    <td>@item.MOQ</td>
-                                                                                    <td>
-                                                                                        <div>
-                                                                                            <a href="@Url.Action("DeletePart", "PContract", new { id = item.ID })" type="submit" onclick="return confirm('Shartnomadan ushbu ehtiyot qismni ochirib yuborishga ishonchingiz komilmi?')"><i class="bx bx-trash"></i></a>
-                                                                                        </div>
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                            }
-                                                                        </tbody>
-                                                                    }
+                                                                    <tbody>
+                                                                        @foreach (var item in ViewBag.partList)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                </td>
+                                                                                <td>@item.PART.PName</td>
+                                                                                <td>@item.Price</td>
+                                                                                <td>@item.Unit</td>
+                                                                                <td>@item.Amount</td>
+                                                                                <td>@item.MOQ</td>
+                                                                                <td>
+                                                                                    <!-- Delete button -->
+                                                                                    <a href="~/PContract/DeletePart/@item.ID" onclick="return confirm('Ushbu shartnomani ochirib yuborishga ishonchingiz komilmi?')">
+                                                                                        <i class="bx bx-trash"></i>
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
