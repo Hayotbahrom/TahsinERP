@@ -98,6 +98,7 @@
                                                                             <th>O'lchov birligi</th>
                                                                             <th>Miqdori</th>
                                                                             <th>MOQ</th>
+                                                                            <th>Faolligi</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -112,6 +113,14 @@
                                                                                 <td>@item.Unit</td>
                                                                                 <td>@item.Amount</td>
                                                                                 <td>@item.MOQ</td>
+                                                                                @if (item.ActivePart)
+                                                                                {
+                                                                                    <td><span class="badge badge-light-success">Faol</span></td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td><span class="badge badge-light-danger">Nofaol</span></td>
+                                                                                }
                                                                             </tr>
                                                                         }
                                                                     </tbody>

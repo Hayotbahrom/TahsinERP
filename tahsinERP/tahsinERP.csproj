@@ -272,6 +272,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
+    <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PContractController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Helper.cs" />
@@ -285,6 +286,8 @@
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetPartsInfo_Result.cs" />
+    <Compile Include="Models\GetPartsInfo_by_supplierID_Result.cs" />
     <Compile Include="Models\COMPANy.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -323,6 +326,12 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\F_WAYBILL_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetPartsInfo_by_type_and_supplierID_Result.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetPartsInfo_by_type_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetSupplierParts_Result.cs" />
@@ -2233,6 +2242,12 @@
     <Content Include="Views\PContract\UploadWithExcel.cshtml" />
     <Content Include="Views\PContract\EditPart.cshtml" />
     <Content Include="Views\Supplier\UploadWithExcel.cshtml" />
+    <Content Include="Views\Part\Index.cshtml" />
+    <Content Include="Views\Part\Create.cshtml" />
+    <Content Include="Views\Part\UploadWithExcel.cshtml" />
+    <Content Include="Views\Part\Edit.cshtml" />
+    <Content Include="Views\Part\Delete.cshtml" />
+    <Content Include="Views\Part\Details.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
     <Content Include="Views\Product\Delete.cshtml" />
