@@ -2282,6 +2282,10 @@
     <Content Include="Views\Part\Edit.cshtml" />
     <Content Include="Views\Part\Delete.cshtml" />
     <Content Include="Views\Part\Details.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\Delete.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
