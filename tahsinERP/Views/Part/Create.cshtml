@@ -1,10 +1,10 @@
-﻿@model tahsinERP.Models.PART
+﻿@model tahsinERP.ViewModels.PartViewModel
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Part"))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Parts"))
 {
     using (Html.BeginForm("Create", "Part", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -47,17 +47,23 @@
                                             <div class="row my-2 py-50">
                                                 <div class="col-sm-6 col-12 order-2 order-sm-1">
                                                     <h4 class="text-primary">Detal raqami</h4>
-                                                    @Html.TextBoxFor(model => model.PNo, new { @class = "form-control", @placeholder = "Raqami", @required="required" })
+                                                    @Html.TextBoxFor(model => model.PNo, new { @class = "form-control", @placeholder = "Raqami", @required = "required" })
                                                     @Html.ValidationMessageFor(model => model.PNo, "", new { @class = "text-danger" })
                                                     <h6 class="invoice-to">Nomi</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         @Html.TextBoxFor(model => model.PName, new { @class = "form-control", @placeholder = "Nomi", @required = "required" })
-                                                        @Html.ValidationMessageFor(model => model.PName, "",new { @class = "text-danger" })
+                                                        @Html.ValidationMessageFor(model => model.PName, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Turi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Type, new { @class = "form-control", @placeholder = "Turi" })
+                                                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                 </div>
                                                 <br />
                                                 <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
                                                     <h4 class="text-primary">Ehtiyot qism rasmi</h4>
+                                                    <hr />
                                                     <input type="file" id="partPhotoUpload" name="partPhotoUpload" />
                                                     @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
                                                 </div>
@@ -66,36 +72,78 @@
                                                 <div class="col-lg-12 col-md-6 mt-25">
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                     <hr>
-                                                    <h6 class="invoice-to">Part name</h6>
+                                                    <h6 class="invoice-to">Sof og'irligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", @placeholder = "Full name" })
-                                                        @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.PWeight, new { @class = "form-control", @placeholder = "Og'irlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PWeight, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">Role</h6>
-                                                    <fieldset class="form-group">
-                                                        @Html.DropDownList("RoleID", null, htmlAttributes: new { @class = "form-control" })
-                                                        @*@Html.DropDownList("RoleID", null, htmlAttributes: new { @class = "select2 form-control", multiple = "multiple" })*@
-                                                    </fieldset>
-                                                    <h6 class="invoice-to">Password</h6>
+                                                    <h6 class="invoice-to">Ehtiyot qism uzunligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
-                                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.PLength, new { @class = "form-control", @placeholder = "Uzunlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PWeight, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">Confirm Password</h6>
+                                                    <h6 class="invoice-to">Ehtiyot qism eni</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
-                                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.PWidth, new { @class = "form-control", @placeholder = "Enini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PWidth, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">Activity</h6>
+                                                    <h6 class="invoice-to">Ehtiyot qism balandligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
+                                                        @Html.TextBoxFor(model => model.PHeight, new { @class = "form-control", @placeholder = "Balandligini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PHeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Qalinligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Thickness, new { @class = "form-control", @placeholder = "Qalinligini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Thickness, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">O'lchov birligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control", @placeholder = "O'lchov birligini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Marka</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Marka, new { @class = "form-control", @placeholder = "Markani kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Marka, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Standart</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Standart, new { @class = "form-control", @placeholder = "Standartini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Standart, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Coating</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Coating, new { @class = "form-control", @placeholder = "Coatingni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Coating, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Gauge</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Gauge, new { @class = "form-control", @placeholder = "Gaugeni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Gauge, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Pitch</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Pitch, new { @class = "form-control", @placeholder = "Pitchni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Pitch, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Batafsil ma'lumot</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "3", @placeholder = "Batafsil ma'lumot" })
+                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <fieldset class="invoice-address form-group">
+                                                        <div class="checkbox checkbox-secondary checkbox-glow">
+                                                            @Html.CheckBoxFor(model => model.IsInHouse, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                            <label for="checkboxGlow2">O'zimizda ishlab chiqariladimi?</label>
+                                                            @Html.ValidationMessageFor(model => model.IsInHouse, "", new { @class = "text-warning" })
+                                                        </div>
                                                     </fieldset>
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
                                                             <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
                                                                 <i class='bx bx-save'></i>
-                                                                Save
+                                                                Saqlash
                                                             </button>
                                                         </li>
                                                     </ul>

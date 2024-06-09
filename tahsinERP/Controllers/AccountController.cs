@@ -23,7 +23,6 @@ namespace tahsinERP.Controllers
 
         [DllImport("Ws2_32.dll")]
         private static extern int inet_addr(string ip);
-        private IHttpContextAccessor _httpContextAccessor;
         public ActionResult Index()
         {
             return View();

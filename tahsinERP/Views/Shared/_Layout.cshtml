@@ -263,10 +263,10 @@
                         <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
                         <ul class="menu-content">
                             <li>
-                                <a href="/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ta'minotchilar ro'yxati</span></a>
+                                <a href="/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ta'minotchilar</span></a>
                             </li>
                             <li>
-                                <a href="/Part"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar ro'yxati</span></a>
+                                <a href="/Part"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span></a>
                             </li>
                         </ul>
                     </li>
@@ -474,9 +474,10 @@
         </footer>
         <!-- END: Footer-->
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
 
+        @Scripts.Render("~/bundles/jquery")
+        <script src="~/Scripts/bootstrap.bundle.js"></script>
+        @*@Scripts.Render("~/bundles/bootstrap")*@
 
         @RenderSection("scripts", required: false)
 

@@ -31,10 +31,10 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public string PNo { get; set; }
         public string PName { get; set; }
-        public Nullable<double> PWeight { get; set; }
-        public Nullable<double> PLength { get; set; }
-        public Nullable<double> PWidth { get; set; }
-        public Nullable<double> PHeight { get; set; }
+        public double PWeight { get; set; }
+        public double PLength { get; set; }
+        public double PWidth { get; set; }
+        public double PHeight { get; set; }
         public string Unit { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
@@ -46,9 +46,9 @@ namespace tahsinERP.Models
         public string Standart { get; set; }
         public string Coating { get; set; }
         public string Grade { get; set; }
-        public Nullable<double> Gauge { get; set; }
-        public Nullable<double> Thickness { get; set; }
-        public Nullable<double> Pitch { get; set; }
+        public double Gauge { get; set; }
+        public double Thickness { get; set; }
+        public double Pitch { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }

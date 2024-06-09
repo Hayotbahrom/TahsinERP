@@ -1,8 +1,103 @@
-﻿
+﻿@model tahsinERP.ViewModels.PartViewModel
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Details</h2>
-
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h5 class="content-header-title float-left pr-1 mb-0">Foydalanuvchi haqida sahifa</h5>
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="~/Part/Index">Ehtiyot qismlar</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    @Model.PNo ma'lumotlari
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row my-2 py-50">
+                                        <div class="col-sm-6 col-12 order-2 order-sm-1">
+                                            <h4 class="text-primary">Ehtiyot qism</h4>
+                                            <span><b>Raqami</b>: @Html.DisplayFor(model => model.PNo, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Nomi</b>: @Html.DisplayFor(model => model.PName, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Turi</b>: @Html.DisplayFor(model => model.Type, new { @class = "form-control" })</span>
+                                        </div>
+                                        <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
+                                            <fieldset>
+                                                <h4 class="text-primary">Ehtiyot qism rasmi</h4>
+                                                <img alt="" src="@ViewBag.Base64String" style="height:150px;width:150px;" />
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            <hr />
+                                            <span><b>O'lchov birligi</b>: @Html.DisplayFor(model => model.Unit, new { @class = "form-control" })</span>
+                                            <hr>
+                                            <span><b>Og'irligi</b>: @Html.DisplayFor(model => model.PWeight, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Uzunligi</b>: @Html.DisplayFor(model => model.PLength, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Eni</b>: @Html.DisplayFor(model => model.PWidth, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Balandligi</b>: @Html.DisplayFor(model => model.PHeight, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Qalinligi</b>: @Html.DisplayFor(model => model.Thickness, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Marka</b>: @Html.DisplayFor(model => model.Marka, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Standart</b>: @Html.DisplayFor(model => model.Standart, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Gauge</b>: @Html.DisplayFor(model => model.Gauge, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Coating</b>: @Html.DisplayFor(model => model.Coating, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Grade</b>: @Html.DisplayFor(model => model.Grade, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Pitch</b>: @Html.DisplayFor(model => model.Pitch, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <fieldset class="form-group">
+                                                @Html.DisplayFor(model => model.IsInHouse)
+                                                <span class="switch-label w-100">
+                                                    Korxonada ishlab chiqariladimi?
+                                                </span>
+                                            </fieldset>
+                                            <hr />
+                                            <h6 class="invoice-to">Batafsil ma'lumot</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "3", @placeholder = "Batafsil ma'lumot", @disabled = "disabled" })
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

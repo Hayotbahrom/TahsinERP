@@ -11,13 +11,12 @@ namespace tahsinERP.ViewModels
         public int ID { get; set; }
         public string UName { get; set; }
         public string FullName { get; set; }
-
         [Required(ErrorMessage = "Emailni kiriting")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Kalit so'zni kiriting")]
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
         public int companyID { get; set; }
+        [Required(ErrorMessage = "Kalit so'zni kiriting")]
         public string Password { get; set; }
         public string Role { get; set; }
         public int RoleID { get; set; }
