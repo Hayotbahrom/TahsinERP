@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -73,11 +74,14 @@ namespace tahsinERP.Controllers
                 PART newPart = new PART();
                 newPart.PNo = partVM.PNo;
                 newPart.PName = partVM.PName;
-                newPart.Description = partVM.Description;
                 newPart.PWeight = partVM.PWeight;
                 newPart.PLength = partVM.PLength;
                 newPart.PWidth = partVM.PWidth;
                 newPart.PHeight = partVM.PHeight;
+                newPart.Unit = partVM.Unit;
+                newPart.Type = partVM.Type;
+                newPart.Description = partVM.Description;
+                newPart.IsDeleted = false;
                 newPart.Thickness = partVM.Thickness;
                 newPart.Grade = partVM.Grade;
                 newPart.Gauge = partVM.Gauge;
@@ -85,10 +89,7 @@ namespace tahsinERP.Controllers
                 newPart.Coating = partVM.Coating;
                 newPart.Marka = partVM.Marka;
                 newPart.Standart = partVM.Standart;
-                newPart.Unit = partVM.Unit;
-                newPart.Type = partVM.Type;
                 newPart.IsInHouse = partVM.IsInHouse;
-                newPart.IsDeleted = false;
 
                 db.PARTS.Add(newPart);
                 db.SaveChanges();
@@ -119,22 +120,155 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-        public ActionResult Edit()
+        public ActionResult Edit(int? ID)
         {
-            return View();
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // Fetch the part entity from the database
+            PART part = db.PARTS.Find(ID);
+            if (part == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Map the properties from the PART entity to a PartViewModel instance
+            PartViewModel partViewModel = new PartViewModel();
+            partViewModel.PNo = part.PNo;
+            partViewModel.PName = part.PName;
+            partViewModel.PWeight = part.PWeight;
+            partViewModel.PLength = part.PLength;
+            partViewModel.PWidth = part.PWidth;
+            partViewModel.PHeight = part.PHeight;
+            partViewModel.Unit = part.Unit;
+            partViewModel.Type = part.Type;
+            partViewModel.Description = part.Description;
+            partViewModel.Thickness = part.Thickness;
+            partViewModel.Grade = part.Grade;
+            partViewModel.Gauge = part.Gauge;
+            partViewModel.Pitch = part.Pitch;
+            partViewModel.Coating = part.Coating;
+            partViewModel.Standart = part.Standart;
+            partViewModel.Marka = part.Marka;
+            partViewModel.IsInHouse = part.IsInHouse;
+            
+
+            return View(partViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(PartViewModel partVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var partToUpdate = db.PARTS.Find(partVM.ID);
+                if (partToUpdate != null)
+                {
+                    partToUpdate.PNo = partVM.PNo;
+                    partToUpdate.PName = partVM.PName;
+                    partToUpdate.Description = partVM.Description;
+                    partToUpdate.PWeight = partVM.PWeight;
+                    partToUpdate.PLength = partVM.PLength;
+                    partToUpdate.PWidth = partVM.PWidth;
+                    partToUpdate.PHeight = partVM.PHeight;
+                    partToUpdate.Unit = partVM.Unit;
+                    partToUpdate.Type = partVM.Type;
+                    partToUpdate.IsDeleted = false;
+                    partToUpdate.Thickness = partVM.Thickness;
+                    partToUpdate.Grade = partVM.Grade;
+                    partToUpdate.Gauge = partVM.Gauge;
+                    partToUpdate.Pitch = partVM.Pitch;
+                    partToUpdate.Coating = partVM.Coating;
+                    partToUpdate.Standart = partVM.Standart;
+                    partToUpdate.Marka = partVM.Marka;
+                    partToUpdate.IsInHouse = partVM.IsInHouse;
+
+                    var imageFile = Request.Files["partPhotoUpload"];
+                    if (imageFile != null && imageFile.ContentLength > 0)
+                    {
+                        if (imageFile.ContentLength < partPhotoMaxLength)
+                        {
+                            var existingImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == partVM.ID);
+
+                            if (existingImage != null)
+                            {
+                                existingImage.Image = new byte[imageFile.ContentLength];
+                                imageFile.InputStream.Read(existingImage.Image, 0, existingImage.Image.Length);
+                            }
+                            else
+                            {
+                                var photoImage = new PARTIMAGE
+                                {
+                                    PartID = partVM.ID,
+                                    Image = new byte[imageFile.ContentLength],
+                                    IsDeleted = false
+                                };
+
+                                imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
+                                db.PARTIMAGES.Add(photoImage);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Unable to load photo, it's more than 2MB. Try again, and if the problem persists, see your system administrator.");
+                            throw new RetryLimitExceededException();
+                        }
+                    }
+
+                    db.Entry(partToUpdate).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+
+            return View(partVM);
+        }
+
+        public ActionResult Delete(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var part = db.PARTS.Find(ID);
+            if (part == null)
+                return HttpNotFound();
+
+            return View(part);
         }
         [HttpPost]
-        public ActionResult Edit(PART part)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int? ID, FormCollection gfc)
         {
-            return View();
-        }
-        public ActionResult Delete()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Delete(PART part)
-        {
+            if (ModelState.IsValid)
+            {
+                PART partToDelete = db.PARTS.Find(ID);
+                if (partToDelete != null)
+                {
+                    partToDelete.IsDeleted = true;
+                    if (TryUpdateModel(partToDelete, "",  new string[] {"IsDeleted"}))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Bunday detall topilmadi.");
+                }
+
+            }
             return View();
         }
         public ActionResult Details(int? ID)

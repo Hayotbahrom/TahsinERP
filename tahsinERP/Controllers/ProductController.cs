@@ -179,7 +179,7 @@ namespace tahsinERP.Controllers
                         }
                     }
 
-                    db.Entry(productToUpdate).State = (System.Data.Entity.EntityState)EntityState.Modified;
+                    db.Entry(productToUpdate).State = System.Data.Entity.EntityState.Modified; 
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
