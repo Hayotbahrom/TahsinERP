@@ -17,7 +17,7 @@ namespace tahsinERP.Controllers
     public class SupplierController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = new string[3] { "", "Import", "Lokal" };
+        private string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
         private string supplierName = "";
         // GET: Supplier
         public ActionResult Index(string type)

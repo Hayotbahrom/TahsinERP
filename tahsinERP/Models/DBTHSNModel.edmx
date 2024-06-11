@@ -155,14 +155,14 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ContractNo" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IssuedDate" Type="date" />
+          <Property Name="IssuedDate" Type="datetime" Nullable="false" />
           <Property Name="CompanyID" Type="int" Nullable="false" />
           <Property Name="SupplierID" Type="int" Nullable="false" />
           <Property Name="Currency" Type="varchar" MaxLength="30" />
           <Property Name="Amount" Type="float" />
           <Property Name="Incoterms" Type="varchar" MaxLength="15" />
           <Property Name="PaymentTerms" Type="varchar" MaxLength="50" />
-          <Property Name="DueDate" Type="date" />
+          <Property Name="DueDate" Type="datetime" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="P_INVOICE_DOCS">
@@ -250,7 +250,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderNo" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IssuedDate" Type="datetime" />
+          <Property Name="IssuedDate" Type="datetime" Nullable="false" />
           <Property Name="CompanyID" Type="int" />
           <Property Name="SupplierID" Type="int" />
           <Property Name="ContractID" Type="int" />
@@ -284,6 +284,7 @@
           <Property Name="WHID" Type="int" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="Description" Type="text" />
+          <Property Name="IssueDateTime" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="P_WRHS_INCOME_DOCS">
           <Key>
@@ -311,6 +312,7 @@
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="Description" Type="text" />
           <Property Name="ShopID" Type="int" />
+          <Property Name="IssueDateTime" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="PART_WRHS">
           <Key>
@@ -413,6 +415,7 @@
           <Property Name="Gauge" Type="float" />
           <Property Name="Thickness" Type="float" />
           <Property Name="Pitch" Type="float" />
+          <Property Name="HSCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PERMISSIONMODULES">
           <Key>
@@ -426,8 +429,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ViewPermit" Type="bit" />
-          <Property Name="ChangePermit" Type="bit" />
+          <Property Name="ViewPermit" Type="bit" Nullable="false" />
+          <Property Name="ChangePermit" Type="bit" Nullable="false" />
           <Property Name="RoleID" Type="int" />
           <Property Name="PermissionModuleID" Type="int" />
         </EntityType>
@@ -606,7 +609,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
-          <Property Name="DateTime" Type="datetime" />
+          <Property Name="DateTime" Type="datetime" Nullable="false" />
           <Property Name="IP" Type="varchar" MaxLength="20" />
           <Property Name="MAC" Type="varchar" MaxLength="50" />
         </EntityType>
@@ -649,7 +652,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="IsDeleted" Type="bit" />
-          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="HashCode" Type="varchar" MaxLength="30" />
           <Property Name="CompanyID" Type="int" />
         </EntityType>
@@ -1433,6 +1436,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetPartsInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetPartsInfo_by_supplierID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SupplierID" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetPartsInfo_by_type" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="varchar" Mode="In" />
         </Function>
@@ -1936,14 +1943,14 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IssuedDate" Type="DateTime" Precision="0" />
+          <Property Name="IssuedDate" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="CompanyID" Type="Int32" Nullable="false" />
           <Property Name="SupplierID" Type="Int32" Nullable="false" />
           <Property Name="Currency" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Amount" Type="Double" />
           <Property Name="Incoterms" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="PaymentTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <Property Name="DueDate" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="P_CONTRACTS" ToRole="COMPANIES" />
           <NavigationProperty Name="P_CONTRACT_DOCS" Relationship="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_CONTRACT_DOCS" />
@@ -2054,7 +2061,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IssuedDate" Type="DateTime" Precision="3" />
+          <Property Name="IssuedDate" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="CompanyID" Type="Int32" />
           <Property Name="SupplierID" Type="Int32" />
           <Property Name="ContractID" Type="Int32" />
@@ -2098,6 +2105,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_P_WRHS_EXPENSES_PART_WRHS" FromRole="P_WRHS_EXPENSES" ToRole="PART_WRHS" />
           <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_EXPENSES_PARTS" FromRole="P_WRHS_EXPENSES" ToRole="PARTS" />
           <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS" FromRole="P_WRHS_EXPENSES" ToRole="PROD_SHOPS" />
+          <Property Name="IssueDateTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="P_WRHS_INCOME_DOCS">
           <Key>
@@ -2132,6 +2140,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_P_WRHS_INCOMES_PART_WRHS" FromRole="P_WRHS_INCOMES" ToRole="PART_WRHS" />
           <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_INCOMES_PARTS" FromRole="P_WRHS_INCOMES" ToRole="PARTS" />
           <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_P_WRHS_INCOMES_PROD_SHOPS" FromRole="P_WRHS_INCOMES" ToRole="PROD_SHOPS" />
+          <Property Name="IssueDateTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="PART_WRHS">
           <Key>
@@ -2256,6 +2265,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Gauge" Type="Double" />
           <Property Name="Thickness" Type="Double" />
           <Property Name="Pitch" Type="Double" />
+          <Property Name="HSCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PERMISSIONMODULE">
           <Key>
@@ -2270,8 +2280,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ViewPermit" Type="Boolean" />
-          <Property Name="ChangePermit" Type="Boolean" />
+          <Property Name="ViewPermit" Type="Boolean" Nullable="false" />
+          <Property Name="ChangePermit" Type="Boolean" Nullable="false" />
           <Property Name="RoleID" Type="Int32" />
           <Property Name="PermissionModuleID" Type="Int32" />
           <NavigationProperty Name="PERMISSIONMODULE" Relationship="Self.FK_PERMISSIONS_PERMISSIONMODULES" FromRole="PERMISSIONS" ToRole="PERMISSIONMODULES" />
@@ -2477,7 +2487,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="DateTime" Type="DateTime" Precision="3" />
+          <Property Name="DateTime" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="IP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="MAC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="USER" Relationship="Self.FK_USER_ENTRIES_USERS" FromRole="USER_ENTRIES" ToRole="USERS" />
@@ -2513,7 +2523,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
-          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="HashCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="CompanyID" Type="Int32" />
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_USERS_COMPANIES" FromRole="USERS" ToRole="COMPANIES" />
@@ -3600,6 +3610,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <Parameter Name="Type" Mode="In" Type="String" />
             <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="GetPartsInfo" ReturnType="Collection(DBTHSNModel.GetPartsInfo_Result)" />
+          <FunctionImport Name="GetPartsInfo_by_supplierID" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_supplierID_Result)">
+          <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetPartsInfo_by_type_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
@@ -3622,6 +3636,26 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Type="Int32" Name="ContractID" Nullable="false" />
           <Property Type="String" Name="Grade" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Coating" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GetPartsInfo_Result">
+          <Property Type="Int32" Name="PartID" Nullable="false" />
+          <Property Type="String" Name="PNo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="PName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SupplierName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="SupplierID" Nullable="false" />
+          <Property Type="String" Name="ContractNo" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="ContractID" Nullable="false" />
+          <Property Type="String" Name="Grade" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Coating" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GetPartsInfo_by_supplierID_Result">
+          <Property Type="Int32" Name="PartID" Nullable="false" />
+          <Property Type="String" Name="PNo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="PName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SupplierName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="SupplierID" Nullable="false" />
+          <Property Type="String" Name="ContractNo" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="ContractID" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3914,6 +3948,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySetMapping Name="P_WRHS_EXPENSES">
             <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_EXPENSES">
               <MappingFragment StoreEntitySet="P_WRHS_EXPENSES">
+                <ScalarProperty Name="IssueDateTime" ColumnName="IssueDateTime" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DocNo" ColumnName="DocNo" />
                 <ScalarProperty Name="PartID" ColumnName="PartID" />
@@ -3942,6 +3977,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySetMapping Name="P_WRHS_INCOMES">
             <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_INCOMES">
               <MappingFragment StoreEntitySet="P_WRHS_INCOMES">
+                <ScalarProperty Name="IssueDateTime" ColumnName="IssueDateTime" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DocNo" ColumnName="DocNo" />
                 <ScalarProperty Name="WHID" ColumnName="WHID" />
@@ -4043,6 +4079,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySetMapping Name="PARTS">
             <EntityTypeMapping TypeName="DBTHSNModel.PART">
               <MappingFragment StoreEntitySet="PARTS">
+                <ScalarProperty Name="HSCode" ColumnName="HSCode" />
                 <ScalarProperty Name="Pitch" ColumnName="Pitch" />
                 <ScalarProperty Name="Thickness" ColumnName="Thickness" />
                 <ScalarProperty Name="Gauge" ColumnName="Gauge" />
@@ -4349,6 +4386,34 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="ContractID" ColumnName="ContractID" />
                 <ScalarProperty Name="Grade" ColumnName="Grade" />
                 <ScalarProperty Name="Coating" ColumnName="Coating" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPartsInfo" FunctionName="DBTHSNModel.Store.GetPartsInfo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBTHSNModel.GetPartsInfo_Result">
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PNo" ColumnName="PNo" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="Coating" ColumnName="Coating" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPartsInfo_by_supplierID" FunctionName="DBTHSNModel.Store.GetPartsInfo_by_supplierID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBTHSNModel.GetPartsInfo_by_supplierID_Result">
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PNo" ColumnName="PNo" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -20,7 +20,7 @@ namespace tahsinERP.Controllers
     public class PContractController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = new string[3] { "", "Import", "Lokal" };
+        private readonly string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
         private string supplierName, contractNo, partNo = "";
         // GET: Contracts
         public ActionResult Index(string type)
@@ -143,7 +143,7 @@ namespace tahsinERP.Controllers
             if (!string.IsNullOrEmpty(dataTableModel))
             {
                 var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
-                // Save to the database
+                
                 try
                 {
                     foreach (DataRow row in tableModel.Rows)
@@ -172,6 +172,7 @@ namespace tahsinERP.Controllers
                             new_contract.IsDeleted = false;
 
                             db.P_CONTRACTS.Add(new_contract);
+                            db.SaveChanges();
 
                             P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == new_contract.ID && pcp.PartID == part.ID).FirstOrDefault();
                             if (contractPart == null)
@@ -186,7 +187,7 @@ namespace tahsinERP.Controllers
                                 new_contractPart.ActivePart = true;
 
                                 db.P_CONTRACT_PARTS.Add(new_contractPart);
-                                int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + contract.ID + " AND PartID =" + part.ID + "");
+                                int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + new_contract.ID + " AND PartID =" + part.ID + "");
 
                                 db.SaveChanges();
                             }

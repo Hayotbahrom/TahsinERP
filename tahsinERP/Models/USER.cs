@@ -33,10 +33,10 @@ namespace tahsinERP.Models
         public string FullName { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public bool IsDeleted { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
         public bool IsActive { get; set; }
         public string HashCode { get; set; }
-        public int CompanyID { get; set; }
+        public Nullable<int> CompanyID { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -27,6 +27,7 @@ namespace tahsinERP.Models
         public int WHID { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public string Description { get; set; }
+        public System.DateTime IssueDateTime { get; set; }
     
         public virtual PART_WRHS PART_WRHS { get; set; }
         public virtual PART PART { get; set; }

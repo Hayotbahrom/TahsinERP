@@ -49,6 +49,7 @@ namespace tahsinERP.Models
         public double Gauge { get; set; }
         public double Thickness { get; set; }
         public double Pitch { get; set; }
+        public string HSCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }

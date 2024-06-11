@@ -20,7 +20,5 @@ namespace tahsinERP.Models
         public int SupplierID { get; set; }
         public string ContractNo { get; set; }
         public int ContractID { get; set; }
-        public string Grade { get; set; }
-        public string Coating { get; set; }
     }
 }

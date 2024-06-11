@@ -21,8 +21,8 @@ namespace tahsinERP.Models
         public double Quantity { get; set; }
         public string Unit { get; set; }
         public double Amount { get; set; }
-        public double MOQ { get; set; }
-        public bool ActivePart { get; set; }
+        public Nullable<double> MOQ { get; set; }
+        public Nullable<bool> ActivePart { get; set; }
     
         public virtual P_CONTRACTS P_CONTRACTS { get; set; }
         public virtual PART PART { get; set; }

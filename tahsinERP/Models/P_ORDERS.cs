@@ -24,7 +24,7 @@ namespace tahsinERP.Models
     
         public int ID { get; set; }
         public string OrderNo { get; set; }
-        public Nullable<System.DateTime> IssuedDate { get; set; }
+        public System.DateTime IssuedDate { get; set; }
         public Nullable<int> CompanyID { get; set; }
         public Nullable<int> SupplierID { get; set; }
         public Nullable<int> ContractID { get; set; }

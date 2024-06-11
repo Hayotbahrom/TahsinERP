@@ -104,5 +104,19 @@ namespace tahsinERP.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_by_type_and_supplierID_Result>("GetPartsInfo_by_type_and_supplierID", typeParameter, supplierIDParameter);
         }
+    
+        public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_Result>("GetPartsInfo");
+        }
+    
+        public virtual ObjectResult<GetPartsInfo_by_supplierID_Result> GetPartsInfo_by_supplierID(Nullable<int> supplierID)
+        {
+            var supplierIDParameter = supplierID.HasValue ?
+                new ObjectParameter("SupplierID", supplierID) :
+                new ObjectParameter("SupplierID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_by_supplierID_Result>("GetPartsInfo_by_supplierID", supplierIDParameter);
+        }
     }
 }
