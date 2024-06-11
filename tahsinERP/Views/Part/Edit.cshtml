@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Part"))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Parts"))
 {
     using (Html.BeginForm("Edit", "Part", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {

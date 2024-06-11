@@ -28,7 +28,6 @@ namespace tahsinERP.Controllers
             }
             return View(list);
         }
-
         // GET: POrder/Create
         public ActionResult Create()
         {
@@ -37,7 +36,6 @@ namespace tahsinERP.Controllers
 
             return View();
         }
-
         // POST: POrder/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -63,7 +61,6 @@ namespace tahsinERP.Controllers
             ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
             return View(order);
         }
-
         public ActionResult Details(int? id)
         {
             if (id == null)
