@@ -281,6 +281,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\PModuleController.cs" />
+    <Compile Include="Controllers\POrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
@@ -2286,6 +2287,9 @@
     <Content Include="Views\Product\Delete.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Part\Edit.cshtml" />
+    <Content Include="Views\POrder\Index.cshtml" />
+    <Content Include="Views\POrder\Create.cshtml" />
+    <Content Include="Views\POrder\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

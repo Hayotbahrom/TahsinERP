@@ -1,0 +1,131 @@
+﻿@model List<tahsinERP.Models.P_ORDERS>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    Sahifalar
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    Buyurtmalar
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <section class="invoice-list-wrapper">
+                <div class="invoice-create-btn mb-1">
+                    <div class="invoice-create-btn mb-1">
+                        <a href="@Url.Action("Create", "POrder")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
+                            Yangi Buyurtmani qo'shish
+                        </a>
+                    </div>
+                </div>
+                <div class="users-list-filter px-1">
+                    <form>
+                        <div class="row border rounded py-2 mb-2">
+                            <div class="col-12 col-sm-12 col-lg-4">
+                                <label for="users-list-role">Role</label>
+                                <fieldset class="form-group">
+                                    @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                </fieldset>
+                            </div>
+                            <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                                <a href="~/POrder" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                    Ro'yxatni yangilash
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <div class="table-responsive table-responsivetable-responsive">
+                                    <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th>Buyurtma raqami</th>
+                                                <th>Shartnoma raqami</th>
+                                                <th>Tuzilgan sanasi</th>
+                                                <th>Ta'minotchi</th>
+                                                <th>Miqdori</th>
+                                                <th>amallar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model != null)
+                                            {
+                                                foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="~/POrder/Details/@item.ID">@item.OrderNo</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="~/PContract/Details/@item.P_CONTRACTS.ID">@item.P_CONTRACTS.ContractNo</a>
+                                                        </td>
+                                                        <td>@item.IssuedDate</td>
+                                                        <td>@item.SUPPLIER.Name</td>
+                                                        <td>@item.Amount</td>
+                                                        <td>
+                                                            <div>
+                                                                <a href="@Url.Action("Edit", "POrder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                <a href="@Url.Action("Delete", "POrder", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th>Buyurtma raqami</th>
+                                                <th>Tuzilgan sanasi</th>
+                                                <th>Ta'minotchi</th>
+                                                <th>Shartnoma raqami</th>
+                                                <th>Miqdori</th>
+                                                <th>amallar</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function refreshDataTable() {
+        const source = document.getElementById("SourceID").value;
+        window.location.href = '@Url.Action("Index", "POrder")?type=' + source;
+    }
+</script>
