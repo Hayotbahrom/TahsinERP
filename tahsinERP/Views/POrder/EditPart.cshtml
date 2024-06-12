@@ -1,14 +1,15 @@
-﻿@model tahsinERP.Models.P_ORDERS
+﻿@model tahsinERP.Models.P_ORDER_PARTS
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "EditPart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "POrder"))
 {
-    using (Html.BeginForm("Create", "POrder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("EditPart", "POrder", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+
         @Html.AntiForgeryToken()
         <div class="app-content content">
             <div class="content-overlay"></div>
@@ -26,7 +27,7 @@
                                             <a href="~/POrder/Index">Buyurtmalar</a>
                                         </li>
                                         <li class="breadcrumb-item active">
-                                            Yangi buyurtma qo'shish
+                                            Buyurtma detallarini tahrirlash
                                         </li>
                                     </ol>
                                 </div>
@@ -35,8 +36,10 @@
                     </div>
                 </div>
                 <div class="content-body">
+                    <!-- app invoice View Page -->
                     <section class="basic-select2">
                         <div class="row">
+                            <!-- invoice view page -->
                             <div class="col-xl-9 col-md-8 col-12">
                                 <div class="card">
                                     <div class="card-content">
@@ -45,31 +48,22 @@
                                                 <div class="col-lg-12 col-md-6 mt-25">
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                     <hr>
+
                                                     <h6 class="invoice-to">Buyurtma raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.OrderNo, new { @class = "form-control round", @placeholder = "Buyurtma raqami" })
-                                                        @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
+                                                        @Html.DisplayFor(model => model.P_ORDERS.OrderNo, new { htmlAttributes = new { @class = "form-control round", @disabled = "disabled" } })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Ta'minotchi</h6>
+                                                    <h6 class="invoice-to">Detal nomi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.SupplierID, ViewBag.Supplier as SelectList, new { @class = "form-control select2" })
-                                                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.PartID, (IEnumerable<SelectListItem>)ViewBag.PartList, new { @class = "form-control round" })
+                                                        @Html.ValidationMessageFor(model => model.PartID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Shartnoma raqami</h6>
+                                                    <h6 class="invoice-to">Narxi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.ContractID, ViewBag.PContract as SelectList, new { @class = "form-control select2" })
-                                                        @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Tuzilgan sanasi</h6>
-                                                    <fieldset class="form-group position-relative has-icon-left">
-                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma muddati" })
-                                                        @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
-                                                        <div class="form-control-position">
-                                                            <i class='bx bx-calendar'></i>
-                                                        </div>
+                                                        @Html.TextBoxFor(model => model.Price, new { @class = "form-control round", @placeholder = "Narxi" })
+                                                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Miqdori</h6>
@@ -78,26 +72,27 @@
                                                         @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Valyuta</h6>
+                                                    <h6 class="invoice-to">Minimum buyurtma miqdori</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
-                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.MOQ, new { @class = "form-control round", @placeholder = "Minimum buyurtma miqdori" })
+                                                        @Html.ValidationMessageFor(model => model.MOQ, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Batafsil ma`lumot</h6>
+                                                    <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Description, new { @class = "form-control round", @placeholder = "Qisqacha tavsifi" })
-                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Maximum imkoniyat" })
+                                                        @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
-                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="EditPart" type="submit" value="EditPart">
                                                                 <i class='bx bx-save'></i>
-                                                                Saqlash
+                                                                Save
                                                             </button>
                                                         </li>
                                                     </ul>
+
                                                 </div>
                                             </div>
                                             <hr>
@@ -112,7 +107,9 @@
         </div>
     }
 }
+
 else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+

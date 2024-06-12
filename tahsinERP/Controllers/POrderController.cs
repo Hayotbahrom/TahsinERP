@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -59,6 +61,7 @@ namespace tahsinERP.Controllers
                 }
             }
         }
+
         public ActionResult Create()
         {
             ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name");
@@ -98,7 +101,199 @@ namespace tahsinERP.Controllers
             if (order == null)
                 return HttpNotFound();
 
+            ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == id).ToList();
+            return View(order);
+        }
 
+        public ActionResult Delete(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var order = db.P_ORDERS.Find(Id);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+            else
+                ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
+            return View(order);
+        }
+        public ActionResult DeletePart(int? id)
+        {
+            P_ORDER_PARTS orderPartToDelete = db.P_ORDER_PARTS.Find(id);
+            if (ModelState.IsValid)
+            {
+                if (orderPartToDelete != null)
+                {
+                    try
+                    {
+                        db.P_ORDER_PARTS.Remove(orderPartToDelete);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "OrderPart not found.");
+                }
+            }
+            return View(orderPartToDelete);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int? ID, FormCollection gfs)
+        {
+            if (ModelState.IsValid)
+            {
+                P_ORDERS orderToDelete = db.P_ORDERS.Find(ID);
+                if (orderToDelete != null)
+                {
+                    orderToDelete.IsDeleted = true;
+                    try
+                    {
+                        db.Entry(orderToDelete).State = System.Data.Entity.EntityState.Modified;
+
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Bunday buyurtma topilmadi.");
+                }
+            }
+            return View();
+        }
+
+        public ActionResult Edit(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var order = db.P_ORDERS.Find(ID);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
+            ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
+            ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
+
+            return View(order);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult Edit(P_ORDERS order)
+        {
+            if (ModelState.IsValid)
+            {
+                P_ORDERS orderToUpdate = db.P_ORDERS.Find(order.ID);
+                if (orderToUpdate != null)
+                {
+                    orderToUpdate.OrderNo = order.OrderNo;
+                    orderToUpdate.SupplierID = order.SupplierID;
+                    orderToUpdate.ContractID = order.ContractID;
+                    orderToUpdate.IssuedDate = order.IssuedDate;
+                    orderToUpdate.Amount = order.Amount;
+                    orderToUpdate.Currency = order.Currency;
+                    orderToUpdate.Description = order.Description;
+
+                    if (TryUpdateModel(orderToUpdate, "", new string[] { "OrderNo, IssuedDate, CompanyID, SupplierID, ContractID, Amount, Currency, Description" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        }
+                    }
+                }
+                return View(orderToUpdate);
+            }
+            // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+            ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
+            ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
+            ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
+            return View(order);
+        }
+
+
+        public ActionResult EditPart(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var orderPart = db.P_ORDER_PARTS.Find(ID);
+            if (orderPart == null)
+            {
+                return HttpNotFound();
+            }
+            var allParts = db.PARTS.Select(p => new SelectListItem
+            {
+                Value = p.ID.ToString(),
+                Text = p.PNo
+            }).ToList();
+
+            ViewBag.PartList = allParts;
+
+            return View(orderPart);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPart(P_ORDER_PARTS orderPart)
+        {
+            if (ModelState.IsValid)
+            {
+                P_ORDER_PARTS orderPartToUpdate = db.P_ORDER_PARTS.Find(orderPart.ID);
+                if (orderPartToUpdate != null)
+                {
+                    orderPartToUpdate.PartID = orderPart.PartID;
+                    orderPartToUpdate.Price = orderPart.Price;
+                    orderPartToUpdate.Amount = orderPart.Amount;
+                    orderPartToUpdate.TotalPrice = orderPart.TotalPrice;
+                    orderPartToUpdate.Unit = orderPart.Unit;
+                    orderPartToUpdate.MOQ = orderPart.MOQ;
+                    //orderPartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
+
+
+                    if (TryUpdateModel(orderPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, TotalPrice" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        }
+                    }
+                }
+                return View(orderPartToUpdate);
+            }
             return View();
         }
         public async Task<ActionResult> Download()

@@ -2295,6 +2295,9 @@
     <Content Include="Views\POrder\Create.cshtml" />
     <Content Include="Views\POrder\Details.cshtml" />
     <Content Include="Views\POrder\UploadWithExcel.cshtml" />
+    <Content Include="Views\POrder\Delete.cshtml" />
+    <Content Include="Views\POrder\Edit.cshtml" />
+    <Content Include="Views\POrder\EditPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
