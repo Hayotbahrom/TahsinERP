@@ -199,7 +199,6 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public ActionResult Edit(P_ORDERS order)
         {
             if (ModelState.IsValid)
@@ -236,8 +235,6 @@ namespace tahsinERP.Controllers
             ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
             return View(order);
         }
-
-
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)

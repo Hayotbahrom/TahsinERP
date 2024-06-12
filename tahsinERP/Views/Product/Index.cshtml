@@ -3,9 +3,6 @@
 @{
     ViewBag.Title = "Product Index";
 }
-
-
-
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Product"))
 {
     bool changePermit = false;
@@ -54,7 +51,12 @@
                     <div class="users-list-filter px-1">
                         <form>
                             <div class="row border rounded py-2 mb-2">
-
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label for="users-list-role">Turi</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("CustomerID", ViewBag.CustomerList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                    </fieldset>
+                                </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
                                     <a href="~/Product" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
                                         Ro'yxatni yangilash

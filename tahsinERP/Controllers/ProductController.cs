@@ -1,239 +1,401 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using Newtonsoft.Json;
+using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 
 namespace tahsinERP.Controllers
 {
     public class ProductController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = new string[3] { "", "Import", "Local" }; // Corrected "Lokal" to "Local"
-
         private byte[] avatar;
         private int productPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
-        public ActionResult Index(string type)
+        private string Pno = "";
+        public ActionResult Index(int? customerID)
         {
-            List<PRODUCT> list = db.PRODUCTS.Where(p => p.IsDeleted == false).ToList();
-            ViewBag.SourceList = new SelectList(sources, type);
-            return View(list);
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                List<PRODUCT> list = db.PRODUCTS.Where(p => p.IsDeleted == false).ToList();
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(), customerID);
+                return View(list);
+            }
         }
-
         public ActionResult Create()
         {
-            ViewBag.SourceList = new SelectList(sources);
-            return View();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                return View();
+            }
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "PNo, Name, Type, Weight, Length, Width, Height, Unit, Description, PNo2, PNo3, PNo4, PackID, IsDeleted")] PRODUCT product)
         {
-            try
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    // Set IsDeleted to false and save the product to get the ID
-                    product.IsDeleted = false;
-                    db.PRODUCTS.Add(product);
-                    db.SaveChanges();
-
-                    // Handle image upload
-                    var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
-                    if (imageFile != null && imageFile.ContentLength > 0)
+                    if (ModelState.IsValid)
                     {
-                        if (imageFile.ContentLength < productPhotoMaxLength)
+                        // Set IsDeleted to false and save the product to get the ID
+                        product.IsDeleted = false;
+                        db.PRODUCTS.Add(product);
+                        db.SaveChanges();
+
+                        // Handle image upload
+                        var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
+                        if (imageFile != null && imageFile.ContentLength > 0)
                         {
-                            var photoImage = new PRODUCTIMAGE
+                            if (imageFile.ContentLength < productPhotoMaxLength)
                             {
-                                ProdID = product.ID, // Use the product ID
-                                Image = new byte[imageFile.ContentLength],
-                                IsDeleted = false
-
-                            };
-
-                            imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
-
-                            db.PRODUCTIMAGES.Add(photoImage);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Unable to load photo, it's more than 2MB. Try again, and if the problem persists, see your system administrator.");
-                            throw new RetryLimitExceededException();
-                        }
-                    }
-
-                    return RedirectToAction("Index");
-                }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Error: " + ex.Message);
-            }
-
-            ViewBag.SourceList = new SelectList(sources);
-            return View(product);
-        }
-
-
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-            var product = db.PRODUCTS.Find(id);
-            if (product == null)
-                return HttpNotFound();
-
-            // Retrieve the product image
-            var productImage = db.PRODUCTIMAGES.FirstOrDefault(img => img.ProdID == id);
-            if (productImage != null)
-            {
-                ViewBag.ProductImage = Convert.ToBase64String(productImage.Image);
-            }
-
-            return View(product);
-        }
-
-
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var product = db.PRODUCTS.Find(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.Type = new SelectList(sources, product.Type);
-            return View(product);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(PRODUCT product)
-        {
-            if (ModelState.IsValid)
-            {
-                var productToUpdate = db.PRODUCTS.Find(product.ID);
-                if (productToUpdate != null)
-                {
-                    productToUpdate.PNo = product.PNo;
-                    productToUpdate.Name = product.Name;
-                    productToUpdate.Description = product.Description;
-                    productToUpdate.Weight = product.Weight;
-                    productToUpdate.Length = product.Length;
-                    productToUpdate.Width = product.Width;
-                    productToUpdate.Height = product.Height;
-                    productToUpdate.Unit = product.Unit;
-                    productToUpdate.Type = product.Type;
-                    productToUpdate.PNo2 = product.PNo2;
-                    productToUpdate.PNo3 = product.PNo3;
-                    productToUpdate.PNo4 = product.PNo4;
-                    productToUpdate.PackID = product.PackID;
-
-                    var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
-                    if (imageFile != null && imageFile.ContentLength > 0)
-                    {
-                        if (imageFile.ContentLength < productPhotoMaxLength)
-                        {
-                            // Check for existing image
-                            var existingImage = db.PRODUCTIMAGES.FirstOrDefault(pi => pi.ProdID == product.ID);
-
-                            if (existingImage != null)
-                            {
-                                // Update existing image
-                                existingImage.Image = new byte[imageFile.ContentLength];
-                                imageFile.InputStream.Read(existingImage.Image, 0, existingImage.Image.Length);
-                            }
-                            else
-                            {
-                                // Add new image
                                 var photoImage = new PRODUCTIMAGE
                                 {
                                     ProdID = product.ID, // Use the product ID
                                     Image = new byte[imageFile.ContentLength],
                                     IsDeleted = false
+
                                 };
 
                                 imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
+
                                 db.PRODUCTIMAGES.Add(photoImage);
+                                db.SaveChanges();
                             }
+                            else
+                            {
+                                ModelState.AddModelError("", "Unable to load photo, it's more than 2MB. Try again, and if the problem persists, see your system administrator.");
+                                throw new RetryLimitExceededException();
+                            }
+                        }
 
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Unable to load photo, it's more than 2MB. Try again, and if the problem persists, see your system administrator.");
-                            throw new RetryLimitExceededException();
-                        }
+                        return RedirectToAction("Index");
                     }
-
-                    db.Entry(productToUpdate).State = System.Data.Entity.EntityState.Modified; 
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
                 }
-
-                return View(productToUpdate);
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error: " + ex.Message);
+                }
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
             }
             return View(product);
         }
+        public ActionResult Details(int? id)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                if (id == null)
+                    return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
+                var product = db.PRODUCTS.Find(id);
+                if (product == null)
+                    return HttpNotFound();
 
+                // Retrieve the product image
+                var productImage = db.PRODUCTIMAGES.FirstOrDefault(img => img.ProdID == id);
+                if (productImage != null)
+                {
+                    ViewBag.ProductImage = Convert.ToBase64String(productImage.Image);
+                }
+                return View(product);
+            }
+        }
+        public ActionResult Edit(int? id)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
 
+                var product = db.PRODUCTS.Find(id);
+                if (product == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
+                return View(product);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(PRODUCT product)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
 
+                if (ModelState.IsValid)
+                {
+                    var productToUpdate = db.PRODUCTS.Find(product.ID);
+                    if (productToUpdate != null)
+                    {
+                        productToUpdate.PNo = product.PNo;
+                        productToUpdate.Name = product.Name;
+                        productToUpdate.Description = product.Description;
+                        productToUpdate.Weight = product.Weight;
+                        productToUpdate.Length = product.Length;
+                        productToUpdate.Width = product.Width;
+                        productToUpdate.Height = product.Height;
+                        productToUpdate.Unit = product.Unit;
+                        productToUpdate.Type = product.Type;
+                        productToUpdate.PNo2 = product.PNo2;
+                        productToUpdate.PNo3 = product.PNo3;
+                        productToUpdate.PNo4 = product.PNo4;
+                        productToUpdate.PackID = product.PackID;
+
+                        var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
+                        if (imageFile != null && imageFile.ContentLength > 0)
+                        {
+                            if (imageFile.ContentLength < productPhotoMaxLength)
+                            {
+                                // Check for existing image
+                                var existingImage = db.PRODUCTIMAGES.FirstOrDefault(pi => pi.ProdID == product.ID);
+
+                                if (existingImage != null)
+                                {
+                                    // Update existing image
+                                    existingImage.Image = new byte[imageFile.ContentLength];
+                                    imageFile.InputStream.Read(existingImage.Image, 0, existingImage.Image.Length);
+                                }
+                                else
+                                {
+                                    // Add new image
+                                    var photoImage = new PRODUCTIMAGE
+                                    {
+                                        ProdID = product.ID, // Use the product ID
+                                        Image = new byte[imageFile.ContentLength],
+                                        IsDeleted = false
+                                    };
+
+                                    imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
+                                    db.PRODUCTIMAGES.Add(photoImage);
+                                }
+
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Unable to load photo, it's more than 2MB. Try again, and if the problem persists, see your system administrator.");
+                                throw new RetryLimitExceededException();
+                            }
+                        }
+
+                        db.Entry(productToUpdate).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+
+                    return View(productToUpdate);
+                }
+                return View(product);
+            }
+        }
         public ActionResult Delete(int? Id)
         {
-            if (Id == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var product = db.PRODUCTS.Find(Id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
 
-            return View(product);
-            //return RedirectToAction("SupplierParts?supplierId="+supplier.ID);
+                if (Id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var product = db.PRODUCTS.Find(Id);
+                if (product == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(product);
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection gfs)
         {
-            if (ModelState.IsValid)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                PRODUCT productToUpdate = db.PRODUCTS.Find(ID);
-                if (productToUpdate != null)
+                if (ModelState.IsValid)
                 {
-
-                    productToUpdate.IsDeleted = true;
-                    if (TryUpdateModel(productToUpdate, "", new string[] { "IsDeleted" }))
+                    PRODUCT productToUpdate = db.PRODUCTS.Find(ID);
+                    if (productToUpdate != null)
                     {
-                        try
+
+                        productToUpdate.IsDeleted = true;
+                        if (TryUpdateModel(productToUpdate, "", new string[] { "IsDeleted" }))
                         {
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            try
+                            {
+                                db.SaveChanges();
+                                return RedirectToAction("Index");
+                            }
+                            catch (RetryLimitExceededException)
+                            {
+                                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            }
                         }
                     }
                 }
+                return View();
             }
-
+        }
+        public async Task<ActionResult> Download()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                SAMPLE_FILES maxsulot = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("maxsulot.xlsx") == 0).FirstOrDefault();
+                if (maxsulot != null)
+                    return File(maxsulot.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return View();
+            }
+        }
+        public ActionResult UploadWithExcel()
+        {
+            ViewBag.IsFileUploaded = false;
             return View();
+        }
+        [HttpPost]
+        public ActionResult UploadWithExcel(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                if (Path.GetExtension(file.FileName).ToLower() == ".xlsx")
+                {
+                    try
+                    {
+                        var dataTable = new System.Data.DataTable();
+                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                        using (var package = new ExcelPackage(file.InputStream))
+                        {
+                            var worksheet = package.Workbook.Worksheets[0];
+                            var rowCount = worksheet.Dimension.Rows;
+                            var colCount = worksheet.Dimension.Columns;
+
+                            for (int col = 1; col <= colCount; col++)
+                            {
+                                dataTable.Columns.Add(worksheet.Cells[1, col].Text);
+                            }
+
+                            for (int row = 2; row <= rowCount; row++)
+                            {
+                                var dataRow = dataTable.NewRow();
+                                for (int col = 1; col <= colCount; col++)
+                                {
+                                    dataRow[col - 1] = worksheet.Cells[row, col].Text;
+                                }
+                                dataTable.Rows.Add(dataRow);
+                            }
+                        }
+
+                        ViewBag.DataTable = dataTable;
+                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                        ViewBag.IsFileUploaded = true;
+                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        {
+                            foreach (DataRow row in dataTable.Rows)
+                            {
+                                Pno = row["Partnumber"].ToString();
+
+                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0).FirstOrDefault();
+                                if (product != null)
+                                {
+                                    ViewBag.ExistingRecordsCount = 1;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Message = $"Faylni yuklashda quyidagicha muammo tug'ildi: {ex.Message}";
+                        return View("UploadWithExcel");
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Format noto'g'ri. Faqat .xlsx fayllarni yuklash mumkin.";
+                    return View("UploadWithExcel");
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Fayl bo'm-bo'sh yoki yuklanmadi!";
+                return View("UploadWithExcel");
+            }
+            return View("UploadWithExcel");
+        }
+        public ActionResult ClearDataTable()
+        {
+            ViewBag.DataTable = null;
+            ViewBag.DataTableModel = null;
+            ViewBag.IsFileUploaded = false;
+            ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
+
+            return View("UploadWithExcel");
+        }
+        [HttpPost]
+        public async Task<ActionResult> Save(string dataTableModel)
+        {
+            if (!string.IsNullOrEmpty(dataTableModel))
+            {
+                await Task.Run(() =>
+                {
+                    var tableModel = JsonConvert.DeserializeObject<System.Data.DataTable>(dataTableModel);
+
+                    try
+                    {
+                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        {
+                            foreach (DataRow row in tableModel.Rows)
+                            {
+                                Pno = row["Partnumber"].ToString();
+
+                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0).FirstOrDefault();
+
+                                if (product == null)
+                                {
+                                    PRODUCT newProduct = new PRODUCT();
+                                    newProduct.PNo = Pno;
+                                    newProduct.Name = row["Name"].ToString();
+                                    newProduct.Weight = Double.Parse(row["Weight"].ToString());
+                                    newProduct.Length = Double.Parse(row["Length"].ToString());
+                                    newProduct.Width = Double.Parse(row["Width"].ToString());
+                                    newProduct.Height = Double.Parse(row["Height"].ToString());
+                                    newProduct.Unit = row["Unit"].ToString();
+                                    newProduct.Type = row["Type"].ToString();
+                                    newProduct.PNo2 = row["PNo2"].ToString();
+                                    newProduct.PNo3 = row["PNo3"].ToString();
+                                    newProduct.PNo4 = row["PNo4"].ToString();
+                                    newProduct.IsDeleted = false;
+
+                                    db.PRODUCTS.Add(newProduct);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    ViewBag.Message = "Muammo!. Yuklangan faylda ayni vaqtda ma'lumotlar bazasida bor ma'lumot kiritilishga harakat bo'lmoqda.";
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
+                });
+            }
+            return RedirectToAction("Index");
         }
     }
 }
