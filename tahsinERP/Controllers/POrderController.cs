@@ -61,7 +61,6 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-
         public ActionResult Create()
         {
             ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name");
@@ -104,7 +103,6 @@ namespace tahsinERP.Controllers
             ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == id).ToList();
             return View(order);
         }
-
         public ActionResult Delete(int? Id)
         {
             if (Id == null)
@@ -145,9 +143,6 @@ namespace tahsinERP.Controllers
             }
             return View(orderPartToDelete);
         }
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection gfs)
@@ -177,7 +172,6 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
         public ActionResult Edit(int? ID)
         {
             if (ID == null)
@@ -196,7 +190,6 @@ namespace tahsinERP.Controllers
 
             return View(order);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(P_ORDERS order)
@@ -257,7 +250,6 @@ namespace tahsinERP.Controllers
 
             return View(orderPart);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditPart(P_ORDER_PARTS orderPart)
@@ -350,9 +342,9 @@ namespace tahsinERP.Controllers
                             supplierName = row["Supplier Name"].ToString();
                             partNo = row["Part Number"].ToString();
 
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
-                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
-                            P_CONTRACTS contract = db.P_CONTRACTS.Where(p => p.ContractNo.CompareTo(contractNo) == 0).FirstOrDefault();
+                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                            P_CONTRACTS contract = db.P_CONTRACTS.Where(p => p.ContractNo.CompareTo(contractNo) == 0 && p.IsDeleted == false).FirstOrDefault();
                             P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.SupplierID == supplier.ID && po.ContractID == contract.ID && po.IsDeleted == false).FirstOrDefault();
                             if (order != null)
                             {
@@ -417,9 +409,9 @@ namespace tahsinERP.Controllers
                             supplierName = row["Supplier Name"].ToString();
                             partNo = row["Part Number"].ToString();
 
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
-                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
-                            P_CONTRACTS contract = db.P_CONTRACTS.Where(p => p.ContractNo.CompareTo(contractNo) == 0).FirstOrDefault();
+                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                            P_CONTRACTS contract = db.P_CONTRACTS.Where(p => p.ContractNo.CompareTo(contractNo) == 0 && p.IsDeleted == false).FirstOrDefault();
 
                             P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
                             if (order == null)

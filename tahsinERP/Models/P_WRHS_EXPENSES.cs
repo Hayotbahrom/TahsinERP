@@ -14,6 +14,12 @@ namespace tahsinERP.Models
     
     public partial class P_WRHS_EXPENSES
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public P_WRHS_EXPENSES()
+        {
+            this.P_WRHS_EXPENSE_DOCS = new HashSet<P_WRHS_EXPENSE_DOCS>();
+        }
+    
         public int ID { get; set; }
         public string DocNo { get; set; }
         public int PartID { get; set; }
@@ -29,6 +35,8 @@ namespace tahsinERP.Models
         public string Description { get; set; }
         public System.DateTime IssueDateTime { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_WRHS_EXPENSE_DOCS> P_WRHS_EXPENSE_DOCS { get; set; }
         public virtual PART_WRHS PART_WRHS { get; set; }
         public virtual PART PART { get; set; }
         public virtual PROD_SHOPS PROD_SHOPS { get; set; }

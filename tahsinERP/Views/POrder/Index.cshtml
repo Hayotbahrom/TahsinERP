@@ -136,8 +136,6 @@
     function refreshDataTable() {
         var source = document.getElementById("SourceID").value;
         const supplierID = document.getElementById("SupplierID").value;
-
-        window.location.href = '@Url.Action("Index", "POrder")?type=' + source;
         window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
     }
     </script>

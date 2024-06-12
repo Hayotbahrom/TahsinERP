@@ -20,7 +20,6 @@ namespace tahsinERP.Controllers
 {
     public class ProductController : Controller
     {
-        private byte[] avatar;
         private int productPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         private string Pno = "";
         public ActionResult Index(int? customerID)
@@ -308,7 +307,7 @@ namespace tahsinERP.Controllers
                             {
                                 Pno = row["Partnumber"].ToString();
 
-                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0).FirstOrDefault();
+                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0 && p.IsDeleted == false).FirstOrDefault();
                                 if (product != null)
                                 {
                                     ViewBag.ExistingRecordsCount = 1;
@@ -361,7 +360,7 @@ namespace tahsinERP.Controllers
                             {
                                 Pno = row["Partnumber"].ToString();
 
-                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0).FirstOrDefault();
+                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0 && p.IsDeleted == false).FirstOrDefault();
 
                                 if (product == null)
                                 {

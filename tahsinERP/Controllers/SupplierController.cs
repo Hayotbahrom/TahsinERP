@@ -226,7 +226,7 @@ namespace tahsinERP.Controllers
                         {
                             supplierName = row["Name"].ToString();
 
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
+                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
                             if (supplier != null)
                                 ViewBag.ExistingRecordsCount = 1;
                         }
@@ -273,7 +273,7 @@ namespace tahsinERP.Controllers
                     foreach (DataRow row in tableModel.Rows)
                     {
                         supplierName = row["Name"].ToString();
-                        SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).FirstOrDefault();
+                        SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
 
                         if (supplier == null)
                         {

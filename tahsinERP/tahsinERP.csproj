@@ -342,7 +342,9 @@
     <Compile Include="Models\GetPartsInfo_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetSupplierParts_Result.cs" />
+    <Compile Include="Models\GetSupplierParts_Result.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PART.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -419,6 +421,9 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_WRHS_EXPENSES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P_WRHS_EXPENSE_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_WRHS_INCOMES.cs">
@@ -2182,13 +2187,6 @@
     <Content Include="app-assets\vendors\js\editors\quill\assets\snow\tooltip.styl" />
     <Content Include="assets\scss\style-rtl.scss" />
     <Content Include="assets\scss\style.scss" />
-    <EntityDeploy Include="Models\DBTHSNModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DBTHSNModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\DBTHSNModel.edmx.diagram">
-      <DependentUpon>DBTHSNModel.edmx</DependentUpon>
-    </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -2217,6 +2215,13 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <EntityDeploy Include="Models\DBTHSNModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DBTHSNModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DBTHSNModel.edmx.diagram">
+      <DependentUpon>DBTHSNModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -2302,6 +2307,7 @@
     <Content Include="Views\Product\UploadWithExcel.cshtml" />
     <Content Include="Views\PInvoice\Index.cshtml" />
     <Content Include="Views\PInvoice\Create.cshtml" />
+    <Content Include="Views\PInvoice\UploadWithExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

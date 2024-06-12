@@ -153,7 +153,7 @@ namespace tahsinERP.Controllers
             partViewModel.Standart = part.Standart;
             partViewModel.Marka = part.Marka;
             partViewModel.IsInHouse = part.IsInHouse;
-            
+
 
             return View(partViewModel);
         }
@@ -249,7 +249,7 @@ namespace tahsinERP.Controllers
                 if (partToDelete != null)
                 {
                     partToDelete.IsDeleted = true;
-                    if (TryUpdateModel(partToDelete, "",  new string[] {"IsDeleted"}))
+                    if (TryUpdateModel(partToDelete, "", new string[] { "IsDeleted" }))
                     {
                         try
                         {
@@ -372,7 +372,7 @@ namespace tahsinERP.Controllers
                         {
                             partNo = row["Partnumber"].ToString();
 
-                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
+                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
                             if (part != null)
                             {
                                 ViewBag.ExistingRecordsCount = 1;
@@ -415,7 +415,7 @@ namespace tahsinERP.Controllers
         {
             if (!string.IsNullOrEmpty(dataTableModel))
             {
-                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);   
+                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
                 try
                 {
 
@@ -423,7 +423,7 @@ namespace tahsinERP.Controllers
                     {
                         partNo = row["Partnumber"].ToString();
 
-                        PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0).FirstOrDefault();
+                        PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
 
                         if (part == null)
                         {

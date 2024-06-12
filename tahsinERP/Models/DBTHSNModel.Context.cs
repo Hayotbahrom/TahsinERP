@@ -47,6 +47,7 @@ namespace tahsinERP.Models
         public virtual DbSet<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
         public virtual DbSet<P_PACKINGLIST_DOCS> P_PACKINGLIST_DOCS { get; set; }
+        public virtual DbSet<P_WRHS_EXPENSE_DOCS> P_WRHS_EXPENSE_DOCS { get; set; }
         public virtual DbSet<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
         public virtual DbSet<P_WRHS_INCOME_DOCS> P_WRHS_INCOME_DOCS { get; set; }
         public virtual DbSet<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
@@ -74,13 +75,18 @@ namespace tahsinERP.Models
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
     
-        public virtual int GetSupplierParts(Nullable<int> supplierID)
+        public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_Result>("GetPartsInfo");
+        }
+    
+        public virtual ObjectResult<GetPartsInfo_by_supplierID_Result> GetPartsInfo_by_supplierID(Nullable<int> supplierID)
         {
             var supplierIDParameter = supplierID.HasValue ?
                 new ObjectParameter("SupplierID", supplierID) :
                 new ObjectParameter("SupplierID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetSupplierParts", supplierIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_by_supplierID_Result>("GetPartsInfo_by_supplierID", supplierIDParameter);
         }
     
         public virtual ObjectResult<GetPartsInfo_by_type_Result> GetPartsInfo_by_type(string type)
@@ -105,18 +111,13 @@ namespace tahsinERP.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_by_type_and_supplierID_Result>("GetPartsInfo_by_type_and_supplierID", typeParameter, supplierIDParameter);
         }
     
-        public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_Result>("GetPartsInfo");
-        }
-    
-        public virtual ObjectResult<GetPartsInfo_by_supplierID_Result> GetPartsInfo_by_supplierID(Nullable<int> supplierID)
+        public virtual ObjectResult<GetSupplierParts_Result> GetSupplierParts(Nullable<int> supplierID)
         {
             var supplierIDParameter = supplierID.HasValue ?
                 new ObjectParameter("SupplierID", supplierID) :
                 new ObjectParameter("SupplierID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_by_supplierID_Result>("GetPartsInfo_by_supplierID", supplierIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSupplierParts_Result>("GetSupplierParts", supplierIDParameter);
         }
     }
 }

@@ -40,14 +40,9 @@
                     {
                         <div class="invoice-create-btn mb-1">
                             <div class="invoice-create-btn mb-1">
-                                <a href="@Url.Action("Create", "PInvoice")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
+                                <a href="@Url.Action("UploadWithExcel", "PInvoice")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
                                     Yangi Invoiceni qo'shish
                                 </a>
-                                <div class="invoice-create-btn mb-1">
-                                    <a href="@Url.Action("UploadWithExcel", "PInvoice")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
-                                        Excel orqali qo'shish
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     }
@@ -141,8 +136,6 @@
     function refreshDataTable() {
         var source = document.getElementById("SourceID").value;
         const supplierID = document.getElementById("SupplierID").value;
-
-        window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source;
         window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source + '&supplierID='+ supplierID;
     }
     </script>
