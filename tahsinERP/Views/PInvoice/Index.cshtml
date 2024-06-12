@@ -1,0 +1,153 @@
+﻿@model List<tahsinERP.Models.P_INVOICES>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PInvoice"))
+    {
+        changePermit = true;
+    }
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        Sahifalar
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Invoice lar
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section class="invoice-list-wrapper">
+                    @if (changePermit)
+                    {
+                        <div class="invoice-create-btn mb-1">
+                            <div class="invoice-create-btn mb-1">
+                                <a href="@Url.Action("Create", "PInvoice")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
+                                    Yangi Invoiceni qo'shish
+                                </a>
+                                <div class="invoice-create-btn mb-1">
+                                    <a href="@Url.Action("UploadWithExcel", "PInvoice")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
+                                        Excel orqali qo'shish
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="users-list-filter px-1">
+                        <form>
+                            <div class="row border rounded py-2 mb-2">
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label>Turi</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label>Ta'minotchisi</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                                    <a href="~/PInvoice" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                        Ro'yxatni yangilash
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Invoice raqami</th>
+                                                    <th>Buyurtma raqami</th>
+                                                    <th>Tuzilgan sanasi</th>
+                                                    <th>Ta'minotchi</th>
+                                                    <th>Miqdori</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model != null)
+                                                {
+                                                    foreach (var item in Model)
+                                                    {
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>
+                                                                <a href="~/PInvoice/Details/@item.ID">@item.InvoiceNo</a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="~/POrder/Details/@item.OrderID">@item.P_ORDERS.OrderNo</a>
+                                                            </td>
+                                                            <td>@item.InvoiceDate</td>
+                                                            <td>@item.SUPPLIER.Name</td>
+                                                            <td>@item.Amount</td>
+                                                            @if (changePermit)
+                                                            {
+                                                                <td>
+                                                                    <div>
+                                                                        <a href="@Url.Action("Edit", "PInvoice", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                        <a href="@Url.Action("Delete", "PInvoice", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                    </div>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function refreshDataTable() {
+        var source = document.getElementById("SourceID").value;
+        const supplierID = document.getElementById("SupplierID").value;
+
+        window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source;
+        window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source + '&supplierID='+ supplierID;
+    }
+    </script>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
