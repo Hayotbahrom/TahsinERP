@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -6,7 +7,6 @@ namespace tahsinERP.Models
 {
     public static class RoleHelper
     {
-        private static DBTHSNEntities db = new DBTHSNEntities();
         public static string[] GetUserRoles(string username)
         {
             if (string.IsNullOrEmpty(username)) return null;
@@ -14,45 +14,56 @@ namespace tahsinERP.Models
         }
         public static bool IsViewPermitted(string username, string moduleName)
         {
-            string roleName = GetUserRoles(username)[0];
-            ROLE role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
-            if (role != null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                PERMISSION permit = GetPermissionsOfRole(role, moduleName);
-                if (permit != null)
+                string roleName = GetUserRoles(username)[0];
+
+                // Perform CPU-bound work here
+                // For example, heavy computations or other synchronous tasks
+                ROLE role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
+                if (role != null)
                 {
-                    if (permit.ViewPermit)
-                        return true;
-                    else
-                        return false;
+                    PERMISSION permit = GetPermissionsOfRole(role, moduleName);
+                    if (permit != null)
+                    {
+                        if (permit.ViewPermit)
+                            return true;
+                        else
+                            return false;
+                    }
                 }
+                return false;
             }
-            return false;
         }
         public static bool IsChangePermitted(string username, string moduleName)
         {
-            
-            string roleName = GetUserRoles(username)[0];
-            ROLE role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
-            if (role != null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                PERMISSION permit = GetPermissionsOfRole(role, moduleName);
-                if (permit != null)
+                string roleName = GetUserRoles(username)[0];
+                ROLE role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
+                if (role != null)
                 {
-                    if (permit.ChangePermit)
-                        return true;
-                    else
-                        return false;
+                    PERMISSION permit = GetPermissionsOfRole(role, moduleName);
+                    if (permit != null)
+                    {
+                        if (permit.ChangePermit)
+                            return true;
+                        else
+                            return false;
+                    }
                 }
+                return false;
             }
-            return false;
         }
-        private static PERMISSION GetPermissionsOfRole(ROLE role, string moduleName)
+        public static PERMISSION GetPermissionsOfRole(ROLE role, string moduleName)
         {
-            PERMISSIONMODULE module = db.PERMISSIONMODULES.Where(pm => pm.Module.CompareTo(moduleName) == 0).FirstOrDefault();
-            if (module != null)
-                return db.PERMISSIONS.Where(p => p.RoleID == role.ID && p.PermissionModuleID == module.ID).FirstOrDefault();
-            return null;
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PERMISSIONMODULE module = db.PERMISSIONMODULES.Where(pm => pm.Module.CompareTo(moduleName) == 0).FirstOrDefault();
+                if (module != null)
+                    return db.PERMISSIONS.Where(p => p.RoleID == role.ID && p.PermissionModuleID == module.ID).FirstOrDefault();
+                return null;
+            }
         }
     }
 }

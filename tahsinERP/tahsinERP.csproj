@@ -2294,6 +2294,7 @@
     <Content Include="Views\POrder\Index.cshtml" />
     <Content Include="Views\POrder\Create.cshtml" />
     <Content Include="Views\POrder\Details.cshtml" />
+    <Content Include="Views\POrder\UploadWithExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
