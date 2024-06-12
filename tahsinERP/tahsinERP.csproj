@@ -2299,6 +2299,7 @@
     <Content Include="Views\POrder\Delete.cshtml" />
     <Content Include="Views\POrder\Edit.cshtml" />
     <Content Include="Views\POrder\EditPart.cshtml" />
+    <Content Include="Views\Product\UploadWithExcel.cshtml" />
     <Content Include="Views\PInvoice\Index.cshtml" />
     <Content Include="Views\PInvoice\Create.cshtml" />
   </ItemGroup>

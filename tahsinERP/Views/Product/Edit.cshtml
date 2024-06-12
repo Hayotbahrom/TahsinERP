@@ -25,7 +25,7 @@
                                             <a href="~/Product/Index">Maxsulot</a>
                                         </li>
                                         <li class="breadcrumb-item active">
-                                            Maxsulot @Model.Name ni tahrirlash
+                                            Maxsulot @Model.PNo ni tahrirlash
                                         </li>
                                     </ol>
                                 </div>
@@ -69,7 +69,6 @@
                                                     </div>
                                                     <h6 class="invoice-to">Turi</h6>
                                                     <fieldset class="form-group">
-                                                        <!-- @Html.DropDownListFor(model => model.Type, ViewBag.SourceList as SelectList, new { @class = "form-control round" })-->
                                                         @Html.TextBoxFor(model => model.Type, new { @class = "form-control round", @placeholder = "Type" })
                                                         @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                                                     </fieldset>
