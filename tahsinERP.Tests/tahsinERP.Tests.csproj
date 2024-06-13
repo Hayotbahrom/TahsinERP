@@ -165,12 +165,6 @@
     <None Include="Scripts\jquery-3.7.1.min.map" />
     <None Include="Scripts\jquery-3.7.1.slim.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\tahsinERP\tahsinERP.csproj">
-      <Project>{524032b1-5df4-40fd-bce8-d04fd72a79c8}</Project>
-      <Name>tahsinERP</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
