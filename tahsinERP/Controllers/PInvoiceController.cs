@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -19,85 +21,196 @@ namespace tahsinERP.Controllers
         private readonly string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
         private string supplierName, invoiceNo, orderNo, partNo = "";
         // GET: PInvoice
+
+
         public ActionResult Index(string type, int? supplierID)
         {
-            if (!string.IsNullOrEmpty(type))
-            {
-                if (supplierID.HasValue)
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
+                if (!string.IsNullOrEmpty(type))
                 {
-                    List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SUPPLIER.Type.CompareTo(type) == 0 && pi.SupplierID == supplierID).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
-
-                    return View(list);
+                    if (supplierID.HasValue)
+                    {
+                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SUPPLIER.Type.CompareTo(type) == 0 && pi.SupplierID == supplierID).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
+                        return View(list);
+                    }
+                    else
+                    {
+                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SUPPLIER.Type.CompareTo(type) == 0).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
+                        return View(list);
+                    }
                 }
                 else
                 {
-                    List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SUPPLIER.Type.CompareTo(type) == 0).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
-
-                    return View(list);
+                    if (supplierID.HasValue)
+                    {
+                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SupplierID == supplierID).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
+                        return View(list);
+                    }
+                    else
+                    {
+                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name");
+                        return View(list);
+                    }
                 }
-            }
-            else
-            {
-                if (supplierID.HasValue)
-                {
-                    List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SupplierID == supplierID).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
-
-                    return View(list);
-                }
-                else
-                {
-                    List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name");
-
-                    return View(list);
-                }
-            }
+            
         }
         public ActionResult Create()
         {
-            ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name");
-            ViewBag.POrder = new SelectList(db.P_ORDERS, "ID", "ContractNo");
-
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name");
+                ViewBag.POrder = new SelectList(db.P_ORDERS, "ID", "ContractNo");
+            }
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "InvoiceNo, CompanyID, SupplierID, OrderID, InvoiceDate, Amount, Currency")] P_INVOICES invoice)
         {
-            try
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    invoice.IsDeleted = false;
-                    db.P_INVOICES.Add(invoice);
+                    if (ModelState.IsValid)
+                    {
+                        invoice.IsDeleted = false;
+                        db.P_INVOICES.Add(invoice);
 
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(ex.Message, ex);
+                }
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", invoice.SupplierID);
+                ViewBag.POrder = new SelectList(db.P_INVOICES, "ID", "ContractNo", invoice.OrderID);
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(ex.Message, ex);
-            }
-
-            ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", invoice.SupplierID);
-            ViewBag.POrder = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", invoice.OrderID);
 
             return View(invoice);
         }
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            P_INVOICES invoice;
+            List<P_INVOICE_PARTS> partList;
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                invoice = db.P_INVOICES.Find(id);
+
+                if (invoice == null)
+                    return HttpNotFound();
+
+                // Manually load the related entities
+                db.Entry(invoice).Reference(i => i.P_ORDERS).Load();
+                db.Entry(invoice).Reference(i => i.SUPPLIER).Load();
+
+                partList = db.P_INVOICE_PARTS.Where(ip => ip.InvoiceID == invoice.ID).ToList();
+                foreach (var part in partList)
+                {
+                    db.Entry(part).Reference(p => p.PART).Load();
+                }
+            }
+
+            ViewBag.partList = partList;
+            return View(invoice);
+        }
+
+        public ActionResult Delete(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var invoice = db.P_INVOICES.Find(Id);
+            if (invoice == null)
+            {
+                return HttpNotFound();
+            }
+            else
+                ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
+            return View(invoice);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int? ID, FormCollection gfs)
+        {
+            if (ModelState.IsValid)
+            {
+                P_INVOICES invoiceToDelete = db.P_INVOICES.Find(ID);
+                if (invoiceToDelete != null)
+                {
+                    invoiceToDelete.IsDeleted = true;
+                    try
+                    {
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
+                }
+            }
+            return View();
+        }
+        public ActionResult DeletePart(int? id)
+        {
+            var invoicePartToDelete = db.P_INVOICE_PARTS.Find(id);
+            if (ModelState.IsValid)
+            {
+                if (invoicePartToDelete != null)
+                {
+                    try
+                    {
+                        db.P_INVOICE_PARTS.Remove(invoicePartToDelete);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "InvoicePart not found.");
+                }
+            }
+            return View(invoicePartToDelete);
+        }
+
+
+
+
+
         public async Task<ActionResult> Download()
         {
-            SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefault();
-            if (invoys != null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefault();
+                if (invoys != null)
                 return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            return View();
+                
+                return View();
+            }
         }
         public ActionResult UploadWithExcel()
         {
@@ -142,23 +255,26 @@ namespace tahsinERP.Controllers
                         ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                         ViewBag.IsFileUploaded = true;
 
-                        foreach (DataRow row in dataTable.Rows)
+                        using (DBTHSNEntities db = new DBTHSNEntities())
                         {
-                            orderNo = row["OrderNo"].ToString();
-                            supplierName = row["Supplier Name"].ToString();
-                            partNo = row["Part Number"].ToString();
-                            invoiceNo = row["Invoice No."].ToString();
-
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                            P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                            P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
-
-                            if (invoice != null)
+                            foreach (DataRow row in dataTable.Rows)
                             {
-                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pop => pop.PartID == part.ID && pop.InvoiceID == invoice.ID).FirstOrDefault();
-                                if (invoicePart != null)
-                                    ViewBag.ExistingRecordsCount = 1;
+                                orderNo = row["OrderNo"].ToString();
+                                supplierName = row["Supplier Name"].ToString();
+                                partNo = row["Part Number"].ToString();
+                                invoiceNo = row["Invoice No."].ToString();
+
+                                SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
+                                P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
+
+                                if (invoice != null)
+                                {
+                                    P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pop => pop.PartID == part.ID && pop.InvoiceID == invoice.ID).FirstOrDefault();
+                                    if (invoicePart != null)
+                                        ViewBag.ExistingRecordsCount = 1;
+                                }
                             }
                         }
                     }
@@ -206,60 +322,63 @@ namespace tahsinERP.Controllers
 
                 try
                 {
-                    foreach (DataRow row in tableModel.Rows)
+                    using (DBTHSNEntities db = new DBTHSNEntities())
                     {
-                        orderNo = row["OrderNo"].ToString();
-                        supplierName = row["Supplier Name"].ToString();
-                        partNo = row["Part Number"].ToString();
-                        invoiceNo = row["Invoice No."].ToString();
-
-                        SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                        PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                        P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                        P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
-
-                        if (invoice == null)
+                        foreach (DataRow row in tableModel.Rows)
                         {
-                            P_INVOICES new_invoice = new P_INVOICES();
-                            new_invoice.InvoiceNo = invoiceNo;
-                            new_invoice.OrderID = order.ID;
-                            new_invoice.SupplierID = supplier.ID;
-                            new_invoice.InvoiceDate = DateTime.Parse(row["Date"].ToString());
-                            new_invoice.Currency = row["Currency"].ToString();
-                            new_invoice.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
-                            new_invoice.IsDeleted = false;
+                            orderNo = row["OrderNo"].ToString();
+                            supplierName = row["Supplier Name"].ToString();
+                            partNo = row["Part Number"].ToString();
+                            invoiceNo = row["Invoice No."].ToString();
 
-                            db.P_INVOICES.Add(new_invoice);
-                            db.SaveChanges();
+                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                            P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
+                            P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
 
-                            P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
-                            if (invoicePart == null)
+                            if (invoice == null)
                             {
-                                P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
-                                new_invoicePart.PartID = part.ID;
-                                new_invoicePart.InvoiceID = new_invoice.ID;
-                                new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
-                                new_invoicePart.Unit = row["Unit"].ToString();
-                                new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+                                P_INVOICES new_invoice = new P_INVOICES();
+                                new_invoice.InvoiceNo = invoiceNo;
+                                new_invoice.OrderID = order.ID;
+                                new_invoice.SupplierID = supplier.ID;
+                                new_invoice.InvoiceDate = DateTime.Parse(row["Date"].ToString());
+                                new_invoice.Currency = row["Currency"].ToString();
+                                new_invoice.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
+                                new_invoice.IsDeleted = false;
 
-                                db.P_INVOICE_PARTS.Add(new_invoicePart);
+                                db.P_INVOICES.Add(new_invoice);
                                 db.SaveChanges();
+
+                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                if (invoicePart == null)
+                                {
+                                    P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
+                                    new_invoicePart.PartID = part.ID;
+                                    new_invoicePart.InvoiceID = new_invoice.ID;
+                                    new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
+                                    new_invoicePart.Unit = row["Unit"].ToString();
+                                    new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+
+                                    db.P_INVOICE_PARTS.Add(new_invoicePart);
+                                    db.SaveChanges();
+                                }
                             }
-                        }
-                        else
-                        {
-                            P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
-                            if (invoicePart == null)
+                            else
                             {
-                                P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
-                                new_invoicePart.PartID = part.ID;
-                                new_invoicePart.InvoiceID = invoice.ID;
-                                new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
-                                new_invoicePart.Unit = row["Unit"].ToString();
-                                new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                if (invoicePart == null)
+                                {
+                                    P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
+                                    new_invoicePart.PartID = part.ID;
+                                    new_invoicePart.InvoiceID = invoice.ID;
+                                    new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
+                                    new_invoicePart.Unit = row["Unit"].ToString();
+                                    new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
-                                db.P_INVOICE_PARTS.Add(new_invoicePart);
-                                db.SaveChanges();
+                                    db.P_INVOICE_PARTS.Add(new_invoicePart);
+                                    db.SaveChanges();
+                                }
                             }
                         }
                     }
