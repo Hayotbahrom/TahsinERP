@@ -274,6 +274,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
+    <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PContractController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2308,6 +2309,7 @@
     <Content Include="Views\PInvoice\Index.cshtml" />
     <Content Include="Views\PInvoice\Create.cshtml" />
     <Content Include="Views\PInvoice\UploadWithExcel.cshtml" />
+    <Content Include="Views\ComingSoon\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
