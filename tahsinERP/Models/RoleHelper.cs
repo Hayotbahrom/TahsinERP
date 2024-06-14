@@ -1,12 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Models
 {
     public static class RoleHelper
     {
+        public static DBTHSNEntities db = new DBTHSNEntities();
         public static string[] GetUserRoles(string username)
         {
             if (string.IsNullOrEmpty(username)) return null;

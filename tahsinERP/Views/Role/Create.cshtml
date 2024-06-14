@@ -56,7 +56,7 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">Batafsil</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @placeholder = "Batafsil" })
+                                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @placeholder = "Batafsil" })
                                                         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <ul class="list-group list-group-flush">
