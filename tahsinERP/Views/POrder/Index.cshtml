@@ -104,7 +104,7 @@
                                                             <td>
                                                                 <a href="~/PContract/Details/@item.P_CONTRACTS.ID">@item.P_CONTRACTS.ContractNo</a>
                                                             </td>
-                                                            <td>@item.IssuedDate</td>
+                                                            <td>@item.IssuedDate.ToString("dd-MM-yyyy")</td>
                                                             <td>@item.SUPPLIER.Name</td>
                                                             <td>@item.Amount</td>
                                                             @if (changePermit)

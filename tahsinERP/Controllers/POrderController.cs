@@ -203,11 +203,10 @@ namespace tahsinERP.Controllers
                     orderToUpdate.SupplierID = order.SupplierID;
                     orderToUpdate.ContractID = order.ContractID;
                     orderToUpdate.IssuedDate = order.IssuedDate;
-                    orderToUpdate.Amount = order.Amount;
                     orderToUpdate.Currency = order.Currency;
                     orderToUpdate.Description = order.Description;
 
-                    if (TryUpdateModel(orderToUpdate, "", new string[] { "OrderNo, IssuedDate, CompanyID, SupplierID, ContractID, Amount, Currency, Description" }))
+                    if (TryUpdateModel(orderToUpdate, "", new string[] { "OrderNo, IssuedDate, SupplierID, ContractID, Currency, Description" }))
                     {
                         try
                         {
