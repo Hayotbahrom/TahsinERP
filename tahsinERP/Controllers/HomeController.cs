@@ -11,14 +11,14 @@ namespace tahsinERP.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Ilova tavsif sahifasi.";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Sizning aloqa sahifangiz.";
 
             return View();
         }

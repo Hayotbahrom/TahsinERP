@@ -53,7 +53,7 @@ namespace tahsinERP.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(ex.Message, "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                ModelState.AddModelError(ex.Message, "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
             }
             return View();
         }
@@ -87,7 +87,7 @@ namespace tahsinERP.Controllers
                 catch (RetryLimitExceededException)
                 {
 
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                 }
             }
             return View();
