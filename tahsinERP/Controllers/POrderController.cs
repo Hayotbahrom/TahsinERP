@@ -133,7 +133,7 @@ namespace tahsinERP.Controllers
                     }
                     catch (RetryLimitExceededException)
                     {
-                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                     }
                 }
                 else
@@ -162,7 +162,7 @@ namespace tahsinERP.Controllers
                     }
                     catch (RetryLimitExceededException)
                     {
-                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                     }
                 }
                 else
@@ -203,11 +203,10 @@ namespace tahsinERP.Controllers
                     orderToUpdate.SupplierID = order.SupplierID;
                     orderToUpdate.ContractID = order.ContractID;
                     orderToUpdate.IssuedDate = order.IssuedDate;
-                    orderToUpdate.Amount = order.Amount;
                     orderToUpdate.Currency = order.Currency;
                     orderToUpdate.Description = order.Description;
 
-                    if (TryUpdateModel(orderToUpdate, "", new string[] { "OrderNo, IssuedDate, CompanyID, SupplierID, ContractID, Amount, Currency, Description" }))
+                    if (TryUpdateModel(orderToUpdate, "", new string[] { "OrderNo, IssuedDate, SupplierID, ContractID, Currency, Description" }))
                     {
                         try
                         {
@@ -216,7 +215,7 @@ namespace tahsinERP.Controllers
                         }
                         catch (RetryLimitExceededException)
                         {
-                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                 }
@@ -277,7 +276,7 @@ namespace tahsinERP.Controllers
                         }
                         catch (RetryLimitExceededException)
                         {
-                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                 }

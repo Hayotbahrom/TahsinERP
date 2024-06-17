@@ -78,11 +78,8 @@
                                         <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    @if (changePermit)
-                                                    {
-                                                        <th></th>
-                                                        <th></th>
-                                                    }
+                                                    <th></th>
+                                                    <th></th>
                                                     <th>username</th>
                                                     <th>F.I.Sh</th>
                                                     <th>email</th>
@@ -98,11 +95,8 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <tr>
-                                                        @if (changePermit)
-                                                        {
-                                                            <td></td>
-                                                            <td></td>
-                                                        }
+                                                        <td></td>
+                                                        <td></td>
                                                         <td>
                                                             <a href="~/User/Details/@item.ID">@item.UName</a>
                                                         </td>
