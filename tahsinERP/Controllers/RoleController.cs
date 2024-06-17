@@ -61,7 +61,7 @@ namespace tahsinERP.Controllers
         [HttpGet]
         public ActionResult Edit(ROLE role)
         {
-            var roles = db.ROLES.FirstOrDefault(x => x.ID == role.ID);
+            var roles = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(x => x.ID == role.ID);
             if (role == null)
             {
                 return HttpNotFound();
@@ -143,11 +143,11 @@ namespace tahsinERP.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SavePermissions(List<PERMISSION> permissions)
+        public ActionResult SavePermissions(ROLE role)
         {
             if (ModelState.IsValid)
             {
-                foreach (var permissionToEdit in permissions)
+                foreach (var permissionToEdit in role.PERMISSIONS)
                 {
                     var item = db.PERMISSIONS.Find(permissionToEdit.ID);
                     if (item != null)
@@ -161,7 +161,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View("Index", permissions);
+            return View("Index", role);
         }
     }
 }

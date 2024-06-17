@@ -22,6 +22,9 @@ namespace tahsinERP.Models
     
         public int ID { get; set; }
         public string Module { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
+        public string Parameter { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PERMISSION> PERMISSIONS { get; set; }
