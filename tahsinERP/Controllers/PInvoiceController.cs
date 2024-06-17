@@ -17,7 +17,6 @@ namespace tahsinERP.Controllers
 {
     public class PInvoiceController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = ConfigurationManager.AppSettings["PInvoice"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
         // GET: PInvoice
@@ -25,8 +24,8 @@ namespace tahsinERP.Controllers
 
         public ActionResult Index(string type, int? supplierID)
         {
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
                 if (!string.IsNullOrEmpty(type))
                 {
                     if (supplierID.HasValue)
@@ -61,7 +60,7 @@ namespace tahsinERP.Controllers
                         return View(list);
                     }
                 }
-            
+            }
         }
         public ActionResult Create()
         {
@@ -136,14 +135,17 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var invoice = db.P_INVOICES.Find(Id);
-            if (invoice == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
+                var invoice = db.P_INVOICES.Find(Id);
+                if (invoice == null)
+                {
+                    return HttpNotFound();
+                }
+                else
+                    ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
+                return View(invoice);
             }
-            else
-                ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
-            return View(invoice);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -151,56 +153,58 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                P_INVOICES invoiceToDelete = db.P_INVOICES.Find(ID);
-                if (invoiceToDelete != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    invoiceToDelete.IsDeleted = true;
-                    try
+                    P_INVOICES invoiceToDelete = db.P_INVOICES.Find(ID);
+                    if (invoiceToDelete != null)
                     {
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
+                        invoiceToDelete.IsDeleted = true;
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
                     }
-                    catch (RetryLimitExceededException)
+                    else
                     {
-                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
                     }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
                 }
             }
             return View();
         }
         public ActionResult DeletePart(int? id)
         {
-            var invoicePartToDelete = db.P_INVOICE_PARTS.Find(id);
-            if (ModelState.IsValid)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (invoicePartToDelete != null)
+                var invoicePartToDelete = db.P_INVOICE_PARTS.Find(id);
+                if (ModelState.IsValid)
                 {
-                    try
+                    if (invoicePartToDelete != null)
                     {
-                        db.P_INVOICE_PARTS.Remove(invoicePartToDelete);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
+                        try
+                        {
+                            db.P_INVOICE_PARTS.Remove(invoicePartToDelete);
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
                     }
-                    catch (RetryLimitExceededException)
+                    else
                     {
-                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        ModelState.AddModelError("", "InvoicePart not found.");
                     }
                 }
-                else
-                {
-                    ModelState.AddModelError("", "InvoicePart not found.");
-                }
+                return View(invoicePartToDelete);
             }
-            return View(invoicePartToDelete);
         }
-
-
-
-
 
         public async Task<ActionResult> Download()
         {
