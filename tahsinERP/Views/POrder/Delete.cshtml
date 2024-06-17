@@ -44,13 +44,10 @@
                                             <span><b>Buyurtma raqami </b>: @Html.DisplayFor(model => model.OrderNo, new { @class = "form-control" })</span>
                                             <br />
                                             <hr />
-                                            <span><b>Tuzilgan sanasi </b>: @Html.DisplayFor(model => model.IssuedDate, new { @class = "form-control" })</span>
+                                            <span><b>Tuzilgan sanasi </b>: @Model.IssuedDate.ToString("dd.yy.yyyy")</span>
                                             <br />
                                             <hr />
-                                            <span><b>Kompaniya</b>: @Html.DisplayFor(model => model.COMPANy.Name, new { @class = "form-control" })</span>
-                                            <br />
-                                            <hr />
-                                            <span><b>Ta'minitchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
+                                            <span><b>Ta'minotchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
                                             <br />
                                             <hr />
                                             <span><b>Shartnoma raqami</b>: @Html.DisplayFor(model => model.P_CONTRACTS.ContractNo, new { @class = "form-control" })</span>

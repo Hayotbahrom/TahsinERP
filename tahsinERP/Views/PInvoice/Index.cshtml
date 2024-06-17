@@ -105,7 +105,9 @@
                                                                 <a href="~/POrder/Details/@item.OrderID">@item.P_ORDERS.OrderNo</a>
                                                             </td>
                                                             <td>@item.InvoiceDate</td>
-                                                            <td>@item.SUPPLIER.Name</td>
+                                                            <td>
+                                                                <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
+                                                            </td>
                                                             <td>@item.Amount</td>
                                                             @if (changePermit)
                                                             {

@@ -98,7 +98,9 @@
                                                         <td>
                                                             <a href="~/PContract/Details/@item.ID">@item.ContractNo</a>
                                                         </td>
-                                                        <td>@item.SUPPLIER.Name</td>
+                                                        <td>
+                                                            <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
+                                                        </td>
                                                         <td>@item.IssuedDate.ToString("dd.MM.yyyy")</td>
                                                         <td>@item.DueDate.ToString("dd.MM.yyyy")</td>
                                                         <td>@item.Incoterms</td>

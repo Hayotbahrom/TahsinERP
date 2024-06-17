@@ -47,13 +47,13 @@
                                                 <span><b>Invoice raqami </b>: @Html.DisplayFor(model => model.InvoiceNo, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Hujjat berilgan sanasi </b>: @Html.DisplayFor(model => model.InvoiceDate, new { @class = "form-control" })</span>
+                                                <span><b>Hujjat berilgan sanasi </b>: @Model.InvoiceDate.ToString("dd.MM.yyyy")</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Buyurtma raqami</b>: @Html.DisplayFor(model => model.P_ORDERS.OrderNo, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Ta'minitchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
+                                                <span><b>Ta'minotchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
