@@ -67,8 +67,9 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name");
-                ViewBag.POrder = new SelectList(db.P_ORDERS, "ID", "ContractNo");
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name" );
+                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo");
+
             }
             return View();
         }
@@ -93,8 +94,8 @@ namespace tahsinERP.Controllers
                 {
                     ModelState.AddModelError(ex.Message, ex);
                 }
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", invoice.SupplierID);
-                ViewBag.POrder = new SelectList(db.P_INVOICES, "ID", "ContractNo", invoice.OrderID);
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
+                ViewBag.POrder = new SelectList(db.P_INVOICES.ToList(), "ID", "OrderNo", invoice.OrderID);
             }
 
             return View(invoice);

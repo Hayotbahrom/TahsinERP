@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -59,7 +60,7 @@ namespace tahsinERP.Controllers
                 {
                     try
                     {
-                        var dataTable = new DataTable();
+                        var dataTable = new System.Data.DataTable();
                         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
                         using (var package = new ExcelPackage(file.InputStream))
@@ -142,7 +143,7 @@ namespace tahsinERP.Controllers
         {
             if (!string.IsNullOrEmpty(dataTableModel))
             {
-                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
+                var tableModel = JsonConvert.DeserializeObject<System.Data.DataTable>(dataTableModel);
                 
                 try
                 {
@@ -274,7 +275,9 @@ namespace tahsinERP.Controllers
                 return HttpNotFound();
             }
             else
-                ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", contract.SupplierID);
+
+            ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
             return View(contract);
         }
         [HttpPost]
