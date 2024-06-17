@@ -18,7 +18,7 @@ namespace tahsinERP.Controllers
     public class POrderController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private readonly string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
+        private string[] sources = ConfigurationManager.AppSettings["PorderTypes"].Split(',');
         private string supplierName, contractNo, orderNo, partNo = "";
 
         // GET: POrder

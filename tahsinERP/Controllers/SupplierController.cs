@@ -2,6 +2,7 @@
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
@@ -17,7 +18,7 @@ namespace tahsinERP.Controllers
     public class SupplierController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
+        private string[] sources = ConfigurationManager.AppSettings["suplierTypes"].Split(',');
         private string supplierName = "";
         // GET: Supplier
         public ActionResult Index(string type)

@@ -20,7 +20,7 @@ namespace tahsinERP.Controllers
     public class PContractController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private readonly string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
+        private string[] sources = ConfigurationManager.AppSettings["p_contractTypes"].Split(',');
         private string supplierName, contractNo, partNo = "";
         // GET: Contracts
         public ActionResult Index(string type)
