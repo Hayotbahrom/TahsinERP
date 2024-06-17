@@ -18,7 +18,7 @@ namespace tahsinERP.Controllers
     public class PInvoiceController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private readonly string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
+        private string[] sources = ConfigurationManager.AppSettings["PInvoice"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
         // GET: PInvoice
 

@@ -38,50 +38,58 @@ namespace tahsinERP.Controllers
             if (ModelState.IsValid)
             {
                 USER getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
-                if (getUser != null)
+                if(getUser.IsDeleted != true)
                 {
-                    var hashCode = getUser.HashCode;
-                    var serializer = new JavaScriptSerializer();
-                    var encodingPasswordString = "";
-                    //Password Hasing Process Call Helper Class Method
-                    if (!string.IsNullOrEmpty(user.Password))
-                        encodingPasswordString = Helper.EncodePassword(user.Password, hashCode);
-
-                    bool IsValidUser = db.USERS
-                   .Any(u => u.Email.ToLower() == user
-                   .Email.ToLower() && u.Password.Equals(encodingPasswordString) && u.IsActive==true);
-                    USERIMAGE image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
-                    if (IsValidUser)
+                    if (getUser != null)
                     {
-                        var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, getUser.FullName);
-                        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+                        var hashCode = getUser.HashCode;
+                        var serializer = new JavaScriptSerializer();
+                        var encodingPasswordString = "";
+                        //Password Hasing Process Call Helper Class Method
+                        if (!string.IsNullOrEmpty(user.Password))
+                            encodingPasswordString = Helper.EncodePassword(user.Password, hashCode);
 
-                        var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
-                            encryptedTicket)
+                        bool IsValidUser = db.USERS
+                   .    Any(u => u.Email.ToLower() == user
+                   .    Email.ToLower() && u.Password.Equals(encodingPasswordString) && u.IsActive==true);
+                        USERIMAGE image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
+                        if (IsValidUser)
                         {
-                            HttpOnly = true,
-                            Secure = FormsAuthentication.RequireSSL,
-                            Path = FormsAuthentication.FormsCookiePath,
-                            Domain = FormsAuthentication.CookieDomain,
-                            Expires = authTicket.Expiration
-                        };
-                        Response.Cookies.Set(cookie);
+                            var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, getUser.FullName);
+                            string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
-                        if (image != null)
-                        {
-                            var userImageCookie = new HttpCookie("UserImageId", image.ID.ToString())
+                            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
+                                encryptedTicket)
                             {
                                 HttpOnly = true,
                                 Secure = FormsAuthentication.RequireSSL,
-                                Path = "/", // Setting the path to root so it's accessible throughout the site
-                                Expires = authTicket.Expiration // Adjust the expiration as needed
+                                Path = FormsAuthentication.FormsCookiePath,
+                                Domain = FormsAuthentication.CookieDomain,
+                                Expires = authTicket.Expiration
                             };
-                            Response.Cookies.Set(userImageCookie);
-                        }
+                            Response.Cookies.Set(cookie);
 
-                        SetUserEntry(getUser.ID);
-                        return RedirectToAction("Index", "Home");
+                            if (image != null)
+                            {
+                                var userImageCookie = new HttpCookie("UserImageId", image.ID.ToString())
+                                {
+                                    HttpOnly = true,
+                                    Secure = FormsAuthentication.RequireSSL,
+                                    Path = "/", // Setting the path to root so it's accessible throughout the site
+                                    Expires = authTicket.Expiration // Adjust the expiration as needed
+                                };
+                                Response.Cookies.Set(userImageCookie);
+                            }
+
+                            SetUserEntry(getUser.ID);
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Bunday foydalanuvchi mavjud emas!");
+                    return View();
                 }
             }
             ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri yoki faolligingiz ochirilgan");
