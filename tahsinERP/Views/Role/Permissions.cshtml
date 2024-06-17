@@ -1,4 +1,4 @@
-﻿@model List<tahsinERP.Models.PERMISSION>
+﻿@model tahsinERP.Models.ROLE
 
 
     <div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -23,18 +23,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for (var i = 0; i < Model.Count; i++)
+                                    @foreach (var permission in Model.PERMISSIONS)
                                     {
                                         <tr>
-                                            <td>@Model[i].PERMISSIONMODULE.Module</td>
+                                            <td>@permission.PERMISSIONMODULE.Module</td>
                                             <td>
-                                                <input type="hidden" name="[@i].ID" value="@Model[i].ID" />
-                                                <input type="checkbox" name="[@i].ChangePermit" value="true" @(Model[i].ChangePermit ? "checked" : "") />
-                                                <input type="hidden" name="[@i].ChangePermit" value="false" />
+                                                <input type="hidden" name="@permission.ID" value="@permission.ID" />
+                                                <input type="checkbox" name="@permission.ChangePermit" value="true" @(permission.ChangePermit ? "checked" : "") />
+                                                <input type="hidden" name="@permission.ChangePermit" value="false" />
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="[@i].ViewPermit" value="true" @(Model[i].ViewPermit ? "checked" : "") />
-                                                <input type="hidden" name="[@i].ViewPermit" value="false" />
+                                                <input type="checkbox" name="@permission.ViewPermit" value="true" @(permission.ViewPermit ? "checked" : "") />
+                                                <input type="hidden" name="@permission.ViewPermit" value="false" />
                                             </td>
                                         </tr>
                                     }

@@ -288,6 +288,7 @@
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WhIncomeController.cs" />
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -427,10 +428,16 @@
     <Compile Include="Models\P_WRHS_EXPENSE_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\P_WRHS_EXPENSE_PARTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\P_WRHS_INCOMES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_WRHS_INCOME_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P_WRHS_INCOME_PARTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ROLE.cs">
@@ -2312,6 +2319,7 @@
     <Content Include="Views\ComingSoon\Index.cshtml" />
     <Content Include="Views\PInvoice\Details.cshtml" />
     <Content Include="Views\PInvoice\Delete.cshtml" />
+    <Content Include="Views\WhIncome\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

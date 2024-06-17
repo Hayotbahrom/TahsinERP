@@ -274,24 +274,34 @@
           <Property Name="ExpenseID" Type="int" Nullable="false" />
           <Property Name="Doc" Type="varbinary(max)" Nullable="false" />
         </EntityType>
+        <EntityType Name="P_WRHS_EXPENSE_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExpenseID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Unit" Type="varchar" MaxLength="30" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="PiecePrice" Type="float" />
+          <Property Name="TotalPrice" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="Comment" Type="text" />
+        </EntityType>
         <EntityType Name="P_WRHS_EXPENSES">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocNo" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="PartID" Type="int" Nullable="false" />
           <Property Name="Amount" Type="float" />
-          <Property Name="Unit" Type="varchar" MaxLength="30" />
-          <Property Name="PiecePrice" Type="float" />
           <Property Name="Currency" Type="varchar" MaxLength="50" />
           <Property Name="TotalPrice" Type="float" />
           <Property Name="RecieverWhID" Type="int" />
-          <Property Name="ShopID" Type="int" />
           <Property Name="WHID" Type="int" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="Description" Type="text" />
           <Property Name="IssueDateTime" Type="datetime" Nullable="false" />
+          <Property Name="SendStatus" Type="bit" />
         </EntityType>
         <EntityType Name="P_WRHS_INCOME_DOCS">
           <Key>
@@ -301,6 +311,19 @@
           <Property Name="IncomeID" Type="int" Nullable="false" />
           <Property Name="Doc" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="P_WRHS_INCOME_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IncomeID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="Unit" Type="varchar" MaxLength="30" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="PiecePrice" Type="float" />
+          <Property Name="TotalPrice" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="Comment" Type="text" />
+        </EntityType>
         <EntityType Name="P_WRHS_INCOMES">
           <Key>
             <PropertyRef Name="ID" />
@@ -308,18 +331,16 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocNo" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="WHID" Type="int" />
-          <Property Name="PartID" Type="int" />
           <Property Name="InvoiceID" Type="int" />
           <Property Name="WaybillID" Type="int" />
           <Property Name="Amount" Type="float" />
-          <Property Name="Unit" Type="varchar" MaxLength="20" />
-          <Property Name="PiecePrice" Type="float" />
           <Property Name="Currency" Type="varchar" MaxLength="35" />
           <Property Name="TotalPrice" Type="float" />
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="Description" Type="text" />
-          <Property Name="ShopID" Type="int" />
           <Property Name="IssueDateTime" Type="datetime" Nullable="false" />
+          <Property Name="SenderWHID" Type="int" />
+          <Property Name="RecieveStatus" Type="bit" />
         </EntityType>
         <EntityType Name="PART_WRHS">
           <Key>
@@ -330,6 +351,7 @@
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="MRP" Type="int" />
+          <Property Name="ShopID" Type="int" />
         </EntityType>
         <EntityType Name="PART1738DOCS">
           <Key>
@@ -430,6 +452,9 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Module" Type="varchar" MaxLength="50" />
+          <Property Name="Controller" Type="varchar" MaxLength="50" />
+          <Property Name="Action" Type="varchar" MaxLength="50" />
+          <Property Name="Parameter" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PERMISSIONS">
           <Key>
@@ -999,6 +1024,30 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES">
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSE_PARTS" Type="Self.P_WRHS_EXPENSE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSE_PARTS">
+              <PropertyRef Name="ExpenseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSE_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSE_PARTS" Type="Self.P_WRHS_EXPENSE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSE_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_P_WRHS_EXPENSES_PART_WRHS">
           <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="1" />
           <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
@@ -1011,30 +1060,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_WRHS_EXPENSES_PARTS">
-          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
-          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_WRHS_EXPENSES">
-              <PropertyRef Name="PartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_WRHS_EXPENSES_PROD_SHOPS">
-          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
-          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PROD_SHOPS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_WRHS_EXPENSES">
-              <PropertyRef Name="ShopID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES">
           <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="1" />
           <End Role="P_WRHS_INCOME_DOCS" Type="Self.P_WRHS_INCOME_DOCS" Multiplicity="*" />
@@ -1044,6 +1069,30 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="P_WRHS_INCOME_DOCS">
               <PropertyRef Name="IncomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES">
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="1" />
+          <End Role="P_WRHS_INCOME_PARTS" Type="Self.P_WRHS_INCOME_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_WRHS_INCOMES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOME_PARTS">
+              <PropertyRef Name="IncomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOME_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="P_WRHS_INCOME_PARTS" Type="Self.P_WRHS_INCOME_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOME_PARTS">
+              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1083,26 +1132,26 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_WRHS_INCOMES_PARTS">
-          <End Role="PARTS" Type="Self.PARTS" Multiplicity="0..1" />
+        <Association Name="FK_P_WRHS_INCOMES_PART_WRHS_SENDER">
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="0..1" />
           <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PARTS">
+            <Principal Role="PART_WRHS">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="P_WRHS_INCOMES">
-              <PropertyRef Name="PartID" />
+              <PropertyRef Name="WHID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_WRHS_INCOMES_PROD_SHOPS">
+        <Association Name="FK_PART_WRHS_PROD_SHOPS">
           <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
-          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PROD_SHOPS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="P_WRHS_INCOMES">
+            <Dependent Role="PART_WRHS">
               <PropertyRef Name="ShopID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1515,8 +1564,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_WRHS_EXPENSE_DOCS" EntityType="Self.P_WRHS_EXPENSE_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_WRHS_EXPENSE_PARTS" EntityType="Self.P_WRHS_EXPENSE_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_WRHS_EXPENSES" EntityType="Self.P_WRHS_EXPENSES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_WRHS_INCOME_DOCS" EntityType="Self.P_WRHS_INCOME_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_WRHS_INCOME_PARTS" EntityType="Self.P_WRHS_INCOME_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_WRHS_INCOMES" EntityType="Self.P_WRHS_INCOMES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PART_WRHS" EntityType="Self.PART_WRHS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PART1738DOCS" EntityType="Self.PART1738DOCS" Schema="dbo" store:Type="Tables" />
@@ -1655,21 +1706,29 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
             <End Role="P_WRHS_EXPENSE_DOCS" EntitySet="P_WRHS_EXPENSE_DOCS" />
           </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES" Association="Self.FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES">
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+            <End Role="P_WRHS_EXPENSE_PARTS" EntitySet="P_WRHS_EXPENSE_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSE_PARTS_PARTS" Association="Self.FK_P_WRHS_EXPENSE_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_EXPENSE_PARTS" EntitySet="P_WRHS_EXPENSE_PARTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_P_WRHS_EXPENSES_PART_WRHS" Association="Self.FK_P_WRHS_EXPENSES_PART_WRHS">
             <End Role="PART_WRHS" EntitySet="PART_WRHS" />
-            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_EXPENSES_PARTS" Association="Self.FK_P_WRHS_EXPENSES_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_EXPENSES_PROD_SHOPS" Association="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS">
-            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
             <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
           </AssociationSet>
           <AssociationSet Name="FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" Association="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES">
             <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
             <End Role="P_WRHS_INCOME_DOCS" EntitySet="P_WRHS_INCOME_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES" Association="Self.FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES">
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+            <End Role="P_WRHS_INCOME_PARTS" EntitySet="P_WRHS_INCOME_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOME_PARTS_PARTS" Association="Self.FK_P_WRHS_INCOME_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_INCOME_PARTS" EntitySet="P_WRHS_INCOME_PARTS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_WRHS_INCOMES_F_WAYBILLS" Association="Self.FK_P_WRHS_INCOMES_F_WAYBILLS">
             <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
@@ -1683,13 +1742,13 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="PART_WRHS" EntitySet="PART_WRHS" />
             <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_INCOMES_PARTS" Association="Self.FK_P_WRHS_INCOMES_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PART_WRHS_SENDER" Association="Self.FK_P_WRHS_INCOMES_PART_WRHS_SENDER">
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
             <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_INCOMES_PROD_SHOPS" Association="Self.FK_P_WRHS_INCOMES_PROD_SHOPS">
+          <AssociationSet Name="FK_PART_WRHS_PROD_SHOPS" Association="Self.FK_PART_WRHS_PROD_SHOPS">
             <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
-            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
           </AssociationSet>
           <AssociationSet Name="FK_PART_WRHS_USERS" Association="Self.FK_PART_WRHS_USERS">
             <End Role="USERS" EntitySet="USERS" />
@@ -2142,28 +2201,39 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSE_DOCS_P_WRHS_EXPENSES" FromRole="P_WRHS_EXPENSE_DOCS" ToRole="P_WRHS_EXPENSES" />
         </EntityType>
+        <EntityType Name="P_WRHS_EXPENSE_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpenseID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="PiecePrice" Type="Double" />
+          <Property Name="TotalPrice" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES" FromRole="P_WRHS_EXPENSE_PARTS" ToRole="P_WRHS_EXPENSES" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_EXPENSE_PARTS_PARTS" FromRole="P_WRHS_EXPENSE_PARTS" ToRole="PARTS" />
+        </EntityType>
         <EntityType Name="P_WRHS_EXPENSES">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DocNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PartID" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="PiecePrice" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="TotalPrice" Type="Double" />
           <Property Name="RecieverWhID" Type="Int32" />
-          <Property Name="ShopID" Type="Int32" />
           <Property Name="WHID" Type="Int32" Nullable="false" />
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IssueDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SendStatus" Type="Boolean" />
           <NavigationProperty Name="P_WRHS_EXPENSE_DOCS" Relationship="Self.FK_P_WRHS_EXPENSE_DOCS_P_WRHS_EXPENSES" FromRole="P_WRHS_EXPENSES" ToRole="P_WRHS_EXPENSE_DOCS" />
+          <NavigationProperty Name="P_WRHS_EXPENSE_PARTS" Relationship="Self.FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES" FromRole="P_WRHS_EXPENSES" ToRole="P_WRHS_EXPENSE_PARTS" />
           <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_P_WRHS_EXPENSES_PART_WRHS" FromRole="P_WRHS_EXPENSES" ToRole="PART_WRHS" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_EXPENSES_PARTS" FromRole="P_WRHS_EXPENSES" ToRole="PARTS" />
-          <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS" FromRole="P_WRHS_EXPENSES" ToRole="PROD_SHOPS" />
         </EntityType>
         <EntityType Name="P_WRHS_INCOME_DOCS">
           <Key>
@@ -2174,6 +2244,21 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" FromRole="P_WRHS_INCOME_DOCS" ToRole="P_WRHS_INCOMES" />
         </EntityType>
+        <EntityType Name="P_WRHS_INCOME_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IncomeID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Unit" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="PiecePrice" Type="Double" />
+          <Property Name="TotalPrice" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES" FromRole="P_WRHS_INCOME_PARTS" ToRole="P_WRHS_INCOMES" />
+          <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_INCOME_PARTS_PARTS" FromRole="P_WRHS_INCOME_PARTS" ToRole="PARTS" />
+        </EntityType>
         <EntityType Name="P_WRHS_INCOMES">
           <Key>
             <PropertyRef Name="ID" />
@@ -2181,24 +2266,22 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DocNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="WHID" Type="Int32" />
-          <Property Name="PartID" Type="Int32" />
           <Property Name="InvoiceID" Type="Int32" />
           <Property Name="WaybillID" Type="Int32" />
           <Property Name="Amount" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="PiecePrice" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="TotalPrice" Type="Double" />
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ShopID" Type="Int32" />
           <Property Name="IssueDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SenderWHID" Type="Int32" />
+          <Property Name="RecieveStatus" Type="Boolean" />
           <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_P_WRHS_INCOMES_F_WAYBILLS" FromRole="P_WRHS_INCOMES" ToRole="F_WAYBILLS" />
           <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_WRHS_INCOMES_P_INVOICES" FromRole="P_WRHS_INCOMES" ToRole="P_INVOICES" />
           <NavigationProperty Name="P_WRHS_INCOME_DOCS" Relationship="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" FromRole="P_WRHS_INCOMES" ToRole="P_WRHS_INCOME_DOCS" />
+          <NavigationProperty Name="P_WRHS_INCOME_PARTS" Relationship="Self.FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES" FromRole="P_WRHS_INCOMES" ToRole="P_WRHS_INCOME_PARTS" />
           <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_P_WRHS_INCOMES_PART_WRHS" FromRole="P_WRHS_INCOMES" ToRole="PART_WRHS" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_P_WRHS_INCOMES_PARTS" FromRole="P_WRHS_INCOMES" ToRole="PARTS" />
-          <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_P_WRHS_INCOMES_PROD_SHOPS" FromRole="P_WRHS_INCOMES" ToRole="PROD_SHOPS" />
+          <NavigationProperty Name="PART_WRHS1" Relationship="Self.FK_P_WRHS_INCOMES_PART_WRHS_SENDER" FromRole="P_WRHS_INCOMES" ToRole="PART_WRHS" />
         </EntityType>
         <EntityType Name="PART_WRHS">
           <Key>
@@ -2209,8 +2292,11 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="MRP" Type="Int32" />
+          <Property Name="ShopID" Type="Int32" />
           <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSES_PART_WRHS" FromRole="PART_WRHS" ToRole="P_WRHS_EXPENSES" />
           <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_PART_WRHS" FromRole="PART_WRHS" ToRole="P_WRHS_INCOMES" />
+          <NavigationProperty Name="P_WRHS_INCOMES1" Relationship="Self.FK_P_WRHS_INCOMES_PART_WRHS_SENDER" FromRole="PART_WRHS" ToRole="P_WRHS_INCOMES" />
+          <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_PART_WRHS_PROD_SHOPS" FromRole="PART_WRHS" ToRole="PROD_SHOPS" />
           <NavigationProperty Name="USER" Relationship="Self.FK_PART_WRHS_USERS" FromRole="PART_WRHS" ToRole="USERS" />
         </EntityType>
         <EntityType Name="PART1738DOCS">
@@ -2317,8 +2403,8 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
           <NavigationProperty Name="P_INVOICE_PARTS" Relationship="Self.FK_P_INVOICE_PARTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PARTS" />
           <NavigationProperty Name="P_ORDER_PARTS" Relationship="Self.FK_P_ORDER_PARTS_PARTS" FromRole="PARTS" ToRole="P_ORDER_PARTS" />
-          <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSES_PARTS" FromRole="PARTS" ToRole="P_WRHS_EXPENSES" />
-          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_PARTS" FromRole="PARTS" ToRole="P_WRHS_INCOMES" />
+          <NavigationProperty Name="P_WRHS_EXPENSE_PARTS" Relationship="Self.FK_P_WRHS_EXPENSE_PARTS_PARTS" FromRole="PARTS" ToRole="P_WRHS_EXPENSE_PARTS" />
+          <NavigationProperty Name="P_WRHS_INCOME_PARTS" Relationship="Self.FK_P_WRHS_INCOME_PARTS_PARTS" FromRole="PARTS" ToRole="P_WRHS_INCOME_PARTS" />
           <NavigationProperty Name="PARTIMAGES" Relationship="Self.FK_PARTIMAGES_PARTS" FromRole="PARTS" ToRole="PARTIMAGES" />
           <NavigationProperty Name="PARTPACKS" Relationship="Self.FK_PARTPACKS_PARTS" FromRole="PARTS" ToRole="PARTPACKS" />
           <NavigationProperty Name="PARTPACK" Relationship="Self.FK_PARTS_PARTPACKS" FromRole="PARTS" ToRole="PARTPACKS" />
@@ -2331,6 +2417,9 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Module" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Controller" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Parameter" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PERMISSIONS" Relationship="Self.FK_PERMISSIONS_PERMISSIONMODULES" FromRole="PERMISSIONMODULES" ToRole="PERMISSIONS" />
         </EntityType>
         <EntityType Name="PERMISSION">
@@ -2355,8 +2444,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_PRODUCTION_SHOPS_COMPANIES" FromRole="PROD_SHOPS" ToRole="COMPANIES" />
-          <NavigationProperty Name="P_WRHS_EXPENSES" Relationship="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS" FromRole="PROD_SHOPS" ToRole="P_WRHS_EXPENSES" />
-          <NavigationProperty Name="P_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_PROD_SHOPS" FromRole="PROD_SHOPS" ToRole="P_WRHS_INCOMES" />
+          <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_PART_WRHS_PROD_SHOPS" FromRole="PROD_SHOPS" ToRole="PART_WRHS" />
           <NavigationProperty Name="PARTS" Relationship="Self.FK_PARTS_PROD_SHOPS" FromRole="PROD_SHOPS" ToRole="PARTS" />
         </EntityType>
         <EntityType Name="PRODUCT1738DOCS">
@@ -3015,6 +3103,30 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES">
+          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSE_PARTS" Type="Self.P_WRHS_EXPENSE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_WRHS_EXPENSES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSE_PARTS">
+              <PropertyRef Name="ExpenseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_EXPENSE_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_WRHS_EXPENSE_PARTS" Type="Self.P_WRHS_EXPENSE_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_EXPENSE_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_P_WRHS_EXPENSES_PART_WRHS">
           <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="1" />
           <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
@@ -3024,30 +3136,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Principal>
             <Dependent Role="P_WRHS_EXPENSES">
               <PropertyRef Name="WHID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_WRHS_EXPENSES_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
-          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_WRHS_EXPENSES">
-              <PropertyRef Name="PartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_WRHS_EXPENSES_PROD_SHOPS">
-          <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
-          <End Role="P_WRHS_EXPENSES" Type="Self.P_WRHS_EXPENSES" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PROD_SHOPS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_WRHS_EXPENSES">
-              <PropertyRef Name="ShopID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3063,6 +3151,30 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES">
+          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="1" />
+          <End Role="P_WRHS_INCOME_PARTS" Type="Self.P_WRHS_INCOME_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_WRHS_INCOMES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOME_PARTS">
+              <PropertyRef Name="IncomeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_WRHS_INCOME_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
+          <End Role="P_WRHS_INCOME_PARTS" Type="Self.P_WRHS_INCOME_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_WRHS_INCOME_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_P_WRHS_INCOMES_PART_WRHS">
           <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="0..1" />
           <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
@@ -3075,26 +3187,26 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_WRHS_INCOMES_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="0..1" />
+        <Association Name="FK_P_WRHS_INCOMES_PART_WRHS_SENDER">
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="0..1" />
           <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PARTS">
+            <Principal Role="PART_WRHS">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="P_WRHS_INCOMES">
-              <PropertyRef Name="PartID" />
+              <PropertyRef Name="WHID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_WRHS_INCOMES_PROD_SHOPS">
+        <Association Name="FK_PART_WRHS_PROD_SHOPS">
           <End Role="PROD_SHOPS" Type="Self.PROD_SHOPS" Multiplicity="0..1" />
-          <End Role="P_WRHS_INCOMES" Type="Self.P_WRHS_INCOMES" Multiplicity="*" />
+          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PROD_SHOPS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="P_WRHS_INCOMES">
+            <Dependent Role="PART_WRHS">
               <PropertyRef Name="ShopID" />
             </Dependent>
           </ReferentialConstraint>
@@ -3389,8 +3501,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" />
           <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" />
           <EntitySet Name="P_WRHS_EXPENSE_DOCS" EntityType="Self.P_WRHS_EXPENSE_DOCS" />
+          <EntitySet Name="P_WRHS_EXPENSE_PARTS" EntityType="Self.P_WRHS_EXPENSE_PARTS" />
           <EntitySet Name="P_WRHS_EXPENSES" EntityType="Self.P_WRHS_EXPENSES" />
           <EntitySet Name="P_WRHS_INCOME_DOCS" EntityType="Self.P_WRHS_INCOME_DOCS" />
+          <EntitySet Name="P_WRHS_INCOME_PARTS" EntityType="Self.P_WRHS_INCOME_PARTS" />
           <EntitySet Name="P_WRHS_INCOMES" EntityType="Self.P_WRHS_INCOMES" />
           <EntitySet Name="PART_WRHS" EntityType="Self.PART_WRHS" />
           <EntitySet Name="PART1738DOCS" EntityType="Self.PART1738DOCS" />
@@ -3555,33 +3669,41 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
             <End Role="P_WRHS_EXPENSE_DOCS" EntitySet="P_WRHS_EXPENSE_DOCS" />
           </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES" Association="Self.FK_P_WRHS_EXPENSE_PARTS_P_WRHS_EXPENSES">
+            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
+            <End Role="P_WRHS_EXPENSE_PARTS" EntitySet="P_WRHS_EXPENSE_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_EXPENSE_PARTS_PARTS" Association="Self.FK_P_WRHS_EXPENSE_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_EXPENSE_PARTS" EntitySet="P_WRHS_EXPENSE_PARTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_P_WRHS_EXPENSES_PART_WRHS" Association="Self.FK_P_WRHS_EXPENSES_PART_WRHS">
             <End Role="PART_WRHS" EntitySet="PART_WRHS" />
-            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_EXPENSES_PARTS" Association="Self.FK_P_WRHS_EXPENSES_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_EXPENSES_PROD_SHOPS" Association="Self.FK_P_WRHS_EXPENSES_PROD_SHOPS">
-            <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
             <End Role="P_WRHS_EXPENSES" EntitySet="P_WRHS_EXPENSES" />
           </AssociationSet>
           <AssociationSet Name="FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES" Association="Self.FK_P_WRHS_INCOME_DOCS_P_WRHS_INCOMES">
             <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
             <End Role="P_WRHS_INCOME_DOCS" EntitySet="P_WRHS_INCOME_DOCS" />
           </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES" Association="Self.FK_P_WRHS_INCOME_PARTS_P_WRHS_INCOMES">
+            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+            <End Role="P_WRHS_INCOME_PARTS" EntitySet="P_WRHS_INCOME_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_WRHS_INCOME_PARTS_PARTS" Association="Self.FK_P_WRHS_INCOME_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="P_WRHS_INCOME_PARTS" EntitySet="P_WRHS_INCOME_PARTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_P_WRHS_INCOMES_PART_WRHS" Association="Self.FK_P_WRHS_INCOMES_PART_WRHS">
             <End Role="PART_WRHS" EntitySet="PART_WRHS" />
             <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_INCOMES_PARTS" Association="Self.FK_P_WRHS_INCOMES_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
+          <AssociationSet Name="FK_P_WRHS_INCOMES_PART_WRHS_SENDER" Association="Self.FK_P_WRHS_INCOMES_PART_WRHS_SENDER">
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
             <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_WRHS_INCOMES_PROD_SHOPS" Association="Self.FK_P_WRHS_INCOMES_PROD_SHOPS">
+          <AssociationSet Name="FK_PART_WRHS_PROD_SHOPS" Association="Self.FK_PART_WRHS_PROD_SHOPS">
             <End Role="PROD_SHOPS" EntitySet="PROD_SHOPS" />
-            <End Role="P_WRHS_INCOMES" EntitySet="P_WRHS_INCOMES" />
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
           </AssociationSet>
           <AssociationSet Name="FK_PART_WRHS_USERS" Association="Self.FK_PART_WRHS_USERS">
             <End Role="USERS" EntitySet="USERS" />
@@ -4031,23 +4153,34 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="P_WRHS_EXPENSE_PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_EXPENSE_PARTS">
+              <MappingFragment StoreEntitySet="P_WRHS_EXPENSE_PARTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ExpenseID" ColumnName="ExpenseID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PiecePrice" ColumnName="PiecePrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="P_WRHS_EXPENSES">
             <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_EXPENSES">
               <MappingFragment StoreEntitySet="P_WRHS_EXPENSES">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DocNo" ColumnName="DocNo" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="PiecePrice" ColumnName="PiecePrice" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
                 <ScalarProperty Name="RecieverWhID" ColumnName="RecieverWhID" />
-                <ScalarProperty Name="ShopID" ColumnName="ShopID" />
                 <ScalarProperty Name="WHID" ColumnName="WHID" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IssueDateTime" ColumnName="IssueDateTime" />
+                <ScalarProperty Name="SendStatus" ColumnName="SendStatus" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4060,24 +4193,36 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="P_WRHS_INCOME_PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_INCOME_PARTS">
+              <MappingFragment StoreEntitySet="P_WRHS_INCOME_PARTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IncomeID" ColumnName="IncomeID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PiecePrice" ColumnName="PiecePrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="P_WRHS_INCOMES">
             <EntityTypeMapping TypeName="DBTHSNModel.P_WRHS_INCOMES">
               <MappingFragment StoreEntitySet="P_WRHS_INCOMES">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DocNo" ColumnName="DocNo" />
                 <ScalarProperty Name="WHID" ColumnName="WHID" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
                 <ScalarProperty Name="WaybillID" ColumnName="WaybillID" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="PiecePrice" ColumnName="PiecePrice" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ShopID" ColumnName="ShopID" />
                 <ScalarProperty Name="IssueDateTime" ColumnName="IssueDateTime" />
+                <ScalarProperty Name="SenderWHID" ColumnName="SenderWHID" />
+                <ScalarProperty Name="RecieveStatus" ColumnName="RecieveStatus" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4089,6 +4234,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="ShopID" ColumnName="ShopID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4195,6 +4341,9 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               <MappingFragment StoreEntitySet="PERMISSIONMODULES">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
