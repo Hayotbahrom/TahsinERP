@@ -11,27 +11,29 @@ namespace tahsinERP.Controllers
 {
     public class PModuleController : Controller
     {
-        private static DBTHSNEntities db = new DBTHSNEntities();
         // GET: PModule
         [HttpGet]
         public ActionResult Index()
         {
-            var permissionModules = db.PERMISSIONMODULES.ToList();
-            var permissions = db.PERMISSIONS.ToList();
-            var roles = db.ROLES.ToList();
-
-            var viewModel = permissionModules.Select(pm => new PermissionModuleViewModel
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ID = pm.ID,
-                Module = pm.Module,
-                RoleNames = string.Join(", ", permissions
-                                        .Where(p => p.PermissionModuleID == pm.ID)
-                                        .Select(p => roles
-                                                     .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
-                                        .Distinct())
-            }).ToList();
+                var permissionModules = db.PERMISSIONMODULES.ToList();
+                var permissions = db.PERMISSIONS.ToList();
+                var roles = db.ROLES.ToList();
 
-            return View(viewModel);
+                var viewModel = permissionModules.Select(pm => new PermissionModuleViewModel
+                {
+                    ID = pm.ID,
+                    Module = pm.Module,
+                    RoleNames = string.Join(", ", permissions
+                                            .Where(p => p.PermissionModuleID == pm.ID)
+                                            .Select(p => roles
+                                                         .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
+                                            .Distinct())
+                }).ToList();
+
+                return View(viewModel);
+            }
         }
         public ActionResult Create()
         {
@@ -44,12 +46,15 @@ namespace tahsinERP.Controllers
         {
             try
             {
-                PERMISSIONMODULE permissions = new PERMISSIONMODULE();
-                permissions.Module = permissionModule.Module;
-                db.PERMISSIONMODULES.Add(permissions);
-                db.SaveChanges();
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    PERMISSIONMODULE permissions = new PERMISSIONMODULE();
+                    permissions.Module = permissionModule.Module;
+                    db.PERMISSIONMODULES.Add(permissions);
+                    db.SaveChanges();
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
             }
             catch (Exception ex)
             {
@@ -59,101 +64,113 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Edit(PERMISSIONMODULE permissionModule)
         {
-            var pmodule = db.PERMISSIONMODULES.FirstOrDefault(x => x.ID == permissionModule.ID);
-            if (pmodule == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
-            }
-            List<ROLE> selectedRoles = db.ROLES.Join(db.PERMISSIONS, role => role.ID, permission => permission.RoleID, (role, permission) => new { role, permission }).Join(db.PERMISSIONMODULES, combined => combined.permission.PermissionModuleID, pm => pm.ID, (combined, pm) => new { combined.role, pm }).Where(combined => combined.pm.ID == pmodule.ID).Select(combined => combined.role).ToList();
+                var pmodule = db.PERMISSIONMODULES.FirstOrDefault(x => x.ID == permissionModule.ID);
+                if (pmodule == null)
+                {
+                    return HttpNotFound();
+                }
+                List<ROLE> selectedRoles = db.ROLES.Join(db.PERMISSIONS, role => role.ID, permission => permission.RoleID, (role, permission) => new { role, permission }).Join(db.PERMISSIONMODULES, combined => combined.permission.PermissionModuleID, pm => pm.ID, (combined, pm) => new { combined.role, pm }).Where(combined => combined.pm.ID == pmodule.ID).Select(combined => combined.role).ToList();
            
-            ViewBag.RoleID = new MultiSelectList(db.ROLES, "ID", "RName", selectedRoles);
+                ViewBag.RoleID = new MultiSelectList(db.ROLES, "ID", "RName", selectedRoles);
 
-            return View(pmodule);
+                return View(pmodule);
+            }
         }
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int Id)
         {
-            var pModule = db.PERMISSIONMODULES.Find(Id);
-
-            if (TryUpdateModel(pModule, "", new string[] { "Module" }))
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                try
-                {
-                    db.SaveChanges();
+                var pModule = db.PERMISSIONMODULES.Find(Id);
 
-                    return RedirectToAction("Index");
-                }
-                catch (RetryLimitExceededException)
+                if (TryUpdateModel(pModule, "", new string[] { "Module" }))
                 {
+                    try
+                    {
+                        db.SaveChanges();
 
-                    ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+
+                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    }
                 }
+                return View();
             }
-            return View();
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int Id)
         {
-            var permissionModule = db.PERMISSIONMODULES.Find(Id);
-
-            if (permissionModule != null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var permissions = db.PERMISSIONS
-                    .Where(p => p.PermissionModuleID == Id)
-                    .ToList();
+                var permissionModule = db.PERMISSIONMODULES.Find(Id);
 
-                var roleIds = permissions.Select(p => p.RoleID).Distinct().ToList();
-                var roles = db.ROLES
-                    .Where(r => roleIds.Contains(r.ID))
-                    .ToList();
-
-                foreach (var permission in permissions)
+                if (permissionModule != null)
                 {
-                    db.PERMISSIONS.Remove(permission);
-                }
+                    var permissions = db.PERMISSIONS
+                        .Where(p => p.PermissionModuleID == Id)
+                        .ToList();
 
-                foreach (var role in roles)
-                {
-                    if (!db.PERMISSIONS.Any(p => p.RoleID == role.ID))
+                    var roleIds = permissions.Select(p => p.RoleID).Distinct().ToList();
+                    var roles = db.ROLES
+                        .Where(r => roleIds.Contains(r.ID))
+                        .ToList();
+
+                    foreach (var permission in permissions)
                     {
-                        db.ROLES.Remove(role);
+                        db.PERMISSIONS.Remove(permission);
                     }
+
+                    foreach (var role in roles)
+                    {
+                        if (!db.PERMISSIONS.Any(p => p.RoleID == role.ID))
+                        {
+                            db.ROLES.Remove(role);
+                        }
+                    }
+
+                    db.PERMISSIONMODULES.Remove(permissionModule);
+                    db.SaveChanges();
                 }
 
-                db.PERMISSIONMODULES.Remove(permissionModule);
-                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
         }
         public ActionResult Details(int id)
         {
-            var permissionModule = db.PERMISSIONMODULES
-                                      .FirstOrDefault(pm => pm.ID == id);
-            if (permissionModule == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
+                var permissionModule = db.PERMISSIONMODULES
+                                          .FirstOrDefault(pm => pm.ID == id);
+                if (permissionModule == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var permissions = db.PERMISSIONS
+                                    .Where(p => p.PermissionModuleID == id)
+                                    .ToList();
+                var roles = db.ROLES.ToList();
+
+                var viewModel = new PermissionModuleViewModel
+                {
+                    ID = permissionModule.ID,
+                    Module = permissionModule.Module,
+                    RoleNames = string.Join(", ", permissions
+                                                .Select(p => roles
+                                                             .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
+                                                .Distinct())
+                };
+
+                return View(viewModel);
             }
-
-            var permissions = db.PERMISSIONS
-                                .Where(p => p.PermissionModuleID == id)
-                                .ToList();
-            var roles = db.ROLES.ToList();
-
-            var viewModel = new PermissionModuleViewModel
-            {
-                ID = permissionModule.ID,
-                Module = permissionModule.Module,
-                RoleNames = string.Join(", ", permissions
-                                            .Select(p => roles
-                                                         .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
-                                            .Distinct())
-            };
-
-            return View(viewModel);
         }
 
     }
