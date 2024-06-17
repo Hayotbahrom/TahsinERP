@@ -39,7 +39,6 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
     <!-- END: Custom CSS-->
-    <title>@ViewBag.Title - My Application</title>
     <!-- Boshqa matnlar -->
 </head>
 
@@ -253,71 +252,85 @@
         <li class=" nav-item">
             <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
         </li>*@
-                        <li class=" navigation-header">
-                            <span>SRM</span>
+                    <li class=" navigation-header">
+                        <span>SRM</span>
+                    </li>
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Supplier"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ta'minotchilar</span></a>
+                                </li>
+                                <li>
+                                    <a href="/Part"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span></a>
+                                </li>
+                            </ul>
                         </li>
-                    <li class=" nav-item">
-                        <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ta'minotchilar</span></a>
-                            </li>
-                            <li>
-                                <a href="/Part"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class=" nav-item">
-                        <a href="#"><i class="bx bxs-book-bookmark"></i><span class="menu-title" data-i18n="Content">Shartnomalar</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/PContract"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "PContract")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "PContract")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "PContract")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class=" nav-item">
-                        <a href="#"><i class="bx bxs-book"></i><span class="menu-title" data-i18n="Colors">Buyurtmalar</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/POrder"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "POrder")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "POrder")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "POrder")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class=" nav-item">
-                        <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Barchasi</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "PInvoice")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "PInvoice")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Index", "PInvoice")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
-                            </li>
-                        </ul>
-                    </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PContract"))
+                    {
+
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-book-bookmark"></i><span class="menu-title" data-i18n="Content">Shartnomalar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/PContract"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PContract")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PContract")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PContract")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "POrder"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-book"></i><span class="menu-title" data-i18n="Colors">Buyurtmalar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/POrder"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "POrder")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "POrder")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "POrder")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
+
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Barchasi</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PInvoice")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PInvoice")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PInvoice")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
 
                     <li class=" nav-item">
                         <a href="#">
@@ -476,6 +489,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <li class=" navigation-header">
                         <span>Sozlamalar</span>
                     </li>
@@ -488,9 +502,12 @@
                             <span class="menu-title" data-i18n="Account Settings">Akkaunt Sozlamalari</span>
                         </a>
                     </li>
-                    <li class=" nav-item">
-                        <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
-                    </li>
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "AdminPanel"))
+                    {
+                        <li class=" nav-item">
+                            <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
