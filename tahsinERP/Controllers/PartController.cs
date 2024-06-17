@@ -22,7 +22,7 @@ namespace tahsinERP.Controllers
     public class PartController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = new string[4] { "", "KD", "Steel", "Maxalliy" };
+        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');//new string[4] { "", "KD", "Steel", "Maxalliy" };
         private byte[] avatar;
         private int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         private string partNo = "";
