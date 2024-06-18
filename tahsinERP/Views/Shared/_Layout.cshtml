@@ -1,4 +1,4 @@
-﻿@using tahsinERP.Models;    
+﻿@using tahsinERP.Models;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +42,7 @@
     <!-- Boshqa matnlar -->
 </head>
 
-<body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+<body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
     @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Layout"))
     {
         <div class="header-navbar-shadow"></div>
@@ -238,24 +238,24 @@
                         </ul>
                     </li>
                     @*<li class=" navigation-header">
-            <span>Boshqaruv dasturlari</span>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-chat"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-check-circle"></i><span class="menu-title" data-i18n="Todo">Topshiriqlar</span></a>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-calendar"></i><span class="menu-title" data-i18n="Calendar">Kalendar</span></a>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
-        </li>*@
+                            <span>Boshqaruv dasturlari</span>
+                        </li>
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bx-chat"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
+                        </li>
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bx-check-circle"></i><span class="menu-title" data-i18n="Todo">Topshiriqlar</span></a>
+                        </li>
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bx-calendar"></i><span class="menu-title" data-i18n="Calendar">Kalendar</span></a>
+                        </li>
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
+                        </li>*@
                     <li class=" navigation-header">
                         <span>SRM</span>
                     </li>
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Supplier"))
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
                     {
                         <li class=" nav-item">
                             <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
@@ -356,7 +356,7 @@
                                 <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
                             </li>
                             <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
                             </li>
                             <li>
                                 <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
@@ -546,9 +546,11 @@
 
         <!-- BEGIN: Page Vendor JS-->
         <script src="~/app-assets/vendors/js/charts/apexcharts.min.js"></script>
+        <script src="~/app-assets/vendors/js/charts/gmaps.min.js"></script>
         <script src="~/app-assets/vendors/js/extensions/swiper.min.js"></script>
         <script src="~/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
         <script src="~/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
+        <script src="~/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
         <script src="~/app-assets/vendors/js/extensions/dropzone.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
@@ -559,9 +561,9 @@
         <script src="~/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+        <script src="~/app-assets/externalExport/js/jszip.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
         <script src="~/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
-        <script src="~/app-assets/vendors/js/charts/gmaps.min.js"></script>
         <script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
         <script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
         <script src="~/app-assets/vendors/js/pickers/pickadate/picker.time.js"></script>
@@ -588,6 +590,7 @@
         <script src="~/app-assets/js/scripts/charts/gmaps/maps.js"></script>
         <script src="~/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js"></script>
         <script src="~/app-assets/js/scripts/forms/form-tooltip-valid.js"></script>
+        <script src="~/app-assets/js/scripts/forms/form-repeater.js"></script>
         <!-- END: Page JS-->
 
         <!--sweet alert uchun js filelar-->

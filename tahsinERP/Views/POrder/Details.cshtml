@@ -6,13 +6,13 @@
 
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "POrder"))
 {
-    <div class="app-content content">
+     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="content-header-left col-12 mb-2 mt-1">
                     <div class="row breadcrumbs-top">
-                        <div class="col-12">
+                       <div class="col-12">
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb rounded-pill breadcrumb-divider">
                                     <li class="breadcrumb-item">
@@ -47,10 +47,10 @@
                                                 <span><b>Buyurtma raqami </b>: @Html.DisplayFor(model => model.OrderNo, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Tuzilgan sanasi </b>: @Html.DisplayFor(model => model.IssuedDate, new { @class = "form-control" })</span>
+                                                <span><b>Tuzilgan sanasi </b>: @Model.IssuedDate.ToString("dd.yy.yyyy")</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Ta'minitchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
+                                                <span><b>Ta'minotchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Shartnoma raqami</b>: @Html.DisplayFor(model => model.P_CONTRACTS.ContractNo, new { @class = "form-control" })</span>

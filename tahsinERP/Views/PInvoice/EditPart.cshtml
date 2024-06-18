@@ -1,16 +1,16 @@
-﻿@model tahsinERP.Models.P_CONTRACT_PARTS
+﻿@model tahsinERP.Models.P_INVOICE_PARTS
 
 @{
     ViewBag.Title = "EditPart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PInvoice"))
 {
-    using (Html.BeginForm("EditPart", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("EditPart", "PInvoice", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
 
-       @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
@@ -24,10 +24,10 @@
                                             <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                         </li>
                                         <li class="breadcrumb-item">
-                                            <a href="~/PContract/Index">Shartnomalar</a>
+                                            <a href="~/PInvoice/Index">Invoice lar</a>
                                         </li>
                                         <li class="breadcrumb-item active">
-                                            Shartnoma detallarini tahrirlash
+                                            Invoice detallarini tahrirlash
                                         </li>
                                     </ol>
                                 </div>
@@ -49,9 +49,9 @@
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                     <hr>
 
-                                                    <h6 class="invoice-to">Shartnoma raqami</h6>
+                                                    <h6 class="invoice-to">Invoice raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DisplayFor(model => model.P_CONTRACTS.ContractNo, new { htmlAttributes = new { @class = "form-control round", @disabled = "disabled" } })
+                                                        @Html.DisplayFor(model => model.P_INVOICES.InvoiceNo, new { htmlAttributes = new { @class = "form-control round", @disabled = "disabled" } })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Detal nomi</h6>
@@ -69,13 +69,7 @@
                                                     <h6 class="invoice-to">Miqdori</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control round", @placeholder = "Miqdori" })
-                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Minimum buyurtma miqdori</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.MOQ, new { @class = "form-control round", @placeholder = "Minimum buyurtma miqdori" })
-                                                        @Html.ValidationMessageFor(model => model.MOQ, "", new { @class = "text-danger" })
+                                                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
@@ -83,16 +77,7 @@
                                                         @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Maximum imkoniyat" })
                                                         @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <ul class="list-unstyled mb-0">
-                                                        <li class="d-inline-block mr-2 mb-1">
-                                                            <fieldset>
-                                                                <div class="checkbox checkbox-secondary checkbox-glow">
-                                                                    @Html.CheckBoxFor(model => model.ActivePart, new { @type = "checkbox", @id = "checkboxGlow2" })
-                                                                    <label for="checkboxGlow2">Faolmi?</label>
-                                                                </div>
-                                                            </fieldset>
-                                                        </li>
-                                                    </ul>
+
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
                                                             <button class="btn btn-primary btn-block subtotal-preview-btn" name="EditPart" type="submit" value="EditPart">
@@ -101,6 +86,7 @@
                                                             </button>
                                                         </li>
                                                     </ul>
+
                                                 </div>
                                             </div>
                                             <hr>

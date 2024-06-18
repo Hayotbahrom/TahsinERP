@@ -17,8 +17,7 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PROD_SHOPS()
         {
-            this.P_WRHS_EXPENSES = new HashSet<P_WRHS_EXPENSES>();
-            this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
+            this.PART_WRHS = new HashSet<PART_WRHS>();
             this.PARTS = new HashSet<PART>();
         }
     
@@ -30,9 +29,7 @@ namespace tahsinERP.Models
     
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
+        public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART> PARTS { get; set; }
     }

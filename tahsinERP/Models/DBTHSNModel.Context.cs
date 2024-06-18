@@ -48,8 +48,10 @@ namespace tahsinERP.Models
         public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
         public virtual DbSet<P_PACKINGLIST_DOCS> P_PACKINGLIST_DOCS { get; set; }
         public virtual DbSet<P_WRHS_EXPENSE_DOCS> P_WRHS_EXPENSE_DOCS { get; set; }
+        public virtual DbSet<P_WRHS_EXPENSE_PARTS> P_WRHS_EXPENSE_PARTS { get; set; }
         public virtual DbSet<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
         public virtual DbSet<P_WRHS_INCOME_DOCS> P_WRHS_INCOME_DOCS { get; set; }
+        public virtual DbSet<P_WRHS_INCOME_PARTS> P_WRHS_INCOME_PARTS { get; set; }
         public virtual DbSet<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
         public virtual DbSet<PART_WRHS> PART_WRHS { get; set; }
         public virtual DbSet<PART1738DOCS> PART1738DOCS { get; set; }

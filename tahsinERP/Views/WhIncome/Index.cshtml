@@ -6,7 +6,7 @@
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "WHOperations"))
 {
     bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PInvoice"))
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "WHOperations"))
     {
         changePermit = true;
     }
@@ -26,7 +26,7 @@
                                         Sahifalar
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Invoice lar
+                                        Omborga kirim
                                     </li>
                                 </ol>
                             </div>
@@ -40,8 +40,17 @@
                     {
                         <div class="invoice-create-btn mb-1">
                             <div class="invoice-create-btn mb-1">
-                                <a href="@Url.Action("UploadWithExcel", "PInvoice")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
-                                    Yangi Invoiceni qo'shish
+                                <a href="@Url.Action("Create", "WhIncome")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
+                                    Kirim
+                                </a>
+                                <a href="@Url.Action("UploadWithExcel", "WhIncome")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
+                                    Excel orqali kirim
+                                </a>
+                                <a href="@Url.Action("#", "WhIncome")" class="btn btn-outline-warning mr-1 mb-1" role="button" aria-pressed="true">
+                                    Akt rasmiylashtirish
+                                </a>
+                                <a href="@Url.Action("Index", "WhExpense")" class="btn btn-outline-danger mr-1 mb-1" role="button" aria-pressed="true">
+                                    Chiqimga o'tish
                                 </a>
                             </div>
                         </div>
@@ -62,7 +71,7 @@
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
-                                    <a href="~/PInvoice" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                    <a href="~/WhIncome" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
                                         Ro'yxatni yangilash
                                     </a>
                                 </div>
@@ -79,11 +88,10 @@
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
+                                                    <th>Hujjat raqami</th>
                                                     <th>Invoice raqami</th>
-                                                    <th>Buyurtma raqami</th>
-                                                    <th>Tuzilgan sanasi</th>
-                                                    <th>Ta'minotchi</th>
-                                                    <th>Miqdori</th>
+                                                    <th>Yuk xati raqami</th>
+                                                    <th>Qabul sanasi</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -99,20 +107,21 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td>
-                                                                <a href="~/PInvoice/Details/@item.ID">@item.InvoiceNo</a>
+                                                                <a href="~/WhIncome/Details/@item.ID">@item.DocNo</a>
                                                             </td>
                                                             <td>
-                                                                <a href="~/POrder/Details/@item.OrderID">@item.P_ORDERS.OrderNo</a>
+                                                                <a href="~/PInvoice/Details/@item.InvoiceID">@item.P_INVOICES.InvoiceNo</a>
                                                             </td>
-                                                            <td>@item.InvoiceDate</td>
-                                                            <td>@item.SUPPLIER.Name</td>
-                                                            <td>@item.Amount</td>
+                                                            <td>
+                                                                <a href="~/Fwaybill/Details/@item.WaybillID">@item.F_WAYBILLS.WaybillNo</a>
+                                                            </td>
+                                                            <td>@item.IssueDateTime.ToShortDateString()</td>
                                                             @if (changePermit)
                                                             {
                                                                 <td>
                                                                     <div>
-                                                                        <a href="@Url.Action("Edit", "PInvoice", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                        <a href="@Url.Action("Delete", "PInvoice", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                        <a href="@Url.Action("Edit", "WhIncome", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                        <a href="@Url.Action("Delete", "WhIncome", new { id = item.ID })"><i class="bx bx-trash"></i></a>
                                                                     </div>
                                                                 </td>
                                                             }
@@ -136,7 +145,7 @@
     function refreshDataTable() {
         var source = document.getElementById("SourceID").value;
         const supplierID = document.getElementById("SupplierID").value;
-        window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source + '&supplierID='+ supplierID;
+        window.location.href = '@Url.Action("Index", "WhIncome")?type=' + source + '&supplierID='+ supplierID;
     }
     </script>
 }
