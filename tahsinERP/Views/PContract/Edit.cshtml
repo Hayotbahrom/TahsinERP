@@ -44,11 +44,13 @@
                                             <fieldset class="invoice-address form-group">
                                                 @Html.TextBoxFor(model => model.ContractNo, new { @class = "form-control round" })
                                             </fieldset>
-                                            <hr>
+                                            
                                             <h6 class="invoice-to">Ta'minotchi</h6>
                                             <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.SUPPLIER.Name, new { @class = "form-control round" })
+                                                @Html.DropDownListFor(model => model.SupplierID, ViewBag.Supplier as SelectList, new { @class = "form-control select2" })
+                                                @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                             </fieldset>
+
                                             <h6 class="invoice-to">Tuzilgan sanasi</h6>
                                             <fieldset class="form-group position-relative has-icon-left">
                                                 @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round" })
