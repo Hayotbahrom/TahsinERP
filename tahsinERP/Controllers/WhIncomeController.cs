@@ -53,5 +53,9 @@ namespace tahsinERP.Controllers
                 }
             }
         }
+        public ActionResult Create()
+        {
+            return View();
+        }
     }
 }

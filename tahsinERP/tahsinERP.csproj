@@ -2320,6 +2320,7 @@
     <Content Include="Views\PInvoice\Details.cshtml" />
     <Content Include="Views\PInvoice\Delete.cshtml" />
     <Content Include="Views\WhIncome\Index.cshtml" />
+    <Content Include="Views\WhIncome\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
