@@ -17,6 +17,7 @@ namespace tahsinERP.ViewModels
         public double PWidth { get; set; }
         public double PHeight { get; set; }
         public string Unit { get; set; }
+        [Display(Name = "Selected Part Type")]
         public string Type { get; set; }
         [DataType(DataType.Text)]
         public string Description { get; set; }
@@ -33,5 +34,6 @@ namespace tahsinERP.ViewModels
         public double Pitch { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
+        public List<string> PartTypes { get; set; }
     }
 }

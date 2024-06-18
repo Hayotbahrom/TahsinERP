@@ -1,0 +1,141 @@
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using System;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using tahsinERP.Models;
+
+namespace tahsinERP.Controllers
+{
+    public class ShopController : Controller
+    {
+        private DBTHSNEntities db = new DBTHSNEntities();
+        // GET: Shop
+        public ActionResult Index()
+        {
+            var prod_shop = db.PROD_SHOPS.Where(x => x.IsDeleted == false).ToList();
+            return View(prod_shop);
+        }
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create([Bind(Include = "ShopName,CompanyID,Description,Isdeleted")] PROD_SHOPS prod_shop)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    prod_shop.IsDeleted = false;
+                    prod_shop.CompanyID = 1;
+                    db.PROD_SHOPS.Add(prod_shop);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(ex.Message, "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+            }
+            return View(prod_shop);
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var prod_shop = db.PROD_SHOPS.Find(id);
+            if (prod_shop == null)
+            {
+                return HttpNotFound();
+            }
+            return View(prod_shop);
+        }
+        [HttpPost]
+        public ActionResult Delete(PROD_SHOPS prod_shop)
+        {
+            if (ModelState.IsValid)
+            {
+                var prod_shop_deleted = db.PROD_SHOPS.Find(prod_shop.ID);
+                if (prod_shop_deleted != null)
+                {
+                    prod_shop_deleted.IsDeleted = true;
+                    if (TryUpdateModel(prod_shop_deleted, "", new string[] {"IsDeleted" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
+                    }
+                }
+                return View(prod_shop_deleted);
+            }
+
+            return View();
+        }
+
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var prod_shop = db.PROD_SHOPS.Find(id);
+            if (prod_shop == null)
+            {
+                return HttpNotFound();
+            }
+            return View(prod_shop);
+        }
+        [HttpPost]
+        public ActionResult Edit(PROD_SHOPS prod_shop)
+        {
+            if (ModelState.IsValid)
+            {
+                var prod_shop_Update = db.PROD_SHOPS.Find(prod_shop.ID);
+                if (prod_shop_Update != null)
+                {
+                    prod_shop_Update.IsDeleted = false;
+                    if (TryUpdateModel(prod_shop_Update, "", new string[] { "ShopName","Description","CompanyID", "IsDeleted" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
+                    }
+                }
+                return View(prod_shop_Update);
+            }
+
+            return View();
+        }
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var prod_shop = db.PROD_SHOPS.Find(id);
+            if (prod_shop == null)
+            {
+                return HttpNotFound();
+            }
+            return View(prod_shop);
+        }
+    }
+}
