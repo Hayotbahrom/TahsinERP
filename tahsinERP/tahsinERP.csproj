@@ -288,6 +288,7 @@
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WhIncomeController.cs" />
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -427,10 +428,16 @@
     <Compile Include="Models\P_WRHS_EXPENSE_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\P_WRHS_EXPENSE_PARTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\P_WRHS_INCOMES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_WRHS_INCOME_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\P_WRHS_INCOME_PARTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ROLE.cs">
@@ -636,6 +643,7 @@
     <Content Include="app-assets\data\fullcalendar\php\get-events.php" />
     <Content Include="app-assets\data\fullcalendar\php\get-timezones.php" />
     <Content Include="app-assets\data\fullcalendar\php\utils.php" />
+    <Content Include="app-assets\externalExport\js\jszip.min.js" />
     <Content Include="app-assets\fonts\boxicons\css\boxicons.css" />
     <Content Include="app-assets\fonts\boxicons\css\boxicons.min.css" />
     <Content Include="app-assets\fonts\boxicons\fonts\boxicons.svg" />
@@ -2312,6 +2320,8 @@
     <Content Include="Views\ComingSoon\Index.cshtml" />
     <Content Include="Views\PInvoice\Details.cshtml" />
     <Content Include="Views\PInvoice\Delete.cshtml" />
+    <Content Include="Views\WhIncome\Index.cshtml" />
+    <Content Include="Views\WhIncome\Create.cshtml" />
     <Content Include="Views\PInvoice\Edit.cshtml" />
     <Content Include="Views\PInvoice\EditPart.cshtml" />
   </ItemGroup>

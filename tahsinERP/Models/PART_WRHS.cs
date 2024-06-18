@@ -19,6 +19,7 @@ namespace tahsinERP.Models
         {
             this.P_WRHS_EXPENSES = new HashSet<P_WRHS_EXPENSES>();
             this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
+            this.P_WRHS_INCOMES1 = new HashSet<P_WRHS_INCOMES>();
         }
     
         public int ID { get; set; }
@@ -26,11 +27,15 @@ namespace tahsinERP.Models
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public Nullable<int> MRP { get; set; }
+        public Nullable<int> ShopID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES1 { get; set; }
+        public virtual PROD_SHOPS PROD_SHOPS { get; set; }
         public virtual USER USER { get; set; }
     }
 }

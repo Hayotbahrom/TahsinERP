@@ -21,8 +21,8 @@ namespace tahsinERP.Models
             this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
             this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
             this.P_ORDER_PARTS = new HashSet<P_ORDER_PARTS>();
-            this.P_WRHS_EXPENSES = new HashSet<P_WRHS_EXPENSES>();
-            this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
+            this.P_WRHS_EXPENSE_PARTS = new HashSet<P_WRHS_EXPENSE_PARTS>();
+            this.P_WRHS_INCOME_PARTS = new HashSet<P_WRHS_INCOME_PARTS>();
             this.PARTIMAGES = new HashSet<PARTIMAGE>();
             this.PARTPACKS = new HashSet<PARTPACK>();
             this.PARTPLANS = new HashSet<PARTPLAN>();
@@ -60,9 +60,9 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
+        public virtual ICollection<P_WRHS_EXPENSE_PARTS> P_WRHS_EXPENSE_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
+        public virtual ICollection<P_WRHS_INCOME_PARTS> P_WRHS_INCOME_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PARTIMAGE> PARTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
