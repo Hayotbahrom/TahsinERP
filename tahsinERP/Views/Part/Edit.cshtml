@@ -57,9 +57,14 @@
                                                                 @Html.TextBoxFor(model => model.PName, new { @class = "form-control", @placeholder = "Nomi", @required = "required" })
                                                                 @Html.ValidationMessageFor(model => model.PName, "", new { @class = "text-danger" })
                                                             </fieldset>
+                                                            <h6 class="invoice-to">Tsex Nomi</h6>
+                                                            <fieldset class="invoice-address form-group">
+                                                                @Html.DropDownListFor(model => model.ShopID, (SelectList)ViewBag.Prod_Shops, new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.ShopID, "", new { @class = "text-danger" })
+                                                            </fieldset>
                                                             <h6 class="invoice-to">Turi</h6>
                                                             <fieldset class="invoice-address form-group">
-                                                                @Html.TextBoxFor(model => model.Type, new { @class = "form-control", @placeholder = "Turi" })
+                                                                @Html.DropDownListFor(model => model.Type, new SelectList(ViewBag.PartTypes), new { @class = "form-control" })
                                                                 @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                                                             </fieldset>
                                                         </div>

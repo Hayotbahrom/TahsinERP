@@ -1,11 +1,13 @@
 ﻿using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
@@ -94,6 +96,7 @@ namespace tahsinERP.Controllers
                 newPart.Marka = partVM.Marka;
                 newPart.Standart = partVM.Standart;
                 newPart.IsInHouse = partVM.IsInHouse;
+                newPart.ShopID = partVM.ShopID;
 
                 db.PARTS.Add(newPart);
                 db.SaveChanges();
@@ -127,112 +130,136 @@ namespace tahsinERP.Controllers
             ViewBag.Prod_SHops = new SelectList(db.PROD_SHOPS, "ID", "ShopName",partVM.ShopID);
             return View();
         }
-        public ActionResult Edit(int? ID)
+        public ActionResult Edit(int? id)
         {
-            if (ID == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            // Fetch the part entity from the database
-            PART part = db.PARTS.Find(ID);
+            var part = db.PARTS.Find(id);
             if (part == null)
             {
                 return HttpNotFound();
             }
 
-            // Map the properties from the PART entity to a PartViewModel instance
-            PartViewModel partViewModel = new PartViewModel();
-            partViewModel.PNo = part.PNo;
-            partViewModel.PName = part.PName;
-            partViewModel.PWeight = part.PWeight;
-            partViewModel.PLength = part.PLength;
-            partViewModel.PWidth = part.PWidth;
-            partViewModel.PHeight = part.PHeight;
-            partViewModel.Unit = part.Unit;
-            partViewModel.Type = part.Type;
-            partViewModel.Description = part.Description;
-            partViewModel.Thickness = part.Thickness;
-            partViewModel.Grade = part.Grade;
-            partViewModel.Gauge = part.Gauge;
-            partViewModel.Pitch = part.Pitch;
-            partViewModel.Coating = part.Coating;
-            partViewModel.Standart = part.Standart;
-            partViewModel.Marka = part.Marka;
-            partViewModel.IsInHouse = part.IsInHouse;
+            // Populate ViewBag.Prod_Shops for the ShopID dropdown
+            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", part.ShopID);
+            ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
+            // Populate ViewBag.PartTypes for the Type dropdown
 
 
-            return View(partViewModel);
+            PartViewModel partVM = new PartViewModel
+            {
+                ID = part.ID,
+                PNo = part.PNo,
+                PName = part.PName,
+                PWeight = part.PWeight,
+                PLength = part.PLength,
+                PWidth = part.PWidth,
+                PHeight = part.PHeight,
+                Unit = part.Unit,
+                Type = part.Type,
+                Description = part.Description,
+                Thickness = part.Thickness,
+                Grade = part.Grade,
+                Gauge = part.Gauge,
+                Pitch = part.Pitch,
+                Coating = part.Coating,
+                Marka = part.Marka,
+                Standart = part.Standart,
+                IsInHouse = part.IsInHouse,
+                ShopID = part.ShopID ?? 0,
+                ShopName = db.PROD_SHOPS.Where(s => s.ID == part.ShopID).Select(s => s.ShopName).FirstOrDefault()
+            };
+
+            return View(partVM);
         }
 
+
+
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit(PartViewModel partVM)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var partToUpdate = db.PARTS.Find(partVM.ID);
-                if (partToUpdate != null)
+                if (ModelState.IsValid)
                 {
-                    partToUpdate.PNo = partVM.PNo;
-                    partToUpdate.PName = partVM.PName;
-                    partToUpdate.Description = partVM.Description;
-                    partToUpdate.PWeight = partVM.PWeight;
-                    partToUpdate.PLength = partVM.PLength;
-                    partToUpdate.PWidth = partVM.PWidth;
-                    partToUpdate.PHeight = partVM.PHeight;
-                    partToUpdate.Unit = partVM.Unit;
-                    partToUpdate.Type = partVM.Type;
-                    partToUpdate.IsDeleted = false;
-                    partToUpdate.Thickness = partVM.Thickness;
-                    partToUpdate.Grade = partVM.Grade;
-                    partToUpdate.Gauge = partVM.Gauge;
-                    partToUpdate.Pitch = partVM.Pitch;
-                    partToUpdate.Coating = partVM.Coating;
-                    partToUpdate.Standart = partVM.Standart;
-                    partToUpdate.Marka = partVM.Marka;
-                    partToUpdate.IsInHouse = partVM.IsInHouse;
-
-                    var imageFile = Request.Files["partPhotoUpload"];
-                    if (imageFile != null && imageFile.ContentLength > 0)
+                    var part = db.PARTS.Find(partVM.ID);
+                    if (part == null)
                     {
-                        if (imageFile.ContentLength < partPhotoMaxLength)
-                        {
-                            var existingImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == partVM.ID);
+                        return HttpNotFound();
+                    }
 
-                            if (existingImage != null)
+                    part.PNo = partVM.PNo;
+                    part.PName = partVM.PName;
+                    part.PWeight = partVM.PWeight;
+                    part.PLength = partVM.PLength;
+                    part.PWidth = partVM.PWidth;
+                    part.PHeight = partVM.PHeight;
+                    part.Unit = partVM.Unit;
+                    part.Type = partVM.Type;
+                    part.Description = partVM.Description;
+                    part.IsDeleted = false;
+                    part.Thickness = partVM.Thickness;
+                    part.Grade = partVM.Grade;
+                    part.Gauge = partVM.Gauge;
+                    part.Pitch = partVM.Pitch;
+                    part.Coating = partVM.Coating;
+                    part.Marka = partVM.Marka;
+                    part.Standart = partVM.Standart;
+                    part.IsInHouse = partVM.IsInHouse;
+                    part.ShopID = partVM.ShopID;
+
+                    db.Entry(part).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    if (Request.Files["partPhotoUpload"] != null && Request.Files["partPhotoUpload"].ContentLength > 0)
+                    {
+                        if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
+                        {
+                            var existingPartImage = db.PARTIMAGES.SingleOrDefault(pi => pi.PartID == part.ID);
+                            byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                            Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+
+                            if (existingPartImage != null)
                             {
-                                existingImage.Image = new byte[imageFile.ContentLength];
-                                imageFile.InputStream.Read(existingImage.Image, 0, existingImage.Image.Length);
+                                existingPartImage.Image = avatar;
                             }
                             else
                             {
-                                var photoImage = new PARTIMAGE
+                                PARTIMAGE partImage = new PARTIMAGE
                                 {
-                                    PartID = partVM.ID,
-                                    Image = new byte[imageFile.ContentLength],
-                                    IsDeleted = false
+                                    PartID = part.ID,
+                                    Image = avatar
                                 };
-
-                                imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
-                                db.PARTIMAGES.Add(photoImage);
+                                db.PARTIMAGES.Add(partImage);
                             }
+
+                            db.SaveChanges();
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Suratni yuklab bo‘lmadi, u 2 MB dan ortiq. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
                             throw new RetryLimitExceededException();
                         }
                     }
 
-                    db.Entry(partToUpdate).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Ma'lumotlarni saqlashni iloji bo'lmadi: {ex.Message}. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+            }
 
+            ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
+            ViewBag.Prod_SHops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partVM.ShopID);
             return View(partVM);
         }
+
 
         public ActionResult Delete(int? ID)
         {
@@ -278,42 +305,57 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-        public ActionResult Details(int? ID)
+        public ActionResult Details(int? id)
         {
-            if (ID == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PartViewModel partvm = new PartViewModel();
-            PART selectedPart = db.PARTS.Find(ID);
-            if (selectedPart == null)
+
+            var part = db.PARTS.Find(id);
+            if (part == null)
+            {
                 return HttpNotFound();
-            else
-            {
-                partvm.ID = selectedPart.ID;
-                partvm.PNo = selectedPart.PNo;
-                partvm.PName = selectedPart.PName;
-                partvm.Standart = selectedPart.Standart;
-                partvm.PWidth = selectedPart.PWidth;
-                partvm.PLength = selectedPart.PLength;
-                partvm.PHeight = selectedPart.PHeight;
-                partvm.Thickness = selectedPart.Thickness;
-                partvm.Description = selectedPart.Description;
-                partvm.Gauge = selectedPart.Gauge;
-                partvm.Coating = selectedPart.Coating;
-                partvm.Marka = selectedPart.Marka;
-                partvm.Grade = selectedPart.Grade;
-                partvm.IsInHouse = selectedPart.IsInHouse;
-                partvm.Pitch = selectedPart.Pitch;
-                partvm.Unit = selectedPart.Unit;
             }
-            PARTIMAGE partimage = db.PARTIMAGES.Where(ui => ui.PartID == selectedPart.ID).FirstOrDefault();
-            if (partimage != null)
+
+            var shop = db.PROD_SHOPS.Find(part.ShopID);
+            string shopName = shop != null ? shop.ShopName : "Unknown";
+
+            PartViewModel partVM = new PartViewModel
             {
-                ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partimage.Image, 0, partimage.Image.Length);
+                ID = part.ID,
+                PNo = part.PNo,
+                PName = part.PName,
+                PWeight = part.PWeight,
+                PLength = part.PLength,
+                PWidth = part.PWidth,
+                PHeight = part.PHeight,
+                Unit = part.Unit,
+                Type = part.Type,
+                Description = part.Description,
+                Thickness = part.Thickness,
+                Grade = part.Grade,
+                Gauge = part.Gauge,
+                Pitch = part.Pitch,
+                Coating = part.Coating,
+                Marka = part.Marka,
+                Standart = part.Standart,
+                IsInHouse = part.IsInHouse,
+                ShopID = part.ShopID ?? 0, // Default to 0 if null
+                ShopName = shopName // Set the shop name
+            };
+
+            // Assuming the image is stored as a base64 string in the viewbag
+            var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == part.ID);
+            if (partImage != null)
+            {
+                ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partImage.Image);
             }
-            return View(partvm);
+
+            return View(partVM);
         }
+
+
         public ActionResult UploadWithExcel()
         {
             ViewBag.IsFileUploaded = false;
