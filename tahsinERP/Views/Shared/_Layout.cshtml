@@ -238,24 +238,25 @@
                         </ul>
                     </li>
                     @*<li class=" navigation-header">
-                            <span>Boshqaruv dasturlari</span>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-chat"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-check-circle"></i><span class="menu-title" data-i18n="Todo">Topshiriqlar</span></a>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-calendar"></i><span class="menu-title" data-i18n="Calendar">Kalendar</span></a>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
-                        </li>*@
+            <span>Boshqaruv dasturlari</span>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-chat"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-check-circle"></i><span class="menu-title" data-i18n="Todo">Topshiriqlar</span></a>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-calendar"></i><span class="menu-title" data-i18n="Calendar">Kalendar</span></a>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
+        </li>*@
                     <li class=" navigation-header">
                         <span>SRM</span>
                     </li>
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+                    @*@if (RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))*@
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Supplier"))
                     {
                         <li class=" nav-item">
                             <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
@@ -447,17 +448,20 @@
                     <li class=" navigation-header">
                         <span>CRM</span>
                     </li>
-                    <li class=" nav-item">
-                        <a href="#"><i class="bx bxs-smiley-happy"></i><span class="menu-title" data-i18n="Sweet Alert">Xaridorlar</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Umumiy ma'lumot</span></a>
-                            </li>
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Shartnomalar</span></a>
-                            </li>
-                        </ul>
-                    </li>
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Customer"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-smiley-happy"></i><span class="menu-title" data-i18n="Sweet Alert">Xaridorlar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/Customer/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Umumiy ma'lumot</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Shartnomalar</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
                     <li class=" nav-item">
                         <a href="~/ComingSoon/Index"><i class="bx bx-stats"></i><span class="menu-title" data-i18n="Toastr">Forecast reja</span></a>
                     </li>
