@@ -1,7 +1,4 @@
-﻿using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -10,13 +7,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -69,10 +64,12 @@ namespace tahsinERP.Controllers
         {
             PartViewModel partVM = new PartViewModel();
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.Prod_SHops = new SelectList(db.PROD_SHOPS, "ID", "ShopName");
+            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName");
             return View(partVM);
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(PartViewModel partVM)
         {
             try
@@ -101,13 +98,37 @@ namespace tahsinERP.Controllers
                 db.PARTS.Add(newPart);
                 db.SaveChanges();
 
+
+                PROD_SHOPS pROD_SHOPS = db.PROD_SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
+                if (pROD_SHOPS != null)
+                {
+                    bool exists = db.Database.SqlQuery<int>(
+                "SELECT COUNT(*) FROM Prod_Shops_Parts WHERE ShopId = @ShopId AND PartId = @PartId",
+                new SqlParameter("@ShopId", pROD_SHOPS.ID),
+                new SqlParameter("@PartId", newPart.ID)
+            ).FirstOrDefault() > 0;
+                    if (!exists)
+                    {
+
+                        int shopId = db.Database.SqlQuery<int>("Select shopId from Prod_Shops_Parts where ShopId=" + pROD_SHOPS.ID + "and PartId = " + newPart.ID + "").FirstOrDefault();
+                        if (shopId != pROD_SHOPS.ID)
+                        {
+                            int noOfRowInserted = db.Database.ExecuteSqlCommand("Insert Into Prod_Shops_Parts ([ShopId],[PartId]) Values(" + pROD_SHOPS.ID + "," + newPart.ID + ")");
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Bu Shop va Part kombinatsiyasi allaqachon mavjud.");
+                    }
+                }
                 if (Request.Files["partPhotoUpload"].ContentLength > 0)
                 {
                     if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
                     {
                         PARTIMAGE partImage = new PARTIMAGE();
-                        avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                        Request.Files["partPhotoUploadpart"].InputStream.Read(avatar, 0, avatar.Length);
+                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
                         partImage.PartID = newPart.ID;
                         partImage.Image = avatar;
 
@@ -120,16 +141,19 @@ namespace tahsinERP.Controllers
                         throw new RetryLimitExceededException();
                     }
                 }
-                return RedirectToAction("Index"); 
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(ex.Message, "Ma'lumotlarni saqlashni iloji bo'lmadi. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
             }
+
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.Prod_SHops = new SelectList(db.PROD_SHOPS, "ID", "ShopName",partVM.ShopID);
-            return View();
+            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partVM.ShopID);
+            return View(partVM);
         }
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -142,12 +166,6 @@ namespace tahsinERP.Controllers
             {
                 return HttpNotFound();
             }
-
-            // Populate ViewBag.Prod_Shops for the ShopID dropdown
-            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", part.ShopID);
-            ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            // Populate ViewBag.PartTypes for the Type dropdown
-
 
             PartViewModel partVM = new PartViewModel
             {
@@ -169,96 +187,91 @@ namespace tahsinERP.Controllers
                 Marka = part.Marka,
                 Standart = part.Standart,
                 IsInHouse = part.IsInHouse,
-                ShopID = part.ShopID ?? 0,
-                ShopName = db.PROD_SHOPS.Where(s => s.ID == part.ShopID).Select(s => s.ShopName).FirstOrDefault()
+                ShopID = part.ShopID ?? 0
             };
+
+            ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
+            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", part.ShopID);
 
             return View(partVM);
         }
 
-
-
-
-
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(PartViewModel partVM)
         {
             try
             {
-                if (ModelState.IsValid)
+                var partToUpdate = db.PARTS.Find(partVM.ID);
+                if (partToUpdate == null)
                 {
-                    var part = db.PARTS.Find(partVM.ID);
-                    if (part == null)
-                    {
-                        return HttpNotFound();
-                    }
-
-                    part.PNo = partVM.PNo;
-                    part.PName = partVM.PName;
-                    part.PWeight = partVM.PWeight;
-                    part.PLength = partVM.PLength;
-                    part.PWidth = partVM.PWidth;
-                    part.PHeight = partVM.PHeight;
-                    part.Unit = partVM.Unit;
-                    part.Type = partVM.Type;
-                    part.Description = partVM.Description;
-                    part.IsDeleted = false;
-                    part.Thickness = partVM.Thickness;
-                    part.Grade = partVM.Grade;
-                    part.Gauge = partVM.Gauge;
-                    part.Pitch = partVM.Pitch;
-                    part.Coating = partVM.Coating;
-                    part.Marka = partVM.Marka;
-                    part.Standart = partVM.Standart;
-                    part.IsInHouse = partVM.IsInHouse;
-                    part.ShopID = partVM.ShopID;
-
-                    db.Entry(part).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    if (Request.Files["partPhotoUpload"] != null && Request.Files["partPhotoUpload"].ContentLength > 0)
-                    {
-                        if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
-                        {
-                            var existingPartImage = db.PARTIMAGES.SingleOrDefault(pi => pi.PartID == part.ID);
-                            byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                            Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
-
-                            if (existingPartImage != null)
-                            {
-                                existingPartImage.Image = avatar;
-                            }
-                            else
-                            {
-                                PARTIMAGE partImage = new PARTIMAGE
-                                {
-                                    PartID = part.ID,
-                                    Image = avatar
-                                };
-                                db.PARTIMAGES.Add(partImage);
-                            }
-
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
-                            throw new RetryLimitExceededException();
-                        }
-                    }
-
-                    return RedirectToAction("Index");
+                    return HttpNotFound();
                 }
+
+                partToUpdate.PNo = partVM.PNo;
+                partToUpdate.PName = partVM.PName;
+                partToUpdate.PWeight = partVM.PWeight;
+                partToUpdate.PLength = partVM.PLength;
+                partToUpdate.PWidth = partVM.PWidth;
+                partToUpdate.PHeight = partVM.PHeight;
+                partToUpdate.Unit = partVM.Unit;
+                partToUpdate.Type = partVM.Type;
+                partToUpdate.Description = partVM.Description;
+                partToUpdate.Thickness = partVM.Thickness;
+                partToUpdate.Grade = partVM.Grade;
+                partToUpdate.Gauge = partVM.Gauge;
+                partToUpdate.Pitch = partVM.Pitch;
+                partToUpdate.Coating = partVM.Coating;
+                partToUpdate.Marka = partVM.Marka;
+                partToUpdate.Standart = partVM.Standart;
+                partToUpdate.IsInHouse = partVM.IsInHouse;
+                partToUpdate.ShopID = partVM.ShopID;
+
+                db.Entry(partToUpdate).State = EntityState.Modified;
+                db.SaveChanges();
+
+                // Update the many-to-many table Prod_Shop_Parts
+                db.Database.ExecuteSqlCommand("DELETE FROM Prod_Shops_Parts WHERE PartID = {0}", partToUpdate.ID);
+                db.Database.ExecuteSqlCommand(
+                    "INSERT INTO Prod_Shops_Parts (PartID, ShopID) VALUES ({0}, {1})", partToUpdate.ID, partVM.ShopID);
+
+                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                {
+                    if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
+                    {
+                        var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == partToUpdate.ID);
+                        if (partImage == null)
+                        {
+                            partImage = new PARTIMAGE();
+                            db.PARTIMAGES.Add(partImage);
+                        }
+
+                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        partImage.PartID = partToUpdate.ID;
+                        partImage.Image = avatar;
+
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        throw new RetryLimitExceededException();
+                    }
+                }
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"Ma'lumotlarni saqlashni iloji bo'lmadi: {ex.Message}. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                ModelState.AddModelError(ex.Message, "Ma'lumotlarni saqlashni iloji bo'lmadi. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
             }
 
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.Prod_SHops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partVM.ShopID);
+            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partVM.ShopID);
             return View(partVM);
         }
+
 
 
         public ActionResult Delete(int? ID)
