@@ -19,7 +19,6 @@ namespace tahsinERP.Controllers
 {
     public class PartController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');//new string[4] { "", "KD", "Steel", "Maxalliy" };
         private byte[] avatar;
         private int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
@@ -96,11 +95,25 @@ namespace tahsinERP.Controllers
                 newPart.Marka = partVM.Marka;
                 newPart.Standart = partVM.Standart;
                 newPart.IsInHouse = partVM.IsInHouse;
+                
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    db.PARTS.Add(newPart);
+                    db.SaveChanges();
                 newPart.ShopID = partVM.ShopID;
 
                 db.PARTS.Add(newPart);
                 db.SaveChanges();
 
+                    if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                    {
+                        if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
+                        {
+                            PARTIMAGE partImage = new PARTIMAGE();
+                            avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                            Request.Files["partPhotoUploadpart"].InputStream.Read(avatar, 0, avatar.Length);
+                            partImage.PartID = newPart.ID;
+                            partImage.Image = avatar;
 
                 PROD_SHOPS pROD_SHOPS = db.PROD_SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
                 if (pROD_SHOPS != null)
@@ -135,6 +148,27 @@ namespace tahsinERP.Controllers
                         partImage.PartID = newPart.ID;
                         partImage.Image = avatar;
 
+                            db.PARTIMAGES.Add(partImage);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                            throw new RetryLimitExceededException();
+                        }
+                    }
+                }
+            }
+                        db.PARTIMAGES.Add(partImage);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        throw new RetryLimitExceededException();
+                    }
+                }
+                return RedirectToAction("Index"); 
                         db.PARTIMAGES.Add(partImage);
                         db.SaveChanges();
                     }
@@ -163,6 +197,13 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PART part = db.PARTS.Find(ID);
+                if (part == null)
+                {
+                    return HttpNotFound();
+                }
 
             var part = db.PARTS.Find(id);
             if (part == null)
@@ -198,11 +239,40 @@ namespace tahsinERP.Controllers
 
             return View(partVM);
         }
+                return View(partViewModel);
+            }
+            // Fetch the part entity from the database
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(PartViewModel partVM)
         {
+            if (ModelState.IsValid)
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    var partToUpdate = db.PARTS.Find(partVM.ID);
+                    if (partToUpdate != null)
+                    {
+                        partToUpdate.PNo = partVM.PNo;
+                        partToUpdate.PName = partVM.PName;
+                        partToUpdate.Description = partVM.Description;
+                        partToUpdate.PWeight = partVM.PWeight;
+                        partToUpdate.PLength = partVM.PLength;
+                        partToUpdate.PWidth = partVM.PWidth;
+                        partToUpdate.PHeight = partVM.PHeight;
+                        partToUpdate.Unit = partVM.Unit;
+                        partToUpdate.Type = partVM.Type;
+                        partToUpdate.IsDeleted = false;
+                        partToUpdate.Thickness = partVM.Thickness;
+                        partToUpdate.Grade = partVM.Grade;
+                        partToUpdate.Gauge = partVM.Gauge;
+                        partToUpdate.Pitch = partVM.Pitch;
+                        partToUpdate.Coating = partVM.Coating;
+                        partToUpdate.Standart = partVM.Standart;
+                        partToUpdate.Marka = partVM.Marka;
+                        partToUpdate.IsInHouse = partVM.IsInHouse;
             try
             {
                 var partToUpdate = db.PARTS.Find(partVM.ID);
@@ -233,6 +303,46 @@ namespace tahsinERP.Controllers
                 db.Entry(partToUpdate).State = EntityState.Modified;
                 db.SaveChanges();
 
+                        var imageFile = Request.Files["partPhotoUpload"];
+                        if (imageFile != null && imageFile.ContentLength > 0)
+                        {
+                            if (imageFile.ContentLength < partPhotoMaxLength)
+                            {
+                                var existingImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == partVM.ID);
+                    if (Request.Files["partPhotoUpload"] != null && Request.Files["partPhotoUpload"].ContentLength > 0)
+                    {
+                        if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
+                        {
+                            var existingPartImage = db.PARTIMAGES.SingleOrDefault(pi => pi.PartID == part.ID);
+                            byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                            Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+
+                                if (existingImage != null)
+                                {
+                                    existingImage.Image = new byte[imageFile.ContentLength];
+                                    imageFile.InputStream.Read(existingImage.Image, 0, existingImage.Image.Length);
+                                }
+                                else
+                                {
+                                    var photoImage = new PARTIMAGE
+                                    {
+                                        PartID = partVM.ID,
+                                        Image = new byte[imageFile.ContentLength],
+                                        IsDeleted = false
+                                    };
+                            if (existingPartImage != null)
+                            {
+                                existingPartImage.Image = avatar;
+                            }
+                            else
+                            {
+                                PARTIMAGE partImage = new PARTIMAGE
+                                {
+                                    PartID = part.ID,
+                                    Image = avatar
+                                };
+                                db.PARTIMAGES.Add(partImage);
+                            }
                 // Update the many-to-many table Prod_Shop_Parts
                 db.Database.ExecuteSqlCommand("DELETE FROM Prod_Shops_Parts WHERE PartID = {0}", partToUpdate.ID);
                 db.Database.ExecuteSqlCommand(
@@ -249,6 +359,29 @@ namespace tahsinERP.Controllers
                             db.PARTIMAGES.Add(partImage);
                         }
 
+                                    imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
+                                    db.PARTIMAGES.Add(photoImage);
+                                }
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Suratni yuklab bo‘lmadi, u 2 MB dan ortiq. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
+                                throw new RetryLimitExceededException();
+                            }
+                        }
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                            throw new RetryLimitExceededException();
+                        }
+                    }
+
+                        db.Entry(partToUpdate).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                         byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
                         Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
                         partImage.PartID = partToUpdate.ID;
@@ -263,6 +396,11 @@ namespace tahsinERP.Controllers
                     }
                 }
 
+                }
+            }
+                    return RedirectToAction("Index");
+                }
+            }
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -283,11 +421,14 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var part = db.PARTS.Find(ID);
-            if (part == null)
-                return HttpNotFound();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var part = db.PARTS.Find(ID);
+                if (part == null)
+                    return HttpNotFound();
 
-            return View(part);
+                return View(part);
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -295,27 +436,30 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                PART partToDelete = db.PARTS.Find(ID);
-                if (partToDelete != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    partToDelete.IsDeleted = true;
-                    if (TryUpdateModel(partToDelete, "", new string[] { "IsDeleted" }))
+                    PART partToDelete = db.PARTS.Find(ID);
+                    if (partToDelete != null)
                     {
-                        try
+                        partToDelete.IsDeleted = true;
+                        if (TryUpdateModel(partToDelete, "", new string[] { "IsDeleted" }))
                         {
-                            db.SaveChanges();
+                            try
+                            {
+                                db.SaveChanges();
 
-                            return RedirectToAction("Index");
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                                return RedirectToAction("Index");
+                            }
+                            catch (RetryLimitExceededException)
+                            {
+                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            }
                         }
                     }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Bunday detall topilmadi.");
+                    else
+                    {
+                        ModelState.AddModelError("", "Bunday detall topilmadi.");
+                    }
                 }
 
             }
@@ -327,6 +471,39 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PartViewModel partvm = new PartViewModel();
+                PART selectedPart = db.PARTS.Find(ID);
+                if (selectedPart == null)
+                    return HttpNotFound();
+                else
+                {
+                    partvm.ID = selectedPart.ID;
+                    partvm.PNo = selectedPart.PNo;
+                    partvm.PName = selectedPart.PName;
+                    partvm.Standart = selectedPart.Standart;
+                    partvm.PWidth = selectedPart.PWidth;
+                    partvm.PLength = selectedPart.PLength;
+                    partvm.PHeight = selectedPart.PHeight;
+                    partvm.Thickness = selectedPart.Thickness;
+                    partvm.Description = selectedPart.Description;
+                    partvm.Gauge = selectedPart.Gauge;
+                    partvm.Coating = selectedPart.Coating;
+                    partvm.Marka = selectedPart.Marka;
+                    partvm.Grade = selectedPart.Grade;
+                    partvm.IsInHouse = selectedPart.IsInHouse;
+                    partvm.Pitch = selectedPart.Pitch;
+                    partvm.Unit = selectedPart.Unit;
+                }
+                PARTIMAGE partimage = db.PARTIMAGES.Where(ui => ui.PartID == selectedPart.ID).FirstOrDefault();
+                if (partimage != null)
+                {
+                    ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partimage.Image, 0, partimage.Image.Length);
+                }
+                return View(partvm);
+            }
+        }
 
             var part = db.PARTS.Find(id);
             if (part == null)
@@ -379,10 +556,13 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Download()
         {
-            SAMPLE_FILES detal = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("detallar.xlsx") == 0).FirstOrDefault();
-            if (detal != null)
-                return File(detal.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            return View();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                SAMPLE_FILES detal = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("detallar.xlsx") == 0).FirstOrDefault();
+                if (detal != null)
+                    return File(detal.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return View();
+            }
         }
         [HttpPost]
         public ActionResult UploadWithExcel(HttpPostedFileBase file)
@@ -432,17 +612,18 @@ namespace tahsinERP.Controllers
                         ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                         ViewBag.IsFileUploaded = true;
 
-
-                        foreach (DataRow row in dataTable.Rows)
+                        using (DBTHSNEntities db = new DBTHSNEntities())
                         {
-                            partNo = row["Partnumber"].ToString();
-
-                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                            if (part != null)
+                            foreach (DataRow row in dataTable.Rows)
                             {
-                                ViewBag.ExistingRecordsCount = 1;
-                            }
+                                partNo = row["Partnumber"].ToString();
 
+                                PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                if (part != null)
+                                {
+                                    ViewBag.ExistingRecordsCount = 1;
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -483,42 +664,44 @@ namespace tahsinERP.Controllers
                 var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
                 try
                 {
-
-                    foreach (DataRow row in tableModel.Rows)
+                    using (DBTHSNEntities db = new DBTHSNEntities())
                     {
-                        partNo = row["Partnumber"].ToString();
-
-                        PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-
-                        if (part == null)
+                        foreach (DataRow row in tableModel.Rows)
                         {
-                            PART newPart = new PART();
-                            newPart.PNo = row["Partnumber"].ToString();
-                            newPart.PName = row["PartName"].ToString();
-                            newPart.PWeight = Double.Parse(row["Weight"].ToString());
-                            newPart.PLength = Double.Parse(row["Length"].ToString());
-                            newPart.PWidth = Double.Parse(row["Width"].ToString());
-                            newPart.PHeight = Double.Parse(row["Height"].ToString());
-                            newPart.Thickness = Double.Parse(row["Thickness"].ToString());
-                            newPart.Grade = row["Grade"].ToString();
-                            newPart.Gauge = Double.Parse(row["Gauge"].ToString());
-                            newPart.Pitch = Double.Parse(row["Pitch"].ToString());
-                            newPart.Coating = row["Coating"].ToString();
-                            newPart.Marka = row["Standart"].ToString();
-                            newPart.Standart = row["Standart"].ToString();
-                            newPart.Unit = row["Unit"].ToString();
-                            if (row["InHouse?"].ToString().CompareTo("Yes") == 0)
-                                newPart.IsInHouse = true;
+                            partNo = row["Partnumber"].ToString();
+
+                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+
+                            if (part == null)
+                            {
+                                PART newPart = new PART();
+                                newPart.PNo = row["Partnumber"].ToString();
+                                newPart.PName = row["PartName"].ToString();
+                                newPart.PWeight = Double.Parse(row["Weight"].ToString());
+                                newPart.PLength = Double.Parse(row["Length"].ToString());
+                                newPart.PWidth = Double.Parse(row["Width"].ToString());
+                                newPart.PHeight = Double.Parse(row["Height"].ToString());
+                                newPart.Thickness = Double.Parse(row["Thickness"].ToString());
+                                newPart.Grade = row["Grade"].ToString();
+                                newPart.Gauge = Double.Parse(row["Gauge"].ToString());
+                                newPart.Pitch = Double.Parse(row["Pitch"].ToString());
+                                newPart.Coating = row["Coating"].ToString();
+                                newPart.Marka = row["Standart"].ToString();
+                                newPart.Standart = row["Standart"].ToString();
+                                newPart.Unit = row["Unit"].ToString();
+                                if (row["InHouse?"].ToString().CompareTo("Yes") == 0)
+                                    newPart.IsInHouse = true;
+                                else
+                                    newPart.IsInHouse = false;
+                                newPart.IsDeleted = false;
+
+                                db.PARTS.Add(newPart);
+                                db.SaveChanges();
+                            }
                             else
-                                newPart.IsInHouse = false;
-                            newPart.IsDeleted = false;
-
-                            db.PARTS.Add(newPart);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            ViewBag.Message = "Muammo!. Yuklangan faylda ayni vaqtda ma'lumotlar bazasida bor ma'lumot kiritilishga harakat bo'lmoqda.";
+                            {
+                                ViewBag.Message = "Muammo!. Yuklangan faylda ayni vaqtda ma'lumotlar bazasida bor ma'lumot kiritilishga harakat bo'lmoqda.";
+                            }
                         }
                     }
                 }
