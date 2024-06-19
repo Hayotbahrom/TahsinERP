@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -73,7 +74,10 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Create()
         {
-            return View();
+            PartViewModel partVM = new PartViewModel();
+            ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
+            ViewBag.Prod_SHops = new SelectList(db.PROD_SHOPS, "ID", "ShopName");
+            return View(partVM);
         }
         [HttpPost]
         public ActionResult Create(PartViewModel partVM)
@@ -122,11 +126,14 @@ namespace tahsinERP.Controllers
                         throw new RetryLimitExceededException();
                     }
                 }
+                return RedirectToAction("Index"); 
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(ex.Message, "Ma'lumotlarni saqlashni iloji bo'lmadi. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
             }
+            ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
+            ViewBag.Prod_SHops = new SelectList(db.PROD_SHOPS, "ID", "ShopName",partVM.ShopID);
             return View();
         }
         public ActionResult Edit(int? ID)
