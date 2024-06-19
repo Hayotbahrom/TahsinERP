@@ -6,7 +6,6 @@ namespace tahsinERP.Controllers
 {
     public class PermissionController : Controller
     {
-        DBTHSNEntities db = new DBTHSNEntities();
         // GET: Permission
         public ActionResult Index()
         {
@@ -14,29 +13,35 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Permissions(int? roleID)
         {
-            var thisRole = db.ROLES.Find(roleID);
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var thisRole = db.ROLES.Find(roleID);
 
-            return View(thisRole);
+                return View(thisRole);
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Permissions(int? roleID, FormCollection fvm)
         {
-            var permissions = db.PERMISSIONS.Where(pr => pr.RoleID == roleID).ToList();
-            foreach (var permission in permissions)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                bool changePermit = permission.ChangePermit;
-                bool viewPermit = permission.ViewPermit;
-
-                // Update the database with the new permission values
-                var perm = db.PERMISSIONS.Find(permission.ID);
-                if (perm != null)
+                var permissions = db.PERMISSIONS.Where(pr => pr.RoleID == roleID).ToList();
+                foreach (var permission in permissions)
                 {
-                    perm.ChangePermit = changePermit;
-                    perm.ViewPermit = viewPermit;
-                    db.Entry(perm).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    bool changePermit = permission.ChangePermit;
+                    bool viewPermit = permission.ViewPermit;
+
+                    // Update the database with the new permission values
+                    var perm = db.PERMISSIONS.Find(permission.ID);
+                    if (perm != null)
+                    {
+                        perm.ChangePermit = changePermit;
+                        perm.ViewPermit = viewPermit;
+                        db.Entry(perm).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
             }
 

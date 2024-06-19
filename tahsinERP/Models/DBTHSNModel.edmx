@@ -4,21 +4,23 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DBTHSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DBTHSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BOMS">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ParentID" Type="int" />
-          <Property Name="ChildID" Type="int" />
-          <Property Name="GrandChildID" Type="int" />
           <Property Name="ChildUsageQty" Type="float" />
           <Property Name="ChildUsageUnit" Type="varchar" MaxLength="15" />
           <Property Name="GrandChildUsageQty" Type="float" />
           <Property Name="GrandChildUsageUnit" Type="varchar" MaxLength="15" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="IsDeleted" Type="bit" />
+          <Property Name="ParentPNo" Type="varchar" MaxLength="50" />
+          <Property Name="ChildPNo" Type="varchar" MaxLength="50" />
+          <Property Name="GrandChildPNo" Type="varchar" MaxLength="50" />
+          <Property Name="IsParentProduct" Type="bit" />
+          <Property Name="IsParentPart" Type="bit" />
         </EntityType>
         <EntityType Name="COMPANIES">
           <Key>
@@ -476,18 +478,6 @@
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PARTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PROD_SHOPS_PARTS">
-          <Property Name="ShopID" Type="int" />
-          <Property Name="PartID" Type="int" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PROD_SHOPS_PRODUCTS">
-          <Property Name="ShopID" Type="int" />
-          <Property Name="ProductID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PRODUCT1738DOCS">
           <Key>
             <PropertyRef Name="ID" />
@@ -1324,18 +1314,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PARTS_PARTS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PARTS_PROD_SHOPS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PRODUCTS_PROD_SHOPS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PRODUCTS_PRODUCTS" />-->
         <Association Name="FK_PRODUCT1738DOCS_PRODUCTPACKS">
           <End Role="PRODUCTPACKS" Type="Self.PRODUCTPACKS" Multiplicity="1" />
           <End Role="PRODUCT1738DOCS" Type="Self.PRODUCT1738DOCS" Multiplicity="*" />
@@ -1871,8 +1849,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="USERS" EntitySet="USERS" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DBTHSNModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1881,15 +1858,17 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ParentID" Type="Int32" />
-          <Property Name="ChildID" Type="Int32" />
-          <Property Name="GrandChildID" Type="Int32" />
           <Property Name="ChildUsageQty" Type="Double" />
           <Property Name="ChildUsageUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="GrandChildUsageQty" Type="Double" />
           <Property Name="GrandChildUsageUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="ParentPNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChildPNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GrandChildPNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsParentProduct" Type="Boolean" />
+          <Property Name="IsParentPart" Type="Boolean" />
         </EntityType>
         <EntityType Name="COMPANy">
           <Key>
@@ -3799,17 +3778,17 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           </AssociationSet>
           <FunctionImport Name="GetPartsInfo" ReturnType="Collection(DBTHSNModel.GetPartsInfo_Result)" />
           <FunctionImport Name="GetPartsInfo_by_supplierID" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_supplierID_Result)">
-            <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+          <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPartsInfo_by_type" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_type_Result)">
-            <Parameter Name="Type" Mode="In" Type="String" />
+          <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPartsInfo_by_type_and_supplierID" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_type_and_supplierID_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
             <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetSupplierParts" ReturnType="Collection(DBTHSNModel.GetSupplierParts_Result)">
-            <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+          <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetPartsInfo_Result">
@@ -3866,10 +3845,12 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySetMapping Name="BOMS">
             <EntityTypeMapping TypeName="DBTHSNModel.BOM">
               <MappingFragment StoreEntitySet="BOMS">
+                <ScalarProperty Name="IsParentPart" ColumnName="IsParentPart" />
+                <ScalarProperty Name="IsParentProduct" ColumnName="IsParentProduct" />
+                <ScalarProperty Name="GrandChildPNo" ColumnName="GrandChildPNo" />
+                <ScalarProperty Name="ChildPNo" ColumnName="ChildPNo" />
+                <ScalarProperty Name="ParentPNo" ColumnName="ParentPNo" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="ChildID" ColumnName="ChildID" />
-                <ScalarProperty Name="GrandChildID" ColumnName="GrandChildID" />
                 <ScalarProperty Name="ChildUsageQty" ColumnName="ChildUsageQty" />
                 <ScalarProperty Name="ChildUsageUnit" ColumnName="ChildUsageUnit" />
                 <ScalarProperty Name="GrandChildUsageQty" ColumnName="GrandChildUsageQty" />
