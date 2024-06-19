@@ -27,38 +27,41 @@ namespace tahsinERP.Controllers
         // GET: Part
         public ActionResult Index(string type, int? supplierID)
         {
-            var suppliers = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
-            if (!string.IsNullOrEmpty(type))
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (supplierID.HasValue)
+                var suppliers = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
+                if (!string.IsNullOrEmpty(type))
                 {
-                    ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_type_and_supplierID_Result>("EXEC GetPartsInfo_by_type_and_supplierID @Type, @SupplierID", new SqlParameter("@Type", type), new SqlParameter("@SupplierID", supplierID)).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
+                    if (supplierID.HasValue)
+                    {
+                        ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_type_and_supplierID_Result>("EXEC GetPartsInfo_by_type_and_supplierID @Type, @SupplierID", new SqlParameter("@Type", type), new SqlParameter("@SupplierID", supplierID)).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
+                    }
+                    else
+                    {
+                        ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_type_Result>("EXEC GetPartsInfo_by_type @Type", new SqlParameter("@Type", type)).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
+                    }
                 }
                 else
                 {
-                    ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_type_Result>("EXEC GetPartsInfo_by_type @Type", new SqlParameter("@Type", type)).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
+                    if (supplierID.HasValue)
+                    {
+                        ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_supplierID_Result>("EXEC GetPartsInfo_by_supplierID @SupplierID", new SqlParameter("@SupplierID", supplierID)).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
+                    }
+                    else
+                    {
+                        ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_Result>("EXEC GetPartsInfo").ToList();
+                        ViewBag.SourceList = new SelectList(sources);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
+                    }
                 }
+                return View();
             }
-            else
-            {
-                if (supplierID.HasValue)
-                {
-                    ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_supplierID_Result>("EXEC GetPartsInfo_by_supplierID @SupplierID", new SqlParameter("@SupplierID", supplierID)).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
-                }
-                else
-                {
-                    ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_Result>("EXEC GetPartsInfo").ToList();
-                    ViewBag.SourceList = new SelectList(sources);
-                    ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
-                }
-            }
-            return View();
         }
         public ActionResult Create()
         {
