@@ -287,6 +287,7 @@
     <Compile Include="Controllers\POrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
@@ -645,6 +646,7 @@
     <Content Include="app-assets\data\fullcalendar\php\get-events.php" />
     <Content Include="app-assets\data\fullcalendar\php\get-timezones.php" />
     <Content Include="app-assets\data\fullcalendar\php\utils.php" />
+    <Content Include="app-assets\externalExport\js\jszip.min.js" />
     <Content Include="app-assets\fonts\boxicons\css\boxicons.css" />
     <Content Include="app-assets\fonts\boxicons\css\boxicons.min.css" />
     <Content Include="app-assets\fonts\boxicons\fonts\boxicons.svg" />
@@ -2325,6 +2327,14 @@
     <Content Include="Views\BOM\Index.cshtml" />
     <Content Include="Views\BOM\Details.cshtml" />
     <Content Include="Views\BOM\BOMTree.cshtml" />
+    <Content Include="Views\WhIncome\Create.cshtml" />
+    <Content Include="Views\PInvoice\Edit.cshtml" />
+    <Content Include="Views\PInvoice\EditPart.cshtml" />
+    <Content Include="Views\Shop\Index.cshtml" />
+    <Content Include="Views\Shop\Create.cshtml" />
+    <Content Include="Views\Shop\Delete.cshtml" />
+    <Content Include="Views\Shop\Details.cshtml" />
+    <Content Include="Views\Shop\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
