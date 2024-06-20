@@ -28,7 +28,7 @@
             </div>
             <div class="content-body">
                 <!-- app invoice View Page -->
-                @using (Html.BeginForm("SavePermission", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("Permissions", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
                     <section class="invoice-edit-wrapper">
@@ -46,30 +46,28 @@
                                                         <th>Ko'rish</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    @foreach (var permission in Model.PERMISSIONS)
-                                                    {
-                                                        <tr>
-                                                            <td>@permission.PERMISSIONMODULE.Module</td>
-                                                            <td>
-                                                                <input type="hidden" name="permissions[@permission.ID].ID" value="@permission.ID" />
-                                                                <input type="checkbox" name="permissions[@permission.ID].ChangePermit" value="true" @(permission.ChangePermit ? "checked" : "") />
-                                                                <input type="hidden" name="permissions[@permission.ID].ChangePermit" value="false" />
-                                                            </td>
-                                                            <td>
-                                                                <input type="checkbox" name="permissions[@permission.ID].ViewPermit" value="true" @(permission.ViewPermit ? "checked" : "") />
-                                                                <input type="hidden" name="permissions[@permission.ID].ViewPermit" value="false" />
-                                                            </td>
-                                                        </tr>
 
-                                                    }
-                                                </tbody>
+                                                @foreach (var permission in Model.PERMISSIONS)
+                                                {
+                                                    <tr>
+                                                        <td>@permission.PERMISSIONMODULE.Module</td>
+                                                        <td>
+                                                            <input type="hidden" name="permissions[@permission.ID].ID" value="@permission.ID" />
+                                                            <input type="checkbox" name="permissions[@permission.ID].ChangePermit" value="true" @(permission.ChangePermit ? "checked" : "") />
+                                                            <input type="hidden" name="permissions[@permission.ID].ChangePermit" value="false" />
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox" name="permissions[@permission.ID].ViewPermit" value="true" @(permission.ViewPermit ? "checked" : "") />
+                                                            <input type="hidden" name="permissions[@permission.ID].ViewPermit" value="false" />
+                                                        </td>
+                                                    </tr>
 
+                                                }
                                             </table>
                                             <hr>
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
-                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="permissions" type="submit" value="Permissions">
                                                         <i class='bx bx-save'></i>
                                                         Saqlash
                                                     </button>

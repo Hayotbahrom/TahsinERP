@@ -1775,6 +1775,7 @@
     <Content Include="app-assets\js\core\app.min.js" />
     <Content Include="app-assets\js\core\libraries\bootstrap.min.js" />
     <Content Include="app-assets\js\core\libraries\jquery.min.js" />
+    <Content Include="app-assets\js\pmodule\script.js" />
     <Content Include="app-assets\js\scripts\cards\widgets.js" />
     <Content Include="app-assets\js\scripts\cards\widgets.min.js" />
     <Content Include="app-assets\js\scripts\charts\chart-apex.js" />
@@ -2349,6 +2350,9 @@
     <Content Include="Views\PackingList\Delete.cshtml" />
     <Content Include="Views\PackingList\Edit.cshtml" />
     <Content Include="Views\Role\Permissions.cshtml" />
+    <Content Include="Views\PModule\Delete.cshtml" />
+    <Content Include="Views\Customer\Edit.cshtml" />
+    <Content Include="Views\Customer\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

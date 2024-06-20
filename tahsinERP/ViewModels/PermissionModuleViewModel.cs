@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace tahsinERP.ViewModels
 {
@@ -9,6 +6,9 @@ namespace tahsinERP.ViewModels
     {
         public int ID { get; set; }
         public string Module { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
+        public string Parametr { get; set; }
         public string RoleNames { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -93,6 +94,7 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
+
         [HttpGet]
         public ActionResult Delete(ROLE roles)
         {
@@ -138,16 +140,29 @@ namespace tahsinERP.Controllers
             roles.PERMISSIONS = role.PERMISSIONS;
             return View(roles);
         }
-        public ActionResult Permissions()
+        public ActionResult Permissions(int? id)
         {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult SavePermissions(ROLE role)
-        {
-            if (ModelState.IsValid)
+            if (id == null)
             {
-                foreach (var permissionToEdit in role.PERMISSIONS)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var role = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(r => r.ID == id);
+            if (role == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(role);
+        }
+
+        [HttpPost]
+        public ActionResult Permissions(ROLE role)
+        {
+            if (!ModelState.IsValid)
+            {
+                var permission = db.ROLES.Include(p => p.PERMISSIONS).FirstOrDefault(p => p.ID == role.ID);
+                foreach (var permissionToEdit in permission.PERMISSIONS )
                 {
                     var item = db.PERMISSIONS.Find(permissionToEdit.ID);
                     if (item != null)
@@ -159,9 +174,9 @@ namespace tahsinERP.Controllers
                     }
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction($"Edit/{role.ID}");
             }
-            return View("Index", role);
+            return View("index");
         }
     }
 }
