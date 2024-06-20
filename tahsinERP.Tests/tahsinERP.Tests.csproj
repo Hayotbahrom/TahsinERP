@@ -166,6 +166,9 @@
     <None Include="Scripts\jquery-3.7.1.slim.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\tahsinERP\tahsinERP.csproj">
       <Project>{524032b1-5df4-40fd-bce8-d04fd72a79c8}</Project>
       <Name>tahsinERP</Name>
