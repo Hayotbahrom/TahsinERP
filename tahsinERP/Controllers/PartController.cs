@@ -24,7 +24,16 @@ namespace tahsinERP.Controllers
         private byte[] avatar;
         private int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         private string partNo = "";
+        
         // GET: Part
+        public ActionResult GetAllParts()
+        {
+            if (true)
+            {
+
+            }
+            return View(); 
+        }
         public ActionResult Index(string type, int? supplierID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

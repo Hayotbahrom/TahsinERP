@@ -16,13 +16,13 @@ namespace tahsinERP.Controllers
 {
     public class PContractController : Controller
     {
+        private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = ConfigurationManager.AppSettings["p_contractTypes"].Split(',');
         private string supplierName, contractNo, partNo = "";
         // GET: Contracts
         public ActionResult Index(string type)
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
+           
                 if (!string.IsNullOrEmpty(type))
                 {
                     List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
@@ -35,7 +35,7 @@ namespace tahsinERP.Controllers
                     ViewBag.SourceList = new SelectList(sources, type);
                     return View(list);
                 }
-            }
+           
         }
         public ActionResult Download()
         {
@@ -265,8 +265,6 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
                 var contract = db.P_CONTRACTS.Find(ID);
                 if (contract == null)
                 {
@@ -275,7 +273,6 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
                 return View(contract);
-            }
         }
         public ActionResult Edit(int? ID)
         {
@@ -290,10 +287,11 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
-                else
-                    ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", contract.SupplierID);
-
+                
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", contract.SupplierID);
                 ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
+
+                db.Entry(contract).Reference(c => c.SUPPLIER).Load();
                 return View(contract);
             }
         }
