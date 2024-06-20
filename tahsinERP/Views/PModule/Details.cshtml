@@ -48,6 +48,18 @@
                                             <fieldset class="invoice-address form-group">
                                                 @Html.DisplayFor(model => model.Module, new { @class = "form-control" })
                                             </fieldset>
+                                            <h6 class="invoice-to">Controller nomi</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.DisplayFor(model => model.Controller, new { @class = "form-control" })
+                                            </fieldset>
+                                            <h6 class="invoice-to">Action nomi</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.DisplayFor(model => model.Action, new { @class = "form-control" })
+                                            </fieldset>
+                                            <h6 class="invoice-to">Parametr nomi</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.DisplayFor(model => model.Parametr, new { @class = "form-control" })
+                                            </fieldset>
                                             <h6 class="invoice-to">Ruxsat Rollari</h6>
                                             <fieldset class="invoice-address form-group">
                                                 @Html.DisplayFor(model => model.RoleNames, new { @class = "form-control" })

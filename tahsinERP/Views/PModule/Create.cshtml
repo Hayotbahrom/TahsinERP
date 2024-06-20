@@ -66,6 +66,11 @@
                                                             @Html.TextBoxFor(model => model.Action, new { @class = "form-control", @placeholder = "action nomi" })
                                                             @Html.ValidationMessageFor(model => model.Action, "", new { @class = "text-danger" })
                                                         </fieldset>
+                                                        <h6 class="invoice-to">Parametr</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.DropDownListFor(model => model.Parameter, new SelectList(ViewBag.Parametr, "Select Part Type"), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parameter, "", new { @class = "text-danger" })
+                                                        </fieldset>
                                                         <br />
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item border-0 pb-0">

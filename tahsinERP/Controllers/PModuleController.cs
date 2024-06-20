@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace tahsinERP.Controllers
 {
     public class PModuleController : Controller
     {
+
         // GET: PModule
         [HttpGet]
         public ActionResult Index()
@@ -39,6 +41,7 @@ namespace tahsinERP.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
             ViewBag.ControllerNames = GetAllControllerNames();
             return View();
         }
@@ -56,8 +59,9 @@ namespace tahsinERP.Controllers
                     {
                         PERMISSIONMODULE permissions = new PERMISSIONMODULE();
                         permissions.Module = permissionModule.Module;
-                        permissions.Controller = permissionModule.Controller; // Assigning Controller from dropdown
-                        permissions.Action = permissionModule.Action; // Assigning Action from dropdown
+                        permissions.Controller = permissionModule.Controller;
+                        permissions.Action = permissionModule.Action; 
+                        permissions.Parameter = permissionModule.Parameter;
                         db.PERMISSIONMODULES.Add(permissions);
                         db.SaveChanges();
                         return RedirectToAction("Index");
@@ -68,6 +72,7 @@ namespace tahsinERP.Controllers
             {
                 ModelState.AddModelError(ex.Message, "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
             }
+            ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
             ViewBag.ControllerNames = GetAllControllerNames();
             return View(permissionModule);
         }
@@ -133,6 +138,7 @@ namespace tahsinERP.Controllers
                 var roles = db.ROLES.ToList();
                 ViewBag.RoleID = new MultiSelectList(roles, "ID", "RName", selectedRoleIDs);
                 ViewBag.ControllerNames = GetAllControllerNames();
+                ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
 
                 return View(pModule);
             }
@@ -190,6 +196,7 @@ namespace tahsinERP.Controllers
                 // If ModelState is not valid, return to the view with errors
                 var roles = db.ROLES.ToList();
                 ViewBag.RoleID = new MultiSelectList(roles, "ID", "RName", RoleID);
+                ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
                 return View(permissionModule);
             }
         }
@@ -217,6 +224,9 @@ namespace tahsinERP.Controllers
             {
                 ID = permissionModule.ID,
                 Module = permissionModule.Module,
+                Controller = permissionModule.Controller,
+                Action = permissionModule.Action,
+                Parametr = permissionModule.Parameter,
                 RoleNames = string.Join(", ", permissions
                                                 .Select(p => roles
                                                              .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
@@ -284,6 +294,9 @@ namespace tahsinERP.Controllers
                 {
                     ID = permissionModule.ID,
                     Module = permissionModule.Module,
+                    Controller = permissionModule.Controller,
+                    Action = permissionModule.Action,
+                    Parametr = permissionModule.Parameter,
                     RoleNames = string.Join(", ", permissions
                                                 .Select(p => roles
                                                              .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
