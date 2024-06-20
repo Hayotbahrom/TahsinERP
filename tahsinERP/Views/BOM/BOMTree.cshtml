@@ -1,0 +1,17 @@
+﻿@model tahsinERP.ViewModels.BOMViewModel
+@{
+    ViewBag.Title = "BOMTree";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<li class="list-group-item">
+
+    @if (Model.Children.Any())
+    {
+        <ul>
+            @foreach (var child in Model.Children)
+            {
+                @Html.DisplayFor(_ => child, "BOMViewModel")
+            }
+        </ul>
+    }
+</li>

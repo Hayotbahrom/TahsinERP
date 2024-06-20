@@ -17,8 +17,7 @@ namespace tahsinERP.Controllers
     public class AccountController : Controller
     {
 
-        private DBTHSNEntities db = new DBTHSNEntities();
-
+        
         [DllImport("Iphlpapi.dll")]
         private static extern int SendARP(int dest, int host, ref long mac, ref int length);
 
@@ -36,65 +35,68 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(UserViewModel user)
         {
-            if (ModelState.IsValid)
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                USER getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
-                if(getUser.IsDeleted != true)
+                if (ModelState.IsValid)
                 {
-                    if (getUser != null)
+                    USER getUser = db.USERS.Where(u => u.Email.Equals(user.Email)).FirstOrDefault();
+                    if(getUser.IsDeleted != true)
                     {
-                        var hashCode = getUser.HashCode;
-                        var serializer = new JavaScriptSerializer();
-                        var encodingPasswordString = "";
-                        //Password Hasing Process Call Helper Class Method
-                        if (!string.IsNullOrEmpty(user.Password))
-                            encodingPasswordString = Helper.EncodePassword(user.Password, hashCode);
-
-                        bool IsValidUser = db.USERS
-                   .    Any(u => u.Email.ToLower() == user
-                   .    Email.ToLower() && u.Password.Equals(encodingPasswordString) && u.IsActive==true);
-                        USERIMAGE image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
-                        if (IsValidUser)
+                        if (getUser != null)
                         {
-                            var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, getUser.FullName);
-                            string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+                            var hashCode = getUser.HashCode;
+                            var serializer = new JavaScriptSerializer();
+                            var encodingPasswordString = "";
+                            //Password Hasing Process Call Helper Class Method
+                            if (!string.IsNullOrEmpty(user.Password))
+                                encodingPasswordString = Helper.EncodePassword(user.Password, hashCode);
 
-                            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
-                                encryptedTicket)
+                            bool IsValidUser = db.USERS
+                       .    Any(u => u.Email.ToLower() == user
+                       .    Email.ToLower() && u.Password.Equals(encodingPasswordString) && u.IsActive==true);
+                            USERIMAGE image = db.USERIMAGES.Where(ui => ui.UserID == getUser.ID).FirstOrDefault();
+                            if (IsValidUser)
                             {
-                                HttpOnly = true,
-                                Secure = FormsAuthentication.RequireSSL,
-                                Path = FormsAuthentication.FormsCookiePath,
-                                Domain = FormsAuthentication.CookieDomain,
-                                Expires = authTicket.Expiration
-                            };
-                            Response.Cookies.Set(cookie);
+                                var authTicket = new FormsAuthenticationTicket(1, user.Email, DateTime.Now, DateTime.Now.AddMinutes(15), false, getUser.FullName);
+                                string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
-                            if (image != null)
-                            {
-                                var userImageCookie = new HttpCookie("UserImageId", image.ID.ToString())
+                                var cookie = new HttpCookie(FormsAuthentication.FormsCookieName,
+                                    encryptedTicket)
                                 {
                                     HttpOnly = true,
                                     Secure = FormsAuthentication.RequireSSL,
-                                    Path = "/", // Setting the path to root so it's accessible throughout the site
-                                    Expires = authTicket.Expiration // Adjust the expiration as needed
+                                    Path = FormsAuthentication.FormsCookiePath,
+                                    Domain = FormsAuthentication.CookieDomain,
+                                    Expires = authTicket.Expiration
                                 };
-                                Response.Cookies.Set(userImageCookie);
-                            }
+                                Response.Cookies.Set(cookie);
 
-                            SetUserEntry(getUser.ID);
-                            return RedirectToAction("Index", "Home");
+                                if (image != null)
+                                {
+                                    var userImageCookie = new HttpCookie("UserImageId", image.ID.ToString())
+                                    {
+                                        HttpOnly = true,
+                                        Secure = FormsAuthentication.RequireSSL,
+                                        Path = "/", // Setting the path to root so it's accessible throughout the site
+                                        Expires = authTicket.Expiration // Adjust the expiration as needed
+                                    };
+                                    Response.Cookies.Set(userImageCookie);
+                                }
+
+                                SetUserEntry(getUser.ID);
+                                return RedirectToAction("Index", "Home");
+                            }
                         }
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "Bunday foydalanuvchi mavjud emas!");
+                        return View();
+                    }
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Bunday foydalanuvchi mavjud emas!");
-                    return View();
-                }
+                ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri yoki faolligingiz ochirilgan");
+                return View();
             }
-            ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri yoki faolligingiz ochirilgan");
-            return View();
         }
         private void SetUserEntry(int userID)
         {
@@ -123,9 +125,11 @@ namespace tahsinERP.Controllers
                     IP = ip,
                     MAC = macAddress
                 };
-
-                db.USER_ENTRIES.Add(userEntry);
-                db.SaveChanges();
+                using(DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    db.USER_ENTRIES.Add(userEntry);
+                    db.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -139,29 +143,37 @@ namespace tahsinERP.Controllers
         }
         public ActionResult GetUserImage(int id)
         {
-            var image = db.USERIMAGES.FirstOrDefault(ui => ui.ID == id);
-            if (image != null)
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                return File(image.Image, "image/png"); // Adjust the MIME type if necessary
+                var image = db.USERIMAGES.FirstOrDefault(ui => ui.ID == id);
+                if (image != null)
+                {
+                    return File(image.Image, "image/png"); // Adjust the MIME type if necessary
+                }
+
+                return HttpNotFound();
             }
-            return HttpNotFound();
         }
         public ActionResult Settings(string eMail)
         {
-            USER currentUser = db.USERS.Where(u => u.Email == eMail).FirstOrDefault();
-            UserViewModel userViewModel = new UserViewModel();
-
-            userViewModel.UName = currentUser.Uname;
-            userViewModel.Password = currentUser.Password;
-            userViewModel.Email = currentUser.Email;
-            userViewModel.FullName = currentUser.FullName;
-            userViewModel.IsActive = currentUser.IsActive;
-            USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == currentUser.ID).FirstOrDefault();
-            if (userimage != null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
+                USER currentUser = db.USERS.Where(u => u.Email == eMail).FirstOrDefault();
+                UserViewModel userViewModel = new UserViewModel();
+
+                userViewModel.UName = currentUser.Uname;
+                userViewModel.Password = currentUser.Password;
+                userViewModel.Email = currentUser.Email;
+                userViewModel.FullName = currentUser.FullName;
+                userViewModel.IsActive = currentUser.IsActive;
+                USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == currentUser.ID).FirstOrDefault();
+                if (userimage != null)
+                {
+                    ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(userimage.Image, 0, userimage.Image.Length);
+                }
+
+                return View(userViewModel);
             }
-            return View(userViewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -173,66 +185,70 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            USER userToUpdate = db.USERS.Where(u => u.Email == uvm.Email).FirstOrDefault();
-            if (userToUpdate == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
-            }
-            if (!string.IsNullOrEmpty(uvm.Password))
-            {
-                var keyNew = Helper.GeneratePassword(10);
-                var password = Helper.EncodePassword(uvm.Password, keyNew);
-                userToUpdate.HashCode = keyNew;
-                userToUpdate.Password = password;
-            }
-            USERIMAGE uImage = db.USERIMAGES.Where(ui => ui.UserID == userToUpdate.ID).FirstOrDefault();
-            if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
-            {
-                try
-                {
-                    if (uImage != null)
-                        if (Request.Files["userPhotoUpload"].ContentLength > 0)
-                        {
-                            if (Request.Files["userPhotoUpload"].InputStream.Length < userPhotoMaxLength)
-                            {
-                                avatar = new byte[Request.Files["userPhotoUpload"].InputStream.Length];
-                                Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                                if (uImage == null)
-                                {
-                                    USERIMAGE uImageNew = new USERIMAGE
-                                    {
-                                        UserID = userToUpdate.ID,
-                                        Image = avatar
-                                    };
 
-                                    db.USERIMAGES.Add(uImageNew);
-                                    db.SaveChanges();
+                USER userToUpdate = db.USERS.Where(u => u.Email == uvm.Email).FirstOrDefault();
+                if (userToUpdate == null)
+                {
+                    return HttpNotFound();
+                }
+                if (!string.IsNullOrEmpty(uvm.Password))
+                {
+                    var keyNew = Helper.GeneratePassword(10);
+                    var password = Helper.EncodePassword(uvm.Password, keyNew);
+                    userToUpdate.HashCode = keyNew;
+                    userToUpdate.Password = password;
+                }
+                USERIMAGE uImage = db.USERIMAGES.Where(ui => ui.UserID == userToUpdate.ID).FirstOrDefault();
+                if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
+                {
+                    try
+                    {
+                        if (uImage != null)
+                            if (Request.Files["userPhotoUpload"].ContentLength > 0)
+                            {
+                                if (Request.Files["userPhotoUpload"].InputStream.Length < userPhotoMaxLength)
+                                {
+                                    avatar = new byte[Request.Files["userPhotoUpload"].InputStream.Length];
+                                    Request.Files["userPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                    if (uImage == null)
+                                    {
+                                        USERIMAGE uImageNew = new USERIMAGE
+                                        {
+                                            UserID = userToUpdate.ID,
+                                            Image = avatar
+                                        };
+
+                                        db.USERIMAGES.Add(uImageNew);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        uImage.UserID = userToUpdate.ID;
+                                        uImage.Image = avatar;
+
+                                        db.Entry(uImage).State = System.Data.Entity.EntityState.Modified;
+                                        db.SaveChanges();
+                                    }
                                 }
                                 else
                                 {
-                                    uImage.UserID = userToUpdate.ID;
-                                    uImage.Image = avatar;
-
-                                    db.Entry(uImage).State = System.Data.Entity.EntityState.Modified;
-                                    db.SaveChanges();
+                                    ModelState.AddModelError("", "Suratni yuklab bo‘lmadi, u 2 MB dan ortiq. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
+                                    throw new RetryLimitExceededException();
                                 }
                             }
-                            else
-                            {
-                                ModelState.AddModelError("", "Suratni yuklab bo‘lmadi, u 2 MB dan ortiq. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
-                                throw new RetryLimitExceededException();
-                            }
-                        }
-                    db.SaveChanges();
-                    return Redirect("/Home");
+                        db.SaveChanges();
+                        return Redirect("/Home");
+                    }
+                    catch (RetryLimitExceededException /* dex */)
+                    {
+                        //Log the error (uncomment dex variable name and add a line here to write a log.
+                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    }
                 }
-                catch (RetryLimitExceededException /* dex */)
-                {
-                    //Log the error (uncomment dex variable name and add a line here to write a log.
-                    ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                }
+                return View(uvm);
             }
-            return View(uvm);
         }
     }
 }

@@ -274,7 +274,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
+    <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PContractController.cs" />
@@ -476,6 +478,7 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BOMViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
@@ -2323,6 +2326,9 @@
     <Content Include="Views\PInvoice\Details.cshtml" />
     <Content Include="Views\PInvoice\Delete.cshtml" />
     <Content Include="Views\WhIncome\Index.cshtml" />
+    <Content Include="Views\BOM\Index.cshtml" />
+    <Content Include="Views\BOM\Details.cshtml" />
+    <Content Include="Views\BOM\BOMTree.cshtml" />
     <Content Include="Views\WhIncome\Create.cshtml" />
     <Content Include="Views\PInvoice\Edit.cshtml" />
     <Content Include="Views\PInvoice\EditPart.cshtml" />
@@ -2331,6 +2337,9 @@
     <Content Include="Views\Shop\Delete.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
     <Content Include="Views\Shop\Edit.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\Details.cshtml" />
+    <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\PackingList\Index.cshtml" />
     <Content Include="Views\PackingList\Create.cshtml" />
     <Content Include="Views\PackingList\Details.cshtml" />

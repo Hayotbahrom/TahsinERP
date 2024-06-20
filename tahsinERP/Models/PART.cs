@@ -40,7 +40,7 @@ namespace tahsinERP.Models
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
         public Nullable<int> PackID { get; set; }
-        public Nullable<int> ShopID { get; set; }
+        public int? ShopID { get; set; }
         public bool IsInHouse { get; set; }
         public string Marka { get; set; }
         public string Standart { get; set; }

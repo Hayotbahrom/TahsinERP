@@ -15,14 +15,16 @@ namespace tahsinERP.Models
     public partial class BOM
     {
         public int ID { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public Nullable<int> ChildID { get; set; }
-        public Nullable<int> GrandChildID { get; set; }
-        public Nullable<double> ChildUsageQty { get; set; }
+        public double ChildUsageQty { get; set; }
         public string ChildUsageUnit { get; set; }
         public Nullable<double> GrandChildUsageQty { get; set; }
         public string GrandChildUsageUnit { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
+        public string ParentPNo { get; set; }
+        public string ChildPNo { get; set; }
+        public string GrandChildPNo { get; set; }
+        public bool IsParentProduct { get; set; }
+        public bool IsParentPart { get; set; }
     }
 }
