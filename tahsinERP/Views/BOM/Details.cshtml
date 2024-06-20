@@ -4,74 +4,65 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-12 mb-2 mt-1">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h5 class="content-header-title float-left pr-1 mb-0">BOM</h5>
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb p-0 mb-0">
-                                <li class="breadcrumb-item">
-                                    <a href="/Home"><i class="bx bx-home-alt"></i></a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="/Home/BOM">BOM</a>
-                                </li>
-                                <li class="breadcrumb-item active">
-                                    Bir maxsulot BOMi
-                                </li>
-                            </ol>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/list/meyer-reset.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/list/style.css">
+</head>
+<body>
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h5 class="content-header-title float-left pr-1 mb-0">BOM</h5>
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="/Home/BOM">BOM</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Bir maxsulot BOMi
+                                    </li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="content-body">
-            <section id="basic-list-group">
-                <div class="row match-height">
-                    <div class="col-lg-6 col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">@Model.PNo</h4>
-                            </div>
-                            <div class="card-content">
-                                <div class="card-body">
-                                    <ul class="list-group">
-                                        @foreach (var item in ViewBag.bomList)
-                                        {
-                                            <li class="list-group-item">
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">
-                                                        <table class="table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>PartNo</th>
-                                                                    <th>Usage</th>
-                                                                    <th>Unit</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>@item.ChildPNo</td>
-                                                                    <td>@item.ChildUsageQty</td>
-                                                                    <td>@item.ChildUsageUnit</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
+            <div>
+                <ul class="tree">
+
+                    <!-- Root node (Category) -->
+                    <li>
+                        <div class="sticky">@Model.PNo</div>
+                        @foreach (var item in ViewBag.bomList)
+{
+                        <ul>
+                            <li>
+                                <div class="sticky">@item.ChildPNo - @item.ChildUsageQty - @item.ChildUsageUnit</div>
+                            </li>
+                            <!-- Second level node -->
+                            @if(!string.IsNullOrEmpty(item.GrandChildPNo)){
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="sticky">@item.GrandChildPNo - @item.GrandChildUsageQty - @item.GrandChildUsageUnit</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            }
+                        </ul>
+                        }
+                    </li>
+
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+</body>
