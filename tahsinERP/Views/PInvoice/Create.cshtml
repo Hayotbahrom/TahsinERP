@@ -59,7 +59,7 @@
 
                                                     <h6 class="invoice-to">Buyurtma raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.P_ORDERS.OrderNo, ViewBag.POrder as SelectList, new { @class = "form-control select2" })
+                                                        @Html.DropDownListFor(model => model.OrderID, ViewBag.POrder as SelectList, new { @class = "form-control select2" })
                                                         @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
                                                     </fieldset>
 

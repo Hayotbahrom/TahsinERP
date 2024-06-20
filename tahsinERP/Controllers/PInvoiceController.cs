@@ -69,12 +69,12 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name" );
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo");
-
             }
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "InvoiceNo, CompanyID, SupplierID, OrderID, InvoiceDate, Amount, Currency")] P_INVOICES invoice)
@@ -94,14 +94,15 @@ namespace tahsinERP.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(ex.Message, ex);
+                    ModelState.AddModelError(string.Empty, ex);
                 }
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
-                ViewBag.POrder = new SelectList(db.P_INVOICES.ToList(), "ID", "OrderNo", invoice.OrderID);
+                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo", invoice.OrderID);
             }
 
             return View(invoice);
         }
+
 
         public ActionResult Details(int? id)
         {
