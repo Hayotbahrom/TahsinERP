@@ -31,7 +31,6 @@ namespace tahsinERP.Controllers
             }
         }
 
-
         public ActionResult Create()
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())

@@ -22,20 +22,20 @@ namespace tahsinERP.Controllers
         // GET: Contracts
         public ActionResult Index(string type)
         {
-           
                 if (!string.IsNullOrEmpty(type))
                 {
                     List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
+                    ViewBag.Type = type;
                     return View(list);
                 }
                 else
                 {
                     List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
+                    ViewBag.Type = type;
                     return View(list);
                 }
-           
         }
         public ActionResult Download()
         {
