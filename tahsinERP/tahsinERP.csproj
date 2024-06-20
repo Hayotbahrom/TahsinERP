@@ -584,6 +584,7 @@
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.css" />
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.min.css" />
     <Content Include="app-assets\css\list\meyer-reset.css" />
+    <Content Include="app-assets\css\list\reset.min.css" />
     <Content Include="app-assets\css\pages\app-chat.css" />
     <Content Include="app-assets\css\pages\app-chat.min.css" />
     <Content Include="app-assets\css\pages\app-email.css" />
@@ -2126,6 +2127,7 @@
     <Content Include="app-assets\vendors\js\ui\screenfull.min.js" />
     <Content Include="app-assets\vendors\js\ui\unison.min.js" />
     <Content Include="app-assets\vendors\js\vendors.min.js" />
+    <Content Include="assets\css\reset.min.css" />
     <Content Include="assets\css\style-rtl.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\js\scripts.js" />
