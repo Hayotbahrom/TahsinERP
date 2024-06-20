@@ -1,57 +1,93 @@
 ﻿@model tahsinERP.Models.ROLE
-
-
-    <div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    @*<h3 class="modal-title" id="myModalLabel1">@Model.RName - ning ruxsatlari</h3>*@
-                    <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
-                        <i class="bx bx-x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        @using (Html.BeginForm("SavePermissions", "Role", FormMethod.Post))
-                        {
-                            <table class="table table-striped table-bordered complex-headers" id="permissionsTable">
-                                <thead>
-                                    <tr>
-                                        <th>Module</th>
-                                        <th>O'zgartirish</th>
-                                        <th>Ko'rish</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var permission in Model.PERMISSIONS)
-                                    {
-                                        <tr>
-                                            <td>@permission.PERMISSIONMODULE.Module</td>
-                                            <td>
-                                                <input type="hidden" name="@permission.ID" value="@permission.ID" />
-                                                <input type="checkbox" name="@permission.ChangePermit" value="true" @(permission.ChangePermit ? "checked" : "") />
-                                                <input type="hidden" name="@permission.ChangePermit" value="false" />
-                                            </td>
-                                            <td>
-                                                <input type="checkbox" name="@permission.ViewPermit" value="true" @(permission.ViewPermit ? "checked" : "") />
-                                                <input type="hidden" name="@permission.ViewPermit" value="false" />
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3">
-                                            <button class="btn btn-success btn-block subtotal-preview-btn" id="savePermissionsBtn">
-                                                <i class='bx bx-save'></i> Saqlash
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        }
+@{
+    ViewBag.Title = "Permission";
+    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Roles"))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        Admin Panel
+                                    </li>
+                                </ol>
+                            </div>
                         </div>
+                    </div>
                 </div>
+            </div>
+            <div class="content-body">
+                <!-- app invoice View Page -->
+                @using (Html.BeginForm("SavePermission", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <section class="invoice-edit-wrapper">
+                        <div class="row">
+                            <!-- invoice view page -->
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <table class="table table-striped table-bordered complex-headers" id="permissionsTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Module</th>
+                                                        <th>O'zgartirish</th>
+                                                        <th>Ko'rish</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var permission in Model.PERMISSIONS)
+                                                    {
+                                                        <tr>
+                                                            <td>@permission.PERMISSIONMODULE.Module</td>
+                                                            <td>
+                                                                <input type="hidden" name="permissions[@permission.ID].ID" value="@permission.ID" />
+                                                                <input type="checkbox" name="permissions[@permission.ID].ChangePermit" value="true" @(permission.ChangePermit ? "checked" : "") />
+                                                                <input type="hidden" name="permissions[@permission.ID].ChangePermit" value="false" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox" name="permissions[@permission.ID].ViewPermit" value="true" @(permission.ViewPermit ? "checked" : "") />
+                                                                <input type="hidden" name="permissions[@permission.ID].ViewPermit" value="false" />
+                                                            </td>
+                                                        </tr>
+
+                                                    }
+                                                </tbody>
+
+                                            </table>
+                                            <hr>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                }
             </div>
         </div>
     </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
