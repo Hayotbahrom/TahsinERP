@@ -2276,7 +2276,6 @@
     <Content Include="Views\Account\Settings.cshtml" />
     <Content Include="Views\Shared\_UserProfile.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
-    <Content Include="Views\Role\Permissions.cshtml" />
     <Content Include="Views\PModule\Index.cshtml" />
     <Content Include="Views\Permission\Edit.cshtml" />
     <Content Include="Views\PModule\Create.cshtml" />
@@ -2339,6 +2338,7 @@
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Customer\Details.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
+    <Content Include="Views\Role\Permissions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
