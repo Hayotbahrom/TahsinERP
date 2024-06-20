@@ -1,0 +1,102 @@
+﻿@model  tahsinERP.Models.P_INVOICE_PACKINGLISTS
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PackingList"))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/PackingList">Packing List lar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        @Model.PackingListNo raqamli packinglist o'chirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-xl-9 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            <h4 class="text-primary">Invoice ma'lumotlari</h4>
+                                            <hr />
+                                            <span><b>PackingList raqami</b>: @Html.DisplayFor(model => model.PackingListNo)</span>
+                                            <br />
+                                            <span><b>Invoice raqami</b>: @Html.DisplayFor(model => model.P_INVOICES.InvoiceNo)</span>
+                                            <hr />
+                                            <br />
+                                            <span><b>Birinchi Uzunligi</b>: @Html.DisplayFor(model => model.PrLength)</span>
+                                            <br />
+                                            <span><b>Birinchi Kengligi</b>: @Html.DisplayFor(model => model.PrWidth)</span>
+                                            <br />
+                                            <span><b>Birinchi Balandligi</b>: @Html.DisplayFor(model => model.PrHeight)</span>
+                                            <br />
+                                            <span><b>Birinchi Umumiy hajmi</b>: @Html.DisplayFor(model => model.PrCBM)</span>
+                                            <br />
+                                            <span><b>Birinchi Umumiy og`irlig</b>: @Html.DisplayFor(model => model.PrGrWeight)</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Ikkinchi Uzunligi</b>: @Html.DisplayFor(model => model.ScLength)</span>
+                                            <br />
+                                            <span><b>Ikkinchi Kengligi</b>: @Html.DisplayFor(model => model.ScWidth)</span>
+                                            <br />
+                                            <span><b>Ikkinchi Balandligi</b>: @Html.DisplayFor(model => model.ScHeight)</span>
+                                            <br />
+                                            <span><b>Ikkinchi Umumiy hajmi</b>: @Html.DisplayFor(model => model.ScCBM)</span>
+                                            <br />
+                                            <span><b>Ikkinchi Umumiy og`irlig</b>: @Html.DisplayFor(model => model.ScGrWeight)</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Pallet turi</b>: @Html.DisplayFor(model => model.PltType)</span>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                    
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item border-0 pb-0">
+                                            @using (Html.BeginForm("Delete", "PackingList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu Invoice o\'chirib yuborishga ishonchingiz komilmi?')">
+                                                    <i class='bx bx-trash'></i>
+                                                    O'chirish
+                                                </button>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+

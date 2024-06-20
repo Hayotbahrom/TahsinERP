@@ -275,6 +275,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
+    <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PContractController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2330,6 +2331,11 @@
     <Content Include="Views\Shop\Delete.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
     <Content Include="Views\Shop\Edit.cshtml" />
+    <Content Include="Views\PackingList\Index.cshtml" />
+    <Content Include="Views\PackingList\Create.cshtml" />
+    <Content Include="Views\PackingList\Details.cshtml" />
+    <Content Include="Views\PackingList\Delete.cshtml" />
+    <Content Include="Views\PackingList\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
