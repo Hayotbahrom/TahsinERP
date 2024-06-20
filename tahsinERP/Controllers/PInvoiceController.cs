@@ -28,42 +28,51 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                IQueryable<P_INVOICES> invoicesQuery = db.P_INVOICES
+                    .Include(pi => pi.SUPPLIER)
+                    .Include(pi => pi.P_ORDERS)
+                    .Where(pi => pi.IsDeleted == false);
+
+                // Filter by type if provided
                 if (!string.IsNullOrEmpty(type))
                 {
-                    if (supplierID.HasValue)
-                    {
-                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SUPPLIER.Type.CompareTo(type) == 0 && pi.SupplierID == supplierID).ToList();
-                        ViewBag.SourceList = new SelectList(sources, type);
-                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
-                        return View(list);
-                    }
-                    else
-                    {
-                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SUPPLIER.Type.CompareTo(type) == 0).ToList();
-                        ViewBag.SourceList = new SelectList(sources, type);
-                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
-                        return View(list);
-                    }
+                    invoicesQuery = invoicesQuery.Where(pi => pi.SUPPLIER.Type.CompareTo(type) == 0);
+                    ViewBag.SourceList = new SelectList(sources, type);
                 }
                 else
                 {
-                    if (supplierID.HasValue)
-                    {
-                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false && pi.SupplierID == supplierID).ToList();
-                        ViewBag.SourceList = new SelectList(sources, type);
-                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
-                        return View(list);
-                    }
-                    else
-                    {
-                        List<P_INVOICES> list = db.P_INVOICES.Where(pi => pi.IsDeleted == false).ToList();
-                        ViewBag.SourceList = new SelectList(sources, type);
-                        ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name");
-                        return View(list);
-                    }
+                    ViewBag.SourceList = new SelectList(sources);
                 }
+
+                // Filter by supplierID if provided
+                if (supplierID.HasValue)
+                {
+                    int supplierIdValue = supplierID.Value; // Extract the value from nullable int
+                    invoicesQuery = invoicesQuery.Where(pi => pi.SupplierID == supplierIdValue);
+                }
+
+                List<P_INVOICES> invoices = invoicesQuery.ToList();
+
+                // Prepare ViewBag.SupplierList based on filters
+                var suppliersQuery = db.SUPPLIERS.Where(s => s.IsDeleted == false);
+
+                if (!string.IsNullOrEmpty(type))
+                {
+                    suppliersQuery = suppliersQuery.Where(s => s.Type.CompareTo(type) == 0);
+                }
+
+                if (supplierID.HasValue)
+                {
+                    suppliersQuery = suppliersQuery.Where(s => s.ID == supplierID.Value);
+                }
+
+                ViewBag.SupplierList = new SelectList(suppliersQuery.ToList(), "ID", "Name");
+
+                return View(invoices);
             }
         }
+
+
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -174,7 +183,7 @@ namespace tahsinERP.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
+                        ModelState.AddModelError("", "Bunday invoice topilmadi.");
                     }
                 }
             }
