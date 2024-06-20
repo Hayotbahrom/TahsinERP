@@ -280,8 +280,8 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
                 var contract = db.P_CONTRACTS.Find(ID);
                 if (contract == null)
                 {
@@ -293,7 +293,7 @@ namespace tahsinERP.Controllers
 
                 db.Entry(contract).Reference(c => c.SUPPLIER).Load();
                 return View(contract);
-            }
+            
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -301,18 +301,18 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (DBTHSNEntities db = new DBTHSNEntities())
-                {
+               /* using (DBTHSNEntities db = new DBTHSNEntities())
+                {*/
                     P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(contract.ID);
                     if (contractToUpdate != null)
                     {
-                        //contractToUpdate.ContractNo = contract.ContractNo;
-                        ////contractToUpdate.SupplierID = contract.SupplierID;
-                        //contractToUpdate.IssuedDate = contract.IssuedDate;
-                        //contractToUpdate.DueDate = contract.DueDate;
-                        //contractToUpdate.Currency = contract.Currency;
-                        //contractToUpdate.Incoterms = contract.Incoterms;
-                        //contractToUpdate.PaymentTerms = contract.PaymentTerms;
+                        contractToUpdate.ContractNo = contract.ContractNo;
+                        contractToUpdate.SupplierID = contract.SupplierID;
+                        contractToUpdate.IssuedDate = contract.IssuedDate;
+                        contractToUpdate.DueDate = contract.DueDate;
+                        contractToUpdate.Currency = contract.Currency;
+                        contractToUpdate.Incoterms = contract.Incoterms;
+                        contractToUpdate.PaymentTerms = contract.PaymentTerms;
                         contractToUpdate.IsDeleted = false;
 
                         if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, SupplierID, Price, Currency, Amount, Incoterms, PaymentTerms, DueDate" }))
@@ -329,7 +329,7 @@ namespace tahsinERP.Controllers
                         }
                     }
                     return View(contractToUpdate);
-                }
+                
             }
             return View();
         }

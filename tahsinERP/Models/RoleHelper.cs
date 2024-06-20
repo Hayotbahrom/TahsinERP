@@ -81,6 +81,26 @@ namespace tahsinERP.Models
                 return false;
             }
         }
+        public static bool IsChangePermitted(string username, string controller, string action)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                string roleName = GetUserRoles(username)[0];
+                ROLE role = db.ROLES.Where(r => r.RName.CompareTo(roleName) == 0).FirstOrDefault();
+                if (role != null)
+                {
+                    PERMISSION permit = GetPermissionsOfRole(role, controller, action);
+                    if (permit != null)
+                    {
+                        if (permit.ChangePermit)
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+                return false;
+            }
+        }
         public static PERMISSION GetPermissionsOfRole(ROLE role, string moduleName)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
