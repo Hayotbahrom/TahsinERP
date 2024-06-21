@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
@@ -402,18 +403,23 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
                 var contract = db.P_CONTRACTS.Find(Id);
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
                 else
-                    ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
+                    ViewBag.partList = db.P_CONTRACT_PARTS
+                        .Where(pc => pc.ContractID == contract.ID).ToList();
+
+                db.Entry(contract).Reference(i => i.SUPPLIER).Load();
                 return View(contract);
-            }
+            
         }
+        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection gfs)

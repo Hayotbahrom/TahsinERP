@@ -5,12 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PContract"))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     using (Html.BeginForm("EditPart", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-
-       @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
@@ -69,7 +68,7 @@
                                                     <h6 class="invoice-to">Miqdori</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control round", @placeholder = "Miqdori" })
-                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Minimum buyurtma miqdori</h6>
@@ -80,19 +79,21 @@
 
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Maximum imkoniyat" })
+                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "O'lchov birligi" })
                                                         @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
                                                     </fieldset>
+
                                                     <ul class="list-unstyled mb-0">
                                                         <li class="d-inline-block mr-2 mb-1">
                                                             <fieldset>
                                                                 <div class="checkbox checkbox-secondary checkbox-glow">
-                                                                    @Html.CheckBoxFor(model => model.ActivePart, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                                    @Html.CheckBoxFor(model => model.ActivePart, new { @id = "checkboxGlow2" })
                                                                     <label for="checkboxGlow2">Faolmi?</label>
                                                                 </div>
                                                             </fieldset>
                                                         </li>
                                                     </ul>
+
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
                                                             <button class="btn btn-primary btn-block subtotal-preview-btn" name="EditPart" type="submit" value="EditPart">
@@ -115,9 +116,7 @@
         </div>
     }
 }
-
 else
 {
-    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+    @Html.Action("Index", "ViewNotAuthorized")
 }
-
