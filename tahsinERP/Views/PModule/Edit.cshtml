@@ -56,7 +56,7 @@
                                                     </fieldset>
                                                     <fieldset class="invoice-address form-group">
                                                         <label>Controller</label>
-                                                        @Html.DropDownListFor(model => model.Controller, (List<SelectListItem>)ViewBag.ControllerNames, "Tanlang", new { @class = "form-control select2", @id = "controllerDropdown" })
+                                                        @Html.DropDownList("Controller", ViewBag.ControllerNames as SelectList, new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.Controller, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <fieldset class="invoice-address form-group">
@@ -71,7 +71,7 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">Rollarga birikishi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownList("RoleID", ViewBag.RoleID as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
+                                                        @Html.ListBox("RoleID", ViewBag.Roles as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
                                                     </fieldset>
                                                 </div>
                                             </div>
