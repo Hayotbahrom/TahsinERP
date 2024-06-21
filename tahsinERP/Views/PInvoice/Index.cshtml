@@ -59,7 +59,7 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Ta'minotchisi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshdatatablesupplier()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
@@ -139,8 +139,15 @@
     function refreshDataTable() {
         var source = document.getElementById("SourceID").value;
         const supplierID = document.getElementById("SupplierID").value;
-        window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source + '&supplierID='+ supplierID;
-    }
+        window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source;
+        ////window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source + '&supplierID='+ supplierID;
+
+        };
+      function refreshdatatablesupplier() {
+          var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "PInvoice")?type=' + source + '&supplierID='+ supplierID;
+        }
     </script>
 }
 else

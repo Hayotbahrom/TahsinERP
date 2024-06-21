@@ -40,49 +40,60 @@ namespace tahsinERP.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.ControllerNames = GetAllControllerNames();
-            return View();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var roles = db.ROLES.ToList();
+                ViewBag.Roles = new MultiSelectList(roles, "ID", "RName");
+                ViewBag.ControllerNames = GetAllControllerNames();
+                ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
+
+                return View();
+            }
         }
 
-        // POST: PModule/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(PERMISSIONMODULE permissionModule)
+        public ActionResult Create(PERMISSIONMODULE permissions, int[] RoleID)
         {
-            try
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    using (DBTHSNEntities db = new DBTHSNEntities())
+                    try
                     {
-                        PERMISSIONMODULE permissions = new PERMISSIONMODULE();
-                        permissions.Module = permissionModule.Module;
-                        permissions.Controller = permissionModule.Controller;
-                        permissions.Action = permissionModule.Action;
-                        permissions.Parameter = permissionModule.Parameter;
                         db.PERMISSIONMODULES.Add(permissions);
+                        db.SaveChanges();
+
+                        foreach (var roleId in RoleID)
+                        {
+                            db.PERMISSIONS.Add(new PERMISSION
+                            {
+                                PermissionModuleID = permissions.ID,
+                                RoleID = roleId,
+                                ViewPermit = true,
+                                ChangePermit = false
+                            });
+                        }
+
                         db.SaveChanges();
                         return RedirectToAction("Index");
                     }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "An error occurred while creating the permission module. Please try again.");
+                    }
                 }
+
+                var roles = db.ROLES.ToList();
+                ViewBag.Roles = new MultiSelectList(roles, "ID", "RName", RoleID);
+                ViewBag.ControllerNames = GetAllControllerNames();
+                ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
+
+                return View(permissions);
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(ex.Message, "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-            }
-            ViewBag.Parametr = ConfigurationManager.AppSettings["Parametr"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.ControllerNames = GetAllControllerNames();
-            return View(permissionModule);
         }
 
-        // Helper method to get all controller names
-        // Helper method to get all controller names
-        
 
 
-        // AJAX endpoint to get actions for a controller
-        // PModuleController.cs
         [HttpPost]
         public JsonResult GetActions(string controller)
         {
@@ -105,7 +116,7 @@ namespace tahsinERP.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); // Log or handle exception as needed
+                Console.WriteLine(ex.Message); 
                 return Json(new List<string>());
             }
         }
@@ -124,23 +135,19 @@ namespace tahsinERP.Controllers
                         var pModule = db.PERMISSIONMODULES.Find(receivedID);
                         if (pModule == null)
                         {
-                            // Log the issue
                             System.Diagnostics.Debug.WriteLine($"PermissionModule not found for ID: {receivedID}");
                             return HttpNotFound();
                         }
 
-                        // Update the permission module
                         pModule.Module = permissions.Module;
                         pModule.Controller = permissions.Controller;
                         pModule.Action = permissions.Action;
-                        pModule.Parameter = permissions.Parameter; // Ensure Parametr is updated here
+                        pModule.Parameter = permissions.Parameter; 
 
-                        // Get existing permissions for the permission module
                         var existingPermissions = db.PERMISSIONS
                             .Where(p => p.PermissionModuleID == pModule.ID)
                             .ToList();
 
-                        // Remove permissions that are no longer selected
                         foreach (var permission in existingPermissions)
                         {
                             if (!RoleID.Contains(permission.RoleID ?? 0))
@@ -149,7 +156,6 @@ namespace tahsinERP.Controllers
                             }
                         }
 
-                        // Add new permissions for newly selected roles
                         foreach (var roleId in RoleID)
                         {
                             if (!existingPermissions.Any(p => p.RoleID == roleId))
@@ -177,7 +183,6 @@ namespace tahsinERP.Controllers
                     }
                 }
 
-                // Repopulate the ViewBag with roles and selected RoleID if model state is invalid
                 var roles = db.ROLES.ToList();
                 ViewBag.Roles = new MultiSelectList(roles, "ID", "RName", RoleID);
                 ViewBag.ControllerNames = new SelectList(GetAllControllerNames(), "Value", "Text", permissions.Controller);
@@ -223,7 +228,6 @@ namespace tahsinERP.Controllers
 
         private DBTHSNEntities db = new DBTHSNEntities();
 
-        // Other actions...
 
         public ActionResult Delete(int id)
         {
