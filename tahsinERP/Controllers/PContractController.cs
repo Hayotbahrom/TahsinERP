@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
@@ -22,20 +23,20 @@ namespace tahsinERP.Controllers
         // GET: Contracts
         public ActionResult Index(string type)
         {
-           
                 if (!string.IsNullOrEmpty(type))
                 {
                     List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
+                    ViewBag.Type = type;
                     return View(list);
                 }
                 else
                 {
                     List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
+                    ViewBag.Type = type;
                     return View(list);
                 }
-           
         }
         public ActionResult Download()
         {
@@ -402,18 +403,23 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
                 var contract = db.P_CONTRACTS.Find(Id);
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
                 else
-                    ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
+                    ViewBag.partList = db.P_CONTRACT_PARTS
+                        .Where(pc => pc.ContractID == contract.ID).ToList();
+
+                db.Entry(contract).Reference(i => i.SUPPLIER).Load();
                 return View(contract);
-            }
+            
         }
+        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID, FormCollection gfs)
