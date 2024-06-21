@@ -71,6 +71,10 @@
                                                             @Html.DropDownListFor(model => model.Parameter, new SelectList(ViewBag.Parametr, "Select Part Type"), new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parameter, "", new { @class = "text-danger" })
                                                         </fieldset>
+                                                        <h6 class="invoice-to">Rollarga birikishi</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.ListBox("RoleID", ViewBag.Roles as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
+                                                        </fieldset>
                                                         <br />
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item border-0 pb-0">
