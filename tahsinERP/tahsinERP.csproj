@@ -290,6 +290,7 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductPlanController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -2372,6 +2373,11 @@
     <Content Include="Views\ProductPlan\Delete.cshtml" />
     <Content Include="Views\Part\ContractsOfPart.cshtml" />
     <Content Include="Views\Part\GetAllParts.cshtml" />
+    <Content Include="Views\SContract\Index.cshtml" />
+    <Content Include="Views\SContract\Details.cshtml" />
+    <Content Include="Views\SContract\Create.cshtml" />
+    <Content Include="Views\SContract\Edit.cshtml" />
+    <Content Include="Views\SContract\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
