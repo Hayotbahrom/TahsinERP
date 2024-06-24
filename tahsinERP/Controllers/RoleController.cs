@@ -67,6 +67,13 @@ namespace tahsinERP.Controllers
             {
                 return HttpNotFound();
             }
+            //Developer rolini faqat developer o`zgartirishga tekshirish
+            var currentUserRole = User.Identity.Name;
+            if (currentUserRole != "developer" && role.RName == "developer")
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Only developers can edit the developer role.");
+            }
+
             return View(roles);
         }
         [HttpPost, ActionName("Edit")]
@@ -76,6 +83,13 @@ namespace tahsinERP.Controllers
             if (ModelState.IsValid)
             {
                 var roleToUpdate = db.ROLES.Find(id);
+
+                //Developer rolini faqat developer o`zgartirishga tekshirish
+                var currentUserRole = User.Identity.Name;
+                if (currentUserRole != "developer" && roleToUpdate.RName == "developer")
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Only developers can edit the developer role.");
+                }
 
                 if (TryUpdateModel(roleToUpdate, "", new string[] { "RName", "Description" }))
                 {
