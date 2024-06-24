@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -31,7 +32,7 @@ namespace tahsinERP.Controllers
                 }
 
                 PRODUCTPLAN productPlan = db.PRODUCTPLANS
-                                           .Include(pp => pp.PRODUCT) 
+                                           .Include(pp => pp.PRODUCT)
                                            .FirstOrDefault(pp => pp.ID == id);
 
                 if (productPlan == null)
@@ -134,9 +135,52 @@ namespace tahsinERP.Controllers
             return View(productPlan);
         }
 
-        public ActionResult Delete()
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PRODUCTPLAN productPlan = db.PRODUCTPLANS.Find(id);
+                if (productPlan == null)
+                {
+                    return HttpNotFound();
+                }
+
+                ViewBag.ProductList = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "Name", productPlan.ProductID);
+                return View(productPlan);
+            }
+        }
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+
+                try
+                {
+                    PRODUCTPLAN productPlan = db.PRODUCTPLANS.Find(id);
+                    if (productPlan == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    productPlan.IsDeleted = true;
+                    db.Entry(productPlan).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception
+                    ModelState.AddModelError("", "Unable to delete. Try again, and if the problem persists see your system administrator.");
+                    return View();
+                }
+            }
         }
     }
 }
