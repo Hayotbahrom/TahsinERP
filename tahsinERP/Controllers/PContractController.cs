@@ -238,7 +238,7 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate")] P_CONTRACTS contract)
+        public ActionResult Create([Bind(Include = "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate, IDN")] P_CONTRACTS contract)
         {
 
             try
@@ -316,7 +316,7 @@ namespace tahsinERP.Controllers
                         contractToUpdate.PaymentTerms = contract.PaymentTerms;
                         contractToUpdate.IsDeleted = false;
 
-                        if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, SupplierID, Price, Currency, Amount, Incoterms, PaymentTerms, DueDate" }))
+                        if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, SupplierID, Price, Currency, Amount, Incoterms, PaymentTerms, DueDate, IDN" }))
                         {
                             try
                             {

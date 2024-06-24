@@ -70,7 +70,7 @@ namespace tahsinERP.Controllers
                                 PermissionModuleID = permissions.ID,
                                 RoleID = roleId,
                                 ViewPermit = true,
-                                ChangePermit = false
+                                ChangePermit = true
                             });
                         }
 
@@ -165,7 +165,7 @@ namespace tahsinERP.Controllers
                                     PermissionModuleID = pModule.ID,
                                     RoleID = roleId,
                                     ViewPermit = true,
-                                    ChangePermit = false
+                                    ChangePermit = true
                                 });
                             }
                         }

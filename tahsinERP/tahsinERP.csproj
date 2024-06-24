@@ -277,8 +277,10 @@
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
+    <Compile Include="Controllers\PartWRHSController.cs" />
     <Compile Include="Controllers\PContractController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Helper.cs" />
@@ -288,8 +290,10 @@
     <Compile Include="Controllers\PModuleController.cs" />
     <Compile Include="Controllers\POrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductPackController.cs" />
     <Compile Include="Controllers\ProductPlanController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -2372,7 +2376,15 @@
     <Content Include="Views\ProductPlan\Delete.cshtml" />
     <Content Include="Views\Part\ContractsOfPart.cshtml" />
     <Content Include="Views\Part\GetAllParts.cshtml" />
-    <Content Include="Views\WhIncome\UploadWithExcel.cshtml" />
+    <Content Include="Views\SContract\Index.cshtml" />
+    <Content Include="Views\SContract\Details.cshtml" />
+    <Content Include="Views\SContract\Create.cshtml" />
+    <Content Include="Views\SContract\Edit.cshtml" />
+    <Content Include="Views\SContract\Delete.cshtml" />
+    <Content Include="Views\ProductPack\Index.cshtml" />
+    <Content Include="Views\PartWRHS\Index.cshtml" />
+    <Content Include="Views\PartWRHS\Create.cshtml" />
+    <Content Include="Views\Forwarder\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
