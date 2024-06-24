@@ -22,6 +22,7 @@ namespace tahsinERP.Models
             this.PRODUCTPLANS = new HashSet<PRODUCTPLAN>();
             this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
             this.SPLs = new HashSet<SPL>();
+            this.DAMAGED_PRODUCTS = new HashSet<DAMAGED_PRODUCTS>();
         }
     
         public int ID { get; set; }
@@ -50,5 +51,7 @@ namespace tahsinERP.Models
         public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPL> SPLs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
     }
 }

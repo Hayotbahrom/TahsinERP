@@ -33,6 +33,7 @@ namespace tahsinERP.Models
         public string PaymentTerms { get; set; }
         public System.DateTime DueDate { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+        public string IDN { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
