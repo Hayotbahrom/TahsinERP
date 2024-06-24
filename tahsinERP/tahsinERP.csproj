@@ -2372,6 +2372,7 @@
     <Content Include="Views\ProductPlan\Delete.cshtml" />
     <Content Include="Views\Part\ContractsOfPart.cshtml" />
     <Content Include="Views\Part\GetAllParts.cshtml" />
+    <Content Include="Views\WhIncome\UploadWithExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
