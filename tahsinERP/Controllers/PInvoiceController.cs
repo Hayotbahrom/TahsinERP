@@ -21,9 +21,8 @@ namespace tahsinERP.Controllers
     {
         private string[] sources = ConfigurationManager.AppSettings["PInvoice"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
+
         // GET: PInvoice
-
-
         public ActionResult Index(string type, int? supplierID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -47,8 +46,7 @@ namespace tahsinERP.Controllers
                 // Filter by supplierID if provided
                 if (supplierID.HasValue)
                 {
-                    int supplierIdValue = supplierID.Value; // Extract the value from nullable int
-                    invoicesQuery = invoicesQuery.Where(pi => pi.SupplierID == supplierIdValue);
+                    invoicesQuery = invoicesQuery.Where(pi => pi.SupplierID == supplierID.Value);
                 }
 
                 List<P_INVOICES> invoices = invoicesQuery.ToList();
@@ -67,10 +65,12 @@ namespace tahsinERP.Controllers
                 }
 
                 ViewBag.SupplierList = new SelectList(suppliersQuery.ToList(), "ID", "Name");
+                ViewBag.Type = type;
 
                 return View(invoices);
             }
         }
+
 
 
         public ActionResult Create()

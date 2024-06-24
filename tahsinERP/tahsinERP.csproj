@@ -288,6 +288,7 @@
     <Compile Include="Controllers\PModuleController.cs" />
     <Compile Include="Controllers\POrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductPlanController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
@@ -481,6 +482,7 @@
     <Compile Include="ViewModels\BOMViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
+    <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
@@ -2356,6 +2358,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ProductPlan\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

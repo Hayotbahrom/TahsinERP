@@ -27,12 +27,16 @@ namespace tahsinERP.Controllers
             {
                 List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false && s.Type.CompareTo(type) == 0).ToList();
                 ViewBag.SourceList = new SelectList(sources, type);
+                ViewBag.Type = type;
+
                 return View(list);
             }
             else
             {
                 List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
                 ViewBag.SourceList = new SelectList(sources, type);
+                ViewBag.Type = type;
+
                 return View(list);
             }
         }
