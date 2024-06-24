@@ -35,7 +35,9 @@ namespace tahsinERP.Controllers
                 roles.IsDeleted = false;
 
                 db.ROLES.Add(roles);
-                int[] permissionModulesID = new int[50];
+
+                var length = db.PERMISSIONMODULES.ToList().Count;
+                int[] permissionModulesID = new int[length];
                 int i = 0;
                 foreach (var item in db.PERMISSIONMODULES.ToList())
                 {
