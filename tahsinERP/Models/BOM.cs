@@ -17,7 +17,7 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public double ChildUsageQty { get; set; }
         public string ChildUsageUnit { get; set; }
-        public double GrandChildUsageQty { get; set; }
+        public Nullable<double> GrandChildUsageQty { get; set; }
         public string GrandChildUsageUnit { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
