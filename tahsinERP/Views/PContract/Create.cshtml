@@ -81,49 +81,54 @@
                                                         @Html.TextBoxFor(model => model.PaymentTerms, new { @class = "form-control round", @placeholder = "To'lov muddati" })
                                                         @Html.ValidationMessageFor(model => model.PaymentTerms, "", new { @class = "text-danger" })
                                                     </fieldset>
+                                                    <h6 class="invoice-to">IDN raqami</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.IDN, new { @class = "form-control round", @placeholder = "IDN raqma" })
+                                                        @Html.ValidationMessageFor(model => model.IDN, "", new { @class = "text-danger" })
+                                                    </fieldset>
 
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="card-header">
-                                                                <h4 class="card-title">Shartnoma predmeti</h4>
-                                                            </div>
-                                                            <div class="card-content">
-                                                                <div class="card-body">
-                                                                    <div class="table-responsive table-responsivetable-responsive">
-                                                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th></th>
-                                                                                    <th></th>
-                                                                                    <th>Detal raqami</th>
-                                                                                    <th>Dona narxi</th>
-                                                                                    <th>Valyuta</th>
-                                                                                    <th>O'lchov birligi</th>
-                                                                                    <th>Miqdori</th>
-                                                                                    <th>MOQ</th>
-                                                                                    <th>Maksimal imkoniyat</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @*foreach(var items in ContractItems)*@
-                                                                                <tr>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <th>model.PartID</th>
-                                                                                    <th>model.Price</th>
-                                                                                    <th>model.Currency</th>
-                                                                                    <th>model.Unit</th>
-                                                                                    <th>model.Amount</th>
-                                                                                    <th>model.MOQ</th>
-                                                                                    <th>model.MaximumCapacity</th>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <!--<div class="row">
+        <div class="col-12">
+            <div class="card-header">
+                <h4 class="card-title">Shartnoma predmeti</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="table-responsive table-responsivetable-responsive">
+                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Detal raqami</th>
+                                    <th>Dona narxi</th>
+                                    <th>Valyuta</th>
+                                    <th>O'lchov birligi</th>
+                                    <th>Miqdori</th>
+                                    <th>MOQ</th>
+                                    <th>Maksimal imkoniyat</th>
+                                </tr>
+                            </thead>
+                            <tbody>-->
+                                                    @*foreach(var items in ContractItems)*@
+                                                    <!--<tr>
+                                    <td></td>
+                                    <td></td>
+                                    <th>model.PartID</th>
+                                    <th>model.Price</th>
+                                    <th>model.Currency</th>
+                                    <th>model.Unit</th>
+                                    <th>model.Amount</th>
+                                    <th>model.MOQ</th>
+                                    <th>model.MaximumCapacity</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
                                                             <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
