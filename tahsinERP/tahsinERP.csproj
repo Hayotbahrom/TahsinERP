@@ -2365,12 +2365,16 @@
     <Content Include="Views\PModule\Delete.cshtml" />
     <Content Include="Views\Customer\Edit.cshtml" />
     <Content Include="Views\Customer\Delete.cshtml" />
+    <Content Include="Views\ProductPlan\Index.cshtml" />
+    <Content Include="Views\ProductPlan\Details.cshtml" />
+    <Content Include="Views\ProductPlan\Create.cshtml" />
+    <Content Include="Views\ProductPlan\Edit.cshtml" />
+    <Content Include="Views\ProductPlan\Delete.cshtml" />
     <Content Include="Views\Part\ContractsOfPart.cshtml" />
     <Content Include="Views\Part\GetAllParts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ProductPlan\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
