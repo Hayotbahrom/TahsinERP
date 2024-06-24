@@ -1,8 +1,9 @@
-﻿
+﻿@model List<tahsinERP.Models.PRODUCTPACK>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Parts"))
 {
@@ -23,11 +24,8 @@
                                     <li class="breadcrumb-item">
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
-                                    <li class="breadcrumb-item ">
-                                        Sahifalar
-                                    </li>
                                     <li class="breadcrumb-item active">
-                                        Ehtiyot qismlar
+                                        Mahsulotlarni qadoq malumotlari
                                     </li>
                                 </ol>
                             </div>
@@ -42,41 +40,16 @@
                         <div class="invoice-create-btn mb-1">
                             @if (changePermit)
                             {
-                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Part/Create';">
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/ProductPack/Create';">
                                     <span class="align-middle ml-25">Ehtiyot qismni qo'shish</span>
                                 </button>
-                                <a href="@Url.Action("UploadWithExcel", "Part")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
+                                <a href="@Url.Action("UploadWithExcel", "ProductPack")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
                                     Extiyot qismni excel orqali qo'shish
                                 </a>
                             }
-                            <button type="button" class="btn btn-primary shadow mr-1 mb-1" onclick="window.location.href='/Part/GetAllParts';">
-                                <span class="align-middle ml-25">Barcha ehtiyot qismlarni ko`rish</span>
-                            </button>
                         </div>
                     </div>
-                    <div class="users-list-filter px-1">
-                        <form>
-                            <div class="row border rounded py-2 mb-2">
-                                <div class="col-12 col-sm-12 col-lg-4">
-                                    <label>Turi</label>
-                                    <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
-                                    </fieldset>
-                                </div>
-                                <div class="col-12 col-sm-12 col-lg-4">
-                                    <label>Ta'minotchisi</label>
-                                    <fieldset class="form-group">
-                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
-                                    </fieldset>
-                                </div>
-                                <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
-                                    <a href="~/Part" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
-                                        Ro'yxatni yangilash
-                                    </a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
@@ -88,10 +61,9 @@
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>Detal Raqami</th>
-                                                    <th>Nomi</th>
-                                                    <th>Ta'minotchi</th>
-                                                    <th>Shartnoma raqami</th>
+                                                    <th>Mahsulot nomi</th>
+                                                    <th>Mahsulot qadoq materiali</th>
+                                                    <th>Mahsulot qadoq miqdori</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -99,27 +71,23 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in ViewBag.partList)
+                                                @foreach (var item in Model)
                                                 {
                                                     <tr>
                                                         <td></td>
                                                         <td></td>
                                                         <td>
-                                                            <a href="~/Part/Details/@item.PartID">@item.PNo</a>
+                                                            <a href="~/Part/Details/@item.ID">@item.PRODUCT.Name</a>
                                                         </td>
-                                                        <td>@item.PName</td>
-                                                        <td>
-                                                            <a href="~/Supplier/Details/@item.SupplierID">@item.SupplierName</a>
-                                                        </td>
-                                                        <td>
-                                                            <a href="~/PContract/Details/@item.ContractID">@item.ContractNo</a>
-                                                        </td>
+                                                        <td>@item.PrPackMaterial </td>
+                                                        <td>@item.PrPackQty</td>
+
                                                         @if (changePermit)
                                                         {
                                                             <td>
                                                                 <div>
-                                                                    <a href="@Url.Action("Edit", "Part", new { id = item.PartID })"><i class="bx bx-edit-alt"></i></a>
-                                                                    <a href="@Url.Action("Delete", "Part", new { id = item.PartID})"><i class="bx bx-trash"></i></a>
+                                                                    <a href="@Url.Action("Edit", "ProductPack", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "ProductPack", new { id = item.ID})"><i class="bx bx-trash"></i></a>
                                                                 </div>
                                                             </td>
                                                         }
@@ -136,17 +104,6 @@
             </div>
         </div>
     </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        function refreshDataTable() {
-            var source = document.getElementById("SourceID").value;
-            const supplierID = document.getElementById("SupplierID").value;
-
-            window.location.href = '@Url.Action("Index", "Part")?type=' + source + '&supplierID='+ supplierID;
-            // new { type = "source", supplierID = "supplierID" })';
-        }
-    </script>
 }
 else
 {

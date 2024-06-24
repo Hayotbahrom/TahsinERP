@@ -44,7 +44,7 @@
                                             <fieldset class="invoice-address form-group">
                                                 @Html.TextBoxFor(model => model.ContractNo, new { @class = "form-control round" })
                                             </fieldset>
-                                            
+
                                             <h6 class="invoice-to">Ta'minotchi</h6>
                                             <fieldset class="invoice-address form-group">
                                                 @Html.DropDownListFor(model => model.SupplierID, ViewBag.Supplier as SelectList, new { @class = "form-control select2" })
@@ -80,6 +80,10 @@
                                             <h6 class="invoice-to">Umumiy summasi</h6>
                                             <fieldset class="invoice-address form-group">
                                                 @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @disabled = "disabled" })
+                                            </fieldset>
+                                            <h6 class="invoice-to">IDN raqami</h6>
+                                            <fieldset class="invoice-address form-group">
+                                                @Html.TextBoxFor(model => model.IDN, new { @class = "form-control round" })
                                             </fieldset>
                                         </div>
                                     </div>
