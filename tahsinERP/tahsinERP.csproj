@@ -277,6 +277,7 @@
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PContractController.cs" />
@@ -2372,6 +2373,7 @@
     <Content Include="Views\ProductPlan\Delete.cshtml" />
     <Content Include="Views\Part\ContractsOfPart.cshtml" />
     <Content Include="Views\Part\GetAllParts.cshtml" />
+    <Content Include="Views\Forwarder\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
