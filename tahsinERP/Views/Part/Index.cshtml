@@ -38,19 +38,22 @@
             <div class="content-body">
                 <!-- users list start -->
                 <section class="invoice-list-wrapper">
-                    @if (changePermit)
-                    {
+                    <div class="invoice-create-btn mb-1">
                         <div class="invoice-create-btn mb-1">
-                            <div class="invoice-create-btn mb-1">
+                            @if (changePermit)
+                            {
                                 <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Part/Create';">
                                     <span class="align-middle ml-25">Ehtiyot qismni qo'shish</span>
                                 </button>
                                 <a href="@Url.Action("UploadWithExcel", "Part")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
                                     Extiyot qismni excel orqali qo'shish
                                 </a>
-                            </div>
+                            }
+                            <button type="button" class="btn btn-primary shadow mr-1 mb-1" onclick="window.location.href='/Part/GetAllParts';">
+                                <span class="align-middle ml-25">Barcha ehtiyot qismlarni ko`rish</span>
+                            </button>
                         </div>
-                    }
+                    </div>
                     <div class="users-list-filter px-1">
                         <form>
                             <div class="row border rounded py-2 mb-2">

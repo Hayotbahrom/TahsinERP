@@ -2366,6 +2366,7 @@
     <Content Include="Views\Customer\Edit.cshtml" />
     <Content Include="Views\Customer\Delete.cshtml" />
     <Content Include="Views\Part\ContractsOfPart.cshtml" />
+    <Content Include="Views\Part\GetAllParts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

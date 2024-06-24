@@ -28,11 +28,12 @@ namespace tahsinERP.Controllers
         // GET: Part
         public ActionResult GetAllParts()
         {
-            if (true)
+            using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-
+                var parts = db1.PARTS
+                    .Where(p => p.IsDeleted == false).ToList();
+                return View(parts); 
             }
-            return View();
         }
         public ActionResult Index(string type, int? supplierID)
         {
