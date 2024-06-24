@@ -70,9 +70,6 @@ namespace tahsinERP.Controllers
                 return View(invoices);
             }
         }
-
-
-
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -82,7 +79,6 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "InvoiceNo, CompanyID, SupplierID, OrderID, InvoiceDate, Amount, Currency")] P_INVOICES invoice)
@@ -110,8 +106,6 @@ namespace tahsinERP.Controllers
 
             return View(invoice);
         }
-
-
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -140,7 +134,6 @@ namespace tahsinERP.Controllers
             ViewBag.partList = partList;
             return View(invoice);
         }
-
         public ActionResult Delete(int? Id)
         {
             if (Id == null)
@@ -217,7 +210,6 @@ namespace tahsinERP.Controllers
                 return View(invoicePartToDelete);
             }
         }
-
         public async Task<ActionResult> Download()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

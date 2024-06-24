@@ -289,6 +289,7 @@
     <Compile Include="Controllers\PModuleController.cs" />
     <Compile Include="Controllers\POrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductPackController.cs" />
     <Compile Include="Controllers\ProductPlanController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
@@ -2373,6 +2374,7 @@
     <Content Include="Views\ProductPlan\Delete.cshtml" />
     <Content Include="Views\Part\ContractsOfPart.cshtml" />
     <Content Include="Views\Part\GetAllParts.cshtml" />
+    <Content Include="Views\ProductPack\Index.cshtml" />
     <Content Include="Views\Forwarder\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
