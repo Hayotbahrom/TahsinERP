@@ -12,19 +12,16 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BOM
+    public partial class DAMAGED_PRODUCTS
     {
         public int ID { get; set; }
-        public double ChildUsageQty { get; set; }
-        public string ChildUsageUnit { get; set; }
-        public double GrandChildUsageQty { get; set; }
-        public string GrandChildUsageUnit { get; set; }
-        public bool IsActive { get; set; }
+        public int ProductID { get; set; }
+        public int DefectTypeID { get; set; }
+        public double Quantity { get; set; }
+        public System.DateTime IssueDateTime { get; set; }
         public bool IsDeleted { get; set; }
-        public string ParentPNo { get; set; }
-        public string ChildPNo { get; set; }
-        public string GrandChildPNo { get; set; }
-        public bool IsParentProduct { get; set; }
-        public bool IsParentPart { get; set; }
+    
+        public virtual DEFECT_TYPES DEFECT_TYPES { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

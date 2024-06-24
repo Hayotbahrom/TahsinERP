@@ -64,6 +64,37 @@
           <Property Name="Type" Type="varchar" MaxLength="10" />
           <Property Name="City" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="DAMAGED_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="DefectTypeID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="IssueDateTime" Type="datetime" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DAMAGED_PRODUCTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="DefectTypeID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="IssueDateTime" Type="datetime" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DEFECT_TYPES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DefectType" Type="varchar" MaxLength="30" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
         <EntityType Name="F_CONTRACTS">
           <Key>
             <PropertyRef Name="ID" />
@@ -166,6 +197,7 @@
           <Property Name="PaymentTerms" Type="varchar" MaxLength="50" />
           <Property Name="DueDate" Type="datetime" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" />
+          <Property Name="IDN" Type="varchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="P_INVOICE_DOCS">
           <Key>
@@ -699,6 +731,54 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="COMPANY_LICENSES">
               <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DAMAGED_PARTS_DEFECT_TYPES">
+          <End Role="DEFECT_TYPES" Type="Self.DEFECT_TYPES" Multiplicity="1" />
+          <End Role="DAMAGED_PARTS" Type="Self.DAMAGED_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEFECT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PARTS">
+              <PropertyRef Name="DefectTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DAMAGED_PARTS_PARTS">
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
+          <End Role="DAMAGED_PARTS" Type="Self.DAMAGED_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PARTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DAMAGED_PRODUCTS_DEFECT_TYPES">
+          <End Role="DEFECT_TYPES" Type="Self.DEFECT_TYPES" Multiplicity="1" />
+          <End Role="DAMAGED_PRODUCTS" Type="Self.DAMAGED_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEFECT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PRODUCTS">
+              <PropertyRef Name="DefectTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DAMAGED_PRODUCTS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="DAMAGED_PRODUCTS" Type="Self.DAMAGED_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PRODUCTS">
+              <PropertyRef Name="ProductID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1525,6 +1605,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySet Name="COMPANIES" EntityType="Self.COMPANIES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMPANY_LICENSES" EntityType="Self.COMPANY_LICENSES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DAMAGED_PARTS" EntityType="Self.DAMAGED_PARTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DAMAGED_PRODUCTS" EntityType="Self.DAMAGED_PRODUCTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DEFECT_TYPES" EntityType="Self.DEFECT_TYPES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="F_CONTRACTS" EntityType="Self.F_CONTRACTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="F_TRANSPORT_TYPES" EntityType="Self.F_TRANSPORT_TYPES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="F_WAYBILL_DOCS" EntityType="Self.F_WAYBILL_DOCS" Schema="dbo" store:Type="Tables" />
@@ -1579,6 +1662,22 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <AssociationSet Name="FK_COMPANY_LICENSES_COMPANIES" Association="Self.FK_COMPANY_LICENSES_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="COMPANY_LICENSES" EntitySet="COMPANY_LICENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DAMAGED_PARTS_DEFECT_TYPES" Association="Self.FK_DAMAGED_PARTS_DEFECT_TYPES">
+            <End Role="DEFECT_TYPES" EntitySet="DEFECT_TYPES" />
+            <End Role="DAMAGED_PARTS" EntitySet="DAMAGED_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DAMAGED_PARTS_PARTS" Association="Self.FK_DAMAGED_PARTS_PARTS">
+            <End Role="PARTS" EntitySet="PARTS" />
+            <End Role="DAMAGED_PARTS" EntitySet="DAMAGED_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DAMAGED_PRODUCTS_DEFECT_TYPES" Association="Self.FK_DAMAGED_PRODUCTS_DEFECT_TYPES">
+            <End Role="DEFECT_TYPES" EntitySet="DEFECT_TYPES" />
+            <End Role="DAMAGED_PRODUCTS" EntitySet="DAMAGED_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DAMAGED_PRODUCTS_PRODUCTS" Association="Self.FK_DAMAGED_PRODUCTS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="DAMAGED_PRODUCTS" EntitySet="DAMAGED_PRODUCTS" />
           </AssociationSet>
           <AssociationSet Name="FK_F_CONTRACTS_COMPANIES" Association="Self.FK_F_CONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
@@ -2044,6 +2143,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="P_CONTRACT_PARTS" Relationship="Self.FK_P_CONTRACT_PARTS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_CONTRACT_PARTS" />
           <NavigationProperty Name="P_ORDERS" Relationship="Self.FK_P_ORDERS_P_CONTRACTS" FromRole="P_CONTRACTS" ToRole="P_ORDERS" />
           <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_PCONTRACTS_SUPPLIERS" FromRole="P_CONTRACTS" ToRole="SUPPLIERS" />
+          <Property Name="IDN" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="P_INVOICE_DOCS">
           <Key>
@@ -2389,6 +2489,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PARTPACK" Relationship="Self.FK_PARTS_PARTPACKS" FromRole="PARTS" ToRole="PARTPACKS" />
           <NavigationProperty Name="PARTPLANS" Relationship="Self.FK_PARTPLANS_PARTS" FromRole="PARTS" ToRole="PARTPLANS" />
           <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_PARTS_PROD_SHOPS" FromRole="PARTS" ToRole="PROD_SHOPS" />
+          <NavigationProperty Name="DAMAGED_PARTS" Relationship="DBTHSNModel.FK_DAMAGED_PARTS_PARTS" FromRole="PART" ToRole="DAMAGED_PARTS" />
         </EntityType>
         <EntityType Name="PERMISSIONMODULE">
           <Key>
@@ -2523,6 +2624,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PRODUCTPLANS" Relationship="Self.FK_PRODUCTPLANS_PRODUCTS" FromRole="PRODUCTS" ToRole="PRODUCTPLANS" />
           <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_SCONTRACTS_PRODUCTS" FromRole="PRODUCTS" ToRole="S_CONTRACTS" />
           <NavigationProperty Name="SPLs" Relationship="Self.FK_SPL_PRODUCTS" FromRole="PRODUCTS" ToRole="SPL" />
+          <NavigationProperty Name="DAMAGED_PRODUCTS" Relationship="DBTHSNModel.FK_DAMAGED_PRODUCTS_PRODUCTS" FromRole="PRODUCT" ToRole="DAMAGED_PRODUCTS" />
         </EntityType>
         <EntityType Name="ROLE">
           <Key>
@@ -3790,6 +3892,25 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <FunctionImport Name="GetSupplierParts" ReturnType="Collection(DBTHSNModel.GetSupplierParts_Result)">
           <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="DAMAGED_PARTS" EntityType="DBTHSNModel.DAMAGED_PARTS" />
+          <EntitySet Name="DAMAGED_PRODUCTS" EntityType="DBTHSNModel.DAMAGED_PRODUCTS" />
+          <EntitySet Name="DEFECT_TYPES" EntityType="DBTHSNModel.DEFECT_TYPES" />
+          <AssociationSet Name="FK_DAMAGED_PARTS_DEFECT_TYPES" Association="DBTHSNModel.FK_DAMAGED_PARTS_DEFECT_TYPES">
+            <End Role="DEFECT_TYPES" EntitySet="DEFECT_TYPES" />
+            <End Role="DAMAGED_PARTS" EntitySet="DAMAGED_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DAMAGED_PARTS_PARTS" Association="DBTHSNModel.FK_DAMAGED_PARTS_PARTS">
+            <End Role="PART" EntitySet="PARTS" />
+            <End Role="DAMAGED_PARTS" EntitySet="DAMAGED_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DAMAGED_PRODUCTS_DEFECT_TYPES" Association="DBTHSNModel.FK_DAMAGED_PRODUCTS_DEFECT_TYPES">
+            <End Role="DEFECT_TYPES" EntitySet="DEFECT_TYPES" />
+            <End Role="DAMAGED_PRODUCTS" EntitySet="DAMAGED_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DAMAGED_PRODUCTS_PRODUCTS" Association="DBTHSNModel.FK_DAMAGED_PRODUCTS_PRODUCTS">
+            <End Role="PRODUCT" EntitySet="PRODUCTS" />
+            <End Role="DAMAGED_PRODUCTS" EntitySet="DAMAGED_PRODUCTS" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetPartsInfo_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
@@ -3836,6 +3957,91 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Type="Int32" Name="ImageID" Nullable="false" />
           <Property Type="Binary" Name="Image" Nullable="true" MaxLength="Max" />
         </ComplexType>
+        <EntityType Name="DAMAGED_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="DefectTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="IssueDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="DEFECT_TYPES" Relationship="DBTHSNModel.FK_DAMAGED_PARTS_DEFECT_TYPES" FromRole="DAMAGED_PARTS" ToRole="DEFECT_TYPES" />
+          <NavigationProperty Name="PART" Relationship="DBTHSNModel.FK_DAMAGED_PARTS_PARTS" FromRole="DAMAGED_PARTS" ToRole="PART" />
+        </EntityType>
+        <EntityType Name="DAMAGED_PRODUCTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="DefectTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="IssueDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="DEFECT_TYPES" Relationship="DBTHSNModel.FK_DAMAGED_PRODUCTS_DEFECT_TYPES" FromRole="DAMAGED_PRODUCTS" ToRole="DEFECT_TYPES" />
+          <NavigationProperty Name="PRODUCT" Relationship="DBTHSNModel.FK_DAMAGED_PRODUCTS_PRODUCTS" FromRole="DAMAGED_PRODUCTS" ToRole="PRODUCT" />
+        </EntityType>
+        <EntityType Name="DEFECT_TYPES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DefectType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="DAMAGED_PARTS" Relationship="DBTHSNModel.FK_DAMAGED_PARTS_DEFECT_TYPES" FromRole="DEFECT_TYPES" ToRole="DAMAGED_PARTS" />
+          <NavigationProperty Name="DAMAGED_PRODUCTS" Relationship="DBTHSNModel.FK_DAMAGED_PRODUCTS_DEFECT_TYPES" FromRole="DEFECT_TYPES" ToRole="DAMAGED_PRODUCTS" />
+        </EntityType>
+        <Association Name="FK_DAMAGED_PARTS_DEFECT_TYPES">
+          <End Type="DBTHSNModel.DEFECT_TYPES" Role="DEFECT_TYPES" Multiplicity="1" />
+          <End Type="DBTHSNModel.DAMAGED_PARTS" Role="DAMAGED_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEFECT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PARTS">
+              <PropertyRef Name="DefectTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DAMAGED_PARTS_PARTS">
+          <End Type="DBTHSNModel.PART" Role="PART" Multiplicity="1" />
+          <End Type="DBTHSNModel.DAMAGED_PARTS" Role="DAMAGED_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PARTS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DAMAGED_PRODUCTS_DEFECT_TYPES">
+          <End Type="DBTHSNModel.DEFECT_TYPES" Role="DEFECT_TYPES" Multiplicity="1" />
+          <End Type="DBTHSNModel.DAMAGED_PRODUCTS" Role="DAMAGED_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEFECT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PRODUCTS">
+              <PropertyRef Name="DefectTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DAMAGED_PRODUCTS_PRODUCTS">
+          <End Type="DBTHSNModel.PRODUCT" Role="PRODUCT" Multiplicity="1" />
+          <End Type="DBTHSNModel.DAMAGED_PRODUCTS" Role="DAMAGED_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DAMAGED_PRODUCTS">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4002,6 +4208,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySetMapping Name="P_CONTRACTS">
             <EntityTypeMapping TypeName="DBTHSNModel.P_CONTRACTS">
               <MappingFragment StoreEntitySet="P_CONTRACTS">
+                <ScalarProperty Name="IDN" ColumnName="IDN" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
                 <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
@@ -4639,6 +4846,40 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="DAMAGED_PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.DAMAGED_PARTS">
+              <MappingFragment StoreEntitySet="DAMAGED_PARTS">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IssueDateTime" ColumnName="IssueDateTime" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DefectTypeID" ColumnName="DefectTypeID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DAMAGED_PRODUCTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.DAMAGED_PRODUCTS">
+              <MappingFragment StoreEntitySet="DAMAGED_PRODUCTS">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="IssueDateTime" ColumnName="IssueDateTime" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DefectTypeID" ColumnName="DefectTypeID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DEFECT_TYPES">
+            <EntityTypeMapping TypeName="DBTHSNModel.DEFECT_TYPES">
+              <MappingFragment StoreEntitySet="DEFECT_TYPES">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DefectType" ColumnName="DefectType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
