@@ -76,6 +76,9 @@ namespace tahsinERP.Models
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
+        public virtual DbSet<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
+        public virtual DbSet<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
+        public virtual DbSet<DEFECT_TYPES> DEFECT_TYPES { get; set; }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {

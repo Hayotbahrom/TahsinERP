@@ -121,6 +121,13 @@
         <AssociationConnector Association="DBTHSNModel.FK_USER_LICENSES_USERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_USERIMAGES_USERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.USERROLES" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DBTHSNModel.DAMAGED_PARTS" Width="1.5" PointX="13.875" PointY="35.375" />
+        <EntityTypeShape EntityType="DBTHSNModel.DAMAGED_PRODUCTS" Width="1.5" PointX="9.375" PointY="17" />
+        <EntityTypeShape EntityType="DBTHSNModel.DEFECT_TYPES" Width="1.5" PointX="0.75" PointY="8" />
+        <AssociationConnector Association="DBTHSNModel.FK_DAMAGED_PARTS_DEFECT_TYPES" />
+        <AssociationConnector Association="DBTHSNModel.FK_DAMAGED_PARTS_PARTS" />
+        <AssociationConnector Association="DBTHSNModel.FK_DAMAGED_PRODUCTS_DEFECT_TYPES" />
+        <AssociationConnector Association="DBTHSNModel.FK_DAMAGED_PRODUCTS_PRODUCTS" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

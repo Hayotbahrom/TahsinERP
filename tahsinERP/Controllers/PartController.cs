@@ -24,7 +24,7 @@ namespace tahsinERP.Controllers
         private byte[] avatar;
         private int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         private string partNo = "";
-        
+
         // GET: Part
         public ActionResult GetAllParts()
         {
@@ -284,9 +284,6 @@ namespace tahsinERP.Controllers
             ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partVM.ShopID);
             return View(partVM);
         }
-
-
-
         public ActionResult Delete(int? ID)
         {
             if (ID == null)
@@ -339,6 +336,7 @@ namespace tahsinERP.Controllers
             }
 
             var part = db.PARTS.Find(id);
+            ViewBag.contractList = ContractsOfParts(part.ID);
             if (part == null)
             {
                 return HttpNotFound();
@@ -380,8 +378,33 @@ namespace tahsinERP.Controllers
 
             return View(partVM);
         }
+        public List<ContractsOfPartsViewModel> ContractsOfParts(int? partID)
+        {
+            if (partID == null)
+            {
+                return null;
+            }
 
+            using (DBTHSNEntities dbContext = new DBTHSNEntities())
+            {
+                var result = dbContext.P_CONTRACTS
+                    .Join(dbContext.P_CONTRACT_PARTS, pc => pc.ID, pcp => pcp.ContractID, (pc, pcp) => new { pc, pcp })
+                    .Join(dbContext.SUPPLIERS, combined => combined.pc.SupplierID, s => s.ID, (combined, s) => new { combined.pc, combined.pcp, s })
+                    .Where(x => x.pcp.PartID == partID && x.pc.IsDeleted == false)
+                    .Select(x => new ContractsOfPartsViewModel
+                    {
+                        ContractNo = x.pc.ContractNo,
+                        ContractID = x.pc.ID,
+                        SupplierName = x.s.Name,
+                        SupplierID = x.s.ID,
+                        IssuedDate = x.pc.IssuedDate,
+                        DueDate = x.pc.DueDate
+                    })
+                    .ToList();
 
+                return result;
+            }
+        }
         public ActionResult UploadWithExcel()
         {
             ViewBag.IsFileUploaded = false;
@@ -544,8 +567,8 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-
             return RedirectToAction("Index");
         }
+
     }
 }
