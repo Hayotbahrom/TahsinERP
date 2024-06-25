@@ -230,13 +230,13 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Create()
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 return View();
-            }
+            //}
         }
-        [HttpPost]
+        [HttpPost]  
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate, IDN")] P_CONTRACTS contract)
         {
