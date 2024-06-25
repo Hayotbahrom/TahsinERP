@@ -42,24 +42,26 @@
                     {
                         <div class="invoice-create-btn mb-1">
                             <div class="invoice-create-btn mb-1">
-                                <a href="@Url.Action("UploadWithExcel", "PContract")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
-                                    Yangi
-                                    Shartnomani qo'shish
-                                </a>
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/SContract/Create';">
+                                    <span class="align-middle ml-25">Yangi Shartnomani qo'shish</span>
+                                </button>
+                                @*<a href="@Url.Action("UploadWithExcel", "SContract")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
+                                    Yangi Shartnomani qo'shish
+                                </a>*@
+                                <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/SContract/UploadWithExcel'">
+                                    <i class="bx bx-file"></i>
+                                    <span class="align-middle ml-25">
+                                    Excel orqali yangi shartnoma qo'shish
+                                    </span>
+                                </button>
                             </div>
                         </div>
                     }
                     <div class="users-list-filter px-1">
                         <form>
                             <div class="row border rounded py-2 mb-2">
-                                <div class="col-12 col-sm-12 col-lg-4">
-                                    <label for="users-list-role">Turi</label>
-                                    <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
-                                    </fieldset>
-                                </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
-                                    <a href="~/PContract" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                    <a href="~/SContract" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
                                         Ro'yxatni yangilash
                                     </a>
                                 </div>
@@ -78,11 +80,9 @@
                                                     <th></th>
                                                     <th></th>
                                                     <th>Raqami</th>
-                                                    <th>Xaridor ismi</th>
+                                                    <th>Xaridor kompaniya</th>
                                                     <th>Mahsulot nomi</th>
                                                     <th>Narxi</th>
-                                                    <th>Incoterms</th>
-                                                    <th>To'lov sharti</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -101,16 +101,14 @@
                                                         <td>
                                                             <a href="~/Customer/Details/@item.CustomerID">@item.CUSTOMER.Name</a>
                                                         </td>
-                                                        <td>@item.PRODUCT.Name</td>
-                                                        <td>@item.DueDate.ToString("dd.MM.yyyy")</td>
-                                                        <td>@item.Incoterms</td>
-                                                        <td>@item.PaymentTerms</td>
+                                                        <td>@item.ContractNo</td>
+                                                        <td>@item.ContractNo</td>
                                                         @if (changePermit)
                                                         {
                                                             <td>
                                                                 <div>
-                                                                    <a href="@Url.Action("Edit", "PContract", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                    <a href="@Url.Action("Delete", "PContract", new { id = item.ID})"><i class="bx bx-trash"></i></a>
+                                                                    <a href="@Url.Action("Edit", "SContract", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "SContract", new { id = item.ID})"><i class="bx bx-trash"></i></a>
                                                                 </div>
                                                             </td>
                                                         }
@@ -122,11 +120,9 @@
                                                     <th></th>
                                                     <th></th>
                                                     <th>Raqami</th>
-                                                    <th>Ta'minotchi nomi</th>
-                                                    <th>Tuzilgan sanasi</th>
-                                                    <th>Tugashi sanasi</th>
-                                                    <th>Incoterms</th>
-                                                    <th>To'lov sharti</th>
+                                                    <th>Xaridor ismi</th>
+                                                    <th>Mahsulot nomi</th>
+                                                    <th>Narxi</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>

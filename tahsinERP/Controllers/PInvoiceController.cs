@@ -19,7 +19,7 @@ namespace tahsinERP.Controllers
 {
     public class PInvoiceController : Controller
     {
-        private string[] sources = ConfigurationManager.AppSettings["PInvoice"].Split(',');
+        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
 
         // GET: PInvoice
