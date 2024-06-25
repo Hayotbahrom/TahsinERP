@@ -1,0 +1,111 @@
+﻿@model List<tahsinERP.Models.PART_WRHS>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "PartWRHS"))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PartWRHS"))
+    {
+        changePermit = true;
+    }
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                         Ombor malumotlari
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- users list start -->
+                <section class="invoice-list-wrapper">
+                    <div class="invoice-create-btn mb-1">
+                        <div class="invoice-create-btn mb-1">
+                            @if (changePermit)
+                            {
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/PartWRHS/Create';">
+                                    <span class="align-middle ml-25">Yangi Ombor malumotlarini qo'shish</span>
+                                </button>
+                                <a href="@Url.Action("UploadWithExcel", "ProductPack")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
+                                    Ombor malumotlarini excel orqali qo'shish
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <!-- datatable start -->
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Nomi</th>
+                                                    <th>Batafsil</th>
+                                                    <th>Ombor mudiri</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="~/PartWRHS/Details/@item.ID">@item.WHName</a>
+                                                        </td>
+                                                        <td>@item.Description </td>
+                                                        <td><a href="~/User/Details/@item.MRP">@item.USER.Uname</a> </td>
+
+                                                        @if (changePermit)
+                                                        {
+                                                            <td>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "PartWRHS", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "PartWRHS", new { id = item.ID})"><i class="bx bx-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

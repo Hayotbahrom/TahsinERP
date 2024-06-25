@@ -1,0 +1,93 @@
+﻿@model tahsinERP.Models.PART_WRHS
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PartWRHS"))
+{
+    using (Html.BeginForm("Edit", "PartWRHS", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/PartWRHS/Index">TSexlar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Yangi qo'shish
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <!-- app invoice View Page -->
+                    <section class="basic-select2">
+                        <div class="row">
+                            <!-- invoice view page -->
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+                                                    <h6 class="invoice-to">Qism Ombori </h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.WHName, new { @class = "form-control", @placeholder = "Qism Ombori nomi" })
+                                                        @Html.ValidationMessageFor(model => model.WHName, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Batafsil</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @placeholder = "Batafsil" })
+                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">MRP</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownList("MRP", ViewBag.MRPUsers as SelectList, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.MRP, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Bog'lanadigon tsex nomi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownList("ShopID", (SelectList)ViewBag.ShopList, "Select Shop", new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ShopID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                                <i class='bx bx-save'></i>
+                                                                Saqlash
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

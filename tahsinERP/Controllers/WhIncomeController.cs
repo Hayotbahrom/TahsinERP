@@ -1,17 +1,15 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 
 namespace tahsinERP.Controllers
@@ -19,6 +17,7 @@ namespace tahsinERP.Controllers
     public class WhIncomeController : Controller
     {
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
+        private string partNo, waybillNo, whName, docNo, invoiceNo = "";
         // GET: WhIncome
         public ActionResult Index(string type, int? supplierID)
         {
@@ -28,14 +27,14 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.P_INVOICES.SupplierID == supplierID).ToList();
+                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.P_INVOICES.SupplierID == supplierID).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
                         return View(list);
                     }
                     else
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0).ToList();
+                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
                         return View(list);
@@ -45,14 +44,14 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SupplierID == supplierID).ToList();
+                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SupplierID == supplierID).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
                         return View(list);
                     }
                     else
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Where(pi => pi.IsDeleted == false).ToList();
+                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name");
                         return View(list);
@@ -68,7 +67,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("omborga_kirim.xlsx") == 0).FirstOrDefault();
+                SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("ombor_kirim.xlsx") == 0).FirstOrDefault();
                 if (invoys != null)
                     return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -122,22 +121,28 @@ namespace tahsinERP.Controllers
                         {
                             foreach (DataRow row in dataTable.Rows)
                             {
-                                //orderNo = row["OrderNo"].ToString();
-                                //supplierName = row["Supplier Name"].ToString();
-                                //partNo = row["Part Number"].ToString();
-                                //invoiceNo = row["Invoice No."].ToString();
+                                whName = row["Warehouse Name"].ToString();
+                                partNo = row["Part Number"].ToString();
+                                invoiceNo = row["Invoice No."].ToString();
+                                waybillNo = row["Waybill No."].ToString();
 
-                                //SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                                //PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                                //P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                                //P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
+                                PART_WRHS warehouse = db.PART_WRHS.Where(wh => wh.WHName.CompareTo(whName) == 0 && wh.IsDeleted == false).FirstOrDefault();
+                                PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.IsDeleted == false).FirstOrDefault();
+                                F_WAYBILLS waybill = db.F_WAYBILLS.Where(wb => wb.WaybillNo.CompareTo(waybillNo) == 0 && wb.IsDeleted == false).FirstOrDefault();
 
-                                //if (invoice != null)
-                                //{
-                                //    P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pop => pop.PartID == part.ID && pop.InvoiceID == invoice.ID).FirstOrDefault();
-                                //    if (invoicePart != null)
-                                //        ViewBag.ExistingRecordsCount = 1;
-                                //}
+                                P_WRHS_INCOMES income = db.P_WRHS_INCOMES.Where(inc => inc.InvoiceID == invoice.ID && inc.WHID == warehouse.ID && inc.IsDeleted == false).FirstOrDefault();
+
+                                if (income != null)
+                                {
+                                    P_WRHS_INCOME_PARTS incomePart = db.P_WRHS_INCOME_PARTS.Where(incp => incp.IncomeID == income.ID && incp.PartID == part.ID).FirstOrDefault();
+                                    if (incomePart != null)
+                                    {
+                                        ViewBag.ExistingRecordsCount = 1;
+                                        if (CheckForInvoiceQty(incomePart, invoice) > 0)
+                                            ViewBag.InvoiceCapacityExceedCount = 1;
+                                    }
+                                }
                             }
                         }
                     }
@@ -160,6 +165,21 @@ namespace tahsinERP.Controllers
             }
             return View("UploadWithExcel");
         }
+        private int CheckForInvoiceQty(P_WRHS_INCOME_PARTS incomePart, P_INVOICES invoice)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(invp => invp.InvoiceID == invoice.ID && invp.PartID == incomePart.PartID).FirstOrDefault();
+                if (invoicePart != null)
+                {
+                    if (invoicePart.Quantity > incomePart.Amount)
+                        return 0;
+                    return 1;
+                }
+                else
+                    return 0;
+            }
+        }
         public ActionResult ClearDataTable()
         {
             ViewBag.DataTable = null;
@@ -172,6 +192,7 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public async Task<ActionResult> Save(string dataTableModel)
         {
+            int a = 1, b = 0;
             await Task.Run(() =>
             {
                 // Perform CPU-bound work here
@@ -189,60 +210,73 @@ namespace tahsinERP.Controllers
                     {
                         foreach (DataRow row in tableModel.Rows)
                         {
-                            //orderNo = row["OrderNo"].ToString();
-                            //supplierName = row["Supplier Name"].ToString();
-                            //partNo = row["Part Number"].ToString();
-                            //invoiceNo = row["Invoice No."].ToString();
+                            whName = row["Warehouse Name"].ToString();
+                            partNo = row["Part Number"].ToString();
+                            invoiceNo = row["Invoice No."].ToString();
+                            waybillNo = row["Waybill No."].ToString();
 
-                            //SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                            //PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                            //P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                            //P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
+                            PART_WRHS warehouse = db.PART_WRHS.Where(wh => wh.WHName.CompareTo(whName) == 0 && wh.IsDeleted == false).FirstOrDefault();
+                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                            P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.IsDeleted == false).FirstOrDefault();
+                            F_WAYBILLS waybill = db.F_WAYBILLS.Where(wb => wb.WaybillNo.CompareTo(waybillNo) == 0 && wb.IsDeleted == false).FirstOrDefault();
 
-                            //if (invoice == null)
-                            //{
-                            //    P_INVOICES new_invoice = new P_INVOICES();
-                            //    new_invoice.InvoiceNo = invoiceNo;
-                            //    new_invoice.OrderID = order.ID;
-                            //    new_invoice.SupplierID = supplier.ID;
-                            //    new_invoice.InvoiceDate = DateTime.Parse(row["Date"].ToString());
-                            //    new_invoice.Currency = row["Currency"].ToString();
-                            //    new_invoice.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
-                            //    new_invoice.IsDeleted = false;
+                            P_WRHS_INCOMES income = db.P_WRHS_INCOMES.Where(inc => inc.InvoiceID == invoice.ID && inc.WHID == warehouse.ID && inc.IssueDateTime.Day == DateTime.Now.Day && inc.IssueDateTime.Hour == DateTime.Now.Hour && inc.IssueDateTime.Minute == DateTime.Now.Minute && inc.IsDeleted == false).FirstOrDefault();
 
-                            //    db.P_INVOICES.Add(new_invoice);
-                            //    db.SaveChanges();
+                            if (income == null)
+                            {
+                                P_WRHS_INCOMES new_income = new P_WRHS_INCOMES();
 
-                            //    P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
-                            //    if (invoicePart == null)
-                            //    {
-                            //        P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
-                            //        new_invoicePart.PartID = part.ID;
-                            //        new_invoicePart.InvoiceID = new_invoice.ID;
-                            //        new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
-                            //        new_invoicePart.Unit = row["Unit"].ToString();
-                            //        new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+                                new_income.InvoiceID = invoice.ID;
+                                new_income.WHID = warehouse.ID;
+                                if (waybill != null)
+                                    new_income.WaybillID = waybill.ID;
+                                new_income.IssueDateTime = DateTime.Now;
+                                new_income.Currency = row["Currency"].ToString();
+                                new_income.IsDeleted = false;
 
-                            //        db.P_INVOICE_PARTS.Add(new_invoicePart);
-                            //        db.SaveChanges();
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
-                            //    if (invoicePart == null)
-                            //    {
-                            //        P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
-                            //        new_invoicePart.PartID = part.ID;
-                            //        new_invoicePart.InvoiceID = invoice.ID;
-                            //        new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
-                            //        new_invoicePart.Unit = row["Unit"].ToString();
-                            //        new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+                                P_WRHS_INCOMES lastIncome = db.P_WRHS_INCOMES.Where(inc => inc.InvoiceID == invoice.ID && inc.WHID == warehouse.ID && inc.IssueDateTime.Day == DateTime.Now.Day).OrderByDescending(icnp => icnp.IssueDateTime).FirstOrDefault();
+                                if (lastIncome != null)
+                                {
+                                    b = Convert.ToInt32(lastIncome.DocNo.Substring(lastIncome.DocNo.LastIndexOf('_') + 1));
+                                    a += b;
+                                    docNo = whName + "_IN_" + DateTime.Now.ToString("ddMMyy") + "_" + a;
+                                }
+                                else
+                                    docNo = whName + "_IN_" + DateTime.Now.ToString("ddMMyy") + "_" + a;
+                                new_income.DocNo = docNo;
+                                db.P_WRHS_INCOMES.Add(new_income);
+                                db.SaveChanges();
 
-                            //        db.P_INVOICE_PARTS.Add(new_invoicePart);
-                            //        db.SaveChanges();
-                            //    }
-                            //}
+                                P_WRHS_INCOME_PARTS incomePart = db.P_WRHS_INCOME_PARTS.Where(incp => incp.IncomeID == new_income.ID && incp.PartID == part.ID).FirstOrDefault();
+                                if (incomePart == null)
+                                {
+                                    P_WRHS_INCOME_PARTS new_incomePart = new P_WRHS_INCOME_PARTS();
+                                    new_incomePart.PartID = part.ID;
+                                    new_incomePart.IncomeID = new_income.ID;
+                                    new_incomePart.PiecePrice = Convert.ToDouble(row["Price"].ToString());
+                                    new_incomePart.Unit = row["Unit"].ToString();
+                                    new_incomePart.Amount = Convert.ToDouble(row["Amount"].ToString());
+
+                                    db.P_WRHS_INCOME_PARTS.Add(new_incomePart);
+                                    db.SaveChanges();
+                                }
+                            }
+                            else
+                            {
+                                P_WRHS_INCOME_PARTS incomePart = db.P_WRHS_INCOME_PARTS.Where(incp => incp.IncomeID == income.ID && incp.PartID == part.ID).FirstOrDefault();
+                                if (incomePart == null)
+                                {
+                                    P_WRHS_INCOME_PARTS new_incomePart = new P_WRHS_INCOME_PARTS();
+                                    new_incomePart.PartID = part.ID;
+                                    new_incomePart.IncomeID = income.ID;
+                                    new_incomePart.PiecePrice = Convert.ToDouble(row["Price"].ToString());
+                                    new_incomePart.Unit = row["Unit"].ToString();
+                                    new_incomePart.Amount = Convert.ToDouble(row["Amount"].ToString());
+
+                                    db.P_WRHS_INCOME_PARTS.Add(new_incomePart);
+                                    db.SaveChanges();
+                                }
+                            }
                         }
                     }
                 }
