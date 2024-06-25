@@ -17,21 +17,21 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PRODUCT()
         {
+            this.DAMAGED_PRODUCTS = new HashSet<DAMAGED_PRODUCTS>();
             this.PRODUCTIMAGES = new HashSet<PRODUCTIMAGE>();
             this.PRODUCTPACKS = new HashSet<PRODUCTPACK>();
             this.PRODUCTPLANS = new HashSet<PRODUCTPLAN>();
-            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
+            this.S_CONTRACT_PRODUCTS = new HashSet<S_CONTRACT_PRODUCTS>();
             this.SPLs = new HashSet<SPL>();
-            this.DAMAGED_PRODUCTS = new HashSet<DAMAGED_PRODUCTS>();
         }
     
         public int ID { get; set; }
         public string PNo { get; set; }
         public string Name { get; set; }
-        public Nullable<double> Weight { get; set; }
-        public Nullable<double> Length { get; set; }
-        public Nullable<double> Width { get; set; }
-        public Nullable<double> Height { get; set; }
+        public double Weight { get; set; }
+        public double Length { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
         public string Unit { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
@@ -42,16 +42,16 @@ namespace tahsinERP.Models
         public Nullable<int> PackID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCTPACK> PRODUCTPACKS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCTPLAN> PRODUCTPLANS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
+        public virtual ICollection<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPL> SPLs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
     }
 }

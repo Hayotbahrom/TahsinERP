@@ -17,6 +17,7 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PART()
         {
+            this.DAMAGED_PARTS = new HashSet<DAMAGED_PARTS>();
             this.P_CONTRACT_PARTS = new HashSet<P_CONTRACT_PARTS>();
             this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
             this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
@@ -26,7 +27,6 @@ namespace tahsinERP.Models
             this.PARTIMAGES = new HashSet<PARTIMAGE>();
             this.PARTPACKS = new HashSet<PARTPACK>();
             this.PARTPLANS = new HashSet<PARTPLAN>();
-            this.DAMAGED_PARTS = new HashSet<DAMAGED_PARTS>();
         }
     
         public int ID { get; set; }
@@ -53,6 +53,8 @@ namespace tahsinERP.Models
         public string HSCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_INVOICE_PACKINGLISTS> P_INVOICE_PACKINGLISTS { get; set; }
@@ -72,7 +74,5 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PARTPLAN> PARTPLANS { get; set; }
         public virtual PROD_SHOPS PROD_SHOPS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
     }
 }

@@ -19,8 +19,7 @@ namespace tahsinERP.Controllers
 {
     public class PInvoiceController : Controller
     {
-        DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = ConfigurationManager.AppSettings["PInvoice"].Split(',');
+        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
 
         // GET: PInvoice
@@ -141,8 +140,8 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
                 var invoice = db.P_INVOICES.Find(Id);
                 if (invoice == null)
                 {
@@ -151,7 +150,7 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
                 return View(invoice);
-           // }
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
