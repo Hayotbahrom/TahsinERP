@@ -66,7 +66,7 @@ namespace tahsinERP.Controllers
 
             // Ensure Include is applied after filtering
             ordersQuery = ordersQuery.Include(po => po.P_CONTRACTS);
-
+            ViewBag.Type = type;
             // Materialize the query into a list
             List<P_ORDERS> orders = ordersQuery.ToList();
 
