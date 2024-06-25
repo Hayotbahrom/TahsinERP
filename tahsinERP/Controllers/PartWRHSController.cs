@@ -1,6 +1,7 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using System.Collections.Generic;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using tahsinERP.Models;
 
@@ -13,73 +14,188 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var part_wrhs = db.PART_WRHS.Where(x => x.IsDeleted == false).ToList();
+                var part_wrhs = db.PART_WRHS
+                          .Where(x => x.IsDeleted == false)
+                          .Include(x => x.USER)
+                          .ToList();
                 return View(part_wrhs);
             }
         }
 
         public ActionResult Create()
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                // ViewBag orqali "Shop" ma'lumotlari
+                var shops = db.PROD_SHOPS.ToList();
+                ViewBag.ShopList = new SelectList(shops, "ID", "ShopName");
 
-            ViewBag.ShopList = new SelectList(db.PROD_SHOPS.ToList(), "ID", "ShopName");
+                // "MRP" ma'lumotlarini olish uchun
+                var mrpUsers = db.USERS
+                                    .Where(u => u.ROLES.Any(r => r.RName == "MRP"))
+                                    .ToList();
+                ViewBag.MRPUsers = new SelectList(mrpUsers, "ID", "FullName");
 
-            //var mrpUsers = db.USERS.Where(u => u. == "MRP").ToList();
-            ////ViewBag.MRPUsers = new SelectList(mrpUsers, "ID", "FullName");
-
-            return View();
+                return View();
             }
         }
 
-        // POST: PartWhs/Create
+        // POST: YourController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,WHName,Description,IsDeleted,MRP,ShopID")] PART_WRHS partWrhs)
+        public ActionResult Create(PART_WRHS model, int MRPUserID, int ShopID)
         {
-            List<PROD_SHOPS> shops;
-            List<USER> mrpUsers;
-
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    db.PART_WRHS.Add(partWrhs);
+                    // Set MRP and ShopID properties
+                    model.MRP = MRPUserID;
+                    model.ShopID = ShopID;
+                    model.IsDeleted = false;
+
+                    // PART_WRHS-ni saqlash
+                    db.PART_WRHS.Add(model);
                     db.SaveChanges();
-                    return RedirectToAction("Index"); // Assuming you have an Index action to list PART_WRHS records
+
+                    // PART_WRHS bilan bog'liq MRP foydalanuvchisini yangilash
+                    var mrpUser = db.USERS.Find(MRPUserID);
+                    if (mrpUser != null)
+                    {
+                        mrpUser.PART_WRHS.Add(model);
+                        db.Entry(mrpUser).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    return RedirectToAction("Index"); // Muaffaqiyatli saqlandi, index sahifasiga yo'naltirish
                 }
 
-                // Fetching shops
-                shops = db.PROD_SHOPS.ToList();
+                // Agar ModelState noto'g'ri bo'lsa, qaytadan "Create" sahifasini ko'rsatish
+                var shops = db.PROD_SHOPS.ToList();
+                ViewBag.ShopList = new SelectList(shops, "ID", "ShopName", model.ShopID);
 
-                // Fetching users with the "MRP" role using a join
-                //mrpUsers = (from u in db.USERS
-                //            join url in db.USER_ROLE_LINK on u.ID equals url.UserID
-                //            join r in db.ROLES on url.RoleID equals r.ID
-                //            where r.RoleName == "MRP"
-                //            select u).ToList();
+                var mrpUsers = db.USERS
+                                    .Where(u => u.ROLES.Any(r => r.RName == "MRP"))
+                                    .ToList();
+                ViewBag.MRPUsers = new SelectList(mrpUsers, "ID", "FullName", MRPUserID);
+
+                return View(model);
+            }
+        }
+        private readonly DBTHSNEntities db = new DBTHSNEntities();
+
+        // GET: PartWRHS/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ViewBag.ShopID = new SelectList(shops, "ID", "Name", partWrhs.ShopID);
-            //ViewBag.MRP = new SelectList(mrpUsers, "ID", "UserName", partWrhs.MRP);
+            try
+            {
+                PART_WRHS partWRHS = db.PART_WRHS.Include(p => p.USER).FirstOrDefault(p => p.ID == id);
+                if (partWRHS == null)
+                {
+                    return HttpNotFound();
+                }
 
-            return View(partWrhs);
+                ViewBag.MRPUsers = new SelectList(db.USERS.Where(u => u.ROLES.Any(r => r.RName == "MRP")), "ID", "FullName", partWRHS.MRP);
+                ViewBag.ShopList = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partWRHS.ShopID);
+                return View(partWRHS);
+            }
+            catch (Exception ex)
+            {
+                // Log the error (uncomment the following line to write to a log file)
+                // Log.Error(ex);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
-        public ActionResult Edit()
+        // POST: PartWRHS/Edit/5
+        [HttpPost]
+        public ActionResult Edit([Bind(Include = "ID,WHName,Description,IsDeleted,MRP,ShopID")] PART_WRHS partWRHS)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    partWRHS.IsDeleted = false;
+                    db.Entry(partWRHS).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    // Log the error (uncomment the following line to write to a log file)
+                    // Log.Error(ex);
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+
+            ViewBag.MRPUsers = new SelectList(db.USERS.Where(u => u.ROLES.Any(r => r.RName == "MRP")), "ID", "FullName", partWRHS.MRP);
+            ViewBag.ShopList = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partWRHS.ShopID);
+            return View(partWRHS);
         }
 
-        public ActionResult Delete()
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
+            PART_WRHS partWRHS = db.PART_WRHS.Find(id);
+            if (partWRHS == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(partWRHS);
         }
 
-        public ActionResult Details()
+        [HttpPost, ActionName("Delete")]
+        public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                PART_WRHS partWRHS = db.PART_WRHS.Find(id);
+                if (partWRHS != null)
+                {
+                    partWRHS.IsDeleted = true;
+                    db.Entry(partWRHS).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            try
+            {
+                PART_WRHS partWRHS = db.PART_WRHS.Include(p => p.USER).Include(p => p.PROD_SHOPS).FirstOrDefault(p => p.ID == id);
+                if (partWRHS == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(partWRHS);
+            }
+            catch (Exception ex)
+            {
+                // Log the error (uncomment the following line to write to a log file)
+                // Log.Error(ex);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error occurred while processing your request.");
+            }
         }
     }
 }

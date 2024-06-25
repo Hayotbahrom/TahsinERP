@@ -1,12 +1,11 @@
 ﻿@model tahsinERP.Models.PART_WRHS
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "PartWRHS"))
 {
-    using (Html.BeginForm("Create", "PartWRHS", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("Edit", "PartWRHS", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="app-content content">
             <div class="content-overlay"></div>
@@ -21,10 +20,10 @@
                                             <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
                                         </li>
                                         <li class="breadcrumb-item">
-                                            <a href="~/PartWRHS/Index">Omborlar</a>
+                                            <a href="~/PartWRHS/Index">TSexlar</a>
                                         </li>
                                         <li class="breadcrumb-item active">
-                                            Yangi ombor qo'shish
+                                            Yangi qo'shish
                                         </li>
                                     </ol>
                                 </div>
@@ -58,7 +57,7 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">MRP</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownList("MRPUserID", (SelectList)ViewBag.MRPUsers, "Select MRP User", new { @class = "form-control" })
+                                                        @Html.DropDownList("MRP", ViewBag.MRPUsers as SelectList, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.MRP, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Bog'lanadigon tsex nomi</h6>

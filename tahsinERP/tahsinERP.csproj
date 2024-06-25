@@ -2385,6 +2385,9 @@
     <Content Include="Views\PartWRHS\Index.cshtml" />
     <Content Include="Views\PartWRHS\Create.cshtml" />
     <Content Include="Views\Forwarder\Index.cshtml" />
+    <Content Include="Views\PartWRHS\Edit.cshtml" />
+    <Content Include="Views\PartWRHS\Details.cshtml" />
+    <Content Include="Views\PartWRHS\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
