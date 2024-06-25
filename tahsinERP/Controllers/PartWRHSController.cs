@@ -40,7 +40,6 @@ namespace tahsinERP.Controllers
             }
         }
 
-        // POST: YourController/Create
         [HttpPost]
         public ActionResult Create(PART_WRHS model, int MRPUserID, int ShopID)
         {
@@ -48,16 +47,12 @@ namespace tahsinERP.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // Set MRP and ShopID properties
                     model.MRP = MRPUserID;
                     model.ShopID = ShopID;
                     model.IsDeleted = false;
 
-                    // PART_WRHS-ni saqlash
                     db.PART_WRHS.Add(model);
                     db.SaveChanges();
-
-                    // PART_WRHS bilan bog'liq MRP foydalanuvchisini yangilash
                     var mrpUser = db.USERS.Find(MRPUserID);
                     if (mrpUser != null)
                     {
@@ -66,10 +61,9 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
                     }
 
-                    return RedirectToAction("Index"); // Muaffaqiyatli saqlandi, index sahifasiga yo'naltirish
+                    return RedirectToAction("Index"); 
                 }
 
-                // Agar ModelState noto'g'ri bo'lsa, qaytadan "Create" sahifasini ko'rsatish
                 var shops = db.PROD_SHOPS.ToList();
                 ViewBag.ShopList = new SelectList(shops, "ID", "ShopName", model.ShopID);
 
@@ -83,7 +77,6 @@ namespace tahsinERP.Controllers
         }
         private readonly DBTHSNEntities db = new DBTHSNEntities();
 
-        // GET: PartWRHS/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -126,8 +119,6 @@ namespace tahsinERP.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Log the error (uncomment the following line to write to a log file)
-                    // Log.Error(ex);
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
             }

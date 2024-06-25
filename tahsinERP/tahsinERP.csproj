@@ -2388,6 +2388,8 @@
     <Content Include="Views\PartWRHS\Edit.cshtml" />
     <Content Include="Views\PartWRHS\Details.cshtml" />
     <Content Include="Views\PartWRHS\Delete.cshtml" />
+    <Content Include="Views\ProductPack\Create.cshtml" />
+    <Content Include="Views\ProductPack\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
