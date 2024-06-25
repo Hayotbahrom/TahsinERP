@@ -1,9 +1,8 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "UploadWithExcel";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "WHOperations"))
 {
     <div class="app-content content">
         <div class="content-overlay"></div>
@@ -18,10 +17,10 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        <a href="~/Supplier">Shartnomalar</a>
+                                        <a href="~/WhIncome">Omborga kirim</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Excel orqali yuklash
+                                        Excel orqali kirim qilish
                                     </li>
                                 </ol>
                             </div>
@@ -33,26 +32,25 @@
                 <section id="input-file-browser">
                     <div class="row">
                         <div class="col-md-12">
-
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Excel orqali yuklash</h4>
+                                    <h4 class="card-title">Excel orqali kirim qilish</h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-6 col-md-12">
                                                 <fieldset class="form-group">
-                                                    <label>Shablon faylni yuklab oling</label>
+                                                    <label>Shablon faylni yuklab oling:</label>
                                                     <br />
-                                                    @Html.ActionLink("taminotchilar.xlsx", "download")
+                                                    @Html.ActionLink("ombor-kirim.xlsx", "download")
                                                 </fieldset>
                                             </div>
                                             <div class="col-lg-6 col-md-12">
-                                                @using (Html.BeginForm("UploadWithExcel", "Supplier", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                @using (Html.BeginForm("UploadWithExcel", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                                 {
                                                     <fieldset class="form-group">
-                                                        <label for="basicInputFile">To'ldirilgan faylni yuklash uchun quyidagi tugmani bosing</label>
+                                                        <label for="basicInputFile">To'ldirilgan faylni yuklash uchun quyidagi tugmani bosing:</label>
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" id="inputGroupFile01" name="file">
                                                             <label class="custom-file-label" for="inputGroupFile01">Faylni tanlang</label>
@@ -60,7 +58,7 @@
                                                     </fieldset>
                                                     <input type="submit" class="btn btn-light-primary mr-1 mb-1 round" value="Yuklash" />
                                                 }
-                                                @using (Html.BeginForm("ClearDataTable", "Supplier", FormMethod.Post))
+                                                @using (Html.BeginForm("ClearDataTable", "WhIncome", FormMethod.Post))
                                                 {
                                                     <fieldset class="form-group">
                                                         <div>
@@ -97,7 +95,7 @@
                                     <div class="card-header">
                                         <h4 class="card-title">Excel orqali yuklangan ma'lumot</h4>
                                     </div>
-                                    @using (Html.BeginForm("Save", "Supplier", FormMethod.Post))
+                                    @using (Html.BeginForm("Save", "WhIncome", FormMethod.Post))
                                     {
                                         <div class="card-content">
                                             <div class="card-body">
@@ -152,13 +150,16 @@
     @section Scripts {
         <script>
         function confirmSave() {
-            console.log("Save button clicked!"); // Check if this message appears in the console
             var duplicateRecords = @ViewBag.ExistingRecordsCount;
             if (duplicateRecords > 0) {
-                alert("Siz yuklagan fayldagi ma'lumotlar tizimning ma'lumotlar bazasida mavjud. Yuklayotgan ma'lumotingizni sinchkovlik bilan tekshirib qayta urinib ko'ring.");
-                return false; // Prevent form submission
+                alert("Siz yuklagan fayldagi ma'lumotlar omborning kirim bazasida mavjud. Yuklayotgan ma'lumotingizni sinchkovlik bilan tekshirib qayta urinib ko'ring.");
+                return false;
             }
-            return true; // Allow form submission
+            else if (@ViewBag.InvoiceCapacityExceedCount > 0) {
+                alert("Siz fayldagi ayrim detallarga invoysdagi umumiy sondan ko'proq kirim qilmoqchi bo'layabsiz yoki invoysda bunaqa detal yo'q, buning iloji yo'q. Yuklayotgan ma'lumotingizni sinchkovlik bilan tekshirib qayta urinib ko'ring.");
+                return false;
+            }
+            return true;
         }
         </script>
     }
@@ -168,4 +169,3 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
-

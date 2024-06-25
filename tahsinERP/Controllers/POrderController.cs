@@ -66,7 +66,7 @@ namespace tahsinERP.Controllers
 
             // Ensure Include is applied after filtering
             ordersQuery = ordersQuery.Include(po => po.P_CONTRACTS);
-
+            ViewBag.Type = type;
             // Materialize the query into a list
             List<P_ORDERS> orders = ordersQuery.ToList();
 
@@ -78,11 +78,11 @@ namespace tahsinERP.Controllers
 
         public ActionResult Create()
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name");
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo");
-            }
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
+                ViewBag.Supplier = new SelectList(db2.SUPPLIERS, "ID", "Name");
+                ViewBag.PContract = new SelectList(db2.P_CONTRACTS, "ID", "ContractNo");
+            //}
 
             return View();
         }
@@ -90,15 +90,15 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "OrderNo, IssuedDate, CompanyID, SupplierID, ContractID, Amount, Currency, Description")] P_ORDERS order)
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
                 try
                 {
                     if (ModelState.IsValid)
                     {
                         order.IsDeleted = false;
-                        db.P_ORDERS.Add(order);
-                        db.SaveChanges();
+                        db2.P_ORDERS.Add(order);
+                        db2.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
@@ -107,10 +107,10 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError(ex.Message, ex);
                 }
 
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
+                ViewBag.Supplier = new SelectList(db2.SUPPLIERS, "ID", "Name", order.SupplierID);
+                ViewBag.PContract = new SelectList(db2.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
                 return View(order);
-            }
+            //}
         }
         public ActionResult Details(int? id)
         {
