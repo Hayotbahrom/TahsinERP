@@ -18,7 +18,7 @@ namespace tahsinERP.Controllers
     public class PContractController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = ConfigurationManager.AppSettings["p_contractTypes"].Split(',');
+        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, partNo = "";
         // GET: Contracts
         public ActionResult Index(string type)
@@ -230,13 +230,13 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Create()
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
+            /*using (DBTHSNEntities db = new DBTHSNEntities())
+            {*/
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 return View();
-            }
+            //}
         }
-        [HttpPost]
+        [HttpPost]  
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate, IDN")] P_CONTRACTS contract)
         {
@@ -266,14 +266,14 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-                var contract = db.P_CONTRACTS.Find(ID);
-                if (contract == null)
-                {
-                    return HttpNotFound();
-                }
-                else
-                    ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
-                return View(contract);
+            var contract = db.P_CONTRACTS.Find(ID);
+            if (contract == null)
+            {
+                return HttpNotFound();
+            }
+            else
+                ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
+            return View(contract);
         }
         public ActionResult Edit(int? ID)
         {
@@ -304,32 +304,32 @@ namespace tahsinERP.Controllers
             {
                /* using (DBTHSNEntities db = new DBTHSNEntities())
                 {*/
-                    P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(contract.ID);
-                    if (contractToUpdate != null)
-                    {
-                        contractToUpdate.ContractNo = contract.ContractNo;
-                        contractToUpdate.SupplierID = contract.SupplierID;
-                        contractToUpdate.IssuedDate = contract.IssuedDate;
-                        contractToUpdate.DueDate = contract.DueDate;
-                        contractToUpdate.Currency = contract.Currency;
-                        contractToUpdate.Incoterms = contract.Incoterms;
-                        contractToUpdate.PaymentTerms = contract.PaymentTerms;
-                        contractToUpdate.IsDeleted = false;
+                P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(contract.ID);
+                if (contractToUpdate != null)
+                {
+                    contractToUpdate.ContractNo = contract.ContractNo;
+                    contractToUpdate.SupplierID = contract.SupplierID;
+                    contractToUpdate.IssuedDate = contract.IssuedDate;
+                    contractToUpdate.DueDate = contract.DueDate;
+                    contractToUpdate.Currency = contract.Currency;
+                    contractToUpdate.Incoterms = contract.Incoterms;
+                    contractToUpdate.PaymentTerms = contract.PaymentTerms;
+                    contractToUpdate.IsDeleted = false;
 
-                        if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, SupplierID, Price, Currency, Amount, Incoterms, PaymentTerms, DueDate, IDN" }))
+                    if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, SupplierID, Price, Currency, Amount, Incoterms, PaymentTerms, DueDate, IDN" }))
+                    {
+                        try
                         {
-                            try
-                            {
-                                db.SaveChanges();
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
-                    return View(contractToUpdate);
+                }
+                return View(contractToUpdate);
                 
             }
             return View();
@@ -397,6 +397,9 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
+
+
+
         public ActionResult Delete(int? Id)
         {
             if (Id == null)
@@ -416,7 +419,6 @@ namespace tahsinERP.Controllers
 
                 db.Entry(contract).Reference(i => i.SUPPLIER).Load();
                 return View(contract);
-            
         }
         
 

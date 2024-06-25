@@ -31,6 +31,9 @@ namespace tahsinERP.Models
         public virtual DbSet<COMPANy> COMPANIES { get; set; }
         public virtual DbSet<COMPANY_LICENSES> COMPANY_LICENSES { get; set; }
         public virtual DbSet<CUSTOMER> CUSTOMERS { get; set; }
+        public virtual DbSet<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
+        public virtual DbSet<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
+        public virtual DbSet<DEFECT_TYPES> DEFECT_TYPES { get; set; }
         public virtual DbSet<F_CONTRACTS> F_CONTRACTS { get; set; }
         public virtual DbSet<F_TRANSPORT_TYPES> F_TRANSPORT_TYPES { get; set; }
         public virtual DbSet<F_WAYBILL_DOCS> F_WAYBILL_DOCS { get; set; }
@@ -68,6 +71,7 @@ namespace tahsinERP.Models
         public virtual DbSet<PRODUCTPLAN> PRODUCTPLANS { get; set; }
         public virtual DbSet<PRODUCT> PRODUCTS { get; set; }
         public virtual DbSet<ROLE> ROLES { get; set; }
+        public virtual DbSet<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         public virtual DbSet<S_CONTRACTS> S_CONTRACTS { get; set; }
         public virtual DbSet<SAMPLE_FILES> SAMPLE_FILES { get; set; }
         public virtual DbSet<SPL> SPLs { get; set; }
@@ -76,9 +80,6 @@ namespace tahsinERP.Models
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
-        public virtual DbSet<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
-        public virtual DbSet<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
-        public virtual DbSet<DEFECT_TYPES> DEFECT_TYPES { get; set; }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {

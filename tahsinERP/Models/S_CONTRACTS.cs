@@ -14,22 +14,27 @@ namespace tahsinERP.Models
     
     public partial class S_CONTRACTS
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public S_CONTRACTS()
+        {
+            this.S_CONTRACT_PRODUCTS = new HashSet<S_CONTRACT_PRODUCTS>();
+        }
+    
         public int ID { get; set; }
         public string ContractNo { get; set; }
         public Nullable<System.DateTime> IssuedDate { get; set; }
         public int CompanyID { get; set; }
         public int CustomerID { get; set; }
-        public int ProdID { get; set; }
-        public Nullable<double> Price { get; set; }
         public string Currency { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Incoterms { get; set; }
         public string PaymentTerms { get; set; }
-        public string Unit { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         public virtual CUSTOMER CUSTOMER { get; set; }
-        public virtual PRODUCT PRODUCT { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
     }
 }

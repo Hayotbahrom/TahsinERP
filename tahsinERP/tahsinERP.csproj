@@ -473,6 +473,9 @@
     <Compile Include="Models\S_CONTRACTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\S_CONTRACT_PRODUCTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\USER.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>

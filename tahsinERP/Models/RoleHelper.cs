@@ -169,7 +169,7 @@ namespace tahsinERP.Models
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                PERMISSIONMODULE module = db.PERMISSIONMODULES.Where(pm => pm.Controller.CompareTo(controller) == 0 && pm.Action.CompareTo(action) == 0 && pm.Parameter.CompareTo(parametr) == 0).FirstOrDefault();
+                PERMISSIONMODULE module = db.PERMISSIONMODULES.Where(pm => pm.Controller.CompareTo(controller) == 0 && pm.Action.CompareTo(action) == 0 && ((pm.Parameter == null && (parametr == null || parametr == "")) || pm.Parameter == parametr)).FirstOrDefault();
                 if (module != null)
                     return db.PERMISSIONS.Where(p => p.RoleID == role.ID && p.PermissionModuleID == module.ID).FirstOrDefault();
                 return null;
