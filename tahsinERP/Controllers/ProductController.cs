@@ -22,12 +22,12 @@ namespace tahsinERP.Controllers
     {
         private int productPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         private string Pno = "";
-        public ActionResult Index(int? customerID)
+        public ActionResult Index()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 List<PRODUCT> list = db.PRODUCTS.Where(p => p.IsDeleted == false).ToList();
-                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(), customerID);
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(),"ID","Name");
                 return View(list);
             }
         }
