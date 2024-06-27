@@ -2322,7 +2322,6 @@
     <Content Include="Views\PContract\Edit.cshtml" />
     <Content Include="Views\PContract\Delete.cshtml" />
     <Content Include="Views\PContract\UploadWithExcel.cshtml" />
-    <Content Include="Views\PContract\EditPart.cshtml" />
     <Content Include="Views\Supplier\UploadWithExcel.cshtml" />
     <Content Include="Views\Part\Index.cshtml" />
     <Content Include="Views\Part\Create.cshtml" />
@@ -2391,6 +2390,7 @@
     <Content Include="Views\PartWRHS\Edit.cshtml" />
     <Content Include="Views\PartWRHS\Details.cshtml" />
     <Content Include="Views\PartWRHS\Delete.cshtml" />
+    <Content Include="Views\PContract\EditPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
