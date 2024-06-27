@@ -10,7 +10,6 @@ namespace tahsinERP.Controllers
 {
     public class ShopController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
         // GET: Shop
         public ActionResult Index()
         {
@@ -37,8 +36,8 @@ namespace tahsinERP.Controllers
                     {
                         prod_shop.IsDeleted = false;
                         prod_shop.CompanyID = 1;
-                        db.PROD_SHOPS.Add(prod_shop);
-                        db.SaveChanges();
+                        db1.PROD_SHOPS.Add(prod_shop);
+                        db1.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
@@ -58,7 +57,7 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db.PROD_SHOPS.Find(id);
+                var prod_shop = db1.PROD_SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();
@@ -73,7 +72,7 @@ namespace tahsinERP.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var prod_shop_deleted = db.PROD_SHOPS.Find(prod_shop.ID);
+                    var prod_shop_deleted = db1.PROD_SHOPS.Find(prod_shop.ID);
                     if (prod_shop_deleted != null)
                     {
                         prod_shop_deleted.IsDeleted = true;
@@ -81,7 +80,7 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
-                                db.SaveChanges();
+                                db1.SaveChanges();
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -105,7 +104,7 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db.PROD_SHOPS.Find(id);
+                var prod_shop = db1.PROD_SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();
@@ -120,7 +119,7 @@ namespace tahsinERP.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var prod_shop_Update = db.PROD_SHOPS.Find(prod_shop.ID);
+                    var prod_shop_Update = db1.PROD_SHOPS.Find(prod_shop.ID);
                     if (prod_shop_Update != null)
                     {
                         prod_shop_Update.IsDeleted = false;
@@ -128,7 +127,7 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
-                                db.SaveChanges();
+                                db1.SaveChanges();
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -150,12 +149,12 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db.PROD_SHOPS.Find(id);
+                var prod_shop = db1.PROD_SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();
                 }
-                return View(prod_shop);
+                return View(prod_shop); 
             }
         }
     }
