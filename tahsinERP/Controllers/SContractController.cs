@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -14,12 +15,11 @@ namespace tahsinERP.Controllers
     {
         private DBTHSNEntities db = new DBTHSNEntities();
         // GET: SContract | Index
-        public ActionResult Index(string type)
+        public ActionResult Index()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 List<S_CONTRACTS> list = db.S_CONTRACTS.Where(sc => sc.IsDeleted == false).ToList();
-                ViewBag.Type = type;
                 return View(list);
             }
         }
@@ -30,8 +30,12 @@ namespace tahsinERP.Controllers
         // Create
         public ActionResult Create()
         {
-            return View();
-
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                S_CONTRACTS contract = new S_CONTRACTS();
+                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
+                return View(contract);
+            }
         }
 
         [HttpPost]
@@ -57,8 +61,6 @@ namespace tahsinERP.Controllers
             }
 
             ViewBag.Customer = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
-
-
             return View(contract);
         }
         // __________
