@@ -1,4 +1,4 @@
-﻿@model List<tahsinERP.Controllers.WhIncomeController.RepeaterItem>
+﻿@model tahsinERP.Models.P_WRHS_INCOMES
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -49,29 +49,58 @@
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Email">Email</label>
-                                                            <input type="email" class="form-control" id="Email" name="GroupA[0].Email" placeholder="Enter email id">
+                                                            <label for="DocNo">DocNo</label>
+                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @name = "GroupA[0].DocNo", @placeholder = "DocNo kiriting" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Password">Password</label>
-                                                            <input type="password" class="form-control" id="Password" name="GroupA[0].Password" placeholder="Enter Password">
+                                                            <label for="WhID">Qismni tanlang</label>
+                                                            @Html.DropDownList("WHID", (SelectList)ViewBag.Wrhs, new { @name = "GroupA[0]", @id = "WhId", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.WHID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Gender">Gender</label>
-                                                            <select name="GroupA[0].Gender" id="Gender" class="form-control">
-                                                                <option value="Male">Male</option>
-                                                                <option value="Female">Female</option>
-                                                            </select>
+                                                            <label for="WhID">Invoiceni tanlang</label>
+                                                            @Html.DropDownList("InvoiceID", (SelectList)ViewBag.Invoice, new { @name = "GroupA[0]", @id = "InvoiceId", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        @*<div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="WbID">Waybiillni tanlang</label>
+                                                            @Html.DropDownList("WaybillID", (SelectList)ViewBag.Invoice, new { @name = "GroupA[0]", @id = "WbID", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.WaybillID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Profession">Profession</label>
-                                                            <select name="GroupA[0].Profession" id="Profession" class="form-control">
-                                                                <option value="Designer">Designer</option>
-                                                                <option value="Developer">Developer</option>
-                                                                <option value="Tester">Tester</option>
-                                                                <option value="Manager">Manager</option>
-                                                            </select>
+                                                            <label for="Amount">Amount</label>
+                                                            @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @name = "GroupA[0].DocNo", @placeholder = "Amountni kiriting" })
                                                         </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Currency">Currency</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @name = "GroupA[0].DocNo", @placeholder = "Currencyni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="TotalPrice">Total Price</label>
+                                                            @Html.TextBoxFor(model => model.TotalPrice, new { @type = "text", @class = "form-control", @id = "TotalPrice", @name = "GroupA[0].DocNo", @placeholder = "Total-Priceni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Description">Description</label>
+                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @name = "GroupA[0].DocNo", @placeholder = "Descriptionni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Description">Description</label>
+                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @name = "GroupA[0].DocNo", @placeholder = "Descriptionni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            @Html.EditorFor(model => model.IssueDateTime, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
+                                                            @Html.ValidationMessageFor(model => model.IssueDateTime, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="SenderWHID">SenderWHID tanlang</label>
+                                                            @Html.DropDownList("WaybillID", (SelectList)ViewBag.Invoice, new { @name = "GroupA[0]", @id = "SenderWHID", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.SenderWHID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="RecieveStatus">RecieveStatusni kiriting</label>
+                                                            @Html.TextBoxFor(model => model.RecieveStatus, new { @type = "text", @class = "form-control", @id = "RecieveStatus", @name = "GroupA[0].DocNo", @placeholder = "RecieveStatusni kiriting" })
+                                                        </div>*@
+
                                                         <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
                                                             <button class="btn btn-danger text-nowrap px-1" data-repeater-delete type="button">
                                                                 <i class="bx bx-x"></i> Delete
@@ -94,6 +123,7 @@
                                                     <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
                                                         <i class='bx bx-save'></i>
                                                         Save
+
                                                     </button>
                                                 </li>
                                             </ul>
