@@ -5,10 +5,10 @@
 }
 
 
-@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Parts"))
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Parts"))
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "ProductPack"))
     {
         changePermit = true;
     }
@@ -41,10 +41,10 @@
                             @if (changePermit)
                             {
                                 <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/ProductPack/Create';">
-                                    <span class="align-middle ml-25">Ehtiyot qismni qo'shish</span>
+                                    <span class="align-middle ml-25">Mahsulot qadoq malumotlarini qo'shish</span>
                                 </button>
                                 <a href="@Url.Action("UploadWithExcel", "ProductPack")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
-                                    Extiyot qismni excel orqali qo'shish
+                                    Mahsulot qadoq malumotlarini excel orqali qo'shish
                                 </a>
                             }
                         </div>
@@ -77,9 +77,9 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td>
-                                                            <a href="~/Part/Details/@item.ID">@item.PRODUCT.Name</a>
+                                                            <a href="~/Product/Details/@item.ProdID">@item.PRODUCT.Name</a>
                                                         </td>
-                                                        <td>@item.PrPackMaterial </td>
+                                                        <td> <a href="~/ProductPack/Details/@item.ID">@item.PrPackMaterial</a></td>
                                                         <td>@item.PrPackQty</td>
 
                                                         @if (changePermit)

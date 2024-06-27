@@ -64,13 +64,13 @@
                                                     @Html.AntiForgeryToken()
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                 <div class="form-group mb-50">
-                                                    <label class="text-bold-600">E-mail</label>
-                                                    @Html.TextBoxFor(u => u.Email, new { @class = "form-control round", @placeholder = "E-mail" })
+                                                    <label class="text-bold-600" for="email">E-mail</label>
+                                                    @Html.TextBoxFor(u => u.Email, new { @class = "form-control round", @id = "email", @placeholder = "E-mail" })
                                                     @Html.ValidationMessageFor(m => m.Email)
                                                 </div>
                                                     <div class="form-group">
-                                                        <label class="text-bold-600">Kalit so'zi</label>
-                                                        @Html.PasswordFor(u => u.Password, new { @class = "form-control round", @placeholder = "Kalit so'zi(пароль)" })
+                                                        <label class="text-bold-600" for="password">Kalit so'zi</label>
+                                                        @Html.PasswordFor(u => u.Password, new { @class = "form-control round", @id = "password", @placeholder = "Kalit so'zi(пароль)" })
                                                         @Html.ValidationMessageFor(m => m.Password)
                                                     </div>
                                                     <hr /> 

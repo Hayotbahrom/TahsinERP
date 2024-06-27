@@ -17,7 +17,7 @@ namespace tahsinERP.Controllers
     public class CustomerController : Controller
     {
         private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = ConfigurationManager.AppSettings["suplierTypes"].Split(',');
+        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName = "";
         // GET: Customer
         public ActionResult Index()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace tahsinERP.Controllers
 {
     public class SContractController : Controller
     {
+        private DBTHSNEntities db = new DBTHSNEntities();
         // GET: SContract | Index
         public ActionResult Index(string type)
         {
@@ -28,26 +30,25 @@ namespace tahsinERP.Controllers
         // Create
         public ActionResult Create()
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                ViewBag.Customer = new SelectList(db.CUSTOMERS.ToList(), "ID", "Name");
-                return View();
-            }
+            return View();
+
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "ID,ContractNo,IssuedDate,CompanyID,CustomerID,Currency,Amount,Incoterms,PaymentTerms,DueDate,IsDeleted")] S_CONTRACTS contract)
+        public ActionResult Create([Bind(Include = "ID,ContractNo,IssuedDate,CompanyID,CustomerID,Currency,Amount,Incoterms,PaymentTerms,DueDate,IsDeleted")] S_CONTRACTS contract, int customerId)
         {
             try
             {
-                using (DBTHSNEntities db = new DBTHSNEntities())
+                if (ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
-                    {
-                        db.S_CONTRACTS.Add(contract);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
+                    var companyId = ConfigurationManager.AppSettings["companyID"];
+                    contract.CompanyID = int.Parse(companyId);
+                    contract.CustomerID = customerId;
+                    contract.IsDeleted = false;
+
+                    db.S_CONTRACTS.Add(contract);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception ex)
@@ -55,7 +56,10 @@ namespace tahsinERP.Controllers
                 ModelState.AddModelError(ex.Message, ex);
             }
 
-            return View();
+            ViewBag.Customer = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
+
+
+            return View(contract);
         }
         // __________
 
@@ -63,7 +67,7 @@ namespace tahsinERP.Controllers
 
         // Details
         [HttpGet]
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -86,7 +90,7 @@ namespace tahsinERP.Controllers
 
 
         // Main Edit
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -141,7 +145,7 @@ namespace tahsinERP.Controllers
 
 
         // Edit Product
-        public ActionResult EditProduct(int id)
+        public ActionResult EditProduct(int? id)
         {
             if (id == null)
             {
@@ -196,7 +200,7 @@ namespace tahsinERP.Controllers
 
 
         // Delete Main
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
