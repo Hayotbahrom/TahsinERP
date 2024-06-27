@@ -597,6 +597,26 @@
         <script src="~/app-assets/js/scripts/extensions/sweet-alerts.js"></script>
         <script src="~/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
         <script src="~/app-assets/vendors/js/extensions/polyfill.min.js"></script>
+
+
+        <!-- REPEATER -->
+        <script src="~/assets/js/jquery.min.js"></script>
+        <script src="~/assets/js/jquery.repeater.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.repeater-default').repeater({
+            show: function () {
+                        $(this).slideDown();
+                },
+                    hide: function (deleteElement) {
+                    if (confirm('Are you sure you want to delete this element?')) {
+                            $(this).slideUp(deleteElement);
+                    }
+                }
+            });
+        });
+        </script>
+        <!-- __________ -->
     }
     else
     {
