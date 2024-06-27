@@ -17,27 +17,29 @@ namespace tahsinERP.Controllers
 {
     public class SupplierController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName = "";
         // GET: Supplier
         public ActionResult Index(string type)
         {
-            if (!string.IsNullOrEmpty(type))
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false && s.Type.CompareTo(type) == 0).ToList();
-                ViewBag.SourceList = new SelectList(sources, type);
-                ViewBag.Type = type;
+                if (!string.IsNullOrEmpty(type))
+                {
+                    List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false && s.Type.CompareTo(type) == 0).ToList();
+                    ViewBag.SourceList = new SelectList(sources, type);
+                    ViewBag.Type = type;
 
-                return View(list);
-            }
-            else
-            {
-                List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
-                ViewBag.SourceList = new SelectList(sources, type);
-                ViewBag.Type = type;
+                    return View(list);
+                }
+                else
+                {
+                    List<SUPPLIER> list = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
+                    ViewBag.SourceList = new SelectList(sources, type);
+                    ViewBag.Type = type;
 
-                return View(list);
+                    return View(list);
+                }
             }
         }
         public ActionResult Create()
@@ -48,21 +50,24 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name, DUNS, Type, Country, City, Address, Telephone, E_mail, ContactPerson, Director, IsDeleted")] SUPPLIER supplier)
         {
-            try
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    supplier.IsDeleted = false;
-                    db.SUPPLIERS.Add(supplier);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    if (ModelState.IsValid)
+                    {
+                        supplier.IsDeleted = false;
+                        db.SUPPLIERS.Add(supplier);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(ex.Message, ex);
+                }
+                return View(supplier);
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(ex.Message, ex);
-            }
-            return View(supplier);
         }
         public ActionResult Details(int? Id)
         {
@@ -70,13 +75,16 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var supplier = db.SUPPLIERS.Find(Id);
-            if (supplier == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
+                var supplier = db.SUPPLIERS.Find(Id);
+                if (supplier == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.partList = SupplierParts(supplier.ID);
+                return View(supplier);
             }
-            ViewBag.partList = SupplierParts(supplier.ID);
-            return View(supplier);
         }
         public List<GetSupplierParts_Result> SupplierParts(int? supplierId)
         {
@@ -85,27 +93,32 @@ namespace tahsinERP.Controllers
                 // Handle missing SupplierID (e.g., show an error message)
                 return null;
             }
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var supplierData = db.Database.SqlQuery<GetSupplierParts_Result>(
+                    "EXEC GetSupplierParts @SupplierID",
+                    new SqlParameter("@SupplierID", supplierId)
+                ).ToList();
 
-            var supplierData = db.Database.SqlQuery<GetSupplierParts_Result>(
-                "EXEC GetSupplierParts @SupplierID",
-                new SqlParameter("@SupplierID", supplierId)
-            ).ToList();
-
-            return supplierData;
+                return supplierData;
+            }
         }
         public ActionResult Edit(int? Id)
         {
-            if (Id == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (Id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var supplier = db.SUPPLIERS.Find(Id);
+                if (supplier == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.Type = new SelectList(sources, supplier.Type);
+                return View(supplier);
             }
-            var supplier = db.SUPPLIERS.Find(Id);
-            if (supplier == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Type = new SelectList(sources, supplier.Type);
-            return View(supplier);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -113,25 +126,28 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                SUPPLIER supplierToUpdate = db.SUPPLIERS.Find(supplier.ID);
-                if (supplierToUpdate != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    supplierToUpdate.IsDeleted = false;
-                    supplierToUpdate.Type = supplier.Type;
-                    if (TryUpdateModel(supplierToUpdate, "", new string[] { "Name", "DUNS", "Type", "Country", "City", "Address", "Telephone", "Email", "ContactPersonName", "DirectorName", "IsDeleted" }))
+                    SUPPLIER supplierToUpdate = db.SUPPLIERS.Find(supplier.ID);
+                    if (supplierToUpdate != null)
                     {
-                        try
+                        supplierToUpdate.IsDeleted = false;
+                        supplierToUpdate.Type = supplier.Type;
+                        if (TryUpdateModel(supplierToUpdate, "", new string[] { "Name", "DUNS", "Type", "Country", "City", "Address", "Telephone", "Email", "ContactPersonName", "DirectorName", "IsDeleted" }))
                         {
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            try
+                            {
+                                db.SaveChanges();
+                                return RedirectToAction("Index");
+                            }
+                            catch (RetryLimitExceededException)
+                            {
+                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            }
                         }
                     }
+                    return View(supplierToUpdate);
                 }
-                return View(supplierToUpdate);
             }
             return View();
         }
@@ -141,13 +157,16 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var supplier = db.SUPPLIERS.Find(Id);
-            if (supplier == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
-            }
+                var supplier = db.SUPPLIERS.Find(Id);
+                if (supplier == null)
+                {
+                    return HttpNotFound();
+                }
 
-            return View(supplier);
+                return View(supplier);
+            }
             //return RedirectToAction("SupplierParts?supplierId="+supplier.ID);
         }
         [HttpPost]
@@ -156,20 +175,23 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                SUPPLIER supplierToUpdate = db.SUPPLIERS.Find(ID);
-                if (supplierToUpdate != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    supplierToUpdate.IsDeleted = true;
-                    if (TryUpdateModel(supplierToUpdate, "", new string[] { "IsDeleted" }))
+                    SUPPLIER supplierToUpdate = db.SUPPLIERS.Find(ID);
+                    if (supplierToUpdate != null)
                     {
-                        try
+                        supplierToUpdate.IsDeleted = true;
+                        if (TryUpdateModel(supplierToUpdate, "", new string[] { "IsDeleted" }))
                         {
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            try
+                            {
+                                db.SaveChanges();
+                                return RedirectToAction("Index");
+                            }
+                            catch (RetryLimitExceededException)
+                            {
+                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            }
                         }
                     }
                 }
@@ -178,10 +200,13 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Download()
         {
-            SAMPLE_FILES taminotchilar = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("taminotchilar.xlsx") == 0).FirstOrDefault();
-            if (taminotchilar != null)
-                return File(taminotchilar.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            return View();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                SAMPLE_FILES taminotchilar = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("taminotchilar.xlsx") == 0).FirstOrDefault();
+                if (taminotchilar != null)
+                    return File(taminotchilar.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return View();
+            }
         }
         public ActionResult UploadWithExcel()
         {
@@ -226,14 +251,16 @@ namespace tahsinERP.Controllers
                         ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                         ViewBag.IsFileUploaded = true;
 
-
-                        foreach (DataRow row in dataTable.Rows)
+                        using (DBTHSNEntities db = new DBTHSNEntities())
                         {
-                            supplierName = row["Name"].ToString();
+                            foreach (DataRow row in dataTable.Rows)
+                            {
+                                supplierName = row["Name"].ToString();
 
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                            if (supplier != null)
-                                ViewBag.ExistingRecordsCount = 1;
+                                SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                if (supplier != null)
+                                    ViewBag.ExistingRecordsCount = 1;
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -275,28 +302,31 @@ namespace tahsinERP.Controllers
                 // Save to the database
                 try
                 {
-                    foreach (DataRow row in tableModel.Rows)
+                    using (DBTHSNEntities db = new DBTHSNEntities())
                     {
-                        supplierName = row["Name"].ToString();
-                        SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-
-                        if (supplier == null)
+                        foreach (DataRow row in tableModel.Rows)
                         {
-                            SUPPLIER new_supplier = new SUPPLIER();
-                            new_supplier.Name = supplierName;
-                            new_supplier.Address = row["Address"].ToString();
-                            new_supplier.Country = row["Country"].ToString();
-                            new_supplier.City = row["City"].ToString();
-                            new_supplier.Type = row["Type"].ToString();
-                            new_supplier.DUNS = row["DUNS"].ToString();
-                            new_supplier.Email = row["Email"].ToString();
-                            new_supplier.Telephone = row["Telephone"].ToString();
-                            new_supplier.ContactPersonName = row["ContactPersonName"].ToString();
-                            new_supplier.DirectorName = row["DirectorName"].ToString();
-                            new_supplier.IsDeleted = false;
+                            supplierName = row["Name"].ToString();
+                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
 
-                            db.SUPPLIERS.Add(new_supplier);
-                            db.SaveChanges();
+                            if (supplier == null)
+                            {
+                                SUPPLIER new_supplier = new SUPPLIER();
+                                new_supplier.Name = supplierName;
+                                new_supplier.Address = row["Address"].ToString();
+                                new_supplier.Country = row["Country"].ToString();
+                                new_supplier.City = row["City"].ToString();
+                                new_supplier.Type = row["Type"].ToString();
+                                new_supplier.DUNS = row["DUNS"].ToString();
+                                new_supplier.Email = row["Email"].ToString();
+                                new_supplier.Telephone = row["Telephone"].ToString();
+                                new_supplier.ContactPersonName = row["ContactPersonName"].ToString();
+                                new_supplier.DirectorName = row["DirectorName"].ToString();
+                                new_supplier.IsDeleted = false;
+
+                                db.SUPPLIERS.Add(new_supplier);
+                                db.SaveChanges();
+                            }
                         }
                     }
                 }
