@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.P_WRHS_INCOMES
+﻿@model List<tahsinERP.Controllers.WhIncomeController.RepeaterItem>
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -32,7 +32,6 @@
             </div>
             <div class="content-body">
                 <section id="form-repeater-wrapper">
-
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -43,40 +42,39 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
-                                        @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default", @action = "#" }))
+                                        @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
                                         {
                                             @Html.AntiForgeryToken()
-                                            <div data-repeater-list="group-a">
+                                            <div data-repeater-list="GroupA">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Email">Email </label>
-                                                            <input type="email" class="form-control" id="Email" placeholder="Enter email id">
+                                                            <label for="Email">Email</label>
+                                                            <input type="email" class="form-control" id="Email" name="GroupA[0].Email" placeholder="Enter email id">
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="password">password</label>
-                                                            <input type="password" class="form-control" id="password" placeholder="Enter Password">
+                                                            <label for="Password">Password</label>
+                                                            <input type="password" class="form-control" id="Password" name="GroupA[0].Password" placeholder="Enter Password">
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="gender">Gender</label>
-                                                            <select name="gender" id="gender" class="form-control">
+                                                            <label for="Gender">Gender</label>
+                                                            <select name="GroupA[0].Gender" id="Gender" class="form-control">
                                                                 <option value="Male">Male</option>
-                                                                <option value="Female">female</option>
+                                                                <option value="Female">Female</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Profession">Profession</label>
-                                                            <select name="profession" id="Profession" class="form-control">
-                                                                <option value="FontEnd Developer">Designer</option>
-                                                                <option value="BackEnd Developer">Developer</option>
-                                                                <option value="Bussiness Analystic">Tester</option>
-                                                                <option value="Project Cordinator">Manager</option>
+                                                            <select name="GroupA[0].Profession" id="Profession" class="form-control">
+                                                                <option value="Designer">Designer</option>
+                                                                <option value="Developer">Developer</option>
+                                                                <option value="Tester">Tester</option>
+                                                                <option value="Manager">Manager</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
                                                             <button class="btn btn-danger text-nowrap px-1" data-repeater-delete type="button">
-                                                                <i class="bx bx-x"></i>
-                                                                Delete
+                                                                <i class="bx bx-x"></i> Delete
                                                             </button>
                                                         </div>
                                                     </div>
@@ -86,23 +84,29 @@
                                             <div class="form-group">
                                                 <div class="col p-0">
                                                     <button class="btn btn-primary" data-repeater-create type="button">
-                                                        <i class="bx bx-plus"></i>
-                                                        Add
+                                                        <i class="bx bx-plus"></i> Add
                                                     </button>
                                                 </div>
                                             </div>
+
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i>
+                                                        Save
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         }
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                 </section>
             </div>
         </div>
     </div>
-
 }
 else
 {

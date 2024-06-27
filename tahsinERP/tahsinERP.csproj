@@ -2150,6 +2150,8 @@
     <Content Include="assets\css\reset.min.css" />
     <Content Include="assets\css\style-rtl.css" />
     <Content Include="assets\css\style.css" />
+    <Content Include="assets\js\jquery.min.js" />
+    <Content Include="assets\js\jquery.repeater.min.js" />
     <Content Include="assets\js\scripts.js" />
     <Content Include="Content\404.css" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -2283,7 +2285,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -2393,6 +2394,7 @@
     <Content Include="Views\PartWRHS\Delete.cshtml" />
     <Content Include="Views\ProductPack\Create.cshtml" />
     <Content Include="Views\ProductPack\Edit.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

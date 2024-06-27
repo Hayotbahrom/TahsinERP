@@ -94,7 +94,7 @@ namespace tahsinERP.Controllers
                         return View();
                     }
                 }
-                ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri yoki faolligingiz ochirilgan");
+                ModelState.AddModelError("", "E-mail yoki kalit so'zi noto'g'ri yoki faolligingiz o'chirilgan");
                 return View();
             }
         }
