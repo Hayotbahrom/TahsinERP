@@ -54,6 +54,7 @@ namespace tahsinERP.Controllers
             public int PermissionId { get; set; }
             public bool ChangePermit { get; set; }
             public bool ViewPermit { get; set; }
+            public PERMISSION PERMISSION { get; set; }
         }
     }
 }

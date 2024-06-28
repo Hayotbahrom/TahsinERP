@@ -500,6 +500,7 @@
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
+    <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
