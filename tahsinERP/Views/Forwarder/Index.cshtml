@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
@@ -59,7 +61,7 @@
                                                 <tr>
                                                     <th>forwarder nomi</th>
                                                     <th>Direktor </th>
-                                                    <th>Kontakt shaxs</th>
+                                                    <th>Bog`lanish uchun</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -67,7 +69,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model)
+                                               @foreach (var item in Model)
                                                 {
                                                     <tr>
                                                         <td>
@@ -76,7 +78,7 @@
                                                         <td>@item.Director</td>
                                                         <td>@item.ContactPerson</td>
                                                         @if (changePermit)
-                                                        {
+                                                         {
                                                             <td>
                                                                 <div>
                                                                     <a href="@Url.Action("Edit", "Forwarder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
