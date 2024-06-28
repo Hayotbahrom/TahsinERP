@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -156,43 +154,59 @@ namespace tahsinERP.Controllers
             roles.PERMISSIONS = role.PERMISSIONS;
             return View(roles);
         }
-        public ActionResult Permissions(int? id)
+        public ActionResult Permissions(int id)
         {
-            if (id == null)
+            using (var db = new DBTHSNEntities())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+                var role = db.ROLES
+                    .Include(r => r.PERMISSIONS.Select(p => p.PERMISSIONMODULE))
+                    .FirstOrDefault(r => r.ID == id);
 
-            var role = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(r => r.ID == id);
-            if (role == null)
-            {
-                return HttpNotFound();
-            }
+                if (role == null)
+                {
+                    return HttpNotFound();
+                }
 
-            return View(role);
+                var groupedPermissions = role.PERMISSIONS
+                    .GroupBy(p => p.PERMISSIONMODULE)
+                    .Select(g => g.First())
+                    .ToList();
+
+                var viewModel = new RolePermissionsViewModel
+                {
+                    Role = role,
+                    Permissions = groupedPermissions
+                };
+
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
         public ActionResult Permissions(ROLE role)
         {
-            if (!ModelState.IsValid)
+            using (var db = new DBTHSNEntities())
             {
-                var permission = db.ROLES.Include(p => p.PERMISSIONS).FirstOrDefault(p => p.ID == role.ID);
-                foreach (var permissionToEdit in permission.PERMISSIONS )
+                var existingRole = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(r => r.ID == role.ID);
+                if (existingRole == null)
                 {
-                    var item = db.PERMISSIONS.Find(permissionToEdit.ID);
-                    if (item != null)
-                    {
-                        item.ChangePermit = permissionToEdit.ChangePermit;
-                        item.ViewPermit = permissionToEdit.ViewPermit;
+                    return HttpNotFound();
+                }
 
-                        db.Entry(item).State = EntityState.Modified;
+                foreach (var permission in role.PERMISSIONS)
+                {
+                    var existingPermission = existingRole.PERMISSIONS.FirstOrDefault(p => p.ID == permission.ID);
+                    if (existingPermission != null)
+                    {
+                        existingPermission.ViewPermit = permission.ViewPermit;
+                        existingPermission.ChangePermit = permission.ChangePermit;
                     }
                 }
+
                 db.SaveChanges();
-                return RedirectToAction($"Edit/{role.ID}");
+                return RedirectToAction("Edit", new { id = role.ID });
             }
-            return View("index");
         }
+
     }
 }
