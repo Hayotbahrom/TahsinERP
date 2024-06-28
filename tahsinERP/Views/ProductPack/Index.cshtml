@@ -8,7 +8,7 @@
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "ProductPack"))
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
     {
         changePermit = true;
     }
@@ -59,8 +59,6 @@
                                         <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
-                                                    <th></th>
                                                     <th>Mahsulot nomi</th>
                                                     <th>Mahsulot qadoq materiali</th>
                                                     <th>Mahsulot qadoq miqdori</th>
@@ -74,8 +72,6 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <tr>
-                                                        <td></td>
-                                                        <td></td>
                                                         <td>
                                                             <a href="~/Product/Details/@item.ProdID">@item.PRODUCT.Name</a>
                                                         </td>

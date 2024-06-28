@@ -480,11 +480,11 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
-                            var contractParts = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
+                            /*var contractParts = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
                             foreach (var contractPart in contractParts)
                             {
                                 db.P_CONTRACT_PARTS.Remove(contractPart);
-                            }
+                            }*/
                             db.SaveChanges();
                             return RedirectToAction("Index");
                         }
