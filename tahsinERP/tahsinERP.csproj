@@ -2397,6 +2397,10 @@
     <Content Include="Views\ProductPack\Details.cshtml" />
     <Content Include="Views\ProductPack\Delete.cshtml" />
     <Content Include="Views\PContract\EditPart.cshtml" />
+    <Content Include="Views\Forwarder\Create.cshtml" />
+    <Content Include="Views\Forwarder\Details.cshtml" />
+    <Content Include="Views\Forwarder\Edit.cshtml" />
+    <Content Include="Views\Forwarder\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
