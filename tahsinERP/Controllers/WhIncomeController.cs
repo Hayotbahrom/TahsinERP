@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json;
-using OfficeOpenXml;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -63,7 +59,13 @@ namespace tahsinERP.Controllers
 
         public ActionResult Create()
         {
-            return View(new List<RepeaterItem>());
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+                ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+            }
+
+            return View();
         }
 
         [HttpPost]
@@ -134,8 +136,7 @@ namespace tahsinERP.Controllers
         {
             public string Email { get; set; }
             public string Password { get; set; }
-            public string Gender { get; set; }
-            public string Profession { get; set; }
+            public int WrhsID { get; set; }
         }
     }
 }
