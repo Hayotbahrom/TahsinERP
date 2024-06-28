@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -63,23 +66,35 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
+
+                ViewBag.InComes = new SelectList(db.P_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
+                ViewBag.InComeParts = new SelectList(db.P_WRHS_INCOME_PARTS.ToList(), "ID", "IncomeID");
             }
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(List<RepeaterItem> GroupA)
+        public ActionResult Create(WhrsIncome model)
         {
-            if (GroupA != null && GroupA.Any())
+            if (ModelState.IsValid)
             {
-                foreach (var item in GroupA)
-                {
+                // Process the model and save to database
+                // Save WhrsIncome
+                // Save WhrsIncomePart for each item in model.Parts
 
+                // Sample saving logic (replace with your actual logic)
+                foreach (var part in model.Parts)
+                {
+                    // Save each part
                 }
+
+                // Redirect to Index or any other action after successful save
+                return RedirectToAction("Index");
             }
 
-            return View();
+            return View(model);
 
 
             //var emails = form.GetValues("GroupA[0].Email");
