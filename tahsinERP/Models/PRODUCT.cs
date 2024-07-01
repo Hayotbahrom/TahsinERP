@@ -18,6 +18,7 @@ namespace tahsinERP.Models
         public PRODUCT()
         {
             this.DAMAGED_PRODUCTS = new HashSet<DAMAGED_PRODUCTS>();
+            this.PROD_STOCKS = new HashSet<PROD_STOCKS>();
             this.PRODUCTIMAGES = new HashSet<PRODUCTIMAGE>();
             this.PRODUCTPACKS = new HashSet<PRODUCTPACK>();
             this.PRODUCTPLANS = new HashSet<PRODUCTPLAN>();
@@ -28,10 +29,10 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public string PNo { get; set; }
         public string Name { get; set; }
-        public double Weight { get; set; }
-        public double Length { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
+        public Nullable<double> Weight { get; set; }
+        public Nullable<double> Length { get; set; }
+        public Nullable<double> Width { get; set; }
+        public Nullable<double> Height { get; set; }
         public string Unit { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
@@ -43,6 +44,8 @@ namespace tahsinERP.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_STOCKS> PROD_STOCKS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

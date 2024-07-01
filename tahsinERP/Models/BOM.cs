@@ -15,16 +15,18 @@ namespace tahsinERP.Models
     public partial class BOM
     {
         public int ID { get; set; }
-        public Nullable<double> ChildUsageQty { get; set; }
-        public string ChildUsageUnit { get; set; }
-        public double GrandChildUsageQty { get; set; }
-        public string GrandChildUsageUnit { get; set; }
+        public Nullable<double> Consumption { get; set; }
+        public string ConsumptionUnit { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public string ParentPNo { get; set; }
         public string ChildPNo { get; set; }
-        public string GrandChildPNo { get; set; }
         public bool IsParentProduct { get; set; }
-        public Nullable<bool> IsParentPart { get; set; }
+        public Nullable<double> WasteAmount { get; set; }
+        public Nullable<double> TotalConsumption { get; set; }
+        public Nullable<int> Sequence { get; set; }
+        public Nullable<int> ProcessID { get; set; }
+    
+        public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
     }
 }

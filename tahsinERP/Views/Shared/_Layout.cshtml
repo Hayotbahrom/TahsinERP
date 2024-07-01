@@ -535,7 +535,8 @@
 
 
         @Scripts.Render("~/bundles/jquery") //v3.7.1
-        <script src="~/Scripts/bootstrap.bundle.js"></script> //v5.3.3
+        <script src="~/Scripts/bootstrap.bundle.js"></script>
+ //v5.3.3
 
         @RenderSection("scripts", required: false)
 
@@ -601,21 +602,23 @@
 
 
         <!-- REPEATER -->
-        <script src="~/assets/js/jquery.min.js"></script>
-        <script src="~/assets/js/jquery.repeater.min.js"></script>
+        <script src="~/assets/js/jquery.min.js"></script> //v3.6.0
         <script>
-            $(document).ready(function () {
-                $('.repeater-default').repeater({
-            show: function () {
-                        $(this).slideDown();
-                },
+            // 'j' => (just name)using for last added jQuery(v3.0.6)
+            var $j = jQuery.noConflict(true); // Ikkita JS ni birga ishlatish
+
+            $j(document).ready(function () {
+                $j('.repeater-default').repeater({
+                    show: function () {
+                        $j(this).slideDown();
+                    },
                     hide: function (deleteElement) {
-                    if (confirm('Are you sure you want to delete this element?')) {
-                            $(this).slideUp(deleteElement);
+                        if (confirm('Are you sure you want to delete this element?')) {
+                            $j(this).slideUp(deleteElement);
+                        }
                     }
-                }
+                });
             });
-        });
         </script>
         <!-- __________ -->
     }

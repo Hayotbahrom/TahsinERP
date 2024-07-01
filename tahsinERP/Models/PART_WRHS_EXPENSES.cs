@@ -12,28 +12,32 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PROD_SHOPS
+    public partial class PART_WRHS_EXPENSES
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PROD_SHOPS()
+        public PART_WRHS_EXPENSES()
         {
-            this.PART_WRHS = new HashSet<PART_WRHS>();
-            this.PARTS = new HashSet<PART>();
-            this.PROD_WRHS = new HashSet<PROD_WRHS>();
+            this.PART_WRHS_EXPENSE_DOCS = new HashSet<PART_WRHS_EXPENSE_DOCS>();
+            this.PART_WRHS_EXPENSE_PARTS = new HashSet<PART_WRHS_EXPENSE_PARTS>();
         }
     
         public int ID { get; set; }
-        public Nullable<int> CompanyID { get; set; }
-        public string ShopName { get; set; }
-        public string Description { get; set; }
+        public string DocNo { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public string Currency { get; set; }
+        public Nullable<double> TotalPrice { get; set; }
+        public Nullable<int> ReceiverWhID { get; set; }
+        public int SenderWHID { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+        public string Description { get; set; }
+        public System.DateTime IssueDateTime { get; set; }
+        public Nullable<bool> SendStatus { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
+        public virtual PART_WRHS PART_WRHS { get; set; }
+        public virtual PART_WRHS PART_WRHS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
+        public virtual ICollection<PART_WRHS_EXPENSE_DOCS> PART_WRHS_EXPENSE_DOCS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART> PARTS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_WRHS> PROD_WRHS { get; set; }
+        public virtual ICollection<PART_WRHS_EXPENSE_PARTS> PART_WRHS_EXPENSE_PARTS { get; set; }
     }
 }

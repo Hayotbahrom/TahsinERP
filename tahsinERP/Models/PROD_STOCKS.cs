@@ -12,12 +12,15 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_WRHS_EXPENSE_DOCS
+    public partial class PROD_STOCKS
     {
         public int ID { get; set; }
-        public int ExpenseID { get; set; }
-        public byte[] Doc { get; set; }
+        public int WHID { get; set; }
+        public int ProductID { get; set; }
+        public string Unit { get; set; }
+        public double Amount { get; set; }
     
-        public virtual P_WRHS_EXPENSES P_WRHS_EXPENSES { get; set; }
+        public virtual PROD_WRHS PROD_WRHS { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

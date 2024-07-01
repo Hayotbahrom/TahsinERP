@@ -12,28 +12,29 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PROD_SHOPS
+    public partial class PART_WASTE_WRHS_INCOMES
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PROD_SHOPS()
+        public PART_WASTE_WRHS_INCOMES()
         {
-            this.PART_WRHS = new HashSet<PART_WRHS>();
-            this.PARTS = new HashSet<PART>();
-            this.PROD_WRHS = new HashSet<PROD_WRHS>();
+            this.PART_WASTE_WRHS_INCOME_WASTES = new HashSet<PART_WASTE_WRHS_INCOME_WASTES>();
         }
     
         public int ID { get; set; }
-        public Nullable<int> CompanyID { get; set; }
-        public string ShopName { get; set; }
-        public string Description { get; set; }
+        public string DocNo { get; set; }
+        public int ReceiverWHID { get; set; }
+        public double Amount { get; set; }
+        public string Currency { get; set; }
+        public Nullable<double> TotalPrice { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+        public string Description { get; set; }
+        public System.DateTime IssueDateTime { get; set; }
+        public Nullable<int> SenderWHID { get; set; }
+        public Nullable<bool> RecieveStatus { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART> PARTS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_WRHS> PROD_WRHS { get; set; }
+        public virtual ICollection<PART_WASTE_WRHS_INCOME_WASTES> PART_WASTE_WRHS_INCOME_WASTES { get; set; }
+        public virtual PART_WRHS PART_WRHS { get; set; }
+        public virtual PART_WRHS PART_WRHS1 { get; set; }
     }
 }
