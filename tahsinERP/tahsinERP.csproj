@@ -2194,6 +2194,7 @@
     <Content Include="assets\css\reset.min.css" />
     <Content Include="assets\css\style-rtl.css" />
     <Content Include="assets\css\style.css" />
+    <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\repeater.min.js" />
     <Content Include="assets\js\jquery.repeater.min.js" />
     <Content Include="assets\js\scripts.js" />

@@ -27,14 +27,14 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.P_INVOICES.SupplierID == supplierID).ToList();
+                        List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.P_INVOICES.SupplierID == supplierID).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
                         return View(list);
                     }
                     else
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0).ToList();
+                        List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
                         return View(list);
@@ -44,14 +44,14 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SupplierID == supplierID).ToList();
+                        List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SupplierID == supplierID).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
                         return View(list);
                     }
                     else
                     {
-                        List<P_WRHS_INCOMES> list = db.P_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false).ToList();
+                        List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES.Include(pr => pr.P_INVOICES).Include(pr => pr.F_WAYBILLS).Where(pi => pi.IsDeleted == false).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name");
                         return View(list);
@@ -68,8 +68,8 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
                 ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
 
-                ViewBag.InComes = new SelectList(db.P_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                ViewBag.InComeParts = new SelectList(db.P_WRHS_INCOME_PARTS.ToList(), "ID", "IncomeID");
+                ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
+                ViewBag.InComeParts = new SelectList(db.PART_WRHS_INCOME_PARTS.ToList(), "ID", "IncomeID");
             }
 
             return View();
