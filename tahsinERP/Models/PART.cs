@@ -17,16 +17,23 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PART()
         {
+            this.BLANKING_NORMS = new HashSet<BLANKING_NORMS>();
+            this.BLANKING_NORMS1 = new HashSet<BLANKING_NORMS>();
             this.DAMAGED_PARTS = new HashSet<DAMAGED_PARTS>();
             this.P_CONTRACT_PARTS = new HashSet<P_CONTRACT_PARTS>();
             this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
             this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
             this.P_ORDER_PARTS = new HashSet<P_ORDER_PARTS>();
-            this.P_WRHS_EXPENSE_PARTS = new HashSet<P_WRHS_EXPENSE_PARTS>();
-            this.P_WRHS_INCOME_PARTS = new HashSet<P_WRHS_INCOME_PARTS>();
+            this.PART_STOCKS = new HashSet<PART_STOCKS>();
+            this.PART_WRHS_EXPENSE_PARTS = new HashSet<PART_WRHS_EXPENSE_PARTS>();
+            this.PART_WRHS_INCOME_PARTS = new HashSet<PART_WRHS_INCOME_PARTS>();
             this.PARTIMAGES = new HashSet<PARTIMAGE>();
             this.PARTPACKS = new HashSet<PARTPACK>();
             this.PARTPLANS = new HashSet<PARTPLAN>();
+            this.SLITTING_NORMS = new HashSet<SLITTING_NORMS>();
+            this.SLITTING_NORMS1 = new HashSet<SLITTING_NORMS>();
+            this.STAMPING_NORMS = new HashSet<STAMPING_NORMS>();
+            this.STAMPING_NORMS1 = new HashSet<STAMPING_NORMS>();
         }
     
         public int ID { get; set; }
@@ -53,6 +60,10 @@ namespace tahsinERP.Models
         public string HSCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
@@ -63,9 +74,11 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_EXPENSE_PARTS> P_WRHS_EXPENSE_PARTS { get; set; }
+        public virtual ICollection<PART_STOCKS> PART_STOCKS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_INCOME_PARTS> P_WRHS_INCOME_PARTS { get; set; }
+        public virtual ICollection<PART_WRHS_EXPENSE_PARTS> PART_WRHS_EXPENSE_PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_INCOME_PARTS> PART_WRHS_INCOME_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PARTIMAGE> PARTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -74,5 +87,13 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PARTPLAN> PARTPLANS { get; set; }
         public virtual PROD_SHOPS PROD_SHOPS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SLITTING_NORMS> SLITTING_NORMS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SLITTING_NORMS> SLITTING_NORMS1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<STAMPING_NORMS> STAMPING_NORMS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<STAMPING_NORMS> STAMPING_NORMS1 { get; set; }
     }
 }

@@ -17,9 +17,16 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PART_WRHS()
         {
-            this.P_WRHS_EXPENSES = new HashSet<P_WRHS_EXPENSES>();
-            this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
-            this.P_WRHS_INCOMES1 = new HashSet<P_WRHS_INCOMES>();
+            this.PART_STOCKS = new HashSet<PART_STOCKS>();
+            this.PART_WASTE_WRHS_EXPENSES = new HashSet<PART_WASTE_WRHS_EXPENSES>();
+            this.PART_WASTE_WRHS_EXPENSES1 = new HashSet<PART_WASTE_WRHS_EXPENSES>();
+            this.PART_WASTE_WRHS_INCOMES = new HashSet<PART_WASTE_WRHS_INCOMES>();
+            this.PART_WASTE_WRHS_INCOMES1 = new HashSet<PART_WASTE_WRHS_INCOMES>();
+            this.PART_WRHS_EXPENSES = new HashSet<PART_WRHS_EXPENSES>();
+            this.PART_WRHS_EXPENSES1 = new HashSet<PART_WRHS_EXPENSES>();
+            this.PART_WRHS_INCOMES = new HashSet<PART_WRHS_INCOMES>();
+            this.PART_WRHS_INCOMES1 = new HashSet<PART_WRHS_INCOMES>();
+            this.WASTE_STOCKS = new HashSet<WASTE_STOCKS>();
         }
     
         public int ID { get; set; }
@@ -30,12 +37,26 @@ namespace tahsinERP.Models
         public Nullable<int> ShopID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
+        public virtual ICollection<PART_STOCKS> PART_STOCKS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
+        public virtual ICollection<PART_WASTE_WRHS_EXPENSES> PART_WASTE_WRHS_EXPENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES1 { get; set; }
+        public virtual ICollection<PART_WASTE_WRHS_EXPENSES> PART_WASTE_WRHS_EXPENSES1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WASTE_WRHS_INCOMES> PART_WASTE_WRHS_INCOMES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WASTE_WRHS_INCOMES> PART_WASTE_WRHS_INCOMES1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_EXPENSES> PART_WRHS_EXPENSES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_EXPENSES> PART_WRHS_EXPENSES1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_INCOMES> PART_WRHS_INCOMES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_INCOMES> PART_WRHS_INCOMES1 { get; set; }
         public virtual PROD_SHOPS PROD_SHOPS { get; set; }
         public virtual USER USER { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WASTE_STOCKS> WASTE_STOCKS { get; set; }
     }
 }

@@ -12,28 +12,28 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PROD_SHOPS
+    public partial class WASTE
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PROD_SHOPS()
+        public WASTE()
         {
-            this.PART_WRHS = new HashSet<PART_WRHS>();
-            this.PARTS = new HashSet<PART>();
-            this.PROD_WRHS = new HashSet<PROD_WRHS>();
+            this.PART_WASTE_WRHS_EXPENSE_WASTES = new HashSet<PART_WASTE_WRHS_EXPENSE_WASTES>();
+            this.PART_WASTE_WRHS_INCOME_WASTES = new HashSet<PART_WASTE_WRHS_INCOME_WASTES>();
+            this.WASTE_STOCKS = new HashSet<WASTE_STOCKS>();
         }
     
         public int ID { get; set; }
-        public Nullable<int> CompanyID { get; set; }
-        public string ShopName { get; set; }
+        public string WasteName { get; set; }
+        public int ProcessID { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
+        public virtual ICollection<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART> PARTS { get; set; }
+        public virtual ICollection<PART_WASTE_WRHS_INCOME_WASTES> PART_WASTE_WRHS_INCOME_WASTES { get; set; }
+        public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_WRHS> PROD_WRHS { get; set; }
+        public virtual ICollection<WASTE_STOCKS> WASTE_STOCKS { get; set; }
     }
 }

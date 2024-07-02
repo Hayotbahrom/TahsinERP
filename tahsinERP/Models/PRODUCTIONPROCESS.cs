@@ -12,31 +12,23 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_WRHS_EXPENSES
+    public partial class PRODUCTIONPROCESS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public P_WRHS_EXPENSES()
+        public PRODUCTIONPROCESS()
         {
-            this.P_WRHS_EXPENSE_DOCS = new HashSet<P_WRHS_EXPENSE_DOCS>();
-            this.P_WRHS_EXPENSE_PARTS = new HashSet<P_WRHS_EXPENSE_PARTS>();
+            this.BOMS = new HashSet<BOM>();
+            this.WASTES = new HashSet<WASTE>();
         }
     
         public int ID { get; set; }
-        public string DocNo { get; set; }
-        public Nullable<double> Amount { get; set; }
-        public string Currency { get; set; }
-        public Nullable<double> TotalPrice { get; set; }
-        public Nullable<int> RecieverWhID { get; set; }
-        public int WHID { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public string ProcessName { get; set; }
         public string Description { get; set; }
-        public System.DateTime IssueDateTime { get; set; }
-        public Nullable<bool> SendStatus { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_EXPENSE_DOCS> P_WRHS_EXPENSE_DOCS { get; set; }
+        public virtual ICollection<BOM> BOMS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_EXPENSE_PARTS> P_WRHS_EXPENSE_PARTS { get; set; }
-        public virtual PART_WRHS PART_WRHS { get; set; }
+        public virtual ICollection<WASTE> WASTES { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model tahsinERP.Models.P_WRHS_INCOMES
+﻿@using tahsinERP.ViewModels
+@model tahsinERP.ViewModels.WhrsIncome
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -43,87 +44,126 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
-                                        {
+                                        {    
+
+                                            
                                             @Html.AntiForgeryToken()
-                                            <div data-repeater-list="GroupA">
+                                            // WRHS_InComes
+                                            <div class="row justify-content-around d-flex align-items-start">
+                                                @*Left Part*@
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="DocNo">DocNo</label>
+                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @placeholder = "DocNo kiriting" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="WhID">WHID</label>
+                                                            @Html.DropDownListFor(model => model.WHID, (SelectList)ViewBag.Wrhs, new { @id = "WhId", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.WHID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="WhID">Invoice</label>
+                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, new { @id = "InvoiceId", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="WbID">Waybill</label>
+                                                            @Html.DropDownListFor(model => model.WaybillID, (SelectList)ViewBag.Waybills, new { @id = "WbID", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.WaybillID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Amount">Amount</label>
+                                                            @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Amountni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Currency</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Currencyni kiriting" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @*Right Part*@
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="TotalPrice">Total Price</label>
+                                                            @Html.TextBoxFor(model => model.TotalPrice, new { @type = "text", @class = "form-control", @id = "TotalPrice", @placeholder = "Total-Priceni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Description">Description</label>
+                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @placeholder = "Descriptionni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="IssueDateTime">Issue Date-Time</label>
+                                                            @Html.EditorFor(model => model.IssueDateTime, new { htmlAttributes = new { @id = "IssueDateTime", @class = "form-control pickadate-months-year " } })
+                                                            @Html.ValidationMessageFor(model => model.IssueDateTime, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="SenderWHID">SenderWHID</label>
+                                                            @Html.TextBoxFor(model => model.SenderWHID, new { @type = "text", @class = "form-control", @id = "SenderWHID", @placeholder = "SenderWHIDni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="RecieveStatus">Recieve Status</label>
+                                                            @Html.CheckBoxFor(model => model.RecieveStatus, new { @class = "form-control", @id = "RecieveStatus" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            // WRHS_InCome_Parts
+                                            <br />
+                                            <h4>
+                                                Parts
+                                            </h4>
+                                            <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="DocNo">DocNo</label>
-                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @name = "GroupA[0].DocNo", @placeholder = "DocNo kiriting" })
+                                                            <label for="Part_IncomeID">IncomeID</label>
+                                                            @Html.DropDownList("Parts[0].Part_IncomeID", (SelectList)ViewBag.InComes, new { @class = "form-control" })
+                                                            @Html.ValidationMessage("Parts[0].Part_IncomeID", "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="WhID">Qismni tanlang</label>
-                                                            @Html.DropDownList("WHID", (SelectList)ViewBag.Wrhs, new { @name = "GroupA[0]", @id = "WhId", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.WHID, "", new { @class = "text-danger" })
+                                                            <label for="Part_PartID">PartID</label>
+                                                            @Html.DropDownList("Parts[0].Part_PartID", (SelectList)ViewBag.InComeParts, new { @class = "form-control" })
+                                                            @Html.ValidationMessage("Parts[0].Part_PartID", "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="WhID">Invoiceni tanlang</label>
-                                                            @Html.DropDownList("InvoiceID", (SelectList)ViewBag.Invoice, new { @name = "GroupA[0]", @id = "InvoiceId", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        @*<div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="WbID">Waybiillni tanlang</label>
-                                                            @Html.DropDownList("WaybillID", (SelectList)ViewBag.Invoice, new { @name = "GroupA[0]", @id = "WbID", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.WaybillID, "", new { @class = "text-danger" })
+                                                            <label for="Part_Unit">Unit</label>
+                                                            @Html.TextBox("Parts[0].Part_Unit", null, new { @type = "text", @class = "form-control", @placeholder = "Unitni kiriting" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Amount">Amount</label>
-                                                            @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @name = "GroupA[0].DocNo", @placeholder = "Amountni kiriting" })
+                                                            <label for="Part_Amount">Amount</label>
+                                                            @Html.TextBox("Parts[0].Part_Amount", null, new { @type = "text", @class = "form-control", @placeholder = "Amountni kiriting" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Currency">Currency</label>
-                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @name = "GroupA[0].DocNo", @placeholder = "Currencyni kiriting" })
+                                                            <label for="Part_PiecePrice">Piece Price</label>
+                                                            @Html.TextBox("Parts[0].Part_PiecePrice", null, new { @type = "text", @class = "form-control", @placeholder = "Piece Priceni kiriting" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="TotalPrice">Total Price</label>
-                                                            @Html.TextBoxFor(model => model.TotalPrice, new { @type = "text", @class = "form-control", @id = "TotalPrice", @name = "GroupA[0].DocNo", @placeholder = "Total-Priceni kiriting" })
+                                                            <label for="Part_TotalPrice">Total Price</label>
+                                                            @Html.TextBox("Parts[0].Part_TotalPrice", null, new { @type = "text", @class = "form-control", @placeholder = "Total Priceni kiriting" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Description">Description</label>
-                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @name = "GroupA[0].DocNo", @placeholder = "Descriptionni kiriting" })
+                                                            <label for="Part_Comment">Comment</label>
+                                                            @Html.TextBox("Parts[0].Part_Comment", null, new { @type = "text", @class = "form-control", @placeholder = "Commentni kiriting" })
                                                         </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Description">Description</label>
-                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @name = "GroupA[0].DocNo", @placeholder = "Descriptionni kiriting" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            @Html.EditorFor(model => model.IssueDateTime, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
-                                                            @Html.ValidationMessageFor(model => model.IssueDateTime, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="SenderWHID">SenderWHID tanlang</label>
-                                                            @Html.DropDownList("WaybillID", (SelectList)ViewBag.Invoice, new { @name = "GroupA[0]", @id = "SenderWHID", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.SenderWHID, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="RecieveStatus">RecieveStatusni kiriting</label>
-                                                            @Html.TextBoxFor(model => model.RecieveStatus, new { @type = "text", @class = "form-control", @id = "RecieveStatus", @name = "GroupA[0].DocNo", @placeholder = "RecieveStatusni kiriting" })
-                                                        </div>*@
-
-                                                        <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                            <button class="btn btn-danger text-nowrap px-1" data-repeater-delete type="button">
-                                                                <i class="bx bx-x"></i> Delete
-                                                            </button>
+                                                        <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
                                                         </div>
                                                     </div>
                                                     <hr>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col p-0">
-                                                    <button class="btn btn-primary" data-repeater-create type="button">
-                                                        <i class="bx bx-plus"></i> Add
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
 
+                                            // Save button
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
                                                     <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
                                                         <i class='bx bx-save'></i>
-                                                        Save
-
+                                                        Saqlash
                                                     </button>
                                                 </li>
                                             </ul>
