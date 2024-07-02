@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tahsinERP", "tahsinERP\tahs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tahsinERP.Tests", "tahsinERP.Tests\tahsinERP.Tests.csproj", "{FFDB0077-8259-4A68-9DB0-60625634FE53}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tahsinERPCore", "tahsinERPCore\tahsinERPCore.csproj", "{F9D988EA-EADA-4C57-B377-A4855185925D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FFDB0077-8259-4A68-9DB0-60625634FE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFDB0077-8259-4A68-9DB0-60625634FE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFDB0077-8259-4A68-9DB0-60625634FE53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D988EA-EADA-4C57-B377-A4855185925D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D988EA-EADA-4C57-B377-A4855185925D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D988EA-EADA-4C57-B377-A4855185925D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D988EA-EADA-4C57-B377-A4855185925D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
