@@ -44,14 +44,14 @@
 {
                         <ul>
                             <li>
-                                <div class="sticky">@item.ChildPNo - @item.ChildUsageQty - @item.ChildUsageUnit</div>
+                                <div class="sticky">@item.ChildPNo</div>
                             </li>
                             <!-- Second level node -->
-                            @if(!string.IsNullOrEmpty(item.GrandChildPNo)){
+                            @if(!string.IsNullOrEmpty(item.ChildPNo)){
                             <li>
                                 <ul>
                                     <li>
-                                        <div class="sticky">@item.GrandChildPNo - @item.GrandChildUsageQty - @item.GrandChildUsageUnit</div>
+                                        <div class="sticky">@item.ChildPNo</div>
                                     </li>
                                 </ul>
                             </li>
