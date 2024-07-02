@@ -21,31 +21,28 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Create()
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                return View();
-            }
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public ActionResult Create([Bind(Include = "TransportType, ExtLgth, ExtWdth, ExtHght, IntLgth, IntWdth, IntHght, Unit, CapableOfLifting, TransportWeight")] F_TRANSPORT_TYPES transportType)
+        public ActionResult Create(F_TRANSPORT_TYPES transportType)
         {
             if (transportType == null)
             {
                 ModelState.AddModelError("", "Invalid form data. Please check the inputs.");
                 return View(transportType);
             }
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 try
                 {
                     if (ModelState.IsValid)
                     {
-                        // Set IsDeleted to false and save the forwarder to get the ID
-                        db.F_TRANSPORT_TYPES.Add(transportType);
+                        var transportTypeInsert = new F_TRANSPORT_TYPES();
+                        transportTypeInsert = transportType;
+                        db.F_TRANSPORT_TYPES.Add(transportTypeInsert);
                         db.SaveChanges();
-
                         return RedirectToAction("Index");
                     }
                 }
@@ -54,8 +51,10 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "Error: " + ex.Message);
                 }
             }
+
             return View(transportType);
         }
+
 
         public ActionResult Details(int? id)
         {

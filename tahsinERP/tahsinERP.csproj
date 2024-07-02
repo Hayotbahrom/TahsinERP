@@ -2453,10 +2453,11 @@
     <Content Include="Views\FTransportType\Details.cshtml" />
     <Content Include="Views\FTransportType\Edit.cshtml" />
     <Content Include="Views\FTransportType\Delete.cshtml" />
+    <Content Include="Views\Waybill\Index.cshtml" />
+    <Content Include="Views\Waybill\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Waybill\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
