@@ -35,9 +35,10 @@ namespace tahsinERP.Controllers
         {
             using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                S_CONTRACTS contract = new S_CONTRACTS();
+                SContractViewModel SContractViewModel = new SContractViewModel();
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
-                return View(contract);
+                ViewBag.Contracts = new SelectList(db.S_CONTRACTS.Where(sc => sc.IsDeleted == false).ToList(), "ID", "ContractNo");
+                return View(SContractViewModel);
             }
         }
 
