@@ -46,7 +46,7 @@
                                         {
                                             @Html.AntiForgeryToken()
 
-                                            // ContractViewModel
+                                            // SContractViewModel 
                                             <div class="row justify-content-around d-flex align-items-start">
                                                 @*Left Part*@
                                                 <div class="col-lg-6 col-sm-12">
@@ -90,82 +90,35 @@
                                                 </div>
                                             </div>
 
-                                            // ContractProductViewModel
+                                            // SContractProductViewModel
                                             <br />
                                             <h4>
                                                 Products
                                             </h4>
-                                            <div data-repeater-list="ContractProducts">
-                                                <div data-repeater-item>
-                                                    <div class="row justify-content-between">
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Unit">Contract</label>
-                                                            @Html.TextBoxFor(model => model.ContractNo, "", new { @type = "text", @class = "form-control", @placeholder = "ContractNo kiriting" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="ProductID">Customer</label>
-                                                            @Html.DropDownListFor(model => model.CustomerID, (SelectList)ViewBag.Customers, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Unit">Currency</label>
-                                                            @Html.TextBoxFor(model => model.Currency, null, new { @type = "text", @class = "form-control", @placeholder = "Currency kiriting" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Amount">Amount</label>
-                                                            @Html.TextBox("ContractProducts[0].Amount", null, new { @type = "text", @class = "form-control", @placeholder = "Amount kiriting" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="PiecePrice">Piece Price</label>
-                                                            @Html.TextBox("ContractProducts[0].PiecePrice", null, new { @type = "text", @class = "form-control", @placeholder = "Piece Price kiriting" })
-                                                        </div>
-                                                        <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                            <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                </div>
-                                            </div>
-                                            <button data-repeater-create type="button" class="btn btn-primary">Add New Product</button>
-
-
-                                            // SContract_Products
-                                            <br />
-                                            <h4>
-                                                Products
-                                            </h4>
-                                            <div data-repeater-list="Products">
+                                            @*<div data-repeater-list="ContractProducts">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_IncomeID">IncomeID</label>
-                                                            @Html.DropDownList("Parts[0].Part_IncomeID", (SelectList)ViewBag.InComes, new { @class = "form-control" })
-                                                            @Html.ValidationMessage("Parts[0].Part_IncomeID", "", new { @class = "text-danger" })
+                                                            <label for="Part_IncomeID">Contract</label>
+                                                            @Html.DropDownList("Parts[0].ContractID", (SelectList)ViewBag.InComes, new { @class = "form-control" })
+                                                            @Html.ValidationMessage("Parts[0].ContractID", "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_PartID">PartID</label>
-                                                            @Html.DropDownList("Parts[0].Part_PartID", (SelectList)ViewBag.InComeParts, new { @class = "form-control" })
+                                                            <label for="Part_PartID">Product</label>
+                                                            @Html.DropDownList("Parts[0].ProductID", (SelectList)ViewBag.InComeParts, new { @class = "form-control" })
                                                             @Html.ValidationMessage("Parts[0].Part_PartID", "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_TotalPrice">Piece-Price</label>
+                                                            @Html.TextBox("Parts[0].PiecePrice", null, new { @type = "text", @class = "form-control", @placeholder = "Total Priceni kiriting" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Unit</label>
-                                                            @Html.TextBox("Parts[0].Part_Unit", null, new { @type = "text", @class = "form-control", @placeholder = "Unitni kiriting" })
+                                                            @Html.TextBox("Parts[0].Unit", null, new { @type = "text", @class = "form-control", @placeholder = "Unitni kiriting" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Amount</label>
-                                                            @Html.TextBox("Parts[0].Part_Amount", null, new { @type = "text", @class = "form-control", @placeholder = "Amountni kiriting" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_PiecePrice">Piece Price</label>
-                                                            @Html.TextBox("Parts[0].Part_PiecePrice", null, new { @type = "text", @class = "form-control", @placeholder = "Piece Priceni kiriting" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_TotalPrice">Total Price</label>
-                                                            @Html.TextBox("Parts[0].Part_TotalPrice", null, new { @type = "text", @class = "form-control", @placeholder = "Total Priceni kiriting" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Comment">Comment</label>
-                                                            @Html.TextBox("Parts[0].Part_Comment", null, new { @type = "text", @class = "form-control", @placeholder = "Commentni kiriting" })
+                                                            @Html.TextBox("Parts[0].Amount", null, new { @type = "text", @class = "form-control", @placeholder = "Amountni kiriting" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
                                                             <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
@@ -174,9 +127,7 @@
                                                     <hr>
                                                 </div>
                                             </div>
-                                            <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
-
-
+                                            <button data-repeater-create type="button" class="btn btn-primary">Add New Product</button>*@
 
                                             // Save button
                                             <ul class="list-group list-group-flush">

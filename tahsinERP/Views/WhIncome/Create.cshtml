@@ -36,11 +36,6 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">
-                                        Repeating Forms
-                                    </h4>
-                                </div>
                                 <div class="card-content">
                                     <div class="card-body">
                                         @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
@@ -103,9 +98,13 @@
                                                             <label for="SenderWHID">SenderWHID</label>
                                                             @Html.TextBoxFor(model => model.SenderWHID, new { @type = "text", @class = "form-control", @id = "SenderWHID", @placeholder = "SenderWHIDni kiriting" })
                                                         </div>
+
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="RecieveStatus">Recieve Status</label>
-                                                            @Html.CheckBoxFor(model => model.RecieveStatus, new { @class = "form-control", @id = "RecieveStatus" })
+                                                            <div class="checkbox checkbox-secondary checkbox-glow">
+                                                                @Html.CheckBoxFor(model => model.RecieveStatus, new { @type = "checkbox", @id = "RecieveStatus" })
+                                                                <label for="RecieveStatus">Recieve Status</label>
+                                                                @Html.ValidationMessageFor(model => model.RecieveStatus, "", new { @class = "text-warning" })
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -120,8 +119,8 @@
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_IncomeID">IncomeID</label>
-                                                            @Html.DropDownList("Parts[0].Part_IncomeID", (SelectList)ViewBag.InComes, new { @class = "form-control" })
+                                                            <label for="Part_IncomeID">Income</label>
+                                                            @Html.DropDownList("Select", (SelectList)ViewBag.InComes, new { @class = "form-control" })
                                                             @Html.ValidationMessage("Parts[0].Part_IncomeID", "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
