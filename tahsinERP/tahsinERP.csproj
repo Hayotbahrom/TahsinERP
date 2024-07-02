@@ -290,11 +290,13 @@
     <Compile Include="Controllers\PModuleController.cs" />
     <Compile Include="Controllers\POrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductionProcessController.cs" />
     <Compile Include="Controllers\ProductPackController.cs" />
     <Compile Include="Controllers\ProductPlanController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\SlittingController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
@@ -537,11 +539,13 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BOMCreateViewModel.cs" />
     <Compile Include="ViewModels\BOMViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
+    <Compile Include="ViewModels\SlittingProcessViewModel.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
@@ -2445,6 +2449,15 @@
     <Content Include="Views\Forwarder\Details.cshtml" />
     <Content Include="Views\Forwarder\Edit.cshtml" />
     <Content Include="Views\Forwarder\Delete.cshtml" />
+    <Content Include="Views\BOM\Create.cshtml" />
+    <Content Include="Views\Slitting\Index.cshtml" />
+    <Content Include="Views\Slitting\Create.cshtml" />
+    <Content Include="Views\ProductionProcess\Index.cshtml" />
+    <Content Include="Views\ProductionProcess\Create.cshtml" />
+    <Content Include="Views\ProductionProcess\Details.cshtml" />
+    <Content Include="Views\ProductionProcess\Edit.cshtml" />
+    <Content Include="Views\ProductionProcess\Delete.cshtml" />
+    <Content Include="Views\BOM\CreateWizard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
