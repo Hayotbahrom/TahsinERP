@@ -278,6 +278,7 @@
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
+    <Compile Include="Controllers\FTransportTypeController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WaybillController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
@@ -2402,9 +2404,15 @@
     <Content Include="Views\Forwarder\Details.cshtml" />
     <Content Include="Views\Forwarder\Edit.cshtml" />
     <Content Include="Views\Forwarder\Delete.cshtml" />
+    <Content Include="Views\FTransportType\Index.cshtml" />
+    <Content Include="Views\FTransportType\Create.cshtml" />
+    <Content Include="Views\FTransportType\Details.cshtml" />
+    <Content Include="Views\FTransportType\Edit.cshtml" />
+    <Content Include="Views\FTransportType\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Waybill\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
