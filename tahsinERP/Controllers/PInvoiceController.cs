@@ -212,21 +212,24 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Edit(int? ID)
         {
-            if (ID == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var invoice = db.P_INVOICES.Find(ID);
-            if (invoice == null)
-            {
-                return HttpNotFound();
-            }
+                if (ID == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var invoice = db.P_INVOICES.Find(ID);
+                if (invoice == null)
+                {
+                    return HttpNotFound();
+                }
 
-            ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", invoice.SupplierID);
-            ViewBag.POrder = new SelectList(db.P_ORDERS, "ID", "OrderNo", invoice.OrderID);
-            ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", invoice.SupplierID);
+                ViewBag.POrder = new SelectList(db.P_ORDERS, "ID", "OrderNo", invoice.OrderID);
+                ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
 
-            return View(invoice);
+                return View(invoice);
+            }
         }
 
         [HttpPost]
@@ -235,82 +238,91 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                P_INVOICES invoiceToUpdate = db.P_INVOICES.Find(invoice.ID);
-                if (invoiceToUpdate != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    invoiceToUpdate.InvoiceNo = invoice.InvoiceNo;
-                    invoiceToUpdate.SupplierID = invoice.SupplierID;
-                    invoiceToUpdate.OrderID = invoice.OrderID;
-                    invoiceToUpdate.InvoiceDate = invoice.InvoiceDate;
-                    invoiceToUpdate.Currency = invoice.Currency;
-                    invoiceToUpdate.Amount = invoice.Amount;
-                    invoiceToUpdate.IsDeleted = false;
-
-                    db.Entry(invoiceToUpdate).State = EntityState.Modified;
-
-                    try
+                    P_INVOICES invoiceToUpdate = db.P_INVOICES.Find(invoice.ID);
+                    if (invoiceToUpdate != null)
                     {
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        if (ex.InnerException?.InnerException is SqlException sqlEx)
+                        invoiceToUpdate.InvoiceNo = invoice.InvoiceNo;
+                        invoiceToUpdate.SupplierID = invoice.SupplierID;
+                        invoiceToUpdate.OrderID = invoice.OrderID;
+                        invoiceToUpdate.InvoiceDate = invoice.InvoiceDate;
+                        invoiceToUpdate.Currency = invoice.Currency;
+                        invoiceToUpdate.Amount = invoice.Amount;
+                        invoiceToUpdate.IsDeleted = false;
+
+                        db.Entry(invoiceToUpdate).State = EntityState.Modified;
+
+                        try
                         {
-                            if (sqlEx.Number == 547) // Foreign key constraint violation
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            if (ex.InnerException?.InnerException is SqlException sqlEx)
                             {
-                                ModelState.AddModelError("", "The OrderID does not exist in the P_ORDERS table.");
+                                if (sqlEx.Number == 547) // Foreign key constraint violation
+                                {
+                                    ModelState.AddModelError("", "The OrderID does not exist in the P_ORDERS table.");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", $"Database update error: {sqlEx.Message}");
+                                }
                             }
                             else
                             {
-                                ModelState.AddModelError("", $"Database update error: {sqlEx.Message}");
+                                ModelState.AddModelError("", $"Unexpected error: {ex.Message}");
                             }
                         }
-                        else
+                        catch (RetryLimitExceededException)
                         {
-                            ModelState.AddModelError("", $"Unexpected error: {ex.Message}");
+                            ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, contact the system administrator.");
                         }
                     }
-                    catch (RetryLimitExceededException)
+                    else
                     {
-                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, contact the system administrator.");
+                        ModelState.AddModelError("", "Invoice not found.");
                     }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Invoice not found.");
                 }
             }
 
-            // Re-populate dropdown lists in case of an error
-            ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", invoice.SupplierID);
-            ViewBag.POrder = new SelectList(db.P_ORDERS, "ID", "OrderNo", invoice.OrderID);
-            ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                // Re-populate dropdown lists in case of an error
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", invoice.SupplierID);
+                ViewBag.POrder = new SelectList(db.P_ORDERS, "ID", "OrderNo", invoice.OrderID);
+                ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
+            }
 
             return View(invoice);
         }
 
         public ActionResult EditPart(int? ID)
         {
-            if (ID == null)
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (ID == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                var invoicePart = db.P_INVOICE_PARTS.Find(ID);
+                if (invoicePart == null)
+                {
+                    return HttpNotFound();
+                }
+                var allParts = db.PARTS.Select(p => new SelectListItem
+                {
+                    Value = p.ID.ToString(),
+                    Text = p.PNo
+                }).ToList();
+
+                ViewBag.PartList = allParts;
+
+                return View(invoicePart);
             }
-
-            var invoicePart = db.P_INVOICE_PARTS.Find(ID);
-            if (invoicePart == null)
-            {
-                return HttpNotFound();
-            }
-            var allParts = db.PARTS.Select(p => new SelectListItem
-            {
-                Value = p.ID.ToString(),
-                Text = p.PNo
-            }).ToList();
-
-            ViewBag.PartList = allParts;
-
-            return View(invoicePart);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -318,42 +330,44 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                P_INVOICE_PARTS invoicePartToUpdate = db.P_INVOICE_PARTS.Find(invoicePart.ID);
-                if (invoicePartToUpdate != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    invoicePartToUpdate.PartID = invoicePart.PartID;
-                    invoicePartToUpdate.Price = invoicePart.Price;
-                    invoicePartToUpdate.Quantity = invoicePart.Quantity;
-                    invoicePartToUpdate.Unit = invoicePart.Unit;
-                    //invoicePartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
-
-
-                    if (TryUpdateModel(invoicePartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit" }))
+                    P_INVOICE_PARTS invoicePartToUpdate = db.P_INVOICE_PARTS.Find(invoicePart.ID);
+                    if (invoicePartToUpdate != null)
                     {
-                        try
+                        invoicePartToUpdate.PartID = invoicePart.PartID;
+                        invoicePartToUpdate.Price = invoicePart.Price;
+                        invoicePartToUpdate.Quantity = invoicePart.Quantity;
+                        invoicePartToUpdate.Unit = invoicePart.Unit;
+                        //invoicePartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
+
+
+                        if (TryUpdateModel(invoicePartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit" }))
                         {
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            try
+                            {
+                                db.SaveChanges();
+                                return RedirectToAction("Index");
+                            }
+                            catch (RetryLimitExceededException)
+                            {
+                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            }
                         }
                     }
+                    return View(invoicePartToUpdate);
                 }
-                return View(invoicePartToUpdate);
             }
             return View();
         }
-
         public async Task<ActionResult> Download()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefault();
                 if (invoys != null)
-                return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                
+                    return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
                 return View();
             }
         }
