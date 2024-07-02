@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using tahsinERP.Models;
 using System.Linq;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -25,6 +26,47 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult Create(TransportTypeViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                // Map ViewModel to Entity Model
+                var transportType = new F_TRANSPORT_TYPES
+                {
+                    TransportType = viewModel.TransportType,
+                    ExtLgth = viewModel.ExtLgth,
+                    ExtWdth = viewModel.ExtWdth,
+                    ExtHght = viewModel.ExtHght,
+                    IntLgth = viewModel.IntLgth,
+                    IntWdth = viewModel.IntWdth,
+                    IntHght = viewModel.IntHght,
+                    Unit = viewModel.Unit,
+                    CapableOfLifting = viewModel.CapableOfLifting,
+                    TransportWeight = viewModel.TransportWeight
+                };
+
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    try
+                    {
+                        db.F_TRANSPORT_TYPES.Add(transportType);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "Error: " + ex.Message);
+                    }
+                }
+            }
+
+            // If ModelState is not valid, return the view with the ViewModel
+            return View(viewModel);
+        }
+
+
+        /*[HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(F_TRANSPORT_TYPES transportType)
         {
             if (transportType == null)
@@ -39,9 +81,7 @@ namespace tahsinERP.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        var transportTypeInsert = new F_TRANSPORT_TYPES();
-                        transportTypeInsert = transportType;
-                        db.F_TRANSPORT_TYPES.Add(transportTypeInsert);
+                        db.F_TRANSPORT_TYPES.Add(transportType);
                         db.SaveChanges();
                         return RedirectToAction("Index");
                     }
@@ -53,9 +93,7 @@ namespace tahsinERP.Controllers
             }
 
             return View(transportType);
-        }
-
-
+        }*/
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -71,53 +109,84 @@ namespace tahsinERP.Controllers
                 return View(transportType);
             }
         }
+        // GET: FTransportType/Edit/
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-
+                // Retrieve existing entity
                 var transportType = db.F_TRANSPORT_TYPES.Find(id);
                 if (transportType == null)
                 {
                     return HttpNotFound();
                 }
-                return View(transportType);
+
+                // Map entity to view model
+                var viewModel = new TransportTypeViewModel
+                {
+                    ID = transportType.ID,
+                    TransportType = transportType.TransportType,
+                    ExtLgth = transportType.ExtLgth,
+                    ExtWdth = transportType.ExtWdth,
+                    ExtHght = transportType.ExtHght,
+                    IntLgth = transportType.IntLgth,
+                    IntWdth = transportType.IntWdth,
+                    IntHght = transportType.IntHght,
+                    Unit = transportType.Unit,
+                    CapableOfLifting = transportType.CapableOfLifting,
+                    TransportWeight = transportType.TransportWeight
+                };
+
+                return View(viewModel);
             }
         }
+        // POST: FTransportType/Edit/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(F_TRANSPORT_TYPES transportType)
+        public ActionResult Edit(TransportTypeViewModel viewModel)
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
+            if (ModelState.IsValid)
             {
-
-                if (ModelState.IsValid)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    var transportTypeToUpdate = db.F_TRANSPORT_TYPES.Find(transportType.ID);
-                    if (transportTypeToUpdate != null)
+                    // Retrieve existing entity
+                    var transportTypeToUpdate = db.F_TRANSPORT_TYPES.Find(viewModel.ID);
+                    if (transportTypeToUpdate == null)
                     {
-                        if (TryUpdateModel(transportTypeToUpdate, "", new string[] { "TransportType, ExtLgth, ExtWdth, ExtHght, IntLgth, IntWdth, IntHght, Unit, CapableOfLifting, TransportWeight" }))
-                        {
-                            try
-                            {
-                                db.SaveChanges();
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
-                        }
+                        return HttpNotFound();
                     }
 
-                    return View(transportTypeToUpdate);
+                    // Update entity with data from view model
+                    transportTypeToUpdate.TransportType = viewModel.TransportType;
+                    transportTypeToUpdate.ExtLgth = viewModel.ExtLgth;
+                    transportTypeToUpdate.ExtWdth = viewModel.ExtWdth;
+                    transportTypeToUpdate.ExtHght = viewModel.ExtHght;
+                    transportTypeToUpdate.IntLgth = viewModel.IntLgth;
+                    transportTypeToUpdate.IntWdth = viewModel.IntWdth;
+                    transportTypeToUpdate.IntHght = viewModel.IntHght;
+                    transportTypeToUpdate.Unit = viewModel.Unit;
+                    transportTypeToUpdate.CapableOfLifting = viewModel.CapableOfLifting;
+                    transportTypeToUpdate.TransportWeight = viewModel.TransportWeight;
+
+                    try
+                    {
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "Error: " + ex.Message);
+                    }
                 }
-                return View(transportType);
             }
+
+            // If ModelState is not valid, return the view with the ViewModel
+            return View(viewModel);
         }
         public ActionResult Delete(int? Id)
         {
@@ -159,7 +228,6 @@ namespace tahsinERP.Controllers
                         {
                             ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
-
                     }
                 }
                 return View();
