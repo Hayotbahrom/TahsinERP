@@ -27,6 +27,7 @@ namespace tahsinERP.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<BLANKING_NORMS> BLANKING_NORMS { get; set; }
         public virtual DbSet<BOM> BOMS { get; set; }
         public virtual DbSet<COMPANy> COMPANIES { get; set; }
         public virtual DbSet<COMPANY_LICENSES> COMPANY_LICENSES { get; set; }
@@ -50,13 +51,19 @@ namespace tahsinERP.Models
         public virtual DbSet<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
         public virtual DbSet<P_PACKINGLIST_DOCS> P_PACKINGLIST_DOCS { get; set; }
-        public virtual DbSet<P_WRHS_EXPENSE_DOCS> P_WRHS_EXPENSE_DOCS { get; set; }
-        public virtual DbSet<P_WRHS_EXPENSE_PARTS> P_WRHS_EXPENSE_PARTS { get; set; }
-        public virtual DbSet<P_WRHS_EXPENSES> P_WRHS_EXPENSES { get; set; }
-        public virtual DbSet<P_WRHS_INCOME_DOCS> P_WRHS_INCOME_DOCS { get; set; }
-        public virtual DbSet<P_WRHS_INCOME_PARTS> P_WRHS_INCOME_PARTS { get; set; }
-        public virtual DbSet<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
+        public virtual DbSet<P_PROFORMA_INVOICES> P_PROFORMA_INVOICES { get; set; }
+        public virtual DbSet<PART_STOCKS> PART_STOCKS { get; set; }
+        public virtual DbSet<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
+        public virtual DbSet<PART_WASTE_WRHS_EXPENSES> PART_WASTE_WRHS_EXPENSES { get; set; }
+        public virtual DbSet<PART_WASTE_WRHS_INCOME_WASTES> PART_WASTE_WRHS_INCOME_WASTES { get; set; }
+        public virtual DbSet<PART_WASTE_WRHS_INCOMES> PART_WASTE_WRHS_INCOMES { get; set; }
         public virtual DbSet<PART_WRHS> PART_WRHS { get; set; }
+        public virtual DbSet<PART_WRHS_EXPENSE_DOCS> PART_WRHS_EXPENSE_DOCS { get; set; }
+        public virtual DbSet<PART_WRHS_EXPENSE_PARTS> PART_WRHS_EXPENSE_PARTS { get; set; }
+        public virtual DbSet<PART_WRHS_EXPENSES> PART_WRHS_EXPENSES { get; set; }
+        public virtual DbSet<PART_WRHS_INCOME_DOCS> PART_WRHS_INCOME_DOCS { get; set; }
+        public virtual DbSet<PART_WRHS_INCOME_PARTS> PART_WRHS_INCOME_PARTS { get; set; }
+        public virtual DbSet<PART_WRHS_INCOMES> PART_WRHS_INCOMES { get; set; }
         public virtual DbSet<PART1738DOCS> PART1738DOCS { get; set; }
         public virtual DbSet<PARTIMAGE> PARTIMAGES { get; set; }
         public virtual DbSet<PARTPACK> PARTPACKS { get; set; }
@@ -65,8 +72,11 @@ namespace tahsinERP.Models
         public virtual DbSet<PERMISSIONMODULE> PERMISSIONMODULES { get; set; }
         public virtual DbSet<PERMISSION> PERMISSIONS { get; set; }
         public virtual DbSet<PROD_SHOPS> PROD_SHOPS { get; set; }
+        public virtual DbSet<PROD_STOCKS> PROD_STOCKS { get; set; }
+        public virtual DbSet<PROD_WRHS> PROD_WRHS { get; set; }
         public virtual DbSet<PRODUCT1738DOCS> PRODUCT1738DOCS { get; set; }
         public virtual DbSet<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
+        public virtual DbSet<PRODUCTIONPROCESS> PRODUCTIONPROCESSES { get; set; }
         public virtual DbSet<PRODUCTPACK> PRODUCTPACKS { get; set; }
         public virtual DbSet<PRODUCTPLAN> PRODUCTPLANS { get; set; }
         public virtual DbSet<PRODUCT> PRODUCTS { get; set; }
@@ -74,12 +84,16 @@ namespace tahsinERP.Models
         public virtual DbSet<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         public virtual DbSet<S_CONTRACTS> S_CONTRACTS { get; set; }
         public virtual DbSet<SAMPLE_FILES> SAMPLE_FILES { get; set; }
+        public virtual DbSet<SLITTING_NORMS> SLITTING_NORMS { get; set; }
         public virtual DbSet<SPL> SPLs { get; set; }
+        public virtual DbSet<STAMPING_NORMS> STAMPING_NORMS { get; set; }
         public virtual DbSet<SUPPLIER> SUPPLIERS { get; set; }
         public virtual DbSet<USER_ENTRIES> USER_ENTRIES { get; set; }
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
+        public virtual DbSet<WASTE_STOCKS> WASTE_STOCKS { get; set; }
+        public virtual DbSet<WASTE> WASTES { get; set; }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {

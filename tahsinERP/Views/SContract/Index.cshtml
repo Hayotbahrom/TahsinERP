@@ -79,10 +79,12 @@
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>Raqami</th>
-                                                    <th>Xaridor kompaniya</th>
-                                                    <th>Mahsulot nomi</th>
-                                                    <th>Narxi</th>
+                                                    <th>Shartnoma raqami</th>
+                                                    <th>Xaridor nomi</th>
+                                                    <th>Tuzilgan sanasi</th>
+                                                    <th>Tugash sanasi</th>
+                                                    <th>IncoTerms</th>
+                                                    <th>PaymentTerms</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -101,8 +103,10 @@
                                                         <td>
                                                             <a href="~/Customer/Details/@item.CustomerID">@item.CUSTOMER.Name</a>
                                                         </td>
-                                                        <td>@item.ContractNo</td>
-                                                        <td>@item.ContractNo</td>
+                                                        <td>@item.IssuedDate</td>
+                                                        <td>@item.DueDate</td>
+                                                        <td>@item.Incoterms</td>
+                                                        <td>@item.PaymentTerms</td>
                                                         @if (changePermit)
                                                         {
                                                             <td>
@@ -119,13 +123,15 @@
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>Raqami</th>
-                                                    <th>Xaridor ismi</th>
-                                                    <th>Mahsulot nomi</th>
-                                                    <th>Narxi</th>
+                                                    <th>SHARTNOMA RAQAMI</th>
+                                                    <th>XARIDOR NOMI</th>
+                                                    <th>TUZILGAN SANASI</th>
+                                                    <th>TUGASH SANASI</th>
+                                                    <th>INCOTERMS</th>
+                                                    <th>PAYMENTTERMS</th>
                                                     @if (changePermit)
                                                     {
-                                                        <th>amallar</th>
+                                                        <th>AMALLAR</th>
                                                     }
                                                 </tr>
                                             </tfoot>
@@ -147,7 +153,7 @@
         function refreshDataTable() {
             const source = document.getElementById("SourceID").value;
 
-            window.location.href = '@Url.Action("Index", "PContract")?type=' + source;
+            window.location.href = '@Url.Action("Index", "SContract")?type=' + source;
         }
     </script>
 }

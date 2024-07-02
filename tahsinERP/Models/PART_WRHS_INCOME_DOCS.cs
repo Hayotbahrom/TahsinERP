@@ -12,18 +12,12 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_WRHS_INCOME_PARTS
+    public partial class PART_WRHS_INCOME_DOCS
     {
         public int ID { get; set; }
         public int IncomeID { get; set; }
-        public int PartID { get; set; }
-        public string Unit { get; set; }
-        public double Amount { get; set; }
-        public Nullable<double> PiecePrice { get; set; }
-        public Nullable<double> TotalPrice { get; set; }
-        public string Comment { get; set; }
+        public byte[] Doc { get; set; }
     
-        public virtual P_WRHS_INCOMES P_WRHS_INCOMES { get; set; }
-        public virtual PART PART { get; set; }
+        public virtual PART_WRHS_INCOMES PART_WRHS_INCOMES { get; set; }
     }
 }

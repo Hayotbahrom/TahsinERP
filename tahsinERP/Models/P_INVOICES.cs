@@ -21,7 +21,8 @@ namespace tahsinERP.Models
             this.P_INVOICE_DOCS = new HashSet<P_INVOICE_DOCS>();
             this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
             this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
-            this.P_WRHS_INCOMES = new HashSet<P_WRHS_INCOMES>();
+            this.P_PROFORMA_INVOICES = new HashSet<P_PROFORMA_INVOICES>();
+            this.PART_WRHS_INCOMES = new HashSet<PART_WRHS_INCOMES>();
         }
     
         public int ID { get; set; }
@@ -46,6 +47,8 @@ namespace tahsinERP.Models
         public virtual P_ORDERS P_ORDERS { get; set; }
         public virtual SUPPLIER SUPPLIER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_WRHS_INCOMES> P_WRHS_INCOMES { get; set; }
+        public virtual ICollection<P_PROFORMA_INVOICES> P_PROFORMA_INVOICES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_INCOMES> PART_WRHS_INCOMES { get; set; }
     }
 }

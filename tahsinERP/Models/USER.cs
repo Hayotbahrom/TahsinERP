@@ -17,11 +17,15 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public USER()
         {
+            this.BLANKING_NORMS = new HashSet<BLANKING_NORMS>();
             this.PART_WRHS = new HashSet<PART_WRHS>();
             this.PART1738DOCS = new HashSet<PART1738DOCS>();
             this.PART1738DOCS1 = new HashSet<PART1738DOCS>();
+            this.PROD_WRHS = new HashSet<PROD_WRHS>();
             this.PRODUCT1738DOCS = new HashSet<PRODUCT1738DOCS>();
             this.PRODUCT1738DOCS1 = new HashSet<PRODUCT1738DOCS>();
+            this.SLITTING_NORMS = new HashSet<SLITTING_NORMS>();
+            this.STAMPING_NORMS = new HashSet<STAMPING_NORMS>();
             this.USER_ENTRIES = new HashSet<USER_ENTRIES>();
             this.USER_LICENSES = new HashSet<USER_LICENSES>();
             this.USERIMAGES = new HashSet<USERIMAGE>();
@@ -38,6 +42,8 @@ namespace tahsinERP.Models
         public string HashCode { get; set; }
         public Nullable<int> CompanyID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
@@ -46,9 +52,15 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART1738DOCS> PART1738DOCS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_WRHS> PROD_WRHS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCT1738DOCS> PRODUCT1738DOCS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCT1738DOCS> PRODUCT1738DOCS1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SLITTING_NORMS> SLITTING_NORMS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<STAMPING_NORMS> STAMPING_NORMS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<USER_ENTRIES> USER_ENTRIES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -1,0 +1,139 @@
+﻿@model tahsinERP.Models.F_TRANSPORT_TYPES
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Create", "FTransportType", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/FTransportType/Index">Transport turlari</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Yangi transport turi qo'shish
+                                        </li>
+                                    </ol>
+                                    <div class="invoice-create-btn mb-1">
+                                        <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/FTransportType/UploadWithExcel'">
+                                            <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali transport turi qo'shish</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <section class="basic-select2">
+                        <div class="row">
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+
+                                                    @*<h4 class="text-primary">Transport turi</h4>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.TransportType, new { @class = "form-control round", @placeholder = "Transport turi" })
+                                                        @Html.ValidationMessageFor(model => model.TransportType, "", new { @class = "text-danger" })
+                                                    </fieldset>*@
+
+                                                    <!-- Additional Fields -->
+                                                    <h6 class="invoice-to">Unit</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Unit" })
+                                                        @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Ko'tarish imkoniyati</h6>
+                                                    <fieldset class="form-group">
+                                                        @Html.TextBoxFor(model => model.CapableOfLifting, new { @class = "form-control round", @placeholder = "Ko'tarish imkoniyati" })
+                                                        @Html.ValidationMessageFor(model => model.CapableOfLifting, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Og'irligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.TransportWeight, new { @class = "form-control round", @placeholder = "Og'irligi" })
+                                                        @Html.ValidationMessageFor(model => model.TransportWeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <!-- Additional External and Internal Dimensions -->
+                                                    <h6 class="invoice-to">Tashqi Uzunligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ExtLgth, new { @class = "form-control round", @placeholder = "Tashqi Uzunligi" })
+                                                        @Html.ValidationMessageFor(model => model.ExtLgth, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Tashqi Kengligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ExtWdth, new { @class = "form-control round", @placeholder = "Tashqi Kengligi" })
+                                                        @Html.ValidationMessageFor(model => model.ExtWdth, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Tashqi Balandligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ExtHght, new { @class = "form-control round", @placeholder = "Tashqi Balandligi" })
+                                                        @Html.ValidationMessageFor(model => model.ExtHght, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Ichki Uzunligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.IntLgth, new { @class = "form-control round", @placeholder = "Ichki Uzunligi" })
+                                                        @Html.ValidationMessageFor(model => model.IntLgth, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Ichki Kengligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.IntWdth, new { @class = "form-control round", @placeholder = "Ichki Kengligi" })
+                                                        @Html.ValidationMessageFor(model => model.IntWdth, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Ichki Balandligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.IntHght, new { @class = "form-control round", @placeholder = "Ichki Balandligi" })
+                                                        @Html.ValidationMessageFor(model => model.IntHght, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-6"></div>
+                                                        <div class="col-12 col-sm-6"></div>
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                                <i class='bx bx-save'></i>
+                                                                Save
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

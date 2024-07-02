@@ -19,6 +19,7 @@ namespace tahsinERP.Models
         {
             this.PART_WRHS = new HashSet<PART_WRHS>();
             this.PARTS = new HashSet<PART>();
+            this.PROD_WRHS = new HashSet<PROD_WRHS>();
         }
     
         public int ID { get; set; }
@@ -32,5 +33,7 @@ namespace tahsinERP.Models
         public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART> PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_WRHS> PROD_WRHS { get; set; }
     }
 }

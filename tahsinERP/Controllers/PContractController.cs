@@ -17,26 +17,32 @@ namespace tahsinERP.Controllers
 {
     public class PContractController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, partNo = "";
         // GET: Contracts
         public ActionResult Index(string type)
         {
+            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            {
                 if (!string.IsNullOrEmpty(type))
                 {
-                    List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
+                    List<P_CONTRACTS> list = db1.P_CONTRACTS
+                        .Include(pc => pc.SUPPLIER)
+                        .Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
                     ViewBag.Type = type;
                     return View(list);
                 }
                 else
                 {
-                    List<P_CONTRACTS> list = db.P_CONTRACTS.Where(pc => pc.IsDeleted == false).ToList();
+                    List<P_CONTRACTS> list = db1.P_CONTRACTS
+                        .Include (pc => pc.SUPPLIER)
+                        .Where(pc => pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
                     ViewBag.Type = type;
                     return View(list);
                 }
+            }
         }
         public ActionResult Download()
         {
@@ -230,11 +236,11 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Create()
         {
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
+            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            {
+                ViewBag.Supplier = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name");
                 return View();
-            //}
+            }
         }
         [HttpPost]  
         [ValidateAntiForgeryToken]
@@ -243,12 +249,12 @@ namespace tahsinERP.Controllers
 
             try
             {
-                using (DBTHSNEntities db = new DBTHSNEntities())
+                using (DBTHSNEntities db1 = new DBTHSNEntities())
                 {
                     if (ModelState.IsValid)
                     {
-                        db.P_CONTRACTS.Add(contract);
-                        db.SaveChanges();
+                        db1.P_CONTRACTS.Add(contract);
+                        db1.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
@@ -266,74 +272,104 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var contract = db.P_CONTRACTS.Find(ID);
-            if (contract == null)
+
+            using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                return HttpNotFound();
+                var contract = db1.P_CONTRACTS
+                                  .Include(p => p.SUPPLIER)
+                                  .FirstOrDefault(p => p.ID == ID);
+
+                if (contract == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var partList = db1.P_CONTRACT_PARTS
+                                  .Include(pc => pc.PART)
+                                  .Where(pc => pc.ContractID == contract.ID)
+                                  .ToList();
+
+                ViewBag.PartList = partList;
+
+                return View(contract);
             }
-            else
-                ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
-            return View(contract);
         }
+
         public ActionResult Edit(int? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
-                var contract = db.P_CONTRACTS.Find(ID);
+
+            P_CONTRACTS contract;
+            List<P_CONTRACT_PARTS> partList;
+            SelectList suppliers;
+
+            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            {
+                contract = db1.P_CONTRACTS
+                    .Include(c => c.SUPPLIER)
+                    .Include(c => c.P_CONTRACT_PARTS.Select(p => p.PART))
+                    .FirstOrDefault(c => c.ID == ID);
+
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
-                
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", contract.SupplierID);
-                ViewBag.partList = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contract.ID).ToList();
 
-                db.Entry(contract).Reference(c => c.SUPPLIER).Load();
-                return View(contract);
-            
+                suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", contract.SupplierID);
+
+                partList = contract.P_CONTRACT_PARTS.ToList();
+            }
+
+            ViewBag.Supplier = suppliers;
+            ViewBag.partList = partList;
+
+            return View(contract);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(P_CONTRACTS contract)
         {
             if (ModelState.IsValid)
             {
-               /* using (DBTHSNEntities db = new DBTHSNEntities())
-                {*/
-                P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(contract.ID);
-                if (contractToUpdate != null)
+                using (DBTHSNEntities db1 = new DBTHSNEntities())
                 {
-                    contractToUpdate.ContractNo = contract.ContractNo;
-                    contractToUpdate.SupplierID = contract.SupplierID;
-                    contractToUpdate.IssuedDate = contract.IssuedDate;
-                    contractToUpdate.DueDate = contract.DueDate;
-                    contractToUpdate.Currency = contract.Currency;
-                    contractToUpdate.Incoterms = contract.Incoterms;
-                    contractToUpdate.PaymentTerms = contract.PaymentTerms;
-                    contractToUpdate.IsDeleted = false;
-
-                    if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo, IssuedDate, SupplierID, Price, Currency, Amount, Incoterms, PaymentTerms, DueDate, IDN" }))
+                    P_CONTRACTS contractToUpdate = db1.P_CONTRACTS.Find(contract.ID);
+                    if (contractToUpdate != null)
                     {
-                        try
+                        contractToUpdate.ContractNo = contract.ContractNo;
+                        contractToUpdate.SupplierID = contract.SupplierID;
+                        contractToUpdate.IssuedDate = contract.IssuedDate;
+                        contractToUpdate.DueDate = contract.DueDate;
+                        contractToUpdate.Currency = contract.Currency;
+                        contractToUpdate.Incoterms = contract.Incoterms;
+                        contractToUpdate.PaymentTerms = contract.PaymentTerms;
+                        contractToUpdate.IDN = contract.IDN;      
+                        contractToUpdate.IsDeleted = false;
+
+                        if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo", "IssuedDate", "SupplierID", "Price", "Currency", "Amount", "Incoterms", "PaymentTerms", "DueDate", "IDN" }))
                         {
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            try
+                            {
+                                db1.SaveChanges();
+                                return RedirectToAction("Index");
+                            }
+                            catch (RetryLimitExceededException)
+                            {
+                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            }
                         }
                     }
+                    return View(contractToUpdate);
                 }
-                return View(contractToUpdate);
-                
             }
-            return View();
+            return View(contract);
         }
+
+
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)
@@ -342,16 +378,21 @@ namespace tahsinERP.Controllers
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contractPart = db.P_CONTRACT_PARTS.Find(ID);
+                var contractPart = db.P_CONTRACT_PARTS
+                                    .Include(p => p.P_CONTRACTS)
+                                    .Include(p => p.PART)
+                                    .FirstOrDefault(p => p.ID == ID);
                 if (contractPart == null)
                 {
                     return HttpNotFound();
                 }
-                var allParts = db.PARTS.Select(p => new SelectListItem
-                {
-                    Value = p.ID.ToString(),
-                    Text = p.PNo
-                }).ToList();
+                var allParts = db.PARTS
+                                .Include(p => p.P_CONTRACT_PARTS)
+                                .Select(p => new SelectListItem
+                                {
+                                    Value = p.ID.ToString(),
+                                    Text = p.PNo
+                                }).ToList();
 
                 ViewBag.PartList = allParts;
 
@@ -406,8 +447,8 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
                 var contract = db.P_CONTRACTS.Find(Id);
                 if (contract == null)
                 {
@@ -415,10 +456,12 @@ namespace tahsinERP.Controllers
                 }
                 else
                     ViewBag.partList = db.P_CONTRACT_PARTS
+                        .Include(pc => pc.PART)
                         .Where(pc => pc.ContractID == contract.ID).ToList();
 
                 db.Entry(contract).Reference(i => i.SUPPLIER).Load();
                 return View(contract);
+            }
         }
         
 
@@ -437,11 +480,11 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
-                            var contractParts = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
+                            /*var contractParts = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
                             foreach (var contractPart in contractParts)
                             {
                                 db.P_CONTRACT_PARTS.Remove(contractPart);
-                            }
+                            }*/
                             db.SaveChanges();
                             return RedirectToAction("Index");
                         }

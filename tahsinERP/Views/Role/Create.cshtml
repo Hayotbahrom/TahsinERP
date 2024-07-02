@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Roles"))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     using (Html.BeginForm("Create", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {

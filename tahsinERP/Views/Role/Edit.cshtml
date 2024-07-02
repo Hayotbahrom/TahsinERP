@@ -3,7 +3,7 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Roles"))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     <div class="app-content content">
         <div class="content-overlay"></div>

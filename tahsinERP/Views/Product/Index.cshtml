@@ -3,10 +3,10 @@
 @{
     ViewBag.Title = "Product Index";
 }
-@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "Product"))
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "Product"))
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
     {
         changePermit = true;
     }

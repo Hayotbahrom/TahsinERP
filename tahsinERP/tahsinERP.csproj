@@ -278,6 +278,7 @@
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
+    <Compile Include="Controllers\FTransportTypeController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
@@ -297,7 +298,11 @@
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WaybillController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
+    <Compile Include="Models\BLANKING_NORMS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -380,7 +385,40 @@
     <Compile Include="Models\PARTPLAN.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PART_STOCKS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WASTE_WRHS_EXPENSES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WASTE_WRHS_EXPENSE_WASTES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WASTE_WRHS_INCOMES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WASTE_WRHS_INCOME_WASTES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PART_WRHS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WRHS_EXPENSES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WRHS_EXPENSE_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WRHS_EXPENSE_PARTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WRHS_INCOMES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WRHS_INCOME_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_WRHS_INCOME_PARTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PERMISSION.cs">
@@ -398,6 +436,9 @@
     <Compile Include="Models\PRODUCTIMAGE.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PRODUCTIONPROCESS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PRODUCTPACK.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -405,6 +446,12 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PROD_SHOPS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PROD_STOCKS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PROD_WRHS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_CONTRACTS.cs">
@@ -440,22 +487,7 @@
     <Compile Include="Models\P_PACKINGLIST_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\P_WRHS_EXPENSES.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\P_WRHS_EXPENSE_DOCS.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\P_WRHS_EXPENSE_PARTS.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\P_WRHS_INCOMES.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\P_WRHS_INCOME_DOCS.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\P_WRHS_INCOME_PARTS.cs">
+    <Compile Include="Models\P_PROFORMA_INVOICES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ROLE.cs">
@@ -464,7 +496,13 @@
     <Compile Include="Models\SAMPLE_FILES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SLITTING_NORMS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SPL.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\STAMPING_NORMS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SUPPLIER.cs">
@@ -494,14 +532,22 @@
     <Compile Include="Models\USER_LICENSES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\WASTE.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WASTE_STOCKS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\BOMViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
+    <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
+    <Compile Include="ViewModels\WhrsIncomeViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
@@ -2150,6 +2196,9 @@
     <Content Include="assets\css\reset.min.css" />
     <Content Include="assets\css\style-rtl.css" />
     <Content Include="assets\css\style.css" />
+    <Content Include="assets\js\jquery.min.js" />
+    <Content Include="assets\js\repeater.min.js" />
+    <Content Include="assets\js\jquery.repeater.min.js" />
     <Content Include="assets\js\scripts.js" />
     <Content Include="Content\404.css" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -2283,7 +2332,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -2322,7 +2370,6 @@
     <Content Include="Views\PContract\Edit.cshtml" />
     <Content Include="Views\PContract\Delete.cshtml" />
     <Content Include="Views\PContract\UploadWithExcel.cshtml" />
-    <Content Include="Views\PContract\EditPart.cshtml" />
     <Content Include="Views\Supplier\UploadWithExcel.cshtml" />
     <Content Include="Views\Part\Index.cshtml" />
     <Content Include="Views\Part\Create.cshtml" />
@@ -2393,9 +2440,23 @@
     <Content Include="Views\PartWRHS\Delete.cshtml" />
     <Content Include="Views\ProductPack\Create.cshtml" />
     <Content Include="Views\ProductPack\Edit.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\ProductPack\Details.cshtml" />
+    <Content Include="Views\ProductPack\Delete.cshtml" />
+    <Content Include="Views\PContract\EditPart.cshtml" />
+    <Content Include="Views\Forwarder\Create.cshtml" />
+    <Content Include="Views\Forwarder\Details.cshtml" />
+    <Content Include="Views\Forwarder\Edit.cshtml" />
+    <Content Include="Views\Forwarder\Delete.cshtml" />
+    <Content Include="Views\FTransportType\Index.cshtml" />
+    <Content Include="Views\FTransportType\Create.cshtml" />
+    <Content Include="Views\FTransportType\Details.cshtml" />
+    <Content Include="Views\FTransportType\Edit.cshtml" />
+    <Content Include="Views\FTransportType\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Waybill\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

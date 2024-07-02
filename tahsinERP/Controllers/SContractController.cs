@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
     public class SContractController : Controller
     {
         // GET: SContract | Index
-        public ActionResult Index(string type)
+        public ActionResult Index()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                List<S_CONTRACTS> list = db.S_CONTRACTS.Where(sc => sc.IsDeleted == false).ToList();
-                ViewBag.Type = type;
+                List<S_CONTRACTS> list = db.S_CONTRACTS
+                                           .Include(sc => sc.CUSTOMER)
+                                           .Where(sc => sc.IsDeleted == false)
+                                           .ToList();
+
                 return View(list);
             }
         }
@@ -28,34 +33,41 @@ namespace tahsinERP.Controllers
         // Create
         public ActionResult Create()
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Customer = new SelectList(db.CUSTOMERS.ToList(), "ID", "Name");
-                return View();
+                S_CONTRACTS contract = new S_CONTRACTS();
+                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
+                return View(contract);
             }
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "ID,ContractNo,IssuedDate,CompanyID,CustomerID,Currency,Amount,Incoterms,PaymentTerms,DueDate,IsDeleted")] S_CONTRACTS contract)
+        public ActionResult Create([Bind(Include = "ID,ContractNo,IssuedDate,CompanyID,CustomerID,Currency,Amount,Incoterms,PaymentTerms,DueDate,IsDeleted")] S_CONTRACTS contract, int customerId)
         {
-            try
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                using (DBTHSNEntities db = new DBTHSNEntities())
+                try
                 {
                     if (ModelState.IsValid)
                     {
+                        var companyId = ConfigurationManager.AppSettings["companyID"];
+                        contract.CompanyID = int.Parse(companyId);
+                        contract.CustomerID = customerId;
+                        contract.IsDeleted = false;
+
                         db.S_CONTRACTS.Add(contract);
                         db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(ex.Message, ex);
-            }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(ex.Message, ex);
+                }
 
-            return View();
+                ViewBag.Customer = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
+                return View(contract);
+            }
         }
         // __________
 
@@ -63,7 +75,7 @@ namespace tahsinERP.Controllers
 
         // Details
         [HttpGet]
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -72,21 +84,31 @@ namespace tahsinERP.Controllers
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contract = db.S_CONTRACTS.Find(id);
+                var contract = db.S_CONTRACTS
+                                 .Include(c => c.CUSTOMER)
+                                 .FirstOrDefault(p => p.ID == id);
+
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
 
-                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS.Where(sc => sc.ContractID == contract.ID).ToList();
+                var productList = db.S_CONTRACT_PRODUCTS
+                                    .Include(pl => pl.PRODUCT)
+                                    .Where(pl => pl.ContractID == contract.ID)
+                                    .ToList();
+
+                ViewBag.ProductList = productList;
                 return View(contract);
             }
         }
         // __________
 
 
+
         // Main Edit
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -141,7 +163,8 @@ namespace tahsinERP.Controllers
 
 
         // Edit Product
-        public ActionResult EditProduct(int id)
+        [HttpGet]
+        public ActionResult EditProduct(int? id)
         {
             if (id == null)
             {
@@ -196,7 +219,8 @@ namespace tahsinERP.Controllers
 
 
         // Delete Main
-        public ActionResult Delete(int id)
+        [HttpGet]
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -217,50 +241,52 @@ namespace tahsinERP.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         public ActionResult Delete(int id, FormCollection gfs)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid || id == null)
             {
-                using (DBTHSNEntities db = new DBTHSNEntities())
-                {
-                    S_CONTRACTS contractToDelete = db.S_CONTRACTS.Find(id);
-                    if (contractToDelete != null)
-                    {
-                        contractToDelete.IsDeleted = true;
-
-                        try
-                        {
-                            db.Entry(contractToDelete).State = EntityState.Modified;
-                            var contractProducts = db.S_CONTRACT_PRODUCTS.Where(sp => sp.ContractID == contractToDelete.ID).ToList();
-
-                            foreach (var contractProduct in contractProducts)
-                            {
-                                db.S_CONTRACT_PRODUCTS.Remove(contractProduct);
-                            }
-
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        catch (Exception ex)
-                        {
-                            ModelState.AddModelError("", "O'zgarishlarni saqlab bo'madi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
-                    }
-                }
+                return View();
             }
 
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                S_CONTRACTS contractToDelete = db.S_CONTRACTS.Find(id);
+                if (contractToDelete != null)
+                {
+                    contractToDelete.IsDeleted = true;
+
+                    try
+                    {
+                        db.Entry(contractToDelete).State = EntityState.Modified;
+                        var contractProducts = db.S_CONTRACT_PRODUCTS.Where(sp => sp.ContractID == contractToDelete.ID).ToList();
+
+                        foreach (var contractProduct in contractProducts)
+                        {
+                            db.S_CONTRACT_PRODUCTS.Remove(contractProduct);
+                        }
+
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "O'zgarishlarni saqlab bo'madi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
+                }
+            }
+            
             return View();
         }
-        // __________
 
 
 
         // Delete Contract-Product
+        [HttpDelete]
         public ActionResult DeleteProduct(int id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

@@ -1,0 +1,98 @@
+﻿@model tahsinERP.Models.PRODUCTPACK
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/ProductPack/Index">Mahsulotlarni qadoq malumotlari</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Qadoq ma'lumoti
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row my-2 py-50">
+                                            <div class="col-sm-6 col-12 order-2 order-sm-1">
+                                                <span><b>Product Name</b>: @Html.DisplayFor(model => model.PRODUCT.Name, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Securement</b>: @Html.DisplayFor(model => model.Securement, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Dunnage</b>: @Html.DisplayFor(model => model.Dunnage, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>PrPackMaterial</b>: @Html.DisplayFor(model => model.PrPackMaterial, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>PrLength</b>: @Html.DisplayFor(model => model.PrLength, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>PrWidth</b>: @Html.DisplayFor(model => model.PrWidth, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>PrHeight</b>: @Html.DisplayFor(model => model.PrHeight, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>PrWeight</b>: @Html.DisplayFor(model => model.PrWeight, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>PrPackQty</b>: @Html.DisplayFor(model => model.PrPackQty, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>ScPackMaterial</b>: @Html.DisplayFor(model => model.ScPackMaterial, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>ScLength</b>: @Html.DisplayFor(model => model.ScLength, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>ScWidth</b>: @Html.DisplayFor(model => model.ScWidth, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>ScHeight</b>: @Html.DisplayFor(model => model.ScHeight, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>ScWeight</b>: @Html.DisplayFor(model => model.ScWeight, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>ScPackQty</b>: @Html.DisplayFor(model => model.ScPackQty, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Pallet Type</b>: @Html.DisplayFor(model => model.PalletType, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Pallet Length</b>: @Html.DisplayFor(model => model.PltLength, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Pallet Width</b>: @Html.DisplayFor(model => model.PltWidth, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Pallet Height</b>: @Html.DisplayFor(model => model.PltHeight, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Pallet Weight</b>: @Html.DisplayFor(model => model.PltWeight, new { @class = "form-control" })</span>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

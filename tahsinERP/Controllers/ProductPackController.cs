@@ -12,11 +12,11 @@ namespace tahsinERP.Controllers
         // GET: ProductPack
         public ActionResult Index()
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var productpack = db.PRODUCTPACKS
                     .Where(x => x.IsDeleted == false)
-                    .Include(p =>p.PRODUCT)
+                    .Include(p => p.PRODUCT)
                     .ToList();
                 return View(productpack);
             }
@@ -79,7 +79,7 @@ namespace tahsinERP.Controllers
                     }
 
                     var products = db.PRODUCTS.ToList();
-                    ViewBag.ProductList = new SelectList(products, "ID", "Name");
+                    ViewBag.ProductList = new SelectList(products, "ID", "Name", productPack.ProdID);
 
                     return View(productPack);
                 }
@@ -91,10 +91,8 @@ namespace tahsinERP.Controllers
             }
         }
 
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,ProdID,PrPackMaterial,PrPackQty,Securement,Dunnage,PrWeight,PrLength,PrWidth,PrHeight,ScPackMaterial,ScWeight,ScLength,ScWidth,ScHeight,ScPackQty,PalletType,PltLength,PltWidth,PltHeight,PltWeight,RegDate,IsActive,IsDeleted")] PRODUCTPACK productPack)
+        public ActionResult Edit([Bind(Include = "ID,ProdID,PrPackMaterial,PrPackQty,Securement,Dunnage,PrWeight,PrLength,PrWidth,PrHeight,ScPackMaterial,ScWeight,ScLength,ScWidth,ScHeight,ScPackQty,PalletType,PltLength,PltWidth,PltHeight,PltWeight,RegDate,IsActive,IsDeleted")] PRODUCTPACK productPack, int productId)
         {
             try
             {
@@ -102,12 +100,12 @@ namespace tahsinERP.Controllers
                 {
                     using (DBTHSNEntities db = new DBTHSNEntities())
                     {
-                        // ProdID orqali Product ma'lumotlarini olib, productPack obyektiga qo'shib qo'yish
-                        productPack.PRODUCT = db.PRODUCTS.FirstOrDefault(p => p.ID == productPack.ProdID);
-
                         productPack.IsDeleted = false;
                         productPack.RegDate = DateTime.Now;
+                        productPack.ProdID = productId;
+
                         db.Entry(productPack).State = EntityState.Modified;
+                        db.Entry(productPack).Property(p => p.ProdID).IsModified = true; // ProdID ni modified deb belgilash
                         db.SaveChanges();
                     }
                     return RedirectToAction("Index");
@@ -116,7 +114,7 @@ namespace tahsinERP.Controllers
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
                     var products = db.PRODUCTS.ToList();
-                    ViewBag.ProductList = new SelectList(products, "ID", "Name");
+                    ViewBag.ProductList = new SelectList(products, "ID", "Name", productPack.ProdID);
                 }
                 return View(productPack);
             }
@@ -126,6 +124,82 @@ namespace tahsinERP.Controllers
                 return View("Error");
             }
         }
+
+        public ActionResult Details(int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                try
+                {
+                    var productPack = db.PRODUCTPACKS.Include(pr => pr.PRODUCT).FirstOrDefault(p => p.ID == id);
+                    if (productPack == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(productPack );
+                }
+                catch
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Malumotni olishda hatolik yuz berdi!");
+
+                }
+
+            }
+            return View();
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                try
+                {
+                    var productPack = db.PRODUCTPACKS.Include(pr => pr.PRODUCT).FirstOrDefault(p => p.ID == id);
+                    if (productPack == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(productPack);
+                }
+                catch
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Malumotni olishda hatolik yuz berdi!");
+
+                }
+
+            }
+            return View();
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                PRODUCTPACK prodPack = db.PRODUCTPACKS.Find(id);
+                if (prodPack != null)
+                {
+                    prodPack.IsDeleted = true;
+                    db.Entry(prodPack).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "O'zgarishni saqlashda hatolik yuz berdi!");
+            }
+        }
+
+
 
 
     }

@@ -5,7 +5,7 @@
 }
 
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "ProductPack"))
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     using (Html.BeginForm("Create", "ProductPack", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -158,8 +158,8 @@
                                                         </div>
                                                     </fieldset>
                                                 </div>
-                                                    <br />
-                                                </div>
+                                                <br />
+                                            </div>
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
                                                     <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">

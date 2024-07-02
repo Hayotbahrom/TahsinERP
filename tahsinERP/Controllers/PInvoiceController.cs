@@ -21,7 +21,7 @@ namespace tahsinERP.Controllers
     {
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
-
+        private DBTHSNEntities db = new DBTHSNEntities();
         // GET: PInvoice
         public ActionResult Index(string type, int? supplierID)
         {
@@ -148,7 +148,13 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
                 else
-                    ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
+                    ViewBag.partList = db.P_INVOICE_PARTS
+                        .Include(pc => pc.PART)
+                        .Where(pc => pc.InvoiceID == invoice.ID).ToList();
+
+                db.Entry(invoice).Reference(i => i.P_ORDERS).Load();
+                db.Entry(invoice).Reference(i => i.SUPPLIER).Load();
+
                 return View(invoice);
             }
         }
@@ -210,7 +216,7 @@ namespace tahsinERP.Controllers
                 return View(invoicePartToDelete);
             }
         }
-        public ActionResult Edit(int? ID)
+        /*public ActionResult Edit(int? ID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -230,7 +236,34 @@ namespace tahsinERP.Controllers
 
                 return View(invoice);
             }
+        }*/
+        public ActionResult Edit(int? ID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                if (ID == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                // Eager loading P_INVOICE_PARTS and their associated PARTs
+                var invoice = db.P_INVOICES
+                                .Include(i => i.P_INVOICE_PARTS.Select(pc => pc.PART))
+                                .SingleOrDefault(i => i.ID == ID);
+
+                if (invoice == null)
+                {
+                    return HttpNotFound();
+                }
+
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
+                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo", invoice.OrderID);
+                ViewBag.partList = invoice.P_INVOICE_PARTS.ToList();
+
+                return View(invoice);
+            }
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -296,7 +329,8 @@ namespace tahsinERP.Controllers
                 ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
             }
 
-            return View(invoice);
+                return View(invoice);
+            }
         }
 
         public ActionResult EditPart(int? ID)

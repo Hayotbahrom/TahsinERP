@@ -18,59 +18,62 @@ namespace tahsinERP.Controllers
 {
     public class POrderController : Controller
     {
-        private DBTHSNEntities db2 = new DBTHSNEntities();
+        
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, orderNo, partNo = "";
 
         // GET: POrder
         public ActionResult Index(string type, int? supplierID)
         {
-            IQueryable<P_ORDERS> ordersQuery = db2.P_ORDERS
-                .Where(po => po.IsDeleted == false);
-
-            if (!string.IsNullOrEmpty(type))
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.SourceList = new SelectList(sources, type);
+                IQueryable<P_ORDERS> ordersQuery = db.P_ORDERS
+                    .Where(po => po.IsDeleted == false);
 
-                // Fetch SUPPLIER IDs matching the type
-                List<int> supplierIds = db2.SUPPLIERS
-                    .Where(s => s.Type == type && s.IsDeleted == false)
-                    .Select(s => s.ID)
-                    .ToList();
+                if (!string.IsNullOrEmpty(type))
+                {
+                    ViewBag.SourceList = new SelectList(sources, type);
 
-                // Filter orders by matching SUPPLIER IDs
-                ordersQuery = ordersQuery
-                    .Where(po => supplierIds.Contains((int)po.SupplierID));
+                    // Fetch SUPPLIER IDs matching the type
+                    List<int> supplierIds = db.SUPPLIERS
+                        .Where(s => s.Type == type && s.IsDeleted == false)
+                        .Select(s => s.ID)
+                        .ToList();
+
+                    // Filter orders by matching SUPPLIER IDs
+                    ordersQuery = ordersQuery
+                        .Where(po => supplierIds.Contains((int)po.SupplierID));
+                }
+                else
+                {
+                    ViewBag.SourceList = new SelectList(sources);
+                }
+
+                if (supplierID.HasValue)
+                {
+                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS
+                        .Where(s => s.ID == supplierID && s.IsDeleted == false)
+                        .ToList(), "ID", "Name", supplierID);
+
+                    // Filter orders by supplierID
+                    ordersQuery = ordersQuery
+                        .Where(po => po.SupplierID == supplierID);
+                }
+                else
+                {
+                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS
+                        .Where(s => s.IsDeleted == false)
+                        .ToList(), "ID", "Name");
+                }
+
+                // Ensure Include is applied after filtering
+                ordersQuery = ordersQuery.Include(po => po.P_CONTRACTS);
+                ViewBag.Type = type;
+                // Materialize the query into a list
+                List<P_ORDERS> orders = ordersQuery.ToList();
+
+                return View(orders);
             }
-            else
-            {
-                ViewBag.SourceList = new SelectList(sources);
-            }
-
-            if (supplierID.HasValue)
-            {
-                ViewBag.SupplierList = new SelectList(db2.SUPPLIERS
-                    .Where(s => s.ID == supplierID && s.IsDeleted == false)
-                    .ToList(), "ID", "Name", supplierID);
-
-                // Filter orders by supplierID
-                ordersQuery = ordersQuery
-                    .Where(po => po.SupplierID == supplierID);
-            }
-            else
-            {
-                ViewBag.SupplierList = new SelectList(db2.SUPPLIERS
-                    .Where(s => s.IsDeleted == false)
-                    .ToList(), "ID", "Name");
-            }
-
-            // Ensure Include is applied after filtering
-            ordersQuery = ordersQuery.Include(po => po.P_CONTRACTS);
-            ViewBag.Type = type;
-            // Materialize the query into a list
-            List<P_ORDERS> orders = ordersQuery.ToList();
-
-            return View(orders);
         }
 
 
@@ -78,11 +81,11 @@ namespace tahsinERP.Controllers
 
         public ActionResult Create()
         {
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
-                ViewBag.Supplier = new SelectList(db2.SUPPLIERS, "ID", "Name");
-                ViewBag.PContract = new SelectList(db2.P_CONTRACTS, "ID", "ContractNo");
-            //}
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo");
+            }
 
             return View();
         }
@@ -90,15 +93,15 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "OrderNo, IssuedDate, CompanyID, SupplierID, ContractID, Amount, Currency, Description")] P_ORDERS order)
         {
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
                 try
                 {
                     if (ModelState.IsValid)
                     {
                         order.IsDeleted = false;
-                        db2.P_ORDERS.Add(order);
-                        db2.SaveChanges();
+                        db.P_ORDERS.Add(order);
+                        db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
@@ -107,10 +110,10 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError(ex.Message, ex);
                 }
 
-                ViewBag.Supplier = new SelectList(db2.SUPPLIERS, "ID", "Name", order.SupplierID);
-                ViewBag.PContract = new SelectList(db2.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
                 return View(order);
-            //}
+            }
         }
         public ActionResult Details(int? id)
         {
@@ -260,26 +263,26 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
-                var order = db2.P_ORDERS.Find(ID);
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var order = db.P_ORDERS.Find(ID);
                 if (order == null)
                 {
                     return HttpNotFound();
                 }
 
                 // Eager loading related entities
-                db2.Entry(order).Reference(o => o.SUPPLIER).Load();
-                db2.Entry(order).Reference(o => o.P_CONTRACTS).Load();
-                db2.Entry(order).Collection(o => o.P_ORDER_PARTS).Query().Where(pc => pc.OrderID == order.ID).Load();
+                db.Entry(order).Reference(o => o.SUPPLIER).Load();
+                db.Entry(order).Reference(o => o.P_CONTRACTS).Load();
+                db.Entry(order).Collection(o => o.P_ORDER_PARTS).Query().Where(pc => pc.OrderID == order.ID).Load();
 
                 // Populate ViewBag for dropdowns or other data needed in the view
-                ViewBag.Supplier = new SelectList(db2.SUPPLIERS, "ID", "Name", order.SupplierID);
-                ViewBag.PContract = new SelectList(db2.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
-                ViewBag.PartList = db2.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", order.SupplierID);
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo", order.ContractID);
+                ViewBag.PartList = db.P_ORDER_PARTS.Include(pc => pc.PART).Where(pc => pc.OrderID == order.ID).ToList();
 
                 return View(order);
-            
+            }
         }
 
         [HttpPost]
@@ -329,23 +332,24 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            /*using (DBTHSNEntities db = new DBTHSNEntities())
-            {*/
-                var orderPart = db2.P_ORDER_PARTS.Find(ID);
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var orderPart = db.P_ORDER_PARTS.Find(ID);
                 if (orderPart == null)
                 {
                     return HttpNotFound();
                 }
-                var allParts = db2.PARTS.Select(p => new SelectListItem
+                var allParts = db.PARTS.Select(p => new SelectListItem
                 {
                     Value = p.ID.ToString(),
                     Text = p.PNo
                 }).ToList();
 
+                db.Entry(orderPart).Reference(o => o.P_ORDERS).Load();
                 ViewBag.PartList = allParts;
 
                 return View(orderPart);
-            
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

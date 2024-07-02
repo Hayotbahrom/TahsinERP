@@ -185,7 +185,7 @@ namespace tahsinERP.Controllers
             {
                 // Log the error (uncomment the following line to write to a log file)
                 // Log.Error(ex);
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error occurred while processing your request.");
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Malumotni olishda hatolik yuz berdi!");
             }
         }
     }

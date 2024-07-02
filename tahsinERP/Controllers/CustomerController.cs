@@ -16,8 +16,7 @@ namespace tahsinERP.Controllers
 {
     public class CustomerController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
-        private string[] sources = ConfigurationManager.AppSettings["suplierTypes"].Split(',');
+        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName = "";
         // GET: Customer
         public ActionResult Index()
@@ -28,7 +27,6 @@ namespace tahsinERP.Controllers
                 return View(customers);
             }
         }
-
         public ActionResult Details(int? Id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -153,10 +151,13 @@ namespace tahsinERP.Controllers
 
         public ActionResult Download()
         {
-            SAMPLE_FILES taminotchilar = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("taminotchilar.xlsx") == 0).FirstOrDefault();
-            if (taminotchilar != null)
-                return File(taminotchilar.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            return View();
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            { 
+                SAMPLE_FILES taminotchilar = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("taminotchilar.xlsx") == 0).FirstOrDefault();
+                if (taminotchilar != null)
+                    return File(taminotchilar.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return View();
+            }
         }
         public ActionResult UploadWithExcel()
         {
@@ -201,14 +202,16 @@ namespace tahsinERP.Controllers
                         ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                         ViewBag.IsFileUploaded = true;
 
-
-                        foreach (DataRow row in dataTable.Rows)
+                        using(DBTHSNEntities db = new DBTHSNEntities())
                         {
-                            supplierName = row["Name"].ToString();
+                            foreach (DataRow row in dataTable.Rows)
+                            {
+                                supplierName = row["Name"].ToString();
 
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                            if (supplier != null)
-                                ViewBag.ExistingRecordsCount = 1;
+                                SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                if (supplier != null)
+                                    ViewBag.ExistingRecordsCount = 1;
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -250,28 +253,31 @@ namespace tahsinERP.Controllers
                 // Save to the database
                 try
                 {
-                    foreach (DataRow row in tableModel.Rows)
+                    using(DBTHSNEntities db = new DBTHSNEntities())
                     {
-                        supplierName = row["Name"].ToString();
-                        SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-
-                        if (supplier == null)
+                        foreach (DataRow row in tableModel.Rows)
                         {
-                            SUPPLIER new_supplier = new SUPPLIER();
-                            new_supplier.Name = supplierName;
-                            new_supplier.Address = row["Address"].ToString();
-                            new_supplier.Country = row["Country"].ToString();
-                            new_supplier.City = row["City"].ToString();
-                            new_supplier.Type = row["Type"].ToString();
-                            new_supplier.DUNS = row["DUNS"].ToString();
-                            new_supplier.Email = row["Email"].ToString();
-                            new_supplier.Telephone = row["Telephone"].ToString();
-                            new_supplier.ContactPersonName = row["ContactPersonName"].ToString();
-                            new_supplier.DirectorName = row["DirectorName"].ToString();
-                            new_supplier.IsDeleted = false;
+                            supplierName = row["Name"].ToString();
+                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
 
-                            db.SUPPLIERS.Add(new_supplier);
-                            db.SaveChanges();
+                            if (supplier == null)
+                            {
+                                SUPPLIER new_supplier = new SUPPLIER();
+                                new_supplier.Name = supplierName;
+                                new_supplier.Address = row["Address"].ToString();
+                                new_supplier.Country = row["Country"].ToString();
+                                new_supplier.City = row["City"].ToString();
+                                new_supplier.Type = row["Type"].ToString();
+                                new_supplier.DUNS = row["DUNS"].ToString();
+                                new_supplier.Email = row["Email"].ToString();
+                                new_supplier.Telephone = row["Telephone"].ToString();
+                                new_supplier.ContactPersonName = row["ContactPersonName"].ToString();
+                                new_supplier.DirectorName = row["DirectorName"].ToString();
+                                new_supplier.IsDeleted = false;
+
+                                db.SUPPLIERS.Add(new_supplier);
+                                db.SaveChanges();
+                            }
                         }
                     }
                 }
