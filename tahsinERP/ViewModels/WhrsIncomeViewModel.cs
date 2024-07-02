@@ -9,20 +9,31 @@ namespace tahsinERP.ViewModels
     {
         public int ID { get; set; }
         public string DocNo { get; set; }
+
         [Required]
         public int WHID { get; set; }
+
         [Required]
         public int InvoiceID { get; set; }
+
         [Required]
         public int WaybillID { get; set; }
+
         public int Amount { get; set; }
+
         public string Currency { get; set; }
+
         public int TotalPrice { get; set; }
+
         public bool IsDeleted { get; set; }
+
         [DataType(DataType.Text)]
         public string Description { get; set; }
+
         public DateTime IssueDateTime { get; set; }
+
         public int SenderWHID { get; set; }
+
         public bool RecieveStatus { get; set; }
 
 

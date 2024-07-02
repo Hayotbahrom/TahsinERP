@@ -69,7 +69,9 @@ namespace tahsinERP.Controllers
                 ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
 
                 ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                ViewBag.InComeParts = new SelectList(db.PART_WRHS_INCOME_PARTS.ToList(), "ID", "IncomeID");
+                var whrsIncomeParts = db.PARTS.Where(c => c.IsDeleted == false).ToList();
+                
+                ViewBag.InComeParts = new SelectList(whrsIncomeParts, "ID", "PNo");
             }
 
             return View();

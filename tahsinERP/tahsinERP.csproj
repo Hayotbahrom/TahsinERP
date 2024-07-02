@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <_MigrateToProjectGuid>f9d988ea-eada-4c57-b377-a4855185925d</_MigrateToProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -547,6 +548,7 @@
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
+    <Compile Include="ViewModels\SContractViewModel.cs" />
     <Compile Include="ViewModels\WhrsIncomeViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
@@ -2197,7 +2199,6 @@
     <Content Include="assets\css\style-rtl.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\js\jquery.min.js" />
-    <Content Include="assets\js\repeater.min.js" />
     <Content Include="assets\js\jquery.repeater.min.js" />
     <Content Include="assets\js\scripts.js" />
     <Content Include="Content\404.css" />
