@@ -279,6 +279,7 @@
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
+    <Compile Include="Controllers\FTransportTypeController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
@@ -298,6 +299,7 @@
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WaybillController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
     <Compile Include="Models\BLANKING_NORMS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
@@ -546,6 +548,7 @@
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
+    <Compile Include="ViewModels\SContractViewModel.cs" />
     <Compile Include="ViewModels\WhrsIncomeViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
@@ -2196,7 +2199,6 @@
     <Content Include="assets\css\style-rtl.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\js\jquery.min.js" />
-    <Content Include="assets\js\repeater.min.js" />
     <Content Include="assets\js\jquery.repeater.min.js" />
     <Content Include="assets\js\scripts.js" />
     <Content Include="Content\404.css" />
@@ -2447,9 +2449,15 @@
     <Content Include="Views\Forwarder\Details.cshtml" />
     <Content Include="Views\Forwarder\Edit.cshtml" />
     <Content Include="Views\Forwarder\Delete.cshtml" />
+    <Content Include="Views\FTransportType\Index.cshtml" />
+    <Content Include="Views\FTransportType\Create.cshtml" />
+    <Content Include="Views\FTransportType\Details.cshtml" />
+    <Content Include="Views\FTransportType\Edit.cshtml" />
+    <Content Include="Views\FTransportType\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Waybill\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
