@@ -546,7 +546,6 @@
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
     <Compile Include="ViewModels\BOM\ParentViewModel.cs" />
     <Compile Include="ViewModels\BOMCreateViewModel.cs" />
-    <Compile Include="ViewModels\BOMViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
