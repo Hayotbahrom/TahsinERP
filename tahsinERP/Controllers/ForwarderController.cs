@@ -30,7 +30,7 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ForwarderName, Director, ContractPerson, Description, IsDeleted")] FORWARDER forwarder)
+        public ActionResult Create( FORWARDER forwarder)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
