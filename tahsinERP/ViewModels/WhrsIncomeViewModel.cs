@@ -50,12 +50,12 @@ namespace tahsinERP.ViewModels
     // Part ViewModel
     public class WhrsIncomePart
     {
-        public int Part_IncomeID { get; set; }
-        public int Part_PartID { get; set; }
-        public string Part_Unit { get; set; }
-        public int Part_Amount { get; set; }
-        public int Part_PiecePrice { get; set; }
-        public int Part_TotalPrice { get; set; }
-        public string Part_Comment { get; set; }
+        public int IncomeID { get; set; }
+        public int PartID { get; set; }
+        public string Unit { get; set; }
+        public int Amount { get; set; }
+        public int PiecePrice { get; set; }
+        public int TotalPrice { get; set; }
+        public string Comment { get; set; }
     }
 }

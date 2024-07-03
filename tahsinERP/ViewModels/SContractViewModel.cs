@@ -34,16 +34,16 @@ namespace tahsinERP.ViewModels
 
         public bool? IsDeleted { get; set; }
 
-        public List<ContractProductViewModel> ContractProducts { get; set; }
+        public List<SContractProductViewModel> ContractProducts { get; set; }
 
         public SContractViewModel()
         {
-            ContractProducts = new List<ContractProductViewModel>();
+            ContractProducts = new List<SContractProductViewModel>();
         }
     }
 
     // Product ViewModel
-    public class ContractProductViewModel
+    public class SContractProductViewModel
     {
         public int ID { get; set; }
 

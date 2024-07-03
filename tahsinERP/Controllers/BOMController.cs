@@ -1,9 +1,7 @@
-﻿using OfficeOpenXml.Drawing.Chart.ChartEx;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
 using System.Web.UI.WebControls.WebParts;
@@ -207,5 +205,58 @@ namespace tahsinERP.Controllers
                 return Base64String;
             }
         }
+
+        public ActionResult Create()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                // Processni viewBagga olish
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
+
+                // Productni ViewBagga olish
+                var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.ProductList = new SelectList(products, "ID", "PNo"); // Use the correct property name here
+
+                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Part = new SelectList(part, "ID", "PNo");
+
+                return View();
+            }
+        }
+        [HttpPost]
+        public ActionResult Create(BOMCreateViewModel bom, int[] processID)
+        {
+
+            List<string> processes = new List<string>();
+
+            //foreach (var process in bom.PRODUCTIONPROCESS)
+            //{
+            //    processes.Add(process.ProcessName);
+            //}
+            //ViewBag.ProcessList = processes;
+            int count = 0;
+            foreach (var process in processID)
+            {
+                count += 1;
+            }
+
+            ViewBag.processcount = count;
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName",processID);
+
+                // Productni ViewBagga olish
+                var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.ProductList = new SelectList(products, "ID", "PNo"); // Use the correct property name here
+
+                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Part = new SelectList(part, "ID", "PNo");
+            }
+            return View(bom);
+        }
+
     }
 }

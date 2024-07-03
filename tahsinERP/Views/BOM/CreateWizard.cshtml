@@ -1,0 +1,56 @@
+﻿<div class="content-body">
+    <section id="validation">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <h4 class="card-title">Validation Example</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div>
+                                <form action="#" class="wizard-validation">
+
+
+                                    <!-- step 2 -->
+                                    <!-- body content of step 2 end -->
+                                    @for (int i = 0; i < ViewBag.processcount; i++)
+                                    {
+                                        <h6>
+                                            <i class="step-icon"></i>
+                                            <span>ProcessList[i]</span>
+                                        </h6>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="proposalTitle3">
+                                                            Proposal Title
+                                                        </label>
+                                                        <input type="text" class="form-control required" id="proposalTitle3" name="proposalTitle" placeholder="Enter Your Proposel Title">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="jobTitle5">
+                                                            Job Title
+                                                        </label>
+                                                        <input type="text" class="form-control required" id="jobTitle5" name="jobTitle5" placeholder="Enter Your Job Title">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="shortDescription3">Short Description</label>
+                                                        <textarea name="shortDescription" id="shortDescription3" rows="4" class="form-control" placeholder="Please Enter short Description"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    }
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

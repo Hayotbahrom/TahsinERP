@@ -23,14 +23,14 @@ namespace tahsinERP.Models
     
         public int ID { get; set; }
         public string WaybillNo { get; set; }
-        public Nullable<int> ContractID { get; set; }
-        public Nullable<int> TransportTypeID { get; set; }
-        public Nullable<int> InvoiceID { get; set; }
-        public Nullable<int> PackingListID { get; set; }
+        public int ContractID { get; set; }
+        public int TransportTypeID { get; set; }
+        public int InvoiceID { get; set; }
+        public int PackingListID { get; set; }
         public Nullable<double> CBM { get; set; }
         public Nullable<double> GrWeight { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual F_CONTRACTS F_CONTRACTS { get; set; }
         public virtual F_TRANSPORT_TYPES F_TRANSPORT_TYPES { get; set; }
