@@ -368,8 +368,6 @@ namespace tahsinERP.Controllers
             }
             return View(contract);
         }
-
-
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)
