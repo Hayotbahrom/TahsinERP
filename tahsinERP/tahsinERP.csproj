@@ -540,7 +540,9 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\BOMViewModel.cs" />
+    <Compile Include="ViewModels\BOM\ChildViewModel.cs" />
+    <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
+    <Compile Include="ViewModels\BOM\ParentViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
@@ -710,7 +712,7 @@
     <Content Include="app-assets\css\plugins\forms\wizard.min.css" />
     <Content Include="app-assets\css\plugins\tour\tour.css" />
     <Content Include="app-assets\css\plugins\tour\tour.min.css" />
-    <Content Include="app-assets\css\list\style.css" />
+    <Content Include="app-assets\css\list\list-style.css" />
     <Content Include="app-assets\css\themes\dark-layout.css" />
     <Content Include="app-assets\css\themes\dark-layout.min.css" />
     <Content Include="app-assets\css\themes\semi-dark-layout.css" />
@@ -2399,7 +2401,6 @@
     <Content Include="Views\WhIncome\Index.cshtml" />
     <Content Include="Views\BOM\Index.cshtml" />
     <Content Include="Views\BOM\Details.cshtml" />
-    <Content Include="Views\BOM\BOMTree.cshtml" />
     <Content Include="Views\WhIncome\Create.cshtml" />
     <Content Include="Views\PInvoice\Edit.cshtml" />
     <Content Include="Views\PInvoice\EditPart.cshtml" />

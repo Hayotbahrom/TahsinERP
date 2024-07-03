@@ -1,12 +1,11 @@
-﻿@model tahsinERP.Models.PRODUCT
+﻿@model tahsinERP.ViewModels.ParentViewModel
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <head>
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/list/meyer-reset.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/list/style.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/list/list-style.css">
 </head>
 <body>
     <div class="app-content content">
@@ -34,34 +33,85 @@
                 </div>
             </div>
 
-            <div>
-                <ul class="tree">
-
-                    <!-- Root node (Category) -->
-                    <li>
-                        <div class="sticky">@Model.PNo</div>
-                        @foreach (var item in ViewBag.bomList)
-{
-                        <ul>
-                            <li>
-                                <div class="sticky">@item.ChildPNo</div>
-                            </li>
-                            <!-- Second level node -->
-                            @if(!string.IsNullOrEmpty(item.ChildPNo)){
-                            <li>
-                                <ul>
-                                    <li>
-                                        <div class="sticky">@item.ChildPNo</div>
-                                    </li>
-                                </ul>
-                            </li>
-                            }
-                        </ul>
+            <ul class="wtree" id="firstLevel">
+                <li id="firstLevel">
+                    <div>
+                        @if (Model.ParentImageBase64.Any())
+                        {
+                            <img src="@Model.ParentImageBase64" alt="Product Image" style="width: 150px; height: auto;" />
                         }
-                    </li>
+                        <span>@Model.ParentPNo</span>
+                    </div>
 
-                </ul>
-            </div>
+                    <ul id="secondLevel">
+                        @foreach (var child in Model.Children)
+                        {
+                            <li id="secondLevel">
+                                <div>
+                                    @if (child.ChildImageBase64.Any())
+                                    {
+                                        <img class="img-fluid" src="@child.ChildImageBase64" style="height:150px; width:150px; margin-right: 10px;" />
+                                    }
+                                    @if (child.PART != null)
+                                    {
+                                        <span><a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>: @child.Consumption-@child.ConsumptionUnit</span>
+                                    }
+                                </div>
+                                @if (child.Children.Any())
+                                {
+                                    <ul id="thirdLevel">
+                                        @foreach (var grandChild in child.Children)
+                                        {
+                                            <li id="thirdLevel">
+                                                <div>
+                                                    @if (grandChild.ChildImageBase64.Any())
+                                                    {
+                                                        <img class="img-fluid" src="@grandChild.ChildImageBase64" style="height:150px; width:150px; margin-right: 10px;" />
+                                                    }
+                                                    @if (grandChild.PART != null)
+                                                    {
+                                                        <span><a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>: @grandChild.Consumption-@grandChild.ConsumptionUnit</span>
+                                                    }
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var treeItems = document.querySelectorAll('.wtree li div span');
+
+            treeItems.forEach(function (item) {
+                item.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var parentLi = this.closest('li');
+                    var subUl = parentLi.querySelector('ul');
+
+                    if (subUl) {
+                        if (subUl.style.display === 'none' || subUl.style.display === '') {
+                            subUl.style.display = 'block';
+                        } else {
+                            subUl.style.display = 'none';
+                        }
+                    }
+
+                    // Close all other open sub-lists
+                    var allSubUls = document.querySelectorAll('.wtree ul');
+                    allSubUls.forEach(function (otherSubUl) {
+                        if (otherSubUl !== subUl && !otherSubUl.contains(subUl)) {
+                            otherSubUl.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
