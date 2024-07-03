@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.F_WAYBILLS
+﻿@model tahsinERP.ViewModels.WaybillCreateViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -48,40 +48,43 @@
                                                     <h6 class="invoice-to">Waybill raqami</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         @Html.TextBoxFor(model => model.WaybillNo, new { @class = "form-control round", @placeholder = "Waybill raqami" })
-                                                        @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
+                                                        @Html.ValidationMessageFor(model => model.WaybillNo, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Transport turi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.TransportTypeID, ViewBag.TransportType as SelectList, new { @class = "form-control select2" })
+                                                        @Html.DropDownListFor(model => model.TransportTypeID, Model.TransportTypes, "Select Transport Type", new { @class = "form-control select2" })
                                                         @Html.ValidationMessageFor(model => model.TransportTypeID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Shartnoma raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.ContractID, ViewBag.FContract as SelectList, new { @class = "form-control select2" })
+                                                        @Html.DropDownListFor(model => model.ContractID, Model.Contracts, new { @class = "form-control select2" })
                                                         @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Tuzilgan sanasi</h6>
-                                                    <fieldset class="form-group position-relative has-icon-left">
-                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma muddati" })
-                                                        @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
-                                                        <div class="form-control-position">
-                                                            <i class='bx bx-calendar'></i>
-                                                        </div>
+                                                    <h6 class="invoice-to">Invoice</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownListFor(model => model.InvoiceID, Model.Invoices, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Miqdori</h6>
+                                                    <h6 class="invoice-to">PackingList</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @placeholder = "Miqdori" })
-                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.PackingListID, Model.PackingLists, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.PackingListID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
-                                                    <h6 class="invoice-to">Valyuta</h6>
+                                                    <h6 class="invoice-to">CBM</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
-                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.CBM, new { @class = "form-control round", @placeholder = "birlik hajm o`lchovi" })
+                                                        @Html.ValidationMessageFor(model => model.CBM, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Umumiy og`irligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.GrWeight, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
+                                                        @Html.ValidationMessageFor(model => model.GrWeight, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Batafsil ma`lumot</h6>

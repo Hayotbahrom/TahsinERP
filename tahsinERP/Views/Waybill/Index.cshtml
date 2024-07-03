@@ -13,7 +13,7 @@
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
-            <div class="content-header row">
+           <div class="content-header row">
                 <div class="content-header-left col-12 mb-2 mt-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
@@ -93,6 +93,7 @@
                                                         <td><a href="~/Waybill/Details/@item.ID">@item.WaybillNo</a></td>
                                                         <td><a href="~/FContract/Details/@item.ContractID">@item.F_CONTRACTS.ContractNo</a></td>
                                                         <td><a href="~/FTransportType/Details/@item.TransportTypeID">@item.F_TRANSPORT_TYPES.TransportType</a></td>
+                                                        <td><a href="~/PInvoice/Details/@item.InvoiceID">@item.P_INVOICES.InvoiceNo</a></td>
                                                         <td><a href="~/PackingList/Details/@item.PackingListID">@item.P_INVOICE_PACKINGLISTS.PackingListNo</a></td>
                                                         <td>@item.GrWeight</td>
                                                         @if (changePermit)

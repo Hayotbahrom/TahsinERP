@@ -547,6 +547,8 @@
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
+    <Compile Include="ViewModels\TransportTypeViewModel.cs" />
+    <Compile Include="ViewModels\WaybillCreateViewModel.cs" />
     <Compile Include="ViewModels\WhrsIncomeViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
@@ -2455,6 +2457,9 @@
     <Content Include="Views\FTransportType\Delete.cshtml" />
     <Content Include="Views\Waybill\Index.cshtml" />
     <Content Include="Views\Waybill\Create.cshtml" />
+    <Content Include="Views\Waybill\Details.cshtml" />
+    <Content Include="Views\Waybill\Edit.cshtml" />
+    <Content Include="Views\Waybill\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
