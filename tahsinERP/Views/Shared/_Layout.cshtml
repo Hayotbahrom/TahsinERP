@@ -535,7 +535,8 @@
 
 
         @Scripts.Render("~/bundles/jquery") //v3.7.1
-        <script src="~/Scripts/bootstrap.bundle.js"></script> //v5.3.3
+        <script src="~/Scripts/bootstrap.bundle.js"></script>
+        //v5.3.3
 
         @RenderSection("scripts", required: false)
 
@@ -600,8 +601,29 @@
         <script src="~/app-assets/vendors/js/extensions/polyfill.min.js"></script>
 
 
+
+        <script>
+            $(document).ready(function () {
+                $('#nextButton').click(function () {
+                    alert('Button clicked');
+                    $.ajax({
+                        url: '@Url.Action("CreateWizard", "BOM")',
+                        type: 'GET',
+                        success: function (data) {
+                            $('#partialViewContainer').html(data);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error: ' + error);
+                        }
+                    });
+                });
+            });
+        </script>
+
+
         <!-- REPEATER -->
-        <script src="~/assets/js/jquery.min.js"></script> // v3.6.0
+        <script src="~/assets/js/jquery.min.js"></script>
+ // v3.6.0
         <script src="~/assets/js/jquery.repeater.min.js"></script>
         <script>
             // 'j' => (just name)using for last added jQuery(v3.0.6)

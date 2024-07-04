@@ -3,114 +3,63 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<!DOCTYPE html>
-<html class="loading" lang="en" data-textdirection="ltr">
-<!-- BEGIN: Head-->
-
-<head>
-    <link rel="apple-touch-icon" href="~/app-assets/images/ico/apple-icon-120.png">
-    <link rel="shortcut icon" type="image/x-icon" href="~/app-assets/images/ico/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/dark-layout.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/semi-dark-layout.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
-    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
-
-</head>
-
-<body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
-                <div class="content-header-left col-12 mb-2 mt-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                                    <li class="breadcrumb-item">
-                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="~/BOM/Index">BOM</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">
-                                        BOM ga mahsulot qo'shish
-                                    </li>
-                                </ol>
-                            </div>
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="~/BOM/Index">BOM</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    BOM ga mahsulot qo'shish
+                                </li>
+                            </ol>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="content-body">
-                <section id="validation">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <br />
-                                <div class="card-header pb-0">
-                                    <h4 class="card-title">Validation Example</h4>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        @Html.BeginForm("Create", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" })){
+        </div>
+        <div class="content-body">
+            <section id="validation">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <br />
+                            <div class="card-header pb-0">
+                                <h4 class="card-title">Validation Example</h4>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-body">
+                                    @using (Html.BeginForm("Create", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
                                         <div>
                                             <br />
                                             <fieldset class="invoice-address form-group">
-                                                <label>
-                                                    Maxsulotni tanlang:
-                                                </label>
+                                                <label>Maxsulotni tanlang:</label>
                                                 @Html.DropDownList("ProductID", (SelectList)ViewBag.ProductList, "maxsulotlar", new { @class = "form-control" })
                                                 @Html.ValidationMessageFor(model => model.product.ID, "", new { @class = "text-danger" })
-                                                <label>
-                                                    Jarayonlar ketma-ketligini tanlang:
-                                                </label>
+                                                <label>Jarayonlar ketma-ketligini tanlang:</label>
                                                 @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
                                             </fieldset>
-                                            <button type="submit" class="btn btn-outline-success mr-1 mb-1" onclick="@Html.Partial("CreateWizard")" >
-                                                <span class="align-middle ml-25">BOM yaratish</span>
+                                            <button type="submit" class="btn btn-outline-success mr-1 mb-1">
+                                                <span class="align-middle ml-25">Keyingisi</span>
                                             </button>
                                         </div>
-                                        @*@Html.Partial("CreateWizard");*@
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </div>
     </div>
-
-
-
-    <!-- END: Content-->
-    <!-- demo chat-->
-
-
-    <script src="~/app-assets/vendors/js/vendors.min.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
-    <script src="~/app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
-    <script src="~/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
-    <script src="~/app-assets/js/core/app-menu.js"></script>
-    <script src="~/app-assets/js/core/app.js"></script>
-    <script src="~/app-assets/js/scripts/components.js"></script>
-    <script src="~/app-assets/js/scripts/footer.js"></script>
-    <script src="~/app-assets/js/scripts/forms/wizard-steps.js"></script>
-
-</body>
-<!-- END: Body-->
-
-</html>
+</div>
