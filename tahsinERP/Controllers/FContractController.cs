@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -15,29 +16,29 @@ namespace tahsinERP.Controllers
     public class FContractController : Controller
     {
         // GET: FContract
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var list = db.F_CONTRACTS
+                var list = await db.F_CONTRACTS
                     .Include(fc => fc.FORWARDER)
                     .Where(fc => fc.IsDeleted == false)
-                    .ToList();
+                    .ToListAsync();
 
                 return View(list);
             }
         }
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.FContract = new SelectList(db.F_CONTRACTS.Where(fc => fc.IsDeleted == false), "ID", "ContractNo");
+                ViewBag.Forwarder = new SelectList(await db.FORWARDERS.Where(fc => fc.IsDeleted == false).ToListAsync(), "ID", "ForwarderName");
                 return View();
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(F_CONTRACTS contract)
+        public async Task<ActionResult> Create(F_CONTRACTS contract)
         {
             try
             {
@@ -45,8 +46,9 @@ namespace tahsinERP.Controllers
                 {
                     if (ModelState.IsValid)
                     {
+                        contract.IsDeleted = false;
                         db.F_CONTRACTS.Add(contract);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return RedirectToAction("Index"); 
                     }
@@ -58,7 +60,7 @@ namespace tahsinERP.Controllers
             }
             return View(contract);
         }
-        public ActionResult Details(int? ID)
+        public async Task<ActionResult> Details(int? ID)
         {
             if (ID == null)
             {
@@ -67,9 +69,9 @@ namespace tahsinERP.Controllers
 
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                var contract = db1.F_CONTRACTS
+                var contract = await db1.F_CONTRACTS
                                   .Include(p => p.FORWARDER)
-                                  .FirstOrDefault(p => p.ID == ID);
+                                  .FirstOrDefaultAsync(p => p.ID == ID);
 
                 if (contract == null)
                 {
@@ -79,7 +81,7 @@ namespace tahsinERP.Controllers
                 return View(contract);
             }
         }
-        public ActionResult Edit(int? ID)
+        public async Task<ActionResult> Edit(int? ID)
         {
             if (ID == null)
             {
@@ -88,28 +90,28 @@ namespace tahsinERP.Controllers
 
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                var contract = db1.F_CONTRACTS
+                var contract = await db1.F_CONTRACTS
                     .Include(c => c.FORWARDER)
-                    .FirstOrDefault(c => c.ID == ID);
+                    .FirstOrDefaultAsync(c => c.ID == ID);
 
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
-
+                ViewBag.Forwarder = new SelectList( await db1.FORWARDERS.Where(f => f.IsDeleted == false).ToListAsync(), "ID", "ForwarderName");
                 return View(contract);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(F_CONTRACTS contract)
+        public async Task<ActionResult> Edit(F_CONTRACTS contract)
         {
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db1 = new DBTHSNEntities())
                 {
-                    var contractToUpdate = db1.F_CONTRACTS.Find(contract.ID);
+                    var contractToUpdate = await db1.F_CONTRACTS.FindAsync(contract.ID);
                     if (contractToUpdate != null)
                     {
                         contractToUpdate.ContractNo = contract.ContractNo;
@@ -123,7 +125,7 @@ namespace tahsinERP.Controllers
 
                         try
                         {
-                            db1.SaveChanges();
+                            await db1.SaveChangesAsync();
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -136,7 +138,7 @@ namespace tahsinERP.Controllers
             }
             return View(contract);
         }
-        public ActionResult Delete(int? Id)
+        public async Task<ActionResult> Delete(int? Id)
         {
             if (Id == null)
             {
@@ -144,32 +146,32 @@ namespace tahsinERP.Controllers
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contract = db.F_CONTRACTS.Find(Id);
+                var contract = await db.F_CONTRACTS.FindAsync(Id);
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
 
-                db.Entry(contract).Reference(i => i.FORWARDER).Load();
+                await db.Entry(contract).Reference(i => i.FORWARDER).LoadAsync();
                 return View(contract);
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int? ID, FormCollection gfs)
+        public async Task<ActionResult> Delete(int? ID, FormCollection gfs)
         {
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    var contractToDelete = db.F_CONTRACTS.Find(ID);
+                    var contractToDelete = await db.F_CONTRACTS.FindAsync(ID);
                     if (contractToDelete != null)
                     {
                         contractToDelete.IsDeleted = true;
                         try
                         {
                             db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
+                             await db.SaveChangesAsync();
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
