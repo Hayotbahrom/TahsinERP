@@ -14,11 +14,23 @@ h1 {
     padding: 0 0 10px 0;
 }
 
-.wtree li {
+.wtree ul li {
     list-style-type: none;
     margin: 10px 0 10px 10px;
     position: relative;
     cursor: pointer;
+}
+
+.wtree ul li:first-child {
+    margin: 10px 0 10px 10px;
+}
+
+.wtree ul li:nth-child(2) {
+    margin: 10px 150px 10px 10px;
+}
+
+.wtree li:last-child {
+    margin: 10px 350px 10px 10px;
 }
 
 .wtree li:before {
@@ -81,6 +93,16 @@ h1 {
 #firstLevel #secondLevel #thirdLevel span {
     background-color: #FEFCD5;
 }
+
+#secondLevel div {
+    margin-left: 150px;
+}
+
+#thirdLevel div {
+    margin-left: 350px;
+}
+
+
 
 .display {
     margin-right: 12px;
