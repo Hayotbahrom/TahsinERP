@@ -1,17 +1,17 @@
-﻿@model List<tahsinERP.Models.PART>
+﻿@model  List<tahsinERP.Models.PRODUCTIONPROCESS>
 @{
-    ViewBag.Title = "GetAllParts";
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*
-<style>
-    /* Add a bottom border to each table row */
-    #myDataTable tr {
-        border-bottom: 1px solid #ccc;
-    }
-</style>*@
+
 
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+    {
+        changePermit = true;
+    }
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -20,16 +20,15 @@
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
                             <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb p-0 mb-0">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
                                     <li class="breadcrumb-item">
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
-                                    <li class="breadcrumb-item ">
-                                        Sahifalar
-                                    </li>
+
                                     <li class="breadcrumb-item active">
-                                        Barcha ehtiyot qismlar
+                                        Production Processlar
                                     </li>
+
                                 </ol>
                             </div>
                         </div>
@@ -39,24 +38,32 @@
             <div class="content-body">
                 <!-- users list start -->
                 <section class="invoice-list-wrapper">
+                    @if (changePermit)
+                    {
+                        <div class="invoice-create-btn mb-1">
+                            <a href="@Url.Action("Create", "ProductionProcess")" class="btn btn-success bg-light invoice-create" role="button" aria-pressed="true">
+                                Yangi
+                                Process qo'shish
+                            </a>
+                        </div>
+                    }
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
                                     <!-- datatable start -->
-                                    <div class="table-responsive table-responsivetable-responsive">
+                                    <div class="card-datatable table-responsivetable-responsive">
                                         <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>Detal Raqami</th>
-                                                    <th>Nomi</th>
-                                                    <th>Marka</th>
-                                                    <th>Standart</th>
-                                                    <th>Og`irligi</th>
-                                                    <th>O`lchov birligi</th>
-                                                    <th>Amallar</th>
+                                                    <th>Process nomi</th>
+                                                    <th>Batafsil</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -66,24 +73,24 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td>
-                                                            <a href="~/Part/Details/@item.ID">@item.PNo</a>
+                                                            <a href="~/ProductionProcess/Details/@item.ID">@item.ProcessName</a>
                                                         </td>
-                                                        <td><a href="~/Part/Details/@item.ID">@item.PName</a></td>
-                                                        <td>@item.Marka</td>
-                                                        <td>@item.Standart</td>
-                                                        <td>@item.PWeight</td>
-                                                        <td>@item.Unit</td>
-                                                        <td>
-                                                            <div>
-                                                                <a href="@Url.Action("Edit", "Part", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                <a href="@Url.Action("Delete", "Part", new { id = item.ID })"><i class="bx bx-trash"></i></a>
-                                                            </div>
-                                                        </td>
+                                                        <td>@item.Description</td>
+                                                        @if (changePermit)
+                                                        {
+                                                            <td>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "ProductionProcess", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "ProductionProcess", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        }
                                                     </tr>
                                                 }
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!-- datatable ends -->
                                 </div>
                             </div>
                         </div>
@@ -97,3 +104,5 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+

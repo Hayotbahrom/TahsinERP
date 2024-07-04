@@ -292,11 +292,13 @@
     <Compile Include="Controllers\PModuleController.cs" />
     <Compile Include="Controllers\POrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductionProcessController.cs" />
     <Compile Include="Controllers\ProductPackController.cs" />
     <Compile Include="Controllers\ProductPlanController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\SlittingController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WaybillController.cs" />
@@ -540,16 +542,23 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\BOMViewModel.cs" />
+    <Compile Include="ViewModels\BOM\ChildViewModel.cs" />
+    <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
+    <Compile Include="ViewModels\BOM\ParentViewModel.cs" />
+    <Compile Include="ViewModels\BOMCreateViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
+    <Compile Include="ViewModels\SlittingProcessViewModel.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\SContractViewModel.cs" />
     <Compile Include="ViewModels\WrhsIncomeViewModel.cs" />
+    <Compile Include="ViewModels\TransportTypeViewModel.cs" />
+    <Compile Include="ViewModels\WaybillCreateViewModel.cs" />
+    <Compile Include="ViewModels\WhrsIncomeViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
@@ -710,7 +719,7 @@
     <Content Include="app-assets\css\plugins\forms\wizard.min.css" />
     <Content Include="app-assets\css\plugins\tour\tour.css" />
     <Content Include="app-assets\css\plugins\tour\tour.min.css" />
-    <Content Include="app-assets\css\list\style.css" />
+    <Content Include="app-assets\css\list\list-style.css" />
     <Content Include="app-assets\css\themes\dark-layout.css" />
     <Content Include="app-assets\css\themes\dark-layout.min.css" />
     <Content Include="app-assets\css\themes\semi-dark-layout.css" />
@@ -2399,7 +2408,6 @@
     <Content Include="Views\WhIncome\Index.cshtml" />
     <Content Include="Views\BOM\Index.cshtml" />
     <Content Include="Views\BOM\Details.cshtml" />
-    <Content Include="Views\BOM\BOMTree.cshtml" />
     <Content Include="Views\WhIncome\Create.cshtml" />
     <Content Include="Views\PInvoice\Edit.cshtml" />
     <Content Include="Views\PInvoice\EditPart.cshtml" />
@@ -2449,15 +2457,28 @@
     <Content Include="Views\Forwarder\Details.cshtml" />
     <Content Include="Views\Forwarder\Edit.cshtml" />
     <Content Include="Views\Forwarder\Delete.cshtml" />
+    <Content Include="Views\BOM\Create.cshtml" />
+    <Content Include="Views\Slitting\Index.cshtml" />
+    <Content Include="Views\Slitting\Create.cshtml" />
+    <Content Include="Views\ProductionProcess\Index.cshtml" />
+    <Content Include="Views\ProductionProcess\Create.cshtml" />
+    <Content Include="Views\ProductionProcess\Details.cshtml" />
+    <Content Include="Views\ProductionProcess\Edit.cshtml" />
+    <Content Include="Views\ProductionProcess\Delete.cshtml" />
+    <Content Include="Views\BOM\CreateWizard.cshtml" />
     <Content Include="Views\FTransportType\Index.cshtml" />
     <Content Include="Views\FTransportType\Create.cshtml" />
     <Content Include="Views\FTransportType\Details.cshtml" />
     <Content Include="Views\FTransportType\Edit.cshtml" />
     <Content Include="Views\FTransportType\Delete.cshtml" />
+    <Content Include="Views\Waybill\Index.cshtml" />
+    <Content Include="Views\Waybill\Create.cshtml" />
+    <Content Include="Views\Waybill\Details.cshtml" />
+    <Content Include="Views\Waybill\Edit.cshtml" />
+    <Content Include="Views\Waybill\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Waybill\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
