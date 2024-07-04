@@ -67,7 +67,7 @@
                                                     <h6 class="invoice-to">Tugaydigan sana</h6>
                                                     <fieldset class="form-group position-relative has-icon-left">
                                                         @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma muddati" })
-                                                        @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+                                                        @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
                                                         <div class="form-control-position">
                                                             <i class='bx bx-calendar'></i>
                                                         </div>
