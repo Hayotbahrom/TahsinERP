@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 50px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: normal;
+}
+
+h1 {
+    padding: 0 0 10px 0;
+}
+
+.wtree li {
+    list-style-type: none;
+    margin: 10px 0 10px 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.wtree li:before {
+    content: "";
+    counter-increment: item;
+    position: absolute;
+    top: -10px;
+    left: -30px;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    width: 30px;
+    height: 15px;
+}
+
+.wtree li:after {
+    position: absolute;
+    content: "";
+    top: 5px;
+    left: -30px;
+    border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    width: 30px;
+    height: 100%;
+}
+
+.wtree li:last-child:after {
+    display: none;
+}
+
+.wtree li div span {
+    display: block;
+    border: 1px solid #ddd;
+    padding: 10px;
+    color: #666666;
+    text-decoration: none;
+}
+
+.wtree li div span:hover, .wtree li div span:focus {
+    color: #000;
+    border: 1px solid #474747;
+}
+
+.wtree li div span:hover + ul li span, .wtree li div span:focus + ul li span {
+    color: #000;
+    border: 1px solid #474747;
+}
+
+.wtree li div span:hover + ul li:after, .wtree li div span:hover + ul li:before, .wtree li div span:focus + ul li:after, .wtree li div span:focus + ul li:before {
+    border-color: #474747;
+}
+
+#firstLevel span {
+    background-color: #DDF3FE;
+}
+
+#firstLevel #secondLevel span {
+    background-color: #DDEBC8;
+}
+
+#firstLevel #secondLevel #thirdLevel span {
+    background-color: #FEFCD5;
+}
+
+.display {
+    margin-right: 12px;
+    font-weight: bold;
+}
+
+input, label {
+    margin: 12px 0px 20px 0px;
+}
+
+label {
+    padding-left: 6px;
+    padding-right: 12px;
+}
+
+.wtree ul {
+    display: none;
+}

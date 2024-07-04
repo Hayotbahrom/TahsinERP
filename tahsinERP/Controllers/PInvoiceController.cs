@@ -263,8 +263,6 @@ namespace tahsinERP.Controllers
                 return View(invoice);
             }
         }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(P_INVOICES invoice)
@@ -330,7 +328,6 @@ namespace tahsinERP.Controllers
                 return View(invoice);
             }
         }
-
         public ActionResult EditPart(int? ID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -400,8 +397,8 @@ namespace tahsinERP.Controllers
             {
                 SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefault();
                 if (invoys != null)
-                return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                
+                    return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
                 return View();
             }
         }

@@ -543,8 +543,10 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BOM\ChildViewModel.cs" />
+    <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
+    <Compile Include="ViewModels\BOM\ParentViewModel.cs" />
     <Compile Include="ViewModels\BOMCreateViewModel.cs" />
-    <Compile Include="ViewModels\BOMViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
@@ -554,6 +556,7 @@
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\SContractViewModel.cs" />
+    <Compile Include="ViewModels\WrhsIncomeViewModel.cs" />
     <Compile Include="ViewModels\TransportTypeViewModel.cs" />
     <Compile Include="ViewModels\WaybillCreateViewModel.cs" />
     <Compile Include="ViewModels\WhrsIncomeViewModel.cs" />
@@ -717,7 +720,7 @@
     <Content Include="app-assets\css\plugins\forms\wizard.min.css" />
     <Content Include="app-assets\css\plugins\tour\tour.css" />
     <Content Include="app-assets\css\plugins\tour\tour.min.css" />
-    <Content Include="app-assets\css\list\style.css" />
+    <Content Include="app-assets\css\list\list-style.css" />
     <Content Include="app-assets\css\themes\dark-layout.css" />
     <Content Include="app-assets\css\themes\dark-layout.min.css" />
     <Content Include="app-assets\css\themes\semi-dark-layout.css" />
@@ -2406,7 +2409,6 @@
     <Content Include="Views\WhIncome\Index.cshtml" />
     <Content Include="Views\BOM\Index.cshtml" />
     <Content Include="Views\BOM\Details.cshtml" />
-    <Content Include="Views\BOM\BOMTree.cshtml" />
     <Content Include="Views\WhIncome\Create.cshtml" />
     <Content Include="Views\PInvoice\Edit.cshtml" />
     <Content Include="Views\PInvoice\EditPart.cshtml" />
@@ -2464,12 +2466,12 @@
     <Content Include="Views\ProductionProcess\Details.cshtml" />
     <Content Include="Views\ProductionProcess\Edit.cshtml" />
     <Content Include="Views\ProductionProcess\Delete.cshtml" />
-    <Content Include="Views\BOM\CreateWizard.cshtml" />
     <Content Include="Views\FTransportType\Index.cshtml" />
     <Content Include="Views\FTransportType\Create.cshtml" />
     <Content Include="Views\FTransportType\Details.cshtml" />
     <Content Include="Views\FTransportType\Edit.cshtml" />
     <Content Include="Views\FTransportType\Delete.cshtml" />
+    <Content Include="Views\BOM\CreateWizard.cshtml" />
     <Content Include="Views\Waybill\Index.cshtml" />
     <Content Include="Views\Waybill\Create.cshtml" />
     <Content Include="Views\Waybill\Details.cshtml" />
