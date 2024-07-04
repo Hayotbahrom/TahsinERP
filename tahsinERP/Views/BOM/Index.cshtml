@@ -1,4 +1,4 @@
-﻿@model List<tahsinERP.Models.PRODUCT>
+﻿@model List<tahsinERP.ViewModels.BOM.IndexViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -48,6 +48,30 @@
                             </button>
                         </div>
                     }
+                    <div class="users-list-filter px-1">
+                        <form>
+                            <div class="row border rounded py-2 mb-2">
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <div class="col-12 col-sm-12 col-lg-4">
+                                        <label for="users-list-role">Maxsulot Turi</label>
+                                        <fieldset class="form-group">
+                                            @Html.DropDownList("SourceID", new SelectList(new[]
+                                       {
+                                           "",
+                                           "Faqat Maxsulotlar",
+                                           "Faqat Yarim tayyor maxsulotlar"
+                                       }), new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                                    <a href="~/BOM" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                        Ro'yxatni yangilash
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
@@ -58,7 +82,6 @@
                                             <thead>
                                                 <tr>
                                                     <th>Maxsulot raqami</th>
-                                                    <th>Nomi</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -70,9 +93,12 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <a href="~/BOM/Details/@item.ID">@item.PNo</a>
+                                                            @{
+                                                                string link = Url.Action("Details", "BOM")+"?ID=" + item.ID + "&isParent=" + ViewBag.IsParentProduct;
+
+                                                                <a href="@link">@item.ParentPNo</a>
+                                                            }
                                                         </td>
-                                                        <td><a href="~/BOM/Details/@item.ID">@item.Name</a></td>
                                                         @if (changePermit)
                                                         {
                                                             <td>
@@ -97,6 +123,16 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function refreshDataTable() {
+            const source = document.getElementById("SourceID").value;
+            const checked = source === 'Faqat Maxsulotlar';
+            console.log(source);// Use triple equals for strict comparison
+
+        window.location.href = '@Url.Action("Index", "BOM")?IsParentProduct=' + checked;
+    }
+    </script>
 }
 else
 {

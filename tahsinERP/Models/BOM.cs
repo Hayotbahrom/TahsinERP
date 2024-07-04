@@ -15,7 +15,7 @@ namespace tahsinERP.Models
     public partial class BOM
     {
         public int ID { get; set; }
-        public Nullable<double> Consumption { get; set; }
+        public double Consumption { get; set; }
         public string ConsumptionUnit { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsDeleted { get; set; }

@@ -30,7 +30,7 @@ namespace tahsinERP.Controllers
                     RoleNames = string.Join(", ", permissions
                                             .Where(p => p.PermissionModuleID == pm.ID)
                                             .Select(p => roles
-                                                         .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
+                                            .FirstOrDefault(r => r.ID == p.RoleID)?.RName)
                                             .Distinct())
                 }).ToList();
 

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace tahsinERP.ViewModels
 {
     // General
-    public class WhrsIncome
+    public class WrhsIncomeViewModel
     {
         public int ID { get; set; }
         public string DocNo { get; set; }
@@ -40,7 +40,7 @@ namespace tahsinERP.ViewModels
         // Parts
         public List<WhrsIncomePart> Parts { get; set; }
 
-        public WhrsIncome()
+        public WrhsIncomeViewModel()
         {
             Parts = new List<WhrsIncomePart>();
         }
