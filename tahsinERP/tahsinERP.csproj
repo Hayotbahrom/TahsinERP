@@ -559,7 +559,6 @@
     <Compile Include="ViewModels\WrhsIncomeViewModel.cs" />
     <Compile Include="ViewModels\TransportTypeViewModel.cs" />
     <Compile Include="ViewModels\WaybillCreateViewModel.cs" />
-    <Compile Include="ViewModels\WhrsIncomeViewModel.cs" />
     <Compile Include="ViewModels\SupplierPartsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
