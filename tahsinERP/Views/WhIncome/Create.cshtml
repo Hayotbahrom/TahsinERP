@@ -1,5 +1,4 @@
-﻿@using tahsinERP.ViewModels
-@model tahsinERP.ViewModels.WhrsIncome
+﻿@model tahsinERP.ViewModels.WrhsIncomeViewModel
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -39,9 +38,7 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
-                                        {    
-
-                                            
+                                        {
                                             @Html.AntiForgeryToken()
                                             // WRHS_InComes
                                             <div class="row justify-content-around d-flex align-items-start">
@@ -181,3 +178,4 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+

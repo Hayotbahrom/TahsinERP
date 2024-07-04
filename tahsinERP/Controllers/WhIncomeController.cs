@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -76,50 +74,70 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(WhrsIncome model)
+        public ActionResult Create(WrhsIncomeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Process the model and save to database
-                // Save WhrsIncome
-                // Save WhrsIncomePart for each item in model.Parts
-
-                // Sample saving logic (replace with your actual logic)
-                foreach (var part in model.Parts)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    // Save each part
-                }
+                    // Yangi PART_WRHS_INCOMES yozuvini yaratish
+                    PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
+                    {
+                        DocNo = model.DocNo,
+                        WHID = model.WHID,
+                        InvoiceID = model.InvoiceID,
+                        WaybillID = model.WaybillID,
+                        Amount = model.Amount,
+                        Currency = model.Currency,
+                        TotalPrice = model.TotalPrice,
+                        IsDeleted = false,
+                        Description = model.Description,
+                        SenderWHID = model.SenderWHID,
+                        IssueDateTime = model.IssueDateTime,
+                        RecieveStatus = model.RecieveStatus,
+                    };
 
-                // Redirect to Index or any other action after successful save
-                return RedirectToAction("Index");
+                    db.PART_WRHS_INCOMES.Add(newIncome);
+                    db.SaveChanges();
+
+                    // Yangi yozuvning IncomeID sini olish
+                    int newIncomeID = newIncome.ID;
+
+                    // Parts ni saqlash
+                    foreach (var part in model.Parts)
+                    {
+                        PART_WRHS_INCOME_PARTS newPart = new PART_WRHS_INCOME_PARTS
+                        {
+                            IncomeID = newIncomeID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                            PartID = part.PartID,
+                            Unit = part.Unit,
+                            Amount = part.Amount,
+                            PiecePrice = part.PiecePrice,
+                            TotalPrice = part.TotalPrice,
+                            Comment = part.Comment
+                        };
+
+                        db.PART_WRHS_INCOME_PARTS.Add(newPart);
+                    }
+
+                    db.SaveChanges(); // db.SaveChanges() ni bu yerda chaqirish zarur
+                    return RedirectToAction("Index");
+                }
+            }
+
+            // Ma'lumotlar to'g'ri kiritilmagan bo'lsa, view ni qayta yuklash
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName", model.WHID);
+                ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
+                ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo", model.WaybillID);
+                ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
+                ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
             }
 
             return View(model);
-
-
-            //var emails = form.GetValues("GroupA[0].Email");
-            //var passwords = form.GetValues("GroupA[0].Password");
-            //var genders = form.GetValues("GroupA[0].Gender");
-            //var professions = form.GetValues("GroupA[0].Profession");
-
-            //var repeaterItems = new List<RepeaterItem>();
-
-            //if (emails != null && passwords != null && genders != null && professions != null)
-            //{
-            //    for (int i = 0; i < emails.Length; i++)
-            //    {
-            //        repeaterItems.Add(new RepeaterItem
-            //        {
-            //            Email = emails[i],
-            //            Password = passwords[i],
-            //            Gender = genders[i],
-            //            Profession = professions[i]
-            //        });
-            //    }
-            //}
-
-            //return View();
         }
+
 
         public async Task<ActionResult> Download()
         {
