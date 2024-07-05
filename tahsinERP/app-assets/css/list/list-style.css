@@ -38,18 +38,22 @@ h1 {
     counter-increment: item;
     position: absolute;
     top: -10px;
-    left: -30px;
+    left: 170px;
     border-left: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     width: 30px;
     height: 15px;
 }
 
+.wtree .thirdLevel:before {
+    left: 50px !important;
+}
+
 .wtree li:after {
     position: absolute;
     content: "";
     top: 5px;
-    left: -30px;
+    left: 170px;
     border-left: 1px solid #ddd;
     border-top: 1px solid #ddd;
     width: 30px;
@@ -95,11 +99,11 @@ h1 {
 }
 
 #secondLevel div {
-    margin-left: 150px;
+    margin-left: 200px;
 }
 
 #thirdLevel div {
-    margin-left: 350px;
+    margin-left: 450px;
 }
 
 

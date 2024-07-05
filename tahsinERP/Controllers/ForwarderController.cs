@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
@@ -13,15 +15,15 @@ namespace tahsinERP.Controllers
     {
         // GET: Forwarder
         
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var list = db.FORWARDERS.Where(f => f.IsDeleted == false).ToList();
+                var list = await db.FORWARDERS.Where(f => f.IsDeleted == false).ToListAsync();
                 return View(list);
             }
         }
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -30,7 +32,7 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( FORWARDER forwarder)
+        public async Task<ActionResult> Create( FORWARDER forwarder)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -41,7 +43,7 @@ namespace tahsinERP.Controllers
                         // Set IsDeleted to false and save the forwarder to get the ID
                         forwarder.IsDeleted = false;
                         db.FORWARDERS.Add(forwarder);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         return RedirectToAction("Index");
                     }
@@ -54,7 +56,7 @@ namespace tahsinERP.Controllers
             }
             return View(forwarder);
         }
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
@@ -62,14 +64,14 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
 
-                var forwarder = db.FORWARDERS.Find(id);
+                var forwarder = await db.FORWARDERS.FindAsync(id);
                 if (forwarder == null)
                     return HttpNotFound();
 
                 return View(forwarder);
             }
         }
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -78,7 +80,7 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
 
-                var forwarder = db.FORWARDERS.Find(id);
+                var forwarder = await db.FORWARDERS.FindAsync(id);
                 if (forwarder == null)
                 {
                     return HttpNotFound();
@@ -88,14 +90,14 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(FORWARDER forwarder)
+        public async Task<ActionResult> Edit(FORWARDER forwarder)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
 
                 if (ModelState.IsValid)
                 {
-                    var forwarderToUpdate = db.FORWARDERS.Find(forwarder.ID);
+                    var forwarderToUpdate = await db.FORWARDERS.FindAsync(forwarder.ID);
                     if (forwarderToUpdate != null)
                     {
                         forwarderToUpdate.ForwarderName = forwarder.ForwarderName;
@@ -104,7 +106,7 @@ namespace tahsinERP.Controllers
                         forwarderToUpdate.ContactPerson = forwarder.ContactPerson;
                         
                         db.Entry(forwarderToUpdate).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
                         return RedirectToAction("Index");
                     }
 
@@ -113,7 +115,7 @@ namespace tahsinERP.Controllers
                 return View(forwarder);
             }
         }
-        public ActionResult Delete(int? Id)
+        public async Task<ActionResult> Delete(int? Id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -122,7 +124,7 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var forwarder = db.FORWARDERS.Find(Id);
+                var forwarder = await db.FORWARDERS.FindAsync(Id);
                 if (forwarder == null)
                 {
                     return HttpNotFound();
@@ -133,13 +135,13 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int? ID, FormCollection gfs)
+        public async Task<ActionResult> Delete(int? ID, FormCollection gfs)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    FORWARDER forwarderToDelete = db.FORWARDERS.Find(ID);
+                    FORWARDER forwarderToDelete = await db.FORWARDERS.FindAsync(ID);
                     if (forwarderToDelete != null)
                     {
 

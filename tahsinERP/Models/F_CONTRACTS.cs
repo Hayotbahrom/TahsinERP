@@ -24,8 +24,8 @@ namespace tahsinERP.Models
         public string ContractNo { get; set; }
         public Nullable<int> CompanyID { get; set; }
         public Nullable<int> ForwarderID { get; set; }
-        public Nullable<System.DateTime> IssueDate { get; set; }
-        public Nullable<System.DateTime> DueDate { get; set; }
+        public System.DateTime IssueDate { get; set; }
+        public System.DateTime DueDate { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }

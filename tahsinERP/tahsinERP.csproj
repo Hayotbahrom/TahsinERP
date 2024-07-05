@@ -278,6 +278,7 @@
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\FContractController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
@@ -2464,18 +2465,22 @@
     <Content Include="Views\ProductionProcess\Details.cshtml" />
     <Content Include="Views\ProductionProcess\Edit.cshtml" />
     <Content Include="Views\ProductionProcess\Delete.cshtml" />
-    <Content Include="Views\BOM\CreateWizard.cshtml" />
     <Content Include="Views\FTransportType\Index.cshtml" />
     <Content Include="Views\FTransportType\Create.cshtml" />
     <Content Include="Views\FTransportType\Details.cshtml" />
     <Content Include="Views\FTransportType\Edit.cshtml" />
     <Content Include="Views\FTransportType\Delete.cshtml" />
+    <Content Include="Views\BOM\CreateWizard.cshtml" />
     <Content Include="Views\Waybill\Index.cshtml" />
     <Content Include="Views\Waybill\Create.cshtml" />
     <Content Include="Views\Waybill\Details.cshtml" />
     <Content Include="Views\Waybill\Edit.cshtml" />
     <Content Include="Views\Waybill\Delete.cshtml" />
-    <Content Include="Views\WhIncome\AddPart.cshtml" />
+    <Content Include="Views\FContract\Index.cshtml" />
+    <Content Include="Views\FContract\Create.cshtml" />
+    <Content Include="Views\FContract\Details.cshtml" />
+    <Content Include="Views\FContract\Edit.cshtml" />
+    <Content Include="Views\FContract\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.P_CONTRACTS
+﻿@model tahsinERP.Models.F_CONTRACTS
 
 @{
     ViewBag.Title = "Create";
@@ -7,7 +7,7 @@
 }
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString(), type))
 {
-    using (Html.BeginForm("Create", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("Create", "FContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         <div class="app-content content">
@@ -23,7 +23,7 @@
                                             <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                         </li>
                                         <li class="breadcrumb-item">
-                                            <a href="~/PContract/Index">Shartnomalar</a>
+                                            <a href="~/FContract/Index">Shartnomalar</a>
                                         </li>
                                         <li class="breadcrumb-item active">
                                             Yangi shartnoma qo'shish
@@ -52,14 +52,15 @@
                                                         @Html.TextBoxFor(model => model.ContractNo, new { @class = "form-control round", @placeholder = "Shartnoma raqami" })
                                                         @Html.ValidationMessageFor(model => model.ContractNo, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">Ta'minotchi</h6>
+                                                    <h6 class="invoice-to">Forwarder</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownList("Supplier", null, htmlAttributes: new { @class = "form-control select2" })
+                                                        @Html.DropDownListFor(model => model.ForwarderID, ViewBag.Forwarder as SelectList,  new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.ForwarderID, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Tuzilgan sanasi</h6>
                                                     <fieldset class="form-group position-relative has-icon-left">
-                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi" })
-                                                        @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.IssueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi" })
+                                                        @Html.ValidationMessageFor(model => model.IssueDate, "", new { @class = "text-danger" })
                                                         <div class="form-control-position">
                                                             <i class='bx bx-calendar'></i>
                                                         </div>
@@ -72,64 +73,21 @@
                                                             <i class='bx bx-calendar'></i>
                                                         </div>
                                                     </fieldset>
-                                                    <h6 class="invoice-to">Incoterms</h6>
+                                                    <h6 class="invoice-to">Miqdori</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Incoterms, new { @class = "form-control round", @placeholder = "Incoterms" })
-                                                        @Html.ValidationMessageFor(model => model.Incoterms, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @placeholder = "Amount" })
+                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">To'lov sharti</h6>
+                                                    <h6 class="invoice-to">Valyuta</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.PaymentTerms, new { @class = "form-control round", @placeholder = "To'lov muddati" })
-                                                        @Html.ValidationMessageFor(model => model.PaymentTerms, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Valyuta" })
+                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">IDN raqami</h6>
+                                                    <h6 class="invoice-to">Batafsil ma`lumot</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.IDN, new { @class = "form-control round", @placeholder = "IDN raqma" })
-                                                        @Html.ValidationMessageFor(model => model.IDN, "", new { @class = "text-danger" })
+                                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control round", @placeholder = "Qisqacha malumot" })
+                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                     </fieldset>
-
-                                                    <!--<div class="row">
-        <div class="col-12">
-            <div class="card-header">
-                <h4 class="card-title">Shartnoma predmeti</h4>
-            </div>
-            <div class="card-content">
-                <div class="card-body">
-                    <div class="table-responsive table-responsivetable-responsive">
-                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Detal raqami</th>
-                                    <th>Dona narxi</th>
-                                    <th>Valyuta</th>
-                                    <th>O'lchov birligi</th>
-                                    <th>Miqdori</th>
-                                    <th>MOQ</th>
-                                    <th>Maksimal imkoniyat</th>
-                                </tr>
-                            </thead>
-                            <tbody>-->
-                                                    @*foreach(var items in ContractItems)*@
-                                                    <!--<tr>
-                                    <td></td>
-                                    <td></td>
-                                    <th>model.PartID</th>
-                                    <th>model.Price</th>
-                                    <th>model.Currency</th>
-                                    <th>model.Unit</th>
-                                    <th>model.Amount</th>
-                                    <th>model.MOQ</th>
-                                    <th>model.MaximumCapacity</th>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
                                                             <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">

@@ -1,56 +1,213 @@
-﻿<div class="content-body">
-    <section id="validation">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header pb-0">
-                        <h4 class="card-title">Validation Example</h4>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-body">
-                            <div>
-                                <form action="#" class="wizard-validation">
+﻿@model tahsinERP.ViewModels.BOMCreateViewModel
+@{
+    ViewBag.Title = "CreateWizard";
+}
+<head>
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/semi-dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+</head>
 
-
-                                    <!-- step 2 -->
-                                    <!-- body content of step 2 end -->
-                                    @for (int i = 0; i < ViewBag.processcount; i++)
-                                    {
-                                        <h6>
-                                            <i class="step-icon"></i>
-                                            <span>ProcessList[i]</span>
-                                        </h6>
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="proposalTitle3">
-                                                            Proposal Title
-                                                        </label>
-                                                        <input type="text" class="form-control required" id="proposalTitle3" name="proposalTitle" placeholder="Enter Your Proposel Title">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="jobTitle5">
-                                                            Job Title
-                                                        </label>
-                                                        <input type="text" class="form-control required" id="jobTitle5" name="jobTitle5" placeholder="Enter Your Job Title">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="shortDescription3">Short Description</label>
-                                                        <textarea name="shortDescription" id="shortDescription3" rows="4" class="form-control" placeholder="Please Enter short Description"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    }
-                                </form>
+<body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/BOM/Index">BOM</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        BOM ga mahsulot qo'shish
+                                    </li>
+                                </ol>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="content-body">
+                <section id="validation">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header pb-0">
+                                    <h4 class="card-title">Validation Example</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div>
+                                            @using (Html.BeginForm("CreateProcess", "Bom", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                <form class="wizard-validation">
+                                                    @if (!string.IsNullOrEmpty(Model.Process))
+                                                    {
+                                                        var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                                                        foreach (var processName in processNames)
+                                                        {
+                                                            <h6>
+                                                                <i class="step-icon"></i>
+                                                                <span>@processName</span>
+                                                            </h6>
+
+                                                            switch (processName)
+                                                            {
+                                                                case "Sliting":
+                                                                    <fieldset>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.TextBoxFor(model => model.SLITTING_NORMS.CutterWidth, new { @class = "form-control", @placeholder = "Cutter width" })
+                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.CutterWidth, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    break;
+
+                                                                case "Blanking":
+                                                                    <fieldset>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("BLANKING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("BLANKING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    break;
+
+
+                                                                case "Stamping":
+                                                                    <fieldset>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("STAMPING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("STAMPING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    break;
+                                                                case "Welding":
+                                                                    <fieldset>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    break;
+                                                                case "Painting":
+                                                                    <fieldset>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    break;
+
+                                                                default:
+                                                                    <p>No specific fields for this process.</p>
+                                                                    break;
+                                                            }
+                                                        }
+                                                    }
+                                                </form>
+                                                <br />
+                                                <br />
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item border-0 pb-0">
+                                                        <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                            <i class='bx bx-save'></i>
+                                                            Save
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
-    </section>
-</div>
+    </div>
+
+    <script src="~/app-assets/vendors/js/vendors.min.js"></script>
+    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
+    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
+    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
+    <script src="~/app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
+    <script src="~/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/core/app-menu.js"></script>
+    <script src="~/app-assets/js/core/app.js"></script>
+    <script src="~/app-assets/js/scripts/components.js"></script>
+    <script src="~/app-assets/js/scripts/footer.js"></script>
+    <script src="~/app-assets/js/scripts/forms/wizard-steps.js"></script>
+</body>
