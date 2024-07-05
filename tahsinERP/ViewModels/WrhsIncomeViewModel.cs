@@ -7,11 +7,11 @@ namespace tahsinERP.ViewModels
     // General
     public class WrhsIncomeViewModel
     {
-        public int ID { get; set; }
+        public int ID { get; set; } // Auto Increment in DB
         public string DocNo { get; set; }
 
         [Required]
-        public int WHID { get; set; }
+        public int WHID { get; set; } // Ombor IDsi auto: null
 
         [Required]
         public int InvoiceID { get; set; }
@@ -23,16 +23,16 @@ namespace tahsinERP.ViewModels
 
         public string Currency { get; set; }
 
-        public int TotalPrice { get; set; }
+        public int TotalPrice { get; set; } // Trigger in DB
 
         public bool IsDeleted { get; set; }
 
         [DataType(DataType.Text)]
         public string Description { get; set; }
 
-        public DateTime IssueDateTime { get; set; }
+        public DateTime IssueDateTime { get; set; } // From Controller
 
-        public int SenderWHID { get; set; }
+        public int SenderWHID { get; set; } // Auto: null
 
         public bool RecieveStatus { get; set; }
 
@@ -50,12 +50,13 @@ namespace tahsinERP.ViewModels
     // Part ViewModel
     public class WhrsIncomePart
     {
-        public int IncomeID { get; set; }
-        public int PartID { get; set; }
+        public int ID {  set; get; } // Auto Increment in DB
+        public int IncomeID { get; set; } // User dan olinmaydi
+        public int PartID { get; set; } 
         public string Unit { get; set; }
         public int Amount { get; set; }
         public int PiecePrice { get; set; }
-        public int TotalPrice { get; set; }
+        public int TotalPrice { get; set; } // Trigger in DB
         public string Comment { get; set; }
     }
 }

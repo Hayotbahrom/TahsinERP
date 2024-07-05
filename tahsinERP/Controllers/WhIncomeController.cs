@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -62,14 +63,12 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+                //ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
                 ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
 
                 ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                 ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                ViewBag.InComeParts = new SelectList(db.PART_WRHS_INCOMES.ToList(), "ID", "IncomeID");
             }
 
             return View();
@@ -78,66 +77,50 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Create(WrhsIncomeViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                using (DBTHSNEntities db = new DBTHSNEntities())
-                {
-                    // Yangi PART_WRHS_INCOMES yozuvini yaratish
-                    PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
-                    {
-                        DocNo = model.DocNo,
-                        WHID = model.WHID,
-                        InvoiceID = model.InvoiceID,
-                        WaybillID = model.WaybillID,
-                        Amount = model.Amount,
-                        Currency = model.Currency,
-                        TotalPrice = model.TotalPrice,
-                        IsDeleted = false,
-                        Description = model.Description,
-                        SenderWHID = model.SenderWHID,
-                        IssueDateTime = model.IssueDateTime,
-                        RecieveStatus = model.RecieveStatus,
-                    };
-
-                    db.PART_WRHS_INCOMES.Add(newIncome);
-                    db.SaveChanges();
-
-                    // Yangi yozuvning IncomeID sini olish
-                    int newIncomeID = newIncome.ID;
-
-                    // Parts ni saqlash
-                    foreach (var part in model.Parts)
-                    {
-                        PART_WRHS_INCOME_PARTS newPart = new PART_WRHS_INCOME_PARTS
-                        {
-                            IncomeID = newIncomeID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
-                            PartID = part.PartID,
-                            Unit = part.Unit,
-                            Amount = part.Amount,
-                            PiecePrice = part.PiecePrice,
-                            TotalPrice = part.TotalPrice,
-                            Comment = part.Comment
-                        };
-
-                        db.PART_WRHS_INCOME_PARTS.Add(newPart);
-                    }
-
-                    db.SaveChanges(); // db.SaveChanges() ni bu yerda chaqirish zarur
-                    return RedirectToAction("Index");
-                }
-            }
-
-            // Ma'lumotlar to'g'ri kiritilmagan bo'lsa, view ni qayta yuklash
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName", model.WHID);
-                ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
-                ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo", model.WaybillID);
-                ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-            }
+                // Yangi PART_WRHS_INCOMES yozuvini yaratish
+                PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
+                {
+                    DocNo = model.DocNo,
+                    WHID = null,
+                    InvoiceID = model.InvoiceID,
+                    WaybillID = model.WaybillID,
+                    Amount = model.Amount,
+                    Currency = model.Currency,
+                    IsDeleted = false,
+                    Description = model.Description,
+                    IssueDateTime = DateTime.Now,
+                    SenderWHID = null,
+                    RecieveStatus = model.RecieveStatus,
+                };
 
-            return View(model);
+                db.PART_WRHS_INCOMES.Add(newIncome);
+                db.SaveChanges();
+
+                // Yangi yozuvning IncomeID sini olish
+                int newIncomeID = newIncome.ID;
+
+                // Parts ni saqlash
+                foreach (var part in model.Parts)
+                {
+                    PART_WRHS_INCOME_PARTS newPart = new PART_WRHS_INCOME_PARTS
+                    {
+                        IncomeID = newIncomeID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                        PartID = part.PartID,
+                        Unit = part.Unit,
+                        Amount = part.Amount,
+                        PiecePrice = part.PiecePrice,
+                        //TotalPrice = part.TotalPrice,
+                        Comment = part.Comment
+                    };
+
+                    db.PART_WRHS_INCOME_PARTS.Add(newPart);
+                }
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
         }
 
 

@@ -14,11 +14,23 @@ h1 {
     padding: 0 0 10px 0;
 }
 
-.wtree li {
+.wtree ul li {
     list-style-type: none;
     margin: 10px 0 10px 10px;
     position: relative;
     cursor: pointer;
+}
+
+.wtree ul li:first-child {
+    margin: 10px 0 10px 10px;
+}
+
+.wtree ul li:nth-child(2) {
+    margin: 10px 150px 10px 10px;
+}
+
+.wtree li:last-child {
+    margin: 10px 350px 10px 10px;
 }
 
 .wtree li:before {
@@ -26,18 +38,22 @@ h1 {
     counter-increment: item;
     position: absolute;
     top: -10px;
-    left: -30px;
+    left: 170px;
     border-left: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     width: 30px;
     height: 15px;
 }
 
+.wtree .thirdLevel:before {
+    left: 50px !important;
+}
+
 .wtree li:after {
     position: absolute;
     content: "";
     top: 5px;
-    left: -30px;
+    left: 170px;
     border-left: 1px solid #ddd;
     border-top: 1px solid #ddd;
     width: 30px;
@@ -81,6 +97,16 @@ h1 {
 #firstLevel #secondLevel #thirdLevel span {
     background-color: #FEFCD5;
 }
+
+#secondLevel div {
+    margin-left: 200px;
+}
+
+#thirdLevel div {
+    margin-left: 450px;
+}
+
+
 
 .display {
     margin-right: 12px;

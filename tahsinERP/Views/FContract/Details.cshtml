@@ -1,0 +1,81 @@
+﻿@model tahsinERP.Models.F_CONTRACTS
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/FContract/Index">Shartnomalar </a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        shartnoma sahifasi
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-xl-9 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                            <h4 class="text-primary">FContract malumotlari</h4>
+                                            <hr>
+
+                                            <div class="row my-2 py-50">
+                                                <div class="col-sm-6 col-12 order-2 order-sm-1">
+                                                    <span><b>Shartnoma raqami</b>: @Html.DisplayFor(model => model.ContractNo, new { @class = "form-control" })</span>
+                                                    <hr />
+                                                    <span><b>Forwarder</b>: @Html.DisplayFor(model => model.FORWARDER.ForwarderName, new { @class = "form-control" })</span>
+                                                    <hr />
+                                                    <span><b>Belgilangan sanasi</b>:   @Model.IssueDate.ToString("dd.MM.yyyy")</span>
+                                                    <hr />
+                                                    <span><b>Amal qilish sanasi</b>: @Model.DueDate.ToString("dd.MM.yyyy")</span>
+                                                    <hr />
+                                                    <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
+                                                    <hr />
+                                                    <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
+                                                    <hr />
+                                                    <span><b>Batafsil ma`lumot</b>: @Html.DisplayFor(model => model.Description, new { @class = "form-control" })</span>
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
