@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using System.Web.Services.Description;
-using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 using tahsinERP.ViewModels.BOM;
@@ -55,7 +52,7 @@ namespace tahsinERP.Controllers
             {
                 PRODUCT product = db.PRODUCTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
                 PART part = db.PARTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
-                
+
                 if (isParent)
                 {
                     var bomList = db.BOMS.Where(b => b.ParentPNo == product.PNo && b.IsDeleted == false).ToList();
@@ -207,6 +204,8 @@ namespace tahsinERP.Controllers
             }
         }
 
+
+
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -220,123 +219,157 @@ namespace tahsinERP.Controllers
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
 
-                return View();
+                return View(new BOMCreateViewModel());
             }
         }
 
         [HttpPost]
-        public ActionResult Create(BOMCreateViewModel bom, int[] processID)
+        public ActionResult Create(BOMCreateViewModel model, int[] processID)
         {
-
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var selectedProcesses = db.PRODUCTIONPROCESSES
                                           .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
                                           .ToList();
 
-                bom.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
+                model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
 
-                var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.ProductList = new SelectList(products, "ID", "PNo");
+                var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
 
-                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Part = new SelectList(part, "ID", "PNo");
+                model.Product = product;
 
+                TempData["BOMCreateViewModel"] = model;
+                return RedirectToAction("CreateWizard");
             }
-
-            return RedirectToAction("CreateWizard", bom);
         }
 
-        public ActionResult CreateWizard(BOMCreateViewModel bom)
+        public ActionResult CreateWizard()
         {
+            var model = TempData["BOMCreateViewModel"] as BOMCreateViewModel;
+
+            if (model == null)
+                return RedirectToAction("Create");
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
-                return View(bom);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult CreateProcess(BOMCreateViewModel model, int[] progresID)
-        {
-            if (ModelState.IsValid)
-            {
-                if (!string.IsNullOrEmpty(model.Process))
-                {
-                    using (DBTHSNEntities db = new DBTHSNEntities())
-                    {
-                        foreach (var process in progresID)
-                        {
-                            BOM bom = new BOM();
-                            bom.ProcessID = process;
-                            bom.ParentPNo = model.product.PNo;
-                            bom.ChildPNo = model.part.PNo;
-                            db.BOMS.Add(bom);
-                        }
-                        var processNames = model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-                        foreach (var processName in processNames)
-                        {
-                            switch (processName)
-                            {
-                                case "Sliting":
-                                    var slitting = new SLITTING_NORMS
-                                    {
-                                        PartID_before = model.SLITTING_NORMS.PartID_before,
-                                        PartID_after = model.SLITTING_NORMS.PartID_after,
-                                        CutterWidth = model.SLITTING_NORMS.CutterWidth
-                                    };
-                                    db.SLITTING_NORMS.Add(slitting);
-                                    break;
-
-                                case "Blanking":
-                                    var blanking = new BLANKING_NORMS
-                                    {
-                                        PartID_before = model.BLANKING_NORMS.PartID_before,
-                                        PartID_after = model.BLANKING_NORMS.PartID_after
-                                    };
-                                    db.BLANKING_NORMS.Add(blanking);
-                                    break;
-
-                                case "Stamping":
-                                    var stamping = new STAMPING_NORMS
-                                    {
-                                        PartID_before = model.STAMPING_NORMS.PartID_before,
-                                        PartID_after = model.STAMPING_NORMS.PartID_after
-                                    };
-                                    db.STAMPING_NORMS.Add(stamping);
-                                    break;
-
-                                    //case "Welding":
-                                    //    var welding = new WELDING_NORMS
-                                    //    {
-                                    //        PartID_before = model.WELDING_NORMS.PartID_before,
-                                    //        PartID_after = model.WELDING_NORMS.PartID_after
-                                    //    };
-                                    //    _context.WELDING_NORMS.Add(welding);
-                                    //    break;
-
-                                    //case "Painting":
-                                    //    var painting = new PAINTING_NORMS
-                                    //    {
-                                    //        PartID_before = model.PAINTING_NORMS.PartID_before,
-                                    //        PartID_after = model.PAINTING_NORMS.PartID_after
-                                    //    };
-                                    //    _context.PAINTING_NORMS.Add(painting);
-                                    //    break;
-                            }
-                        }
-                        db.SaveChanges();
-                        return RedirectToAction("Index"); // Or whatever action you want to redirect to after a successful create
-                    }
-                }
             }
 
-            // If we got this far, something failed; redisplay form
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult CreateWizard(BOMCreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    //var currentUserName = User.Identity.Name;
+                    //var currentUserId = db.USERS.FirstOrDefault(u => u.Uname == currentUserName)?.ID;
 
+                    var processNames = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
+
+                    var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
+                    var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
+
+
+                    var cutterLines = (int)((part_before.PWidth) / (part_after.PWidth) - 1);
+                    var cutterWidth = model.SLITTING_NORMS.CutterWidth;
+                    var pieceCount = Convert.ToInt32(Math.Round(part_before.PWidth / part_after.PWidth));
+
+                    if (part_after != null && part_before != null)
+                    {
+                        var slitting_process = new SLITTING_NORMS
+                        {
+                            IsDeleted = false,
+                            IsActive = model.SLITTING_NORMS.IsActive,
+                            PartID_after = model.SLITTING_NORMS.PartID_after,
+                            PartID_before = model.SLITTING_NORMS.PartID_before,
+                            SlittingPieces = pieceCount,
+                            CutterLines = cutterLines,
+                            CutterWidth = cutterWidth,
+                            WeightOfSlittedParts = part_after.PWidth * (part_before.PWeight / part_before.PWidth),
+                            WeightOfCutWaste = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
+                            WidthOfUsefulWaste = part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth),
+                            WeightOfUsefulWaste = (part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth)) * (part_before.PWeight / part_before.PWidth),
+                            IssuedDateTime = DateTime.Now,
+                            IssuedByUserID = 5
+                        };
+                        db.SLITTING_NORMS.Add(slitting_process);
+                    }
+
+                    if (model.BLANKING_NORMS != null)
+                    {
+
+
+                        var part_after_Blanking = db.PARTS.FirstOrDefault(p => p.IsDeleted == false && p.ID == model.BLANKING_NORMS.PartID_after);
+                        if (part_after_Blanking != null && part_after != null)
+                        {
+
+
+                            var blanking_norms = new BLANKING_NORMS()
+                            {
+                                IsDeleted = false,
+                                IsActive = model.BLANKING_NORMS.IsActive,
+                                PartID_before = part_after.ID,
+                                PartID_after = part_after_Blanking.ID,
+                                Density = model.BLANKING_NORMS.Density,
+                                QuantityOfBlanks = (int)(part_after.PWeight / part_after_Blanking.PWeight),
+                                WeightOfBlanks = (int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density),
+                                WeightOfCutWaste = part_after.PWeight - (part_after.PWeight * part_after_Blanking.PWeight),
+                                IssuedDateTime = DateTime.Now,
+                                IssuedByUserID = 5
+                            };
+
+                            db.BLANKING_NORMS.Add(blanking_norms);
+                        }
+                        var part_after_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.STAMPING_NORMS.PartID_after);
+                        if (part_after_Stamping != null && part_after_Blanking != null)
+                        {
+                            var stamping = new STAMPING_NORMS()
+                            {
+                                IsDeleted = false,
+                                IsActive = model.STAMPING_NORMS.IsActive,
+                                PartID_before = part_after_Blanking.ID,
+                                PartID_after = part_after_Stamping.ID,
+                                Density = model.STAMPING_NORMS.Density,
+                                QuantityOfStamps = (int)(part_after_Blanking.PWeight / part_after_Stamping.PWeight),
+                                WeightOfStamps = (int)(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density),
+                                WeightOfWaste = part_after_Blanking.PWeight - (part_after_Blanking.PWeight * part_after_Stamping.PWeight),
+                                IssuedDateTime = DateTime.Now,
+                                IssuedByUserID = 5
+                            };
+                            db.STAMPING_NORMS.Add(stamping);
+                        }
+                    }
+                    if (part_after != null)
+                    {
+                        var bom = new BOM();
+
+                        bom.ChildPNo = part_after.PNo;
+                        bom.ParentPNo = "26312742";
+                        bom.IsDeleted = false;
+                        bom.IsActive = true;
+                        bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
+                        bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Sliting")?.ID;
+                        
+                        db.BOMS.Add(bom);
+                    }
+                    db.SaveChanges();
+
+
+
+                    return RedirectToAction("Index");
+                }
+            }
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Part = new SelectList(part, "ID", "PNo");
+            }
+            return View(model);
+        }
     }
 }

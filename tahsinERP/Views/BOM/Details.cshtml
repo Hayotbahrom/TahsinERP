@@ -32,29 +32,46 @@
                     </div>
                 </div>
             </div>
+            
 
             <ul class="wtree" id="firstLevel">
                 <li id="firstLevel">
-                    <div>
+                    <div style="display: flex; align-items: center;">
                         @if (Model.ParentImageBase64.Any())
                         {
-                            <img src="@Model.ParentImageBase64" alt="Product Image" style="width: 150px; height: auto;" />
+                            <a href="@Model.ParentImageBase64" target="_blank">
+                                <img src="@Model.ParentImageBase64" alt="Product Image"
+                                     style="width: 130px; height: auto;
+                                     object-fit: scale-down;
+                                     margin-right: 5px;" />
+                            </a>
                         }
-                        <span>@Model.ParentPNo</span>
+                        <span>
+                            @Model.ParentPNo
+                        </span>
                     </div>
 
                     <ul id="secondLevel">
                         @foreach (var child in Model.Children)
                         {
                             <li id="secondLevel">
-                                <div>
+                                <div style="display: flex; align-items: center;" class="box">
                                     @if (child.ChildImageBase64.Any())
                                     {
-                                        <img class="img-fluid" src="@child.ChildImageBase64" style="height:150px; width:150px; margin-right: 10px;" />
+                                        <a href="@child.ChildImageBase64" target="_blank">
+                                            <img src="@child.ChildImageBase64" alt="Product Image"
+                                                 style="width: 130px; height: auto;
+                                                 object-fit: scale-down;
+                                                 margin-right: 5px;"
+                                                 class="img-fluid" />
+                                        </a>
                                     }
                                     @if (child.PART != null)
                                     {
-                                        <span><a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>: @child.Consumption-@child.ConsumptionUnit</span>
+                                        <span>
+                                            <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
+                                            @child.Consumption-@child.ConsumptionUnit
+                                        </span>
                                     }
                                 </div>
                                 @if (child.Children.Any())
@@ -63,14 +80,21 @@
                                         @foreach (var grandChild in child.Children)
                                         {
                                             <li id="thirdLevel">
-                                                <div>
+                                                <div style="display: flex; align-items: center;" class="box">
                                                     @if (grandChild.ChildImageBase64.Any())
                                                     {
-                                                        <img class="img-fluid" src="@grandChild.ChildImageBase64" style="height:150px; width:150px; margin-right: 10px;" />
+                                                        <img src="@grandChild.ChildImageBase64" alt="Product Image"
+                                                             style="width: 130px; height: auto;
+                                                                    object-fit: scale-down;
+                                                                    margin-right: 10px;"
+                                                             class="img-fluid" />
                                                     }
                                                     @if (grandChild.PART != null)
                                                     {
-                                                        <span><a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>: @grandChild.Consumption-@grandChild.ConsumptionUnit</span>
+                                                        <span>
+                                                            <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
+                                                            @grandChild.Consumption-@grandChild.ConsumptionUnit
+                                                        </span>
                                                     }
                                                 </div>
                                             </li>
@@ -114,4 +138,6 @@
             });
         });
     </script>
+
+
 </body>

@@ -2470,12 +2470,12 @@
     <Content Include="Views\FTransportType\Details.cshtml" />
     <Content Include="Views\FTransportType\Edit.cshtml" />
     <Content Include="Views\FTransportType\Delete.cshtml" />
-    <Content Include="Views\BOM\CreateWizard.cshtml" />
     <Content Include="Views\Waybill\Index.cshtml" />
     <Content Include="Views\Waybill\Create.cshtml" />
     <Content Include="Views\Waybill\Details.cshtml" />
     <Content Include="Views\Waybill\Edit.cshtml" />
     <Content Include="Views\Waybill\Delete.cshtml" />
+    <Content Include="Views\BOM\CreateWizard.cshtml" />
     <Content Include="Views\FContract\Index.cshtml" />
     <Content Include="Views\FContract\Create.cshtml" />
     <Content Include="Views\FContract\Details.cshtml" />
