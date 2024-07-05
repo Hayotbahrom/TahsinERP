@@ -1,4 +1,4 @@
-﻿@model List<tahsinERP.Models.P_WRHS_INCOMES>
+﻿@model List<tahsinERP.Models.PART_WRHS_INCOMES>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -149,11 +149,11 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
-    function refreshDataTable() {
-        var source = document.getElementById("SourceID").value;
-        const supplierID = document.getElementById("SupplierID").value;
-        window.location.href = '@Url.Action("Index", "WhIncome")?type=' + source + '&supplierID='+ supplierID;
-    }
+        function refreshDataTable() {
+            var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "WhIncome")?type=' + source + '&supplierID='+ supplierID;
+        }
     </script>
 }
 else
