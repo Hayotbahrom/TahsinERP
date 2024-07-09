@@ -42,10 +42,12 @@
                     @if (changePermit)
                     {
                         <div class="invoice-create-btn mb-1">
-                            <a href="@Url.Action("Create", "Slitting")" class="btn btn-success bg-light invoice-create" role="button" aria-pressed="true">
-                                Yangi
-                                Slitting Process qo'shish
-                            </a>
+
+                            <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Slitting/Create';">
+                                <span class="align-middle ml-25">
+                                    Yangi slitting Process qo'shish
+                                </span>
+                            </button>
                         </div>
                     }
                     <div class="col-md-12 col-sm-12">
@@ -59,7 +61,8 @@
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>Jarayondan chiqadigan mahsulot raqami</th>
+                                                    <th>Detalni jarayondan oldingi raqami</th>
+                                                    <th>Detalni jarayondan keyingi raqami</th>
                                                     <th>Bo'laklar soni</th>
                                                     @if (changePermit)
                                                     {
@@ -73,12 +76,15 @@
                                                     <tr>
                                                         <td></td>
                                                         <td></td>
-                  
+                                                        <td>
+                                                            <a href="~/Part/Details/@item.PartBefore.ID">@item.PartBefore.PNo</a>
+                                                        </td>
 
-                                                            <td>
-                                                                <a href="#">@item.PartAfter?.PNo</a>
-                                                            </td>
-                                                        
+
+                                                        <td>
+                                                            <a href="~/Part/Details/@item.PartAfter.ID">@item.PartAfter.PNo</a>
+                                                        </td>
+
                                                         <td>@item.SLITTING_NORMS.SlittingPieces</td>
                                                         @if (changePermit)
                                                         {

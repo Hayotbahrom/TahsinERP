@@ -18,14 +18,16 @@ namespace tahsinERP.Controllers
                     .Select(s => new
                     {
                         SlittingNorm = s,
-                        PartAfter = db.PARTS.FirstOrDefault(p => p.ID == s.PartID_after && p.IsDeleted == false)
+                        PartAfter = db.PARTS.FirstOrDefault(p => p.ID == s.PartID_after && p.IsDeleted == false),
+                        PartBefore = db.PARTS.FirstOrDefault(p => p.ID == s.PartID_before && p.IsDeleted == false)
                     })
                     .ToList();
 
                 var viewModel = slitting.Select(s => new SlittingNormViewModel
                 {
                     SLITTING_NORMS = s.SlittingNorm,
-                    PartAfter = s.PartAfter
+                    PartAfter = s.PartAfter,
+                    PartBefore = s.PartBefore,
                 }).ToList();
 
                 return View(viewModel);
@@ -168,6 +170,50 @@ namespace tahsinERP.Controllers
             }
             return View(model);
         }
+
+        public ActionResult Delete(int id)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var slittingNorm = db.SLITTING_NORMS.FirstOrDefault(x => x.ID == id && x.IsDeleted == false);
+                if (slittingNorm == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var partBefore = db.PARTS.FirstOrDefault(p => p.ID == slittingNorm.PartID_before && p.IsDeleted == false);
+                var partAfter = db.PARTS.FirstOrDefault(p => p.ID == slittingNorm.PartID_after && p.IsDeleted == false);
+
+                var viewModel = new SlittingNormViewModel
+                {
+                    SLITTING_NORMS = slittingNorm,
+                    PartBefore = partBefore,
+                    PartAfter = partAfter
+                };
+
+                return View(viewModel);
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult Delete(int id,FormCollection fcn)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var slittingNorm = db.SLITTING_NORMS.FirstOrDefault(x => x.ID == id && x.IsDeleted == false);
+                if (slittingNorm == null)
+                {
+                    return HttpNotFound();
+                }
+
+                slittingNorm.IsDeleted = true;
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+        }
+
 
     }
 }

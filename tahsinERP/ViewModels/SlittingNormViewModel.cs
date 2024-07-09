@@ -10,5 +10,7 @@ namespace tahsinERP.ViewModels
     {
         public SLITTING_NORMS SLITTING_NORMS { get; set; }
         public PART PartAfter { get; set; }
+        public PART PartBefore { get; set; }
+
     }
 }

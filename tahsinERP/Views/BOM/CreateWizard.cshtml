@@ -14,7 +14,6 @@
         <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
         <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
     </head>
-
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -47,7 +46,7 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         @using (Html.BeginForm("CreateWizard", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
-                                        { 
+                                        {
                                             if (!string.IsNullOrEmpty(Model.Process))
                                             {
                                                 var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
@@ -200,8 +199,14 @@
                                                     }
                                                 }
                                             }
-
-
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         }
                                     </div>
                                 </div>

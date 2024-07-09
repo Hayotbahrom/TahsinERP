@@ -557,7 +557,6 @@
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\SContractViewModel.cs" />
-    <Compile Include="ViewModels\SlittingViewModel.cs" />
     <Compile Include="ViewModels\WrhsIncomeViewModel.cs" />
     <Compile Include="ViewModels\TransportTypeViewModel.cs" />
     <Compile Include="ViewModels\WaybillCreateViewModel.cs" />
@@ -2484,6 +2483,7 @@
     <Content Include="Views\FContract\Edit.cshtml" />
     <Content Include="Views\FContract\Delete.cshtml" />
     <Content Include="Views\Slitting\Edit.cshtml" />
+    <Content Include="Views\Slitting\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
