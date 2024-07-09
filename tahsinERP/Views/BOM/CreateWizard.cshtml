@@ -46,8 +46,8 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        @using (Html.BeginForm("CreateWizard", "Bom", FormMethod.Post, new { @class = "wizard-validation", enctype = "multipart/form-data" }))
-                                        {
+                                        @using (Html.BeginForm("CreateWizard", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
+                                        { 
                                             if (!string.IsNullOrEmpty(Model.Process))
                                             {
                                                 var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
@@ -140,25 +140,45 @@
 
                                                         case "Welding":
                                                             <fieldset>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("WELDING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                        </fieldset>
+                                                                <div data-repeater-list="WeldingsPartID">
+                                                                    <div data-repeater-item>
+                                                                        <div class="row justify-content-between">
+                                                                            <fieldset class="invoice-address form-group">
+                                                                                @Html.DropDownList("Welding_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
+                                                                                @Html.ValidationMessageFor(model => model.WeldingPart[0].Welding_PartID, "", new { @class = "text-danger" })
+                                                                            </fieldset>
+                                                                            <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                                                <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
                                                                     </div>
                                                                 </div>
+                                                                <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
+                                                                <br />
+                                                                <br />
                                                             </fieldset>
                                                             break;
 
                                                         case "Assembly":
                                                             <fieldset>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("PAINTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                        </fieldset>
+                                                                <div data-repeater-list="WeldingsPartID">
+                                                                    <div data-repeater-item>
+                                                                        <div class="row justify-content-between">
+                                                                            <fieldset class="invoice-address form-group">
+                                                                                @Html.DropDownList("Assamble_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
+                                                                                @Html.ValidationMessageFor(model => model.AssemblyPart[0].Assamble_PartID, "", new { @class = "text-danger" })
+                                                                            </fieldset>
+                                                                            <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                                                <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
                                                                     </div>
                                                                 </div>
+                                                                <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
+                                                                <br />
+                                                                <br />
                                                             </fieldset>
                                                             break;
 
@@ -181,17 +201,7 @@
                                                 }
                                             }
 
-                                            <br />
-                                            <br />
-                                            <br />
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item border-0 pb-0">
-                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="CreateWizard">
-                                                        <i class='bx bx-save'></i>
-                                                        Saqlash
-                                                    </button>
-                                                </li>
-                                            </ul>
+
                                         }
                                     </div>
                                 </div>
@@ -203,6 +213,7 @@
         </div>
     </div>
 
+    <script src="~/assets/js/jquery.min.js"></script>
     <script src="~/app-assets/vendors/js/vendors.min.js"></script>
     <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
     <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
@@ -214,6 +225,7 @@
     <script src="~/app-assets/js/scripts/components.js"></script>
     <script src="~/app-assets/js/scripts/footer.js"></script>
     <script src="~/app-assets/js/scripts/forms/wizard-steps.js"></script>
+    <script src="~/assets/js/jquery.min.js"></script>
 }
 else
 {

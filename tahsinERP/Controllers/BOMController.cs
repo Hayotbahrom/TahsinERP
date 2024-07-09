@@ -236,7 +236,7 @@ namespace tahsinERP.Controllers
 
                 var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
 
-                model.Product = product;
+                model.ProductNo = product.PNo;
 
                 TempData["BOMCreateViewModel"] = model;
                 return RedirectToAction("CreateWizard");
@@ -266,14 +266,10 @@ namespace tahsinERP.Controllers
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    //var currentUserName = User.Identity.Name;
-                    //var currentUserId = db.USERS.FirstOrDefault(u => u.Uname == currentUserName)?.ID;
-
                     var processNames = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
 
                     var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
                     var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
-
 
                     var cutterLines = (int)((part_before.PWidth) / (part_after.PWidth) - 1);
                     var cutterWidth = model.SLITTING_NORMS.CutterWidth;
@@ -298,6 +294,20 @@ namespace tahsinERP.Controllers
                             IssuedByUserID = 5
                         };
                         db.SLITTING_NORMS.Add(slitting_process);
+
+                        if (part_after != null)
+                        {
+                            var bom = new BOM();
+
+                            bom.ChildPNo = part_after.PNo;
+                            bom.ParentPNo = model.ProductNo;
+                            bom.IsDeleted = false;
+                            bom.IsActive = true;
+                            bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
+                            bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Sliting")?.ID;
+
+                            db.BOMS.Add(bom);
+                        }
                     }
 
                     if (model.BLANKING_NORMS != null)
@@ -324,6 +334,18 @@ namespace tahsinERP.Controllers
                             };
 
                             db.BLANKING_NORMS.Add(blanking_norms);
+
+                            var bom = new BOM();
+
+                            bom.ChildPNo = part_after_Blanking.PNo;
+                            bom.ParentPNo = model.ProductNo;
+                            bom.IsDeleted = false;
+                            bom.IsActive = true;
+                            bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
+                            bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID;
+
+                            db.BOMS.Add(bom);
+
                         }
                         var part_after_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.STAMPING_NORMS.PartID_after);
                         if (part_after_Stamping != null && part_after_Blanking != null)
@@ -342,21 +364,48 @@ namespace tahsinERP.Controllers
                                 IssuedByUserID = 5
                             };
                             db.STAMPING_NORMS.Add(stamping);
+                            var bom = new BOM();
+
+                            bom.ChildPNo = part_after_Stamping.PNo;
+                            bom.ParentPNo = model.ProductNo;
+                            bom.IsDeleted = false;
+                            bom.IsActive = true;
+                            bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
+                            bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID;
+                            db.BOMS.Add(bom);
                         }
                     }
-                    if (part_after != null)
-                    {
-                        var bom = new BOM();
 
-                        bom.ChildPNo = part_after.PNo;
-                        bom.ParentPNo = "26312742";
-                        bom.IsDeleted = false;
-                        bom.IsActive = true;
-                        bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
-                        bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Sliting")?.ID;
-                        
-                        db.BOMS.Add(bom);
+                    if (model.WeldingPart != null)
+                    {
+                        foreach (var part in model.WeldingPart)
+                        {
+                            var bom = new BOM();
+                            bom.ChildPNo = part.PNo;
+                            bom.ParentPNo = model.ProductNo;
+                            bom.IsDeleted = false;
+                            bom.IsActive = true;
+                            bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
+                            bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID;
+                            db.BOMS.Add(bom);
+                        }
                     }
+
+                    if (model.AssemblyPart != null)
+                    {
+                        foreach (var part in model.AssemblyPart)
+                        {
+                            var bom = new BOM();
+                            bom.ChildPNo = part.PNo;
+                            bom.ParentPNo = model.ProductNo;
+                            bom.IsDeleted = false;
+                            bom.IsActive = true;
+                            bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
+                            bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Assembly")?.ID;
+                            db.BOMS.Add(bom);
+                        }
+                    }
+
                     db.SaveChanges();
 
 

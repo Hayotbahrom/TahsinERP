@@ -619,23 +619,7 @@
 
 
 
-        <script>
-            $(document).ready(function () {
-                $('#nextButton').click(function () {
-                    alert('Button clicked');
-                    $.ajax({
-                        url: '@Url.Action("CreateWizard", "BOM")',
-                        type: 'GET',
-                        success: function (data) {
-                            $('#partialViewContainer').html(data);
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error: ' + error);
-                        }
-                    });
-                });
-            });
-        </script>
+
 
 
         <!-- REPEATER -->
