@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Infrastructure.Design;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -37,37 +38,71 @@ namespace tahsinERP.Controllers
             {
                 SContractViewModel SContractViewModel = new SContractViewModel();
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.Contracts = new SelectList(db.S_CONTRACTS.Where(sc => sc.IsDeleted == false).ToList(), "ID", "ContractNo");
+                ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
                 return View(SContractViewModel);
             }
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "ID,ContractNo,IssuedDate,CompanyID,CustomerID,Currency,Amount,Incoterms,PaymentTerms,DueDate,IsDeleted")] S_CONTRACTS contract, int customerId)
+        public ActionResult Create(SContractViewModel model)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            if (model == null)
             {
-                try
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Model cannot be null");
+            }
+
+            if (model.Products == null || !model.Products.Any())
+            {
+                ModelState.AddModelError("Products", "At least one Product is required.");
+                return View(model);
+            }
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                // Add New S_CONTRACT
+                S_CONTRACTS newContract = new S_CONTRACTS
                 {
-                    if (ModelState.IsValid)
+                    ContractNo = model.ContractNo,
+                    IssuedDate = DateTime.Now,
+                    CompanyID = int.Parse(ConfigurationManager.AppSettings["companyID"]),
+                    CustomerID = model.CustomerID,
+                    Currency = model.Currency,
+                    Amount = model.Amount,
+                    Incoterms = model.Incoterms,
+                    PaymentTerms = model.PaymentTerms,
+                    DueDate = model.DueDate,
+                    IsDeleted = false,
+                };
+
+                db.S_CONTRACTS.Add(newContract);
+                db.SaveChanges();
+
+                // Yangi Contract ning ID sini olish
+                int newContractID = newContract.ID;
+
+                // Yangi Product lar ni saqlash
+                foreach (var item in model.Products)
+                {
+                    if(item == null)
                     {
-                        var companyId = ConfigurationManager.AppSettings["companyID"];
-                        contract.CompanyID = int.Parse(companyId);
-                        contract.CustomerID = customerId;
-                        contract.IsDeleted = false;
-
-                        db.S_CONTRACTS.Add(contract);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
+                        ModelState.AddModelError("Products", "Product cannot be null");
+                        return View(model);
                     }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(ex.Message, ex);
+
+                    S_CONTRACT_PRODUCTS newProduct = new S_CONTRACT_PRODUCTS
+                    {
+                        ContractID = newContractID,
+                        ProductID = item.ProductID,
+                        PiecePrice = item.PiecePrice,
+                        Unit = item.Unit,
+                        Amount = item.Amount
+                    };
+
+                    db.S_CONTRACT_PRODUCTS.Add(newProduct);
                 }
 
-                ViewBag.Customer = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
-                return View(contract);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
         }
         // __________

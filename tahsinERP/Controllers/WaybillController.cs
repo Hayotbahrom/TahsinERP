@@ -22,7 +22,6 @@ namespace tahsinERP.Controllers
                     .Include( w => w.F_CONTRACTS)
                     .Include(w => w.P_INVOICES)
                     .Include(w => w.F_TRANSPORT_TYPES)
-                    .Include(w => w.P_INVOICE_PACKINGLISTS)
                     .Where(w => w.IsDeleted == false).ToList();
 
                 return View(list);
@@ -77,7 +76,6 @@ namespace tahsinERP.Controllers
                         ContractID = viewModel.ContractID,
                         TransportTypeID = viewModel.TransportTypeID,
                         InvoiceID = viewModel.InvoiceID,
-                        PackingListID = viewModel.PackingListID,
                         CBM = viewModel.CBM,
                         GrWeight = viewModel.GrWeight,
                         Description = viewModel.Description,
@@ -134,7 +132,6 @@ namespace tahsinERP.Controllers
                                 .Include(w => w.F_CONTRACTS)
                                 .Include(w => w.P_INVOICES)
                                 .Include(w => w.F_TRANSPORT_TYPES)
-                                .Include(w => w.P_INVOICE_PACKINGLISTS)
                                 .FirstOrDefault(w => w.ID == ID);
 
                 if (waybill == null)
@@ -158,7 +155,6 @@ namespace tahsinERP.Controllers
                                 .Include(w => w.F_CONTRACTS)
                                 .Include(w => w.P_INVOICES)
                                 .Include(w => w.F_TRANSPORT_TYPES)
-                                .Include(w => w.P_INVOICE_PACKINGLISTS)
                                 .FirstOrDefault(w => w.ID == ID);
 
                 if (waybill == null)
@@ -189,7 +185,6 @@ namespace tahsinERP.Controllers
                         waybillToUpdate.ContractID = waybill.ContractID;
                         waybillToUpdate.TransportTypeID = waybill.TransportTypeID;
                         waybillToUpdate.InvoiceID = waybill.InvoiceID;
-                        waybillToUpdate.PackingListID = waybill.PackingListID;
                         waybillToUpdate.CBM = waybill.CBM;
                         waybillToUpdate.GrWeight = waybill.GrWeight;
                         waybillToUpdate.Description = waybill.Description;
@@ -231,7 +226,6 @@ namespace tahsinERP.Controllers
                 db.Entry(waybill).Reference(i => i.F_CONTRACTS).Load();
                 db.Entry(waybill).Reference(i => i.F_TRANSPORT_TYPES).Load();
                 db.Entry(waybill).Reference(i => i.P_INVOICES).Load();
-                db.Entry(waybill).Reference(i =>i.P_INVOICE_PACKINGLISTS).Load();
 
                 return View(waybill);
             }
