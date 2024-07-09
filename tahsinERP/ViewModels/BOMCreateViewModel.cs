@@ -8,14 +8,18 @@ namespace tahsinERP.ViewModels
 {
     public class BOMCreateViewModel
     {
-        public PRODUCT product {  get; set; }
-        public PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
+        public int ProductID { get; set; }
+        public PRODUCT Product { get; set; }
+        public string Process { get; set; }
+        public int[] SelectedProcessIds { get; set; }
+
         public SLITTING_NORMS SLITTING_NORMS { get; set; }
         public BLANKING_NORMS BLANKING_NORMS { get; set; }
-        public STAMPING_NORMS STAMPING_NORMS { get;set; }
-        public PART part { get; set; }
+        public STAMPING_NORMS STAMPING_NORMS { get; set; }
+        public PART Part { get; set; }
+
+        // Additional fields for other norms and consumption units
         public string ConsumptionUnit { get; set; }
-        public string Process { get; set; }
-        
+
     }
 }

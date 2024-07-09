@@ -1,21 +1,20 @@
 ﻿@model tahsinERP.ViewModels.BOMCreateViewModel
-@{
-    ViewBag.Title = "CreateWizard";
-}
-<head>
-    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/dark-layout.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/semi-dark-layout.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu.css">
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
-    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
-</head>
 
-<body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <head>
+        <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/dark-layout.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/semi-dark-layout.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu.css">
+        <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
+        <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    </head>
+
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -45,150 +44,155 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header pb-0">
-                                    <h4 class="card-title">Validation Example</h4>
-                                </div>
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <div>
-                                            @using (Html.BeginForm("CreateProcess", "Bom", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        @using (Html.BeginForm("CreateWizard", "Bom", FormMethod.Post, new { @class = "wizard-validation", enctype = "multipart/form-data" }))
+                                        {
+                                            if (!string.IsNullOrEmpty(Model.Process))
                                             {
-                                                <form class="wizard-validation">
-                                                    @if (!string.IsNullOrEmpty(Model.Process))
+                                                var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                                                foreach (var processName in processNames)
+                                                {
+                                                    <h6>
+                                                        <i class="step-icon"></i>
+                                                        <span>@processName</span>
+                                                    </h6>
+
+                                                    switch (processName)
                                                     {
-                                                        var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-                                                        foreach (var processName in processNames)
-                                                        {
-                                                            <h6>
-                                                                <i class="step-icon"></i>
-                                                                <span>@processName</span>
-                                                            </h6>
+                                                        case "Sliting":
+                                                            <fieldset>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                            @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                            @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.TextBoxFor(model => model.SLITTING_NORMS.CutterWidth, new { @class = "form-control", @placeholder = "Cutter width" })
+                                                                            @Html.ValidationMessageFor(model => model.SLITTING_NORMS.CutterWidth, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
+                                                                        @Html.CheckBoxFor(model => model.SLITTING_NORMS.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                                        <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
+                                                                        @Html.ValidationMessageFor(model => model.SLITTING_NORMS.IsActive, "", new { @class = "text-warning" })
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                            break;
 
-                                                            switch (processName)
-                                                            {
-                                                                case "Sliting":
-                                                                    <fieldset>
-                                                                        <div class="row">
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.TextBoxFor(model => model.SLITTING_NORMS.CutterWidth, new { @class = "form-control", @placeholder = "Cutter width" })
-                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.CutterWidth, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-                                                                        </div>
-                                                                    </fieldset>
-                                                                    break;
+                                                        case "Blanking":
+                                                            <fieldset>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("BLANKING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                            @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.TextBoxFor(model => model.BLANKING_NORMS.Density, new { @class = "form-control", @placeholder = "Density" })
+                                                                            @Html.ValidationMessageFor(model => model.BLANKING_NORMS.Density, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
+                                                                        @Html.CheckBoxFor(model => model.BLANKING_NORMS.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                                        <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
+                                                                        @Html.ValidationMessageFor(model => model.BLANKING_NORMS.IsActive, "", new { @class = "text-warning" })
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                            break;
 
-                                                                case "Blanking":
-                                                                    <fieldset>
-                                                                        <div class="row">
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("BLANKING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_before, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("BLANKING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_after, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
+                                                        case "Stamping":
+                                                            <fieldset>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("STAMPING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                            @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.TextBoxFor(model => model.STAMPING_NORMS.Density, new { @class = "form-control", @placeholder = "Density" })
+                                                                            @Html.ValidationMessageFor(model => model.STAMPING_NORMS.Density, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
+                                                                        @Html.CheckBoxFor(model => model.STAMPING_NORMS.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                                        <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
+                                                                        @Html.ValidationMessageFor(model => model.STAMPING_NORMS.IsActive, "", new { @class = "text-warning" })
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                            break;
 
-                                                                        </div>
-                                                                    </fieldset>
-                                                                    break;
+                                                        case "Welding":
+                                                            <fieldset>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("WELDING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                            break;
 
+                                                        case "Assembly":
+                                                            <fieldset>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("PAINTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                            break;
 
-                                                                case "Stamping":
-                                                                    <fieldset>
-                                                                        <div class="row">
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("STAMPING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_before, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("STAMPING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_after, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
+                                                        case "Painting":
+                                                            <fieldset>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("PAINTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                            break;
 
-                                                                        </div>
-                                                                    </fieldset>
-                                                                    break;
-                                                                case "Welding":
-                                                                    <fieldset>
-                                                                        <div class="row">
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </fieldset>
-                                                                    break;
-                                                                case "Painting":
-                                                                    <fieldset>
-                                                                        <div class="row">
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-                                                                            <div class="col-md-4">
-                                                                                <fieldset class="invoice-address form-group">
-                                                                                    @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                                    @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
-                                                                                </fieldset>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </fieldset>
-                                                                    break;
-
-                                                                default:
-                                                                    <p>No specific fields for this process.</p>
-                                                                    break;
-                                                            }
-                                                        }
+                                                        default:
+                                                            <p>No specific fields for this process.</p>
+                                                            break;
                                                     }
-                                                </form>
-                                                <br />
-                                                <br />
-                                                <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item border-0 pb-0">
-                                                        <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
-                                                            <i class='bx bx-save'></i>
-                                                            Save
-                                                        </button>
-                                                    </li>
-                                                </ul>
+                                                }
                                             }
-                                        </div>
+
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="CreateWizard">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -210,4 +214,8 @@
     <script src="~/app-assets/js/scripts/components.js"></script>
     <script src="~/app-assets/js/scripts/footer.js"></script>
     <script src="~/app-assets/js/scripts/forms/wizard-steps.js"></script>
-</body>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
