@@ -57,7 +57,7 @@ namespace tahsinERP.Models
         public double Gauge { get; set; }
         public double Thickness { get; set; }
         public double Pitch { get; set; }
-        public string HSCode { get; set; }
+        public Nullable<int> HSCodeID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
@@ -65,6 +65,7 @@ namespace tahsinERP.Models
         public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
+        public virtual HSCODE HSCODE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

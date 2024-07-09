@@ -17,7 +17,7 @@ namespace tahsinERP.Controllers
     public class WhIncomeController : Controller
     {
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
-        private string partNo, waybillNo, whName, docNo, invoiceNo = "";
+        //private string partNo, waybillNo, whName, docNo, invoiceNo = "";
 
         // GET: WhIncome
         public ActionResult Index(string type, int? supplierID)

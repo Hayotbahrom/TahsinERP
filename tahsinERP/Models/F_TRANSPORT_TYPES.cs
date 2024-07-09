@@ -18,6 +18,7 @@ namespace tahsinERP.Models
         public F_TRANSPORT_TYPES()
         {
             this.F_WAYBILLS = new HashSet<F_WAYBILLS>();
+            this.P_INVOICE_PACKINGLISTS = new HashSet<P_INVOICE_PACKINGLISTS>();
         }
     
         public int ID { get; set; }
@@ -34,5 +35,7 @@ namespace tahsinERP.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_INVOICE_PACKINGLISTS> P_INVOICE_PACKINGLISTS { get; set; }
     }
 }

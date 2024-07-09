@@ -159,7 +159,6 @@
           <Property Name="ContractID" Type="int" />
           <Property Name="TransportTypeID" Type="int" />
           <Property Name="InvoiceID" Type="int" />
-          <Property Name="PackingListID" Type="int" />
           <Property Name="CBM" Type="float" />
           <Property Name="GrWeight" Type="float" />
           <Property Name="Description" Type="text" />
@@ -173,6 +172,15 @@
           <Property Name="ForwarderName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Director" Type="varchar" MaxLength="50" />
           <Property Name="ContactPerson" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="HSCODES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HSCODE" Type="int" Nullable="false" />
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
@@ -229,21 +237,29 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InvoiceID" Type="int" Nullable="false" />
-          <Property Name="PackingListNo" Type="varchar" MaxLength="50" />
+          <Property Name="PackingListNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TransportTypeID" Type="int" Nullable="false" />
+          <Property Name="TransportNo" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="PieceWeight" Type="float" />
           <Property Name="PrLength" Type="float" />
           <Property Name="PrWidth" Type="float" />
           <Property Name="PrHeight" Type="float" />
-          <Property Name="PrCBM" Type="float" />
+          <Property Name="PrCBM" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="PrAmount" Type="float" />
+          <Property Name="PrNetWeight" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="PrGrWeight" Type="float" />
           <Property Name="PrPackMaterial" Type="varchar" MaxLength="50" />
           <Property Name="ScPackMaterial" Type="varchar" MaxLength="50" />
           <Property Name="ScLength" Type="float" />
           <Property Name="ScWidth" Type="float" />
           <Property Name="ScHeight" Type="float" />
-          <Property Name="ScCBM" Type="float" />
+          <Property Name="ScCBM" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="NoOfBoxes" Type="float" />
+          <Property Name="SchedPack" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="ScNetWeight" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="ScGrWeight" Type="float" />
-          <Property Name="PltType" Type="varchar" MaxLength="50" />
+          <Property Name="PalletType" Type="varchar" MaxLength="30" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="P_INVOICE_PARTS">
@@ -307,14 +323,6 @@
           <Property Name="Currency" Type="varchar" MaxLength="15" />
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
-        </EntityType>
-        <EntityType Name="P_PACKINGLIST_DOCS">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PackingListID" Type="int" Nullable="false" />
-          <Property Name="Doc" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -408,6 +416,7 @@
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="MRP" Type="int" />
           <Property Name="ShopID" Type="int" />
+          <Property Name="Account" Type="int" />
         </EntityType>
         <EntityType Name="PART_WRHS_EXPENSE_DOCS">
           <Key>
@@ -576,7 +585,7 @@
           <Property Name="Gauge" Type="float" />
           <Property Name="Thickness" Type="float" />
           <Property Name="Pitch" Type="float" />
-          <Property Name="HSCode" Type="varchar" MaxLength="50" />
+          <Property Name="HSCodeID" Type="int" />
         </EntityType>
         <EntityType Name="PERMISSIONMODULES">
           <Key>
@@ -640,6 +649,7 @@ warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a pr
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="MRP" Type="int" />
           <Property Name="ShopID" Type="int" />
+          <Property Name="Account" Type="int" />
         </EntityType>
         <EntityType Name="PRODUCT1738DOCS">
           <Key>
@@ -1094,18 +1104,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
-          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="0..1" />
-          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="P_INVOICE_PACKINGLISTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="F_WAYBILLS">
-              <PropertyRef Name="PackingListID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_F_WAYBILLS_P_INVOICES">
           <End Role="P_INVOICES" Type="Self.P_INVOICES" Multiplicity="0..1" />
           <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
@@ -1163,6 +1161,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="P_INVOICE_DOCS">
               <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES">
+          <End Role="F_TRANSPORT_TYPES" Type="Self.F_TRANSPORT_TYPES" Multiplicity="1" />
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_TRANSPORT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="TransportTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1319,18 +1329,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="P_ORDERS">
               <PropertyRef Name="SupplierID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
-          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="1" />
-          <End Role="P_PACKINGLIST_DOCS" Type="Self.P_PACKINGLIST_DOCS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="P_INVOICE_PACKINGLISTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_PACKINGLIST_DOCS">
-              <PropertyRef Name="PackingListID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1727,6 +1725,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="PARTPLANS">
               <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PARTS_HSCODES">
+          <End Role="HSCODES" Type="Self.HSCODES" Multiplicity="0..1" />
+          <End Role="PARTS" Type="Self.PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HSCODES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PARTS">
+              <PropertyRef Name="HSCodeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2214,6 +2224,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="F_WAYBILL_DOCS" EntityType="Self.F_WAYBILL_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="F_WAYBILLS" EntityType="Self.F_WAYBILLS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FORWARDERS" EntityType="Self.FORWARDERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HSCODES" EntityType="Self.HSCODES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_CONTRACT_DOCS" EntityType="Self.P_CONTRACT_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_CONTRACT_PARTS" EntityType="Self.P_CONTRACT_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_CONTRACTS" EntityType="Self.P_CONTRACTS" Schema="dbo" store:Type="Tables" />
@@ -2224,7 +2235,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="P_ORDER_DOCS" EntityType="Self.P_ORDER_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_ORDER_PARTS" EntityType="Self.P_ORDER_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_PROFORMA_INVOICES" EntityType="Self.P_PROFORMA_INVOICES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PART_STOCKS" EntityType="Self.PART_STOCKS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PART_WASTE_WRHS_EXPENSE_WASTES" EntityType="Self.PART_WASTE_WRHS_EXPENSE_WASTES" Schema="dbo" store:Type="Tables" />
@@ -2330,10 +2340,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="F_TRANSPORT_TYPES" EntitySet="F_TRANSPORT_TYPES" />
             <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
           </AssociationSet>
-          <AssociationSet Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" Association="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
-            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
-            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
-          </AssociationSet>
           <AssociationSet Name="FK_F_WAYBILLS_P_INVOICES" Association="Self.FK_F_WAYBILLS_P_INVOICES">
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
             <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
@@ -2353,6 +2359,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <AssociationSet Name="FK_P_INVOICE_DOCS_P_INVOICES" Association="Self.FK_P_INVOICE_DOCS_P_INVOICES">
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
             <End Role="P_INVOICE_DOCS" EntitySet="P_INVOICE_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES" Association="Self.FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES">
+            <End Role="F_TRANSPORT_TYPES" EntitySet="F_TRANSPORT_TYPES" />
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_P_INVOICES" Association="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES">
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
@@ -2405,10 +2415,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <AssociationSet Name="FK_P_ORDERS_SUPPLIERS" Association="Self.FK_P_ORDERS_SUPPLIERS">
             <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" Association="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
-            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
-            <End Role="P_PACKINGLIST_DOCS" EntitySet="P_PACKINGLIST_DOCS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_PROFORMA_INVOICES_COMPANIES" Association="Self.FK_P_PROFORMA_INVOICES_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
@@ -2541,6 +2547,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <AssociationSet Name="FK_PARTPLANS_PARTS" Association="Self.FK_PARTPLANS_PARTS">
             <End Role="PARTS" EntitySet="PARTS" />
             <End Role="PARTPLANS" EntitySet="PARTPLANS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PARTS_HSCODES" Association="Self.FK_PARTS_HSCODES">
+            <End Role="HSCODES" EntitySet="HSCODES" />
+            <End Role="PARTS" EntitySet="PARTS" />
           </AssociationSet>
           <AssociationSet Name="FK_PARTS_PARTPACKS" Association="Self.FK_PARTS_PARTPACKS">
             <End Role="PARTPACKS" EntitySet="PARTPACKS" />
@@ -2857,6 +2867,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="CapableOfLifting" Type="Double" />
           <Property Name="TransportWeight" Type="Double" />
           <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILLS_F_TRANSPORT_TYPES" FromRole="F_TRANSPORT_TYPES" ToRole="F_WAYBILLS" />
+          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES" FromRole="F_TRANSPORT_TYPES" ToRole="P_INVOICE_PACKINGLISTS" />
         </EntityType>
         <EntityType Name="F_WAYBILL_DOCS">
           <Key>
@@ -2876,7 +2887,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="ContractID" Type="Int32" />
           <Property Name="TransportTypeID" Type="Int32" />
           <Property Name="InvoiceID" Type="Int32" />
-          <Property Name="PackingListID" Type="Int32" />
           <Property Name="CBM" Type="Double" />
           <Property Name="GrWeight" Type="Double" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -2884,7 +2894,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <NavigationProperty Name="F_CONTRACTS" Relationship="Self.FK_F_WAYBILLS_F_CONTRACTS" FromRole="F_WAYBILLS" ToRole="F_CONTRACTS" />
           <NavigationProperty Name="F_TRANSPORT_TYPES" Relationship="Self.FK_F_WAYBILLS_F_TRANSPORT_TYPES" FromRole="F_WAYBILLS" ToRole="F_TRANSPORT_TYPES" />
           <NavigationProperty Name="F_WAYBILL_DOCS" Relationship="Self.FK_F_WAYBILL_DOCS_F_WAYBILLS" FromRole="F_WAYBILLS" ToRole="F_WAYBILL_DOCS" />
-          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" FromRole="F_WAYBILLS" ToRole="P_INVOICE_PACKINGLISTS" />
           <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_F_WAYBILLS_P_INVOICES" FromRole="F_WAYBILLS" ToRole="P_INVOICES" />
           <NavigationProperty Name="PART_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_F_WAYBILLS" FromRole="F_WAYBILLS" ToRole="PART_WRHS_INCOMES" />
         </EntityType>
@@ -2899,6 +2908,16 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
           <NavigationProperty Name="F_CONTRACTS" Relationship="Self.FK_F_CONTRACTS_FORWARDERS" FromRole="FORWARDERS" ToRole="F_CONTRACTS" />
+        </EntityType>
+        <EntityType Name="HSCODE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HSCODE1" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="PARTS" Relationship="Self.FK_PARTS_HSCODES" FromRole="HSCODES" ToRole="PARTS" />
         </EntityType>
         <EntityType Name="P_CONTRACT_DOCS">
           <Key>
@@ -2962,26 +2981,33 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InvoiceID" Type="Int32" Nullable="false" />
-          <Property Name="PackingListNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PackingListNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TransportTypeID" Type="Int32" Nullable="false" />
+          <Property Name="TransportNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="PieceWeight" Type="Double" />
           <Property Name="PrLength" Type="Double" />
           <Property Name="PrWidth" Type="Double" />
           <Property Name="PrHeight" Type="Double" />
-          <Property Name="PrCBM" Type="Double" />
+          <Property Name="PrCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="PrAmount" Type="Double" />
+          <Property Name="PrNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="PrGrWeight" Type="Double" />
           <Property Name="PrPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ScPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ScLength" Type="Double" />
           <Property Name="ScWidth" Type="Double" />
           <Property Name="ScHeight" Type="Double" />
-          <Property Name="ScCBM" Type="Double" />
+          <Property Name="ScCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="NoOfBoxes" Type="Double" />
+          <Property Name="SchedPack" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ScNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="ScGrWeight" Type="Double" />
-          <Property Name="PltType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PalletType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
-          <NavigationProperty Name="F_WAYBILLS" Relationship="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="F_WAYBILLS" />
+          <NavigationProperty Name="F_TRANSPORT_TYPES" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES" FromRole="P_INVOICE_PACKINGLISTS" ToRole="F_TRANSPORT_TYPES" />
           <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_INVOICES" />
           <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="PARTS" />
-          <NavigationProperty Name="P_PACKINGLIST_DOCS" Relationship="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_PACKINGLIST_DOCS" />
         </EntityType>
         <EntityType Name="P_INVOICE_PARTS">
           <Key>
@@ -3064,15 +3090,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <NavigationProperty Name="P_ORDER_DOCS" Relationship="Self.FK_P_ORDER_DOCS_P_ORDERS" FromRole="P_ORDERS" ToRole="P_ORDER_DOCS" />
           <NavigationProperty Name="P_ORDER_PARTS" Relationship="Self.FK_P_ORDER_PARTS_P_ORDERS" FromRole="P_ORDERS" ToRole="P_ORDER_PARTS" />
           <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_P_ORDERS_SUPPLIERS" FromRole="P_ORDERS" ToRole="SUPPLIERS" />
-        </EntityType>
-        <EntityType Name="P_PACKINGLIST_DOCS">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PackingListID" Type="Int32" Nullable="false" />
-          <Property Name="Doc" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" FromRole="P_PACKINGLIST_DOCS" ToRole="P_INVOICE_PACKINGLISTS" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -3181,6 +3198,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="MRP" Type="Int32" />
           <Property Name="ShopID" Type="Int32" />
+          <Property Name="Account" Type="Int32" />
           <NavigationProperty Name="PART_STOCKS" Relationship="Self.FK_PART_STOCKS_PART_WRHS" FromRole="PART_WRHS" ToRole="PART_STOCKS" />
           <NavigationProperty Name="PART_WASTE_WRHS_EXPENSES" Relationship="Self.FK_PART_WASTE_WRHS_EXPENSES_PART_WRHS" FromRole="PART_WRHS" ToRole="PART_WASTE_WRHS_EXPENSES" />
           <NavigationProperty Name="PART_WASTE_WRHS_EXPENSES1" Relationship="Self.FK_PART_WASTE_WRHS_EXPENSES_PART_WRHS1" FromRole="PART_WRHS" ToRole="PART_WASTE_WRHS_EXPENSES" />
@@ -3385,10 +3403,11 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Gauge" Type="Double" />
           <Property Name="Thickness" Type="Double" />
           <Property Name="Pitch" Type="Double" />
-          <Property Name="HSCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HSCodeID" Type="Int32" />
           <NavigationProperty Name="BLANKING_NORMS" Relationship="Self.FK_BLANKING_NORMS_PARTS" FromRole="PARTS" ToRole="BLANKING_NORMS" />
           <NavigationProperty Name="BLANKING_NORMS1" Relationship="Self.FK_BLANKING_NORMS_PARTS1" FromRole="PARTS" ToRole="BLANKING_NORMS" />
           <NavigationProperty Name="DAMAGED_PARTS" Relationship="Self.FK_DAMAGED_PARTS_PARTS" FromRole="PARTS" ToRole="DAMAGED_PARTS" />
+          <NavigationProperty Name="HSCODE" Relationship="Self.FK_PARTS_HSCODES" FromRole="PARTS" ToRole="HSCODES" />
           <NavigationProperty Name="P_CONTRACT_PARTS" Relationship="Self.FK_P_CONTRACT_PARTS_PARTS" FromRole="PARTS" ToRole="P_CONTRACT_PARTS" />
           <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
           <NavigationProperty Name="P_INVOICE_PARTS" Relationship="Self.FK_P_INVOICE_PARTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PARTS" />
@@ -3465,6 +3484,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="MRP" Type="Int32" />
           <Property Name="ShopID" Type="Int32" />
+          <Property Name="Account" Type="Int32" />
           <NavigationProperty Name="PROD_SHOPS" Relationship="Self.FK_PROD_WRHS_PROD_SHOPS" FromRole="PROD_WRHS" ToRole="PROD_SHOPS" />
           <NavigationProperty Name="PROD_STOCKS" Relationship="Self.FK_PROD_STOCKS_PROD_WRHS" FromRole="PROD_WRHS" ToRole="PROD_STOCKS" />
           <NavigationProperty Name="USER" Relationship="Self.FK_PROD_WRHS_USERS" FromRole="PROD_WRHS" ToRole="USERS" />
@@ -4053,6 +4073,18 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES">
+          <End Role="F_TRANSPORT_TYPES" Type="Self.F_TRANSPORT_TYPES" Multiplicity="1" />
+          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="F_TRANSPORT_TYPES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="TransportTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_F_WAYBILL_DOCS_F_WAYBILLS">
           <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="1" />
           <End Role="F_WAYBILL_DOCS" Type="Self.F_WAYBILL_DOCS" Multiplicity="*" />
@@ -4062,18 +4094,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Principal>
             <Dependent Role="F_WAYBILL_DOCS">
               <PropertyRef Name="WaybillID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
-          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="0..1" />
-          <End Role="F_WAYBILLS" Type="Self.F_WAYBILLS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="P_INVOICE_PACKINGLISTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="F_WAYBILLS">
-              <PropertyRef Name="PackingListID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4098,6 +4118,18 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Principal>
             <Dependent Role="PART_WRHS_INCOMES">
               <PropertyRef Name="WaybillID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PARTS_HSCODES">
+          <End Role="HSCODES" Type="Self.HSCODE" Multiplicity="0..1" />
+          <End Role="PARTS" Type="Self.PART" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HSCODES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PARTS">
+              <PropertyRef Name="HSCodeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4194,18 +4226,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             </Principal>
             <Dependent Role="P_INVOICE_PACKINGLISTS">
               <PropertyRef Name="PartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
-          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="1" />
-          <End Role="P_PACKINGLIST_DOCS" Type="Self.P_PACKINGLIST_DOCS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="P_INVOICE_PACKINGLISTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_PACKINGLIST_DOCS">
-              <PropertyRef Name="PackingListID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5043,6 +5063,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="F_WAYBILL_DOCS" EntityType="Self.F_WAYBILL_DOCS" />
           <EntitySet Name="F_WAYBILLS" EntityType="Self.F_WAYBILLS" />
           <EntitySet Name="FORWARDERS" EntityType="Self.FORWARDER" />
+          <EntitySet Name="HSCODES" EntityType="Self.HSCODE" />
           <EntitySet Name="P_CONTRACT_DOCS" EntityType="Self.P_CONTRACT_DOCS" />
           <EntitySet Name="P_CONTRACT_PARTS" EntityType="Self.P_CONTRACT_PARTS" />
           <EntitySet Name="P_CONTRACTS" EntityType="Self.P_CONTRACTS" />
@@ -5053,7 +5074,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="P_ORDER_DOCS" EntityType="Self.P_ORDER_DOCS" />
           <EntitySet Name="P_ORDER_PARTS" EntityType="Self.P_ORDER_PARTS" />
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" />
-          <EntitySet Name="P_PACKINGLIST_DOCS" EntityType="Self.P_PACKINGLIST_DOCS" />
           <EntitySet Name="P_PROFORMA_INVOICES" EntityType="Self.P_PROFORMA_INVOICES" />
           <EntitySet Name="PART_STOCKS" EntityType="Self.PART_STOCKS" />
           <EntitySet Name="PART_WASTE_WRHS_EXPENSE_WASTES" EntityType="Self.PART_WASTE_WRHS_EXPENSE_WASTES" />
@@ -5181,13 +5201,13 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="F_TRANSPORT_TYPES" EntitySet="F_TRANSPORT_TYPES" />
             <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
           </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES" Association="Self.FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES">
+            <End Role="F_TRANSPORT_TYPES" EntitySet="F_TRANSPORT_TYPES" />
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_F_WAYBILL_DOCS_F_WAYBILLS" Association="Self.FK_F_WAYBILL_DOCS_F_WAYBILLS">
             <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
             <End Role="F_WAYBILL_DOCS" EntitySet="F_WAYBILL_DOCS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" Association="Self.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS">
-            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
-            <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
           </AssociationSet>
           <AssociationSet Name="FK_F_WAYBILLS_P_INVOICES" Association="Self.FK_F_WAYBILLS_P_INVOICES">
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
@@ -5196,6 +5216,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <AssociationSet Name="FK_P_WRHS_INCOMES_F_WAYBILLS" Association="Self.FK_P_WRHS_INCOMES_F_WAYBILLS">
             <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
             <End Role="PART_WRHS_INCOMES" EntitySet="PART_WRHS_INCOMES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PARTS_HSCODES" Association="Self.FK_PARTS_HSCODES">
+            <End Role="HSCODES" EntitySet="HSCODES" />
+            <End Role="PARTS" EntitySet="PARTS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_CONTRACT_DOCS_P_CONTRACTS" Association="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS">
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
@@ -5228,10 +5252,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_PARTS" Association="Self.FK_P_INVOICE_PACKINGLISTS_PARTS">
             <End Role="PARTS" EntitySet="PARTS" />
             <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" Association="Self.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS">
-            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
-            <End Role="P_PACKINGLIST_DOCS" EntitySet="P_PACKINGLIST_DOCS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_INVOICE_PARTS_P_INVOICES" Association="Self.FK_P_INVOICE_PARTS_P_INVOICES">
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
@@ -5739,7 +5759,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="ContractID" ColumnName="ContractID" />
                 <ScalarProperty Name="TransportTypeID" ColumnName="TransportTypeID" />
                 <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-                <ScalarProperty Name="PackingListID" ColumnName="PackingListID" />
                 <ScalarProperty Name="CBM" ColumnName="CBM" />
                 <ScalarProperty Name="GrWeight" ColumnName="GrWeight" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -5754,6 +5773,16 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="ForwarderName" ColumnName="ForwarderName" />
                 <ScalarProperty Name="Director" ColumnName="Director" />
                 <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HSCODES">
+            <EntityTypeMapping TypeName="DBTHSNModel.HSCODE">
+              <MappingFragment StoreEntitySet="HSCODES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="HSCODE1" ColumnName="HSCODE" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
@@ -5816,11 +5845,16 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
                 <ScalarProperty Name="PackingListNo" ColumnName="PackingListNo" />
+                <ScalarProperty Name="TransportTypeID" ColumnName="TransportTypeID" />
+                <ScalarProperty Name="TransportNo" ColumnName="TransportNo" />
                 <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PieceWeight" ColumnName="PieceWeight" />
                 <ScalarProperty Name="PrLength" ColumnName="PrLength" />
                 <ScalarProperty Name="PrWidth" ColumnName="PrWidth" />
                 <ScalarProperty Name="PrHeight" ColumnName="PrHeight" />
                 <ScalarProperty Name="PrCBM" ColumnName="PrCBM" />
+                <ScalarProperty Name="PrAmount" ColumnName="PrAmount" />
+                <ScalarProperty Name="PrNetWeight" ColumnName="PrNetWeight" />
                 <ScalarProperty Name="PrGrWeight" ColumnName="PrGrWeight" />
                 <ScalarProperty Name="PrPackMaterial" ColumnName="PrPackMaterial" />
                 <ScalarProperty Name="ScPackMaterial" ColumnName="ScPackMaterial" />
@@ -5828,8 +5862,11 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="ScWidth" ColumnName="ScWidth" />
                 <ScalarProperty Name="ScHeight" ColumnName="ScHeight" />
                 <ScalarProperty Name="ScCBM" ColumnName="ScCBM" />
+                <ScalarProperty Name="NoOfBoxes" ColumnName="NoOfBoxes" />
+                <ScalarProperty Name="SchedPack" ColumnName="SchedPack" />
+                <ScalarProperty Name="ScNetWeight" ColumnName="ScNetWeight" />
                 <ScalarProperty Name="ScGrWeight" ColumnName="ScGrWeight" />
-                <ScalarProperty Name="PltType" ColumnName="PltType" />
+                <ScalarProperty Name="PalletType" ColumnName="PalletType" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -5898,15 +5935,6 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="P_PACKINGLIST_DOCS">
-            <EntityTypeMapping TypeName="DBTHSNModel.P_PACKINGLIST_DOCS">
-              <MappingFragment StoreEntitySet="P_PACKINGLIST_DOCS">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="PackingListID" ColumnName="PackingListID" />
-                <ScalarProperty Name="Doc" ColumnName="Doc" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6007,6 +6035,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="MRP" ColumnName="MRP" />
                 <ScalarProperty Name="ShopID" ColumnName="ShopID" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6186,7 +6215,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="Gauge" ColumnName="Gauge" />
                 <ScalarProperty Name="Thickness" ColumnName="Thickness" />
                 <ScalarProperty Name="Pitch" ColumnName="Pitch" />
-                <ScalarProperty Name="HSCode" ColumnName="HSCode" />
+                <ScalarProperty Name="HSCodeID" ColumnName="HSCodeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6243,6 +6272,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="MRP" ColumnName="MRP" />
                 <ScalarProperty Name="ShopID" ColumnName="ShopID" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

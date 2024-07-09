@@ -4,74 +4,74 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b22c53ed46cd4858af2bd8b79f5ed7d7" Name="Diagram1" ZoomLevel="29">
-        <EntityTypeShape EntityType="DBTHSNModel.BLANKING_NORMS" Width="1.5" PointX="16.5" PointY="75.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.BOM" Width="1.5" PointX="11.25" PointY="106.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.COMPANy" Width="1.5" PointX="0.75" PointY="60.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.COMPANY_LICENSES" Width="1.5" PointX="3" PointY="59.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.CUSTOMER" Width="1.5" PointX="3.75" PointY="48" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.DAMAGED_PARTS" Width="1.5" PointX="16.5" PointY="82.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.DAMAGED_PRODUCTS" Width="1.5" PointX="19.5" PointY="71.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.DEFECT_TYPES" Width="1.5" PointX="14.25" PointY="98.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.F_CONTRACTS" Width="1.5" PointX="3" PointY="63" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.F_TRANSPORT_TYPES" Width="1.5" PointX="10.5" PointY="64.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.F_WAYBILL_DOCS" Width="1.5" PointX="15" PointY="62.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.F_WAYBILLS" Width="1.5" PointX="12.75" PointY="62.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.FORWARDER" Width="1.5" PointX="0.75" PointY="66.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACT_DOCS" Width="1.5" PointX="8.25" PointY="65.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACT_PARTS" Width="1.5" PointX="10.5" PointY="74.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACTS" Width="1.5" PointX="6" PointY="60.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_DOCS" Width="1.5" PointX="5.25" PointY="52.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_PACKINGLISTS" Width="1.5" PointX="10.5" PointY="68.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_PARTS" Width="1.5" PointX="13.5" PointY="69.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICES" Width="1.5" PointX="3" PointY="54.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_ORDER_DOCS" Width="1.5" PointX="10.5" PointY="61.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_ORDER_PARTS" Width="1.5" PointX="13.5" PointY="73.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_ORDERS" Width="1.5" PointX="8.25" PointY="60.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_PACKINGLIST_DOCS" Width="1.5" PointX="12.75" PointY="86.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_PROFORMA_INVOICES" Width="1.5" PointX="8.25" PointY="56" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_STOCKS" Width="1.5" PointX="13.5" PointY="82.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_EXPENSE_WASTES" Width="1.5" PointX="12.75" PointY="89.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_EXPENSES" Width="1.5" PointX="7.5" PointY="89.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_INCOME_WASTES" Width="1.5" PointX="12.75" PointY="94.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_INCOMES" Width="1.5" PointX="7.5" PointY="93.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS" Width="1.5" PointX="5.25" PointY="81.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_EXPENSE_DOCS" Width="1.5" PointX="9.75" PointY="99.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_EXPENSE_PARTS" Width="1.5" PointX="15.5" PointY="89.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_EXPENSES" Width="1.5" PointX="7.5" PointY="98.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_INCOME_DOCS" Width="1.5" PointX="20.25" PointY="65.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_INCOME_PARTS" Width="1.5" PointX="22.25" PointY="74.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_INCOMES" Width="1.5" PointX="18" PointY="63.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART1738DOCS" Width="1.5" PointX="18.75" PointY="79.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PARTIMAGE" Width="1.5" PointX="10.5" PointY="85.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PARTPACK" Width="1.5" PointX="10.5" PointY="91.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PARTPLAN" Width="1.5" PointX="10.5" PointY="88" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PART" Width="1.5" PointX="8.25" PointY="79.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PERMISSIONMODULE" Width="1.5" PointX="3.75" PointY="87.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PERMISSION" Width="1.5" PointX="6" PointY="72.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PROD_SHOPS" Width="1.5" PointX="3" PointY="82.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PROD_STOCKS" Width="1.5" PointX="10.5" PointY="79.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PROD_WRHS" Width="1.5" PointX="5.25" PointY="77.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PRODUCT1738DOCS" Width="1.5" PointX="15.25" PointY="64.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTIMAGE" Width="1.5" PointX="11.25" PointY="45.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTIONPROCESS" Width="1.5" PointX="9" PointY="103.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTPACK" Width="1.5" PointX="13" PointY="48.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTPLAN" Width="1.5" PointX="11.25" PointY="41.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.PRODUCT" Width="1.5" PointX="9" PointY="49.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.ROLE" Width="1.5" PointX="3.75" PointY="72.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.S_CONTRACT_PRODUCTS" Width="1.5" PointX="11.25" PointY="56.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.S_CONTRACTS" Width="1.5" PointX="6" PointY="55.875" IsExpanded="true" />
+      <Diagram DiagramId="000f3a2ca0494e3f9a835b6732837932" Name="Diagram1" ZoomLevel="18">
+        <EntityTypeShape EntityType="DBTHSNModel.BLANKING_NORMS" Width="1.5" PointX="16.5" PointY="76.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.BOM" Width="1.5" PointX="11.25" PointY="107.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.COMPANy" Width="1.5" PointX="0.75" PointY="61.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.COMPANY_LICENSES" Width="1.5" PointX="3" PointY="60.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.CUSTOMER" Width="1.5" PointX="3.75" PointY="48.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.DAMAGED_PARTS" Width="1.5" PointX="16.5" PointY="83.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.DAMAGED_PRODUCTS" Width="1.5" PointX="21.5" PointY="72.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.DEFECT_TYPES" Width="1.5" PointX="14.25" PointY="99.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.F_CONTRACTS" Width="1.5" PointX="3" PointY="63.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.F_TRANSPORT_TYPES" Width="1.5" PointX="11.25" PointY="52.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.F_WAYBILL_DOCS" Width="1.5" PointX="13.5" PointY="60.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.F_WAYBILLS" Width="1.5" PointX="11.25" PointY="65.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.FORWARDER" Width="1.5" PointX="0.75" PointY="67.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.HSCODE" Width="1.5" PointX="6" PointY="74.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACT_DOCS" Width="1.5" PointX="8.25" PointY="66.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACT_PARTS" Width="1.5" PointX="10.5" PointY="74.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_CONTRACTS" Width="1.5" PointX="6" PointY="61.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_DOCS" Width="1.5" PointX="5.25" PointY="53.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_PACKINGLISTS" Width="1.5" PointX="13.5" PointY="68.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICE_PARTS" Width="1.5" PointX="10.5" PointY="70.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_INVOICES" Width="1.5" PointX="3" PointY="55.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_ORDER_DOCS" Width="1.5" PointX="10.5" PointY="62.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_ORDER_PARTS" Width="1.5" PointX="13.5" PointY="76.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_ORDERS" Width="1.5" PointX="8.25" PointY="61.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_PROFORMA_INVOICES" Width="1.5" PointX="8.25" PointY="56.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_STOCKS" Width="1.5" PointX="13.5" PointY="83.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_EXPENSE_WASTES" Width="1.5" PointX="12.75" PointY="90.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_EXPENSES" Width="1.5" PointX="7.5" PointY="90.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_INCOME_WASTES" Width="1.5" PointX="12.75" PointY="95" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_INCOMES" Width="1.5" PointX="7.5" PointY="94.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS" Width="1.5" PointX="5.25" PointY="82.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_EXPENSE_DOCS" Width="1.5" PointX="9.75" PointY="100.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_EXPENSE_PARTS" Width="1.5" PointX="15.5" PointY="91" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_EXPENSES" Width="1.5" PointX="7.5" PointY="99.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_INCOME_DOCS" Width="1.5" PointX="18.75" PointY="66.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_INCOME_PARTS" Width="1.5" PointX="18.75" PointY="72.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART_WRHS_INCOMES" Width="1.5" PointX="16.5" PointY="64.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART1738DOCS" Width="1.5" PointX="18.75" PointY="80.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PARTIMAGE" Width="1.5" PointX="10.5" PointY="86.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PARTPACK" Width="1.5" PointX="10.5" PointY="92.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PARTPLAN" Width="1.5" PointX="10.5" PointY="88.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PART" Width="1.5" PointX="8.25" PointY="80" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PERMISSIONMODULE" Width="1.5" PointX="14.75" PointY="57.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PERMISSION" Width="1.5" PointX="17" PointY="61.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PROD_SHOPS" Width="1.5" PointX="3" PointY="83.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PROD_STOCKS" Width="1.5" PointX="10.5" PointY="79.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PROD_WRHS" Width="1.5" PointX="5.25" PointY="78" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCT1738DOCS" Width="1.5" PointX="14.25" PointY="63.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTIMAGE" Width="1.5" PointX="11.25" PointY="41.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTIONPROCESS" Width="1.5" PointX="9" PointY="104.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTPACK" Width="1.5" PointX="12" PointY="44.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCTPLAN" Width="1.5" PointX="11.25" PointY="37.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.PRODUCT" Width="1.5" PointX="9" PointY="50" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.ROLE" Width="1.5" PointX="3.75" PointY="73.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.S_CONTRACT_PRODUCTS" Width="1.5" PointX="11.25" PointY="57.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.S_CONTRACTS" Width="1.5" PointX="6" PointY="56.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.SAMPLE_FILES" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.SLITTING_NORMS" Width="1.5" PointX="16.5" PointY="69.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.SPL" Width="1.5" PointX="11.25" PointY="35.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.STAMPING_NORMS" Width="1.5" PointX="19.5" PointY="75.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.SUPPLIER" Width="1.5" PointX="3.75" PointY="67.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.USER_ENTRIES" Width="1.5" PointX="8.25" PointY="69.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.USER_LICENSES" Width="1.5" PointX="8.25" PointY="72.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.USERIMAGE" Width="1.5" PointX="8.25" PointY="75.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.USER" Width="1.5" PointX="6" PointY="66" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.WASTE_STOCKS" Width="1.5" PointX="13.5" PointY="78.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.WASTE" Width="1.5" PointX="11.25" PointY="103.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.SLITTING_NORMS" Width="1.5" PointX="16.5" PointY="70.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.SPL" Width="1.5" PointX="11.25" PointY="31.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.STAMPING_NORMS" Width="1.5" PointX="19.5" PointY="76.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.SUPPLIER" Width="1.5" PointX="3.75" PointY="68.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.USER_ENTRIES" Width="1.5" PointX="8.25" PointY="70.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.USER_LICENSES" Width="1.5" PointX="8.25" PointY="73" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.USERIMAGE" Width="1.5" PointX="8.25" PointY="76.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.USER" Width="1.5" PointX="6" PointY="66.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.WASTE_STOCKS" Width="1.5" PointX="13.5" PointY="87.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.WASTE" Width="1.5" PointX="11.25" PointY="104.125" IsExpanded="true" />
         <AssociationConnector Association="DBTHSNModel.FK_BLANKING_NORMS_PARTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_BLANKING_NORMS_PARTS1" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_BLANKING_NORMS_USERS" ManuallyRouted="false" />
@@ -93,10 +93,11 @@
         <AssociationConnector Association="DBTHSNModel.FK_F_CONTRACTS_FORWARDERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_F_WAYBILLS_F_CONTRACTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_F_WAYBILLS_F_TRANSPORT_TYPES" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_F_WAYBILL_DOCS_F_WAYBILLS" ManuallyRouted="false" />
-        <AssociationConnector Association="DBTHSNModel.FK_F_WAYBILLS_P_INVOICE_PACKINGLISTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_F_WAYBILLS_P_INVOICES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_WRHS_INCOMES_F_WAYBILLS" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTHSNModel.FK_PARTS_HSCODES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_CONTRACT_DOCS_P_CONTRACTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_CONTRACT_PARTS_P_CONTRACTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_CONTRACT_PARTS_PARTS" ManuallyRouted="false" />
@@ -105,7 +106,6 @@
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_DOCS_P_INVOICES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_P_INVOICES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_PARTS" ManuallyRouted="false" />
-        <AssociationConnector Association="DBTHSNModel.FK_P_PACKINGLIST_DOCS_P_INVOICE_PACKINGLISTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PARTS_P_INVOICES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PARTS_PARTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICES_P_ORDERS" ManuallyRouted="false" />

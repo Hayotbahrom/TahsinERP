@@ -23,7 +23,7 @@ namespace tahsinERP.ViewModels
 
         public string Currency { get; set; }
 
-        public double? Amount { get; set; }
+        public int Amount { get; set; }
 
         public string Incoterms { get; set; }
 
@@ -32,13 +32,13 @@ namespace tahsinERP.ViewModels
         [DataType(DataType.Date)]
         public DateTime DueDate { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
 
-        public List<SContractProductViewModel> ContractProducts { get; set; }
+        public List<SContractProductViewModel> Products { get; set; }
 
         public SContractViewModel()
         {
-            ContractProducts = new List<SContractProductViewModel>();
+            Products = new List<SContractProductViewModel>();
         }
     }
 

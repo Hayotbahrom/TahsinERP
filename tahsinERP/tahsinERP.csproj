@@ -374,6 +374,9 @@
     <Compile Include="Models\GetSupplierParts_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\HSCODE.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PART.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -486,9 +489,6 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_ORDER_PARTS.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\P_PACKINGLIST_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_PROFORMA_INVOICES.cs">

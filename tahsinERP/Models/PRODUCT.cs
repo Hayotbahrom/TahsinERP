@@ -36,7 +36,7 @@ namespace tahsinERP.Models
         public string Unit { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
-        public bool IsDeleted { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
         public string PNo2 { get; set; }
         public string PNo3 { get; set; }
         public string PNo4 { get; set; }

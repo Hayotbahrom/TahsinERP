@@ -40,6 +40,7 @@ namespace tahsinERP.Models
         public virtual DbSet<F_WAYBILL_DOCS> F_WAYBILL_DOCS { get; set; }
         public virtual DbSet<F_WAYBILLS> F_WAYBILLS { get; set; }
         public virtual DbSet<FORWARDER> FORWARDERS { get; set; }
+        public virtual DbSet<HSCODE> HSCODES { get; set; }
         public virtual DbSet<P_CONTRACT_DOCS> P_CONTRACT_DOCS { get; set; }
         public virtual DbSet<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
         public virtual DbSet<P_CONTRACTS> P_CONTRACTS { get; set; }
@@ -50,7 +51,6 @@ namespace tahsinERP.Models
         public virtual DbSet<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
         public virtual DbSet<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
-        public virtual DbSet<P_PACKINGLIST_DOCS> P_PACKINGLIST_DOCS { get; set; }
         public virtual DbSet<P_PROFORMA_INVOICES> P_PROFORMA_INVOICES { get; set; }
         public virtual DbSet<PART_STOCKS> PART_STOCKS { get; set; }
         public virtual DbSet<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
