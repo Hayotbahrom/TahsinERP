@@ -229,7 +229,13 @@ namespace tahsinERP.Controllers
 
                // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", whrsIncome.SupplierID);
 
-                partList = whrsIncome.PART_WRHS_INCOME_PARTS.ToList();
+                partList = db1.PART_WRHS_INCOME_PARTS
+                    .Where(whp => whp.IncomeID == ID)
+                    .Include(whp => whp.PART)
+                    .ToList();
+                //ViewBag.PartList = new SelectList(db1.PART_WRHS_INCOME_PARTS.Include(p => p.PART).ToList(),"ID","PName");
+                ViewBag.Invoices = new SelectList(db1.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                ViewBag.Waybills = new SelectList(db1.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
             }
 
            // ViewBag.Supplier = suppliers;
@@ -259,17 +265,15 @@ namespace tahsinERP.Controllers
                         wrhsIncomeToUpdate.Description = whrsIncome.Description;
                         wrhsIncomeToUpdate.IssueDateTime = whrsIncome.IssueDateTime;
                         //wrhsIncomeToUpdate.SenderWHID = whrsIncome.SenderWHID;
-                        if (TryUpdateModel(wrhsIncomeToUpdate, "", new string[] { "ContractNo", "IssuedDate", "SupplierID", "Price", "Currency", "Amount", "Incoterms", "PaymentTerms", "DueDate", "IDN" }))
+                        
+                        try
                         {
-                            try
-                            {
-                                db1.SaveChanges();
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db1.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                     return View(wrhsIncomeToUpdate);
@@ -321,25 +325,20 @@ namespace tahsinERP.Controllers
                     if (whIncomePartToUpdate != null)
                     {
                         whIncomePartToUpdate.PartID = whIncomePart.PartID;
-                        whIncomePartToUpdate.IncomeID = whIncomePart.IncomeID;
                         whIncomePartToUpdate.Amount = whIncomePart.Amount;
                         whIncomePartToUpdate.Unit = whIncomePart.Unit;
                         whIncomePartToUpdate.PiecePrice = whIncomePart.PiecePrice;
                         whIncomePartToUpdate.Comment = whIncomePart.Comment;
                         //whIncomePartToUpdate.Amount = whIncomePart.Quantity * whIncomePart.Price; SQL o'zi chiqarib beradi
 
-
-                        if (TryUpdateModel(whIncomePartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, ActivePart" }))
+                        try
                         {
-                            try
-                            {
-                                db.SaveChanges();
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                     return View(whIncomePartToUpdate);
@@ -355,7 +354,7 @@ namespace tahsinERP.Controllers
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var whrsIncome = db.P_CONTRACTS.Find(Id);
+                var whrsIncome = db.PART_WRHS_INCOMES.Find(Id);
                 if (whrsIncome == null)
                 {
                     return HttpNotFound();
@@ -365,7 +364,8 @@ namespace tahsinERP.Controllers
                         .Include(pc => pc.PART)
                         .Where(pc => pc.IncomeID == whrsIncome.ID).ToList();
 
-                db.Entry(whrsIncome).Reference(i => i.SUPPLIER).Load();
+                db.Entry(whrsIncome).Reference(i => i.P_INVOICES).Load();
+                db.Entry(whrsIncome).Reference(i => i.F_WAYBILLS).Load();   
                 return View(whrsIncome);
             }
         }

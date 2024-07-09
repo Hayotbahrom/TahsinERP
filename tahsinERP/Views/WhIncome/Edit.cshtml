@@ -53,13 +53,13 @@
 
                                                 <h6 class="invoice-to">Invoice</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.DropDownListFor(model => model.InvoiceID, ViewBag.PInvoice as SelectList, new { @class = "form-control select2" })
+                                                    @Html.DropDownListFor(model => model.InvoiceID, ViewBag.Invoices as SelectList, new { @class = "form-control select2" })
                                                     @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
                                                 </fieldset>
 
                                                 <h6 class="invoice-to">Waybill raqami</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.DropDownListFor(model => model.WaybillID, ViewBag.Waybill as SelectList, new { @class = "form-control select2" })
+                                                    @Html.DropDownListFor(model => model.WaybillID, ViewBag.Waybills as SelectList, new { @class = "form-control select2" })
                                                     @Html.ValidationMessageFor(model => model.WaybillID, "", new { @class = "text-danger" })
                                                 </fieldset>
 
@@ -100,10 +100,11 @@
                                                                             <tr>
                                                                                 <th>Detal raqami</th>
                                                                                 <th>Detal nomi</th>
-                                                                                <th>Dona narxi</th>
-                                                                                <th>O'lchov birligi</th>
                                                                                 <th>Miqdori</th>
-                                                                                <th>MOQ</th>
+                                                                                <th>O'lchov birligi</th>
+                                                                                <th>Dona narxi</th>
+                                                                                <th>Umumiy narxi</th>
+                                                                                <th>Amallar</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -114,10 +115,10 @@
                                                                                         <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
                                                                                     </td>
                                                                                     <td>@item.PART.PName</td>
-                                                                                    <td>@item.Price</td>
-                                                                                    <td>@item.Unit</td>
                                                                                     <td>@item.Amount</td>
-                                                                                    <td>@item.MOQ</td>
+                                                                                    <td>@item.Unit</td>
+                                                                                    <td>@item.PiecePrice</td>
+                                                                                    <td>@item.TotalPrice</td>
                                                                                     <td>
                                                                                         <!-- Delete button -->
                                                                                         <a href="@Url.Action("EditPart", "WhIncome", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
