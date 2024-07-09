@@ -175,10 +175,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\tahsinERPCore\tahsinERPCore.csproj">
-      <Project>{f9d988ea-eada-4c57-b377-a4855185925d}</Project>
-      <Name>tahsinERPCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\tahsinERP\tahsinERP.csproj">
       <Project>{524032b1-5df4-40fd-bce8-d04fd72a79c8}</Project>
       <Name>tahsinERP</Name>

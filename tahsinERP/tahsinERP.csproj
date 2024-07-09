@@ -2481,6 +2481,11 @@
     <Content Include="Views\FContract\Details.cshtml" />
     <Content Include="Views\FContract\Edit.cshtml" />
     <Content Include="Views\FContract\Delete.cshtml" />
+    <Content Include="Views\WhIncome\Details.cshtml" />
+    <Content Include="Views\WhIncome\Edit.cshtml" />
+    <Content Include="Views\WhIncome\Delete.cshtml" />
+    <Content Include="Views\WhIncome\DeletePart.cshtml" />
+    <Content Include="Views\WhIncome\EditPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

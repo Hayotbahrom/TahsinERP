@@ -214,7 +214,6 @@ namespace tahsinERP.Controllers
 
             PART_WRHS_INCOMES whrsIncome;
             List<PART_WRHS_INCOME_PARTS> partList;
-            SelectList suppliers;
 
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
@@ -279,7 +278,7 @@ namespace tahsinERP.Controllers
             return View(whrsIncome);
         }
         //hali toliq ozgartitilmagan
-        /*
+        
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)
@@ -288,11 +287,11 @@ namespace tahsinERP.Controllers
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contractPart = db.PART_WRHS_INCOME_PARTS
-                                    .Include(p => p.P_CONTRACTS)
+                var whIncomePart = db.PART_WRHS_INCOME_PARTS
+                                    .Include(p => p.PART_WRHS_INCOMES)
                                     .Include(p => p.PART)
                                     .FirstOrDefault(p => p.ID == ID);
-                if (contractPart == null)
+                if (whIncomePart == null)
                 {
                     return HttpNotFound();
                 }
@@ -306,31 +305,31 @@ namespace tahsinERP.Controllers
 
                 ViewBag.PartList = allParts;
 
-                return View(contractPart);
+                return View(whIncomePart);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPart(PART_WRHS_INCOME_PARTS contractPart)
+        public ActionResult EditPart(PART_WRHS_INCOME_PARTS whIncomePart)
         {
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    PART_WRHS_INCOME_PARTS contractPartToUpdate = db.PART_WRHS_INCOME_PARTS.Find(contractPart.ID);
-                    if (contractPartToUpdate != null)
+                    PART_WRHS_INCOME_PARTS whIncomePartToUpdate = db.PART_WRHS_INCOME_PARTS.Find(whIncomePart.ID);
+                    if (whIncomePartToUpdate != null)
                     {
-                        contractPartToUpdate.PartID = contractPart.PartID;
-                        contractPartToUpdate.Price = contractPart.Price;
-                        contractPartToUpdate.Quantity = contractPart.Quantity;
-                        contractPartToUpdate.Unit = contractPart.Unit;
-                        contractPartToUpdate.MOQ = contractPart.MOQ;
-                        contractPartToUpdate.ActivePart = contractPart.ActivePart;
-                        //contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price; SQL o'zi chiqarib beradi
+                        whIncomePartToUpdate.PartID = whIncomePart.PartID;
+                        whIncomePartToUpdate.IncomeID = whIncomePart.IncomeID;
+                        whIncomePartToUpdate.Amount = whIncomePart.Amount;
+                        whIncomePartToUpdate.Unit = whIncomePart.Unit;
+                        whIncomePartToUpdate.PiecePrice = whIncomePart.PiecePrice;
+                        whIncomePartToUpdate.Comment = whIncomePart.Comment;
+                        //whIncomePartToUpdate.Amount = whIncomePart.Quantity * whIncomePart.Price; SQL o'zi chiqarib beradi
 
 
-                        if (TryUpdateModel(contractPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, ActivePart" }))
+                        if (TryUpdateModel(whIncomePartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, ActivePart" }))
                         {
                             try
                             {
@@ -343,7 +342,7 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
-                    return View(contractPartToUpdate);
+                    return View(whIncomePartToUpdate);
                 }
             }
             return View();
@@ -364,13 +363,12 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.PART_WRHS_INCOME_PARTS
                         .Include(pc => pc.PART)
-                        .Where(pc => pc.ContractID == whrsIncome.ID).ToList();
+                        .Where(pc => pc.IncomeID == whrsIncome.ID).ToList();
 
                 db.Entry(whrsIncome).Reference(i => i.SUPPLIER).Load();
                 return View(whrsIncome);
             }
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -380,18 +378,18 @@ namespace tahsinERP.Controllers
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    P_CONTRACTS contractToDelete = db.P_CONTRACTS.Find(ID);
-                    if (contractToDelete != null)
+                    PART_WRHS_INCOMES whIncomeToDelete = db.PART_WRHS_INCOMES.Find(ID);
+                    if (whIncomeToDelete != null)
                     {
-                        contractToDelete.IsDeleted = true;
+                        whIncomeToDelete.IsDeleted = true;
                         try
                         {
-                            db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
-                            /*var contractParts = db.PART_WRHS_INCOME_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
-                            foreach (var contractPart in contractParts)
+                            db.Entry(whIncomeToDelete).State = System.Data.Entity.EntityState.Modified;
+                            /*var contractParts = db.PART_WRHS_INCOME_PARTS.Where(pc => pc.IncomeID == whIncomeToDelete.ID).ToList();
+                            foreach (var whIncomePart in contractParts)
                             {
-                                db.PART_WRHS_INCOME_PARTS.Remove(contractPart);
-                            }
+                                db.PART_WRHS_INCOME_PARTS.Remove(whIncomePart);
+                            }*/
                             db.SaveChanges();
                             return RedirectToAction("Index");
                         }
@@ -435,7 +433,7 @@ namespace tahsinERP.Controllers
                 }
                 return View(contractPartToDelete);
             }
-        }*/
+        }
 
     }
 }
