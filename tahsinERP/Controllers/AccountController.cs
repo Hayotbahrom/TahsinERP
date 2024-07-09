@@ -16,8 +16,6 @@ namespace tahsinERP.Controllers
 {
     public class AccountController : Controller
     {
-
-        
         [DllImport("Iphlpapi.dll")]
         private static extern int SendARP(int dest, int host, ref long mac, ref int length);
 

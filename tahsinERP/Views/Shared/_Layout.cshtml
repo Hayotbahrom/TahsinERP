@@ -46,6 +46,28 @@
 <body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
     @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Layout"))
     {
+        <!-- Begin Modal -->
+        <div id="cookieConsentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cookieConsentModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cookieConsentModalLabel">Cookie Consent</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="acceptCookiesBtn">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ends Modal -->
+
+
         <div class="header-navbar-shadow"></div>
         <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top ">
             <div class="navbar-wrapper">
@@ -209,7 +231,12 @@
                     </div>
                 </div>
             </div>
-        </nav>@* <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@<!-- END: Header--><!-- BEGIN: Main Menu--><div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+        </nav>
+        @* <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+        <!-- END: Header-->
+
+        <!-- BEGIN: Main Menu-->
+        <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
             <div class="navbar-header">
                 <ul class="nav navbar-nav flex-row">
                     <li class="nav-item mr-auto">
@@ -622,14 +649,15 @@
 
 
 
-        <!-- REPEATER -->
-        <script src="~/assets/js/jquery.min.js"></script>
- // v3.6.0
+        <!-- REPEATER/Cookies Modal -->
+        <script src="~/assets/js/jquery.min.js"></script>// v3.6.0
         <script src="~/assets/js/jquery.repeater.min.js"></script>
         <script>
-            // 'j' => (just name)using for last added jQuery(v3.0.6)
+            @* General: using two jQuery version *@
             var $j = jQuery.noConflict(true); // Ikkita JS ni birga ishlatish
+            // 'j' => (just name)using for last added jQuery(v3.0.6)
 
+            @* Repeater.JS *@
             $j(document).ready(function () {
                 $j('.repeater-default').repeater({
                     show: function () {
@@ -640,6 +668,19 @@
                             $j(this).slideUp(deleteElement);
                         }
                     }
+                });
+            });
+
+            @* Cookie *@
+            $j(document).ready(function() {
+                if (showCookieConsentModal) {
+                    alert("used");
+                    $j('#cookieConsentModal').modal('show');
+                }
+
+                $j('#acceptCookiesBtn').click(function() {
+                    document.cookie = "CookieConsent=true; path=/";
+                    $j('#cookieConsentModal').modal('hide');
                 });
             });
         </script>

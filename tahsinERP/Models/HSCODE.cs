@@ -12,21 +12,20 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BOM
+    public partial class HSCODE
     {
-        public int ID { get; set; }
-        public double Consumption { get; set; }
-        public string ConsumptionUnit { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
-        public string ParentPNo { get; set; }
-        public string ChildPNo { get; set; }
-        public Nullable<bool> IsParentProduct { get; set; }
-        public double WasteAmount { get; set; }
-        public double TotalConsumption { get; set; }
-        public Nullable<int> Sequence { get; set; }
-        public Nullable<int> ProcessID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public HSCODE()
+        {
+            this.PARTS = new HashSet<PART>();
+        }
     
-        public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
+        public int ID { get; set; }
+        public int HSCODE1 { get; set; }
+        public string Description { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART> PARTS { get; set; }
     }
 }

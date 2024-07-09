@@ -17,7 +17,7 @@ namespace tahsinERP.Controllers
 {
     public class SupplierController : Controller
     {
-        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
+        private string[] sources = ConfigurationManager.AppSettings["supplierTypes"].Split(',');
         private string supplierName = "";
         // GET: Supplier
         public ActionResult Index(string type)
