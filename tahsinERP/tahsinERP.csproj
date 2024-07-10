@@ -275,6 +275,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
+    <Compile Include="Controllers\BlankingController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -300,6 +301,7 @@
     <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SlittingController.cs" />
+    <Compile Include="Controllers\StampingController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WaybillController.cs" />
@@ -543,15 +545,18 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BOM\BlankingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\ChildViewModel.cs" />
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
     <Compile Include="ViewModels\BOM\ParentViewModel.cs" />
     <Compile Include="ViewModels\BOMCreateViewModel.cs" />
+    <Compile Include="ViewModels\BOM\StampingNormViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
-    <Compile Include="ViewModels\SlittingProcessViewModel.cs" />
+    <Compile Include="ViewModels\BOM\SlittingNormViewModel.cs" />
+    <Compile Include="ViewModels\BOM\SlittingProcessViewModel.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
@@ -2481,6 +2486,23 @@
     <Content Include="Views\FContract\Details.cshtml" />
     <Content Include="Views\FContract\Edit.cshtml" />
     <Content Include="Views\FContract\Delete.cshtml" />
+    <Content Include="Views\Slitting\Edit.cshtml" />
+    <Content Include="Views\Slitting\Delete.cshtml" />
+    <Content Include="Views\WhIncome\Details.cshtml" />
+    <Content Include="Views\WhIncome\Edit.cshtml" />
+    <Content Include="Views\WhIncome\Delete.cshtml" />
+    <Content Include="Views\WhIncome\DeletePart.cshtml" />
+    <Content Include="Views\WhIncome\EditPart.cshtml" />
+    <Content Include="Views\Blanking\Index.cshtml" />
+    <Content Include="Views\Blanking\Create.cshtml" />
+    <Content Include="Views\Blanking\Edit.cshtml" />
+    <Content Include="Views\Blanking\Delete.cshtml" />
+    <Content Include="Views\Blanking\Details.cshtml" />
+    <Content Include="Views\Stamping\Index.cshtml" />
+    <Content Include="Views\Stamping\Create.cshtml" />
+    <Content Include="Views\Stamping\Edit.cshtml" />
+    <Content Include="Views\Stamping\Delete.cshtml" />
+    <Content Include="Views\Stamping\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

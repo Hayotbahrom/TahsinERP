@@ -1,0 +1,83 @@
+﻿@model tahsinERP.ViewModels.BOM.BlankingNormViewModel
+
+@{
+    ViewBag.Title = "Delete Blanking Norm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Blanking/Index">Blanking Process</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Blanking Norm Processni o'chirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row my-2 py-50">
+                                            <div class="col-sm-6 col-12 order-2 order-sm-1">
+                                                @using (Html.BeginForm("Delete", "Blanking", FormMethod.Post))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.HiddenFor(model => model.BLANKING_NORMS.ID)
+
+                                                    <hr />
+                                                    <span><b>Part Before:</b> @Html.DisplayFor(model => model.PartBefore.PNo)</span>
+                                                    <hr />
+                                                    <span><b>Part After:</b> @Html.DisplayFor(model => model.PartAfter.PNo)</span>
+                                                    <hr />
+                                                    <span><b>Density:</b> @Html.DisplayFor(model => model.BLANKING_NORMS.Density)</span>
+                                                    <hr />
+                                                    <span><b>Quantity Of Blanks:</b> @Html.DisplayFor(model => model.BLANKING_NORMS.QuantityOfBlanks)</span>
+                                                    <hr />
+                                                    <span><b>Weight Of Blanks:</b> @Html.DisplayFor(model => model.BLANKING_NORMS.WeightOfBlanks)</span>
+                                                    <hr />
+                                                    <span><b>Weight Of Cut Waste:</b> @Html.DisplayFor(model => model.BLANKING_NORMS.WeightOfCutWaste)</span>
+                                                    <hr />
+                                                    <br />
+                                                    <h6>Are you sure you want to delete this blanking norm?</h6>
+                                                    <br />
+                                                    <input type="submit" value="Delete" class="btn btn-danger" />
+                                                    <a href="~/Blanking/Index" class="btn btn-secondary">Cancel</a>
+                                                }
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
