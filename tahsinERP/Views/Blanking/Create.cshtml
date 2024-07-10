@@ -1,0 +1,100 @@
+﻿@model tahsinERP.Models.BLANKING_NORMS
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Create", "Blanking", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Slitting/Index">Slitting Processlar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Yangi Slitting process qo'shish
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <!-- app invoice View Page -->
+                    <section class="basic-select2">
+                        <div class="row">
+                            <!-- invoice view page -->
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <fieldset class="invoice-address form-group">
+                                                                @Html.DropDownList("PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                @Html.ValidationMessageFor(model => model.PartID_before, "", new { @class = "text-danger" })
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <fieldset class="invoice-address form-group">
+                                                                @Html.DropDownList("PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                @Html.ValidationMessageFor(model => model.PartID_after, "", new { @class = "text-danger" })
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <fieldset class="invoice-address form-group">
+                                                                @Html.TextBoxFor(model => model.Density, new { @class = "form-control", @placeholder = "Density" })
+                                                                @Html.ValidationMessageFor(model => model.Density, "", new { @class = "text-danger" })
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
+                                                            @Html.CheckBoxFor(model => model.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                            <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
+                                                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
+                                                        </div>
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                                <i class='bx bx-save'></i>
+                                                                Save
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
