@@ -223,25 +223,50 @@ namespace tahsinERP.Controllers
             }
         }
 
+        //[HttpPost]
+        //public ActionResult Create(BOMCreateViewModel model, int[] processID)
+        //{
+        //    using (DBTHSNEntities db = new DBTHSNEntities())
+        //    {
+        //        var selectedProcesses = db.PRODUCTIONPROCESSES
+        //                                  .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
+        //                                  .ToList();
+
+        //        model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
+
+        //        var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
+
+        //        model.ProductNo = product.PNo;
+        //        model.Product = product;
+
+        //        TempData["BOMCreateViewModel"] = model;
+        //        return RedirectToAction("CreateWizard");
+        //    }
+        //}
+
         [HttpPost]
         public ActionResult Create(BOMCreateViewModel model, int[] processID)
         {
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var selectedProcesses = db.PRODUCTIONPROCESSES
-                                          .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
-                                          .ToList();
+                                           .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
+                                           .ToList();
 
                 model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
 
                 var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
 
                 model.ProductNo = product.PNo;
+                model.Product = product;
 
                 TempData["BOMCreateViewModel"] = model;
-                return RedirectToAction("CreateWizard");
             }
+
+            return RedirectToAction("CreateWizard");
         }
+
 
         public ActionResult CreateWizard()
         {
@@ -254,10 +279,14 @@ namespace tahsinERP.Controllers
             {
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
+
+                var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.ProductList = new SelectList(products, "ID", "PNo");
             }
 
             return View(model);
         }
+
         [HttpPost]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
@@ -272,6 +301,8 @@ namespace tahsinERP.Controllers
                     int userId = userimage.UserID;
 
                     var processNames = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
+
+                    var product = db.PRODUCTS.Where(x => x.IsDeleted == false && x.ID == model.Product.ID).FirstOrDefault();
 
                     var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
                     var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);

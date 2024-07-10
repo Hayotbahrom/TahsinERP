@@ -47,6 +47,7 @@
                                     <div class="card-body">
                                         @using (Html.BeginForm("CreateWizard", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
                                         {
+                                            @Html.HiddenFor(model => model.Product.PNo)
                                             if (!string.IsNullOrEmpty(Model.Process))
                                             {
                                                 var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
@@ -63,6 +64,9 @@
                                                             <fieldset>
                                                                 <div class="row">
                                                                     <div class="col-md-4">
+                                                                        <h4>
+                                                                            @Model.Product.PNo
+                                                                        </h4>
                                                                         <fieldset class="invoice-address form-group">
                                                                             @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
                                                                             @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
