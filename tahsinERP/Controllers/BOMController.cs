@@ -12,17 +12,20 @@ namespace tahsinERP.Controllers
     public class BOMController : Controller
     {
         // GET: BOM
-        public ActionResult Index(bool? IsParentProduct)
+        public ActionResult Index(IndexViewModel viewModel)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (IsParentProduct == true)
+                if (viewModel.IsParentProduct == true)
                 {
                     //var results = db.BOMS.Where(bom => bom.IsParentProduct == true).GroupBy(bom => bom.ParentPNo).Select(group => group.FirstOrDefault()).ToList();
                     List<IndexViewModel> result = db.BOMS.Join(db.PRODUCTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
                     new IndexViewModel
                     {
                         ParentPNo = bom.ParentPNo,
+                        ProductName = product.Name,
+                        ProductID = product.ID,
+                        IsParentProduct = true,
                         ID = product.ID
                     })
                         .GroupBy(item => new { item.ParentPNo, item.ID })
@@ -36,6 +39,9 @@ namespace tahsinERP.Controllers
                    new IndexViewModel
                    {
                        ParentPNo = bom.ParentPNo,
+                       ProductName = product.PName,
+                       ProductID = product.ID,
+                       IsParentProduct = false,
                        ID = product.ID
                    })
                        .GroupBy(item => new { item.ParentPNo, item.ID })
@@ -261,17 +267,43 @@ namespace tahsinERP.Controllers
 
 
                 var slittingNorms = db.SLITTING_NORMS
-           .Where(x => x.IsDeleted == false)
-           .Select(x => new
-           {
-               x.ID,
-               PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
-                          db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
-           })
-           .ToList();
+                                      .Where(x => x.IsDeleted == false)
+                                      .Select(x => new
+                                      {
+                                          x.ID,
+                                          PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
+                                                     db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
+                                      })
+                                      .ToList();
 
                 ViewBag.SlittingNorms = new SelectList(slittingNorms, "ID", "PartInfo");
+
+                var blankingNorms = db.BLANKING_NORMS
+                                      .Where(x => x.IsDeleted == false)
+                                      .Select(x => new
+                                      {
+                                          x.ID,
+                                          PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
+                                                     db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
+                                      })
+                                      .ToList();
+
+                ViewBag.BlankingNorms = new SelectList(blankingNorms, "ID", "PartInfo");
+
+                var stamping = db.STAMPING_NORMS
+                                      .Where(x => x.IsDeleted == false)
+                                      .Select(x => new
+                                      {
+                                          x.ID,
+                                          PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
+                                                     db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
+                                      })
+                                      .ToList();
+
+                ViewBag.StampingNorms = new SelectList(stamping, "ID", "PartInfo");
+
             }
+
 
             return View(model);
         }
@@ -279,7 +311,7 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -288,58 +320,82 @@ namespace tahsinERP.Controllers
 
                     var userimage = db.USERIMAGES.FirstOrDefault(x => x.ID == userImageId);
                     int userId = userimage.UserID;
-
-                    var selectedSlittingNorm = db.SLITTING_NORMS.Find(model.SelectedSlittingNormID);
-
                     var processNames = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
 
-                    var product = db.PRODUCTS.Where(x => x.IsDeleted == false && x.ID == model.Product.ID).FirstOrDefault();
-
-                    var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
-                    var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
-
-                    var cutterLines = (int)((part_before.PWidth) / (part_after.PWidth) - 1);
-                    var cutterWidth = model.SLITTING_NORMS.CutterWidth;
-                    var pieceCount = Convert.ToInt32(Math.Round(part_before.PWidth / part_after.PWidth));
-
-                    if (part_after != null && part_before != null)
+                    if (model.SelectedSlittingNormID != 0)
                     {
-                        var slitting_process = new SLITTING_NORMS
-                        {
-                            IsDeleted = false,
-                            IsActive = model.SLITTING_NORMS.IsActive,
-                            PartID_after = model.SLITTING_NORMS.PartID_after,
-                            PartID_before = model.SLITTING_NORMS.PartID_before,
-                            SlittingPieces = pieceCount,
-                            CutterLines = cutterLines,
-                            CutterWidth = cutterWidth,
-                            WeightOfSlittedParts = part_after.PWidth * (part_before.PWeight / part_before.PWidth),
-                            WeightOfCutWaste = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
-                            WidthOfUsefulWaste = part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth),
-                            WeightOfUsefulWaste = (part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth)) * (part_before.PWeight / part_before.PWidth),
-                            IssuedDateTime = DateTime.Now,
-                            IssuedByUserID = userId
-                        };
-                        db.SLITTING_NORMS.Add(slitting_process);
+                        var selectedSlittingNorm = db.SLITTING_NORMS.Find(model.SelectedSlittingNormID);
 
-                        if (part_after != null)
-                        {
-                            var bom = new BOM
-                            {
-                                ChildPNo = part_after.PNo,
-                                ParentPNo = model.Product.PNo,
-                                IsDeleted = false,
-                                IsActive = true,
-                                WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
-                                ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID
-                            };
+                        var after_part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
+                        var part_before1 = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
 
-                            db.BOMS.Add(bom);
-                        }
+                        var cutterLines1 = (int)((part_before1.PWidth) / (after_part.PWidth) - 1);
+                        var cutterWidth1 = selectedSlittingNorm.CutterWidth;
+
+                        var bom = new BOM();
+
+                        bom.ChildPNo = after_part.PNo;
+                        bom.ParentPNo = model.Product.PNo;
+                        bom.IsDeleted = false;
+                        if (model.Product.PNo != null) { bom.IsParentProduct = true; }
+                        else { bom.IsParentProduct = false; }
+                        bom.IsActive = model.IsActive;
+                        bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1 * cutterWidth1);
+                        bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID;
+                        bom.Consumption = model.SLITTING_NORMS.WeightOfSlittedParts;
+                        bom.ConsumptionUnit = "dona";
+                        db.BOMS.Add(bom);
                     }
 
+                    if (model.SLITTING_NORMS.ID != 0)
+                    {
+                        var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
+                        var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
+
+                        var cutterLines = (int)((part_before.PWidth) / (part_after.PWidth) - 1);
+                        var cutterWidth = model.SLITTING_NORMS.CutterWidth;
+                        var pieceCount = Convert.ToInt32(Math.Round(part_before.PWidth / part_after.PWidth));
+
+                        if (part_after != null && part_before != null)
+                        {
+                            var slitting_process = new SLITTING_NORMS
+                            {
+                                IsDeleted = false,
+                                IsActive = model.SLITTING_NORMS.IsActive,
+                                PartID_after = model.SLITTING_NORMS.PartID_after,
+                                PartID_before = model.SLITTING_NORMS.PartID_before,
+                                SlittingPieces = pieceCount,
+                                CutterLines = cutterLines,
+                                CutterWidth = cutterWidth,
+                                WeightOfSlittedParts = part_after.PWidth * (part_before.PWeight / part_before.PWidth),
+                                WeightOfCutWaste = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
+                                WidthOfUsefulWaste = part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth),
+                                WeightOfUsefulWaste = (part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth)) * (part_before.PWeight / part_before.PWidth),
+                                IssuedDateTime = DateTime.Now,
+                                IssuedByUserID = userId
+                            };
+                            db.SLITTING_NORMS.Add(slitting_process);
+
+                            if (part_after != null)
+                            {
+                                var bom = new BOM
+                                {
+                                    ChildPNo = part_after.PNo,
+                                    ParentPNo = model.Product.PNo,
+                                    IsDeleted = false,
+                                    IsActive = true,
+                                    WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
+                                    ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID
+                                };
+
+                                db.BOMS.Add(bom);
+                            }
+                        }
+
+                    }
                     if (model.BLANKING_NORMS != null)
                     {
+                        var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
                         var part_after_Blanking = db.PARTS.FirstOrDefault(p => p.IsDeleted == false && p.ID == model.BLANKING_NORMS.PartID_after);
                         if (part_after_Blanking != null && part_after != null)
                         {
@@ -365,7 +421,6 @@ namespace tahsinERP.Controllers
                                 ParentPNo = model.ProductNo,
                                 IsDeleted = false,
                                 IsActive = true,
-                                WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID
                             };
 
@@ -396,7 +451,6 @@ namespace tahsinERP.Controllers
                                 ParentPNo = model.ProductNo,
                                 IsDeleted = false,
                                 IsActive = true,
-                                WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID
                             };
                             db.BOMS.Add(bom);
@@ -413,7 +467,6 @@ namespace tahsinERP.Controllers
                                 ParentPNo = model.ProductNo,
                                 IsDeleted = false,
                                 IsActive = true,
-                                WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID
                             };
                             db.BOMS.Add(bom);
@@ -430,7 +483,6 @@ namespace tahsinERP.Controllers
                                 ParentPNo = model.ProductNo,
                                 IsDeleted = false,
                                 IsActive = true,
-                                WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Assembly")?.ID
                             };
                             db.BOMS.Add(bom);
@@ -453,6 +505,9 @@ namespace tahsinERP.Controllers
 
             return View(model);
         }
+
+
+
 
     }
 }
