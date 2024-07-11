@@ -1,5 +1,4 @@
-﻿@model  tahsinERP.Models.SLITTING_NORMS
-
+﻿@model tahsinERP.Models.BLANKING_NORMS
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,7 +6,7 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
-    using (Html.BeginForm("Create", "Slitting", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("Create", "Blanking", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         <div class="app-content content">
@@ -62,8 +61,8 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <fieldset class="invoice-address form-group">
-                                                                @Html.TextBoxFor(model => model.CutterWidth, new { @class = "form-control", @placeholder = "Cutter width" })
-                                                                @Html.ValidationMessageFor(model => model.CutterWidth, "", new { @class = "text-danger" })
+                                                                @Html.TextBoxFor(model => model.Density, new { @class = "form-control", @placeholder = "Density" })
+                                                                @Html.ValidationMessageFor(model => model.Density, "", new { @class = "text-danger" })
                                                             </fieldset>
                                                         </div>
                                                         <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">

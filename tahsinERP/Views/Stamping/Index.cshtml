@@ -1,11 +1,8 @@
-﻿@model List<tahsinERP.ViewModels.SlittingNormViewModel>
+﻿@model List<tahsinERP.ViewModels.BOM.StampingNormViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
 }
-
-
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     bool changePermit = false;
@@ -27,7 +24,7 @@
                                     </li>
 
                                     <li class="breadcrumb-item active">
-                                        Slitting Processlar 
+                                        Stamping Processlar
                                     </li>
 
                                 </ol>
@@ -43,9 +40,9 @@
                     {
                         <div class="invoice-create-btn mb-1">
 
-                            <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Slitting/Create';">
+                            <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Stamping/Create';">
                                 <span class="align-middle ml-25">
-                                    Yangi slitting Process qo'shish
+                                    Yangi stamping Process qo'shish
                                 </span>
                             </button>
                         </div>
@@ -63,7 +60,7 @@
                                                     <th></th>
                                                     <th>Detalni jarayondan oldingi raqami</th>
                                                     <th>Detalni jarayondan keyingi raqami</th>
-                                                    <th>Bo'laklar soni</th>
+                                                    <th>Stamping soni</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -85,13 +82,13 @@
                                                             <a href="~/Part/Details/@item.PartAfter.ID">@item.PartAfter.PNo</a>
                                                         </td>
 
-                                                        <td>@item.SLITTING_NORMS.SlittingPieces</td>
+                                                        <td>@item.STAMPING_NORMS.QuantityOfStamps</td>
                                                         @if (changePermit)
                                                         {
                                                             <td>
                                                                 <div>
-                                                                    <a href="@Url.Action("Edit", "Slitting", new { id = item.SLITTING_NORMS.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                    <a href="@Url.Action("Delete", "Slitting", new { id = item.SLITTING_NORMS.ID })"><i class="bx bx-trash"></i></a>
+                                                                    <a href="@Url.Action("Edit", "Stamping", new { id = item.STAMPING_NORMS.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "Stamping", new { id = item.STAMPING_NORMS.ID })"><i class="bx bx-trash"></i></a>
                                                                 </div>
                                                             </td>
                                                         }

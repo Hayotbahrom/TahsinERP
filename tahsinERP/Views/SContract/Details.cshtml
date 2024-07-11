@@ -40,6 +40,20 @@
                                     <div class="row">
                                         <div class="col-lg-12 col-md-6 mt-25">
                                             <hr />
+                                            <section>
+                                                <div>
+                                                    <br />
+                                                    <h4 class="text-primary">Xaridor ma'lumotlari</h4>
+                                                    <span>
+                                                        <b>Nomi</b>: @Html.DisplayFor(model => model.CUSTOMER.Name, new { @class = "form-control" })
+                                                    </span>
+                                                    <hr />
+                                                    <span>
+                                                        <b>DUNS</b>: @Html.DisplayFor(model => model.CUSTOMER.DUNS, new { @class = "form-control" })
+                                                    </span>
+                                                    <hr />
+                                                </div>
+                                            </section>
                                             <h4 class="text-primary">Shartnoma  ma'lumotlari</h4>
                                             <hr />
                                             <span>
@@ -47,11 +61,11 @@
                                             </span>
                                             <hr />
                                             <span>
-                                                <b>Belgilangan sanasi</b>: @Model.IssuedDate.ToString()
+                                                <b>Tuzilgan sanasi</b>: @Model.IssuedDate.ToString("dd.MM.yyyy")
                                             </span>
                                             <hr />
                                             <span>
-                                                <b>Amal qilish sanasi</b>: @Model.DueDate.ToString()
+                                                <b>Amal qilish sanasi</b>: @Model.DueDate.ToString("dd.MM.yyyy")
                                             </span>
                                             <hr />
                                             <span>
@@ -70,20 +84,7 @@
                                                 <b>To`lov sharti</b>: @Html.DisplayFor(model => model.PaymentTerms, new { @class = "form-control" })
                                             </span>
                                             <hr />
-                                            <section>
-                                                <div>
-                                                    <br />
-                                                    <h4 class="text-primary">Xaridor ma'lumotlari</h4>
-                                                    <span>
-                                                        <b>Nomi</b>: @Html.DisplayFor(model => model.CUSTOMER.Name, new { @class = "form-control" })
-                                                    </span>
-                                                    <hr />
-                                                    <span>
-                                                        <b>DUNS</b>: @Html.DisplayFor(model => model.CUSTOMER.DUNS, new { @class = "form-control" })
-                                                    </span>
-                                                    <hr />
-                                                </div>
-                                            </section>
+
                                         </div>
                                     </div>
                                     <section id="column-selectors">
@@ -104,8 +105,6 @@
                                                                             <th>Dona narxi</th>
                                                                             <th>O'lchov birligi</th>
                                                                             <th>Miqdori</th>
-                                                                            <th>MOQ</th>
-                                                                            <th>Faolligi</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -113,21 +112,20 @@
                                                                         {
                                                                             <tr>
                                                                                 <td>
-                                                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                    <a href="~/SContracts/Details/@item.PRODUCT.ID">@item.PRODUCT.PNo</a>
                                                                                 </td>
-                                                                                <td>@item.PART.PName</td>
-                                                                                <td>@item.Price</td>
-                                                                                <td>@item.Unit</td>
-                                                                                <td>@item.Amount</td>
-                                                                                <td>@item.MOQ</td>
-                                                                                @if (item.ActivePart)
-                                                                                {
-                                                                                    <td><span class="badge badge-light-success">Faol</span></td>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <td><span class="badge badge-light-danger">Nofaol</span></td>
-                                                                                }
+                                                                                <td>
+                                                                                    @item.PRODUCT.Name
+                                                                                </td>
+                                                                                <td>
+                                                                                    @item.PiecePrice
+                                                                                </td>
+                                                                                <td>
+                                                                                    @item.Unit
+                                                                                </td>
+                                                                                <td>
+                                                                                    @item.Amount
+                                                                                </td>
                                                                             </tr>
                                                                         }
                                                                     </tbody>

@@ -22,11 +22,11 @@ namespace tahsinERP.Controllers
         // GET: Contracts
         public ActionResult Index(string type)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (!string.IsNullOrEmpty(type))
                 {
-                    List<P_CONTRACTS> list = db1.P_CONTRACTS
+                    List<P_CONTRACTS> list = db.P_CONTRACTS
                         .Include(pc => pc.SUPPLIER)
                         .Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
@@ -35,7 +35,7 @@ namespace tahsinERP.Controllers
                 }
                 else
                 {
-                    List<P_CONTRACTS> list = db1.P_CONTRACTS
+                    List<P_CONTRACTS> list = db.P_CONTRACTS
                         .Include (pc => pc.SUPPLIER)
                         .Where(pc => pc.IsDeleted == false).ToList();
                     ViewBag.SourceList = new SelectList(sources, type);
@@ -236,9 +236,9 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Create()
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Supplier = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name");
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 return View();
             }
         }
@@ -249,12 +249,12 @@ namespace tahsinERP.Controllers
 
             try
             {
-                using (DBTHSNEntities db1 = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
                     if (ModelState.IsValid)
                     {
-                        db1.P_CONTRACTS.Add(contract);
-                        db1.SaveChanges();
+                        db.P_CONTRACTS.Add(contract);
+                        db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
@@ -273,9 +273,9 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contract = db1.P_CONTRACTS
+                var contract = db.P_CONTRACTS
                                   .Include(p => p.SUPPLIER)
                                   .FirstOrDefault(p => p.ID == ID);
 
@@ -284,7 +284,7 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                var partList = db1.P_CONTRACT_PARTS
+                var partList = db.P_CONTRACT_PARTS
                                   .Include(pc => pc.PART)
                                   .Where(pc => pc.ContractID == contract.ID)
                                   .ToList();
@@ -306,9 +306,9 @@ namespace tahsinERP.Controllers
             List<P_CONTRACT_PARTS> partList;
             SelectList suppliers;
 
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                contract = db1.P_CONTRACTS
+                contract = db.P_CONTRACTS
                     .Include(c => c.SUPPLIER)
                     .Include(c => c.P_CONTRACT_PARTS.Select(p => p.PART))
                     .FirstOrDefault(c => c.ID == ID);
@@ -318,7 +318,7 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", contract.SupplierID);
+                suppliers = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", contract.SupplierID);
 
                 partList = contract.P_CONTRACT_PARTS.ToList();
             }
@@ -335,9 +335,9 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (DBTHSNEntities db1 = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    P_CONTRACTS contractToUpdate = db1.P_CONTRACTS.Find(contract.ID);
+                    P_CONTRACTS contractToUpdate = db.P_CONTRACTS.Find(contract.ID);
                     if (contractToUpdate != null)
                     {
                         contractToUpdate.ContractNo = contract.ContractNo;
@@ -354,7 +354,7 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
-                                db1.SaveChanges();
+                                db.SaveChanges();
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
