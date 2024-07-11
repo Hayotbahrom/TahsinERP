@@ -47,7 +47,7 @@
                                     <div class="card-body">
                                         @using (Html.BeginForm("CreateWizard", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
                                         {
-                                            @Html.HiddenFor(model => model.Product.PNo)
+                                            @Html.HiddenFor(model => model.Product)
                                             if (!string.IsNullOrEmpty(Model.Process))
                                             {
                                                 var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
@@ -64,23 +64,24 @@
                                                             <fieldset>
                                                                 <div class="row">
                                                                     <div class="col-md-4">
-                                                                        <h4>
-                                                                            @Model.Product.PNo
-                                                                        </h4>
+                                                                        <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                            @Html.DropDownList("SLITTING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2" })
                                                                             @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
                                                                         </fieldset>
                                                                     </div>
                                                                     <div class="col-md-4">
+                                                                        <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                            @Html.DropDownList("SLITTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Jarayondan keyingi holatini tanlang", new { @class = "form-control select2" })
                                                                             @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
                                                                         </fieldset>
                                                                     </div>
+                                                                    <br />
                                                                     <div class="col-md-4">
+                                                                        <h6>Kesadigon toshni razmerini kiriting</h6>
                                                                         <fieldset class="invoice-address form-group">
-                                                                            @Html.TextBoxFor(model => model.SLITTING_NORMS.CutterWidth, new { @class = "form-control", @placeholder = "Cutter width" })
+                                                                            @Html.TextBoxFor(model => model.SLITTING_NORMS.CutterWidth, new { @class = "form-control", @placeholder = "Kesadigan tosh razmerini kiriting" })
                                                                             @Html.ValidationMessageFor(model => model.SLITTING_NORMS.CutterWidth, "", new { @class = "text-danger" })
                                                                         </fieldset>
                                                                     </div>
