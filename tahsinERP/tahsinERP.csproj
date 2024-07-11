@@ -663,6 +663,7 @@
     <Content Include="app-assets\css\core\menu\menu-types\vertical-menu.min.css" />
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.css" />
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.min.css" />
+    <Content Include="app-assets\css\list\custom.css" />
     <Content Include="app-assets\css\list\meyer-reset.css" />
     <Content Include="app-assets\css\list\reset.min.css" />
     <Content Include="app-assets\css\pages\app-chat.css" />
@@ -723,7 +724,6 @@
     <Content Include="app-assets\css\plugins\forms\wizard.min.css" />
     <Content Include="app-assets\css\plugins\tour\tour.css" />
     <Content Include="app-assets\css\plugins\tour\tour.min.css" />
-    <Content Include="app-assets\css\list\list-style.css" />
     <Content Include="app-assets\css\themes\dark-layout.css" />
     <Content Include="app-assets\css\themes\dark-layout.min.css" />
     <Content Include="app-assets\css\themes\semi-dark-layout.css" />
