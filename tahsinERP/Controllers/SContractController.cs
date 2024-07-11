@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Infrastructure.Design;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -34,7 +33,7 @@ namespace tahsinERP.Controllers
         // Create
         public ActionResult Create()
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 SContractViewModel SContractViewModel = new SContractViewModel();
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
@@ -83,7 +82,7 @@ namespace tahsinERP.Controllers
                 // Yangi Product lar ni saqlash
                 foreach (var item in model.Products)
                 {
-                    if(item == null)
+                    if (item == null)
                     {
                         ModelState.AddModelError("Products", "Product cannot be null");
                         return View(model);
@@ -110,7 +109,6 @@ namespace tahsinERP.Controllers
 
 
         // Details
-        [HttpGet]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -143,34 +141,80 @@ namespace tahsinERP.Controllers
 
 
         // Main Edit
-        [HttpGet]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+        // [HttpGet]
+        // public ActionResult Edit(int? id)
+        //{
+        //     if (id == null)
+        //     {
+        //         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //     }
 
+        //     using (DBTHSNEntities db = new DBTHSNEntities())
+        //     {
+        //         var contract = db.S_CONTRACTS.Find(id);
+
+        //         if (contract == null)
+        //         {
+        //             return HttpNotFound();
+        //         }
+
+        //         ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
+        //         ViewBag.ProductList = db.S_CONTRACT_PRODUCTS
+        //                                 .Include(pl => pl.PRODUCT)
+        //                                 .Where(pl => pl.ContractID == contract.ID)
+        //                                 .ToList();
+
+        //         return View(contract);
+        //     }
+        // }
+
+        public ActionResult Edit(int id)
+        {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contract = db.S_CONTRACTS.Find(id);
-
+                // Contractni olish
+                S_CONTRACTS contract = db.S_CONTRACTS.Find(id);
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
 
+                // ViewModelni to'ldirish
+                SContractViewModel viewModel = new SContractViewModel
+                {
+                    ID = contract.ID,
+                    ContractNo = contract.ContractNo,
+                    IssuedDate = contract.IssuedDate,
+                    CustomerID = contract.CustomerID,
+                    Currency = contract.Currency,
+                    Amount =(int)contract.Amount,
+                    Incoterms = contract.Incoterms,
+                    PaymentTerms = contract.PaymentTerms,
+                    DueDate = contract.DueDate,
+                    Products = db.S_CONTRACT_PRODUCTS
+                                .Where(p => p.ContractID == contract.ID)
+                                .Select(p => new SContractProductViewModel
+                                {
+                                    ID = p.ID,
+                                    ProductID = p.ProductID,
+                                    PiecePrice = p.PiecePrice,
+                                    Unit = p.Unit,
+                                    Amount = p.Amount
+                                }).ToList()
+                };
 
-                ViewBag.Customer = new SelectList(db.CUSTOMERS, "ID", "Name", contract.CustomerID);
-                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS.Where(sp => sp.ContractID == contract.ID).ToList();
+                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS
+                                         .Include(pl => pl.PRODUCT)
+                                         .Where(pl => pl.ContractID == contract.ID)
+                                         .ToList();
 
-                db.Entry(contract).Reference(c => c.CUSTOMER).Load();
-                return View(contract);
+                return View(viewModel);
             }
         }
 
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "ID,ContractNo,IssuedDate,CompanyID,CustomerID,Currency,Amount,Incoterms,PaymentTerms,DueDate,IsDeleted")] S_CONTRACTS contract)
+        public ActionResult Edit(SContractViewModel contract)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -189,12 +233,14 @@ namespace tahsinERP.Controllers
                     }
                 }
 
-                ViewBag.Customer = new SelectList(db.CUSTOMERS, "ID", "Name", contract.CustomerID);
+                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.ProductList = db.S_CONTRACT_PRODUCTS.Where(sp => sp.ContractID == contract.ID).ToList();
+
                 return View(contract);
             }
         }
         // __________
+
 
 
 
@@ -315,7 +361,7 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
                 }
             }
-            
+
             return View();
         }
 
