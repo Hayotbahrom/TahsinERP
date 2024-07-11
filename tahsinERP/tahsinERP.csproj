@@ -279,6 +279,7 @@
     <Compile Include="Controllers\FContractController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
+    <Compile Include="Controllers\HSCodeController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
@@ -589,6 +590,7 @@
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingProcessViewModel.cs" />
+    <Compile Include="ViewModels\PInvoiceViewModel.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
@@ -697,6 +699,7 @@
     <Content Include="app-assets\css\core\menu\menu-types\vertical-menu.min.css" />
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.css" />
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.min.css" />
+    <Content Include="app-assets\css\list\custom.css" />
     <Content Include="app-assets\css\list\meyer-reset.css" />
     <Content Include="app-assets\css\list\reset.min.css" />
     <Content Include="app-assets\css\pages\app-chat.css" />
@@ -757,7 +760,6 @@
     <Content Include="app-assets\css\plugins\forms\wizard.min.css" />
     <Content Include="app-assets\css\plugins\tour\tour.css" />
     <Content Include="app-assets\css\plugins\tour\tour.min.css" />
-    <Content Include="app-assets\css\list\list-style.css" />
     <Content Include="app-assets\css\themes\dark-layout.css" />
     <Content Include="app-assets\css\themes\dark-layout.min.css" />
     <Content Include="app-assets\css\themes\semi-dark-layout.css" />
@@ -2543,7 +2545,7 @@
     <Content Include="Views\WhExpense\Edit.cshtml" />
     <Content Include="Views\WhExpense\EditPart.cshtml" />
     <Content Include="Views\WhExpense\Delete.cshtml" />
-    <Content Include="Views\WhExpense\DeletePart.cshtml" />
+    <Content Include="Views\HSCode\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -41,10 +41,10 @@
                                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                             <h4 class="text-primary">Kirim ma'lumotlari</h4>
                                             <hr />
-                                            <span><b>Buyurtma raqami </b>: @Html.DisplayFor(model => model.DocNo, new { @class = "form-control" })</span>
+                                            <span><b>Hujjat raqami </b>: @Html.DisplayFor(model => model.DocNo, new { @class = "form-control" })</span>
                                             <br />
                                             <hr />
-                                            <span><b>Tuzilgan sanasi </b>: @Model.IssueDateTime.ToString("dd.yy.yyyy")</span>
+                                            <span><b>Kirim sanasi </b>: @Model.IssueDateTime.ToString("dd.yy.yyyy")</span>
                                             <br />
                                             <hr />
                                             <span><b>Invoice raqami</b>: @Html.DisplayFor(model => model.P_INVOICES.InvoiceNo, new { @class = "form-control" })</span>

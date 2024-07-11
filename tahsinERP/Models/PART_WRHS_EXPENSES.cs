@@ -31,7 +31,7 @@ namespace tahsinERP.Models
         public Nullable<bool> IsDeleted { get; set; }
         public string Description { get; set; }
         public System.DateTime IssueDateTime { get; set; }
-        public Nullable<bool> SendStatus { get; set; }
+        public bool SendStatus { get; set; }
     
         public virtual PART_WRHS PART_WRHS { get; set; }
         public virtual PART_WRHS PART_WRHS1 { get; set; }
