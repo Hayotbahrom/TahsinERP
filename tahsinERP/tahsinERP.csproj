@@ -2503,6 +2503,7 @@
     <Content Include="Views\Stamping\Edit.cshtml" />
     <Content Include="Views\Stamping\Delete.cshtml" />
     <Content Include="Views\Stamping\Details.cshtml" />
+    <Content Include="Views\SContract\EditProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -50,7 +50,7 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Model cannot be null");
             }
 
-            if (model.Products == null || !model.Products.Any())
+            if (model.ProductList == null || !model.ProductList.Any())
             {
                 ModelState.AddModelError("Products", "At least one Product is required.");
                 return View(model);
@@ -66,7 +66,7 @@ namespace tahsinERP.Controllers
                     CompanyID = int.Parse(ConfigurationManager.AppSettings["companyID"]),
                     CustomerID = model.CustomerID,
                     Currency = model.Currency,
-                    Amount = model.Amount,
+                    Amount = (int)model.Amount,
                     Incoterms = model.Incoterms,
                     PaymentTerms = model.PaymentTerms,
                     DueDate = model.DueDate,
@@ -80,7 +80,7 @@ namespace tahsinERP.Controllers
                 int newContractID = newContract.ID;
 
                 // Yangi Product lar ni saqlash
-                foreach (var item in model.Products)
+                foreach (var item in model.ProductList)
                 {
                     if (item == null)
                     {
@@ -92,7 +92,7 @@ namespace tahsinERP.Controllers
                     {
                         ContractID = newContractID,
                         ProductID = item.ProductID,
-                        PiecePrice = item.PiecePrice,
+                        PiecePrice = (int)item.PiecePrice,
                         Unit = item.Unit,
                         Amount = item.Amount
                     };
@@ -141,104 +141,114 @@ namespace tahsinERP.Controllers
 
 
         // Main Edit
-        // [HttpGet]
-        // public ActionResult Edit(int? id)
-        //{
-        //     if (id == null)
-        //     {
-        //         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //     }
-
-        //     using (DBTHSNEntities db = new DBTHSNEntities())
-        //     {
-        //         var contract = db.S_CONTRACTS.Find(id);
-
-        //         if (contract == null)
-        //         {
-        //             return HttpNotFound();
-        //         }
-
-        //         ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
-        //         ViewBag.ProductList = db.S_CONTRACT_PRODUCTS
-        //                                 .Include(pl => pl.PRODUCT)
-        //                                 .Where(pl => pl.ContractID == contract.ID)
-        //                                 .ToList();
-
-        //         return View(contract);
-        //     }
-        // }
-
+        [HttpGet]
         public ActionResult Edit(int id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                // Contractni olish
-                S_CONTRACTS contract = db.S_CONTRACTS.Find(id);
+                var contract = db.S_CONTRACTS.Find(id);
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
 
-                // ViewModelni to'ldirish
-                SContractViewModel viewModel = new SContractViewModel
+                var model = new SContractViewModel
                 {
                     ID = contract.ID,
                     ContractNo = contract.ContractNo,
-                    IssuedDate = contract.IssuedDate,
                     CustomerID = contract.CustomerID,
-                    Currency = contract.Currency,
-                    Amount =(int)contract.Amount,
+                    IssuedDate = contract.IssuedDate,
+                    DueDate = contract.DueDate,
                     Incoterms = contract.Incoterms,
                     PaymentTerms = contract.PaymentTerms,
-                    DueDate = contract.DueDate,
-                    Products = db.S_CONTRACT_PRODUCTS
-                                .Where(p => p.ContractID == contract.ID)
-                                .Select(p => new SContractProductViewModel
-                                {
-                                    ID = p.ID,
-                                    ProductID = p.ProductID,
-                                    PiecePrice = p.PiecePrice,
-                                    Unit = p.Unit,
-                                    Amount = p.Amount
-                                }).ToList()
+                    Currency = contract.Currency,
+                    Amount = (int)contract.Amount,
+                    ProductList = contract.S_CONTRACT_PRODUCTS.Select(p => new SContractProductViewModel
+                    {
+                        ID = p.ID,
+                        SContractID = p.ContractID,
+                        ProductID = p.ProductID,
+                        PiecePrice = (int)p.PiecePrice,
+                        Unit = p.Unit,
+                        Amount = (int)p.Amount,
+                        PRODUCT = new ProductViewModel
+                        {
+                            ID = p.PRODUCT.ID,
+                            PNo = p.PRODUCT.PNo,
+                            Name = p.PRODUCT.Name
+                        }
+                    }).ToList()
                 };
 
-                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS
-                                         .Include(pl => pl.PRODUCT)
-                                         .Where(pl => pl.ContractID == contract.ID)
-                                         .ToList();
+                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", contract.CustomerID);
+                ViewBag.ProductList = model.ProductList;
 
-                return View(viewModel);
+                return View(model);
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(SContractViewModel contract)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(SContractViewModel model)
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
+            if (model == null)
             {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        contract.IsDeleted = false;
-                        db.Entry(contract).State = EntityState.Modified;
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                    }
-                }
-
-                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS.Where(sp => sp.ContractID == contract.ID).ToList();
-
-                return View(contract);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Model cannot be null");
             }
+
+            if (model.ProductList == null || !model.ProductList.Any())
+            {
+                ModelState.AddModelError("Products", "At least one Product is required.");
+                return View(model);
+            }
+
+            if (ModelState.IsValid)
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    var contract = db.S_CONTRACTS.Find(model.ID);
+                    if (contract == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    contract.ContractNo = model.ContractNo;
+                    contract.CustomerID = model.CustomerID;
+                    contract.IssuedDate = model.IssuedDate;
+                    contract.DueDate = model.DueDate;
+                    contract.Incoterms = model.Incoterms;
+                    contract.PaymentTerms = model.PaymentTerms;
+                    contract.Currency = model.Currency;
+                    contract.Amount = (int)model.Amount;
+
+                    db.Entry(contract).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    // Update product list
+                    foreach (var product in model.ProductList)
+                    {
+                        var a = product.ProductID;
+
+                        var existingProduct = db.S_CONTRACT_PRODUCTS.Find(product.ProductID);
+                        if (existingProduct != null)
+                        {
+                            existingProduct.PiecePrice = (int)product.PiecePrice;
+                            existingProduct.Unit = product.Unit;
+                            existingProduct.Amount = product.Amount;
+                            db.Entry(existingProduct).State = EntityState.Modified;
+                        }
+                    }
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+            }
+
+            ViewBag.ProductList = model.ProductList;
+            return View(model);
         }
+
+
         // __________
 
 
@@ -324,7 +334,7 @@ namespace tahsinERP.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete(int id, FormCollection gfs)
+        public ActionResult Delete(int? id, FormCollection gfs)
         {
             if (!ModelState.IsValid || id == null)
             {
@@ -365,8 +375,6 @@ namespace tahsinERP.Controllers
             return View();
         }
 
-
-
         // Delete Contract-Product
         [HttpDelete]
         public ActionResult DeleteProduct(int id)
@@ -399,6 +407,5 @@ namespace tahsinERP.Controllers
                 return View(contractProductToDelete);
             }
         }
-        // __________
     }
 }
