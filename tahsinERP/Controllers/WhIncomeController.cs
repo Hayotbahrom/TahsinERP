@@ -17,11 +17,12 @@ namespace tahsinERP.Controllers
     public class WhIncomeController : Controller
     {
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
-        //private string partNo, waybillNo, whName, docNo, invoiceNo = "";
+        PART_WRHS warehouse = null;
 
         // GET: WhIncome
         public ActionResult Index(string type, int? supplierID)
         {
+            this.warehouse = GetWarehouseOfMRP(User.Identity.Name);
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (!string.IsNullOrEmpty(type))
@@ -76,7 +77,16 @@ namespace tahsinERP.Controllers
                 }
             }
         }
+        private PART_WRHS GetWarehouseOfMRP(string email)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                USER currentUser = db.USERS.Where(u => u.Email.CompareTo(email) == 0 && u.IsDeleted == false && u.IsActive == true).FirstOrDefault();
+                PART_WRHS his_warehouse = db.PART_WRHS.Where(wrhs => wrhs.MRP == currentUser.ID).FirstOrDefault();
 
+                return his_warehouse;
+            }
+        }
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -87,9 +97,25 @@ namespace tahsinERP.Controllers
 
                 ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                 ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-            }
 
-            return View();
+                WrhsIncomeViewModel model = new WrhsIncomeViewModel();
+                PART_WRHS_INCOMES income = db.PART_WRHS_INCOMES.OrderByDescending(w => w.IssueDateTime).FirstOrDefault();
+                var monthAndNumber = income.DocNo.Split('_');
+                 
+                if (int.Parse(monthAndNumber[0]) == int.Parse(DateTime.Now.Month.ToString()))
+                {
+                    int doc_No_number = Convert.ToInt32(income.DocNo.Substring(income.DocNo.LastIndexOf('_')+1));
+                    doc_No_number++;
+                    model.DocNo = DateTime.Now.Month + "_" + doc_No_number;
+                }
+                else
+                {
+                    model.DocNo = DateTime.Now.Month + "_" +1;
+                }
+
+
+                return View(model);
+            }
         }
 
         [HttpPost]
@@ -97,13 +123,11 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                // Yangi PART_WRHS_INCOMES yozuvini yaratish
                 PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
                 {
                     DocNo = model.DocNo,
-                    WHID = null,
+                    WHID = warehouse.ID,
                     InvoiceID = model.InvoiceID,
-                    WaybillID = model.WaybillID,
                     Amount = model.Amount,
                     Currency = model.Currency,
                     IsDeleted = false,
@@ -112,7 +136,6 @@ namespace tahsinERP.Controllers
                     SenderWHID = null,
                     RecieveStatus = model.RecieveStatus,
                 };
-
                 db.PART_WRHS_INCOMES.Add(newIncome);
                 db.SaveChanges();
 
@@ -220,14 +243,14 @@ namespace tahsinERP.Controllers
                 whrsIncome = db1.PART_WRHS_INCOMES
                     .Include(i => i.P_INVOICES)
                     .Include(i => i.F_WAYBILLS)
-                    .FirstOrDefault (p => p.ID == ID);
+                    .FirstOrDefault(p => p.ID == ID);
 
                 if (whrsIncome == null)
                 {
                     return HttpNotFound();
                 }
 
-               // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", whrsIncome.SupplierID);
+                // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", whrsIncome.SupplierID);
 
                 partList = db1.PART_WRHS_INCOME_PARTS
                     .Where(whp => whp.IncomeID == ID)
@@ -238,7 +261,7 @@ namespace tahsinERP.Controllers
                 ViewBag.Waybills = new SelectList(db1.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
             }
 
-           // ViewBag.Supplier = suppliers;
+            // ViewBag.Supplier = suppliers;
             ViewBag.partList = partList;
 
             return View(whrsIncome);
@@ -265,7 +288,7 @@ namespace tahsinERP.Controllers
                         wrhsIncomeToUpdate.Description = whrsIncome.Description;
                         wrhsIncomeToUpdate.IssueDateTime = whrsIncome.IssueDateTime;
                         //wrhsIncomeToUpdate.SenderWHID = whrsIncome.SenderWHID;
-                        
+
                         try
                         {
                             db1.SaveChanges();
@@ -282,7 +305,7 @@ namespace tahsinERP.Controllers
             return View(whrsIncome);
         }
         //hali toliq ozgartitilmagan
-        
+
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)
@@ -365,7 +388,7 @@ namespace tahsinERP.Controllers
                         .Where(pc => pc.IncomeID == whrsIncome.ID).ToList();
 
                 db.Entry(whrsIncome).Reference(i => i.P_INVOICES).Load();
-                db.Entry(whrsIncome).Reference(i => i.F_WAYBILLS).Load();   
+                db.Entry(whrsIncome).Reference(i => i.F_WAYBILLS).Load();
                 return View(whrsIncome);
             }
         }

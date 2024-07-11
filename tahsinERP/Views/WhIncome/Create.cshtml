@@ -46,25 +46,16 @@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="DocNo">DocNo</label>
-                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @placeholder = "DocNo kiriting" })
+                                                            <label for="DocNo">Kirim hujjat raqami</label>
+                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo",  @disabled = "disabled" })
                                                         </div>
 
                                                         @*ID auto olinishi kerak, ushbu turgan shartnomaniki*@
 
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Invoice</label>
+                                                            <label for="InvoiceId">Invoys</label>
                                                             @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, new { @id = "InvoiceId", @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Amount">Amount</label>
-                                                            @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Miqdorini kiriting" })
-                                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Description">Description</label>
-                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @placeholder = "Izoh kiriting(ixtiyoriy)" })
                                                         </div>
                                                     </div>
                                                 </div>
@@ -72,30 +63,18 @@
                                                 @*Right Part*@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
-                                                        @*Total Price USER dan olinmaydi, TRIGGER in DB*@
 
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="WbID">Waybill</label>
+                                                        @*<div class="col-md-6 col-12 form-group">
+                                                            <label for="WbID">Yuk xati raqami</label>
                                                             @Html.DropDownListFor(model => model.WaybillID, (SelectList)ViewBag.Waybills, new { @id = "WbID", @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.WaybillID, "", new { @class = "text-danger" })
-                                                        </div>
+                                                        </div>*@
 
-                                                        @*Issue DateTime auto DateTime.Now bilan olinishi kk*@
-
-                                                        @*SenerWHID USER dan olinmaydi*@
 
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="Currency">Currency</label>
-                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Currencyni kiriting" })
+                                                            <label for="Currency">Valyuta</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Valyutani kiriting" })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
-                                                        </div>
-
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <div class="checkbox checkbox-secondary checkbox-glow">
-                                                                @Html.CheckBoxFor(model => model.RecieveStatus, new { @type = "checkbox", @id = "RecieveStatus" })
-                                                                <label for="RecieveStatus">Recieve Status</label>
-                                                                @Html.ValidationMessageFor(model => model.RecieveStatus, "", new { @class = "text-warning" })
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,7 +83,7 @@
                                             // WRHS_InCome_Parts
                                             <br />
                                             <h4>
-                                                Parts
+                                                Invoys dagi ehtiyot qismlar
                                             </h4>
                                             <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
@@ -116,17 +95,17 @@
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Unit">Unit</label>
+                                                            <label for="Part_Unit">O'lchov birligi</label>
                                                             <input type="text" name="Unit" class="form-control" id="Part_Unit" placeholder="Birligini kiriting" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Amount">Amount</label>
+                                                            <label for="Part_Amount">Miqdori</label>
                                                             <input type="number" name="Amount" class="form-control" id="Part_Amount" placeholder="Miqdorini kiriting" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_PiecePrice">Piece Price</label>
+                                                            <label for="Part_PiecePrice">Narxi</label>
                                                             <input type="number" name="PiecePrice" step="0.01" class="form-control" id="Part_PiecePrice" placeholder="Qism narxini kiriting" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PiecePrice, "", new { @class = "text-danger" })
                                                         </div>
