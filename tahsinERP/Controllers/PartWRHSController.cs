@@ -27,7 +27,7 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 // ViewBag orqali "Shop" ma'lumotlari
-                var shops = db.PROD_SHOPS.ToList();
+                var shops = db.SHOPS.ToList();
                 ViewBag.ShopList = new SelectList(shops, "ID", "ShopName");
 
                 // "MRP" ma'lumotlarini olish uchun
@@ -64,7 +64,7 @@ namespace tahsinERP.Controllers
                     return RedirectToAction("Index"); 
                 }
 
-                var shops = db.PROD_SHOPS.ToList();
+                var shops = db.SHOPS.ToList();
                 ViewBag.ShopList = new SelectList(shops, "ID", "ShopName", model.ShopID);
 
                 var mrpUsers = db.USERS
@@ -93,14 +93,14 @@ namespace tahsinERP.Controllers
                 }
 
                 ViewBag.MRPUsers = new SelectList(db.USERS.Where(u => u.ROLES.Any(r => r.RName == "MRP")), "ID", "FullName", partWRHS.MRP);
-                ViewBag.ShopList = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partWRHS.ShopID);
+                ViewBag.ShopList = new SelectList(db.SHOPS, "ID", "ShopName", partWRHS.ShopID);
                 return View(partWRHS);
             }
             catch (Exception ex)
             {
                 // Log the error (uncomment the following line to write to a log file)
                 // Log.Error(ex);
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error occurred while processing your request.");
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -119,12 +119,12 @@ namespace tahsinERP.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                    ModelState.AddModelError("", ex.Message);
                 }
             }
 
             ViewBag.MRPUsers = new SelectList(db.USERS.Where(u => u.ROLES.Any(r => r.RName == "MRP")), "ID", "FullName", partWRHS.MRP);
-            ViewBag.ShopList = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partWRHS.ShopID);
+            ViewBag.ShopList = new SelectList(db.SHOPS, "ID", "ShopName", partWRHS.ShopID);
             return View(partWRHS);
         }
 
@@ -160,7 +160,7 @@ namespace tahsinERP.Controllers
             }
             catch (Exception ex)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error occurred while processing your request.");
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -173,7 +173,7 @@ namespace tahsinERP.Controllers
 
             try
             {
-                PART_WRHS partWRHS = db.PART_WRHS.Include(p => p.USER).Include(p => p.PROD_SHOPS).FirstOrDefault(p => p.ID == id);
+                PART_WRHS partWRHS = db.PART_WRHS.Include(p => p.USER).Include(p => p.SHOP).FirstOrDefault(p => p.ID == id);
                 if (partWRHS == null)
                 {
                     return HttpNotFound();
@@ -185,7 +185,7 @@ namespace tahsinERP.Controllers
             {
                 // Log the error (uncomment the following line to write to a log file)
                 // Log.Error(ex);
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Malumotni olishda hatolik yuz berdi!");
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

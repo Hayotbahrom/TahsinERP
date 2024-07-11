@@ -23,7 +23,7 @@ namespace tahsinERP.Models
             this.P_ORDERS = new HashSet<P_ORDERS>();
             this.P_PROFORMA_INVOICES = new HashSet<P_PROFORMA_INVOICES>();
             this.P_CONTRACTS = new HashSet<P_CONTRACTS>();
-            this.PROD_SHOPS = new HashSet<PROD_SHOPS>();
+            this.SHOPS = new HashSet<SHOP>();
             this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
             this.USERS = new HashSet<USER>();
         }
@@ -51,7 +51,7 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_CONTRACTS> P_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_SHOPS> PROD_SHOPS { get; set; }
+        public virtual ICollection<SHOP> SHOPS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

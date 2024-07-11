@@ -20,8 +20,10 @@ namespace tahsinERP.ViewModels
         public PART Part { get; set; }
 
         public int SelectedSlittingNormID { get; set; }
+        public int SelectedBlankingNormID { get; set; }
+        public int SelectedStampingNormID { get; set; }
 
-        // Additional fields for other norms and consumption units
+        public bool IsActive { get; set; }
         public string ConsumptionUnit { get; set; }
 
         public List<WeldingParts> WeldingPart { get; set; }

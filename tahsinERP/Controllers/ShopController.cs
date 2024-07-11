@@ -15,7 +15,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                var prod_shop = db1.PROD_SHOPS.Where(x => x.IsDeleted == false).ToList();
+                var prod_shop = db1.SHOPS.Where(x => x.IsDeleted == false).ToList();
 
                 return View(prod_shop);
             }
@@ -26,7 +26,7 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "ShopName,CompanyID,Description,Isdeleted")] PROD_SHOPS prod_shop)
+        public ActionResult Create([Bind(Include = "ShopName,CompanyID,Description,Isdeleted")] SHOP prod_shop)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
@@ -36,7 +36,7 @@ namespace tahsinERP.Controllers
                     {
                         prod_shop.IsDeleted = false;
                         prod_shop.CompanyID = 1;
-                        db1.PROD_SHOPS.Add(prod_shop);
+                        db1.SHOPS.Add(prod_shop);
                         db1.SaveChanges();
                         return RedirectToAction("Index");
                     }
@@ -57,7 +57,7 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db1.PROD_SHOPS.Find(id);
+                var prod_shop = db1.SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();
@@ -66,13 +66,13 @@ namespace tahsinERP.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Delete(PROD_SHOPS prod_shop)
+        public ActionResult Delete(SHOP prod_shop)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    var prod_shop_deleted = db1.PROD_SHOPS.Find(prod_shop.ID);
+                    var prod_shop_deleted = db1.SHOPS.Find(prod_shop.ID);
                     if (prod_shop_deleted != null)
                     {
                         prod_shop_deleted.IsDeleted = true;
@@ -104,7 +104,7 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db1.PROD_SHOPS.Find(id);
+                var prod_shop = db1.SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();
@@ -113,13 +113,13 @@ namespace tahsinERP.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit(PROD_SHOPS prod_shop)
+        public ActionResult Edit(SHOP prod_shop)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    var prod_shop_Update = db1.PROD_SHOPS.Find(prod_shop.ID);
+                    var prod_shop_Update = db1.SHOPS.Find(prod_shop.ID);
                     if (prod_shop_Update != null)
                     {
                         prod_shop_Update.IsDeleted = false;
@@ -149,7 +149,7 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db1.PROD_SHOPS.Find(id);
+                var prod_shop = db1.SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();

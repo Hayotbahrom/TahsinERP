@@ -17,9 +17,6 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public int CompanyID { get; set; }
         public string LicenseKey { get; set; }
-        public Nullable<System.DateTime> IssueDate { get; set; }
-        public Nullable<System.DateTime> DueDate { get; set; }
-        public string Description { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
     }

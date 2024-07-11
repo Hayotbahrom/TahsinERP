@@ -66,9 +66,10 @@
                                                                 <div class="container row mt-5 ">
                                                                     <div class="form-group form-check checkbox checkbox-secondary checkbox-glow">
                                                                         <input type="checkbox" class="form-check-input" id="toggleCheckBox">
-                                                                        <label class="form-check-label" for="toggleCheckBox">Yangi norma yaratish</label>
+                                                                        <label class="form-check-label" for="toggleCheckBox">Yangi slitting norma yaratish</label>
                                                                     </div>
                                                                 </div>
+                                                                <br />
                                                                 <div id="div1" class="row old">
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
@@ -78,8 +79,6 @@
                                                                         </fieldset>
                                                                     </div>
                                                                 </div>
-                                                                <br />
-                                                                <br />
                                                                 <div id="div2" class="row new" style="display: none;">
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
@@ -114,7 +113,22 @@
 
                                                         case "Blanking":
                                                             <fieldset>
-                                                                <div class="row">
+                                                                <div class="container row mt-5 ">
+                                                                    <div class="form-group form-check checkbox checkbox-secondary checkbox-glow">
+                                                                        <input type="checkbox" class="form-check-input" id="toggleCheckBox1">
+                                                                        <label class="form-check-label" for="toggleCheckBox1">Yangi blanking norma yaratish</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="div11" class="row old">
+                                                                    <div class="col-md-4">
+                                                                        <h6>Ehtiyot qismni tanlang</h6>
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("SelectedBlankingNormID", (SelectList)ViewBag.BlankingNorms, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2" })
+                                                                            @Html.ValidationMessageFor(model => model.SelectedBlankingNormID, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="div21" class="row new" style="display: none;">
                                                                     <div class="col-md-4">
                                                                         <fieldset class="invoice-address form-group">
                                                                             @Html.DropDownList("BLANKING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
@@ -138,7 +152,22 @@
 
                                                         case "Stamping":
                                                             <fieldset>
-                                                                <div class="row">
+                                                                <div class="container row mt-5 ">
+                                                                    <div class="form-group form-check checkbox checkbox-secondary checkbox-glow">
+                                                                        <input type="checkbox" class="form-check-input" id="toggleCheckBox">
+                                                                        <label class="form-check-label" for="toggleCheckBox">Yangi stamping norma yaratish</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="div1" class="row old">
+                                                                    <div class="col-md-4">
+                                                                        <h6>Ehtiyot qismni tanlang</h6>
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("SelectedStampingNormID", (SelectList)ViewBag.StampingNorms, "Stamping processda bor mahsulotdan tanlang ", new { @class = "form-control select2" })
+                                                                            @Html.ValidationMessageFor(model => model.SelectedStampingNormID, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="div2" class="row new" style="display: none;">
                                                                     <div class="col-md-4">
                                                                         <fieldset class="invoice-address form-group">
                                                                             @Html.DropDownList("STAMPING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
@@ -264,6 +293,20 @@
                 } else {
                     $('#div1').show();
                     $('#div2').hide();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#toggleCheckBox1').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#div11').hide();
+                    $('#div21').show();
+                } else {
+                    $('#div11').show();
+                    $('#div21').hide();
                 }
             });
         });

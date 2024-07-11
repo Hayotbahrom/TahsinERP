@@ -12,37 +12,37 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PROD_WRHS
+    public partial class SHOP
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PROD_WRHS()
+        public SHOP()
         {
-            this.PROD_STOCKS = new HashSet<PROD_STOCKS>();
-            this.PROD_WRHS_EXPENSES = new HashSet<PROD_WRHS_EXPENSES>();
-            this.PROD_WRHS_EXPENSES1 = new HashSet<PROD_WRHS_EXPENSES>();
-            this.PROD_WRHS_INCOMES = new HashSet<PROD_WRHS_INCOMES>();
-            this.PROD_WRHS_INCOMES1 = new HashSet<PROD_WRHS_INCOMES>();
+            this.PART_PRODUCTION = new HashSet<PART_PRODUCTION>();
+            this.PART_WRHS = new HashSet<PART_WRHS>();
+            this.PARTS = new HashSet<PART>();
+            this.PROD_WRHS = new HashSet<PROD_WRHS>();
+            this.PRODUCT_PRODUCTION = new HashSet<PRODUCT_PRODUCTION>();
+            this.SHOP_PLANNED_DTS = new HashSet<SHOP_PLANNED_DTS>();
         }
     
         public int ID { get; set; }
-        public string WHName { get; set; }
+        public Nullable<int> CompanyID { get; set; }
+        public string ShopName { get; set; }
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public Nullable<int> MRP { get; set; }
-        public Nullable<int> ShopID { get; set; }
-        public Nullable<int> Account { get; set; }
     
+        public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_STOCKS> PROD_STOCKS { get; set; }
+        public virtual ICollection<PART_PRODUCTION> PART_PRODUCTION { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_WRHS_EXPENSES> PROD_WRHS_EXPENSES { get; set; }
+        public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_WRHS_EXPENSES> PROD_WRHS_EXPENSES1 { get; set; }
+        public virtual ICollection<PART> PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_WRHS_INCOMES> PROD_WRHS_INCOMES { get; set; }
+        public virtual ICollection<PROD_WRHS> PROD_WRHS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_WRHS_INCOMES> PROD_WRHS_INCOMES1 { get; set; }
-        public virtual SHOP SHOP { get; set; }
-        public virtual USER USER { get; set; }
+        public virtual ICollection<PRODUCT_PRODUCTION> PRODUCT_PRODUCTION { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SHOP_PLANNED_DTS> SHOP_PLANNED_DTS { get; set; }
     }
 }

@@ -14,14 +14,21 @@ namespace tahsinERP.Models
     
     public partial class PARTPLAN
     {
-        public int ID { get; set; }
-        public Nullable<int> PartID { get; set; }
-        public Nullable<double> PlannedQty { get; set; }
-        public Nullable<System.DateTime> IssueDate { get; set; }
-        public Nullable<System.DateTime> DueDate { get; set; }
-        public string Label { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PARTPLAN()
+        {
+            this.PARTPLANS_DAILY = new HashSet<PARTPLANS_DAILY>();
+        }
     
+        public int ID { get; set; }
+        public int PartID { get; set; }
+        public double Amount { get; set; }
+        public bool IsDeleted { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime DueDate { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PARTPLANS_DAILY> PARTPLANS_DAILY { get; set; }
         public virtual PART PART { get; set; }
     }
 }
