@@ -279,6 +279,7 @@
     <Compile Include="Controllers\FContractController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
+    <Compile Include="Controllers\HSCodeController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
@@ -350,6 +351,9 @@
     <Compile Include="Models\F_CONTRACTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\F_CONTRACT_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\F_TRANSPORT_TYPES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -371,9 +375,7 @@
     <Compile Include="Models\GetPartsInfo_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetSupplierParts_Result.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\GetSupplierParts_Result.cs" />
     <Compile Include="Models\HSCODE.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -390,6 +392,12 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PARTPLAN.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PARTPLANS_DAILY.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PART_PRODUCTION.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PART_STOCKS.cs">
@@ -452,13 +460,28 @@
     <Compile Include="Models\PRODUCTPLAN.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PROD_SHOPS.cs">
+    <Compile Include="Models\PRODUCTPLANS_DAILY.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PRODUCT_PRODUCTION.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PROD_STOCKS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PROD_WRHS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PROD_WRHS_EXPENSES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PROD_WRHS_EXPENSE_PRODUCTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PROD_WRHS_INCOMES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PROD_WRHS_INCOME_PRODUCTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_CONTRACTS.cs">
@@ -491,6 +514,9 @@
     <Compile Include="Models\P_ORDER_PARTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\P_PACKINGLIST_PARTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\P_PROFORMA_INVOICES.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -498,6 +524,12 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SAMPLE_FILES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SHOP.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SHOP_PLANNED_DTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SLITTING_NORMS.cs">
@@ -516,6 +548,9 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\S_CONTRACT_PRODUCTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TRACING.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\USER.cs">
@@ -555,6 +590,7 @@
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingProcessViewModel.cs" />
+    <Compile Include="ViewModels\PInvoiceViewModel.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
@@ -2509,7 +2545,7 @@
     <Content Include="Views\WhExpense\Edit.cshtml" />
     <Content Include="Views\WhExpense\EditPart.cshtml" />
     <Content Include="Views\WhExpense\Delete.cshtml" />
-    <Content Include="Views\WhExpense\DeletePart.cshtml" />
+    <Content Include="Views\HSCode\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -109,9 +109,8 @@ namespace tahsinERP.Controllers
                         if (existingProductPlan != null)
                         {
                             existingProductPlan.ProductID = productPlan.ProductID;
-                            existingProductPlan.PlannedQty = productPlan.PlannedQty;
-                            existingProductPlan.Label = productPlan.Label;
-                            existingProductPlan.IssueDate = productPlan.IssueDate;
+                            existingProductPlan.Amount = productPlan.Amount;
+                            existingProductPlan.StartDate = productPlan.StartDate;
                             existingProductPlan.DueDate = productPlan.DueDate;
                             existingProductPlan.IsDeleted = false;
 
@@ -177,7 +176,7 @@ namespace tahsinERP.Controllers
                 catch (Exception ex)
                 {
                     // Log the exception
-                    ModelState.AddModelError("", "Unable to delete. Try again, and if the problem persists see your system administrator.");
+                    ModelState.AddModelError("", ex.Message);
                     return View();
                 }
             }

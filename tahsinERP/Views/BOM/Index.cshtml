@@ -81,6 +81,7 @@
                                         <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
                                             <thead>
                                                 <tr>
+                                                    <th>Maxsulot nomi</th>
                                                     <th>Maxsulot raqami</th>
                                                     @if (changePermit)
                                                     {
@@ -93,12 +94,24 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @{
-                                                                string link = Url.Action("Details", "BOM")+"?ID=" + item.ID + "&isParent=" + ViewBag.IsParentProduct;
 
+                                                            @if (item.IsParentProduct == true)
+                                                            {
+                                                                <a href="~/Product/Details/@item.ProductID">@item.ProductName</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="~/Part/Details/@item.ProductID">@item.ProductName</a>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                                string link = Url.Action("Details", "BOM") + "?ID=" + item.ID + "&isParent=" + ViewBag.IsParentProduct;
                                                                 <a href="@link">@item.ParentPNo</a>
                                                             }
                                                         </td>
+                                                        
+
                                                         @if (changePermit)
                                                         {
                                                             <td>

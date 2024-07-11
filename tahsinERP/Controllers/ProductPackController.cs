@@ -195,7 +195,7 @@ namespace tahsinERP.Controllers
             }
             catch (Exception ex)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "O'zgarishni saqlashda hatolik yuz berdi!");
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 

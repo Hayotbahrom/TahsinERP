@@ -15,12 +15,6 @@ namespace tahsinERP.Models
     public partial class USER_LICENSES
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
         public string LicenseKey { get; set; }
-        public Nullable<System.DateTime> IssueDate { get; set; }
-        public Nullable<System.DateTime> DueDate { get; set; }
-        public string Description { get; set; }
-    
-        public virtual USER USER { get; set; }
     }
 }

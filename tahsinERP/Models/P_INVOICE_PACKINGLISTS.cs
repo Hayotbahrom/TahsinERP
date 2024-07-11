@@ -14,35 +14,31 @@ namespace tahsinERP.Models
     
     public partial class P_INVOICE_PACKINGLISTS
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public P_INVOICE_PACKINGLISTS()
+        {
+            this.P_PACKINGLIST_PARTS = new HashSet<P_PACKINGLIST_PARTS>();
+            this.TRACINGS = new HashSet<TRACING>();
+        }
+    
         public int ID { get; set; }
         public int InvoiceID { get; set; }
-        public string PackingListNo { get; set; }
         public int TransportTypeID { get; set; }
         public string TransportNo { get; set; }
-        public int PartID { get; set; }
-        public Nullable<double> PieceWeight { get; set; }
-        public Nullable<double> PrLength { get; set; }
-        public Nullable<double> PrWidth { get; set; }
-        public Nullable<double> PrHeight { get; set; }
-        public Nullable<double> PrCBM { get; set; }
-        public Nullable<double> PrAmount { get; set; }
-        public Nullable<double> PrNetWeight { get; set; }
-        public Nullable<double> PrGrWeight { get; set; }
-        public string PrPackMaterial { get; set; }
-        public string ScPackMaterial { get; set; }
-        public Nullable<double> ScLength { get; set; }
-        public Nullable<double> ScWidth { get; set; }
-        public Nullable<double> ScHeight { get; set; }
-        public Nullable<double> ScCBM { get; set; }
-        public Nullable<double> NoOfBoxes { get; set; }
-        public Nullable<double> SchedPack { get; set; }
-        public Nullable<double> ScNetWeight { get; set; }
-        public Nullable<double> ScGrWeight { get; set; }
-        public string PalletType { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public string PackingListNo { get; set; }
+        public string SealNo { get; set; }
+        public string Comment { get; set; }
+        public bool IsDeleted { get; set; }
+        public Nullable<bool> InTransit { get; set; }
+        public Nullable<double> TotalCBM { get; set; }
+        public Nullable<double> TotalGrWeight { get; set; }
+        public Nullable<double> TotalNetWeight { get; set; }
     
         public virtual F_TRANSPORT_TYPES F_TRANSPORT_TYPES { get; set; }
         public virtual P_INVOICES P_INVOICES { get; set; }
-        public virtual PART PART { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TRACING> TRACINGS { get; set; }
     }
 }

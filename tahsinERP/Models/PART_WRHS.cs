@@ -55,7 +55,7 @@ namespace tahsinERP.Models
         public virtual ICollection<PART_WRHS_INCOMES> PART_WRHS_INCOMES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_WRHS_INCOMES> PART_WRHS_INCOMES1 { get; set; }
-        public virtual PROD_SHOPS PROD_SHOPS { get; set; }
+        public virtual SHOP SHOP { get; set; }
         public virtual USER USER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WASTE_STOCKS> WASTE_STOCKS { get; set; }
