@@ -2511,7 +2511,6 @@
     <Content Include="Views\WhExpense\Edit.cshtml" />
     <Content Include="Views\WhExpense\EditPart.cshtml" />
     <Content Include="Views\WhExpense\Delete.cshtml" />
-    <Content Include="Views\WhExpense\DeletePart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

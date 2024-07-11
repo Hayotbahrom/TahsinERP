@@ -64,7 +64,7 @@
                                                 <hr />
                                                 <span><b>Jo`natilganmi</b>:@* @Html.DisplayFor(model => model.SendStatus, new { @class = "form-control" })*@</span>
 
-                                                @if (Model.SendStatus.HasValue && Model.SendStatus.Value)
+                                                @if (Model.SendStatus)
                                                 {
                                                     <span class="badge badge-light-success">ha</span>
                                                 }
