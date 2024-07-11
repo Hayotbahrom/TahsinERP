@@ -47,7 +47,8 @@
                                     <div class="card-body">
                                         @using (Html.BeginForm("CreateWizard", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
                                         {
-                                            @Html.HiddenFor(model => model.Product)
+                                            @Html.HiddenFor(model => model.Product.PNo)
+                                            @Html.HiddenFor(model => model.Product.ID)
                                             if (!string.IsNullOrEmpty(Model.Process))
                                             {
                                                 var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
@@ -60,8 +61,17 @@
 
                                                     switch (processName)
                                                     {
-                                                        case "Sliting":
+                                                        case "Slitting":
                                                             <fieldset>
+                                                                <div class="row">
+
+                                                                    <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
+                                                                        @Html.CheckBox("CreateNewSlittingNorm", false, new { @id = "CreateNewSlittingNorm" })
+                                                                        <label for="CreateNewSlittingNorm">Yangi norma yaratish.</label>
+                                                                    </div>
+                                                                </div>
+                                                                <br />
+                                                                <br />
                                                                 <div class="row">
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
@@ -79,9 +89,9 @@
                                                                     </div>
                                                                     <br />
                                                                     <div class="col-md-4">
-                                                                        <h6>Kesadigon toshni razmerini kiriting</h6>
+                                                                        <h6>Cutter width</h6>
                                                                         <fieldset class="invoice-address form-group">
-                                                                            @Html.TextBoxFor(model => model.SLITTING_NORMS.CutterWidth, new { @class = "form-control", @placeholder = "Kesadigan tosh razmerini kiriting" })
+                                                                            @Html.TextBoxFor(model => model.SLITTING_NORMS.CutterWidth, new { @class = "form-control", @placeholder = "Cutter width" })
                                                                             @Html.ValidationMessageFor(model => model.SLITTING_NORMS.CutterWidth, "", new { @class = "text-danger" })
                                                                         </fieldset>
                                                                     </div>
@@ -91,6 +101,7 @@
                                                                         @Html.ValidationMessageFor(model => model.SLITTING_NORMS.IsActive, "", new { @class = "text-warning" })
                                                                     </div>
                                                                 </div>
+
                                                             </fieldset>
                                                             break;
 
@@ -236,6 +247,17 @@
     <script src="~/app-assets/js/scripts/footer.js"></script>
     <script src="~/app-assets/js/scripts/forms/wizard-steps.js"></script>
     <script src="~/assets/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#CreateNewSlittingNorm').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#newSlittingNormFields').show();
+                } else {
+                    $('#newSlittingNormFields').hide();
+                }
+            });
+        });
+    </script>
 }
 else
 {

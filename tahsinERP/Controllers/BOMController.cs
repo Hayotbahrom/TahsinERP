@@ -204,8 +204,6 @@ namespace tahsinERP.Controllers
             }
         }
 
-
-
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -237,16 +235,15 @@ namespace tahsinERP.Controllers
 
                 var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
 
-                model.ProductNo = product.PNo;
                 model.Product = product;
+                model.ProductNo = product.PNo;
 
                 TempData["BOMCreateViewModel"] = model;
             }
 
             return RedirectToAction("CreateWizard");
         }
-
-
+         
         public ActionResult CreateWizard()
         {
             var model = TempData["BOMCreateViewModel"] as BOMCreateViewModel;
@@ -269,7 +266,7 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -281,7 +278,7 @@ namespace tahsinERP.Controllers
 
                     var processNames = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
 
-                    var product = db.PRODUCTS.Where(x => x.IsDeleted == false && x.PNo == model.Product.PNo).FirstOrDefault();
+                    var product = db.PRODUCTS.Where(x => x.IsDeleted == false && x.ID == model.Product.ID).FirstOrDefault();
 
                     var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
                     var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
@@ -315,11 +312,11 @@ namespace tahsinERP.Controllers
                             var bom = new BOM
                             {
                                 ChildPNo = part_after.PNo,
-                                ParentPNo = model.ProductNo,
+                                ParentPNo = model.Product.PNo,
                                 IsDeleted = false,
                                 IsActive = true,
                                 WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
-                                ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Sliting")?.ID
+                                ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID
                             };
 
                             db.BOMS.Add(bom);
