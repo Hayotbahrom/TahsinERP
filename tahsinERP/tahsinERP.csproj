@@ -2512,6 +2512,10 @@
     <Content Include="Views\WhExpense\EditPart.cshtml" />
     <Content Include="Views\WhExpense\Delete.cshtml" />
     <Content Include="Views\HSCode\Index.cshtml" />
+    <Content Include="Views\HSCode\Create.cshtml" />
+    <Content Include="Views\HSCode\Details.cshtml" />
+    <Content Include="Views\HSCode\Delete.cshtml" />
+    <Content Include="Views\HSCode\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

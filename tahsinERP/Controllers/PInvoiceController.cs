@@ -64,7 +64,7 @@ namespace tahsinERP.Controllers
                     suppliersQuery = suppliersQuery.Where(s => s.ID == supplierID.Value);
                 }
 
-                ViewBag.SupplierList = new SelectList(suppliersQuery.ToList(), "ID", "Name");
+                ViewBag.SupplierList = new SelectList(suppliersQuery.Where(s => s.Type.CompareTo(type) == 0).ToList(), "ID", "Name");
                 ViewBag.Type = type;
 
                 return View(invoices);
