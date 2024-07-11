@@ -4,154 +4,152 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<head>
-    <link rel="stylesheet" type="text/css" href="~/app-assets/css/list/list-style.css">
-</head>
-<body>
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
-                <div class="content-header-left col-12 mb-2 mt-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                                    <li class="breadcrumb-item">
-                                        <a href="/Home"><i class="bx bx-home-alt"></i></a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="~/BOM">BOM</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">
-                                        Bir maxsulot BOMi
-                                    </li>
-                                </ol>
-                            </div>
+<link rel="stylesheet" type="text/css" href="~/app-assets/css/list/list.css" />
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                <li class="breadcrumb-item">
+                                    <a href="/Home"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="~/BOM">BOM</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    Bir maxsulot BOMi
+                                </li>
+                            </ol>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <ul class="wtree" id="firstLevel">
-                @if (Model.PRODUCT != null)
+        <ul class="wtree" id="firstLevel">
+            @if (Model.PRODUCT != null)
+            {
+                <li id="firstLevel">
+                    <div style="display: flex; align-items: center;">
+                        @if (Model.ParentImageBase64.Any())
+                        {
+                            <a href="@Model.ParentImageBase64" target="_blank">
+                                <img src="@Model.ParentImageBase64" alt="Product Image"
+                                     style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" />
+                            </a>
+                        }
+                        <span>
+                            <a href="~/Product/Details/@Model.PRODUCT.ID">@Model.ParentPNo</a>
+                        </span>
+                    </div>
+
+                    @* Render children here *@
+                    <ul id="secondLevel">
+                        @foreach (var child in Model.Children)
+                        {
+                            <li id="secondLevel">
+                                <div style="display: flex; align-items: center;" class="box">
+                                    @if (child.ChildImageBase64.Any())
+                                    {
+                                        <a href="@child.ChildImageBase64" target="_blank">
+                                            <img src="@child.ChildImageBase64" alt="Product Image"
+                                                 style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
+                                        </a>
+                                    }
+                                    @if (child.PART != null)
+                                    {
+                                        <span>
+                                            <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
+                                            @child.Consumption-@child.ConsumptionUnit
+                                        </span>
+                                    }
+                                </div>
+                                @if (child.Children.Any())
+                                {
+                                    <ul id="thirdLevel">
+                                        @foreach (var grandChild in child.Children)
+                                        {
+                                            <li id="thirdLevel">
+                                                <div style="display: flex; align-items: center;" class="box">
+                                                    @if (grandChild.ChildImageBase64.Any())
+                                                    {
+                                                        <img src="@grandChild.ChildImageBase64" alt="Product Image"
+                                                             style="width: 130px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
+                                                    }
+                                                    @if (grandChild.PART != null)
+                                                    {
+                                                        <span>
+                                                            <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
+                                                            @grandChild.Consumption-@grandChild.ConsumptionUnit
+                                                        </span>
+                                                    }
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+            else
+            {
+                @* If parent is null, render children directly *@
+                foreach (var child in Model.Children)
                 {
-                    <li id="firstLevel">
-                        <div style="display: flex; align-items: center;">
-                            @if (Model.ParentImageBase64.Any())
+                    <li id="secondLevel">
+                        <div style="display: flex; align-items: center;" class="box">
+                            @if (child.ChildImageBase64.Any())
                             {
-                                <a href="@Model.ParentImageBase64" target="_blank">
-                                    <img src="@Model.ParentImageBase64" alt="Product Image"
-                                         style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" />
+                                <a href="@child.ChildImageBase64" target="_blank">
+                                    <img src="@child.ChildImageBase64" alt="Product Image"
+                                         style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
                                 </a>
                             }
-                            <span>
-                                <a href="~/Product/Details/@Model.PRODUCT.ID">@Model.ParentPNo</a>
-                            </span>
-                        </div>
-
-                        @* Render children here *@
-                        <ul id="secondLevel">
-                            @foreach (var child in Model.Children)
+                            @if (child.PART != null)
                             {
-                                <li id="secondLevel">
-                                    <div style="display: flex; align-items: center;" class="box">
-                                        @if (child.ChildImageBase64.Any())
-                                        {
-                                            <a href="@child.ChildImageBase64" target="_blank">
-                                                <img src="@child.ChildImageBase64" alt="Product Image"
-                                                     style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
-                                            </a>
-                                        }
-                                        @if (child.PART != null)
-                                        {
-                                            <span>
-                                                <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                                @child.Consumption-@child.ConsumptionUnit
-                                            </span>
-                                        }
-                                    </div>
-                                    @if (child.Children.Any())
-                                    {
-                                        <ul id="thirdLevel">
-                                            @foreach (var grandChild in child.Children)
-                                            {
-                                                <li id="thirdLevel">
-                                                    <div style="display: flex; align-items: center;" class="box">
-                                                        @if (grandChild.ChildImageBase64.Any())
-                                                        {
-                                                            <img src="@grandChild.ChildImageBase64" alt="Product Image"
-                                                                 style="width: 130px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
-                                                        }
-                                                        @if (grandChild.PART != null)
-                                                        {
-                                                            <span>
-                                                                <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                                @grandChild.Consumption-@grandChild.ConsumptionUnit
-                                                            </span>
-                                                        }
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    }
-                                </li>
+                                <span>
+                                    <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
+                                    @child.Consumption-@child.ConsumptionUnit
+                                </span>
                             }
-                        </ul>
+                        </div>
+                        @if (child.Children.Any())
+                        {
+                            <ul id="thirdLevel">
+                                @foreach (var grandChild in child.Children)
+                                {
+                                    <li id="thirdLevel">
+                                        <div style="display: flex; align-items: center;" class="box">
+                                            @if (grandChild.ChildImageBase64.Any())
+                                            {
+                                                <img src="@grandChild.ChildImageBase64" alt="Product Image"
+                                                     style="width: 130px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
+                                            }
+                                            @if (grandChild.PART != null)
+                                            {
+                                                <span>
+                                                    <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
+                                                    @grandChild.Consumption-@grandChild.ConsumptionUnit
+                                                </span>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
                     </li>
                 }
-                else
-                {
-                    @* If parent is null, render children directly *@
-                    foreach (var child in Model.Children)
-                    {
-                        <li id="secondLevel">
-                            <div style="display: flex; align-items: center;" class="box">
-                                @if (child.ChildImageBase64.Any())
-                                {
-                                    <a href="@child.ChildImageBase64" target="_blank">
-                                        <img src="@child.ChildImageBase64" alt="Product Image"
-                                             style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
-                                    </a>
-                                }
-                                @if (child.PART != null)
-                                {
-                                    <span>
-                                        <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                        @child.Consumption-@child.ConsumptionUnit
-                                    </span>
-                                }
-                            </div>
-                            @if (child.Children.Any())
-                            {
-                                <ul id="thirdLevel">
-                                    @foreach (var grandChild in child.Children)
-                                    {
-                                        <li id="thirdLevel">
-                                            <div style="display: flex; align-items: center;" class="box">
-                                                @if (grandChild.ChildImageBase64.Any())
-                                                {
-                                                    <img src="@grandChild.ChildImageBase64" alt="Product Image"
-                                                         style="width: 130px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
-                                                }
-                                                @if (grandChild.PART != null)
-                                                {
-                                                    <span>
-                                                        <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                        @grandChild.Consumption-@grandChild.ConsumptionUnit
-                                                    </span>
-                                                }
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                        </li>
-                    }
-                }
-            </ul>
-        </div>
+            }
+        </ul>
     </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -171,15 +169,14 @@
                     }
                 }
 
-                    // Close all other open sub-lists
-                    var allSubUls = document.querySelectorAll('.wtree ul');
-                    allSubUls.forEach(function (otherSubUl) {
-                        if (otherSubUl !== subUl && !otherSubUl.contains(subUl)) {
-                            otherSubUl.style.display = 'none';
-                        }
-                    });
+                // Close all other open sub-lists
+                var allSubUls = document.querySelectorAll('.wtree ul');
+                allSubUls.forEach(function (otherSubUl) {
+                    if (otherSubUl !== subUl && !otherSubUl.contains(subUl)) {
+                        otherSubUl.style.display = 'none';
+                    }
                 });
             });
         });
-    </script>
-</body>
+    });
+</script>
