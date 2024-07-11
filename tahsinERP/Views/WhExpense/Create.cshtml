@@ -1,4 +1,5 @@
-﻿@model tahsinERP.ViewModels.WrhsIncomeViewModel
+﻿@model tahsinERP.ViewModels.WrhsExpenseViewModel
+
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -19,10 +20,10 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="~/WhIncome/Index">Kirimlar</a>
+                                        <a href="~/WhExpense/Index">Chiqimlar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Kirim qilish
+                                        Chiqim qilish
                                     </li>
                                 </ol>
                             </div>
@@ -37,12 +38,10 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                        @using (Html.BeginForm("Create", "WhExpense", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
                                         {
                                             @Html.AntiForgeryToken()
-                                            // WRHS_InComes
                                             <div class="row justify-content-around d-flex align-items-start">
-                                                @*Left Part*@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
@@ -50,13 +49,12 @@
                                                             @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @placeholder = "DocNo kiriting" })
                                                         </div>
 
-                                                        @*ID auto olinishi kerak, ushbu turgan shartnomaniki*@
-
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Invoice</label>
-                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, new { @id = "InvoiceId", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
+                                                            <label for="InvoiceId">Qabul qiluvchi</label>
+                                                            @Html.DropDownListFor(model => model.RecieverWHID, (SelectList)ViewBag.PartWrhs, new { @id = "RecieverWhID", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.RecieverWHID, "", new { @class = "text-danger" })
                                                         </div>
+
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Amount">Amount</label>
                                                             @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Miqdorini kiriting" })
@@ -69,50 +67,38 @@
                                                     </div>
                                                 </div>
 
-                                                @*Right Part*@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
-                                                        @*Total Price USER dan olinmaydi, TRIGGER in DB*@
-
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="WbID">Waybill</label>
-                                                            @Html.DropDownListFor(model => model.WaybillID, (SelectList)ViewBag.Waybills, new { @id = "WbID", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.WaybillID, "", new { @class = "text-danger" })
-                                                        </div>
-
-                                                        @*Issue DateTime auto DateTime.Now bilan olinishi kk*@
-
-                                                        @*SenerWHID USER dan olinmaydi*@
-
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Currency">Currency</label>
                                                             @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Currencyni kiriting" })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
-
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Qisqacha bayoni</label>
+                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "qisqacha ma`lumot kiriting" })
+                                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                        </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <div class="checkbox checkbox-secondary checkbox-glow">
-                                                                @Html.CheckBoxFor(model => model.RecieveStatus, new { @type = "checkbox", @id = "RecieveStatus" })
-                                                                <label for="RecieveStatus">Recieve Status</label>
-                                                                @Html.ValidationMessageFor(model => model.RecieveStatus, "", new { @class = "text-warning" })
+                                                                @Html.CheckBoxFor(model => model.SendStatus, new { @type = "checkbox", @id = "RecieveStatus" })
+                                                                <label for="RecieveStatus">Send Status</label>
+                                                                @Html.ValidationMessageFor(model => model.SendStatus, "", new { @class = "text-warning" })
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            // WRHS_InCome_Parts
                                             <br />
-                                            <h4>
-                                                Parts
-                                            </h4>
+                                            <h4>Parts</h4>
                                             <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.InComeParts, new { @class = "form-control" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.IncomeParts, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -145,8 +131,6 @@
 
                                             <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
 
-
-                                            // Save button
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
                                                     <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
@@ -170,4 +154,3 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
-
