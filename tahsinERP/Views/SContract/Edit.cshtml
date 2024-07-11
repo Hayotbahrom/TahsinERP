@@ -1,10 +1,8 @@
 ﻿@model tahsinERP.ViewModels.SContractViewModel
-
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     using (Html.BeginForm("Edit", "SContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -110,29 +108,31 @@
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            @foreach (var item in ViewBag.ProductList)
+                                                                            @for (int i = 0; i < Model.ProductList.Count; i++)
                                                                             {
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <a href="~/SContracts/Details/@item.PRODUCT.ID">@item.PRODUCT.PNo</a>
+                                                                                        <a href="~/SContracts/Details/@Model.ProductList[i].PRODUCT.ID">@Model.ProductList[i].PRODUCT.PNo</a>
                                                                                     </td>
                                                                                     <td>
-                                                                                        @item.PRODUCT.Name
+                                                                                        @Model.ProductList[i].PRODUCT.Name
                                                                                     </td>
                                                                                     <td>
-                                                                                        @item.PiecePrice
+                                                                                        @Html.TextBoxFor(model => model.ProductList[i].PiecePrice, new { @class = "form-control" })
+                                                                                        @*@Html.DisplayFor(model => model.ProductList[i].PiecePrice, new { @class = "form-control" })*@
                                                                                     </td>
                                                                                     <td>
-                                                                                        @item.Unit
+                                                                                        @Html.TextBoxFor(model => model.ProductList[i].Unit, new { @class = "form-control" })
+                                                                                        @*@Html.DisplayFor(model => model.ProductList[i].Unit, new { @class = "form-control" })*@
                                                                                     </td>
                                                                                     <td>
-                                                                                        @item.Amount
+                                                                                        @Html.TextBoxFor(model => model.ProductList[i].Amount, new { @class = "form-control" })
+                                                                                        @*@Html.DisplayFor(model => model.ProductList[i].Amount, new { @class = "form-control" })*@
                                                                                     </td>
-                                                                                    
                                                                                     <td>
                                                                                         <div>
-                                                                                            <a href="@Url.Action("EditProduct", "SContract", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                                            <a href="~/SContract/DeleteProduct/@item.ID" onclick="return confirm('Ushbu shartnoma maxsulotini ochirib yuborishga ishonchingiz komilmi?')">
+                                                                                            <a href="@Url.Action("EditProduct", "SContract", new { id = Model.ProductList[i].ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                                            <a href="~/SContract/DeleteProduct/@Model.ProductList[i].ID" onclick="return confirm('Ushbu shartnoma maxsulotini ochirib yuborishga ishonchingiz komilmi?')">
                                                                                                 <i class="bx bx-trash"></i>
                                                                                             </a>
                                                                                         </div>

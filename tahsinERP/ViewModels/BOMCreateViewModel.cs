@@ -19,6 +19,8 @@ namespace tahsinERP.ViewModels
         public STAMPING_NORMS STAMPING_NORMS { get; set; }
         public PART Part { get; set; }
 
+        public int SelectedSlittingNormID { get; set; }
+
         // Additional fields for other norms and consumption units
         public string ConsumptionUnit { get; set; }
 
