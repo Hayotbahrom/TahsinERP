@@ -38,9 +38,21 @@ namespace tahsinERP.Controllers
                 ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                 ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-            }
 
-            return View();
+                WrhsExpenseViewModel viewModel = new WrhsExpenseViewModel();
+                PART_WRHS_EXPENSES expense = db.PART_WRHS_EXPENSES.OrderByDescending(p => p.IssueDateTime).FirstOrDefault();
+                var monthAndNumber = expense.DocNo.Split('_');
+
+                if (int.Parse(monthAndNumber[0]) == int.Parse(DateTime.Now.Month.ToString()))
+                {
+                    int docNoNumber = int.Parse(monthAndNumber[1]) + 1;
+                    viewModel.DocNo = DateTime.Now.Month + "_" + docNoNumber;
+                }
+                else
+                    viewModel.DocNo = DateTime.Now.Month + "_" + 1;
+
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
@@ -138,58 +150,56 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            PART_WRHS_EXPENSES whrsIncome;
+            PART_WRHS_EXPENSES wrhsExpense;
             List<PART_WRHS_EXPENSE_PARTS> partList;
 
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                whrsIncome = db1.PART_WRHS_EXPENSES
+                wrhsExpense = db1.PART_WRHS_EXPENSES
                     .FirstOrDefault(p => p.ID == ID);
 
-                if (whrsIncome == null)
+                if (wrhsExpense == null)
                 {
                     return HttpNotFound();
                 }
 
-                // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", whrsIncome.SupplierID);
+                // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", wrhsExpense.SupplierID);
 
                 partList = db1.PART_WRHS_EXPENSE_PARTS
                     .Where(whp => whp.ExpenseID == ID)
                     .Include(whp => whp.PART)
                     .ToList();
-                //ViewBag.PartList = new SelectList(db1.PART_WRHS_INCOME_PARTS.Include(p => p.PART).ToList(),"ID","PName");
+                //ViewBag.PartList = new SelectList(db1.PART_WRHS_EXPENSE_PARTS.Include(p => p.PART).ToList(),"ID","PName");
                // ViewBag.Invoices = new SelectList(db1.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
-                ViewBag.ParWhrs = new SelectList(db1.PART_WRHS.Where(i => i.IsDeleted == false).ToList(), "ID", "WHName");
+                ViewBag.PartWhrs = new SelectList(db1.PART_WRHS.Where(i => i.IsDeleted == false).ToList(), "ID", "WHName");
             }
 
             // ViewBag.Supplier = suppliers;
             ViewBag.partList = partList;
 
-            return View(whrsIncome);
+            return View(wrhsExpense);
         }
-        /*
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(PART_WRHS_EXPENSES whrsIncome)
+        public ActionResult Edit(PART_WRHS_EXPENSES wrhsExpense)
         {
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db1 = new DBTHSNEntities())
                 {
-                    PART_WRHS_EXPENSES wrhsIncomeToUpdate = db1.PART_WRHS_EXPENSES.Find(whrsIncome.ID);
-                    if (wrhsIncomeToUpdate != null)
+                    PART_WRHS_EXPENSES wrhsExpenseToUpdate = db1.PART_WRHS_EXPENSES.Find(wrhsExpense.ID);
+                    if (wrhsExpenseToUpdate != null)
                     {
-                        wrhsIncomeToUpdate.DocNo = whrsIncome.DocNo;
-                        // wrhsIncomeToUpdate.WHID = whrsIncome.WHID;
-                        wrhsIncomeToUpdate.InvoiceID = whrsIncome.InvoiceID;
-                        wrhsIncomeToUpdate.WaybillID = whrsIncome.WaybillID;
-                        wrhsIncomeToUpdate.Currency = whrsIncome.Currency;
-                        wrhsIncomeToUpdate.Amount = whrsIncome.Amount;
-                        wrhsIncomeToUpdate.TotalPrice = whrsIncome.TotalPrice;
-                        wrhsIncomeToUpdate.Description = whrsIncome.Description;
-                        wrhsIncomeToUpdate.IssueDateTime = whrsIncome.IssueDateTime;
-                        //wrhsIncomeToUpdate.SenderWHID = whrsIncome.SenderWHID;
+                        wrhsExpenseToUpdate.DocNo = wrhsExpense.DocNo;
+                        wrhsExpenseToUpdate.ReceiverWhID = wrhsExpense.ReceiverWhID;
+                        wrhsExpenseToUpdate.Currency = wrhsExpense.Currency;
+                        wrhsExpenseToUpdate.Amount = wrhsExpense.Amount;
+                        wrhsExpenseToUpdate.TotalPrice = wrhsExpense.TotalPrice;
+                        wrhsExpenseToUpdate.Description = wrhsExpense.Description;
+                        wrhsExpenseToUpdate.IssueDateTime = wrhsExpense.IssueDateTime;
+                        wrhsExpenseToUpdate.IsDeleted = false;
+                        //wrhsExpenseToUpdate.SenderWHID = wrhsExpense.SenderWHID;
 
                         try
                         {
@@ -201,13 +211,13 @@ namespace tahsinERP.Controllers
                             ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
-                    return View(wrhsIncomeToUpdate);
+                    return View(wrhsExpenseToUpdate);
                 }
             }
-            return View(whrsIncome);
+            return View(wrhsExpense);
         }
         //hali toliq ozgartitilmagan
-
+        
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)
@@ -216,16 +226,16 @@ namespace tahsinERP.Controllers
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var whIncomePart = db.PART_WRHS_INCOME_PARTS
+                var whExpensePart = db.PART_WRHS_EXPENSE_PARTS
                                     .Include(p => p.PART_WRHS_EXPENSES)
                                     .Include(p => p.PART)
                                     .FirstOrDefault(p => p.ID == ID);
-                if (whIncomePart == null)
+                if (whExpensePart == null)
                 {
                     return HttpNotFound();
                 }
                 var allParts = db.PARTS
-                                .Include(p => p.PART_WRHS_INCOME_PARTS)
+                                .Include(p => p.PART_WRHS_EXPENSE_PARTS)
                                 .Select(p => new SelectListItem
                                 {
                                     Value = p.ID.ToString(),
@@ -234,27 +244,27 @@ namespace tahsinERP.Controllers
 
                 ViewBag.PartList = allParts;
 
-                return View(whIncomePart);
+                return View(whExpensePart);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPart(PART_WRHS_INCOME_PARTS whIncomePart)
+        public ActionResult EditPart(PART_WRHS_EXPENSE_PARTS whExpensePart)
         {
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    PART_WRHS_INCOME_PARTS whIncomePartToUpdate = db.PART_WRHS_INCOME_PARTS.Find(whIncomePart.ID);
-                    if (whIncomePartToUpdate != null)
+                    PART_WRHS_EXPENSE_PARTS whExpensePartToUpdate = db.PART_WRHS_EXPENSE_PARTS.Find(whExpensePart.ID);
+                    if (whExpensePartToUpdate != null)
                     {
-                        whIncomePartToUpdate.PartID = whIncomePart.PartID;
-                        whIncomePartToUpdate.Amount = whIncomePart.Amount;
-                        whIncomePartToUpdate.Unit = whIncomePart.Unit;
-                        whIncomePartToUpdate.PiecePrice = whIncomePart.PiecePrice;
-                        whIncomePartToUpdate.Comment = whIncomePart.Comment;
-                        //whIncomePartToUpdate.Amount = whIncomePart.Quantity * whIncomePart.Price; SQL o'zi chiqarib beradi
+                        whExpensePartToUpdate.PartID = whExpensePart.PartID;
+                        whExpensePartToUpdate.Amount = whExpensePart.Amount;
+                        whExpensePartToUpdate.Unit = whExpensePart.Unit;
+                        whExpensePartToUpdate.PiecePrice = whExpensePart.PiecePrice;
+                        whExpensePartToUpdate.Comment = whExpensePart.Comment;
+                        //whExpensePartToUpdate.Amount = whExpensePart.Quantity * whExpensePart.Price; SQL o'zi chiqarib beradi
 
                         try
                         {
@@ -266,7 +276,7 @@ namespace tahsinERP.Controllers
                             ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
-                    return View(whIncomePartToUpdate);
+                    return View(whExpensePartToUpdate);
                 }
             }
             return View();
@@ -279,19 +289,18 @@ namespace tahsinERP.Controllers
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var whrsIncome = db.PART_WRHS_EXPENSES.Find(Id);
-                if (whrsIncome == null)
+                var wrhsExpense = db.PART_WRHS_EXPENSES.Find(Id);
+                if (wrhsExpense == null)
                 {
                     return HttpNotFound();
                 }
                 else
-                    ViewBag.partList = db.PART_WRHS_INCOME_PARTS
+                    ViewBag.partList = db.PART_WRHS_EXPENSE_PARTS
                         .Include(pc => pc.PART)
-                        .Where(pc => pc.IncomeID == whrsIncome.ID).ToList();
+                        .Where(pc => pc.ExpenseID == wrhsExpense.ID).ToList();
 
-                db.Entry(whrsIncome).Reference(i => i.P_INVOICES).Load();
-                db.Entry(whrsIncome).Reference(i => i.F_WAYBILLS).Load();
-                return View(whrsIncome);
+                db.Entry(wrhsExpense).Reference(i => i.PART_WRHS).Load();
+                return View(wrhsExpense);
             }
         }
 
@@ -303,13 +312,13 @@ namespace tahsinERP.Controllers
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    PART_WRHS_EXPENSES whIncomeToDelete = db.PART_WRHS_EXPENSES.Find(ID);
-                    if (whIncomeToDelete != null)
+                    PART_WRHS_EXPENSES whExpenseToDelete = db.PART_WRHS_EXPENSES.Find(ID);
+                    if (whExpenseToDelete != null)
                     {
-                        whIncomeToDelete.IsDeleted = true;
+                        whExpenseToDelete.IsDeleted = true;
                         try
                         {
-                            db.Entry(whIncomeToDelete).State = System.Data.Entity.EntityState.Modified;
+                            db.Entry(whExpenseToDelete).State = System.Data.Entity.EntityState.Modified;
                             
                             db.SaveChanges();
                             return RedirectToAction("Index");
@@ -331,14 +340,14 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                PART_WRHS_INCOME_PARTS contractPartToDelete = db.PART_WRHS_INCOME_PARTS.Find(id);
+                PART_WRHS_EXPENSE_PARTS whExpensePartToDelete = db.PART_WRHS_EXPENSE_PARTS.Find(id);
                 if (ModelState.IsValid)
                 {
-                    if (contractPartToDelete != null)
+                    if (whExpensePartToDelete != null)
                     {
                         try
                         {
-                            db.PART_WRHS_INCOME_PARTS.Remove(contractPartToDelete);
+                            db.PART_WRHS_EXPENSE_PARTS.Remove(whExpensePartToDelete);
                             db.SaveChanges();
                             return RedirectToAction("Index");
                         }
@@ -352,9 +361,9 @@ namespace tahsinERP.Controllers
                         ModelState.AddModelError("", "ContractPart not found.");
                     }
                 }
-                return View(contractPartToDelete);
+                return View(whExpensePartToDelete);
             }
-        }*/
+        }
 
     }
 }

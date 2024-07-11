@@ -279,6 +279,7 @@
     <Compile Include="Controllers\FContractController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
+    <Compile Include="Controllers\HSCodeController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
@@ -555,6 +556,7 @@
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingProcessViewModel.cs" />
+    <Compile Include="ViewModels\PInvoiceViewModel.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
@@ -2509,7 +2511,7 @@
     <Content Include="Views\WhExpense\Edit.cshtml" />
     <Content Include="Views\WhExpense\EditPart.cshtml" />
     <Content Include="Views\WhExpense\Delete.cshtml" />
-    <Content Include="Views\WhExpense\DeletePart.cshtml" />
+    <Content Include="Views\HSCode\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
