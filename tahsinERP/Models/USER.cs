@@ -27,7 +27,6 @@ namespace tahsinERP.Models
             this.SLITTING_NORMS = new HashSet<SLITTING_NORMS>();
             this.STAMPING_NORMS = new HashSet<STAMPING_NORMS>();
             this.USER_ENTRIES = new HashSet<USER_ENTRIES>();
-            this.USER_LICENSES = new HashSet<USER_LICENSES>();
             this.USERIMAGES = new HashSet<USERIMAGE>();
             this.ROLES = new HashSet<ROLE>();
         }
@@ -63,8 +62,6 @@ namespace tahsinERP.Models
         public virtual ICollection<STAMPING_NORMS> STAMPING_NORMS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<USER_ENTRIES> USER_ENTRIES { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<USER_LICENSES> USER_LICENSES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<USERIMAGE> USERIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

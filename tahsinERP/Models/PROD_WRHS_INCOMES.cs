@@ -12,29 +12,29 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class S_CONTRACTS
+    public partial class PROD_WRHS_INCOMES
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public S_CONTRACTS()
+        public PROD_WRHS_INCOMES()
         {
-            this.S_CONTRACT_PRODUCTS = new HashSet<S_CONTRACT_PRODUCTS>();
+            this.PROD_WRHS_INCOME_PRODUCTS = new HashSet<PROD_WRHS_INCOME_PRODUCTS>();
         }
     
         public int ID { get; set; }
-        public string ContractNo { get; set; }
-        public DateTime IssuedDate { get; set; }
-        public int CompanyID { get; set; }
-        public int CustomerID { get; set; }
+        public string DocNo { get; set; }
+        public int ReceivingWHID { get; set; }
+        public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
-        public double Amount { get; set; }
-        public string Incoterms { get; set; }
-        public string PaymentTerms { get; set; }
-        public DateTime DueDate { get; set; }
-        public bool IsDeleted { get; set; }
+        public Nullable<double> TotalPrice { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
+        public string Description { get; set; }
+        public System.DateTime IssueDateTime { get; set; }
+        public Nullable<int> SenderWHID { get; set; }
+        public Nullable<bool> RecieveStatus { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
-        public virtual CUSTOMER CUSTOMER { get; set; }
+        public virtual PROD_WRHS PROD_WRHS { get; set; }
+        public virtual PROD_WRHS PROD_WRHS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
+        public virtual ICollection<PROD_WRHS_INCOME_PRODUCTS> PROD_WRHS_INCOME_PRODUCTS { get; set; }
     }
 }

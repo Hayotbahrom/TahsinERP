@@ -79,7 +79,7 @@ namespace tahsinERP.Controllers
                     }
                     catch (Exception ex)
                     {
-                        ModelState.AddModelError("", "An error occurred while creating the permission module. Please try again.");
+                        ModelState.AddModelError("", ex.Message);
                     }
                 }
 

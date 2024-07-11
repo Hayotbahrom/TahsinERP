@@ -12,23 +12,18 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PRODUCTPLAN
+    public partial class PROD_WRHS_EXPENSE_PRODUCTS
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PRODUCTPLAN()
-        {
-            this.PRODUCTPLANS_DAILY = new HashSet<PRODUCTPLANS_DAILY>();
-        }
-    
         public int ID { get; set; }
+        public int ExpenseID { get; set; }
         public int ProductID { get; set; }
+        public string Unit { get; set; }
         public double Amount { get; set; }
-        public bool IsDeleted { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public System.DateTime DueDate { get; set; }
+        public double PiecePrice { get; set; }
+        public double TotalPrice { get; set; }
+        public string Comment { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCTPLANS_DAILY> PRODUCTPLANS_DAILY { get; set; }
+        public virtual PROD_WRHS_EXPENSES PROD_WRHS_EXPENSES { get; set; }
         public virtual PRODUCT PRODUCT { get; set; }
     }
 }

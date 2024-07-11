@@ -12,19 +12,15 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_CONTRACT_PARTS
+    public partial class PRODUCTPLANS_DAILY
     {
         public int ID { get; set; }
-        public int ContractID { get; set; }
-        public int PartID { get; set; }
-        public double Price { get; set; }
-        public double Quantity { get; set; }
-        public string Unit { get; set; }
-        public double Amount { get; set; }
-        public Nullable<double> MOQ { get; set; }
-        public Nullable<bool> ActivePart { get; set; }
+        public int PlanID { get; set; }
+        public System.DateTime Day { get; set; }
+        public double DayShift { get; set; }
+        public double NightShift { get; set; }
+        public double Total { get; set; }
     
-        public virtual P_CONTRACTS P_CONTRACTS { get; set; }
-        public virtual PART PART { get; set; }
+        public virtual PRODUCTPLAN PRODUCTPLAN { get; set; }
     }
 }

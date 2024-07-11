@@ -19,6 +19,9 @@ namespace tahsinERP.Models
         {
             this.DAMAGED_PRODUCTS = new HashSet<DAMAGED_PRODUCTS>();
             this.PROD_STOCKS = new HashSet<PROD_STOCKS>();
+            this.PROD_WRHS_EXPENSE_PRODUCTS = new HashSet<PROD_WRHS_EXPENSE_PRODUCTS>();
+            this.PROD_WRHS_INCOME_PRODUCTS = new HashSet<PROD_WRHS_INCOME_PRODUCTS>();
+            this.PRODUCT_PRODUCTION = new HashSet<PRODUCT_PRODUCTION>();
             this.PRODUCTIMAGES = new HashSet<PRODUCTIMAGE>();
             this.PRODUCTPACKS = new HashSet<PRODUCTPACK>();
             this.PRODUCTPLANS = new HashSet<PRODUCTPLAN>();
@@ -41,11 +44,19 @@ namespace tahsinERP.Models
         public string PNo3 { get; set; }
         public string PNo4 { get; set; }
         public Nullable<int> PackID { get; set; }
+        public Nullable<int> HSCodeID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
+        public virtual HSCODE HSCODE { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PROD_STOCKS> PROD_STOCKS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_WRHS_EXPENSE_PRODUCTS> PROD_WRHS_EXPENSE_PRODUCTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_WRHS_INCOME_PRODUCTS> PROD_WRHS_INCOME_PRODUCTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRODUCT_PRODUCTION> PRODUCT_PRODUCTION { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

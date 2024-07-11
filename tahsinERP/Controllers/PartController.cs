@@ -21,7 +21,7 @@ namespace tahsinERP.Controllers
     {
         private DBTHSNEntities db = new DBTHSNEntities();
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');//new string[4] { "", "KD", "Steel", "Maxalliy" };
-        private byte[] avatar;
+        //private byte[] avatar;
         private int partPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         private string partNo = "";
 
@@ -77,7 +77,7 @@ namespace tahsinERP.Controllers
         {
             PartViewModel partVM = new PartViewModel();
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName");
+            ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName");
             return View(partVM);
         }
 
@@ -112,7 +112,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
 
-                PROD_SHOPS pROD_SHOPS = db.PROD_SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
+                SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
                 if (pROD_SHOPS != null)
                 {
                     bool exists = db.Database.SqlQuery<int>(
@@ -163,7 +163,7 @@ namespace tahsinERP.Controllers
             }
 
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partVM.ShopID);
+            ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
             return View(partVM);
         }
 
@@ -204,7 +204,7 @@ namespace tahsinERP.Controllers
             };
 
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", part.ShopID);
+            ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", part.ShopID);
 
             return View(partVM);
         }
@@ -281,7 +281,7 @@ namespace tahsinERP.Controllers
             }
 
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-            ViewBag.Prod_Shops = new SelectList(db.PROD_SHOPS, "ID", "ShopName", partVM.ShopID);
+            ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
             return View(partVM);
         }
         public ActionResult Delete(int? ID)
@@ -342,7 +342,7 @@ namespace tahsinERP.Controllers
                 return HttpNotFound();
             }
 
-            var shop = db.PROD_SHOPS.Find(part.ShopID);
+            var shop = db.SHOPS.Find(part.ShopID);
             string shopName = shop != null ? shop.ShopName : "Unknown";
 
             PartViewModel partVM = new PartViewModel

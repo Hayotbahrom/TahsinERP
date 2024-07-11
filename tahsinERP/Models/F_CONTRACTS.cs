@@ -17,6 +17,7 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public F_CONTRACTS()
         {
+            this.F_CONTRACT_DOCS = new HashSet<F_CONTRACT_DOCS>();
             this.F_WAYBILLS = new HashSet<F_WAYBILLS>();
         }
     
@@ -32,6 +33,8 @@ namespace tahsinERP.Models
         public Nullable<bool> IsDeleted { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<F_CONTRACT_DOCS> F_CONTRACT_DOCS { get; set; }
         public virtual FORWARDER FORWARDER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }

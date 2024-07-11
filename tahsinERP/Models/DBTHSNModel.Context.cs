@@ -35,6 +35,7 @@ namespace tahsinERP.Models
         public virtual DbSet<DAMAGED_PARTS> DAMAGED_PARTS { get; set; }
         public virtual DbSet<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
         public virtual DbSet<DEFECT_TYPES> DEFECT_TYPES { get; set; }
+        public virtual DbSet<F_CONTRACT_DOCS> F_CONTRACT_DOCS { get; set; }
         public virtual DbSet<F_CONTRACTS> F_CONTRACTS { get; set; }
         public virtual DbSet<F_TRANSPORT_TYPES> F_TRANSPORT_TYPES { get; set; }
         public virtual DbSet<F_WAYBILL_DOCS> F_WAYBILL_DOCS { get; set; }
@@ -51,7 +52,9 @@ namespace tahsinERP.Models
         public virtual DbSet<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
         public virtual DbSet<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
+        public virtual DbSet<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
         public virtual DbSet<P_PROFORMA_INVOICES> P_PROFORMA_INVOICES { get; set; }
+        public virtual DbSet<PART_PRODUCTION> PART_PRODUCTION { get; set; }
         public virtual DbSet<PART_STOCKS> PART_STOCKS { get; set; }
         public virtual DbSet<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
         public virtual DbSet<PART_WASTE_WRHS_EXPENSES> PART_WASTE_WRHS_EXPENSES { get; set; }
@@ -68,26 +71,35 @@ namespace tahsinERP.Models
         public virtual DbSet<PARTIMAGE> PARTIMAGES { get; set; }
         public virtual DbSet<PARTPACK> PARTPACKS { get; set; }
         public virtual DbSet<PARTPLAN> PARTPLANS { get; set; }
+        public virtual DbSet<PARTPLANS_DAILY> PARTPLANS_DAILY { get; set; }
         public virtual DbSet<PART> PARTS { get; set; }
         public virtual DbSet<PERMISSIONMODULE> PERMISSIONMODULES { get; set; }
         public virtual DbSet<PERMISSION> PERMISSIONS { get; set; }
-        public virtual DbSet<PROD_SHOPS> PROD_SHOPS { get; set; }
         public virtual DbSet<PROD_STOCKS> PROD_STOCKS { get; set; }
         public virtual DbSet<PROD_WRHS> PROD_WRHS { get; set; }
+        public virtual DbSet<PROD_WRHS_EXPENSE_PRODUCTS> PROD_WRHS_EXPENSE_PRODUCTS { get; set; }
+        public virtual DbSet<PROD_WRHS_EXPENSES> PROD_WRHS_EXPENSES { get; set; }
+        public virtual DbSet<PROD_WRHS_INCOME_PRODUCTS> PROD_WRHS_INCOME_PRODUCTS { get; set; }
+        public virtual DbSet<PROD_WRHS_INCOMES> PROD_WRHS_INCOMES { get; set; }
+        public virtual DbSet<PRODUCT_PRODUCTION> PRODUCT_PRODUCTION { get; set; }
         public virtual DbSet<PRODUCT1738DOCS> PRODUCT1738DOCS { get; set; }
         public virtual DbSet<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
         public virtual DbSet<PRODUCTIONPROCESS> PRODUCTIONPROCESSES { get; set; }
         public virtual DbSet<PRODUCTPACK> PRODUCTPACKS { get; set; }
         public virtual DbSet<PRODUCTPLAN> PRODUCTPLANS { get; set; }
+        public virtual DbSet<PRODUCTPLANS_DAILY> PRODUCTPLANS_DAILY { get; set; }
         public virtual DbSet<PRODUCT> PRODUCTS { get; set; }
         public virtual DbSet<ROLE> ROLES { get; set; }
         public virtual DbSet<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         public virtual DbSet<S_CONTRACTS> S_CONTRACTS { get; set; }
         public virtual DbSet<SAMPLE_FILES> SAMPLE_FILES { get; set; }
+        public virtual DbSet<SHOP_PLANNED_DTS> SHOP_PLANNED_DTS { get; set; }
+        public virtual DbSet<SHOP> SHOPS { get; set; }
         public virtual DbSet<SLITTING_NORMS> SLITTING_NORMS { get; set; }
         public virtual DbSet<SPL> SPLs { get; set; }
         public virtual DbSet<STAMPING_NORMS> STAMPING_NORMS { get; set; }
         public virtual DbSet<SUPPLIER> SUPPLIERS { get; set; }
+        public virtual DbSet<TRACING> TRACINGS { get; set; }
         public virtual DbSet<USER_ENTRIES> USER_ENTRIES { get; set; }
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
@@ -131,13 +143,13 @@ namespace tahsinERP.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_by_type_and_supplierID_Result>("GetPartsInfo_by_type_and_supplierID", typeParameter, supplierIDParameter);
         }
     
-        public virtual ObjectResult<GetSupplierParts_Result> GetSupplierParts(Nullable<int> supplierID)
+        public virtual int GetSupplierParts(Nullable<int> supplierID)
         {
             var supplierIDParameter = supplierID.HasValue ?
                 new ObjectParameter("SupplierID", supplierID) :
                 new ObjectParameter("SupplierID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSupplierParts_Result>("GetSupplierParts", supplierIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetSupplierParts", supplierIDParameter);
         }
     }
 }

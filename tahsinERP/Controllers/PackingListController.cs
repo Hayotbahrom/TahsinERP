@@ -62,7 +62,7 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError(string.Empty, ex);
                 }
                 ViewBag.Invoice = new SelectList(db1.P_INVOICES.ToList(), "ID", "InvoiceNo", packingList.InvoiceID);
-                ViewBag.Part = new SelectList(db1.PARTS.ToList(), "ID", "PName", packingList.PartID);
+                //ViewBag.Part = new SelectList(db1.PARTS.ToList(), "ID", "PName", packingList.PartID);
             }
 
             return View(packingList);
@@ -83,7 +83,7 @@ namespace tahsinERP.Controllers
 
                 // Manually load the related entities
                 db.Entry(packingList).Reference(i => i.P_INVOICES).Load();
-                db.Entry(packingList).Reference(i => i.PART).Load();
+                //db.Entry(packingList).Reference(i => i.PART).Load();
             }
 
             return View(packingList);
@@ -103,7 +103,7 @@ namespace tahsinERP.Controllers
                 }
                 // Manually load the related entities
                 db.Entry(packingList).Reference(i => i.P_INVOICES).Load();
-                db.Entry(packingList).Reference(i => i.PART).Load();
+                //db.Entry(packingList).Reference(i => i.PART).Load();
 
                 return View(packingList);
             }

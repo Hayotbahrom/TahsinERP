@@ -18,6 +18,7 @@ namespace tahsinERP.Models
         public HSCODE()
         {
             this.PARTS = new HashSet<PART>();
+            this.PRODUCTS = new HashSet<PRODUCT>();
         }
     
         public int ID { get; set; }
@@ -27,5 +28,7 @@ namespace tahsinERP.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART> PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRODUCT> PRODUCTS { get; set; }
     }
 }
