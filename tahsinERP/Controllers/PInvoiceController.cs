@@ -124,7 +124,9 @@ namespace tahsinERP.Controllers
                 db.Entry(invoice).Reference(i => i.P_ORDERS).Load();
                 db.Entry(invoice).Reference(i => i.SUPPLIER).Load();
 
-                partList = db.P_INVOICE_PARTS.Where(ip => ip.InvoiceID == invoice.ID).ToList();
+                partList = db.P_INVOICE_PARTS
+                                        .Include(ip => ip.PART)
+                                        .Where(ip => ip.InvoiceID == invoice.ID).ToList();
                 foreach (var part in partList)
                 {
                     db.Entry(part).Reference(p => p.PART).Load();

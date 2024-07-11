@@ -38,9 +38,21 @@ namespace tahsinERP.Controllers
                 ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                 ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-            }
 
-            return View();
+                WrhsExpenseViewModel viewModel = new WrhsExpenseViewModel();
+                PART_WRHS_EXPENSES expense = db.PART_WRHS_EXPENSES.OrderByDescending(p => p.IssueDateTime).FirstOrDefault();
+                var monthAndNumber = expense.DocNo.Split('_');
+
+                if (int.Parse(monthAndNumber[0]) == int.Parse(DateTime.Now.Month.ToString()))
+                {
+                    int docNoNumber = int.Parse(monthAndNumber[1]) + 1;
+                    viewModel.DocNo = DateTime.Now.Month + "_" + docNoNumber;
+                }
+                else
+                    viewModel.DocNo = DateTime.Now.Month + "_" + 1;
+
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
