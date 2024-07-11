@@ -47,12 +47,12 @@ namespace tahsinERP.Controllers
         {
             if (model == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Model cannot be null");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Shartnoma bekor bo'lishi mumkin emas");
             }
 
             if (model.ProductList == null || !model.ProductList.Any())
             {
-                ModelState.AddModelError("Products", "At least one Product is required.");
+                ModelState.AddModelError("Products", "Kamida bitta mahsulot kerak.");
                 return View(model);
             }
 
@@ -84,7 +84,7 @@ namespace tahsinERP.Controllers
                 {
                     if (item == null)
                     {
-                        ModelState.AddModelError("Products", "Product cannot be null");
+                        ModelState.AddModelError("Products", "Mahsulot bo'sh boʻlishi mumkin emas");
                         return View(model);
                     }
 
@@ -193,12 +193,12 @@ namespace tahsinERP.Controllers
         {
             if (model == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Model cannot be null");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Model bo'sh bo'lishi mumkin emas");
             }
 
             if (model.ProductList == null || !model.ProductList.Any())
             {
-                ModelState.AddModelError("Products", "At least one Product is required.");
+                ModelState.AddModelError("Products", "Kamida bitta mahsulot kerak.");
                 return View(model);
             }
 

@@ -153,23 +153,23 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var treeItems = document.querySelectorAll('.wtree li div span');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var treeItems = document.querySelectorAll('.wtree li div span');
 
-            treeItems.forEach(function (item) {
-                item.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    var parentLi = this.closest('li');
-                    var subUl = parentLi.querySelector('ul');
+        treeItems.forEach(function (item) {
+            item.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var parentLi = this.closest('li');
+                var subUl = parentLi.querySelector('ul');
 
-                    if (subUl) {
-                        if (subUl.style.display === 'none' || subUl.style.display === '') {
-                            subUl.style.display = 'block';
-                        } else {
-                            subUl.style.display = 'none';
-                        }
+                if (subUl) {
+                    if (subUl.style.display === 'none' || subUl.style.display === '') {
+                        subUl.style.display = 'block';
+                    } else {
+                        subUl.style.display = 'none';
                     }
+                }
 
                     // Close all other open sub-lists
                     var allSubUls = document.querySelectorAll('.wtree ul');
