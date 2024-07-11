@@ -243,7 +243,7 @@ namespace tahsinERP.Controllers
 
             return RedirectToAction("CreateWizard");
         }
-         
+
         public ActionResult CreateWizard()
         {
             var model = TempData["BOMCreateViewModel"] as BOMCreateViewModel;
@@ -258,6 +258,19 @@ namespace tahsinERP.Controllers
 
                 var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.ProductList = new SelectList(products, "ID", "PNo");
+
+
+                var slittingNorms = db.SLITTING_NORMS
+           .Where(x => x.IsDeleted == false)
+           .Select(x => new
+           {
+               x.ID,
+               PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
+                          db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
+           })
+           .ToList();
+
+                ViewBag.SlittingNorms = new SelectList(slittingNorms, "ID", "PartInfo");
             }
 
             return View(model);
@@ -266,7 +279,7 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -275,6 +288,8 @@ namespace tahsinERP.Controllers
 
                     var userimage = db.USERIMAGES.FirstOrDefault(x => x.ID == userImageId);
                     int userId = userimage.UserID;
+
+                    var selectedSlittingNorm = db.SLITTING_NORMS.Find(model.SelectedSlittingNormID);
 
                     var processNames = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
 
