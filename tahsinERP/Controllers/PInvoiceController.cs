@@ -21,7 +21,7 @@ namespace tahsinERP.Controllers
     {
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
-        private DBTHSNEntities db = new DBTHSNEntities();
+        //private DBTHSNEntities db = new DBTHSNEntities();
         // GET: PInvoice
         public ActionResult Index(string type, int? supplierID)
         {
