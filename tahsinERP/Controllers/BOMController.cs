@@ -266,7 +266,7 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
