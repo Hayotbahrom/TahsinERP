@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.PART_WRHS_INCOMES
+﻿@model tahsinERP.Models.PART_WRHS_EXPENSES
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -19,10 +19,10 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        <a href="~/WhIncome">Kirimlar</a>
+                                        <a href="~/WhExpense">Chiqimlar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Kirim ma'lumotlari
+                                        Chiqim ma'lumotlari
                                     </li>
                                 </ol>
                             </div>
@@ -42,18 +42,12 @@
                                         <div class="row invoice-info">
                                             <div class="col-lg-12 col-md-6 mt-25">
                                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                <h4 class="text-primary">Kirim ma'lumotlari</h4>
+                                                <h4 class="text-primary">Chiqim ma'lumotlari</h4>
                                                 <hr />
                                                 <span><b>Hujjat raqami </b>: @Html.DisplayFor(model => model.DocNo, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Kelgan sanasi </b>: @Model.IssueDateTime.ToString("dd.yy.yyyy")</span>
-                                                <br />
-                                                <hr />
-                                                <span><b>Invoice raqami</b>: @Html.DisplayFor(model => model.P_INVOICES.InvoiceNo, new { @class = "form-control" })</span>
-                                                <br />
-                                                <hr />
-                                                <span><b>Waybill raqami</b>: @Html.DisplayFor(model => model.F_WAYBILLS.WaybillNo, new { @class = "form-control" })</span>
+                                                <span><b>Tuzilgan sanasi </b>: @Model.IssueDateTime.ToString("dd.yy.yyyy")</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
@@ -62,12 +56,15 @@
                                                 <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
+                                                <span><b>Qabul qiluvchi ombor</b>: @Html.DisplayFor(model => model.PART_WRHS.WHName, new {@class = "form-control"})</span>
+                                                <br />
+                                                <hr />
                                                 <span><b>Umuiy narxi</b>: @Html.DisplayFor(model => model.TotalPrice, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Qabul qilinganmi</b>:@* @Html.DisplayFor(model => model.RecieveStatus, new { @class = "form-control" })*@</span>
-                                                
-                                                @if (Model.RecieveStatus.HasValue && Model.RecieveStatus.Value)
+                                                <span><b>Jo`natilganmi</b>:@* @Html.DisplayFor(model => model.SendStatus, new { @class = "form-control" })*@</span>
+
+                                                @if (Model.SendStatus.HasValue && Model.SendStatus.Value)
                                                 {
                                                     <span class="badge badge-light-success">ha</span>
                                                 }
@@ -86,7 +83,7 @@
                                                 <div class="col-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h4 class="card-title">Kirim predmeti</h4>
+                                                            <h4 class="card-title">Chiqim predmeti</h4>
                                                         </div>
                                                         <div class="card-content">
                                                             <div class="card-body card-dashboard">

@@ -305,6 +305,7 @@
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WaybillController.cs" />
+    <Compile Include="Controllers\WhExpenseController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
     <Compile Include="Models\BLANKING_NORMS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
@@ -561,6 +562,7 @@
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\SContractViewModel.cs" />
+    <Compile Include="ViewModels\WrhsExpenseViewModel.cs" />
     <Compile Include="ViewModels\WrhsIncomeViewModel.cs" />
     <Compile Include="ViewModels\TransportTypeViewModel.cs" />
     <Compile Include="ViewModels\WaybillCreateViewModel.cs" />
@@ -2490,7 +2492,6 @@
     <Content Include="Views\Slitting\Delete.cshtml" />
     <Content Include="Views\WhIncome\Details.cshtml" />
     <Content Include="Views\WhIncome\Edit.cshtml" />
-    <Content Include="Views\WhIncome\Delete.cshtml" />
     <Content Include="Views\WhIncome\DeletePart.cshtml" />
     <Content Include="Views\WhIncome\EditPart.cshtml" />
     <Content Include="Views\Blanking\Index.cshtml" />
@@ -2504,6 +2505,14 @@
     <Content Include="Views\Stamping\Delete.cshtml" />
     <Content Include="Views\Stamping\Details.cshtml" />
     <Content Include="Views\SContract\EditProduct.cshtml" />
+    <Content Include="Views\WhIncome\Delete.cshtml" />
+    <Content Include="Views\WhExpense\Create.cshtml" />
+    <Content Include="Views\WhExpense\Index.cshtml" />
+    <Content Include="Views\WhExpense\Details.cshtml" />
+    <Content Include="Views\WhExpense\Edit.cshtml" />
+    <Content Include="Views\WhExpense\EditPart.cshtml" />
+    <Content Include="Views\WhExpense\Delete.cshtml" />
+    <Content Include="Views\WhExpense\DeletePart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
