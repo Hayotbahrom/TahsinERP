@@ -84,6 +84,7 @@
                                                     <th>Buyurtma raqami</th>
                                                     <th>Tuzilgan sanasi</th>
                                                     <th>Ta'minotchi</th>
+                                                    <th>Turi</th>
                                                     <th>Miqdori</th>
                                                     @if (changePermit)
                                                     {
@@ -109,6 +110,7 @@
                                                             <td>
                                                                 <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
                                                             </td>
+                                                            <td>@item.SUPPLIER.Type</td>
                                                             <td>@item.Amount</td>
                                                             @if (changePermit)
                                                             {

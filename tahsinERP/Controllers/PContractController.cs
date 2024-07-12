@@ -20,11 +20,49 @@ namespace tahsinERP.Controllers
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, partNo = "";
         // GET: Contracts
-        public ActionResult Index(string type)
+        public ActionResult Index(string type, int? supplierID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                IQueryable<P_CONTRACTS> contractsQuery = db.P_CONTRACTS
+                    .Include(p => p.SUPPLIER)
+                    .Where(p => p.IsDeleted == false);
+
+                //filter by type if provided
                 if (!string.IsNullOrEmpty(type))
+                {
+                    contractsQuery = contractsQuery.Where(p => p.SUPPLIER.Type.CompareTo(type) == 0);
+                    ViewBag.SourceList = new SelectList(sources, type);
+                }
+                else
+                {
+                    ViewBag.SourceList = new SelectList(sources);
+                }
+
+                //filter by SupplierID if provided
+                if (supplierID.HasValue)
+                {
+                    contractsQuery = contractsQuery.Where(c => c.SupplierID == supplierID.Value);
+                }
+
+                List<P_CONTRACTS> contractList = contractsQuery.ToList();
+                //Prepare ViewBag.SupplierList based on filter
+                var suppliersQuery = db.SUPPLIERS.Where(s => s.IsDeleted == false);
+                if (!string.IsNullOrEmpty(type))
+                {
+                    suppliersQuery = suppliersQuery.Where(s => s.Type.CompareTo(type) == 0);
+                }
+
+                if (supplierID.HasValue)
+                {
+                    suppliersQuery = suppliersQuery.Where(s => s.ID == supplierID.Value);
+                }
+
+                ViewBag.SupplierList = new SelectList(suppliersQuery.Where(s => s.Type.CompareTo(type)==0).ToList(), "ID", "Name");
+                ViewBag.Type = type;
+
+                return View(contractList);
+                /*if (!string.IsNullOrEmpty(type))
                 {
                     List<P_CONTRACTS> list = db.P_CONTRACTS
                         .Include(pc => pc.SUPPLIER)
@@ -41,7 +79,7 @@ namespace tahsinERP.Controllers
                     ViewBag.SourceList = new SelectList(sources, type);
                     ViewBag.Type = type;
                     return View(list);
-                }
+                }*/
             }
         }
         public ActionResult Download()
