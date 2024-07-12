@@ -31,34 +31,49 @@
             </div>
         </div>
 
-        <ul class="wtree" id="firstLevel">
+        <span class="display">Ko'rsatish: </span>
+        <input id="radio-1" data-tooltip="first level" name="test" type="radio" />
+        <label for="radio-1">
+            o'chiq
+        </label>
+        <input id="radio-2" data-tooltip="second level" name="test" type="radio" hidden />
+        <label for="radio-2" hidden>
+            Second level
+        </label>
+        <input checked id="radio-3" data-tooltip="third level" name="test" type="radio" />
+        <label for="radio-3">
+            yoniq
+        </label>
+
+        @*<input id="radio-1" type="checkbox" />
+        <input id="radio-3" type="checkbox" checked />*@
+
+        <ol class="wtree">
             @if (Model.PRODUCT != null)
             {
-                <li id="firstLevel">
+                <li id="li">
                     <div style="display: flex; align-items: center;">
                         @if (Model.ParentImageBase64.Any())
                         {
                             <a href="@Model.ParentImageBase64" target="_blank">
                                 <img src="@Model.ParentImageBase64" alt="Product Image"
-                                     style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" />
+                                     style="width: 200px; height: auto; object-fit: scale-down; margin-right: 5px;" />
                             </a>
                         }
-                        <span>
+                        <span id="span">
                             <a href="~/Product/Details/@Model.PRODUCT.ID">@Model.ParentPNo</a>
                         </span>
                     </div>
-
-                    @* Render children here *@
-                    <ul id="secondLevel">
+                    <ol>
                         @foreach (var child in Model.Children)
                         {
-                            <li id="secondLevel">
-                                <div style="display: flex; align-items: center;" class="box">
+                            <li>
+                                <div style="display: flex; align-items: center" class="box">
                                     @if (child.ChildImageBase64.Any())
                                     {
                                         <a href="@child.ChildImageBase64" target="_blank">
                                             <img src="@child.ChildImageBase64" alt="Product Image"
-                                                 style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
+                                                 style="width: 170px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
                                         </a>
                                     }
                                     @if (child.PART != null)
@@ -71,15 +86,15 @@
                                 </div>
                                 @if (child.Children.Any())
                                 {
-                                    <ul id="thirdLevel">
+                                    <ol>
                                         @foreach (var grandChild in child.Children)
                                         {
-                                            <li id="thirdLevel">
+                                            <li>
                                                 <div style="display: flex; align-items: center;" class="box">
                                                     @if (grandChild.ChildImageBase64.Any())
                                                     {
                                                         <img src="@grandChild.ChildImageBase64" alt="Product Image"
-                                                             style="width: 130px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
+                                                             style="width: 150px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
                                                     }
                                                     @if (grandChild.PART != null)
                                                     {
@@ -91,20 +106,19 @@
                                                 </div>
                                             </li>
                                         }
-                                    </ul>
+                                    </ol>
                                 }
                             </li>
                         }
-                    </ul>
+                    </ol>
                 </li>
             }
             else
             {
-                @* If parent is null, render children directly *@
                 foreach (var child in Model.Children)
                 {
-                    <li id="secondLevel">
-                        <div style="display: flex; align-items: center;" class="box">
+                    <li>
+                        <div style="display: flex; align-items: center" class="box">
                             @if (child.ChildImageBase64.Any())
                             {
                                 <a href="@child.ChildImageBase64" target="_blank">
@@ -122,10 +136,10 @@
                         </div>
                         @if (child.Children.Any())
                         {
-                            <ul id="thirdLevel">
+                            <ol>
                                 @foreach (var grandChild in child.Children)
                                 {
-                                    <li id="thirdLevel">
+                                    <li>
                                         <div style="display: flex; align-items: center;" class="box">
                                             @if (grandChild.ChildImageBase64.Any())
                                             {
@@ -142,12 +156,12 @@
                                         </div>
                                     </li>
                                 }
-                            </ul>
+                            </ol>
                         }
                     </li>
                 }
             }
-        </ul>
+        </ol>
     </div>
 </div>
 

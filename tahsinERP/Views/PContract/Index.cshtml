@@ -5,7 +5,7 @@
     var type = ViewBag.Type;
 }
 
-@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString(), type) )
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString(), type))
 {
     bool changePermit = false;
     if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
@@ -59,6 +59,13 @@
                                         @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
+
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label>Ta'minotchisi</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshdatatablesupplier()" })
+                                    </fieldset>
+                                </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
                                     <a href="~/PContract" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
                                         Ro'yxatni yangilash
@@ -80,6 +87,7 @@
                                                     <th></th>
                                                     <th>Raqami</th>
                                                     <th>Ta'minotchi nomi</th>
+                                                    <th>Turi</th>
                                                     <th>Tuzilgan sanasi</th>
                                                     <th>Tugashi sanasi</th>
                                                     <th>Incoterms</th>
@@ -102,6 +110,7 @@
                                                         <td>
                                                             <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
                                                         </td>
+                                                        <td>@item.SUPPLIER.Type</td>
                                                         <td>@item.IssuedDate.ToString("dd.MM.yyyy")</td>
                                                         <td>@item.DueDate.ToString("dd.MM.yyyy")</td>
                                                         <td>@item.Incoterms</td>
@@ -132,11 +141,25 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        function refreshDataTable() {
-            const source = document.getElementById("SourceID").value;
+    @* <script type="text/javascript">
+            function refreshDataTable() {
+                const source = document.getElementById("SourceID").value;
 
-            window.location.href = '@Url.Action("Index", "PContract")?type=' + source;
+                window.location.href = '@Url.Action("Index", "PContract")?type=' + source;
+            }
+        </script>*@
+    <script type="text/javascript">
+    function refreshDataTable() {
+        var source = document.getElementById("SourceID").value;
+        const supplierID = document.getElementById("SupplierID").value;
+        window.location.href = '@Url.Action("Index", "PContract")?type=' + source;
+        ////window.location.href = '@Url.Action("Index", "PContract")?type=' + source + '&supplierID='+ supplierID;
+
+        };
+      function refreshdatatablesupplier() {
+          var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "PContract")?type=' + source + '&supplierID='+ supplierID;
         }
     </script>
 }

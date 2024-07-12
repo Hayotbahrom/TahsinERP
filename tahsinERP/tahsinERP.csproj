@@ -700,7 +700,7 @@
     <Content Include="app-assets\css\core\menu\menu-types\vertical-menu.min.css" />
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.css" />
     <Content Include="app-assets\css\core\menu\menu-types\vertical-overlay-menu.min.css" />
-    <Content Include="app-assets\css\list\custom.css" />
+    <Content Include="app-assets\css\list\list.css" />
     <Content Include="app-assets\css\list\meyer-reset.css" />
     <Content Include="app-assets\css\list\reset.min.css" />
     <Content Include="app-assets\css\pages\app-chat.css" />
@@ -2547,6 +2547,10 @@
     <Content Include="Views\WhExpense\EditPart.cshtml" />
     <Content Include="Views\WhExpense\Delete.cshtml" />
     <Content Include="Views\HSCode\Index.cshtml" />
+    <Content Include="Views\HSCode\Create.cshtml" />
+    <Content Include="Views\HSCode\Details.cshtml" />
+    <Content Include="Views\HSCode\Delete.cshtml" />
+    <Content Include="Views\HSCode\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
