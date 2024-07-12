@@ -60,24 +60,24 @@ ol {
         text-decoration: none;
     }
 
-.wtree li span:hover,
-.wtree li span:focus {
-    color: #000;
-    border: 1px solid #474747;
-}
+        .wtree li span:hover,
+        .wtree li span:focus {
+            color: #000;
+            border: 1px solid #474747;
+        }
 
-.wtree li span:hover + ol li span,
-.wtree li span:focus + ol li span {
-    color: #000;
-    border: 1px solid #474747;
-}
+            .wtree li span:hover + ol li span,
+            .wtree li span:focus + ol li span {
+                color: #000;
+                border: 1px solid #474747;
+            }
 
-.wtree li span:hover + ol li:after,
-.wtree li span:hover + ol li:before,
-.wtree li span:focus + ol li:after,
-.wtree li span:focus + ol li:before {
-    border-color: #474747;
-}
+            .wtree li span:hover + ol li:after,
+            .wtree li span:hover + ol li:before,
+            .wtree li span:focus + ol li:after,
+            .wtree li span:focus + ol li:before {
+                border-color: #474747;
+            }
 
 #li #span {
     background-color: #ddf3fe;
