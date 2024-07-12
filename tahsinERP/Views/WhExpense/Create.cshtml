@@ -48,13 +48,11 @@
                                                             <label for="DocNo">Hujjat nomeri</label>
                                                             @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disable"})
                                                         </div>
-
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="InvoiceId">Qabul qiluvchi</label>
                                                             @Html.DropDownListFor(model => model.RecieverWHID, (SelectList)ViewBag.PartWrhs, new { @id = "RecieverWhID", @class = "form-control select2" })
                                                             @Html.ValidationMessageFor(model => model.RecieverWHID, "", new { @class = "text-danger" })
                                                         </div>
-
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Amount">Miqdori</label>
                                                             @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Miqdorini kiriting" })
@@ -147,6 +145,7 @@
                     </div>
                 </section>
             </div>
+        
         </div>
     </div>
 }

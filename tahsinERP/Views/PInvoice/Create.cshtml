@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.P_INVOICES
+﻿@model tahsinERP.ViewModels.PInvoiceViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -8,104 +8,142 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString(), type))
 {
-    using (Html.BeginForm("Create", "PInvoice", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
-        <div class="app-content content">
-            <div class="content-overlay"></div>
-            <div class="content-wrapper">
-                <div class="content-header row">
-                    <div class="content-header-left col-12 mb-2 mt-1">
-                        <div class="row breadcrumbs-top">
-                            <div class="col-12">
-                                <div class="breadcrumb-wrapper col-12">
-                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                                        <li class="breadcrumb-item">
-                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
-                                        </li>
-                                        <li class="breadcrumb-item">
-                                            <a href="~/PInvoice/Index">Invoice lar</a>
-                                        </li>
-                                        <li class="breadcrumb-item active">
-                                            Yangi invoice qo'shish
-                                        </li>
-                                    </ol>
-                                </div>
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/PInvoice/Index">Chiqimlar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Chiqim qilish
+                                    </li>
+                                </ol>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="content-body">
-                    <section class="basic-select2">
-                        <div class="row">
-                            <div class="col-xl-9 col-md-8 col-12">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <div class="card-body pb-0 mx-25">
-                                            <div class="row">
-                                                <div class="col-lg-12 col-md-6 mt-25">
-                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                    <hr>
-                                                    <h6 class="invoice-to">Invoice raqami</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control round", @placeholder = "Buyurtma raqami" })
-                                                        @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Ta'minotchi</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.SupplierID, ViewBag.Supplier as SelectList, new { @class = "form-control select2" })
-                                                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Buyurtma raqami</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.OrderID, ViewBag.POrder as SelectList, new { @class = "form-control select2" })
-                                                        @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Hujjat berilgan sanasi</h6>
-                                                    <fieldset class="form-group position-relative has-icon-left">
-                                                        @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma muddati" })
-                                                        @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
-                                                        <div class="form-control-position">
-                                                            <i class='bx bx-calendar'></i>
+            </div>
+            <div class="content-body">
+                <section id="form-repeater-wrapper">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        @using (Html.BeginForm("Create", "PInvoice", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="row justify-content-around d-flex align-items-start">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="DocNo">Invoice nomeri</label>
+                                                            @Html.TextBoxFor(model => model.InvoiceNo, new { @type = "text", @class = "form-control", @id = "InoviceNo", @placeholder = " invoice raqamini kiriting:" })
+                                                            @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                                         </div>
-                                                    </fieldset>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="InvoiceId">Buyurta raqami</label>
+                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, new { @id = "OrderID", @class = "form-control select2" })
+                                                            @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="InvoiceId">Ta`minotchi</label>
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @id = "SupplierID", @class = "form-control select2" })
+                                                            @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Amount">Miqdori</label>
+                                                            @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Miqdorini kiriting" })
+                                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                    <h6 class="invoice-to">Miqdori</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @placeholder = "Miqdori" })
-                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                                                    </fieldset>
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Valyuta</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Currencyni kiriting" })
+                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                        </div>
 
-                                                    <h6 class="invoice-to">Valyuta</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
-                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item border-0 pb-0">
-                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
-                                                                <i class='bx bx-save'></i>
-                                                                Saqlash
-                                                            </button>
-                                                        </li>
-                                                    </ul>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="InvoiceDate">Hujjat berilgan sanasi</label>
+                                                            @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma muddati" })
+                                                            @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <hr>
-                                        </div>
+
+                                            <br />
+                                            <h4>Ehtiyot qismlar</h4>
+                                            <div data-repeater-list="Parts">
+                                                <div data-repeater-item>
+                                                    <div class="row justify-content-between">
+                                                        <input type="hidden" name="Parts[0].ID" />
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Parts[0].PartID">Ehtiyot qismni tanlang</label>
+                                                            @Html.DropDownList("Parts[0].PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Parts[0].Unit">Unit</label>
+                                                            <input type="text" name="Parts[0].Unit" class="form-control" id="Parts[0].Unit" placeholder="Birligini kiriting" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Parts[0].Quantuty">Miqdori</label>
+                                                            <input type="number" name="Parts[0].Quantuty" class="form-control" id="Parts[0].Quantuty" placeholder="Miqdorini kiriting" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Quantuty, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Parts[0].Price">Birlik narxi</label>
+                                                            <input type="number" name="Parts[0].Price" step="0.01" class="form-control" id="Parts[0].Price" placeholder="Qism narxini kiriting" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">O`chirish</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            </div>
+
+
+                                            <button data-repeater-create type="button" class="btn btn-primary">Detall qo`shish</button>
+
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        }
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                </div>
+                    </div>
+                </section>
             </div>
+
         </div>
-    }
+    </div>
 }
 else
 {

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -76,35 +77,52 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo");
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
             }
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "InvoiceNo, CompanyID, SupplierID, OrderID, InvoiceDate, Amount, Currency")] P_INVOICES invoice)
+        public ActionResult Create(PInvoiceViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                try
+                P_INVOICES invoice = new P_INVOICES()
                 {
-                    if (ModelState.IsValid)
+                    InvoiceNo = model.InvoiceNo,
+                    OrderID = model.OrderID,
+                    SupplierID = model.SupplierID,
+                    Amount = model.Amount,
+                    Currency = model.Currency,
+                    InvoiceDate = model.InvoiceDate,
+                    IsDeleted = false
+                };
+                
+                db.P_INVOICES.Add(invoice);
+                db.SaveChanges();
+                int newInvoiceID = invoice.ID;
+
+
+                foreach (var item in model.Parts)
+                {
+                    var newPart = new P_INVOICE_PARTS
                     {
-                        invoice.IsDeleted = false;
-                        db.P_INVOICES.Add(invoice);
+                        InvoiceID = newInvoiceID,
+                        PartID = item.PartID,
+                        Quantity = item.Quantuty,
+                        Unit = item.Unit,
+                        Price = item.Price
+                    };
+                    db.P_INVOICE_PARTS.Add(newPart);
+                }
 
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex);
-                }
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
-                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo", invoice.OrderID);
+                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(s => s.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-
-            return View(invoice);
         }
         public ActionResult Details(int? id)
         {
