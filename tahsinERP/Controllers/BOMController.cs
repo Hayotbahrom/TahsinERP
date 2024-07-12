@@ -223,39 +223,138 @@ namespace tahsinERP.Controllers
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
 
-                return View(new BOMCreateViewModel());
+                return View(new BomViewModel());
             }
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(BOMCreateViewModel model, int[] processID)
+        //{
+
+        //    using (DBTHSNEntities db = new DBTHSNEntities())
+        //    {
+        //        var selectedProcesses = db.PRODUCTIONPROCESSES
+        //                                   .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
+        //                                   .ToList();
+
+        //        model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
+
+        //        var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
+
+        //        model.Product = product;
+        //        model.ProductNo = product.PNo;
+
+        //        TempData["BOMCreateViewModel"] = model;
+        //    }
+
+        //    return RedirectToAction("CreateWizard");
+        //}
         [HttpPost]
-        public ActionResult Create(BOMCreateViewModel model, int[] processID)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(BomViewModel model, int[] processID)
         {
+            if (ModelState.IsValid)
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    var selectedProcesses = db.PRODUCTIONPROCESSES
+                                              .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
+                                              .ToList();
+
+                    model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
+                    model.SelectedProcessIds = processID;  // Add this line to ensure the process IDs are passed along
+                }
+                return RedirectToAction("CreateWizard", model);
+            }
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var selectedProcesses = db.PRODUCTIONPROCESSES
-                                           .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
-                                           .ToList();
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
 
-                model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
+                var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.ProductList = new SelectList(products, "ID", "PNo");
 
-                var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
-
-                model.Product = product;
-                model.ProductNo = product.PNo;
-
-                TempData["BOMCreateViewModel"] = model;
+                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Part = new SelectList(part, "ID", "PNo");
             }
 
-            return RedirectToAction("CreateWizard");
+            return View(model);
         }
 
-        public ActionResult CreateWizard()
-        {
-            var model = TempData["BOMCreateViewModel"] as BOMCreateViewModel;
 
+        //public ActionResult CreateWizard()
+        //{
+        //    var model = TempData["BOMCreateViewModel"] as BOMCreateViewModel;
+
+        //    if (model == null)
+        //        return RedirectToAction("Create");
+
+        //    using (DBTHSNEntities db = new DBTHSNEntities())
+        //    {
+        //        var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+        //        ViewBag.Part = new SelectList(part, "ID", "PNo");
+
+        //        var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
+        //        ViewBag.ProductList = new SelectList(products, "ID", "PNo");
+
+
+        //        var slittingNorms = db.SLITTING_NORMS
+        //                              .Where(x => x.IsDeleted == false)
+        //                              .Select(x => new
+        //                              {
+        //                                  x.ID,
+        //                                  PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
+        //                                             db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
+        //                              })
+        //                              .ToList();
+
+        //        ViewBag.SlittingNorms = new SelectList(slittingNorms, "ID", "PartInfo");
+
+        //        var blankingNorms = db.BLANKING_NORMS
+        //                              .Where(x => x.IsDeleted == false)
+        //                              .Select(x => new
+        //                              {
+        //                                  x.ID,
+        //                                  PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
+        //                                             db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
+        //                              })
+        //                              .ToList();
+
+        //        ViewBag.BlankingNorms = new SelectList(blankingNorms, "ID", "PartInfo");
+
+        //        var stamping = db.STAMPING_NORMS
+        //                              .Where(x => x.IsDeleted == false)
+        //                              .Select(x => new
+        //                              {
+        //                                  x.ID,
+        //                                  PartInfo = db.PARTS.Where(p => p.ID == x.PartID_after).Select(p => p.PNo).FirstOrDefault() + " - " +
+        //                                             db.PARTS.Where(p => p.ID == x.PartID_before).Select(p => p.PNo).FirstOrDefault()
+        //                              })
+        //                              .ToList();
+
+        //        ViewBag.StampingNorms = new SelectList(stamping, "ID", "PartInfo");
+
+        //    }
+
+
+        //    return View(model);
+        //}
+
+        public ActionResult CreateWizard(BomViewModel model)
+        {
             if (model == null)
                 return RedirectToAction("Create");
+
+            var createViewModel = new BOMCreateViewModel
+            {
+                ProductID = model.ProductID,
+                ProductNo = model.ProductNo,
+                SelectedProcessIds = model.SelectedProcessIds,
+                Process = model.Process,
+                IsActive = model.IsActive
+            };
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -264,7 +363,6 @@ namespace tahsinERP.Controllers
 
                 var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.ProductList = new SelectList(products, "ID", "PNo");
-
 
                 var slittingNorms = db.SLITTING_NORMS
                                       .Where(x => x.IsDeleted == false)
@@ -301,14 +399,14 @@ namespace tahsinERP.Controllers
                                       .ToList();
 
                 ViewBag.StampingNorms = new SelectList(stamping, "ID", "PartInfo");
-
             }
 
-
-            return View(model);
+            return View(createViewModel);
         }
 
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
             if (!ModelState.IsValid)
