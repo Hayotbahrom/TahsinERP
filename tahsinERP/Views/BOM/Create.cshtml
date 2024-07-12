@@ -1,4 +1,5 @@
-﻿@model tahsinERP.ViewModels.BOMCreateViewModel
+﻿@model tahsinERP.ViewModels.BOM.BomViewModel
+
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -40,6 +41,7 @@
                                     <div class="card-body">
                                         @using (Html.BeginForm("Create", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                         {
+                                            @Html.AntiForgeryToken()
                                             <div>
                                                 <br />
                                                 <fieldset class="invoice-address form-group">
@@ -60,7 +62,7 @@
                                                         @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
                                                     </div>
                                                 </fieldset>
-                                                <button type="submit" class="btn btn-outline-success mr-1 mb-1" onclick="showFormWizard()">
+                                                <button type="submit" class="btn btn-outline-success mr-1 mb-1">
                                                     <span class="align-middle ml-25">Keyingisi</span>
                                                 </button>
                                             </div>
@@ -79,9 +81,3 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
-
-<script type="text/javascript">
-    function showFormWizard() {
-        document.getElementById("CreateWizard").style.display = "block";
-    }
-</script>

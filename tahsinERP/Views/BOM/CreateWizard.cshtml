@@ -2,42 +2,8 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
-    <head>
-        <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/dark-layout.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/semi-dark-layout.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu.css">
-        <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
-        <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
-    </head>
     <div class="app-content content">
-        <div class="content-overlay"></div>
         <div class="content-wrapper">
-            <div class="content-header row">
-                <div class="content-header-left col-12 mb-2 mt-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                                    <li class="breadcrumb-item">
-                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="~/BOM/Index">BOM</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">
-                                        BOM ga mahsulot qo'shish
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="content-body">
                 <section id="validation">
                     <div class="row">
@@ -49,6 +15,7 @@
                                         {
                                             @Html.HiddenFor(model => model.Product.PNo)
                                             @Html.HiddenFor(model => model.Product.ID)
+                                            @Html.AntiForgeryToken()
                                             if (!string.IsNullOrEmpty(Model.Process))
                                             {
                                                 var processNames = Model.Process.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
@@ -65,12 +32,12 @@
                                                             <fieldset>
                                                                 <div class="container row mt-5 ">
                                                                     <div class="form-group form-check checkbox checkbox-secondary checkbox-glow">
-                                                                        <input type="checkbox" class="form-check-input" id="toggleCheckBox">
-                                                                        <label class="form-check-label" for="toggleCheckBox">Yangi slitting norma yaratish</label>
+                                                                        <input type="checkbox" class="form-check-input" id="toggleSlittingCheckBox">
+                                                                        <label class="form-check-label" for="toggleSlittingCheckBox">Yangi slitting norma yaratish</label>
                                                                     </div>
                                                                 </div>
                                                                 <br />
-                                                                <div id="div1" class="row old">
+                                                                <div id="slittingOld" class="row old">
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
@@ -79,7 +46,7 @@
                                                                         </fieldset>
                                                                     </div>
                                                                 </div>
-                                                                <div id="div2" class="row new" style="display: none;">
+                                                                <div id="slittingNew" class="row new" style="display: none;">
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
@@ -103,8 +70,8 @@
                                                                         </fieldset>
                                                                     </div>
                                                                     <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
-                                                                        @Html.CheckBoxFor(model => model.SLITTING_NORMS.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
-                                                                        <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
+                                                                        @Html.CheckBoxFor(model => model.SLITTING_NORMS.IsActive, new { @type = "checkbox", @id = "slittingActiveCheckBox" })
+                                                                        <label for="slittingActiveCheckBox">Eng oxirgi faolimi?</label>
                                                                         @Html.ValidationMessageFor(model => model.SLITTING_NORMS.IsActive, "", new { @class = "text-warning" })
                                                                     </div>
                                                                 </div>
@@ -115,11 +82,11 @@
                                                             <fieldset>
                                                                 <div class="container row mt-5 ">
                                                                     <div class="form-group form-check checkbox checkbox-secondary checkbox-glow">
-                                                                        <input type="checkbox" class="form-check-input" id="toggleCheckBox1">
-                                                                        <label class="form-check-label" for="toggleCheckBox1">Yangi blanking norma yaratish</label>
+                                                                        <input type="checkbox" class="form-check-input" id="toggleBlankingCheckBox">
+                                                                        <label class="form-check-label" for="toggleBlankingCheckBox">Yangi blanking norma yaratish</label>
                                                                     </div>
                                                                 </div>
-                                                                <div id="div11" class="row old">
+                                                                <div id="blankingOld" class="row old">
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
@@ -128,7 +95,7 @@
                                                                         </fieldset>
                                                                     </div>
                                                                 </div>
-                                                                <div id="div21" class="row new" style="display: none;">
+                                                                <div id="blankingNew" class="row new" style="display: none;">
                                                                     <div class="col-md-4">
                                                                         <fieldset class="invoice-address form-group">
                                                                             @Html.DropDownList("BLANKING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
@@ -142,8 +109,8 @@
                                                                         </fieldset>
                                                                     </div>
                                                                     <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
-                                                                        @Html.CheckBoxFor(model => model.BLANKING_NORMS.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
-                                                                        <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
+                                                                        @Html.CheckBoxFor(model => model.BLANKING_NORMS.IsActive, new { @type = "checkbox", @id = "blankingActiveCheckBox" })
+                                                                        <label for="blankingActiveCheckBox">Eng oxirgi faolimi?</label>
                                                                         @Html.ValidationMessageFor(model => model.BLANKING_NORMS.IsActive, "", new { @class = "text-warning" })
                                                                     </div>
                                                                 </div>
@@ -154,35 +121,37 @@
                                                             <fieldset>
                                                                 <div class="container row mt-5 ">
                                                                     <div class="form-group form-check checkbox checkbox-secondary checkbox-glow">
-                                                                        <input type="checkbox" class="form-check-input" id="toggleCheckBox">
-                                                                        <label class="form-check-label" for="toggleCheckBox">Yangi stamping norma yaratish</label>
+                                                                        <input type="checkbox" class="form-check-input" id="toggleStampingCheckBox">
+                                                                        <label class="form-check-label" for="toggleStampingCheckBox">Yangi stamping norma yaratish</label>
                                                                     </div>
                                                                 </div>
-                                                                <div id="div1" class="row old">
+                                                                <div id="stampingOld" class="row old">
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("SelectedStampingNormID", (SelectList)ViewBag.StampingNorms, "Stamping processda bor mahsulotdan tanlang ", new { @class = "form-control select2" })
+                                                                            @Html.DropDownList("SelectedStampingNormID", (SelectList)ViewBag.StampingNorms, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2" })
                                                                             @Html.ValidationMessageFor(model => model.SelectedStampingNormID, "", new { @class = "text-danger" })
                                                                         </fieldset>
                                                                     </div>
                                                                 </div>
-                                                                <div id="div2" class="row new" style="display: none;">
+                                                                <div id="stampingNew" class="row new" style="display: none;">
                                                                     <div class="col-md-4">
+                                                                        <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("STAMPING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
+                                                                            @Html.DropDownList("STAMPING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2" })
+                                                                            @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <h6>Ehtiyot qismni tanlang</h6>
+                                                                        <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("STAMPING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Jarayondan keyingi holatini tanlang", new { @class = "form-control select2" })
                                                                             @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_after, "", new { @class = "text-danger" })
                                                                         </fieldset>
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <fieldset class="invoice-address form-group">
-                                                                            @Html.TextBoxFor(model => model.STAMPING_NORMS.Density, new { @class = "form-control", @placeholder = "Density" })
-                                                                            @Html.ValidationMessageFor(model => model.STAMPING_NORMS.Density, "", new { @class = "text-danger" })
-                                                                        </fieldset>
-                                                                    </div>
                                                                     <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
-                                                                        @Html.CheckBoxFor(model => model.STAMPING_NORMS.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
-                                                                        <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
+                                                                        @Html.CheckBoxFor(model => model.STAMPING_NORMS.IsActive, new { @type = "checkbox", @id = "stampingActiveCheckBox" })
+                                                                        <label for="stampingActiveCheckBox">Eng oxirgi faolimi?</label>
                                                                         @Html.ValidationMessageFor(model => model.STAMPING_NORMS.IsActive, "", new { @class = "text-warning" })
                                                                     </div>
                                                                 </div>
@@ -213,11 +182,11 @@
 
                                                         case "Assembly":
                                                             <fieldset>
-                                                                <div data-repeater-list="WeldingsPartID">
+                                                                <div data-repeater-list="AssemblyPartID">
                                                                     <div data-repeater-item>
                                                                         <div class="row justify-content-between">
                                                                             <fieldset class="invoice-address form-group">
-                                                                                @Html.DropDownList("Assamble_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
+                                                                                @Html.DropDownList("Assembly_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
                                                                                 @Html.ValidationMessageFor(model => model.AssemblyPart[0].Assamble_PartID, "", new { @class = "text-danger" })
                                                                             </fieldset>
                                                                             <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
@@ -251,14 +220,6 @@
                                                     }
                                                 }
                                             }
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item border-0 pb-0">
-                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
-                                                        <i class='bx bx-save'></i>
-                                                        Saqlash
-                                                    </button>
-                                                </li>
-                                            </ul>
                                         }
                                     </div>
                                 </div>
@@ -269,44 +230,37 @@
             </div>
         </div>
     </div>
-
-    <script src="~/assets/js/jquery.min.js"></script>
-    <script src="~/app-assets/vendors/js/vendors.min.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
-    <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
-    <script src="~/app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
-    <script src="~/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
-    <script src="~/app-assets/js/core/app-menu.js"></script>
-    <script src="~/app-assets/js/core/app.js"></script>
-    <script src="~/app-assets/js/scripts/components.js"></script>
-    <script src="~/app-assets/js/scripts/footer.js"></script>
-    <script src="~/app-assets/js/scripts/forms/wizard-steps.js"></script>
     <script src="~/assets/js/jquery.min.js"></script>
 
     <script>
         $(document).ready(function () {
-            $('#toggleCheckBox').change(function () {
+            $('#toggleSlittingCheckBox').change(function () {
                 if ($(this).is(':checked')) {
-                    $('#div1').hide();
-                    $('#div2').show();
+                    $('#slittingNew').show();
+                    $('#slittingOld').hide();
                 } else {
-                    $('#div1').show();
-                    $('#div2').hide();
+                    $('#slittingNew').hide();
+                    $('#slittingOld').show();
                 }
             });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $('#toggleCheckBox1').change(function () {
+            $('#toggleBlankingCheckBox').change(function () {
                 if ($(this).is(':checked')) {
-                    $('#div11').hide();
-                    $('#div21').show();
+                    $('#blankingNew').show();
+                    $('#blankingOld').hide();
                 } else {
-                    $('#div11').show();
-                    $('#div21').hide();
+                    $('#blankingNew').hide();
+                    $('#blankingOld').show();
+                }
+            });
+
+            $('#toggleStampingCheckBox').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#stampingNew').show();
+                    $('#stampingOld').hide();
+                } else {
+                    $('#stampingNew').hide();
+                    $('#stampingOld').show();
                 }
             });
         });
