@@ -31,6 +31,9 @@
             </div>
         </div>
 
+        <button id="generatePDF" class="btn btn-outline-success buttons-pdf buttons-html5">PDF yaratish</button>
+        <br />
+
         <span class="display">Ko'rsatish: </span>
         <input id="radio-1" data-tooltip="first level" name="test" type="radio" />
         <label for="radio-1">
@@ -45,10 +48,7 @@
             yoniq
         </label>
 
-        @*<input id="radio-1" type="checkbox" />
-        <input id="radio-3" type="checkbox" checked />*@
-
-        <ol class="wtree">
+        <ol class="wtree" id="wtree">
             @if (Model.PRODUCT != null)
             {
                 <li id="li">
@@ -165,6 +165,7 @@
     </div>
 </div>
 
+<!-- TreeView -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var treeItems = document.querySelectorAll('.wtree li div span');
@@ -194,3 +195,4 @@
         });
     });
 </script>
+<!-- __________ -->

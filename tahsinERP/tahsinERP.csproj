@@ -2360,6 +2360,7 @@
     <Content Include="Models\DBTHSNModel.edmx.diagram">
       <DependentUpon>DBTHSNModel.edmx</DependentUpon>
     </Content>
+    <Content Include="app-assets\js\scripts\pdfMake\html2pdf.bundle.min.js" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />

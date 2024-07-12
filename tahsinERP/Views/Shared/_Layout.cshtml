@@ -623,6 +623,9 @@
         <script src="~/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
         <script src="~/app-assets/vendors/js/pickers/daterange/moment.min.js"></script>
         <script src="~/app-assets/vendors/js/pickers/daterange/daterangepicker.js"></script>
+        <script src="~/app-assets/js/scripts/pdfMake/html2pdf.bundle.min.js"></script>
+        // Export PDF as View
+        <script src="~/app-assets/js/scripts/pdfMake/html2pdf.bundle.min.js"></script>
         <!-- END: Page Vendor JS-->
 
 
@@ -654,16 +657,15 @@
 
 
 
-        <!-- REPEATER/Cookies Modal -->
+        // jQuery: v3.6.0
         <script src="~/assets/js/jquery.min.js"></script>
-        // v3.6.0
+        <!-- REPEATER -->
         <script src="~/assets/js/jquery.repeater.min.js"></script>
         <script>
             @* General: using two jQuery version *@
             var $j = jQuery.noConflict(true); // Ikkita JS ni birga ishlatish
             // 'j' => (just name)using for last added jQuery(v3.0.6)
 
-            @* Repeater.JS *@
             $j(document).ready(function () {
                 $j('.repeater-default').repeater({
                     show: function () {
@@ -676,30 +678,40 @@
                     }
                 });
             });
+        </script>
+        <!-- __________ -->
 
+        <!-- Cookie -->
+        <script>
             $j(document).ready(function () {
-                $j('.repeater-default1').repeater({
-                    show: function () {
-                        $j(this).slideDown();
-                    },
-                    hide: function (deleteElement) {
-                        if (confirm('Are you sure you want to delete this element?')) {
-                            $j(this).slideUp(deleteElement);
-                        }
-                    }
-                });
-            });
-
-            @* Cookie *@
-            $j(document).ready(function() {
                 if (showCookieConsentModal) {
                     alert("used");
                     $j('#cookieConsentModal').modal('show');
                 }
 
-                $j('#acceptCookiesBtn').click(function() {
+                $j('#acceptCookiesBtn').click(function () {
                     document.cookie = "CookieConsent=true; path=/";
                     $j('#cookieConsentModal').modal('hide');
+                });
+            });
+        </script>
+        <!-- __________ -->
+
+        <!-- Export PDF as View -->
+        <script>
+            $j(document).ready(function () {
+                $j('#generatePDF').click(function () {
+                    const element = document.getElementById('wtree');
+                    const opt = {
+                        margin: 0.5,
+                        filename: 'maxsulot.pdf',
+                        image: { type: 'jpeg', quality: 1 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    // New Promise-based usage:
+                    html2pdf().set(opt).from(element).save();
                 });
             });
         </script>
