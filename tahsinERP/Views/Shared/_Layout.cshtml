@@ -585,7 +585,6 @@
         @RenderSection("scripts", required: false)
 
         <!-- BEGIN: Vendor JS-->
-
         <script src="~/app-assets/vendors/js/vendors.min.js"></script>
         <script src="~/assets/js/jquery.min.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
@@ -700,9 +699,9 @@
         <script>
             $j(document).ready(function () {
                 $j('#generatePDF').click(function () {
-                    const element = document.getElementById('wtree');
+                    const element = document.getElementById('toPDF');
                     const opt = {
-                        margin: 0.5,
+                        margin: 0.3,
                         filename: 'maxsulot.pdf',
                         image: { type: 'jpeg', quality: 1 },
                         html2canvas: { scale: 2 },

@@ -21,65 +21,81 @@ ol {
 
 .wtree li {
     list-style-type: none;
-    margin: 10px 0 10px 10px;
+    margin: 10px 0px 10px 10px;
     position: relative;
 }
 
-    .wtree li:before {
-        content: "";
-        counter-increment: item;
-        position: absolute;
-        top: -10px;
-        left: -30px;
-        border-left: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        width: 30px;
-        height: 15px;
-    }
+.wtree li ol li {
+    margin: 10px 0px 10px 100px;
+}
 
-    .wtree li:after {
-        position: absolute;
-        content: "";
-        top: 5px;
-        left: -30px;
-        border-left: 1px solid #ddd;
-        border-top: 1px solid #ddd;
-        width: 30px;
-        height: 100%;
-    }
+.wtree li ol li ol li{
+    margin: 10px 0px 10px 70px;
+}
 
-    .wtree li:last-child:after {
-        display: none;
-    }
+.wtree li:before {
+    content: "";
+    counter-increment: item;
+    position: absolute;
+    top: -10px;
+    left: -30px;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    width: 30px;
+    height: 15px;
+}
 
-    .wtree li span {
-        display: block;
-        border: 1px solid #ddd;
-        padding: 10px;
-        color: #666666;
-        text-decoration: none;
-    }
+.wtree #li::before {
+    content: none;
+}
 
-        .wtree li span:hover,
-        .wtree li span:focus {
-            color: #000;
-            border: 1px solid #474747;
-        }
+.wtree #li {
+    margin: 0px 0px 10px 10px;
+}
 
-            .wtree li span:hover + ol li span,
-            .wtree li span:focus + ol li span {
-                color: #000;
-                border: 1px solid #474747;
-            }
+.wtree li:after {
+    position: absolute;
+    content: "";
+    top: 5px;
+    left: -30px;
+    border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    width: 30px;
+    height: 100%;
+}
 
-            .wtree li span:hover + ol li:after,
-            .wtree li span:hover + ol li:before,
-            .wtree li span:focus + ol li:after,
-            .wtree li span:focus + ol li:before {
-                border-color: #474747;
-            }
+.wtree li:last-child:after {
+    display: none;
+}
 
-#li #span {
+.wtree li span {
+    display: block;
+    border: 1px solid #ddd;
+    padding: 10px;
+    color: #666666;
+    text-decoration: none;
+}
+
+.wtree li span:hover,
+.wtree li span:focus {
+    color: #000;
+    border: 1px solid #474747;
+}
+
+.wtree li span:hover + ol li span,
+.wtree li span:focus + ol li span {
+    color: #000;
+    border: 1px solid #474747;
+}
+
+.wtree li span:hover + ol li:after,
+.wtree li span:hover + ol li:before,
+.wtree li span:focus + ol li:after,
+.wtree li span:focus + ol li:before {
+    border-color: #474747;
+}
+
+li #span {
     background-color: #ddf3fe;
 }
 
