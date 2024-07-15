@@ -64,8 +64,8 @@ stepsValidation.steps({
     form.validate().settings.ignore = ":disabled";
     return form.valid();
   },
-  onFinished: function (event, currentIndex) {
-    alert("Submitted!");
+    onFinished: function (event, currentIndex) {
+        form.submit();
   }
 });
 

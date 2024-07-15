@@ -1,0 +1,189 @@
+﻿@model tahsinERP.ViewModels.BOM.BomViewModel
+@{
+    ViewBag.Title = "WizardView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="~/BOM/Index">BOM</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    BOM ga mahsulot qo'shish
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <!-- Form wizard with step validation section start -->
+        <section id="validation">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h4 class="card-title">Validation Example</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                @using (Html.BeginForm("WizardView", "BOM", FormMethod.Post, new { enctype = "multipart/form-data", @class = "wizard-validation" }))
+                                {
+                                    <!-- Step 1 -->
+                                    <h6>
+                                        <i class="step-icon"></i>
+                                        <span>Baisc Information</span>
+                                    </h6>
+                                    <!-- Step 1 -->
+                                    <!-- body content of step 1 -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="firstName3">First Name </label>
+                                                    <input type="text" class="form-control required" id="firstName3" name="firstName" placeholder="Enter Your First Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="lastName3">Last Name</label>
+                                                    <input type="text" class="form-control required" id="lastName3" name="lastName" placeholder="Enter Your Last Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="emailAddress5">Email</label>
+                                                    <input type="email" class="form-control required" id="emailAddress5" name="emailAddress" placeholder="Enter Your Email">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="location">City</label>
+                                                    <select class="custom-select form-control" id="location" name="location">
+                                                        <option value="">New York</option>
+                                                        <option value="Amsterdam">Chicago</option>
+                                                        <option value="Berlin">San Francisco</option>
+                                                        <option value="Frankfurt">Boston</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- body content of step 1 end -->
+                                    <!-- Step 2 -->
+                                    <h6>
+                                        <i class="step-icon"></i>
+                                        <span>Job Details</span>
+                                    </h6>
+                                    <!-- step 2 -->
+                                    <!-- body content of step 2 end -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="proposalTitle3">
+                                                        Proposal Title
+                                                    </label>
+                                                    <input type="text" class="form-control required" id="proposalTitle3" name="proposalTitle" placeholder="Enter Your Proposel Title">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="jobTitle5">
+                                                        Job Title
+                                                    </label>
+                                                    <input type="text" class="form-control required" id="jobTitle5" name="jobTitle5" placeholder="Enter Your Job Title">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="shortDescription3">Short Description</label>
+                                                    <textarea name="shortDescription" id="shortDescription3" rows="4" class="form-control" placeholder="Please Enter short Description"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- body content of step 2 end -->
+                                    <!-- Step 3 -->
+                                    <h6>
+                                        <i class="step-icon"></i>
+                                        <span>Event Details</span>
+                                    </h6>
+                                    <!-- step 3 end -->
+                                    <!-- step 3 content -->
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="eventName3">
+                                                        Event Name
+                                                    </label>
+                                                    <input type="text" class="form-control required" id="eventName3" name="eventName" placeholder="Enter Event Name">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="eventStatus3">Event Statuss</label>
+                                                    <select class="custom-select form-control required" id="eventStatus3" name="eventStatus">
+                                                        <option value="Planning">Planning</option>
+                                                        <option value="In Progress">In Progress</option>
+                                                        <option value="Finished">Finished</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="eventLocation3">Event Location </label>
+                                                    <select class="custom-select form-control required" id="eventLocation3" name="eventStatus">
+                                                        <option value="Planning">New York</option>
+                                                        <option value="In Progress">Chicago</option>
+                                                        <option value="Finished">San Francisco</option>
+                                                        <option value="Finished">Boston</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="mr-2">Requirements :</label>
+                                                    <div class="c-inputs-stacked">
+                                                        <div class="d-inline-block mr-2">
+                                                            <fieldset>
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" class="checkbox__input" id="checkbox6">
+                                                                    <label for="checkbox6">Staffing</label>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="d-inline-block">
+                                                            <fieldset>
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" class="checkbox__input" id="checkbox5">
+                                                                    <label for="checkbox5">Catering</label>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <!-- step 3 content end-->
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Form wizard with step validation section end -->
+    </div>
+</div>

@@ -2552,6 +2552,7 @@
     <Content Include="Views\HSCode\Details.cshtml" />
     <Content Include="Views\HSCode\Delete.cshtml" />
     <Content Include="Views\HSCode\Edit.cshtml" />
+    <Content Include="Views\BOM\WizardView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

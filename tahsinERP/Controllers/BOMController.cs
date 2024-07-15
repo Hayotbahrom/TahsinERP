@@ -209,7 +209,15 @@ namespace tahsinERP.Controllers
                 return Base64String;
             }
         }
-
+        public ActionResult WizardView()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult WizardView(BomViewModel model)
+        {
+            return View();
+        }
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
