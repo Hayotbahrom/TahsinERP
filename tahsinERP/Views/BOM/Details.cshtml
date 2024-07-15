@@ -80,7 +80,7 @@
                                     {
                                         <span>
                                             <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                            @child.Consumption-@child.ConsumptionUnit
+                                            @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
                                         </span>
                                     }
                                 </div>
@@ -100,7 +100,7 @@
                                                     {
                                                         <span>
                                                             <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                            @grandChild.Consumption-@grandChild.ConsumptionUnit
+                                                            @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
                                                         </span>
                                                     }
                                                 </div>
@@ -130,7 +130,7 @@
                             {
                                 <span>
                                     <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                    @child.Consumption-@child.ConsumptionUnit
+                                    @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
                                 </span>
                             }
                         </div>
@@ -150,7 +150,7 @@
                                             {
                                                 <span>
                                                     <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                    @grandChild.Consumption-@grandChild.ConsumptionUnit
+                                                    @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
                                                 </span>
                                             }
                                         </div>
