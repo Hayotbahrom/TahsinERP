@@ -21,8 +21,16 @@ ol {
 
 .wtree li {
     list-style-type: none;
-    margin: 10px 0 10px 10px;
+    margin: 10px 0px 10px 10px;
     position: relative;
+}
+
+.wtree li ol li {
+    margin: 10px 0px 10px 100px;
+}
+
+.wtree li ol li ol li{
+    margin: 10px 0px 10px 70px;
 }
 
 .wtree li:before {
@@ -35,6 +43,14 @@ ol {
     border-bottom: 1px solid #ddd;
     width: 30px;
     height: 15px;
+}
+
+.wtree #li::before {
+    content: none;
+}
+
+.wtree #li {
+    margin: 0px 0px 10px 10px;
 }
 
 .wtree li:after {
