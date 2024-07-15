@@ -55,12 +55,6 @@
                                                     @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
                                                     <br />
                                                     <br />
-
-                                                    <div class="checkbox checkbox-secondary checkbox-glow">
-                                                        @Html.CheckBoxFor(model => model.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
-                                                        <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
-                                                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
-                                                    </div>
                                                 </fieldset>
                                                 <button type="submit" class="btn btn-outline-success mr-1 mb-1">
                                                     <span class="align-middle ml-25">Keyingisi</span>

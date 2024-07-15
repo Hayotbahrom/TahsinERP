@@ -31,24 +31,22 @@
             </div>
         </div>
 
-        <button id="generatePDF" class="btn btn-outline-success buttons-pdf buttons-html5">PDF yaratish</button>
+        <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
+            <i class='bx bx-save'></i>
+            PDF</button>
         <br />
 
         <span class="display">Ko'rsatish: </span>
         <input id="radio-1" data-tooltip="first level" name="test" type="radio" />
         <label for="radio-1">
-            o'chiq
-        </label>
-        <input id="radio-2" data-tooltip="second level" name="test" type="radio" hidden />
-        <label for="radio-2" hidden>
-            Second level
+            yig'ilgan
         </label>
         <input checked id="radio-3" data-tooltip="third level" name="test" type="radio" />
         <label for="radio-3">
-            yoniq
+            yoyilgan
         </label>
 
-        <ol class="wtree" id="wtree">
+        <ol class="wtree" id="toPDF">
             @if (Model.PRODUCT != null)
             {
                 <li id="li">
@@ -80,7 +78,7 @@
                                     {
                                         <span>
                                             <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                            @child.Consumption-@child.ConsumptionUnit
+                                            @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
                                         </span>
                                     }
                                 </div>
@@ -100,7 +98,7 @@
                                                     {
                                                         <span>
                                                             <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                            @grandChild.Consumption-@grandChild.ConsumptionUnit
+                                                            @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
                                                         </span>
                                                     }
                                                 </div>
@@ -117,7 +115,7 @@
             {
                 foreach (var child in Model.Children)
                 {
-                    <li>
+                    <li id="li">
                         <div style="display: flex; align-items: center" class="box">
                             @if (child.ChildImageBase64.Any())
                             {
@@ -128,9 +126,9 @@
                             }
                             @if (child.PART != null)
                             {
-                                <span>
+                                <span id="span">
                                     <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                    @child.Consumption-@child.ConsumptionUnit
+                                    @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
                                 </span>
                             }
                         </div>
@@ -150,7 +148,7 @@
                                             {
                                                 <span>
                                                     <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                    @grandChild.Consumption-@grandChild.ConsumptionUnit
+                                                    @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
                                                 </span>
                                             }
                                         </div>

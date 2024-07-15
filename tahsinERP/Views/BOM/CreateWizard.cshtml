@@ -13,8 +13,8 @@
                                     <div class="card-body">
                                         @using (Html.BeginForm("CreateWizard", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
                                         {
-                                            @Html.HiddenFor(model => model.Product.PNo)
-                                            @Html.HiddenFor(model => model.Product.ID)
+                                            @Html.HiddenFor(model => model.ProductNo)
+                                            @Html.HiddenFor(model => model.ProductID)
                                             @Html.AntiForgeryToken()
                                             if (!string.IsNullOrEmpty(Model.Process))
                                             {
@@ -98,6 +98,12 @@
                                                                 <div id="blankingNew" class="row new" style="display: none;">
                                                                     <div class="col-md-4">
                                                                         <fieldset class="invoice-address form-group">
+                                                                            @Html.DropDownList("BLANKING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2", @id = "blankingPartID_after" })
+                                                                            @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <fieldset class="invoice-address form-group">
                                                                             @Html.DropDownList("BLANKING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
                                                                             @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_after, "", new { @class = "text-danger" })
                                                                         </fieldset>
@@ -138,7 +144,7 @@
                                                                     <div class="col-md-4">
                                                                         <h6>Ehtiyot qismni tanlang</h6>
                                                                         <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("STAMPING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2" })
+                                                                            @Html.DropDownList("STAMPING_NORMS.PartID_before", (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2", @id = "stampingPartID_before" })
                                                                             @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_before, "", new { @class = "text-danger" })
                                                                         </fieldset>
                                                                     </div>
@@ -231,7 +237,6 @@
         </div>
     </div>
     <script src="~/assets/js/jquery.min.js"></script>
-
     <script>
         $(document).ready(function () {
             $('#toggleSlittingCheckBox').change(function () {
@@ -262,6 +267,13 @@
                     $('#stampingNew').hide();
                     $('#stampingOld').show();
                 }
+            });
+
+            $("#slittingPartID_after").change(function () {
+                updateNextPartIDBefore("blankingPartID_before", $(this).val());
+            });
+            $("#blankingPartID_after").change(function () {
+                updateNextPartIDBefore("stampingPartID_before", $(this).val());
             });
         });
     </script>
