@@ -16,7 +16,10 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var list = await db.TRACINGS.Where(p => p.IsDeleted == false).ToListAsync();
+                var list = await db.TRACINGS
+                    .Include(p => p.P_INVOICE_PACKINGLISTS)
+                    .Where(p => p.IsDeleted == false)
+                    .ToListAsync();
                 return View(list);
             }
         }
@@ -24,7 +27,9 @@ namespace tahsinERP.Controllers
         {
             using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS.Where(p => p.IsDeleted == false).ToListAsync());
+                ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS
+                    .Where(p => p.IsDeleted == false)
+                    .ToListAsync(),"ID", "PackingListNo");
                 return View();
             }
         }
@@ -34,6 +39,12 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var checkExistTracing = await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime == tracing.IssueDateTime).FirstOrDefaultAsync();
+                if (checkExistTracing != null)
+                {
+                    ModelState.AddModelError("", "Bir xil Packinglist va Chiquv sana bilan ma'lumot allaqachon mavjud.");
+                    return View(tracing);
+                }
                 try
                 {
                     if (ModelState.IsValid)
@@ -83,6 +94,8 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
+                ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS.Where(p => p.IsDeleted == false).ToListAsync(), "ID", "PackingListNo");
+
                 return View(tracing);
             }
         }
@@ -92,6 +105,12 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var checkExistTracing = await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime == tracing.IssueDateTime).FirstOrDefaultAsync();
+                if (checkExistTracing != null)
+                {
+                    ModelState.AddModelError("", "Bir xil Packinglist va Chiquv sana bilan ma'lumot allaqachon mavjud.");
+                    return View(tracing);
+                }
 
                 if (ModelState.IsValid)
                 {
@@ -128,6 +147,7 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
+                ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS.Where(p => p.IsDeleted == false).ToListAsync(), "ID", "PackingListNo");
 
                 return View(tracing);
             }
