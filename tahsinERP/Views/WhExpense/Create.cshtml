@@ -45,7 +45,7 @@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="DocNo">Hujjat nomeri</label>
+                                                            <label for="DocNo">Hujjat raqami</label>
                                                             @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disable"})
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
@@ -58,10 +58,7 @@
                                                             @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Miqdorini kiriting" })
                                                             @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                                                         </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Description">Qisqacha tavsif</label>
-                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @placeholder = "Izoh kiriting(ixtiyoriy)" })
-                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
 
@@ -69,12 +66,12 @@
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Currency">Valyuta</label>
-                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Currencyni kiriting" })
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency" })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Currency">Batafsil ma`lumot</label>
-                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "qisqacha ma`lumot kiriting" })
+                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Currency" })
                                                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
@@ -96,27 +93,27 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.IncomeParts, new { @class = "form-control select2" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.IncomeParts, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Unit</label>
-                                                            <input type="text" name="Unit" class="form-control" id="Part_Unit" placeholder="Birligini kiriting" />
+                                                            <input type="text" name="Unit" class="form-control" id="Part_Unit" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount" placeholder="Miqdorini kiriting" />
+                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount"/>
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PiecePrice">Birlik narxi</label>
-                                                            <input type="number" name="PiecePrice" step="0.01" class="form-control" id="Part_PiecePrice" placeholder="Qism narxini kiriting" />
+                                                            <input type="number" name="PiecePrice" step="0.01" class="form-control" id="Part_PiecePrice" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PiecePrice, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Comment">Izoh</label>
-                                                            <input type="text" name="Comment" class="form-control" id="Part_Comment" placeholder="Izoh kiriting(ixtiyoriy)" />
+                                                            <input type="text" name="Comment" class="form-control" id="Part_Comment"/>
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Comment, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
