@@ -115,23 +115,23 @@
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="ProductID">Product</label>
                                                             @Html.DropDownList("ProductID", (SelectList)ViewBag.Products, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Products[0].ProductID, "", new { @class = "text-danger" })
+                                                            @Html.ValidationMessageFor(model => model.ProductList[0].ProductID, "", new { @class = "text-danger" })
 
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Unit">Unit</label>
                                                             <input type="text" name="Unit" class="form-control" id="Unit" placeholder="Maxsulot birligi" />
-                                                            @Html.ValidationMessageFor(model => model.Products[0].Unit, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="PiecePrice">Piece Price</label>
-                                                            <input type="number" name="PiecePrice" class="form-control" id="PiecePrice" placeholder="Dona/kg narxi" />
-                                                            @Html.ValidationMessageFor(model => model.Products[0].PiecePrice, "", new { @class = "text-danger" })
+                                                            @Html.ValidationMessageFor(model => model.ProductList[0].Unit, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Amount">Amount</label>
                                                             <input type="number" name="Amount" class="form-control" id="Amount" placeholder="Miqdori" />
-                                                            @Html.ValidationMessageFor(model => model.Products[0].Amount, "", new { @class = "text-danger" })
+                                                            @Html.ValidationMessageFor(model => model.ProductList[0].Amount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="PiecePrice">Piece Price</label>
+                                                            <input type="number" name="PiecePrice" class="form-control" id="PiecePrice" placeholder="Dona/kg narxi" />
+                                                            @Html.ValidationMessageFor(model => model.ProductList[0].PiecePrice, "", new { @class = "text-danger" })
                                                         </div>
 
                                                         <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
