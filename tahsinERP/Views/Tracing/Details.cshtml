@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.HSCODE
+﻿@model tahsinERP.Models.TRACING
 
 @{
     ViewBag.Title = "Details";
@@ -20,10 +20,10 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="~/HSCODE/Index">HSCODE lar</a>
+                                        <a href="~/Tracing/Index">Tracing lar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        HSCODE sahifasi
+                                        Tracing sahifasi
                                     </li>
                                 </ol>
                             </div>
@@ -42,23 +42,33 @@
 
                                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                                            <h4 class="text-primary">HSCODE malumotlari</h4>
+                                            <h4 class="text-primary">Tracing malumotlari</h4>
                                             <hr>
 
                                             <div class="row my-2 py-50">
                                                 <div class="col-sm-6 col-12 order-2 order-sm-1">
-                                                    @Html.AntiForgeryToken()
-                                                    <hr>
-                                                    <h6 class="invoice-to"></h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.HSCODE1, new { @class = "form-control round", @placeholder = "HsCODE ni kiriting:" })
-                                                        @Html.ValidationMessageFor(model => model.HSCODE1, "", new { @class = "text-danger" })
-                                                    </fieldset>
-                                                    <h6 class="invoice-to">Batafsil ma`lumot</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Description, new { @class = "form-control round", @placeholder = "qisqacha malumot kiriting:" })
-                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                                                    </fieldset>
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <h4 class="text-primary">Tracing ma'lumotlari</h4>
+                                                    <br />
+                                                    <hr />
+                                                    <span><b>PackingList raqami</b>: @Html.DisplayFor(model => model.P_INVOICE_PACKINGLISTS.PackingListNo)</span>
+                                                    <br />
+                                                    <hr />
+                                                    <span><b>Hozirgi manzil</b>: @Html.DisplayFor(model => model.ActualLocation)</span>
+                                                    <br />
+                                                    <hr />
+                                                    <span><b>Manzilgacha</b>: @Html.DisplayFor(model => model.ActualDistanceToDestination)</span>
+                                                    <br />
+                                                    <hr />
+                                                    <span><b>Chiqish sanasi</b>: @Html.DisplayFor(model => model.IssueDateTime.ToString("dd.MM.yyyy"))</span>
+                                                    <br />
+                                                    <br />
+                                                    <span><b>Taxminiy kelish sanasi</b>: @Html.DisplayFor(model => model.ETA.ToString("dd.MM.yyyy"))</span>
+                                                    <br />
+                                                    <br />
+                                                    <span><b>Komment</b>: @Html.DisplayFor(model => model.Comment)</span>
+                                                    <br />
+                                                    <br />
                                                 </div>
                                             </div>
                                         </div>

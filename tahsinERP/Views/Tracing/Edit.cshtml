@@ -1,0 +1,114 @@
+﻿@model tahsinERP.Models.TRACING
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Edit", "Tracing", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Tracing/Index">Tracing lar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Tracing sahifasi
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="row">
+                        <!-- invoice view page -->
+                        <div class="col-xl-9 col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-content">
+
+                                    <div class="card-body pb-0 mx-25">
+                                        @Html.AntiForgeryToken()
+                                        <div class="row">
+                                            <h4 class="text-primary">Tracing malumotlarini tahrirlash</h4>
+
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <hr>
+                                                <h6 class="invoice-to">PackingList raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.PackingListID, ViewBag.packingList as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.PackingListID, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Hozirgi manzili</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.ActualLocation, new { @class = "form-control round", @placeholder = "hozirgi manzili" })
+                                                    @Html.ValidationMessageFor(model => model.ActualLocation, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Manzilgacha bo'lgan masofa</h6>
+                                                <fieldset class="form-group">
+                                                    @Html.TextBoxFor(model => model.ActualDistanceToDestination, new { @class = "form-control round", type = "number", @placeholder = "Manzilgacha bo'lgan masofa" })
+                                                    @Html.ValidationMessageFor(model => model.ActualDistanceToDestination, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <h6>Chiqish sanasi</h6>
+                                                <fieldset class="form-group position-relative has-icon-left">
+                                                    @Html.TextBoxFor(model => model.IssueDateTime, new { @class = "form-control pickadate-months-year round", @placeholder = "Chiqish sanasi" })
+                                                    @Html.ValidationMessageFor(model => model.IssueDateTime, "", new { @class = "text-danger" })
+                                                    <div class="form-control-position">
+                                                        <i class='bx bx-calendar'></i>
+                                                    </div>
+                                                </fieldset>
+                                                <h6>Taxminiy kelish sanasi</h6>
+                                                <fieldset class="form-group position-relative has-icon-left">
+                                                    @Html.TextBoxFor(model => model.ETA, new { @class = "form-control pickadate-months-year round", @placeholder = "Taxminiy kelish sanasi" })
+                                                    @Html.ValidationMessageFor(model => model.ETA, "", new { @class = "text-danger" })
+                                                    <div class="form-control-position">
+                                                        <i class='bx bx-calendar'></i>
+                                                    </div>
+                                                </fieldset>
+                                                <h6>Komment</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Comment, new { @class = "form-control round", @placeholder = "Komment" })
+                                                    @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                            </div>
+                                        </div>
+
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item border-0 pb-0">
+                                                <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                    <i class='bx bx-save'></i>
+                                                    Saqlash
+                                                </button>
+                                            </li>
+                                        </ul>
+
+                                        <hr>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
