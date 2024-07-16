@@ -73,11 +73,13 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
 
-                var tracing = await db.TRACINGS.FindAsync(id);
-                if (tracing == null)
+                var tracingList = await db.TRACINGS
+                    .Include(p => p.P_INVOICE_PACKINGLISTS)
+                    .Where(p => p.IsDeleted == false).ToListAsync();
+                if (tracingList == null)
                     return HttpNotFound();
 
-                return View(tracing);
+                return View(tracingList);   
             }
         }
         public async Task<ActionResult> Edit(int? id)

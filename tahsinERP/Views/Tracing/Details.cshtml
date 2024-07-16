@@ -1,7 +1,7 @@
-﻿@model tahsinERP.Models.TRACING
+﻿@model List<tahsinERP.Models.TRACING>
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Tracing Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -20,10 +20,10 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="~/Tracing/Index">Tracing lar</a>
+                                        <a href="~/Tracing/Index">Tracing</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Tracing sahifasi
+                                        Tracing Details
                                     </li>
                                 </ol>
                             </div>
@@ -39,36 +39,25 @@
                                 <div class="card-body pb-0 mx-25">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-6 mt-25">
-
-                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
                                             <h4 class="text-primary">Tracing malumotlari</h4>
-                                            <hr>
-
-                                            <div class="row my-2 py-50">
-                                                <div class="col-sm-6 col-12 order-2 order-sm-1">
-                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                    <h4 class="text-primary">Tracing ma'lumotlari</h4>
-                                                    <br />
-                                                    <hr />
-                                                    <span><b>PackingList raqami</b>: @Html.DisplayFor(model => model.P_INVOICE_PACKINGLISTS.PackingListNo)</span>
-                                                    <br />
-                                                    <hr />
-                                                    <span><b>Hozirgi manzil</b>: @Html.DisplayFor(model => model.ActualLocation)</span>
-                                                    <br />
-                                                    <hr />
-                                                    <span><b>Manzilgacha</b>: @Html.DisplayFor(model => model.ActualDistanceToDestination)</span>
-                                                    <br />
-                                                    <hr />
-                                                    <span><b>Chiqish sanasi</b>: @Html.DisplayFor(model => model.IssueDateTime.ToString("dd.MM.yyyy"))</span>
-                                                    <br />
-                                                    <br />
-                                                    <span><b>Taxminiy kelish sanasi</b>: @Html.DisplayFor(model => model.ETA.ToString("dd.MM.yyyy"))</span>
-                                                    <br />
-                                                    <br />
-                                                    <span><b>Komment</b>: @Html.DisplayFor(model => model.Comment)</span>
-                                                    <br />
-                                                    <br />
+                                            <div class="wizard-container">
+                                                <div class="wizard-header">
+                                                    @foreach (var item in Model)
+                                                    {
+                                                        <div class="step @((item.IssueDateTime == Model.Last().IssueDateTime && item.ActualDistanceToDestination == 0) ? "completed" : "")">
+                                                            <div class="circle">
+                                                                @Model.IndexOf(item) + 1
+                                                            </div>
+                                                            <div class="label">
+                                                                <div class="date">@item.IssueDateTime.ToString("dd.MM.yyyy HH:mm")</div>
+                                                                <div class="location">@item.ActualLocation.ToUpper()</div>
+                                                                <div class="distance">@item.ActualDistanceToDestination - KM</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div class="progress-container">
+                                                    <div class="progress-bar" id="progress"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -82,6 +71,104 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .wizard-container {
+            position: relative;
+            padding: 20px;
+        }
+
+        .wizard-header {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            width: calc(100% / @(Model.Count));
+        }
+
+        .circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #bbb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: bold;
+        }
+
+        .circle.completed {
+            background-color: green;
+        }
+
+        .label {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .progress-container {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #bbb;
+            z-index: 0;
+        }
+
+        .progress-bar {
+            height: 2px;
+            background-color: green;
+            width: 0;
+        }
+
+        .date {
+            font-size: 12px;
+            color: gray;
+        }
+
+        .location {
+            font-weight: bold;
+        }
+
+        .distance {
+            font-size: 12px;
+            color: gray;
+        }
+
+        /* Style for dashed part of the progress bar */
+        .progress-bar.dashed {
+            background: repeating-linear-gradient(
+                to right,
+                green 0%,
+                green 10%,
+                transparent 10%,
+                transparent 20%
+            );
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            var steps = $('.step');
+            var totalSteps = steps.length;
+
+            // Calculate progress width based on last completed step
+            var progressWidth = ($('.step.completed').length / totalSteps) * 100;
+
+            // Update progress bar width
+            $('#progress').css('width', progressWidth + '%');
+            $('#progress').toggleClass('dashed', progressWidth < 100); // Add dashed class if progress is not complete
+        });
+    </script>
 }
 else
 {
