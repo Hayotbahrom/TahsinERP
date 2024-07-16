@@ -1,4 +1,4 @@
-﻿@model  tahsinERP.Models.HSCODE
+﻿@model  tahsinERP.Models.TRACING
 @{
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -19,10 +19,10 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        <a href="~/HSCODE">HSCODE lar</a>
+                                        <a href="~/Tracing">Tracing lar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        HSCODE o'chirish
+                                        Tracing o'chirish
                                     </li>
                                 </ol>
                             </div>
@@ -38,25 +38,34 @@
                                 <div class="card-body pb-0 mx-25">
                                     <div class="row invoice-info">
                                         <div class="col-lg-12 col-md-6 mt-25">
-                                            @Html.AntiForgeryToken()
                                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                            <hr>
-                                            <h6 class="invoice-to"></h6>
-                                            <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.HSCODE1, new { @class = "form-control round", @placeholder = "HsCODE ni kiriting:" })
-                                                @Html.ValidationMessageFor(model => model.HSCODE1, "", new { @class = "text-danger" })
-                                            </fieldset>
-                                            <h6 class="invoice-to">Batafsil ma`lumot</h6>
-                                            <fieldset class="invoice-address form-group">
-                                                @Html.TextBoxFor(model => model.Description, new { @class = "form-control round", @placeholder = "qisqacha malumot kiriting:" })
-                                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                                            </fieldset>
+                                            <h4 class="text-primary">Tracing ma'lumotlari</h4>
+                                            <br />
+                                            <hr />
+                                            <span><b>PackingList raqami</b>: @Html.DisplayFor(model => model.P_INVOICE_PACKINGLISTS.PackingListNo)</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Hozirgi manzil</b>: @Html.DisplayFor(model => model.ActualLocation)</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Manzilgacha</b>: @Html.DisplayFor(model => model.ActualDistanceToDestination)</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Chiqish sanasi</b>: @Model.IssueDateTime.ToString("dd.MM.yyyy")</span>
+                                            <br />
+                                            <br />
+                                            <span><b>Taxminiy kelish sanasi</b>: @Model.ETA.ToString("dd.MM.yyyy")</span>
+                                            <br />
+                                            <br />
+                                            <span><b>Komment</b>: @Html.DisplayFor(model => model.Comment)</span>
+                                            <br />
+                                            <br />
                                         </div>
                                     </div>
 
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item border-0 pb-0">
-                                            @using (Html.BeginForm("Delete", "HSCODE", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            @using (Html.BeginForm("Delete", "Tracing", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                             {
                                                 @Html.AntiForgeryToken()
                                                 <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu Invoice o\'chirib yuborishga ishonchingiz komilmi?')">

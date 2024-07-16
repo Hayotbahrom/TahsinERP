@@ -95,6 +95,7 @@ namespace tahsinERP.Controllers
                     Amount = model.Amount,
                     Currency = model.Currency,
                     InvoiceDate = model.InvoiceDate,
+                    CompanyID = 1,
                     IsDeleted = false
                 };
                 
@@ -131,27 +132,45 @@ namespace tahsinERP.Controllers
 
             P_INVOICES invoice;
             List<P_INVOICE_PARTS> partList;
+            string transportNo = null;
+            string packingListNo = null;
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                invoice = db.P_INVOICES.Find(id);
+                invoice = db.P_INVOICES
+                    .Include(i => i.COMPANy)
+                    .Include(i => i.SUPPLIER)
+                    .Include(i => i.P_ORDERS.P_CONTRACTS)
+                    .Include(i => i.P_INVOICE_PACKINGLISTS.Select(p => p.F_TRANSPORT_TYPES))
+                    .Where(i => i.ID == id).FirstOrDefault();
 
                 if (invoice == null)
                     return HttpNotFound();
 
-                // Manually load the related entities
+              /*  // Manually load the related entities
                 db.Entry(invoice).Reference(i => i.P_ORDERS).Load();
                 db.Entry(invoice).Reference(i => i.SUPPLIER).Load();
+                db.Entry(invoice).Reference(i => i.COMPANy).Load();*/
 
                 partList = db.P_INVOICE_PARTS
                                         .Include(ip => ip.PART)
                                         .Where(ip => ip.InvoiceID == invoice.ID).ToList();
+
+                var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
+                if (firstPackingList != null)
+                {
+                    transportNo = firstPackingList.TransportNo; // Assuming TransportType has a TransportNo property
+                    packingListNo = firstPackingList.PackingListNo;
+                }
                 foreach (var part in partList)
                 {
                     db.Entry(part).Reference(p => p.PART).Load();
                 }
             }
-
+            ViewBag.packingListNo = packingListNo;
+            ViewBag.transportNo = transportNo;
             ViewBag.partList = partList;
+                
             return View(invoice);
         }
         public ActionResult Delete(int? Id)
