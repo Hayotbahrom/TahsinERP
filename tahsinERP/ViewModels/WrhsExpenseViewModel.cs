@@ -15,9 +15,9 @@ namespace tahsinERP.ViewModels
         public int RecieverWHID { get; set; } // Ombor IDsi auto: null
         
         public int SenderWHID { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
         public string Currency { get; set; }
-        public int TotalPrice { get; set; } // Trigger in DB
+        public double TotalPrice { get; set; } // Trigger in DB
         public bool IsDeleted { get; set; }
         [DataType(DataType.Text)]
         public string Description { get; set; }
@@ -30,8 +30,6 @@ namespace tahsinERP.ViewModels
             Parts = new List<WhrsExpensePart>();
         }
     }
-
-
     // Part ViewModel
     public class WhrsExpensePart
     {
@@ -39,9 +37,9 @@ namespace tahsinERP.ViewModels
         public int ExpenseID { get; set; } // User dan olinmaydi
         public int PartID { get; set; } 
         public string Unit { get; set; }
-        public int Amount { get; set; }
-        public int PiecePrice { get; set; }
-        public int TotalPrice { get; set; } // Trigger in DB
+        public double Amount { get; set; }
+        public double PiecePrice { get; set; }
+        public double TotalPrice { get; set; } // Trigger in DB
         public string Comment { get; set; }
     }
 }

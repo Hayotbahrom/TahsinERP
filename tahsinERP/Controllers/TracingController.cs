@@ -19,10 +19,20 @@ namespace tahsinERP.Controllers
                 var list = await db.TRACINGS
                     .Include(p => p.P_INVOICE_PACKINGLISTS)
                     .Where(p => p.IsDeleted == false)
+                    .GroupBy(t => t.P_INVOICE_PACKINGLISTS.TransportNo)
+                    .Select(g => new
+                    {
+                        TransportNo = g.Key,
+                        LastIssueDateTime = g.Max(t => t.IssueDateTime),
+                        LastTracing = g.OrderByDescending(t => t.IssueDateTime).FirstOrDefault(t => t.ActualDistanceToDestination == 0),
+                        Tracings = g.OrderBy(t => t.IssueDateTime).ToList()
+                    })
                     .ToListAsync();
+
                 return View(list);
             }
         }
+
         public async Task<ActionResult> Create()
         {
             using(DBTHSNEntities db = new DBTHSNEntities())
