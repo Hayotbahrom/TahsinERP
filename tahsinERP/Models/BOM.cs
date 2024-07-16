@@ -17,11 +17,11 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public double Consumption { get; set; }
         public string ConsumptionUnit { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public string ParentPNo { get; set; }
         public string ChildPNo { get; set; }
-        public Nullable<bool> IsParentProduct { get; set; }
+        public bool IsParentProduct { get; set; }
         public double WasteAmount { get; set; }
         public double TotalConsumption { get; set; }
         public Nullable<int> Sequence { get; set; }

@@ -45,7 +45,7 @@
                                                     @Html.AntiForgeryToken()
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                     <hr>
-                                                    <h6 class="invoice-to">PackingList raqami</h6>
+                                                    <h6 class="invoice-to">Transport raqami</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         @Html.DropDownListFor(model => model.PackingListID, ViewBag.packingList as SelectList, new { @class = "form-control select2" })
                                                         @Html.ValidationMessageFor(model => model.PackingListID, "", new { @class = "text-danger" })
@@ -60,7 +60,7 @@
                                                         @Html.TextBoxFor(model => model.ActualDistanceToDestination, new { @class = "form-control round", type = "number", @placeholder = "Manzilgacha bo'lgan masofa" })
                                                         @Html.ValidationMessageFor(model => model.ActualDistanceToDestination, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6>Chiqish sanasi</h6>
+                                                    <h6>Sana:</h6>
                                                     <fieldset class="form-group position-relative has-icon-left">
                                                         @Html.TextBoxFor(model => model.IssueDateTime, new { @class = "form-control pickadate-months-year round", @placeholder = "Chiqish sanasi" })
                                                         @Html.ValidationMessageFor(model => model.IssueDateTime, "", new { @class = "text-danger" })
@@ -68,7 +68,7 @@
                                                             <i class='bx bx-calendar'></i>
                                                         </div>
                                                     </fieldset>
-                                                    <h6>Taxminiy kelish sanasi</h6>
+                                                    <h6>Taxminiy yetib kelish sanasi</h6>
                                                     <fieldset class="form-group position-relative has-icon-left">
                                                         @Html.TextBoxFor(model => model.ETA, new { @class = "form-control pickadate-months-year round", @placeholder = "Taxminiy kelish sanasi" })
                                                         @Html.ValidationMessageFor(model => model.ETA, "", new { @class = "text-danger" })
@@ -76,9 +76,9 @@
                                                             <i class='bx bx-calendar'></i>
                                                         </div>
                                                     </fieldset>
-                                                    <h6>Komment</h6>
+                                                    <h6>Izoh</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Comment, new { @class = "form-control round", @placeholder = "Komment" })
+                                                        @Html.TextBoxFor(model => model.Comment, new { @class = "form-control round", @placeholder = "Izohlar bo'lsa yozib qolding" })
                                                         @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <ul class="list-group list-group-flush">

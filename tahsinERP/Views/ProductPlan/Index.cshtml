@@ -1,4 +1,4 @@
-﻿@model List<tahsinERP.Models.PRODUCTPLAN>
+﻿
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,7 +24,7 @@
                                     </li>
 
                                     <li class="breadcrumb-item active">
-                                        Product Planlar
+                                        Ishlab chiqarishni rejalashtirish
                                     </li>
 
                                 </ol>
@@ -36,15 +36,32 @@
             <div class="content-body">
                 <!-- users list start -->
                 <section class="invoice-list-wrapper">
-                    @if (changePermit)
-                    {
-                        <div class="invoice-create-btn mb-1">
+                    <div class="invoice-create-btn mb-1">
+                        @if (changePermit)
+                        {
                             <a href="@Url.Action("Create", "ProductPlan")" class="btn btn-success bg-light invoice-create" role="button" aria-pressed="true">
                                 Yangi
                                 plan qo'shish
                             </a>
-                        </div>
-                    }
+                        }
+                    </div>
+                    <div class="users-list-filter px-1">
+                        <form>
+                            <div class="row border rounded py-2 mb-2">
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label>Ishlab chiqarish tsexi</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("ShopID", ViewBag.ShopList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                                    <a href="~/ProductPlan" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                        Ro'yxatni yangilash
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
@@ -54,10 +71,10 @@
                                         <table class="table dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th>Rejadagi mahsulot miqdori</th>
-                                                    <th>Label</th>
-                                                    <th>Boshlanish vaqti</th>
-                                                    <th>Tugash vaqti</th>
+                                                    <th>Maxsulot</th>
+                                                    <th>Reja miqdori</th>
+                                                    <th>Boshlanish sanasi</th>
+                                                    <th>Tugash sanasi</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -65,15 +82,22 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model)
+                                                @foreach (var item in ViewBag.productList)
                                                 {
                                                     <tr>
-                                                        <td><a href="~/ProductPlan/Details/@item.ID">@item.PlannedQty</a></td>
+                                                        @if (ViewBag.shopIsNotSelected)
+                                                        {
+                                                            <td><a href="~/ProductPlan/Details/@item.ID">@item.PRODUCT.PNo</a></td>
+                                                        }
+                                                        else if(!ViewBag.shopIsNotSelected)
+                                                        {
+                                                            <td><a href="~/ProductPlan/Details/@item.ID">@item.EneniAmi</a></td>
+                                                        }
                                                         <td>
-                                                            <a href="~/ProductPlan/Details/@item.ID">@item.Label</a>
+                                                            @item.Amount
                                                         </td>
-                                                        <td>@item.IssueDate</td>
-                                                        <td>@item.DueDate</td>
+                                                        <td>@item.StartDate.ToShortDateString()</td>
+                                                        <td>@item.DueDate.ToShortDateString()</td>
 
                                                         @if (changePermit)
                                                         {
@@ -98,6 +122,16 @@
             </div>
         </div>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function refreshDataTable() {
+        const shopID = document.getElementById("ShopID").value;
+
+        window.location.href = '@Url.Action("Index", "ProductPlan")?shopID='+ shopID;
+        // new { type = "source", supplierID = "supplierID" })';
+    }
+    </script>
 }
 else
 {

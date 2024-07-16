@@ -59,10 +59,10 @@
                                         <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th>packingList No</th>
-                                                    <th>Hozirgi manzil</th>
-                                                    <th>Manzilgacha</th>
-                                                    <th>ketish sanasi</th>
+                                                    <th>Transport №</th>
+                                                    <th>Oxirgi manzil</th>
+                                                    <th>Manzilgacha bo'lgan masofa (km)</th>
+                                                    <th>Kungi ma'lumoti</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -74,11 +74,11 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <a href="~/PackingList/Details/@item.PackingListID">@item.P_INVOICE_PACKINGLISTS.PackingListNo</a>
+                                                            <a href="~/PackingList/Details/@item.PackingListID">@item.P_INVOICE_PACKINGLISTS.TransportNo</a>
                                                         </td>
                                                         <td>@item.ActualLocation</td>
                                                         <td>@item.ActualDistanceToDestination</td>
-                                                        <td>@item.IssueDateTime.ToString("dd.MM.yyyy"   )</td>
+                                                        <td>@item.IssueDateTime.ToString("dd.MM.yyyy")</td>
                                                         @if (changePermit)
                                                         {
                                                             <td>
