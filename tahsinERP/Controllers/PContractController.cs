@@ -12,6 +12,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -277,10 +278,59 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
+                ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
                 return View();
             }
         }
-        [HttpPost]  
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(PContractViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var newContract = new P_CONTRACTS()
+                {
+                    ContractNo = model.ContractNo,
+                    IssuedDate = model.IssuedDate,
+                    CompanyID = 1,
+                    SupplierID = model.SupplierID,
+                    Currency = model.Currency,
+                    Amount = model.Amount,
+                    Incoterms = model.Incoterms,
+                    PaymentTerms = model.PaymentTerms,
+                    DueDate = model.DueDate,
+                    IsDeleted = false,
+                    IDN = model.IDN,
+                };
+                db.P_CONTRACTS.Add(newContract);
+                db.SaveChanges();
+
+                // Yangi yozuvning IncomeID sini olish
+                int newContractID = newContract.ID;
+
+                // Parts ni saqlash
+                foreach (var part in model.Parts)
+                {
+                    var newPart = new P_CONTRACT_PARTS
+                    {
+                        ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                        PartID = part.PartID,
+                        Unit = part.Unit,
+                        Amount = part.Amount,
+                        Price = part.Price,
+                        Quantity = part.Quantity,
+                        ActivePart = true,
+                        MOQ = part.MOQ
+                    };
+
+                    db.P_CONTRACT_PARTS.Add(newPart);
+                }
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+        }
+        /*[HttpPost]  
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate, IDN")] P_CONTRACTS contract)
         {
@@ -302,7 +352,7 @@ namespace tahsinERP.Controllers
                 ModelState.AddModelError(ex.Message, ex);
             }
             return View(contract);
-        }
+        }*/
 
         public ActionResult Details(int? ID)
         {
@@ -455,7 +505,6 @@ namespace tahsinERP.Controllers
                         contractPartToUpdate.ActivePart = contractPart.ActivePart;
                         //contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price; SQL o'zi chiqarib beradi
 
-
                         if (TryUpdateModel(contractPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, ActivePart" }))
                         {
                             try
@@ -469,7 +518,7 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
-                    return View(contractPartToUpdate);
+                    return RedirectToAction("Edit");
                 }
             }
             return View();
