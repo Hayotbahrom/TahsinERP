@@ -2542,6 +2542,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Parameter Name="Type" Type="varchar" Mode="In" />
           <Parameter Name="SupplierID" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetProductListPerShop" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ShopID" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetSupplierParts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SupplierID" Type="int" Mode="In" />
         </Function>
@@ -6440,6 +6443,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <FunctionImport Name="GetSupplierParts">
           <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="GetProductListPerShop" ReturnType="Collection(DBTHSNModel.GetProductListPerShop_Result)">
+          <Parameter Name="ShopID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetPartsInfo_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
@@ -6476,6 +6482,14 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Type="Int32" Name="SupplierID" Nullable="false" />
           <Property Type="String" Name="ContractNo" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="ContractID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetProductListPerShop_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="ProductID" Nullable="false" />
+          <Property Type="Double" Name="Amount" Nullable="false" />
+          <Property Type="Boolean" Name="IsDeleted" Nullable="false" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" />
+          <Property Type="DateTime" Name="DueDate" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -7675,6 +7689,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetSupplierParts" FunctionName="DBTHSNModel.Store.GetSupplierParts" />
+          <FunctionImportMapping FunctionImportName="GetProductListPerShop" FunctionName="DBTHSNModel.Store.GetProductListPerShop">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBTHSNModel.GetProductListPerShop_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

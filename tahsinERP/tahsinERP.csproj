@@ -376,6 +376,7 @@
     <Compile Include="Models\GetPartsInfo_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetProductListPerShop_Result.cs" />
     <Compile Include="Models\GetSupplierParts_Result.cs" />
     <Compile Include="Models\HSCODE.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
@@ -593,6 +594,7 @@
     <Compile Include="ViewModels\BOM\SlittingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingProcessViewModel.cs" />
     <Compile Include="ViewModels\PInvoiceViewModel.cs" />
+    <Compile Include="ViewModels\ProductPlanVM.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
