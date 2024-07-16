@@ -82,7 +82,7 @@ namespace tahsinERP.Controllers
                     Description = model.Description,
                     IssueDateTime = DateTime.Now,
                     SendStatus = model.SendStatus,
-                    SenderWHID = 0
+                    SenderWHID = 1
                 };
 
                 db.PART_WRHS_EXPENSES.Add(newExpense);
@@ -93,7 +93,7 @@ namespace tahsinERP.Controllers
                 int newExpenseID = newExpense.ID;
                 newExpense.SenderWHID = newExpense.ID;
                 db.Entry(newExpense).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.SaveChanges();
                 // Save parts
                 foreach (var part in model.Parts)
                 {
