@@ -35,11 +35,11 @@ namespace tahsinERP.Controllers
 
         public async Task<ActionResult> Create()
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS
                     .Where(p => p.IsDeleted == false)
-                    .ToListAsync(),"ID", "PackingListNo");
+                    .ToListAsync(), "ID", "TransportNo");
                 return View();
             }
         }
@@ -49,10 +49,10 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var checkExistTracing = await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime == tracing.IssueDateTime).FirstOrDefaultAsync();
-                if (checkExistTracing != null)
+                bool checkExistTracing = checkForTodaysInput(tracing.PackingListID, tracing.IssueDateTime); //await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime.ToShortDateString().CompareTo(tracing.IssueDateTime.ToShortDateString()) == 0).FirstOrDefaultAsync();
+                if (checkExistTracing)
                 {
-                    ModelState.AddModelError("", "Bir xil Packinglist va Chiquv sana bilan ma'lumot allaqachon mavjud.");
+                    ModelState.AddModelError("", "Bu sana bilan ma'lumot allaqachon kiritilgan. Qaytadan urunib ko'ring!");
                     return View(tracing);
                 }
                 try
@@ -75,6 +75,20 @@ namespace tahsinERP.Controllers
             }
             return View(tracing);
         }
+
+        private bool checkForTodaysInput(int packingListID, DateTime issueDateTime)
+        {
+            DateTime day = issueDateTime.Date;
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                TRACING tracing = db.TRACINGS.Where(tr => tr.PackingListID == packingListID && tr.IssueDateTime == day).FirstOrDefault();
+                if (tracing != null)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -117,10 +131,10 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var checkExistTracing = await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime == tracing.IssueDateTime).FirstOrDefaultAsync();
-                if (checkExistTracing != null)
+                bool checkExistTracing = checkForTodaysInput(tracing.PackingListID, tracing.IssueDateTime); //await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime.ToShortDateString().CompareTo(tracing.IssueDateTime.ToShortDateString()) == 0).FirstOrDefaultAsync();
+                if (checkExistTracing)
                 {
-                    ModelState.AddModelError("", "Bir xil Packinglist va Chiquv sana bilan ma'lumot allaqachon mavjud.");
+                    ModelState.AddModelError("", "Bu sana bilan ma'lumot allaqachon kiritilgan. Qaytadan urunib ko'ring!");
                     return View(tracing);
                 }
 

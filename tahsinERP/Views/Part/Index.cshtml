@@ -39,7 +39,6 @@
                 <!-- users list start -->
                 <section class="invoice-list-wrapper">
                     <div class="invoice-create-btn mb-1">
-                        <div class="invoice-create-btn mb-1">
                             @if (changePermit)
                             {
                                 <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Part/Create';">
@@ -51,8 +50,7 @@
                             }
                             <a href="~/Part/GetAllParts" >
                                 <span class="align-middle ml-25">Barcha ehtiyot qismlar</span>
-                            </a>    
-                        </div>
+                            </a>  
                     </div>
                     <div class="users-list-filter px-1">
                         <form>
@@ -99,7 +97,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in ViewBag.partList)
+                                                @foreach (var item in ViewBag.productList)
                                                 {
                                                     <tr>
                                                         <td></td>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using tahsinERP.Models;
@@ -57,9 +58,15 @@ namespace tahsinERP.Controllers
                         var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.PartID_before);
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.PartID_after);
 
-                        var cutterLines = (int)((part_before.PWidth) / (part_after.PWidth) - 1);
                         var cutterWidth = model.CutterWidth;
-                        var pieceCount = Convert.ToInt32(Math.Round(part_before.PWidth / part_after.PWidth));
+                        var pieceCount = Convert.ToInt32(Math.Floor(part_before.PWidth / part_after.PWidth));
+                        var cutterLines = (pieceCount - 1);
+
+                        var userImageCookie = Request.Cookies["UserImageId"];
+                        int userImageId = int.Parse(userImageCookie.Value);
+
+                        var userimage = db.USERIMAGES.FirstOrDefault(x => x.ID == userImageId);
+                        int userId = userimage.UserID;
 
                         if (part_after != null && part_before != null)
                         {
@@ -72,12 +79,12 @@ namespace tahsinERP.Controllers
                                 SlittingPieces = pieceCount,
                                 CutterLines = cutterLines,
                                 CutterWidth = cutterWidth,
-                                WeightOfSlittedParts = part_after.PWidth * (part_before.PWeight / part_before.PWidth),
-                                WeightOfCutWaste = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
-                                WidthOfUsefulWaste = part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth),
-                                WeightOfUsefulWaste = (part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth)) * (part_before.PWeight / part_before.PWidth),
+                                WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2 , MidpointRounding.ToEven),
+                                WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines * cutterWidth), 2 ,MidpointRounding.ToEven),
+                                WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)),2, MidpointRounding.ToEven),
+                                WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                                 IssuedDateTime = DateTime.Now,
-                                IssuedByUserID = 5
+                                IssuedByUserID = userId
                             };
                             db.SLITTING_NORMS.Add(slitting_process);
                         }

@@ -1,15 +1,14 @@
-﻿@model  tahsinERP.Models.PRODUCTPLAN
+﻿@model  tahsinERP.ViewModels.ProductPlanVM
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <body>
-
-
     @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
     {
         using (Html.BeginForm("Create", "ProductPlan", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
+            @Html.AntiForgeryToken()
             <div class="app-content content">
                 <div class="content-overlay"></div>
                 <div class="content-wrapper">
@@ -23,14 +22,14 @@
                                                 <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                             </li>
                                             <li class="breadcrumb-item">
-                                                <a href="~/Product/Index">Maxsulotlar</a>
+                                                <a href="~/ProductPlan/Index">Rejalashtirish</a>
                                             </li>
                                             <li class="breadcrumb-item active">
-                                                Yangi maxsulot qo'shish
+                                                Bir maxsulotga reja berish
                                             </li>
                                         </ol>
                                         <div class="invoice-create-btn mb-1">
-                                            <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/Product/UploadWithExcel'">
+                                            <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/ProductPlan/UploadWithExcel'">
                                                 <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali maxsulotlar qo'shish</span>
                                             </button>
                                         </div>
@@ -48,30 +47,32 @@
                                             <div class="card-body pb-0 mx-25">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-6 mt-25">
+                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                        <h6 class="invoice-to">Maxsulotni tanlang</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.DropDownList("ProductID", (SelectList)ViewBag.ProductList, "--tanlang--", new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
+                                                        </fieldset>
                                                         <h6 class="invoice-to">Rejadagi mahsulot miqdori</h6>
                                                         <fieldset class="form-group">
-                                                            @Html.EditorFor(model => model.PlannedQty, new { htmlAttributes = new { @class = "form-control" } })
-                                                            @Html.ValidationMessageFor(model => model.PlannedQty, "", new { @class = "text-danger" })
-                                                        </fieldset>
-                                                        <h6 class="invoice-to">Label</h6>
-                                                        <fieldset class="invoice-address form-group">
-                                                            @Html.EditorFor(model => model.Label, new { htmlAttributes = new { @class = "form-control" } })
-                                                            @Html.ValidationMessageFor(model => model.Label, "", new { @class = "text-danger" })
-                                                        </fieldset>
-                                                        <h6 class="invoice-to">Product biriktirish</h6>
-                                                        <fieldset class="invoice-address form-group">
-                                                            @Html.DropDownList("ProductID", (SelectList)ViewBag.ProductList, "Select Product", new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
+                                                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
                                                         </fieldset>
                                                         <h6 class="invoice-to">Tuzilgan sana</h6>
                                                         <fieldset class="invoice-address form-group">
-                                                            @Html.EditorFor(model => model.IssueDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
-                                                            @Html.ValidationMessageFor(model => model.IssueDate, "", new { @class = "text-danger" })
+                                                            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
+                                                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
                                                         </fieldset>
                                                         <h6 class="invoice-to">Muddati tugaydigan sana </h6>
                                                         <fieldset class="invoice-address form-group">
                                                             @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
                                                             @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <fieldset class="invoice-address form-group">
+                                                            <div class="checkbox checkbox-secondary checkbox-glow">
+                                                                @Html.CheckBoxFor(model => model.IsTwoShiftPlan, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                                <label for="checkboxGlow2">2 ta smenalik rejaga bo'lsinmi?</label>
+                                                            </div>
                                                         </fieldset>
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item border-0 pb-0">

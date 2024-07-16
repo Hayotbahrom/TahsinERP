@@ -19,6 +19,7 @@ namespace tahsinERP.Models
     {
         public DBTHSNEntities()
             : base("name=DBTHSNEntities")
+        
         {
         }
     
@@ -150,6 +151,15 @@ namespace tahsinERP.Models
                 new ObjectParameter("SupplierID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetSupplierParts", supplierIDParameter);
+        }
+    
+        public virtual ObjectResult<GetProductListPerShop_Result> GetProductListPerShop(Nullable<int> shopID)
+        {
+            var shopIDParameter = shopID.HasValue ?
+                new ObjectParameter("ShopID", shopID) :
+                new ObjectParameter("ShopID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductListPerShop_Result>("GetProductListPerShop", shopIDParameter);
         }
     }
 }
