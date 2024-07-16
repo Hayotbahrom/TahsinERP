@@ -59,6 +59,11 @@
                                                         @Html.DropDownListFor(model => model.ShopID, ViewBag.Prod_SHops as SelectList, new { @class = "form-control select2" })
                                                         @Html.ValidationMessageFor(model => model.ShopID, "", new { @class = "text-danger" })
                                                     </fieldset>
+                                                    <h6 class="invoice-to">HSCODE</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownListFor(model => model.HSCodeD, ViewBag.HSCode as SelectList, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.HSCodeD, "", new { @class = "text-danger" })
+                                                    </fieldset>
                                                     <h6 class="invoice-to">Turi</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         @Html.DropDownListFor(model => model.Type, new SelectList(ViewBag.PartTypes, "Select Part Type"), new { @class = "form-control" })

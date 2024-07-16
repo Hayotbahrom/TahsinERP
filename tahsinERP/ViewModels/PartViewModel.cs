@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Irony.Ast;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace tahsinERP.ViewModels
         public bool IsDeleted { get; set; }
         public int PackID { get; set; }
         public int ShopID { get; set; }
+        public int HSCodeD { get; set; }
         public string ShopName { get; set; }
         public bool IsInHouse { get; set; }
         public string Marka { get; set; }
