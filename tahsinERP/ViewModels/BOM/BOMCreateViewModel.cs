@@ -39,6 +39,7 @@ namespace tahsinERP.ViewModels
         {
             public int Welding_PartID { get; set; }
             public string PNo { get; set; }
+            public double WeldingQuantity { get; set; }
         }
 
         public class AssemblyParts

@@ -422,7 +422,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -441,7 +441,7 @@ namespace tahsinERP.Controllers
                         var after_part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
                         var part_before1 = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
 
-                        var cutterLines1 = (int)(after_part.PWidth)/((part_before1.PWidth) - 1);
+                        var cutterLines1 = (int)(after_part.PWidth) / ((part_before1.PWidth) - 1);
                         var cutterWidth1 = selectedSlittingNorm.CutterWidth;
 
                         var bom = new BOM();
@@ -459,13 +459,13 @@ namespace tahsinERP.Controllers
                         bom.Sequence = squance + 1;
                         db.BOMS.Add(bom);
                     }
-                    if (model.SLITTING_NORMS.ID != 0)
+                    if (model.SLITTING_NORMS != null)
                     {
                         var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
 
                         var cutterWidth = model.SLITTING_NORMS.CutterWidth;
-                        var pieceCount = Convert.ToInt32(Math.Floor(part_before.PWidth / part_after.PWidth));
+                        var pieceCount = (part_before.PWidth / part_after.PWidth);
                         var cutterLines = (pieceCount - 1);
 
                         if (part_after != null && part_before != null)
@@ -476,8 +476,8 @@ namespace tahsinERP.Controllers
                                 IsActive = model.IsActive,
                                 PartID_after = model.SLITTING_NORMS.PartID_after,
                                 PartID_before = model.SLITTING_NORMS.PartID_before,
-                                SlittingPieces = pieceCount,
-                                CutterLines = cutterLines,
+                                SlittingPieces = (int)pieceCount,
+                                CutterLines = (int)cutterLines,
                                 CutterWidth = cutterWidth,
                                 WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                                 WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
@@ -496,9 +496,9 @@ namespace tahsinERP.Controllers
                                     ParentPNo = part_after.PNo,
                                     IsDeleted = false,
                                     IsActive = true,
-                                    WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth),
+                                    WasteAmount = Math.Round((part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
                                     ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID,
-                                    Consumption = part_after.PWidth * (part_before.PWeight / part_before.PWidth) / cutterLines,
+                                    Consumption = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth) / cutterLines), 2, MidpointRounding.ToEven),
                                     ConsumptionUnit = "kg",
                                     Sequence = squance + 1,
                                 };
@@ -506,11 +506,11 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
-                    if (model.SLITTING_NORMS.ID != 0 || model.SelectedSlittingNormID != 0)
+                    if (model.SLITTING_NORMS != null || model.SelectedSlittingNormID != 0)
                     {
-                        if (model.BLANKING_NORMS.ID != 0 || model.SelectedBlankingNormID != 0)
+                        if (model.BLANKING_NORMS != null || model.SelectedBlankingNormID != 0)
                         {
-                            if (model.BLANKING_NORMS.ID != 0)
+                            if (model.BLANKING_NORMS != null)
                             {
                                 var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
                                 var part_after_Blanking = db.PARTS.FirstOrDefault(p => p.IsDeleted == false && p.ID == model.BLANKING_NORMS.PartID_after);
@@ -538,13 +538,14 @@ namespace tahsinERP.Controllers
                                         IsDeleted = false,
                                         IsActive = true,
                                         ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
-                                        Consumption = (int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after.PWeight / part_after_Blanking.PWeight),
+                                        WasteAmount = Math.Round((part_after.PWeight / part_after.PWidth), 2, MidpointRounding.ToEven),
+                                        Consumption = Math.Round((int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after.PWeight / part_after_Blanking.PWeight), 2, MidpointRounding.ToEven),
                                         ConsumptionUnit = "kg",
                                         Sequence = squance + 2,
                                     };
                                     db.BOMS.Add(bom);
                                 }
-                                if (model.STAMPING_NORMS.ID != 0 || model.SelectedStampingNormID != 0)
+                                if (model.STAMPING_NORMS != null || model.SelectedStampingNormID != 0)
                                 {
 
                                     var part_after_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.STAMPING_NORMS.PartID_after);
@@ -557,9 +558,9 @@ namespace tahsinERP.Controllers
                                             PartID_before = part_after_Blanking.ID,
                                             PartID_after = part_after_Stamping.ID,
                                             Density = model.STAMPING_NORMS.Density,
-                                            QuantityOfStamps = (int)(part_after_Blanking.PWeight / part_after_Stamping.PWeight),
-                                            WeightOfStamps = (int)(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density),
-                                            WeightOfWaste = part_after_Blanking.PWeight - (part_after_Blanking.PWeight * part_after_Stamping.PWeight),
+                                            QuantityOfStamps = (int)(Math.Round((part_after_Blanking.PWeight / part_after_Stamping.PWeight), 2, MidpointRounding.ToEven)),
+                                            WeightOfStamps = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density)),
+                                            WeightOfWaste = (part_after_Blanking.PWeight - (part_after_Blanking.PWeight * part_after_Stamping.PWeight)),
                                             IssuedDateTime = DateTime.Now,
                                             IssuedByUserID = userId
                                         };
@@ -572,7 +573,8 @@ namespace tahsinERP.Controllers
                                             IsDeleted = false,
                                             IsActive = true,
                                             ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID,
-                                            Consumption = (int)(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight),
+                                            WasteAmount = Math.Round((part_after_Stamping.PWeight / part_after_Stamping.PWidth), 2, MidpointRounding.ToEven),
+                                            Consumption = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight)),
                                             ConsumptionUnit = "kg",
                                             Sequence = squance + 3,
                                         };
@@ -680,33 +682,32 @@ namespace tahsinERP.Controllers
                                                 db.BOMS.Add(bom);
                                             }
                                         }
-
                                     }
                                 }
-
                             }
                         }
-
                     }
 
                     if (model.WeldingPart != null)
                     {
-                        foreach (var part in model.WeldingPart)
+                        if (model.WeldingPart.Any())
                         {
-                            var unit_part = db.PARTS.FirstOrDefault(x => x.PNo == part.PNo);
-                            var bom = new BOM
+
+                            foreach (var part in model.WeldingPart)
                             {
-
-                                ChildPNo = part.PNo,
-                                ParentPNo = model.ProductNo,
-                                IsDeleted = false,
-                                IsActive = true,
-                                ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID,
-                                ConsumptionUnit = "kg",
-                                Sequence = squance + 4,
-
-                            };
-                            db.BOMS.Add(bom);
+                                var unit_part = db.PARTS.FirstOrDefault(x => x.PNo == part.PNo);
+                                var bom = new BOM
+                                {
+                                    ChildPNo = part.PNo,
+                                    ParentPNo = model.ProductNo,
+                                    IsDeleted = false,
+                                    IsActive = true,
+                                    ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID,
+                                    ConsumptionUnit = "kg",
+                                    Sequence = squance + 4,
+                                };
+                                db.BOMS.Add(bom);
+                            }
                         }
                     }
 

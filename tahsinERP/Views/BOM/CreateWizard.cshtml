@@ -178,6 +178,11 @@
                                                                                 @Html.DropDownList("Welding_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
                                                                                 @Html.ValidationMessageFor(model => model.WeldingPart[0].Welding_PartID, "", new { @class = "text-danger" })
                                                                             </fieldset>
+                                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                                <label for="Part_Amount">Miqdori</label>
+                                                                                <input type="number" name="WeldingQuantity" class="form-control" placeholder="Miqdorini kiriting" />
+                                                                                @Html.ValidationMessageFor(model => model.WeldingPart[0].WeldingQuantity, "", new { @class = "text-danger" })
+                                                                            </div>
                                                                             <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
                                                                                 <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
                                                                             </div>
@@ -196,6 +201,7 @@
                                                                 <div data-repeater-list="AssemblyPartID">
                                                                     <div data-repeater-item>
                                                                         <div class="row justify-content-between">
+                                                                            <h6>Detalni tanlang</h6>
                                                                             <fieldset class="invoice-address form-group">
                                                                                 @Html.DropDownList("Assembly_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
                                                                                 @Html.ValidationMessageFor(model => model.AssemblyPart[0].Assamble_PartID, "", new { @class = "text-danger" })
