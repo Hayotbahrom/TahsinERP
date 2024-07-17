@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -85,11 +87,58 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo");
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
             }
 
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(POrderViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var newOrder = new P_ORDERS()
+                {
+                    OrderNo = model.OrderNo,
+                    IssuedDate = model.IssuedDate,
+                    CompanyID = 1,
+                    SupplierID = model.SupplierID,
+                    Currency = model.Currency,
+                    Amount = model.Amount,
+                    Description = model.Description,
+                    IsDeleted = false
+                };
+                db.P_ORDERS.Add(newOrder);
+                db.SaveChanges();
+
+                // Yangi yozuvning IncomeID sini olish
+                int newOrderID = newOrder.ID;
+
+                // Parts ni saqlash
+                foreach (var part in model.Parts)
+                {
+                    var newPart = new P_ORDER_PARTS
+                    {
+                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                        PartID = part.PartID,
+                        Unit = part.Unit,
+                        Amount = part.Amount,
+                        Price = part.Price,
+                        TotalPrice = part.TotalPrice,
+                        MOQ = part.MOQ
+                    };
+
+                    db.P_ORDER_PARTS.Add(newPart);
+                }
+
+                db.SaveChanges();
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
+                return RedirectToAction("Index");
+            }
+        }
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "OrderNo, IssuedDate, CompanyID, SupplierID, ContractID, Amount, Currency, Description")] P_ORDERS order)
         {
@@ -114,7 +163,7 @@ namespace tahsinERP.Controllers
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
                 return View(order);
             }
-        }
+        }*/
         public ActionResult Details(int? id)
         {
             
@@ -413,7 +462,7 @@ namespace tahsinERP.Controllers
                 {
                     try
                     {
-                        var dataTable = new DataTable();
+                        var dataTable = new System.Data.DataTable();
                         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
                         using (var package = new ExcelPackage(file.InputStream))
@@ -508,7 +557,7 @@ namespace tahsinERP.Controllers
             {
                 await Task.Run(() =>
                 {
-                    var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
+                    var tableModel = JsonConvert.DeserializeObject<System.Data.DataTable>(dataTableModel);
 
                     try
                     {
