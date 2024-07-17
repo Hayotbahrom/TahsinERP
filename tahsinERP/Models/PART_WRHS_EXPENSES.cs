@@ -26,12 +26,12 @@ namespace tahsinERP.Models
         public double Amount { get; set; }
         public string Currency { get; set; }
         public double TotalPrice { get; set; }
-        public Nullable<int> ReceiverWhID { get; set; }
+        public int ReceiverWhID { get; set; }
         public int SenderWHID { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         public string Description { get; set; }
         public System.DateTime IssueDateTime { get; set; }
-        public Nullable<bool> SendStatus { get; set; }
+        public bool SendStatus { get; set; }
     
         public virtual PART_WRHS PART_WRHS { get; set; }
         public virtual PART_WRHS PART_WRHS1 { get; set; }
