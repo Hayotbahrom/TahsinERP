@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Spreadsheet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -353,13 +351,39 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 int sequence = 0;
                 var processNames = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
                 var userId = GetUserID(User.Identity.Name);
 
-                if(model.SLITTING_NORMS != null)
+                var welding = model.WeldingPart;
+                if (model.SelectedSlittingNormID != 0)
+                {
+                    var selectedSlittingNorm = db.SLITTING_NORMS.Find(model.SelectedSlittingNormID);
+
+                    var after_part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
+                    var part_before1 = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
+
+                    var cutterLines1 = (int)(after_part.PWidth) / ((part_before1.PWidth) - 1);
+                    var cutterWidth1 = selectedSlittingNorm.CutterWidth;
+
+                    var bom = new BOM();
+
+                    bom.ChildPNo = part_before1.PNo;
+                    bom.ParentPNo = after_part.PNo;
+                    bom.IsDeleted = false;
+                    if (model.ProductNo != null) { bom.IsParentProduct = true; }
+                    else { bom.IsParentProduct = false; }
+                    bom.IsActive = true;
+                    bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1 * cutterWidth1);
+                    bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID;
+                    bom.Consumption = selectedSlittingNorm.WeightOfSlittedParts / cutterLines1;
+                    bom.ConsumptionUnit = "kg";
+                    bom.Sequence = sequence + 1;
+                    db.BOMS.Add(bom);
+                }
+                if (model.SLITTING_NORMS != null)
                 {
                     var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
                     var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
@@ -384,7 +408,7 @@ namespace tahsinERP.Controllers
                             WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)), 2, MidpointRounding.ToEven),
                             WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                             IssuedDateTime = DateTime.Now,
-                            IssuedByUserID = userId.GetValueOrDefault(),
+                            IssuedByUserID = userId.GetValueOrDefault()
                         };
                         db.SLITTING_NORMS.Add(slitting_process);
 
@@ -407,15 +431,233 @@ namespace tahsinERP.Controllers
                     }
                 }
 
+                if (model.BLANKING_NORMS != null || model.SelectedBlankingNormID != 0)
+                {
+                    if (model.BLANKING_NORMS != null)
+                    {
+                        var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
+                        var part_after_Blanking = db.PARTS.FirstOrDefault(p => p.IsDeleted == false && p.ID == model.BLANKING_NORMS.PartID_after);
+                        if (part_after_Blanking != null && part_after != null)
+                        {
+                            var blanking_norms = new BLANKING_NORMS
+                            {
+                                IsDeleted = false,
+                                IsActive = model.BLANKING_NORMS.IsActive,
+                                PartID_before = part_after.ID,
+                                PartID_after = part_after_Blanking.ID,
+                                Density = model.BLANKING_NORMS.Density,
+                                QuantityOfBlanks = (int)(part_after.PWeight / part_after_Blanking.PWeight),
+                                WeightOfBlanks = (int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density),
+                                WeightOfCutWaste = part_after.PWeight - (part_after.PWeight * part_after_Blanking.PWeight),
+                                IssuedDateTime = DateTime.Now,
+                                IssuedByUserID = userId.GetValueOrDefault()
+                            };
+                            db.BLANKING_NORMS.Add(blanking_norms);
+
+                            var bom = new BOM
+                            {
+                                ChildPNo = part_after_Blanking.PNo,
+                                ParentPNo = part_after.PNo,
+                                IsDeleted = false,
+                                IsActive = true,
+                                ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
+                                WasteAmount = Math.Round((part_after.PWeight / part_after.PWidth), 2, MidpointRounding.ToEven),
+                                Consumption = Math.Round((int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after.PWeight / part_after_Blanking.PWeight), 2, MidpointRounding.ToEven),
+                                ConsumptionUnit = "kg",
+                                Sequence = sequence + 2,
+                            };
+                            db.BOMS.Add(bom);
+                        }
+                        if (model.STAMPING_NORMS != null || model.SelectedStampingNormID != 0)
+                        {
+
+                            var part_after_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.STAMPING_NORMS.PartID_after);
+                            if (part_after_Stamping != null && part_after_Blanking != null)
+                            {
+                                var stamping = new STAMPING_NORMS
+                                {
+                                    IsDeleted = false,
+                                    IsActive = model.STAMPING_NORMS.IsActive,
+                                    PartID_before = part_after_Blanking.ID,
+                                    PartID_after = part_after_Stamping.ID,
+                                    Density = model.STAMPING_NORMS.Density,
+                                    QuantityOfStamps = (int)(Math.Round((part_after_Blanking.PWeight / part_after_Stamping.PWeight), 2, MidpointRounding.ToEven)),
+                                    WeightOfStamps = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density)),
+                                    WeightOfWaste = (part_after_Blanking.PWeight - (part_after_Blanking.PWeight * part_after_Stamping.PWeight)),
+                                    IssuedDateTime = DateTime.Now,
+                                    IssuedByUserID = userId.GetValueOrDefault()
+                                };
+                                db.STAMPING_NORMS.Add(stamping);
+
+                                var bom = new BOM
+                                {
+                                    ChildPNo = part_after_Stamping.PNo,
+                                    ParentPNo = part_after_Blanking.PNo,
+                                    IsDeleted = false,
+                                    IsActive = true,
+                                    ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID,
+                                    WasteAmount = Math.Round((part_after_Stamping.PWeight / part_after_Stamping.PWidth), 2, MidpointRounding.ToEven),
+                                    Consumption = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight)),
+                                    ConsumptionUnit = "kg",
+                                    Sequence = sequence + 3,
+                                };
+                                db.BOMS.Add(bom);
+                            }
+                            else if (model.SelectedStampingNormID != 0)
+                            {
+                                var selectedStampingNorm = db.STAMPING_NORMS.Find(model.SelectedStampingNormID);
+                                if (selectedStampingNorm != null)
+                                {
+                                    var part_after_stamping = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedStampingNorm.PartID_after);
+
+                                    var bom = new BOM
+                                    {
+                                        ChildPNo = part_after_Stamping.PNo,
+                                        ParentPNo = part_after_Blanking.PNo,
+                                        IsDeleted = false,
+                                        IsActive = true,
+                                        ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
+                                        Consumption = (int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after.PWeight / part_after_Blanking.PWeight),
+                                        ConsumptionUnit = "kg",
+                                        Sequence = sequence + 1,
+                                    };
+                                    db.BOMS.Add(bom);
+                                }
+                            }
+                        }
+                    }
+                    else if (model.SelectedBlankingNormID != 0)
+                    {
+                        var selectedBlankingNorm = db.BLANKING_NORMS.Find(model.SelectedBlankingNormID);
+                        if (selectedBlankingNorm != null)
+                        {
+                            var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedBlankingNorm.PartID_after);
+                            var part_after_Blanking = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedBlankingNorm.PartID_before);
+
+                            if (part_after_Blanking != null && part_after != null)
+                            {
+                                var bom = new BOM
+                                {
+                                    ChildPNo = part_after_Blanking.PNo,
+                                    ParentPNo = part_after.PNo,
+                                    IsDeleted = false,
+                                    IsActive = true,
+                                    ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
+                                    Consumption = (int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after.PWeight / part_after_Blanking.PWeight),
+                                    ConsumptionUnit = "kg",
+                                    Sequence = sequence + 2,
+                                };
+                                db.BOMS.Add(bom);
+                            }
+                            if (model.STAMPING_NORMS != null)
+                            {
+
+                                var part_after_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.SelectedStampingNormID);
+                                if (part_after_Stamping != null && part_after_Blanking != null)
+                                {
+                                    var stamping = new STAMPING_NORMS
+                                    {
+                                        IsDeleted = false,
+                                        IsActive = model.STAMPING_NORMS.IsActive,
+                                        PartID_before = part_after_Blanking.ID,
+                                        PartID_after = part_after_Stamping.ID,
+                                        Density = model.STAMPING_NORMS.Density,
+                                        QuantityOfStamps = (int)(part_after_Blanking.PWeight / part_after_Stamping.PWeight),
+                                        WeightOfStamps = (int)(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density),
+                                        WeightOfWaste = part_after_Blanking.PWeight - (part_after_Blanking.PWeight * part_after_Stamping.PWeight),
+                                        IssuedDateTime = DateTime.Now,
+                                        IssuedByUserID = userId.GetValueOrDefault()
+                                    };
+                                    db.STAMPING_NORMS.Add(stamping);
+
+                                    var bom = new BOM
+                                    {
+                                        ChildPNo = part_after_Stamping.PNo,
+                                        ParentPNo = part_after_Blanking.PNo,
+                                        IsDeleted = false,
+                                        IsActive = true,
+                                        ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID,
+                                        Consumption = (int)(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight),
+                                        ConsumptionUnit = "kg",
+                                        Sequence = sequence + 3,
+                                    };
+                                    db.BOMS.Add(bom);
+                                }
+                                else if (model.SelectedStampingNormID != 0)
+                                {
+                                    var part_after_Blanking1 = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedBlankingNorm.PartID_before);
+                                    var selectedStampingNorm = db.STAMPING_NORMS.Find(model.SelectedStampingNormID);
+                                    if (selectedStampingNorm != null)
+                                    {
+                                        var part_after_stamping = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedStampingNorm.PartID_after);
+
+                                        var bom = new BOM
+                                        {
+                                            ChildPNo = part_after_Stamping.PNo,
+                                            ParentPNo = part_after_Blanking1.PNo,
+                                            IsDeleted = false,
+                                            IsActive = true,
+                                            ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
+                                            Consumption = (int)(part_after.PWidth * part_after.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after.PWeight / part_after_Blanking.PWeight),
+                                            ConsumptionUnit = "kg",
+                                            Sequence = sequence + 3,
+                                        };
+                                        db.BOMS.Add(bom);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+                if (model.WeldingPart != null)
+                {
+                    if (model.WeldingPart.Any())
+                    {
+
+                        foreach (var part in model.WeldingPart)
+                        {
+                            var unit_part = db.PARTS.FirstOrDefault(x => x.PNo == part.PNo);
+                            var bom = new BOM
+                            {
+                                ChildPNo = part.PNo,
+                                ParentPNo = model.ProductNo,
+                                IsDeleted = false,
+                                IsActive = true,
+                                ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID,
+                                ConsumptionUnit = "kg",
+                                Sequence = sequence + 4,
+                            };
+                            db.BOMS.Add(bom);
+                        }
+                    }
+                }
+
+                if (model.AssemblyPart != null)
+                {
+                    int count = 0;
+                    foreach (var part in model.AssemblyPart)
+                    {
+                        var bom = new BOM();
+                        bom.ChildPNo = part.PNo;
+                        bom.ParentPNo = model.ProductNo;
+                        bom.IsDeleted = false;
+                        bom.IsActive = true;
+                        bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Assembly")?.ID;
+                        bom.ConsumptionUnit = "kg";
+                        bom.Sequence = sequence + 5;
+                        count += 1;
+                        bom.Consumption = count;
+
+                        db.BOMS.Add(bom);
+                    }
+                }
+
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
 
             }
-
-            return View();
-
         }
-        
-
-            
-
     }
 }

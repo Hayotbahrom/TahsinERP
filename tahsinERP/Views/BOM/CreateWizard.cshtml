@@ -171,16 +171,19 @@
 
                                                         case "Welding":
                                                             <fieldset>
-                                                                <div data-repeater-list="WeldingsPartID">
+                                                                <div data-repeater-list="WeldingPart">
                                                                     <div data-repeater-item>
                                                                         <div class="row justify-content-between">
-                                                                            <label for="Part_Amount">Detallni tanlang</label>
-                                                                            <fieldset class="invoice-address form-group">
-                                                                                @Html.DropDownList("Welding_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
-                                                                                @Html.ValidationMessageFor(model => model.WeldingPart[0].Welding_PartID, "", new { @class = "text-danger" })
-                                                                            </fieldset>
+
                                                                             <div class="col-md-2 col-sm-12 form-group">
-                                                                                <label for="Part_Amount">Miqdori</label>
+                                                                                <h6>Detalni tanlang</h6>
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("Welding_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
+                                                                                    @Html.ValidationMessageFor(model => model.WeldingPart[0].Welding_PartID, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                                <h6>Miqdori</h6>
                                                                                 <input type="number" name="WeldingQuantity" class="form-control" placeholder="Miqdorini kiriting" />
                                                                                 @Html.ValidationMessageFor(model => model.WeldingPart[0].WeldingQuantity, "", new { @class = "text-danger" })
                                                                             </div>
@@ -188,8 +191,8 @@
                                                                                 <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
                                                                             </div>
                                                                         </div>
-                                                                        <hr>
-                                                                    </div>
+                                                                            <hr>
+                                                                        </div>
                                                                 </div>
                                                                 <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
                                                                 <br />
