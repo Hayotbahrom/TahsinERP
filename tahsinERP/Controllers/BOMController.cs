@@ -303,8 +303,8 @@ namespace tahsinERP.Controllers
 
                         var bom = new BOM();
 
-                        bom.ChildPNo = after_part.PNo;
-                        bom.ParentPNo = part_before1.PNo;
+                        bom.ChildPNo = part_before1.PNo;
+                        bom.ParentPNo = after_part.PNo;
                         bom.IsDeleted = false;
                         if (model.ProductNo != null) { bom.IsParentProduct = true; }
                         else { bom.IsParentProduct = false; }
@@ -312,7 +312,7 @@ namespace tahsinERP.Controllers
                         bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1 * cutterWidth1);
                         bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID;
                         bom.Consumption = selectedSlittingNorm.WeightOfSlittedParts / cutterLines1;
-                        bom.ConsumptionUnit = "dona";
+                        bom.ConsumptionUnit = "kg";
                         bom.Sequence = sequence + 1;
                         db.BOMS.Add(bom);
                     }
@@ -356,7 +356,7 @@ namespace tahsinERP.Controllers
                                     WasteAmount = Math.Round((part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
                                     ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID,
                                     Consumption = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth) / cutterLines), 2, MidpointRounding.ToEven),
-                                    ConsumptionUnit = "dona",
+                                    ConsumptionUnit = "kg",
                                     Sequence = sequence + 1,
                                 };
                                 db.BOMS.Add(bom);
@@ -396,7 +396,7 @@ namespace tahsinERP.Controllers
                                     ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
                                     WasteAmount = Math.Round((part_after_slitting.PWeight / part_after_slitting.PWidth), 2, MidpointRounding.ToEven),
                                     Consumption = Math.Round((int)(part_after_slitting.PWidth * part_after_slitting.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after_slitting.PWeight / part_after_Blanking.PWeight), 2, MidpointRounding.ToEven),
-                                    ConsumptionUnit = "dona",
+                                    ConsumptionUnit = "kg",
                                     Sequence = sequence + 2,
                                 };
                                 db.BOMS.Add(bom);
@@ -425,14 +425,14 @@ namespace tahsinERP.Controllers
 
                                     var bom = new BOM
                                     {
-                                        ChildPNo = part_after_Stamping.PNo,
-                                        ParentPNo = part_after_Blanking.PNo,
+                                        ChildPNo = part_after_Blanking.PNo,
+                                        ParentPNo = part_after_Stamping.PNo,
                                         IsDeleted = false,
                                         IsActive = true,
                                         ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID,
                                         WasteAmount = Math.Round((part_after_Stamping.PWeight / part_after_Stamping.PWidth), 2, MidpointRounding.ToEven),
                                         Consumption = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight)),
-                                        ConsumptionUnit = "dona",
+                                        ConsumptionUnit = "kg",
                                         Sequence = sequence + 3,
                                     };
                                     db.BOMS.Add(bom);
@@ -453,7 +453,7 @@ namespace tahsinERP.Controllers
                                             IsActive = true,
                                             ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
                                             Consumption = (int)(part_after_slitting.PWidth * part_after_slitting.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after_slitting.PWeight / part_after_Blanking.PWeight),
-                                            ConsumptionUnit = "dona",
+                                            ConsumptionUnit = "kg",
                                             Sequence = sequence + 1,
                                         };
                                         db.BOMS.Add(bom);
@@ -481,7 +481,7 @@ namespace tahsinERP.Controllers
                                             IsActive = true,
                                             ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
                                             Consumption = (int)(part_before_Blanking.PWidth * part_before_Blanking.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_before_Blanking.PWeight / part_after_Blanking.PWeight),
-                                            ConsumptionUnit = "dona",
+                                            ConsumptionUnit = "kg",
                                             Sequence = sequence + 2,
                                         };
                                         db.BOMS.Add(bom);
@@ -496,7 +496,7 @@ namespace tahsinERP.Controllers
                                         var stamping = new STAMPING_NORMS
                                         {
                                             IsDeleted = false,
-                                            IsActive = model.STAMPING_NORMS.IsActive,
+                                            IsActive = model.STAMPING_NORMS.IsActive,   
                                             PartID_before = part_after_Blanking.ID,
                                             PartID_after = part_after_Stamping.ID,
                                             Density = model.STAMPING_NORMS.Density,
@@ -516,7 +516,7 @@ namespace tahsinERP.Controllers
                                             IsActive = true,
                                             ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID,
                                             Consumption = (int)(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight),
-                                            ConsumptionUnit = "dona",
+                                            ConsumptionUnit = "kg",
                                             Sequence = sequence + 3,
                                         };
                                         db.BOMS.Add(bom);
@@ -537,7 +537,7 @@ namespace tahsinERP.Controllers
                                             IsActive = true,
                                             ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
                                             Consumption = (int)(part_before_stamping.PWidth * part_before_stamping.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_before_stamping.PWeight / part_after_Blanking.PWeight),
-                                            ConsumptionUnit = "dona",
+                                            ConsumptionUnit = "kg",
                                             Sequence = sequence + 3,
                                         };
                                         db.BOMS.Add(bom);
@@ -560,7 +560,7 @@ namespace tahsinERP.Controllers
                                 IsDeleted = false,
                                 IsActive = true,
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID,
-                                ConsumptionUnit = "dona",
+                                ConsumptionUnit = "kg",
                                 Consumption = part.WeldingQuantity,
                                 Sequence = sequence + 4,
                             };
@@ -580,7 +580,7 @@ namespace tahsinERP.Controllers
                             bom.IsDeleted = false;
                             bom.IsActive = true;
                             bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Assembly")?.ID;
-                            bom.ConsumptionUnit = "dona";
+                            bom.ConsumptionUnit = "kg";
                             bom.Sequence = sequence + 5;
                             count += 1;
                             bom.Consumption = count;
