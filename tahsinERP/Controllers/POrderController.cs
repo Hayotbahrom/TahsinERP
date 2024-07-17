@@ -27,7 +27,7 @@ namespace tahsinERP.Controllers
         // GET: POrder
         public ActionResult Index(string type, int? supplierID)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 IQueryable<P_ORDERS> ordersQuery = db.P_ORDERS
                     .Where(po => po.IsDeleted == false);
@@ -36,13 +36,11 @@ namespace tahsinERP.Controllers
                 {
                     ViewBag.SourceList = new SelectList(sources, type);
 
-                    // Fetch SUPPLIER IDs matching the type
                     List<int> supplierIds = db.SUPPLIERS
                         .Where(s => s.Type == type && s.IsDeleted == false)
                         .Select(s => s.ID)
                         .ToList();
 
-                    // Filter orders by matching SUPPLIER IDs
                     ordersQuery = ordersQuery
                         .Where(po => supplierIds.Contains((int)po.SupplierID));
                 }
@@ -57,7 +55,6 @@ namespace tahsinERP.Controllers
                         .Where(s => s.ID == supplierID && s.IsDeleted == false)
                         .ToList(), "ID", "Name", supplierID);
 
-                    // Filter orders by supplierID
                     ordersQuery = ordersQuery
                         .Where(po => po.SupplierID == supplierID);
                 }
@@ -68,15 +65,14 @@ namespace tahsinERP.Controllers
                         .ToList(), "ID", "Name");
                 }
 
-                // Ensure Include is applied after filtering
                 ordersQuery = ordersQuery.Include(po => po.P_CONTRACTS);
                 ViewBag.Type = type;
-                // Materialize the query into a list
                 List<P_ORDERS> orders = ordersQuery.ToList();
 
                 return View(orders);
             }
         }
+
 
 
 
@@ -104,6 +100,7 @@ namespace tahsinERP.Controllers
                     IssuedDate = model.IssuedDate,
                     CompanyID = 1,
                     SupplierID = model.SupplierID,
+                    ContractID = model.ContractID,
                     Currency = model.Currency,
                     Amount = model.Amount,
                     Description = model.Description,
