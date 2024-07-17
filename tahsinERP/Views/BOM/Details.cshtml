@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.ParentViewModel
+﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -33,7 +33,8 @@
 
         <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
             <i class='bx bx-save'></i>
-            PDF</button>
+            PDF
+        </button>
         <br />
 
         <span class="display">Ko'rsatish: </span>
@@ -46,7 +47,34 @@
             yoyilgan
         </label>
 
-        <ol class="wtree" id="toPDF">
+        <div id="treeview">
+            @if (Model != null)
+            {
+                <ol class="wtree" id="toPDF">
+                    @Html.Partial("_BomTreePartial", Model)
+                </ol>
+            }
+        </div>
+
+        @helper BomTree(BomViewModel model)
+        {
+            <li>
+                @model.ParentPNo - @model.ChildPNo(Consumption: @model.Consumption)
+                @if (model.Children != null && model.Children.Any())
+                {
+                    <ul>
+                        @foreach (var child in model.Children)
+                        {
+                            @BomTree(child)
+                        }
+                    </ul>
+                }
+            </li>
+        }
+
+        @Html.Raw(BomTree(Model))
+
+        @*<ol class="wtree" id="toPDF">
             @if (Model.PRODUCT != null)
             {
                 <li id="li">
@@ -159,7 +187,7 @@
                     </li>
                 }
             }
-        </ol>
+        </ol>*@
     </div>
 </div>
 

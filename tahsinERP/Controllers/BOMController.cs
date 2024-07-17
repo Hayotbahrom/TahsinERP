@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 using tahsinERP.ViewModels.BOM;
@@ -43,7 +44,7 @@ namespace tahsinERP.Controllers
                        ProductID = product.ID,
                        IsParentProduct = false,
                        ID = product.ID
-                   })   
+                   })
                        .GroupBy(item => new { item.ParentPNo, item.ID })
                        .Select(group => group.FirstOrDefault()).ToList();
 
@@ -52,7 +53,6 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-
         public ActionResult Details(int ID, bool isParent)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -60,127 +60,66 @@ namespace tahsinERP.Controllers
                 PRODUCT product = db.PRODUCTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
                 PART part = db.PARTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
 
-                if (isParent)
-                {
-                    var bomList = db.BOMS.Where(b => b.ParentPNo == product.PNo && b.IsDeleted == false).ToList();
-
-                    ParentViewModel parent = new ParentViewModel();
-                    parent.PRODUCT = product;
-                    parent.ParentPNo = product.PNo;
-                    parent.IsParentProduct = true;
-                    parent.ParentImageBase64 = GetParentImage(product.ID, parent.IsParentProduct);
-
-                    if (bomList.Count > 0)
-                    {
-                        foreach (var bom in bomList)
-                        {
-                            PART childPart = db.PARTS.Where(p => p.PNo == bom.ChildPNo && p.IsDeleted == false).FirstOrDefault();
-                            if (childPart != null)
-                            {
-                                ChildViewModel child = new ChildViewModel();
-                                child.PART = childPart;
-                                child.ChildPNo = childPart.PNo;
-                                child.ChildImageBase64 = GetChildImage(childPart.ID);
-                                child.Consumption = bom.Consumption;
-                                child.ConsumptionUnit = bom.ConsumptionUnit;
-                                parent.Children.Add(child);
-
-                                if (CheckForParentStatusOfChild(childPart.PNo))
-                                {
-                                    var childBomList = db.BOMS.Where(b => b.ParentPNo == child.PART.PNo && b.IsDeleted == false).ToList();
-                                    foreach (var childBom in childBomList)
-                                    {
-                                        PART grandchildPart = db.PARTS.Where(p => p.PNo == childBom.ChildPNo && p.IsDeleted == false).FirstOrDefault();
-                                        if (grandchildPart != null)
-                                        {
-                                            ChildViewModel grandChild = new ChildViewModel();
-                                            grandChild.PART = grandchildPart;
-                                            grandChild.ChildPNo = grandchildPart.PNo;
-                                            grandChild.ChildImageBase64 = GetChildImage(grandchildPart.ID);
-                                            grandChild.Consumption = childBom.Consumption;
-                                            grandChild.ConsumptionUnit = childBom.ConsumptionUnit;
-                                            child.Children.Add(grandChild);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return View(parent);
-                }
-                else if (product == null && part == null)
-                {
-                    return HttpNotFound();
-                }
-                else
-                {
-                    var bomList = db.BOMS.Where(b => b.ParentPNo == part.PNo && b.IsDeleted == false).ToList();
-
-                    ParentViewModel parent = new ParentViewModel();
-                    parent.PART = part;
-                    parent.ParentPNo = part.PNo;
-                    parent.IsParentProduct = false;
-                    parent.ParentImageBase64 = GetParentImage(part.ID, parent.IsParentProduct);
-
-                    if (bomList.Count > 0)
-                    {
-                        foreach (var bom in bomList)
-                        {
-                            PART childPart = db.PARTS.Where(p => p.PNo == bom.ChildPNo && p.IsDeleted == false).FirstOrDefault();
-                            if (childPart != null)
-                            {
-                                ChildViewModel child = new ChildViewModel();
-                                child.PART = childPart;
-                                child.ChildPNo = childPart.PNo;
-                                child.ChildImageBase64 = GetChildImage(childPart.ID);
-                                child.Consumption = bom.Consumption;
-                                child.ConsumptionUnit = bom.ConsumptionUnit;
-                                parent.Children.Add(child);
-
-                                //if (CheckForParentStatusOfChild(childPart.PNo))
-                                //{
-                                //    var childBomList = db.BOMS.Where(b => b.ParentPNo == child.PART.PNo && b.IsDeleted == false).ToList();
-                                //    foreach (var childBom in childBomList)
-                                //    {
-                                //        PART grandchildPart = db.PARTS.Where(p => p.PNo == childBom.ChildPNo && p.IsDeleted == false).FirstOrDefault();
-                                //        if (grandchildPart != null)
-                                //        {
-                                //            ChildViewModel grandChild = new ChildViewModel();
-                                //            grandChild.PART = grandchildPart;
-                                //            grandChild.ChildPNo = grandchildPart.PNo;
-                                //            grandChild.ChildImageBase64 = GetChildImage(grandchildPart.ID);
-                                //            grandChild.Consumption = childBom.Consumption;
-                                //            grandChild.ConsumptionUnit = childBom.ConsumptionUnit;
-                                //            child.Children.Add(grandChild);
-                                //        }
-                                //    }
-                                //}
-                            }
-                        }
-                    }
-                    return View(parent);
-                }
+                var rootItem = GetBomTree(product.PNo);
+                return View(rootItem);
             }
         }
-        private bool CheckForParentStatusOfChild(string pNo)
+        public ActionResult _BomTreePartial() {
+            return View();
+        }
+
+        private BoomViewModel GetBomTree(string parentPno)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var bom = db.BOMS.Where(b => b.ParentPNo.CompareTo(pNo) == 0 && b.IsDeleted == false).FirstOrDefault();
-                if (bom != null)
-                    return true;
-                else
-                    return false;
+                // Get all BOMS entries with the given parentId
+                var parentItems = db.BOMS.Where(b => b.ParentPNo == parentPno && b.IsDeleted == false).ToList();
+
+                if (!parentItems.Any())
+                {
+                    return null;
+                }
+
+                // Create the root BomViewModel
+                var root = new BoomViewModel
+                {
+                    ParentPNo = parentPno,
+                    ParentImageBase64 = GetParentImage(parentPno),
+                    Children = parentItems.Select(b => new BoomViewModel
+                    {
+                        ParentPNo = b.ParentPNo,
+                        ChildPNo = b.ChildPNo,
+                        ChildImageBase64 = GetChildImage(b.ChildPNo),
+                        Consumption = b.Consumption,
+                        ConsumptionUnit = b.ConsumptionUnit,
+                        Children = GetBomTree(b.ChildPNo)?.Children // Recursively get the children
+                    }).ToList()
+                };
+
+                return root;
             }
         }
-        private string GetParentImage(int iD, bool isParentProduct)
+        //private bool CheckForParentStatusOfChild(string pNo)
+        //{
+        //    using (DBTHSNEntities db = new DBTHSNEntities())
+        //    {
+        //        var bom = db.BOMS.Where(b => b.ParentPNo.CompareTo(pNo) == 0 && b.IsDeleted == false).FirstOrDefault();
+        //        if (bom != null)
+        //            return true;
+        //        else
+        //            return false;
+        //    }
+        //}
+        private string GetParentImage(string PNo)
         {
             string Base64String = "";
             using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                if (isParentProduct)
+            { 
+                var product = db.PRODUCTS.Where(p => p.PNo.CompareTo(PNo) == 0).FirstOrDefault();
+                var part = db.PARTS.Where(p => p.PNo.CompareTo(PNo) == 0).FirstOrDefault();
+                if (product != null)
                 {
-                    var productImage = db.PRODUCTIMAGES.FirstOrDefault(pi => pi.ProdID == iD);
+                    var productImage = db.PRODUCTIMAGES.FirstOrDefault(pi => pi.ProdID == product.ID);
                     if (productImage != null)
                     {
                         Base64String = "data:image/jpeg;base64," + Convert.ToBase64String(productImage.Image);
@@ -188,7 +127,7 @@ namespace tahsinERP.Controllers
                 }
                 else
                 {
-                    var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == iD);
+                    var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == part.ID);
                     if (partImage != null)
                     {
                         Base64String = "data:image/jpeg;base64," + Convert.ToBase64String(partImage.Image);
@@ -197,27 +136,19 @@ namespace tahsinERP.Controllers
                 return Base64String;
             }
         }
-        private string GetChildImage(int iD)
+        private string GetChildImage(string PNo)
         {
             string Base64String = "";
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == iD);
+                var part = db.PARTS.Where(p => p.PNo.CompareTo(PNo) == 0).FirstOrDefault();
+                var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == part.ID);
                 if (partImage != null)
                 {
                     Base64String = "data:image/jpeg;base64," + Convert.ToBase64String(partImage.Image);
                 }
                 return Base64String;
             }
-        }
-        public ActionResult WizardView()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult WizardView(BomViewModel model)
-        {
-            return View();
         }
         public ActionResult Create()
         {
