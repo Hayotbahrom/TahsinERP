@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -20,18 +22,27 @@ namespace tahsinERP.Controllers
                     .Include(p => p.P_INVOICE_PACKINGLISTS)
                     .Where(p => p.IsDeleted == false)
                     .GroupBy(t => t.P_INVOICE_PACKINGLISTS.TransportNo)
-                    .Select(g => new
+                    .Select(g => new TracingViewModel
                     {
+                        
                         TransportNo = g.Key,
                         LastIssueDateTime = g.Max(t => t.IssueDateTime),
-                        LastTracing = g.OrderByDescending(t => t.IssueDateTime).FirstOrDefault(t => t.ActualDistanceToDestination == 0),
+                        LastTracing = g.OrderByDescending(t => t.IssueDateTime).FirstOrDefault(),
                         Tracings = g.OrderBy(t => t.IssueDateTime).ToList()
                     })
                     .ToListAsync();
 
+                // Ensure the list is not null
+                if (list == null)
+                {
+                    list = new List<TracingViewModel>();
+                }
+
                 return View(list);
             }
         }
+
+
 
         public async Task<ActionResult> Create()
         {
@@ -88,10 +99,32 @@ namespace tahsinERP.Controllers
                     return false;
             }
         }
-
         public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id is null)
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var existTracingTransportNo = await db.TRACINGS
+                                                    .Include(p => p.P_INVOICE_PACKINGLISTS)
+                                                    .Where(p=> p.IsDeleted == false && p.ID == id)
+                                                    .FirstOrDefaultAsync();
+
+                var tracingList = await db.TRACINGS
+                    .Include(p => p.P_INVOICE_PACKINGLISTS)
+                    .Where(p => p.IsDeleted == false && p.P_INVOICE_PACKINGLISTS.TransportNo == existTracingTransportNo.P_INVOICE_PACKINGLISTS.TransportNo)
+                    .ToListAsync();
+
+                if (tracingList == null || tracingList.Count == 0)
+                    return HttpNotFound();
+
+                return View(tracingList);
+            }
+        }
+        /*public async Task<ActionResult> Details(string transportNo)
+        {
+            if (string.IsNullOrEmpty(transportNo))
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -99,13 +132,15 @@ namespace tahsinERP.Controllers
 
                 var tracingList = await db.TRACINGS
                     .Include(p => p.P_INVOICE_PACKINGLISTS)
-                    .Where(p => p.IsDeleted == false).ToListAsync();
-                if (tracingList == null)
+                    .Where(p => p.IsDeleted == false && p.P_INVOICE_PACKINGLISTS.TransportNo == transportNo)
+                    .ToListAsync();
+
+                if (tracingList == null || tracingList.Count == 0)
                     return HttpNotFound();
 
                 return View(tracingList);   
             }
-        }
+        }*/
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
