@@ -251,7 +251,7 @@
             <div class="shadow-bottom"></div>
             <div class="main-menu-content">
                 <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2">2</span></a>
                         <ul class="menu-content">
                             <li>
@@ -340,7 +340,6 @@
                     }
                     @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
                     {
-
                         <li class=" nav-item">
                             <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
                             <ul class="menu-content">
@@ -359,30 +358,34 @@
                             </ul>
                         </li>
                     }
-
-                    <li class=" nav-item">
-                        <a href="#">
-                            <i class="bx bxs-right-arrow-circle"></i><span class="menu-title" data-i18n="Icons">Logistika</span>
-                        </a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/Waybill/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Logistika ma'lumotlari</span></a>
-                            </li>
-                            <li>
-                                <a href="~/FContract/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Logistika shartnomalari</span></a>
-                                <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Ro'yxat</span></a>
-                            </li>
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
-                            </li>
-                            <li>
-                                <a href="~/Forwarder/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Forwarder lar</span></a>
-                            </li>
-                            <li>
-                                <a href="~/FTransportType/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Transport turi</span></a>
-                            </li>
-                        </ul>
-                    </li>
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice")) {
+                        <li class=" nav-item">
+                            <a href="#">
+                                <i class="bx bxs-right-arrow-circle"></i><span class="menu-title" data-i18n="Icons">Logistika</span>
+                            </a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/Waybill/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Logistika ma'lumotlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/FContract/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Logistika shartnomalari</span></a>
+                                    <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Ro'yxat</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/Forwarder/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Forwarder lar</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/FTransportType/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Transport turi</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice")) {
+                    
+                    }
                     <li class=" nav-item">
                         <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
                         <ul class="menu-content">
