@@ -588,6 +588,7 @@
     <Compile Include="ViewModels\BOM\BOMCreateViewModel.cs" />
     <Compile Include="ViewModels\BOM\StampingNormViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
+    <Compile Include="ViewModels\PackingListViewModel.cs" />
     <Compile Include="ViewModels\PartViewModel.cs" />
     <Compile Include="ViewModels\PContractViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleEditViewModel.cs" />
@@ -600,6 +601,7 @@
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />
     <Compile Include="ViewModels\SContractViewModel.cs" />
+    <Compile Include="ViewModels\TracingViewModel.cs" />
     <Compile Include="ViewModels\WrhsExpenseViewModel.cs" />
     <Compile Include="ViewModels\WrhsIncomeViewModel.cs" />
     <Compile Include="ViewModels\TransportTypeViewModel.cs" />
