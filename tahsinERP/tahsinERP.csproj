@@ -2565,7 +2565,7 @@
     <Content Include="Views\Tracing\Details.cshtml" />
     <Content Include="Views\Tracing\Edit.cshtml" />
     <Content Include="Views\Tracing\Delete.cshtml" />
-    <Content Include="Views\BOM\_ChildPartView.cshtml" />
+    <Content Include="Views\BOM\_BomTreePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -64,9 +64,6 @@ namespace tahsinERP.Controllers
                 return View(rootItem);
             }
         }
-        public ActionResult _BomTreePartial() {
-            return View();
-        }
 
         private BoomViewModel GetBomTree(string parentPno)
         {
@@ -89,7 +86,6 @@ namespace tahsinERP.Controllers
                     {
                         ParentPNo = b.ParentPNo,
                         ChildPNo = b.ChildPNo,
-                        ChildImageBase64 = GetChildImage(b.ChildPNo),
                         Consumption = b.Consumption,
                         ConsumptionUnit = b.ConsumptionUnit,
                         Children = GetBomTree(b.ChildPNo)?.Children // Recursively get the children
