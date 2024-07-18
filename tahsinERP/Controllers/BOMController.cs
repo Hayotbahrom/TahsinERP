@@ -351,7 +351,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -640,19 +640,39 @@ namespace tahsinERP.Controllers
 
                     if (model.AssemblyPart != null)
                     {
-                        int count = 0;
                         foreach (var part in model.AssemblyPart)
                         {
+                            var parts = model.AssemblyPart;
+                            var assamble_part = db.PARTS.FirstOrDefault(x => x.ID == part.Assamble_PartID && x.IsDeleted == false);
                             var bom = new BOM();
-                            bom.ChildPNo = part.PNo;
+                            bom.ChildPNo = assamble_part.PNo;
                             bom.ParentPNo = model.ProductNo;
                             bom.IsDeleted = false;
                             bom.IsActive = true;
                             bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Assembly")?.ID;
-                            bom.ConsumptionUnit = "kg";
+                            bom.ConsumptionUnit = assamble_part.Unit;
                             bom.Sequence = sequence + 5;
-                            count += 1;
-                            bom.Consumption = count;
+                            bom.Consumption = part.AssemblyQuantity;
+
+                            db.BOMS.Add(bom);
+                        }
+                    }
+
+                    if(model.PaintingPart != null)
+                    {
+                        foreach (var part in model.PaintingPart)
+                        {
+                            var parts = model.PaintingPart;
+                            var paint_part = db.PARTS.FirstOrDefault(x => x.ID == part.Painting_PartID && x.IsDeleted == false);
+                            var bom = new BOM();
+                            bom.ChildPNo = paint_part.PNo;
+                            bom.ParentPNo = model.ProductNo;
+                            bom.IsDeleted = false;
+                            bom.IsActive = true;
+                            bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Painting")?.ID;
+                            bom.ConsumptionUnit = paint_part.Unit;
+                            bom.Sequence = sequence + 6;
+                            bom.Consumption = part.PaintingQuantity;
 
                             db.BOMS.Add(bom);
                         }
