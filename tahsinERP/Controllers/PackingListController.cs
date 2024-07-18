@@ -35,14 +35,14 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.ToList(), "ID", "InvoiceNo");
-                ViewBag.Part = new SelectList(db1.PARTS.ToList(), "ID", "PName");
+                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
             }
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "InvoiceId, PackingListNo, PartID, PrLength, PrWidth, PrHeight, PrCMB, PrGrWeight, PrPackMaterial, ScLength, ScWidth, ScHeight, ScCMB, ScGrWeight, ScPackMaterial, PltType, IsDeleted")] P_INVOICE_PACKINGLISTS packingList)
+        public ActionResult Create(P_INVOICE_PACKINGLISTS packingList)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
@@ -61,8 +61,8 @@ namespace tahsinERP.Controllers
                 {
                     ModelState.AddModelError(string.Empty, ex);
                 }
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.ToList(), "ID", "InvoiceNo", packingList.InvoiceID);
-                //ViewBag.Part = new SelectList(db1.PARTS.ToList(), "ID", "PName", packingList.PartID);
+                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", packingList.InvoiceID);
+                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "PName", packingList.TransportTypeID);
             }
 
             return View(packingList);
