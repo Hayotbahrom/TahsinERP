@@ -29,10 +29,13 @@ namespace tahsinERP.ViewModels
         public List<WeldingParts> WeldingPart { get; set; }
         public List<AssemblyParts> AssemblyPart { get; set; }
 
+        public List<PaintingParts> PaintingPart { get; set; }
+
         public BOMCreateViewModel()
         {
             WeldingPart = new List<WeldingParts>();
             AssemblyPart = new List<AssemblyParts>();
+            PaintingPart = new List<PaintingParts>();
         }
 
         public class WeldingParts
@@ -46,8 +49,15 @@ namespace tahsinERP.ViewModels
         {
             public int Assamble_PartID { get; set; }
             public string PNo { get; set; }
+            public double AssemblyQuantity { get; set; }
         }
 
+        public class PaintingParts
+        {
+            public int Painting_PartID { get; set; }
+            public string PNo { get; set; }
+            public double PaintingQuantity { get; set; }
+        }
 
     }
 }

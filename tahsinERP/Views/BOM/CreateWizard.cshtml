@@ -188,13 +188,13 @@
                                                                                 @Html.ValidationMessageFor(model => model.WeldingPart[0].WeldingQuantity, "", new { @class = "text-danger" })
                                                                             </div>
                                                                             <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                                                <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
+                                                                                <button data-repeater-delete type="button" class="btn btn-danger">o'chirish</button>
                                                                             </div>
                                                                         </div>
                                                                             <hr>
                                                                         </div>
                                                                 </div>
-                                                                <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
+                                                                <button data-repeater-create type="button" class="btn btn-primary">Ko'roq qo'shish</button>
                                                                 <br />
                                                                 <br />
                                                             </fieldset>
@@ -202,22 +202,29 @@
 
                                                         case "Assembly":
                                                             <fieldset>
-                                                                <div data-repeater-list="AssemblyPartID">
+                                                                <div data-repeater-list="AssemblyPart">
                                                                     <div data-repeater-item>
                                                                         <div class="row justify-content-between">
-                                                                            <h6>Detalni tanlang</h6>
-                                                                            <fieldset class="invoice-address form-group">
-                                                                                @Html.DropDownList("Assembly_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
-                                                                                @Html.ValidationMessageFor(model => model.AssemblyPart[0].Assamble_PartID, "", new { @class = "text-danger" })
-                                                                            </fieldset>
+                                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                                <h6>Detalni tanlang</h6>
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("Assamble_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
+                                                                                    @Html.ValidationMessageFor(model => model.AssemblyPart[0].Assamble_PartID, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                                <h6>Miqdori</h6>
+                                                                                <input type="number" name="AssemblyQuantity" class="form-control" placeholder="Miqdorini kiriting" />
+                                                                                @Html.ValidationMessageFor(model => model.AssemblyPart[0].AssemblyQuantity, "", new { @class = "text-danger" })
+                                                                            </div>
                                                                             <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                                                <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
+                                                                                <button data-repeater-delete type="button" class="btn btn-danger" style="margin-left:20px">o'chirish</button>
                                                                             </div>
                                                                         </div>
-                                                                        <hr>
-                                                                    </div>
+                                                                            <hr>
+                                                                        </div>
                                                                 </div>
-                                                                <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
+                                                                <button data-repeater-create type="button" class="btn btn-primary">Ko'roq qo'shish</button>
                                                                 <br />
                                                                 <br />
                                                             </fieldset>
@@ -225,16 +232,33 @@
 
                                                         case "Painting":
                                                             <fieldset>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <fieldset class="invoice-address form-group">
-                                                                            @Html.DropDownList("PAINTING_NORMS.PartID_after", (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2" })
-                                                                        </fieldset>
+                                                                <div data-repeater-list="PaintingPart">
+                                                                    <div data-repeater-item>
+                                                                        <div class="row justify-content-between">
+                                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                                <h6>Detalni tanlang</h6>
+                                                                                <fieldset class="invoice-address form-group">
+                                                                                    @Html.DropDownList("Painting_PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
+                                                                                    @Html.ValidationMessageFor(model => model.PaintingPart[0].Painting_PartID, "", new { @class = "text-danger" })
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                                <h6>Miqdori</h6>
+                                                                                <input type="number" name="PaintingQuantity" class="form-control" placeholder="Miqdorini kiriting" />
+                                                                                @Html.ValidationMessageFor(model => model.PaintingPart[0].PaintingQuantity, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                            <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                                                <button data-repeater-delete type="button" class="btn btn-danger" style="margin-left:-120px">o'chirish</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr>
                                                                     </div>
                                                                 </div>
+                                                                <button data-repeater-create type="button" class="btn btn-primary">Ko'roq qo'shish</button>
+                                                                <br />
+                                                                <br />
                                                             </fieldset>
                                                             break;
-
                                                         default:
                                                             <p>No specific fields for this process.</p>
                                                             break;

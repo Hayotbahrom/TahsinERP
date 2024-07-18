@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.ParentViewModel
+﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -33,7 +33,8 @@
 
         <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
             <i class='bx bx-save'></i>
-            PDF</button>
+            PDF
+        </button>
         <br />
 
         <span class="display">Ko'rsatish: </span>
@@ -46,120 +47,14 @@
             yoyilgan
         </label>
 
-        <ol class="wtree" id="toPDF">
-            @if (Model.PRODUCT != null)
+        <div id="treeview">
+            @if (Model != null)
             {
-                <li id="li">
-                    <div style="display: flex; align-items: center;">
-                        @if (Model.ParentImageBase64.Any())
-                        {
-                            <a href="@Model.ParentImageBase64" target="_blank">
-                                <img src="@Model.ParentImageBase64" alt="Product Image"
-                                     style="width: 200px; height: auto; object-fit: scale-down; margin-right: 5px;" />
-                            </a>
-                        }
-                        <span id="span">
-                            <a href="~/Product/Details/@Model.PRODUCT.ID">@Model.ParentPNo</a>
-                        </span>
-                    </div>
-                    <ol>
-                        @foreach (var child in Model.Children)
-                        {
-                            <li>
-                                <div style="display: flex; align-items: center" class="box">
-                                    @if (child.ChildImageBase64.Any())
-                                    {
-                                        <a href="@child.ChildImageBase64" target="_blank">
-                                            <img src="@child.ChildImageBase64" alt="Product Image"
-                                                 style="width: 170px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
-                                        </a>
-                                    }
-                                    @if (child.PART != null)
-                                    {
-                                        <span>
-                                            <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                            @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
-                                        </span>
-                                    }
-                                </div>
-                                @if (child.Children.Any())
-                                {
-                                    <ol>
-                                        @foreach (var grandChild in child.Children)
-                                        {
-                                            <li>
-                                                <div style="display: flex; align-items: center;" class="box">
-                                                    @if (grandChild.ChildImageBase64.Any())
-                                                    {
-                                                        <img src="@grandChild.ChildImageBase64" alt="Product Image"
-                                                             style="width: 150px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
-                                                    }
-                                                    @if (grandChild.PART != null)
-                                                    {
-                                                        <span>
-                                                            <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                            @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
-                                                        </span>
-                                                    }
-                                                </div>
-                                            </li>
-                                        }
-                                    </ol>
-                                }
-                            </li>
-                        }
-                    </ol>
-                </li>
+                <ol class="wtree" id="toPDF">
+                    @Html.Partial("_BomTreePartial", Model)
+                </ol>
             }
-            else
-            {
-                foreach (var child in Model.Children)
-                {
-                    <li id="li">
-                        <div style="display: flex; align-items: center" class="box">
-                            @if (child.ChildImageBase64.Any())
-                            {
-                                <a href="@child.ChildImageBase64" target="_blank">
-                                    <img src="@child.ChildImageBase64" alt="Product Image"
-                                         style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
-                                </a>
-                            }
-                            @if (child.PART != null)
-                            {
-                                <span id="span">
-                                    <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                    @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
-                                </span>
-                            }
-                        </div>
-                        @if (child.Children.Any())
-                        {
-                            <ol>
-                                @foreach (var grandChild in child.Children)
-                                {
-                                    <li>
-                                        <div style="display: flex; align-items: center;" class="box">
-                                            @if (grandChild.ChildImageBase64.Any())
-                                            {
-                                                <img src="@grandChild.ChildImageBase64" alt="Product Image"
-                                                     style="width: 130px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
-                                            }
-                                            @if (grandChild.PART != null)
-                                            {
-                                                <span>
-                                                    <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                    @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
-                                                </span>
-                                            }
-                                        </div>
-                                    </li>
-                                }
-                            </ol>
-                        }
-                    </li>
-                }
-            }
-        </ol>
+        </div>
     </div>
 </div>
 
