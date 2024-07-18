@@ -24,7 +24,6 @@ namespace tahsinERP.Controllers
                     .GroupBy(t => t.P_INVOICE_PACKINGLISTS.TransportNo)
                     .Select(g => new TracingViewModel
                     {
-                        
                         TransportNo = g.Key,
                         LastIssueDateTime = g.Max(t => t.IssueDateTime),
                         LastTracing = g.OrderByDescending(t => t.IssueDateTime).FirstOrDefault(),
@@ -108,12 +107,12 @@ namespace tahsinERP.Controllers
             {
                 var existTracingTransportNo = await db.TRACINGS
                                                     .Include(p => p.P_INVOICE_PACKINGLISTS)
-                                                    .Where(p=> p.IsDeleted == false && p.ID == id)
+                                                    .Where(p=> p.IsDeleted == false && p.PackingListID == id)
                                                     .FirstOrDefaultAsync();
 
                 var tracingList = await db.TRACINGS
                     .Include(p => p.P_INVOICE_PACKINGLISTS)
-                    .Where(p => p.IsDeleted == false && p.P_INVOICE_PACKINGLISTS.TransportNo == existTracingTransportNo.P_INVOICE_PACKINGLISTS.TransportNo)
+                    .Where(p => p.IsDeleted == false && p.P_INVOICE_PACKINGLISTS.TransportNo.CompareTo(existTracingTransportNo.P_INVOICE_PACKINGLISTS.TransportNo) == 0)
                     .ToListAsync();
 
                 if (tracingList == null || tracingList.Count == 0)

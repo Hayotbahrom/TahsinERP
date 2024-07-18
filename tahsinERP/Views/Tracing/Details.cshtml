@@ -49,10 +49,10 @@
                                                                 @(Model.IndexOf(item) + 1)
                                                             </div>
                                                             <div class="label">
-                                                                <div class="date">@item.IssueDateTime.ToString("dd.MM.yyyy HH:mm")</div>
+                                                                <div class="date">@item.IssueDateTime.ToString("dd.MM.yyyy")</div>
                                                                 <div class="location">@item.ActualLocation.ToUpper()</div>
                                                                 <div class="distance">@item.ActualDistanceToDestination KM</div>
-                                                                <div class="distance">ETA: @item.ETA.ToShortDateString()</div>
+                                                                <div class="distance">ETA: @item.ETA.ToString("dd.MM.yyyy")</div>
                                                             </div>
                                                         </div>
                                                     }
