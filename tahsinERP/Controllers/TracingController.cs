@@ -63,6 +63,7 @@ namespace tahsinERP.Controllers
                 if (checkExistTracing)
                 {
                     ModelState.AddModelError("", "Bu sana bilan ma'lumot allaqachon kiritilgan. Qaytadan urunib ko'ring!");
+                    ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS.Where(p => p.IsDeleted == false).ToListAsync(), "ID", "PackingListNo");
                     return View(tracing);
                 }
                 try
@@ -165,12 +166,14 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                bool checkExistTracing = checkForTodaysInput(tracing.PackingListID, tracing.IssueDateTime); //await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime.ToShortDateString().CompareTo(tracing.IssueDateTime.ToShortDateString()) == 0).FirstOrDefaultAsync();
+                /*bool checkExistTracing = checkForTodaysInput(tracing.PackingListID, tracing.IssueDateTime); //await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime.ToShortDateString().CompareTo(tracing.IssueDateTime.ToShortDateString()) == 0).FirstOrDefaultAsync();
                 if (checkExistTracing)
                 {
                     ModelState.AddModelError("", "Bu sana bilan ma'lumot allaqachon kiritilgan. Qaytadan urunib ko'ring!");
+                    ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS.Where(p => p.IsDeleted == false).ToListAsync(), "ID", "PackingListNo");
+
                     return View(tracing);
-                }
+                }*/
 
                 if (ModelState.IsValid)
                 {
@@ -190,6 +193,8 @@ namespace tahsinERP.Controllers
 
                     return View(tracingToUpdate);
                 }
+                ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS.Where(p => p.IsDeleted == false).ToListAsync(), "ID", "PackingListNo");
+
                 return View(tracing);
             }
         }
