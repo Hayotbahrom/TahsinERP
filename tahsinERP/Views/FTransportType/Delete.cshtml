@@ -19,7 +19,7 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        <a href="~/Forwarder">Forwarder lar</a>
+                                        <a href="~/FTransportType">Transport turlari</a>
                                     </li>
                                     <li class="breadcrumb-item active">
                                         Transport turini o'chirish
@@ -96,7 +96,7 @@
 
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item border-0 pb-0">
-                                            @using (Html.BeginForm("Delete", "Forwarder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            @using (Html.BeginForm("Delete", "FTransportType", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                             {
                                                 @Html.AntiForgeryToken()
                                                 <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu Invoice o\'chirib yuborishga ishonchingiz komilmi?')">

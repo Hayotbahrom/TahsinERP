@@ -37,21 +37,28 @@
         </button>
         <br />
 
-        <span class="display">Ko'rsatish: </span>
-        <input id="radio-1" data-tooltip="first level" name="test" type="radio" />
-        <label for="radio-1">
-            yig'ilgan
-        </label>
-        <input checked id="radio-3" data-tooltip="third level" name="test" type="radio" />
-        <label for="radio-3">
-            yoyilgan
-        </label>
 
         <div id="treeview">
             @if (Model != null)
                 {
                 <ol class="wtree" id="toPDF">
-                    @Html.Partial("_BomTreePartial", Model)
+                    <li class="li">
+                        <div style="display: flex; align-items: center;">
+                            @if (Model.ParentImageBase64 != null)
+                            {
+                                <a href="@Model.ParentImageBase64" target="_blank">
+                                    <img src="@Model.ParentImageBase64" alt="Product Image"
+                                         style="width: 150px; height: 150px; object-fit: cover; margin-right: 5px;" />
+                                </a>
+                            }
+                            <span class="span">
+                                @Model.ParentPNo 
+                            </span>
+                        </div>
+                        <ol class="wtree">
+                            @Html.Partial("_BomTreePartial", Model)
+                        </ol>
+                    </li>
                 </ol>
             }
         </div>
