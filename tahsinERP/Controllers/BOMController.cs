@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 using tahsinERP.ViewModels.BOM;
@@ -59,9 +58,24 @@ namespace tahsinERP.Controllers
             {
                 PRODUCT product = db.PRODUCTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
                 PART part = db.PARTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
-
-                var rootItem = GetBomTree(product.PNo);
-                return View(rootItem);
+                try
+                {
+                    if (product != null)
+                    {
+                        var rootItem = GetBomTree(product.PNo);
+                        return View(rootItem);
+                    }
+                    else if (part != null)
+                    {
+                        var rootItem = GetBomTree(part.PNo);
+                        return View(rootItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex);
+                }
+                return View();
             }
         }
 
@@ -86,6 +100,7 @@ namespace tahsinERP.Controllers
                     {
                         ParentPNo = b.ParentPNo,
                         ChildPNo = b.ChildPNo,
+                        ChildImageBase64 = GetChildImage(b.ChildPNo),
                         Consumption = b.Consumption,
                         ConsumptionUnit = b.ConsumptionUnit,
                         Children = GetBomTree(b.ChildPNo)?.Children // Recursively get the children
@@ -95,22 +110,11 @@ namespace tahsinERP.Controllers
                 return root;
             }
         }
-        //private bool CheckForParentStatusOfChild(string pNo)
-        //{
-        //    using (DBTHSNEntities db = new DBTHSNEntities())
-        //    {
-        //        var bom = db.BOMS.Where(b => b.ParentPNo.CompareTo(pNo) == 0 && b.IsDeleted == false).FirstOrDefault();
-        //        if (bom != null)
-        //            return true;
-        //        else
-        //            return false;
-        //    }
-        //}
         private string GetParentImage(string PNo)
         {
             string Base64String = "";
             using (DBTHSNEntities db = new DBTHSNEntities())
-            { 
+            {
                 var product = db.PRODUCTS.Where(p => p.PNo.CompareTo(PNo) == 0).FirstOrDefault();
                 var part = db.PARTS.Where(p => p.PNo.CompareTo(PNo) == 0).FirstOrDefault();
                 if (product != null)
@@ -134,9 +138,11 @@ namespace tahsinERP.Controllers
         }
         private string GetChildImage(string PNo)
         {
+
             string Base64String = "";
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+
                 var part = db.PARTS.Where(p => p.PNo.CompareTo(PNo) == 0).FirstOrDefault();
                 var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == part.ID);
                 if (partImage != null)
@@ -278,7 +284,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -385,8 +391,8 @@ namespace tahsinERP.Controllers
 
                                 var bom = new BOM
                                 {
-                                    ChildPNo = part_after_Blanking.PNo,
-                                    ParentPNo = part_after_slitting.PNo,
+                                    ChildPNo = part_after_slitting.PNo,
+                                    ParentPNo = part_after_Blanking.PNo,
                                     IsDeleted = false,
                                     IsActive = true,
                                     ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
@@ -443,8 +449,8 @@ namespace tahsinERP.Controllers
 
                                         var bom = new BOM
                                         {
-                                            ChildPNo = part_after_Stamping.PNo,
-                                            ParentPNo = part_after_Blanking.PNo,
+                                            ChildPNo = part_after_Blanking.PNo,
+                                            ParentPNo = part_after_stamping.PNo,
                                             IsDeleted = false,
                                             IsActive = true,
                                             ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Blanking")?.ID,
@@ -492,7 +498,7 @@ namespace tahsinERP.Controllers
                                         var stamping = new STAMPING_NORMS
                                         {
                                             IsDeleted = false,
-                                            IsActive = model.STAMPING_NORMS.IsActive,   
+                                            IsActive = model.STAMPING_NORMS.IsActive,
                                             PartID_before = part_after_Blanking.ID,
                                             PartID_after = part_after_Stamping.ID,
                                             Density = model.STAMPING_NORMS.Density,
@@ -585,7 +591,7 @@ namespace tahsinERP.Controllers
                         }
                     }
 
-                    if(model.PaintingPart != null)
+                    if (model.PaintingPart != null)
                     {
                         foreach (var part in model.PaintingPart)
                         {
