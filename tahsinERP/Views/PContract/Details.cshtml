@@ -33,7 +33,7 @@
             </div>
             <div class="content-body">
                 <div class="row">
-                    <div class="col-xl-9 col-md-8 col-12">
+                    <div class="col-xl-12 col-md-12 col-12">
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body pb-0 mx-25">
@@ -58,9 +58,7 @@
                                             <hr />
                                             <span><b>Amal qilish sanasi</b>: @Model.DueDate.ToString("dd.MM.yyyy")</span>
                                             <hr />
-                                            <span><b>Umumiy summasi</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
-                                            <hr />
-                                            <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
+                                            <span><b>Umumiy summasi</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
                                             <hr />
                                             <span><b>Incoterms</b>: @Html.DisplayFor(model => model.Incoterms, new { @class = "form-control" })</span>
                                             <hr />

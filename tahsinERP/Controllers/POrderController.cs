@@ -72,11 +72,6 @@ namespace tahsinERP.Controllers
                 return View(orders);
             }
         }
-
-
-
-
-
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

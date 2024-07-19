@@ -54,11 +54,17 @@
                                                             @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
+
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
+                                                            <label for="Currency">Valyuta</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Qisqacha tavsifi</label>
+                                                            @Html.TextAreaFor(model => model.Description, new { @type = "text", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                        </div>  
                                                     </div>
                                                 </div>
 
@@ -66,16 +72,11 @@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="Currency">Valyuta</label>
-                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                            <label for="InvoiceId">Shartnoma raqami</label>
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
-
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Currency">Qisqacha tavsifi</label>
-                                                            @Html.TextAreaFor(model => model.Description, new { @type = "text", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                                                        </div>
+                                                        
                                                         <div class="col-md-6 col-12 form-group">
                                                             <h6 class="invoice-to">Buyurtma berilgan sanasi</h6>
                                                             @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi" })
@@ -91,7 +92,7 @@
                                             // WRHS_InCome_Parts
                                             <br />
                                             <h4>
-                                                Parts
+                                                Buyurtma ilovasi
                                             </h4>
                                             <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
@@ -103,7 +104,7 @@
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Unit">Unit</label>
+                                                            <label for="Part_Unit">Birligi</label>
                                                             <input type="text" name="Unit" class="form-control" id="Part_Unit" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
                                                         </div>
@@ -113,7 +114,7 @@
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Price">Narx</label>
+                                                            <label for="Part_Price">Birlik narxi</label>
                                                             <input type="number" name="Price" step="0.01" class="form-control" id="Part_Price" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
