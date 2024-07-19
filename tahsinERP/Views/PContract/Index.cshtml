@@ -43,10 +43,15 @@
                     {
                         <div class="invoice-create-btn mb-1">
                             <div class="invoice-create-btn mb-1">
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/PContract/Create';">
+                                    <span class="align-middle ml-25">Shartnoma qo'shish</span>
+                                </button>@*
                                 <a href="@Url.Action("UploadWithExcel", "PContract")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
-                                    Yangi
-                                    Shartnomani qo'shish
-                                </a>
+                                    <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali yangi shartnoma qo'shish</span>
+                                </a>*@
+                                <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/PContract/UploadWithExcel'">
+                                    <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali shartnoma qo'shish</span>
+                                </button>
                             </div>
                         </div>
                     }
@@ -56,14 +61,14 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label for="users-list-role">Turi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, "turini tanlang", new { @class = "form-control select2", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
 
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Ta'minotchisi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshdatatablesupplier()" })
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, "ta'minotchini tanlang", new { @class = "form-control select2", onchange = "refreshdatatablesupplier()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
@@ -88,10 +93,10 @@
                                                     <th>Raqami</th>
                                                     <th>Ta'minotchi nomi</th>
                                                     <th>Turi</th>
-                                                    <th>Tuzilgan sanasi</th>
-                                                    <th>Tugashi sanasi</th>
                                                     <th>Incoterms</th>
                                                     <th>To'lov sharti</th>
+                                                    <th>Tuzilgan sanasi</th>
+                                                    <th>Tugashi sanasi</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -111,10 +116,10 @@
                                                             <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
                                                         </td>
                                                         <td>@item.SUPPLIER.Type</td>
-                                                        <td>@item.IssuedDate.ToString("dd.MM.yyyy")</td>
-                                                        <td>@item.DueDate.ToString("dd.MM.yyyy")</td>
                                                         <td>@item.Incoterms</td>
                                                         <td>@item.PaymentTerms</td>
+                                                        <td>@item.IssuedDate.ToString("dd.MM.yyyy")</td>
+                                                        <td>@item.DueDate.ToString("dd.MM.yyyy")</td>
                                                         @if (changePermit)
                                                         {
                                                             <td>

@@ -1,0 +1,36 @@
+﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
+
+<li class="li">
+    <div style="display: flex; align-items: center;">
+        @if (Model.ParentImageBase64 != null)
+        {
+            <a href="@Model.ParentImageBase64" target="_blank">
+                <img src="@Model.ParentImageBase64" alt="Product Image"
+                     style="width: 150px; height: 150px; object-fit: cover; margin-right: 5px;" />
+            </a>
+        }
+
+        @if (Model.ChildImageBase64 != null)
+        {
+            <a href="@Model.ChildImageBase64" target="_blank">
+                <img src="@Model.ChildImageBase64" alt="Child Image"
+                     style="width: 100px; height: 100px; object-fit: cover; margin-right: 5px;" class="img-fluid" />
+            </a>
+        }
+
+        <span class="span">
+            @Model.ParentPNo - @Model.ChildPNo (Ishlatilishi: @Model.Consumption @Model.ConsumptionUnit)
+        </span>
+    </div>
+
+    @if (Model.Children != null && Model.Children.Any())
+    {
+        <ol>
+            @foreach (var child in Model.Children)
+            {
+                @Html.Partial("_BomTreePartial", child)
+
+            }
+        </ol>
+    }
+</li>

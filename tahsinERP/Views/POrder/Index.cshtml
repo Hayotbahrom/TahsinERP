@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var type = ViewBag.Type;
 }
+
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString(), type))
 {
     bool changePermit = false;
@@ -11,10 +12,11 @@
     {
         changePermit = true;
     }
+
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
-           <div class="content-header row">
+            <div class="content-header row">
                 <div class="content-header-left col-12 mb-2 mt-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
@@ -41,9 +43,15 @@
                     {
                         <div class="invoice-create-btn mb-1">
                             <div class="invoice-create-btn mb-1">
-                                <a href="@Url.Action("UploadWithExcel", "POrder")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
+                               @* <a href="@Url.Action("UploadWithExcel", "POrder")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
                                     Yangi Buyurtmani qo'shish
-                                </a>
+                                </a>*@
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/POrder/Create';">
+                                    <span class="align-middle ml-25">Yangi Buyurtma qo'shish</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/POrder/UploadWithExcel'">
+                                    <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali buyurtma qo'shish</span>
+                                </button>
                             </div>
                         </div>
                     }
@@ -103,7 +111,14 @@
                                                                 <a href="~/POrder/Details/@item.ID">@item.OrderNo</a>
                                                             </td>
                                                             <td>
-                                                                <a href="~/PContract/Details/@item.P_CONTRACTS.ID">@item.P_CONTRACTS.ContractNo</a>
+                                                                @if (item.P_CONTRACTS != null)
+                                                                {
+                                                                    <a href="~/PContract/Details/@item.P_CONTRACTS.ID">@item.P_CONTRACTS.ContractNo</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>No Contract</span>
+                                                                }
                                                             </td>
                                                             <td>@item.IssuedDate.ToString("dd-MM-yyyy")</td>
                                                             <td>

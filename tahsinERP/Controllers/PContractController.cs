@@ -12,6 +12,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -24,62 +25,43 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                IQueryable<P_CONTRACTS> contractsQuery = db.P_CONTRACTS
-                    .Include(p => p.SUPPLIER)
-                    .Where(p => p.IsDeleted == false);
-
-                //filter by type if provided
+                List<P_CONTRACTS> contractList = null;
+                var suppliers = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
                 if (!string.IsNullOrEmpty(type))
                 {
-                    contractsQuery = contractsQuery.Where(p => p.SUPPLIER.Type.CompareTo(type) == 0);
-                    ViewBag.SourceList = new SelectList(sources, type);
+                    if (supplierID.HasValue)
+                    {
+                        contractList = db.P_CONTRACTS.Include(p => p.SUPPLIER).Where(p => p.IsDeleted == false && p.SupplierID == supplierID && p.SUPPLIER.Type.CompareTo(type) == 0).ToList();
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
+                        ViewBag.SourceList = new SelectList(sources, type);
+                    }
+                    else
+                    {
+                        contractList = db.P_CONTRACTS.Include(p => p.SUPPLIER).Where(p => p.IsDeleted == false && p.SUPPLIER.Type.CompareTo(type) == 0).ToList();
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
+                        ViewBag.SourceList = new SelectList(sources, type);
+                    }
                 }
                 else
                 {
-                    ViewBag.SourceList = new SelectList(sources);
+                    if (supplierID.HasValue)
+                    {
+                        contractList = db.P_CONTRACTS.Include(p => p.SUPPLIER).Where(p => p.IsDeleted == false && p.SupplierID == supplierID).ToList();
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
+                        ViewBag.SourceList = new SelectList(sources);
+                    }
+                    else
+                    {
+                        contractList = db.P_CONTRACTS.Include(p => p.SUPPLIER).Where(p => p.IsDeleted == false).ToList();
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
+                        ViewBag.SourceList = new SelectList(sources);
+                    }
+
                 }
 
-                //filter by SupplierID if provided
-                if (supplierID.HasValue)
-                {
-                    contractsQuery = contractsQuery.Where(c => c.SupplierID == supplierID.Value);
-                }
-
-                List<P_CONTRACTS> contractList = contractsQuery.ToList();
-                //Prepare ViewBag.SupplierList based on filter
-                var suppliersQuery = db.SUPPLIERS.Where(s => s.IsDeleted == false);
-                if (!string.IsNullOrEmpty(type))
-                {
-                    suppliersQuery = suppliersQuery.Where(s => s.Type.CompareTo(type) == 0);
-                }
-
-                if (supplierID.HasValue)
-                {
-                    suppliersQuery = suppliersQuery.Where(s => s.ID == supplierID.Value);
-                }
-
-                ViewBag.SupplierList = new SelectList(suppliersQuery.Where(s => s.Type.CompareTo(type)==0).ToList(), "ID", "Name");
-                ViewBag.Type = type;
-
+                
+               
                 return View(contractList);
-                /*if (!string.IsNullOrEmpty(type))
-                {
-                    List<P_CONTRACTS> list = db.P_CONTRACTS
-                        .Include(pc => pc.SUPPLIER)
-                        .Where(pc => pc.SUPPLIER.Type.CompareTo(type) == 0 && pc.IsDeleted == false).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.Type = type;
-                    return View(list);
-                }
-                else
-                {
-                    List<P_CONTRACTS> list = db.P_CONTRACTS
-                        .Include (pc => pc.SUPPLIER)
-                        .Where(pc => pc.IsDeleted == false).ToList();
-                    ViewBag.SourceList = new SelectList(sources, type);
-                    ViewBag.Type = type;
-                    return View(list);
-                }*/
             }
         }
         public ActionResult Download()
@@ -277,10 +259,59 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
+                ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
                 return View();
             }
         }
-        [HttpPost]  
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(PContractViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var newContract = new P_CONTRACTS()
+                {
+                    ContractNo = model.ContractNo,
+                    IssuedDate = model.IssuedDate,
+                    CompanyID = 1,
+                    SupplierID = model.SupplierID,
+                    Currency = model.Currency,
+                    Amount = model.Amount,
+                    Incoterms = model.Incoterms,
+                    PaymentTerms = model.PaymentTerms,
+                    DueDate = model.DueDate,
+                    IsDeleted = false,
+                    IDN = model.IDN,
+                };
+                db.P_CONTRACTS.Add(newContract);
+                db.SaveChanges();
+
+                // Yangi yozuvning IncomeID sini olish
+                int newContractID = newContract.ID;
+
+                // Parts ni saqlash
+                foreach (var part in model.Parts)
+                {
+                    var newPart = new P_CONTRACT_PARTS
+                    {
+                        ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                        PartID = part.PartID,
+                        Unit = part.Unit,
+                        Amount = part.Amount,
+                        Price = part.Price,
+                        Quantity = part.Quantity,
+                        ActivePart = true,
+                        MOQ = part.MOQ
+                    };
+
+                    db.P_CONTRACT_PARTS.Add(newPart);
+                }
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+        }
+        /*[HttpPost]  
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate, IDN")] P_CONTRACTS contract)
         {
@@ -302,7 +333,7 @@ namespace tahsinERP.Controllers
                 ModelState.AddModelError(ex.Message, ex);
             }
             return View(contract);
-        }
+        }*/
 
         public ActionResult Details(int? ID)
         {
@@ -455,7 +486,6 @@ namespace tahsinERP.Controllers
                         contractPartToUpdate.ActivePart = contractPart.ActivePart;
                         //contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price; SQL o'zi chiqarib beradi
 
-
                         if (TryUpdateModel(contractPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, ActivePart" }))
                         {
                             try
@@ -469,10 +499,10 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
-                    return View(contractPartToUpdate);
+                    return RedirectToAction("Edit");
                 }
             }
-            return View();
+            return View(contractPart.ID);
         }
         public ActionResult Delete(int? Id)
         {

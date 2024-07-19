@@ -46,12 +46,13 @@
                                                     {
                                                         <div class="step @((item.IssueDateTime == Model.Last().IssueDateTime && item.ActualDistanceToDestination == 0) ? "completed" : "")">
                                                             <div class="circle">
-                                                                @Model.IndexOf(item) + 1
+                                                                @(Model.IndexOf(item) + 1)
                                                             </div>
                                                             <div class="label">
-                                                                <div class="date">@item.IssueDateTime.ToString("dd.MM.yyyy HH:mm")</div>
+                                                                <div class="date">@item.IssueDateTime.ToString("dd.MM.yyyy")</div>
                                                                 <div class="location">@item.ActualLocation.ToUpper()</div>
-                                                                <div class="distance">@item.ActualDistanceToDestination - KM</div>
+                                                                <div class="distance">@item.ActualDistanceToDestination KM</div>
+                                                                <div class="distance">ETA: @item.ETA.ToString("dd.MM.yyyy")</div>
                                                             </div>
                                                         </div>
                                                     }
@@ -105,7 +106,7 @@
             font-weight: bold;
         }
 
-        .circle.completed {
+        .step.completed .circle {
             background-color: green;
         }
 
@@ -144,7 +145,6 @@
             color: gray;
         }
 
-        /* Style for dashed part of the progress bar */
         .progress-bar.dashed {
             background: repeating-linear-gradient(
                 to right,
@@ -161,12 +161,10 @@
             var steps = $('.step');
             var totalSteps = steps.length;
 
-            // Calculate progress width based on last completed step
             var progressWidth = ($('.step.completed').length / totalSteps) * 100;
 
-            // Update progress bar width
             $('#progress').css('width', progressWidth + '%');
-            $('#progress').toggleClass('dashed', progressWidth < 100); // Add dashed class if progress is not complete
+            $('#progress').toggleClass('dashed', progressWidth < 100);
         });
     </script>
 }
