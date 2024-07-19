@@ -60,7 +60,7 @@ namespace tahsinERP.Controllers
                     if (supplierID.HasValue)
                     {
                         ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_supplierID_Result>("EXEC GetPartsInfo_by_supplierID @SupplierID", new SqlParameter("@SupplierID", supplierID)).ToList();
-                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SourceList = new SelectList(sources);
                         ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
                     }
                     else

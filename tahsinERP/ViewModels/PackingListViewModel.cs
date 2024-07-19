@@ -19,6 +19,11 @@ namespace tahsinERP.ViewModels
         public Nullable<double> TotalCBM { get; set; }
         public Nullable<double> TotalGrWeight { get; set; }
         public Nullable<double> TotalNetWeight { get; set; }
+        public List<PackingListPart> Parts { get; set; }
+        public PackingListViewModel()
+        {
+            Parts = new List<PackingListPart>();
+        }
     }
     public class PackingListPart
     {
