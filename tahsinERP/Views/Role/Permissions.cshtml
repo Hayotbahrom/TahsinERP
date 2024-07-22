@@ -4,6 +4,7 @@
     ViewBag.Title = "Permissions";
     Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
 }
+
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 
 {
@@ -50,11 +51,12 @@
                                                     <hr>
                                                     <h6 class="invoice-to">Permissions</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        <input type="text" id="searchInput" placeholder="Search for permissions..." class="form-control mb-2" />
-                                                        <div class="table-responsive">
-                                                            <table class="table" id="permissionsTable">
+                                                        <div class="table-responsive table-responsivetable-responsive">
+                                                            <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
                                                                 <thead>
                                                                     <tr>
+                                                                        <th></th>
+                                                                        <th></th>
                                                                         <th>Module</th>
                                                                         <th>Controller nomi</th>
                                                                         <th>Action nomi</th>
@@ -66,6 +68,8 @@
                                                                     @for (int i = 0; i < Model.Permissions.Count; i++)
                                                                     {
                                                                         <tr>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <td>@Model.Permissions[i].PERMISSIONMODULE.Module</td>
                                                                             <td>@Model.Permissions[i].PERMISSIONMODULE.Controller</td>
                                                                             <td>@Model.Permissions[i].PERMISSIONMODULE.Action</td>
@@ -109,15 +113,3 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#searchInput").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#permissionsTable tbody tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-</script>

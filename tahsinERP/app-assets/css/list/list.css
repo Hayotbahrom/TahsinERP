@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+img {
+    border-radius: 50%;
+}
+
 body {
     /*padding: 50px;*/
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -19,21 +23,22 @@ ol {
     counter-reset: item;
 }
 
-.wtree li {
+
+.wtree .li {
     list-style-type: none;
     margin: 10px 0px 10px 10px;
     position: relative;
 }
 
-.wtree li ol li {
-    margin: 10px 0px 10px 100px;
-}
-
-.wtree li ol li ol li{
+.wtree .li ol .li {
     margin: 10px 0px 10px 70px;
 }
 
-.wtree li:before {
+.wtree .li ol .li ol .li{
+    margin: 10px 0px 10px 50px;
+}
+
+.wtree .li:before {
     content: "";
     counter-increment: item;
     position: absolute;
@@ -45,15 +50,11 @@ ol {
     height: 15px;
 }
 
-.wtree #li::before {
-    content: none;
-}
-
-.wtree #li {
+.wtree .li:first-child {
     margin: 0px 0px 10px 10px;
 }
 
-.wtree li:after {
+.wtree .li:after {
     position: absolute;
     content: "";
     top: 5px;
@@ -64,11 +65,11 @@ ol {
     height: 100%;
 }
 
-.wtree li:last-child:after {
+.wtree .li:last-child:after {
     display: none;
 }
 
-.wtree li span {
+.wtree .li .span {
     display: block;
     border: 1px solid #ddd;
     padding: 10px;
@@ -76,34 +77,34 @@ ol {
     text-decoration: none;
 }
 
-.wtree li span:hover,
-.wtree li span:focus {
+.wtree .li .span:hover,
+.wtree .li .span:focus {
     color: #000;
     border: 1px solid #474747;
 }
 
-.wtree li span:hover + ol li span,
-.wtree li span:focus + ol li span {
+.wtree .li .span:hover + ol .li .span,
+.wtree .li .span:focus + ol .li .span {
     color: #000;
     border: 1px solid #474747;
 }
 
-.wtree li span:hover + ol li:after,
-.wtree li span:hover + ol li:before,
-.wtree li span:focus + ol li:after,
-.wtree li span:focus + ol li:before {
+.wtree .li .span:hover + ol .li:after,
+.wtree .li .span:hover + ol .li:before,
+.wtree .li .span:focus + ol .li:after,
+.wtree .li .span:focus + ol .li:before {
     border-color: #474747;
 }
 
-li #span {
+.span {
     background-color: #ddf3fe;
 }
 
-li li span {
+.li .li .span {
     background-color: #ddebc8;
 }
 
-li li li span {
+.li .li .li .span {
     background-color: #fefcd5;
 }
 
@@ -122,14 +123,14 @@ label {
     padding-right: 12px;
 }
 
-#radio-1:checked + label ~ ol li ol li {
+#radio-1:checked + label ~ ol .li ol .li {
     display: none;
 }
 
-#radio-2:checked + label ~ ol li ol li ol li {
+#radio-2:checked + label ~ ol .li ol .li ol .li {
     display: none;
 }
 
-#radio-3:checked + label ~ li ol li ol li {
+#radio-3:checked + label ~ .li ol .li ol .li {
     display: none;
 }

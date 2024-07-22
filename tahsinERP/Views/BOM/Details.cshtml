@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.ParentViewModel
+﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -33,164 +33,75 @@
 
         <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
             <i class='bx bx-save'></i>
-            PDF</button>
+            PDF
+        </button>
         <br />
 
-        <span class="display">Ko'rsatish: </span>
-        <input id="radio-1" data-tooltip="first level" name="test" type="radio" />
-        <label for="radio-1">
-            yig'ilgan
-        </label>
-        <input checked id="radio-3" data-tooltip="third level" name="test" type="radio" />
-        <label for="radio-3">
-            yoyilgan
-        </label>
 
-        <ol class="wtree" id="toPDF">
-            @if (Model.PRODUCT != null)
-            {
-                <li id="li">
-                    <div style="display: flex; align-items: center;">
-                        @if (Model.ParentImageBase64.Any())
-                        {
-                            <a href="@Model.ParentImageBase64" target="_blank">
-                                <img src="@Model.ParentImageBase64" alt="Product Image"
-                                     style="width: 200px; height: auto; object-fit: scale-down; margin-right: 5px;" />
-                            </a>
-                        }
-                        <span id="span">
-                            <a href="~/Product/Details/@Model.PRODUCT.ID">@Model.ParentPNo</a>
-                        </span>
-                    </div>
-                    <ol>
-                        @foreach (var child in Model.Children)
-                        {
-                            <li>
-                                <div style="display: flex; align-items: center" class="box">
-                                    @if (child.ChildImageBase64.Any())
-                                    {
-                                        <a href="@child.ChildImageBase64" target="_blank">
-                                            <img src="@child.ChildImageBase64" alt="Product Image"
-                                                 style="width: 170px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
-                                        </a>
-                                    }
-                                    @if (child.PART != null)
-                                    {
-                                        <span>
-                                            <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                            @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
-                                        </span>
-                                    }
-                                </div>
-                                @if (child.Children.Any())
-                                {
-                                    <ol>
-                                        @foreach (var grandChild in child.Children)
-                                        {
-                                            <li>
-                                                <div style="display: flex; align-items: center;" class="box">
-                                                    @if (grandChild.ChildImageBase64.Any())
-                                                    {
-                                                        <img src="@grandChild.ChildImageBase64" alt="Product Image"
-                                                             style="width: 150px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
-                                                    }
-                                                    @if (grandChild.PART != null)
-                                                    {
-                                                        <span>
-                                                            <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                            @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
-                                                        </span>
-                                                    }
-                                                </div>
-                                            </li>
-                                        }
-                                    </ol>
-                                }
-                            </li>
-                        }
-                    </ol>
-                </li>
-            }
-            else
-            {
-                foreach (var child in Model.Children)
+        <div id="treeview">
+            @if (Model != null)
                 {
-                    <li id="li">
-                        <div style="display: flex; align-items: center" class="box">
-                            @if (child.ChildImageBase64.Any())
+                <ol class="wtree" id="toPDF">
+                    <li class="li">
+                        <div style="display: flex; align-items: center;">
+                            @if (Model.ParentImageBase64 != null)
                             {
-                                <a href="@child.ChildImageBase64" target="_blank">
-                                    <img src="@child.ChildImageBase64" alt="Product Image"
-                                         style="width: 130px; height: auto; object-fit: scale-down; margin-right: 5px;" class="img-fluid" />
+                                <a href="@Model.ParentImageBase64" target="_blank">
+                                    <img src="@Model.ParentImageBase64" alt="Product Image"
+                                         style="width: 150px; height: 150px; object-fit: cover; margin-right: 5px;" />
                                 </a>
                             }
-                            @if (child.PART != null)
-                            {
-                                <span id="span">
-                                    <a href="/Part/Details/@child.PART.ID">@child.PART.PNo</a>:
-                                    @(child.Consumption == 0 ? "0" : child.Consumption.ToString("F3")) - @child.ConsumptionUnit
-                                </span>
-                            }
+                            <span class="span">
+                                @Model.ParentPNo 
+                            </span>
                         </div>
-                        @if (child.Children.Any())
-                        {
-                            <ol>
-                                @foreach (var grandChild in child.Children)
-                                {
-                                    <li>
-                                        <div style="display: flex; align-items: center;" class="box">
-                                            @if (grandChild.ChildImageBase64.Any())
-                                            {
-                                                <img src="@grandChild.ChildImageBase64" alt="Product Image"
-                                                     style="width: 130px; height: auto; object-fit: scale-down; margin-right: 10px;" class="img-fluid" />
-                                            }
-                                            @if (grandChild.PART != null)
-                                            {
-                                                <span>
-                                                    <a href="/Part/Details/@grandChild.PART.ID">@grandChild.PART.PNo</a>:
-                                                    @(grandChild.Consumption == 0 ? "0" : grandChild.Consumption.ToString("F3")) - @grandChild.ConsumptionUnit
-                                                </span>
-                                            }
-                                        </div>
-                                    </li>
-                                }
-                            </ol>
-                        }
+                        <ol class="wtree">
+                            @Html.Partial("_BomTreePartial", Model)
+                        </ol>
                     </li>
-                }
+                </ol>
             }
-        </ol>
+        </div>
     </div>
 </div>
 
+
 <!-- TreeView -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var treeItems = document.querySelectorAll('.wtree li div span');
+    <!--
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var treeItems = document.querySelectorAll('.wtree .li div .span');
 
-        treeItems.forEach(function (item) {
-            item.addEventListener('click', function (e) {
-                e.stopPropagation();
-                var parentLi = this.closest('li');
-                var subUl = parentLi.querySelector('ul');
+            treeItems.forEach(function (item) {
+                item.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var parentLi = this.closest('.li');
+                    var subUl = parentLi.querySelector('ol');
 
-                if (subUl) {
-                    if (subUl.style.display === 'none' || subUl.style.display === '') {
-                        subUl.style.display = 'block';
+                    if (subUl) {
+                        if (subUl.style.display === 'none' || subUl.style.display === '') {
+                            subUl.style.display = 'block';
+                        } else {
+                            subUl.style.display = 'none';
+                        }
                     } else {
-                        subUl.style.display = 'none';
+                        if (subUl.style.display === 'none' || subUl.style.display === '') {
+                            subUl.style.display = 'block';
+                        } else {
+                            subUl.style.display = '';
+                        }
                     }
-                }
 
-                // Close all other open sub-lists
-                var allSubUls = document.querySelectorAll('.wtree ul');
-                allSubUls.forEach(function (otherSubUl) {
-                    if (otherSubUl !== subUl && !otherSubUl.contains(subUl)) {
-                        otherSubUl.style.display = 'none';
-                    }
+                    // Close all other open sub-lists
+                    var allSubUls = document.querySelectorAll('.wtree ol');
+                    allSubUls.forEach(function (otherSubUl) {
+                        if (otherSubUl !== subUl && !otherSubUl.contains(subUl)) {
+                            otherSubUl.style.display = 'none';
+                        }
+                    });
                 });
             });
         });
-    });
-</script>
+    </script>
+    -->
 <!-- __________ -->

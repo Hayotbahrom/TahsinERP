@@ -44,41 +44,41 @@
                                 <span class="align-middle ml-25">Packing List qo'shish</span>
                             </button>
                             <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/PackingList/UploadWithExcel'">
-                                <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali ta'minotchilarni qo'shish</span>
+                                <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali packingList qo'shish</span>
                             </button>
                         </div>
                     }
-                    <div class="users-list-filter px-1">
-                        @*<form>
-                            <div class="row border rounded py-2 mb-2">
-                                <div class="col-12 col-sm-12 col-lg-4">
-                                    <label for="users-list-role">Turi</label>
-                                    <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
-                                    </fieldset>
-                                </div>
-                                <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
-                                    <a href="~/PackingList" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
-                                        Ro'yxatni yangilash
-                                    </a>
-                                </div>
-                            </div>
-                        </form>*@
+                    @*<div class="users-list-filter px-1">
+                    <form>
+                <div class="row border rounded py-2 mb-2">
+                    <div class="col-12 col-sm-12 col-lg-4">
+                        <label for="users-list-role">Turi</label>
+                        <fieldset class="form-group">
+                            @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                        </fieldset>
                     </div>
+                    <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                        <a href="~/PackingList" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                            Ro'yxatni yangilash
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>*@
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    
+
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
                                         <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th>PackingList raqami</th>
+                                                    <th>TransportNo</th>
                                                     <th>Invoice raqami</th>
-                                                    <th>Maxsulot Kub hajmi</th>
-                                                    <th>Pallet turi</th>
+                                                    <th>Umumiy CBM</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -92,9 +92,9 @@
                                                         <td>
                                                             <a href="~/PackingList/Details/@item.ID">@item.PackingListNo</a>
                                                         </td>
+                                                        <td>@item.TransportNo</td>
                                                         <td><a href="~/PInvoice/Details/@item.InvoiceID">@item.P_INVOICES.InvoiceNo</a></td>
-                                                        <td>@item.PrCBM</td>
-                                                        <td>@item.PalletType</td>
+                                                        <td>@item.TotalCBM</td>
 
                                                         @if (changePermit)
                                                         {

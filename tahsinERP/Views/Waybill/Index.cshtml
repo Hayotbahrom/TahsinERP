@@ -78,7 +78,6 @@
                                                     <th>Shartnoma</th>
                                                     <th>Transport turi</th>
                                                     <th>Invoice No</th>
-                                                    <th>PackingList No</th>
                                                     <th>Umumiy vazni</th>
                                                     @if (changePermit)
                                                     {
@@ -94,7 +93,6 @@
                                                         <td><a href="~/FContract/Details/@item.ContractID">@item.F_CONTRACTS.ContractNo</a></td>
                                                         <td><a href="~/FTransportType/Details/@item.TransportTypeID">@item.F_TRANSPORT_TYPES.TransportType</a></td>
                                                         <td><a href="~/PInvoice/Details/@item.InvoiceID">@item.P_INVOICES.InvoiceNo</a></td>
-                                                        <td><a href="~/PackingList/Details/@item.PackingListID">@item.P_INVOICE_PACKINGLISTS.PackingListNo</a></td>
                                                         <td>@item.GrWeight</td>
                                                         @if (changePermit)
                                                         {
