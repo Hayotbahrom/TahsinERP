@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
@@ -401,7 +402,11 @@ namespace tahsinERP.Controllers
                                   .ToList();
 
                 ViewBag.PartList = partList;
-
+                var partImage = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == ID);
+                if (partImage != null)
+                {
+                    ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partImage.Doc);
+                }
                 return View(contract);
             }
         }
