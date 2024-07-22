@@ -2575,6 +2575,7 @@
     <Content Include="Views\Tracing\Delete.cshtml" />
     <Content Include="Views\BOM\_BomTreePartial.cshtml" />
     <Content Include="Views\BOM\CreateBom.cshtml" />
+    <Content Include="Views\BOM\CompletionStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

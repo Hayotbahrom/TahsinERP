@@ -632,5 +632,13 @@ namespace tahsinERP.Controllers
         {
             return View();
         }
+
+        public ActionResult CompletionStatus(BomViewModel bomViewModel)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                return View(bomViewModel);
+            }
+        }
     }
 }
