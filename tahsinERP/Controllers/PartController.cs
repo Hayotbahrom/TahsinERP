@@ -112,7 +112,7 @@ namespace tahsinERP.Controllers
                     newPart.Standart = partVM.Standart;
                     newPart.IsInHouse = partVM.IsInHouse;
                     newPart.ShopID = partVM.ShopID;
-                    newPart.HSCodeID = partVM.HSCodeID;
+                    newPart.HSCodeID = partVM.HSCodeD;
 
                     db.PARTS.Add(newPart);
                     db.SaveChanges();
@@ -209,7 +209,7 @@ namespace tahsinERP.Controllers
                     Marka = part.Marka,
                     Standart = part.Standart,
                     IsInHouse = part.IsInHouse,
-                    HSCodeID = part.HSCodeID ?? 0,
+                    HSCodeD = part.HSCodeID ?? 0,
                     ShopID = part.ShopID ?? 0
                 };
 
