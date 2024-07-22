@@ -633,55 +633,17 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Welding").ToList();
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Welding" && x.ProcessName == "Painting").ToList();
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
 
                 BomViewModel model = new BomViewModel();
-
                 model.Part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == ID).FirstOrDefault();
-
-                var bomlist = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == model.Part.PNo).FirstOrDefault();
-                if (bomlist != null)
-                {
-                    var flatBomList = GetFlatBomList(bomlist.ParentPNo);
-                    ViewBag.FlatBomList = flatBomList;
-                }
-
                 return View(model);
             }
         }
 
-        private List<BomViewModel> GetFlatBomList(string parentPno)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var result = new List<BomViewModel>();
 
-                var itemsToProcess = new Queue<string>();
-                itemsToProcess.Enqueue(parentPno);
 
-                while (itemsToProcess.Count > 0)
-                {
-                    var currentPno = itemsToProcess.Dequeue();
-
-                    var currentItems = db.BOMS.Where(b => b.ParentPNo == currentPno && b.IsDeleted == false).ToList();
-
-                    foreach (var item in currentItems)
-                    {
-                        var bomViewModel = new BomViewModel
-                        {
-                            PartNo = item.ParentPNo,
-                            ChildPNo = item.ChildPNo,
-                        };
-
-                        result.Add(bomViewModel);
-                        itemsToProcess.Enqueue(item.ChildPNo);
-                    }
-                }
-
-                return result;
-            }
-        }
 
 
         [HttpPost]

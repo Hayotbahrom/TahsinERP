@@ -39,7 +39,7 @@
                                     @using (Html.BeginForm("BomCreate", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                     {
                                         <div>
-                                            @Html.TextBoxFor(Model => Model.Part.PNo)
+                                            @Html.TextBoxFor(Model => Model.Part.PNo, new { disabled = "disabled"})
                                         </div>
                                         @Html.AntiForgeryToken()
                                         <div>
@@ -56,27 +56,7 @@
                                             </button>
                                         </div>
                                     }
-                                    <h3>BOM List</h3>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>ParentPNo</th>
-                                                <th>ChildPNo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (ViewBag.FlatBomList != null)
-                                            {
-                                                foreach (var item in ViewBag.FlatBomList)
-                                                {
-                                                    <tr>
-                                                        <td>@item.PartNo</td>
-                                                        <td>@item.ChildPNo</td>
-                                                    </tr>
-                                                }
-                                            }
-                                        </tbody>
-                                    </table>
+
                                 </div>
                             </div>
                         </div>

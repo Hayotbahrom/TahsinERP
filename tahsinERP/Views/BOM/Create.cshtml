@@ -51,13 +51,16 @@
                                                 @Html.DropDownListFor(model => model.ProductID, (SelectList)ViewBag.ProductList, new { @class = "form-control" })
                                             </div>
                                             <hr />
+                                            <h4>
+                                                Unga biriktirilgan ehtiyot qismlar:
+                                            </h4>
                                             <div data-repeater-list="BomList">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between align-items-center">
 
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="PartID">Ehtiyot qismlar</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.part, new { @class = "form-control", @id = "partList", @onmousedown="this.value=''", @onchange="myFunc(this)" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.part, new { @class = "form-control", @id = "partList" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Quantity">Miqdori</label>
@@ -109,17 +112,3 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
-
-
-<script type="text/javascript">
-    console.log("KIRDI");
-
-    function myFunc(value) {
-        console.log(value);
-
-        $.ajax({
-            url: '',
-            data: { pNo }
-        })
-    }
-</script>
