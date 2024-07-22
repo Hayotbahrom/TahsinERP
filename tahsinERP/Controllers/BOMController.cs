@@ -646,9 +646,6 @@ namespace tahsinERP.Controllers
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
                 return View();
             }
-        public ActionResult CreateBom()
-        {
-            return View();
         }
 
         public ActionResult CompletionStatus(BomViewModel model)
