@@ -95,7 +95,7 @@ namespace tahsinERP.Controllers
                         ContractID = newContractID,
                         ProductID = item.ProductID,
                         PiecePrice = (int)item.PiecePrice,
-                        Unit = item.Unit,
+                        //Unit = item.Unit,
                         Amount = item.Amount
                     };
 
@@ -171,7 +171,7 @@ namespace tahsinERP.Controllers
                         SContractID = p.ContractID,
                         ProductID = p.ProductID,
                         PiecePrice = (int)p.PiecePrice,
-                        Unit = p.Unit,
+                        //Unit = p.Unit,
                         Amount = (int)p.Amount,
                         PRODUCT = new ProductViewModel
                         {
@@ -235,7 +235,7 @@ namespace tahsinERP.Controllers
                         if (existingProduct != null)
                         {
                             existingProduct.PiecePrice = (int)product.PiecePrice;
-                            existingProduct.Unit = product.Unit;
+                            //existingProduct.Unit = product.Unit;
                             existingProduct.Amount = product.Amount;
                             db.Entry(existingProduct).State = EntityState.Modified;
                         }

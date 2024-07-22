@@ -111,7 +111,7 @@ namespace tahsinERP.Controllers
                         InvoiceID = newInvoiceID,
                         PartID = item.PartID,
                         Quantity = item.Quantuty,
-                        Unit = item.Unit,
+                        //Unit = item.Unit,
                         Price = item.Price
                     };
                     db.P_INVOICE_PARTS.Add(newPart);
@@ -407,7 +407,7 @@ namespace tahsinERP.Controllers
                         invoicePartToUpdate.PartID = invoicePart.PartID;
                         invoicePartToUpdate.Price = invoicePart.Price;
                         invoicePartToUpdate.Quantity = invoicePart.Quantity;
-                        invoicePartToUpdate.Unit = invoicePart.Unit;
+                        //invoicePartToUpdate.Unit = invoicePart.Unit;
                         //invoicePartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
 
 
@@ -586,7 +586,7 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.PartID = part.ID;
                                     new_invoicePart.InvoiceID = new_invoice.ID;
                                     new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    new_invoicePart.Unit = row["Unit"].ToString();
+                                    //new_invoicePart.Unit = row["Unit"].ToString();
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
@@ -602,7 +602,7 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.PartID = part.ID;
                                     new_invoicePart.InvoiceID = invoice.ID;
                                     new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    new_invoicePart.Unit = row["Unit"].ToString();
+                                    //new_invoicePart.Unit = row["Unit"].ToString();
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);

@@ -12,21 +12,25 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BOM
+    public partial class TEMPORARY_BOMS
     {
         public int ID { get; set; }
-        public double Consumption { get; set; }
-        public string ConsumptionUnit { get; set; }
+        public Nullable<double> Consumption { get; set; }
+        public int ConsumptionUnitID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public string ParentPNo { get; set; }
         public string ChildPNo { get; set; }
-        public Nullable<bool> IsParentProduct { get; set; }
-        public double WasteAmount { get; set; }
-        public double TotalConsumption { get; set; }
+        public Nullable<double> WasteAmount { get; set; }
+        public Nullable<double> TotalConsumption { get; set; }
         public Nullable<int> Sequence { get; set; }
         public Nullable<int> ProcessID { get; set; }
+        public int UserID { get; set; }
+        public System.DateTime IssuedDate { get; set; }
+        public Nullable<bool> IsInHouse { get; set; }
     
         public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
+        public virtual UNIT UNIT { get; set; }
+        public virtual USER USER { get; set; }
     }
 }

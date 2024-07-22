@@ -147,7 +147,7 @@ namespace tahsinERP.Controllers
                         productToUpdate.Length = product.Length;
                         productToUpdate.Width = product.Width;
                         productToUpdate.Height = product.Height;
-                        productToUpdate.Unit = product.Unit;
+                        //productToUpdate.Unit = product.Unit;
                         productToUpdate.Type = product.Type;
                         productToUpdate.PNo2 = product.PNo2;
                         productToUpdate.PNo3 = product.PNo3;
@@ -371,7 +371,7 @@ namespace tahsinERP.Controllers
                                     newProduct.Length = Double.Parse(row["Length"].ToString());
                                     newProduct.Width = Double.Parse(row["Width"].ToString());
                                     newProduct.Height = Double.Parse(row["Height"].ToString());
-                                    newProduct.Unit = row["Unit"].ToString();
+                                    //newProduct.Unit = row["Unit"].ToString();
                                     newProduct.Type = row["Type"].ToString();
                                     newProduct.PNo2 = row["PNo2"].ToString();
                                     newProduct.PNo3 = row["PNo3"].ToString();

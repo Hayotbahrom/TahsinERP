@@ -235,7 +235,7 @@ namespace tahsinERP.Controllers
                                     new_contractPart.PartID = part.ID;
                                     new_contractPart.ContractID = new_contract.ID;
                                     new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    new_contractPart.Unit = row["Unit"].ToString();
+                                    //new_contractPart.Unit = row["Unit"].ToString();
                                     new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                     new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
                                     new_contractPart.ActivePart = true;
@@ -255,7 +255,7 @@ namespace tahsinERP.Controllers
                                     new_contractPart.PartID = part.ID;
                                     new_contractPart.ContractID = contract.ID;
                                     new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    new_contractPart.Unit = row["Unit"].ToString();
+                                    //new_contractPart.Unit = row["Unit"].ToString();
                                     new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                     new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
@@ -318,7 +318,7 @@ namespace tahsinERP.Controllers
                     {
                         ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
-                        Unit = part.Unit,
+                        //Unit = part.Unit,
                         Amount = part.Amount,
                         Price = part.Price,
                         Quantity = part.Quantity,
@@ -523,7 +523,7 @@ namespace tahsinERP.Controllers
                         contractPartToUpdate.PartID = contractPart.PartID;
                         contractPartToUpdate.Price = contractPart.Price;
                         contractPartToUpdate.Quantity = contractPart.Quantity;
-                        contractPartToUpdate.Unit = contractPart.Unit;
+                        //contractPartToUpdate.Unit = contractPart.Unit;
                         contractPartToUpdate.MOQ = contractPart.MOQ;
                         contractPartToUpdate.ActivePart = contractPart.ActivePart;
                         //contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price; SQL o'zi chiqarib beradi

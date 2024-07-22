@@ -19,8 +19,8 @@ namespace tahsinERP.Models
         public string ActualLocation { get; set; }
         public System.DateTime IssueDateTime { get; set; }
         public double ActualDistanceToDestination { get; set; }
-        public System.DateTime ETA { get; set; }
-        public string Comment { get; set; } 
+        public Nullable<System.DateTime> ETA { get; set; }
+        public string Comment { get; set; }
         public bool IsDeleted { get; set; }
     
         public virtual P_INVOICE_PACKINGLISTS P_INVOICE_PACKINGLISTS { get; set; }

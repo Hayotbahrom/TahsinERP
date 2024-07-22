@@ -99,7 +99,7 @@ namespace tahsinERP.Controllers
                     newPart.PLength = partVM.PLength;
                     newPart.PWidth = partVM.PWidth;
                     newPart.PHeight = partVM.PHeight;
-                    newPart.Unit = partVM.Unit;
+                    //newPart.Unit = partVM.Unit;
                     newPart.Type = partVM.Type;
                     newPart.Description = partVM.Description;
                     newPart.IsDeleted = false;
@@ -198,7 +198,7 @@ namespace tahsinERP.Controllers
                     PLength = part.PLength,
                     PWidth = part.PWidth,
                     PHeight = part.PHeight,
-                    Unit = part.Unit,
+                    //Unit = part.Unit,
                     Type = part.Type,
                     Description = part.Description,
                     Thickness = part.Thickness,
@@ -241,7 +241,7 @@ namespace tahsinERP.Controllers
                     partToUpdate.PLength = partVM.PLength;
                     partToUpdate.PWidth = partVM.PWidth;
                     partToUpdate.PHeight = partVM.PHeight;
-                    partToUpdate.Unit = partVM.Unit;
+                    //partToUpdate.Unit = partVM.Unit;
                     partToUpdate.Type = partVM.Type;
                     partToUpdate.Description = partVM.Description;
                     partToUpdate.Thickness = partVM.Thickness;
@@ -375,7 +375,7 @@ namespace tahsinERP.Controllers
                     PLength = part.PLength,
                     PWidth = part.PWidth,
                     PHeight = part.PHeight,
-                    Unit = part.Unit,
+                   // Unit = part.Unit,
                     Type = part.Type,
                     Description = part.Description,
                     Thickness = part.Thickness,
@@ -570,7 +570,7 @@ namespace tahsinERP.Controllers
                                 newPart.Coating = row["Coating"].ToString();
                                 newPart.Marka = row["Standart"].ToString();
                                 newPart.Standart = row["Standart"].ToString();
-                                newPart.Unit = row["Unit"].ToString();
+                                //newPart.Unit = row["Unit"].ToString();
                                 if (row["InHouse?"].ToString().CompareTo("Yes") == 0)
                                     newPart.IsInHouse = true;
                                 else

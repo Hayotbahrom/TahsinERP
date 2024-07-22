@@ -149,7 +149,7 @@ namespace tahsinERP.Controllers
                     {
                         IncomeID = newIncomeID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
-                        Unit = part.Unit,
+                        //Unit = part.Unit,
                         Amount = part.Amount,
                         PiecePrice = part.PiecePrice,
                         //TotalPrice = part.TotalPrice,
@@ -349,7 +349,7 @@ namespace tahsinERP.Controllers
                     {
                         whIncomePartToUpdate.PartID = whIncomePart.PartID;
                         whIncomePartToUpdate.Amount = whIncomePart.Amount;
-                        whIncomePartToUpdate.Unit = whIncomePart.Unit;
+                        //whIncomePartToUpdate.Unit = whIncomePart.Unit;
                         whIncomePartToUpdate.PiecePrice = whIncomePart.PiecePrice;
                         whIncomePartToUpdate.Comment = whIncomePart.Comment;
                         //whIncomePartToUpdate.Amount = whIncomePart.Quantity * whIncomePart.Price; SQL o'zi chiqarib beradi

@@ -12,61 +12,50 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PRODUCT
+    public partial class UNIT
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PRODUCT()
+        public UNIT()
         {
-            this.DAMAGED_PRODUCTS = new HashSet<DAMAGED_PRODUCTS>();
-            this.PROD_STOCKS = new HashSet<PROD_STOCKS>();
+            this.P_CONTRACT_PARTS = new HashSet<P_CONTRACT_PARTS>();
+            this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
+            this.P_ORDER_PARTS = new HashSet<P_ORDER_PARTS>();
+            this.PART_WRHS_EXPENSE_PARTS = new HashSet<PART_WRHS_EXPENSE_PARTS>();
+            this.PART_WRHS_INCOME_PARTS = new HashSet<PART_WRHS_INCOME_PARTS>();
+            this.PARTS = new HashSet<PART>();
             this.PROD_WRHS_EXPENSE_PRODUCTS = new HashSet<PROD_WRHS_EXPENSE_PRODUCTS>();
             this.PROD_WRHS_INCOME_PRODUCTS = new HashSet<PROD_WRHS_INCOME_PRODUCTS>();
-            this.PRODUCT_PRODUCTION = new HashSet<PRODUCT_PRODUCTION>();
-            this.PRODUCTIMAGES = new HashSet<PRODUCTIMAGE>();
-            this.PRODUCTPACKS = new HashSet<PRODUCTPACK>();
-            this.PRODUCTPLANS = new HashSet<PRODUCTPLAN>();
+            this.PRODUCTS = new HashSet<PRODUCT>();
             this.S_CONTRACT_PRODUCTS = new HashSet<S_CONTRACT_PRODUCTS>();
-            this.SPLs = new HashSet<SPL>();
+            this.TEMPORARY_BOMS = new HashSet<TEMPORARY_BOMS>();
         }
     
         public int ID { get; set; }
-        public string PNo { get; set; }
-        public string Name { get; set; }
-        public Nullable<double> Weight { get; set; }
-        public Nullable<double> Length { get; set; }
-        public Nullable<double> Width { get; set; }
-        public Nullable<double> Height { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
-        public string PNo2 { get; set; }
-        public string PNo3 { get; set; }
-        public string PNo4 { get; set; }
-        public Nullable<int> PackID { get; set; }
-        public Nullable<int> HSCodeID { get; set; }
-        public Nullable<int> UnitID { get; set; }
+        public string UnitName { get; set; }
+        public string ShortName { get; set; }
+        public int Code { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
-        public virtual HSCODE HSCODE { get; set; }
+        public virtual ICollection<P_CONTRACT_PARTS> P_CONTRACT_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PROD_STOCKS> PROD_STOCKS { get; set; }
+        public virtual ICollection<P_INVOICE_PARTS> P_INVOICE_PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_EXPENSE_PARTS> PART_WRHS_EXPENSE_PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WRHS_INCOME_PARTS> PART_WRHS_INCOME_PARTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART> PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PROD_WRHS_EXPENSE_PRODUCTS> PROD_WRHS_EXPENSE_PRODUCTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PROD_WRHS_INCOME_PRODUCTS> PROD_WRHS_INCOME_PRODUCTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCT_PRODUCTION> PRODUCT_PRODUCTION { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCTIMAGE> PRODUCTIMAGES { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCTPACK> PRODUCTPACKS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRODUCTPLAN> PRODUCTPLANS { get; set; }
-        public virtual UNIT UNIT { get; set; }
+        public virtual ICollection<PRODUCT> PRODUCTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SPL> SPLs { get; set; }
+        public virtual ICollection<TEMPORARY_BOMS> TEMPORARY_BOMS { get; set; }
     }
 }
