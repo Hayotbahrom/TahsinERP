@@ -19,6 +19,7 @@ namespace tahsinERP.Models
     {
         public DBTHSNEntities()
             : base("name=DBTHSNEntities")
+        
         {
         }
     

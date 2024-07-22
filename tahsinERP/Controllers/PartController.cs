@@ -60,7 +60,7 @@ namespace tahsinERP.Controllers
                     if (supplierID.HasValue)
                     {
                         ViewBag.partList = db.Database.SqlQuery<GetPartsInfo_by_supplierID_Result>("EXEC GetPartsInfo_by_supplierID @SupplierID", new SqlParameter("@SupplierID", supplierID)).ToList();
-                        ViewBag.SourceList = new SelectList(sources);
+                        ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
                     }
                     else
@@ -78,7 +78,7 @@ namespace tahsinERP.Controllers
             PartViewModel partVM = new PartViewModel();
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
             ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName");
-            ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
+            ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE");
             return View(partVM);
         }
 
@@ -108,7 +108,7 @@ namespace tahsinERP.Controllers
                 newPart.Standart = partVM.Standart;
                 newPart.IsInHouse = partVM.IsInHouse;
                 newPart.ShopID = partVM.ShopID;
-                newPart.HSCodeID = partVM.HSCode;
+                newPart.HSCodeID = partVM.HSCodeD;
 
                 db.PARTS.Add(newPart);
                 db.SaveChanges();
@@ -166,7 +166,6 @@ namespace tahsinERP.Controllers
 
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
             ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
-            ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
             return View(partVM);
         }
 

@@ -58,13 +58,13 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Turi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, "turini tanlang", new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Ta'minotchisi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, "ta'minotchini tanlang",new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">

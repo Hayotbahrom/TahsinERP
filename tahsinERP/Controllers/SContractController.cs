@@ -45,21 +45,15 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Create(SContractViewModel model)
         {
-            //if (model == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Shartnoma bekor bo'lishi mumkin emas");
-            //}
+            if (model == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Shartnoma bekor bo'lishi mumkin emas");
+            }
 
-            //if (model.ProductList == null || !model.ProductList.Any())
-            //{
-            //    using (DBTHSNEntities db = new DBTHSNEntities())
-            //    {
-            //        ModelState.AddModelError("Products", "Kamida bitta mahsulot kerak.");
-            //        ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
-            //        ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
-            //        return View(model);
-            //    }
-            //}
+            if (model.ProductList == null || !model.ProductList.Any())
+            {
+                return View(model);
+            }
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {

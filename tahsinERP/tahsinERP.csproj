@@ -283,7 +283,6 @@
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
     <Compile Include="Controllers\HSCodeController.cs" />
-    <Compile Include="Controllers\MaterialRequirementController.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
@@ -380,14 +379,9 @@
     <Compile Include="Models\GetPartsInfo_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetProductListPerShop_Result.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\GetProductListPerShop_Result.cs" />
     <Compile Include="Models\GetSupplierParts_Result.cs" />
     <Compile Include="Models\HSCODE.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MaterialRequirement.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PART.cs">
@@ -2579,7 +2573,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\MaterialRequirement\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
