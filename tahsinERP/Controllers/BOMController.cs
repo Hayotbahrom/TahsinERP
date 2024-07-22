@@ -90,7 +90,7 @@ namespace tahsinERP.Controllers
                 {
                     return null;
                 }
-                
+
                 // Create the root BomViewModel
                 var root = new BoomViewModel()
                 {
@@ -284,7 +284,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -628,13 +628,25 @@ namespace tahsinERP.Controllers
             return View(model);
         }
 
-        public ActionResult BomCreate()
+        public ActionResult BomCreate(int ID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var part = db.BOMS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
+                try
+                {
+                    var rootItem = GetBomTree(part.ParentPNo);
+                    return View(rootItem);
+
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+
                 var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
-                return View(new BomViewModel());
+                return View();
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.BOM.BomViewModel
+﻿@model  List<tahsinERP.ViewModels.BOM.BoomViewModel>
 @{
     ViewBag.Title = "BomCreate";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -47,11 +47,32 @@
                                                 <br />
                                                 <br />
                                             </fieldset>
+
+
                                             <button type="submit" class="btn btn-outline-success mr-1 mb-1">
                                                 <span class="align-middle ml-25">Keyingisi</span>
                                             </button>
                                         </div>
                                     }
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Parent Part Number</th>
+                                                    <th>Process Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>@item.ParentPNo</td>
+                                                        <td>@item.ProcessName</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
