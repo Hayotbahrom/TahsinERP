@@ -2568,7 +2568,7 @@
     <Content Include="Views\Tracing\Edit.cshtml" />
     <Content Include="Views\Tracing\Delete.cshtml" />
     <Content Include="Views\BOM\_BomTreePartial.cshtml" />
-    <Content Include="Views\BOM\CreateBom.cshtml" />
+    <Content Include="Views\BOM\BomCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
