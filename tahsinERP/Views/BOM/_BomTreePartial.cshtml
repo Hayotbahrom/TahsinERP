@@ -19,7 +19,7 @@
         }
 
         <span class="span">
-            @Model.ParentPNo - @Model.ChildPNo (Ishlatilishi: @Model.Consumption @Model.ConsumptionUnit)
+            @Model.ParentPNo (Ishlatilishi: @Model.Consumption @Model.ConsumptionUnit)
         </span>
     </div>
 
@@ -29,7 +29,6 @@
             @foreach (var child in Model.Children)
             {
                 @Html.Partial("_BomTreePartial", child)
-
             }
         </ol>
     }

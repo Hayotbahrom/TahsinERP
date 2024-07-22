@@ -42,24 +42,62 @@
                                         @using (Html.BeginForm("Create", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                         {
                                             @Html.AntiForgeryToken()
-                                            <div>
+                                        <div>
+                                            <br />
+                                            <fieldset class="invoice-address form-group">
+                                                <label>Maxsulotni tanlang:</label>
                                                 <br />
-                                                <fieldset class="invoice-address form-group">
-                                                    <label>Maxsulotni tanlang:</label>
-                                                    <br />
-                                                    @Html.DropDownListFor(model => model.ProductID, (SelectList)ViewBag.ProductList, "maxsulotlar", new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
-                                                    <br />
-                                                    <label>Jarayonlar ketma-ketligini tanlang:</label>
-                                                    <br />
-                                                    @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
-                                                    <br />
-                                                    <br />
-                                                </fieldset>
-                                                <button type="submit" class="btn btn-outline-success mr-1 mb-1">
-                                                    <span class="align-middle ml-25">Keyingisi</span>
-                                                </button>
-                                            </div>
+                                                @Html.DropDownListFor(model => model.ProductID, (SelectList)ViewBag.ProductList, "maxsulotlar", new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
+                                                <br />
+                                                <label>Jarayonlar ketma-ketligini tanlang:</label>
+                                                <br />
+                                                @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
+                                                <br />
+                                                <br />
+
+                                                <div data-repeater-list="Parts">
+                                                    <div data-repeater-item>
+                                                        <div class="row justify-content-between">
+                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                <label for="ProductID">Part</label>
+                                                                @Html.DropDownList("PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.BomList[0].PartID, "", new { @class = "text-danger" })
+
+                                                            </div>
+                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                <label for="Quantity">Quantity</label>
+                                                                <input type="number" name="Quantity" class="form-control" id="Quantity" placeholder="Maxsulot miqdori" />
+                                                                @Html.ValidationMessageFor(model => model.BomList[0].Quantity, "", new { @class = "text-danger" })
+                                                            </div>
+
+                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                <label for="Unit">Unit</label>
+                                                                <input type="text" name="Unit" class="form-control" id="Unit" placeholder="Maxsulot birligi" />
+                                                                @Html.ValidationMessageFor(model => model.BomList[0].Unit, "", new { @class = "text-danger" })
+                                                            </div>
+
+                                                            <div class="col-md-2 col-sm-12 form-group">
+
+                                                                <label for="InHouse">InHouse</label>
+                                                                <input type="checkbox" name="InHouse" class="form-control" id="InHouse" />
+                                                                @Html.ValidationMessageFor(model => model.BomList[0].InHouse, "", new { @class = "text-danger" })
+                                                            </div>
+
+                                                            <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                                <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                    </div>
+                                                </div>
+
+                                                <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
+                                            </fieldset>
+                                            <button type="submit" class="btn btn-outline-success mr-1 mb-1">
+                                                <span class="align-middle ml-25">Keyingisi</span>
+                                            </button>
+                                        </div>
                                         }
                                     </div>
                                 </div>
