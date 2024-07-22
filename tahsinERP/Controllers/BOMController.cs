@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using tahsinERP.Models;
-using tahsinERP.ViewModels;
 using tahsinERP.ViewModels.BOM;
 using static tahsinERP.ViewModels.BOM.BOMCreateProductViewModel;
 
@@ -13,7 +11,6 @@ namespace tahsinERP.Controllers
 {
     public class BOMController : Controller
     {
-        // GET: BOM
         public ActionResult Index(IndexViewModel viewModel)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -85,7 +82,6 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                // Get all BOMS entries with the given parentId
                 var parentItems = db.BOMS.Where(b => b.ParentPNo == parentPno && b.IsDeleted == false).ToList();
 
                 if (!parentItems.Any())
@@ -93,7 +89,6 @@ namespace tahsinERP.Controllers
                     return null;
                 }
 
-                // Create the root BomViewModel
                 var root = new BoomViewModel
                 {
                     ParentPNo = parentPno,
@@ -105,7 +100,7 @@ namespace tahsinERP.Controllers
                         ChildImageBase64 = GetChildImage(b.ChildPNo),
                         Consumption = b.Consumption,
                         ConsumptionUnit = b.ConsumptionUnit,
-                        Children = GetBomTree(b.ChildPNo)?.Children // Recursively get the children
+                        Children = GetBomTree(b.ChildPNo)?.Children
                     }).ToList()
                 };
 
@@ -183,7 +178,7 @@ namespace tahsinERP.Controllers
 
                 List<BomPart> newList = new List<BomPart>();
 
-                foreach( var part in model.BomList)
+                foreach (var part in model.BomList)
                 {
                     BomPart newPart = new BomPart();
                     newPart.PartID = part.PartID;
@@ -195,11 +190,6 @@ namespace tahsinERP.Controllers
                 }
 
                 TempData["PartList"] = newList;
-                //var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
-                //ViewBag.ProductList = new SelectList(products, "ID", "PNo");
-
-                //var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                //ViewBag.Part = new SelectList(part, "ID", "PNo");
             }
             return RedirectToAction("CompletionStatus", model);
         }
@@ -211,18 +201,18 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var createViewModel = new BOMCreateViewModel();
-                var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
-                createViewModel.Product = product;
-                createViewModel.ProductID = model.ProductID;
-                createViewModel.ProductNo = model.ProductNo;
+                var part = db.PARTS.FirstOrDefault(x => x.ID == model.PartID && x.IsDeleted == false);
+                createViewModel.Part = part;
+                createViewModel.PartID = model.PartID;
+                createViewModel.PartNo = model.PartNo;
                 createViewModel.SelectedProcessIds = model.SelectedProcessIds;
                 createViewModel.Process = model.Process;
                 createViewModel.IsActive = model.IsActive;
 
 
 
-                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Part = new SelectList(part, "ID", "PNo");
+                var part2 = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Part = new SelectList(part2, "ID", "PNo");
 
                 var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.ProductList = new SelectList(products, "ID", "PNo");
@@ -282,7 +272,7 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public bool IsInHouse(string pNo)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 PART part = db.PARTS.Where(p => p.PNo == pNo && p.IsDeleted == false).FirstOrDefault();
                 return part != null;
@@ -291,7 +281,7 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateWizard(BOMCreateViewModel model)
+        public ActionResult CreateWizard(BOMCreateViewModel model, BOMCreateProductViewModel bomviewmodel)
         {
             if (!ModelState.IsValid)
             {
@@ -317,7 +307,7 @@ namespace tahsinERP.Controllers
                         bom.ChildPNo = part_before1.PNo;
                         bom.ParentPNo = after_part.PNo;
                         bom.IsDeleted = false;
-                        if (model.ProductNo != null) { bom.IsParentProduct = true; }
+                        if (model.PartNo != null) { bom.IsParentProduct = true; }
                         else { bom.IsParentProduct = false; }
                         bom.IsActive = true;
                         bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1 * cutterWidth1);
@@ -567,7 +557,7 @@ namespace tahsinERP.Controllers
                             var bom = new BOM
                             {
                                 ChildPNo = unit_part.PNo,
-                                ParentPNo = model.ProductNo,
+                                ParentPNo = model.PartNo,
                                 IsDeleted = false,
                                 IsActive = true,
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID,
@@ -588,7 +578,7 @@ namespace tahsinERP.Controllers
                             var assamble_part = db.PARTS.FirstOrDefault(x => x.ID == part.Assamble_PartID && x.IsDeleted == false);
                             var bom = new BOM();
                             bom.ChildPNo = assamble_part.PNo;
-                            bom.ParentPNo = model.ProductNo;
+                            bom.ParentPNo = model.PartNo;
                             bom.IsDeleted = false;
                             bom.IsActive = true;
                             bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Assembly")?.ID;
@@ -608,7 +598,7 @@ namespace tahsinERP.Controllers
                             var paint_part = db.PARTS.FirstOrDefault(x => x.ID == part.Painting_PartID && x.IsDeleted == false);
                             var bom = new BOM();
                             bom.ChildPNo = paint_part.PNo;
-                            bom.ParentPNo = model.ProductNo;
+                            bom.ParentPNo = model.PartNo;
                             bom.IsDeleted = false;
                             bom.IsActive = true;
                             bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Painting")?.ID;
@@ -622,7 +612,8 @@ namespace tahsinERP.Controllers
 
                     db.SaveChanges();
 
-                    return RedirectToAction("Index");
+
+                    return RedirectToAction("index", bomviewmodel);
                 }
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -649,12 +640,52 @@ namespace tahsinERP.Controllers
 
                 model.Part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == ID).FirstOrDefault();
 
+                var bomlist = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == model.Part.PNo).FirstOrDefault();
+                if (bomlist != null)
+                {
+                    var flatBomList = GetFlatBomList(bomlist.ParentPNo);
+                    ViewBag.FlatBomList = flatBomList;
+                }
+
                 return View(model);
             }
         }
 
+        private List<BomViewModel> GetFlatBomList(string parentPno)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var result = new List<BomViewModel>();
+
+                var itemsToProcess = new Queue<string>();
+                itemsToProcess.Enqueue(parentPno);
+
+                while (itemsToProcess.Count > 0)
+                {
+                    var currentPno = itemsToProcess.Dequeue();
+
+                    var currentItems = db.BOMS.Where(b => b.ParentPNo == currentPno && b.IsDeleted == false).ToList();
+
+                    foreach (var item in currentItems)
+                    {
+                        var bomViewModel = new BomViewModel
+                        {
+                            PartNo = item.ParentPNo,
+                            ChildPNo = item.ChildPNo,
+                        };
+
+                        result.Add(bomViewModel);
+                        itemsToProcess.Enqueue(item.ChildPNo);
+                    }
+                }
+
+                return result;
+            }
+        }
+
+
         [HttpPost]
-        public ActionResult BomCreate(BomViewModel model,int [] processID)
+        public ActionResult BomCreate(BomViewModel model, int[] processID)
         {
 
             if (ModelState.IsValid)
@@ -666,7 +697,7 @@ namespace tahsinERP.Controllers
                                               .ToList();
 
                     model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
-                    model.SelectedProcessIds = processID; 
+                    model.SelectedProcessIds = processID;
                 }
                 return RedirectToAction("CreateWizard", model);
             }
@@ -678,8 +709,8 @@ namespace tahsinERP.Controllers
         public ActionResult CompletionStatus(BOMCreateProductViewModel model)
         {
             var partList = TempData["PartList"] as List<BomPart>;
-            
-            
+
+
 
             ViewBag.partList = partList;
             return View(model);
