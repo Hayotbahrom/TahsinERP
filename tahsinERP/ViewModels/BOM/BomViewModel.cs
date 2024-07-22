@@ -12,6 +12,7 @@ namespace tahsinERP.ViewModels.BOM
         public int PartID { get; set; }
         public PART Part { get; set; }
         public string PartNo { get; set; }
+        public string ChildPNo { get; set; }
 
         public string Process { get; set; }
         public int[] SelectedProcessIds { get; set; }
