@@ -20,5 +20,7 @@ namespace tahsinERP.ViewModels.BOM
         //Bular kerak bo'lmasa o'chirivoringlar:
         public bool IsParentProduct { get; set; }
         public PART PART { get; set; }
+
+        public string ProcessName { get; set; }
     }
 }

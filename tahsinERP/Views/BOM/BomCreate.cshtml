@@ -3,6 +3,7 @@
     ViewBag.Title = "BomCreate";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -19,7 +20,7 @@
                                     <a href="~/BOM/Index">BOM</a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    BOM ga mahsulot qo'shish
+                                    @Model.Part.PNo BOMI
                                 </li>
                             </ol>
                         </div>
@@ -35,8 +36,11 @@
                             <br />
                             <div class="card-content">
                                 <div class="card-body">
-                                    @using (Html.BeginForm("Create", "BomCreate", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    @using (Html.BeginForm("BomCreate", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                     {
+                                        <div>
+                                            @Html.TextBoxFor(Model => Model.Part.PNo)
+                                        </div>
                                         @Html.AntiForgeryToken()
                                         <div>
                                             <br />

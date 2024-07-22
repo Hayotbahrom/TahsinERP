@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 using tahsinERP.ViewModels.BOM;
+using static tahsinERP.ViewModels.BOM.BOMCreateProductViewModel;
 
 namespace tahsinERP.Controllers
 {
@@ -165,18 +167,18 @@ namespace tahsinERP.Controllers
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
 
-                return View(new BomViewModel());
+                return View(new BOMCreateProductViewModel());
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BomViewModel model)
+        public ActionResult Create(BOMCreateProductViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
-                model.Product = product;
+                model.PRODUCT = product;
                 model.ProductNo = product.PNo;
 
                 List<BomPart> newList = new List<BomPart>();
@@ -274,6 +276,16 @@ namespace tahsinERP.Controllers
                                      .FirstOrDefault();
 
                 return currentUser?.ID;
+            }
+        }
+
+        [HttpPost]
+        public bool IsInHouse(string pNo)
+        {
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PART part = db.PARTS.Where(p => p.PNo == pNo && p.IsDeleted == false).FirstOrDefault();
+                return part != null;
             }
         }
 
@@ -626,12 +638,44 @@ namespace tahsinERP.Controllers
             return View(model);
         }
 
-        public ActionResult CreateBom()
+        public ActionResult BomCreate(int ID)
         {
-            return View();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Welding").ToList();
+                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
+
+                BomViewModel model = new BomViewModel();
+
+                model.Part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == ID).FirstOrDefault();
+
+                return View(model);
+            }
         }
 
-        public ActionResult CompletionStatus(BomViewModel model)
+        [HttpPost]
+        public ActionResult BomCreate(BomViewModel model,int [] processID)
+        {
+
+            if (ModelState.IsValid)
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    var selectedProcesses = db.PRODUCTIONPROCESSES
+                                              .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
+                                              .ToList();
+
+                    model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
+                    model.SelectedProcessIds = processID; 
+                }
+                return RedirectToAction("CreateWizard", model);
+            }
+
+            return View(model);
+
+        }
+
+        public ActionResult CompletionStatus(BOMCreateProductViewModel model)
         {
             var partList = TempData["PartList"] as List<BomPart>;
             

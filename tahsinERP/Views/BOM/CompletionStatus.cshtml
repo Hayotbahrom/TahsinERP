@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.BOM.BomViewModel
+﻿@model tahsinERP.ViewModels.BOM.BOMCreateProductViewModel
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
 {
     bool changePermit = false;
@@ -61,14 +61,14 @@
                                                         <td>@item.Quantity</td>
                                                         <td>@item.Unit</td>
                                                         <td>@item.InHouse</td>
+
                                                         @if (item.InHouse)
                                                         {
+
                                                             <td>
                                                                 <div>
-                                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
-                                                                        <i class='bx bx-save'></i>
-                                                                        Yaratish
-                                                                    </button>
+
+                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })">Yaratish<i class="bx bx-edit-alt"></i></a>
                                                                 </div>
                                                             </td>
                                                         }
