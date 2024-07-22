@@ -1,8 +1,4 @@
 ﻿@model tahsinERP.ViewModels.BOM.BomViewModel
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
 {
     bool changePermit = false;
@@ -25,11 +21,11 @@
                                     <li class="breadcrumb-item ">
                                         Sahifalar
                                     </li>
-                                    <li class="breadcrumb-item active">
+                                    <li class="breadcrumb-item">
                                         BOM
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Completion Status
+                                        @Model.ProductNo 
                                     </li>
                                 </ol>
                             </div>
@@ -43,11 +39,11 @@
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
-                                @Model.ProductNo ning
+                                <h4>@Model.ProductNo ning BOM ro'yxati</h4>
                                 <div class="card-body">
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
+                                        <table id="myDataTable" class="table table-bordered" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th>Detall raqami</th>
@@ -58,14 +54,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model.BomList)
+                                                @foreach (var item in @ViewBag.partList)
                                                 {
                                                     <tr>
                                                         <td>@item.PART.PNo</td>
                                                         <td>@item.Quantity</td>
                                                         <td>@item.Unit</td>
                                                         <td>@item.InHouse</td>
-                                                        @if (item.PART.Type.ToLower().CompareTo("inhouse")==0)
+                                                        @if (item.InHouse)
                                                         {
                                                             <td>
                                                                 <div>
@@ -75,6 +71,10 @@
                                                                     </button>
                                                                 </div>
                                                             </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>-</td>
                                                         }
                                                     </tr>
                                                 }

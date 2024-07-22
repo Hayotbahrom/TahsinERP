@@ -173,30 +173,33 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(BomViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                using (DBTHSNEntities db = new DBTHSNEntities())
-                {
-                    var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
-                    model.Product = product;
-                    model.ProductNo = product.PNo;
-                }
-                return RedirectToAction("CreateWizard", model);
-            }
-
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
+                var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
+                model.Product = product;
+                model.ProductNo = product.PNo;
 
-                var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.ProductList = new SelectList(products, "ID", "PNo");
+                List<BomPart> newList = new List<BomPart>();
 
-                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Part = new SelectList(part, "ID", "PNo");
+                foreach( var part in model.BomList)
+                {
+                    BomPart newPart = new BomPart();
+                    newPart.PartID = part.PartID;
+                    newPart.Quantity = part.Quantity;
+                    newPart.Unit = part.Unit;
+                    newPart.InHouse = part.InHouse;
+                    newPart.PART = db.PARTS.Where(p => p.ID == part.PartID && p.IsDeleted == false).FirstOrDefault();
+                    newList.Add(newPart);
+                }
+
+                TempData["PartList"] = newList;
+                //var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
+                //ViewBag.ProductList = new SelectList(products, "ID", "PNo");
+
+                //var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                //ViewBag.Part = new SelectList(part, "ID", "PNo");
             }
-
-            return View(model);
+            return RedirectToAction("CompletionStatus", model);
         }
 
         public ActionResult CreateWizard(BomViewModel model)
@@ -628,11 +631,16 @@ namespace tahsinERP.Controllers
             return View();
         }
 
-        public ActionResult CompletionStatus(BomViewModel bomViewModel)
+        public ActionResult CompletionStatus(BomViewModel model)
         {
-            return  View(bomViewModel);
+            var partList = TempData["PartList"] as List<BomPart>;
+            
+            
+
+            ViewBag.partList = partList;
+            return View(model);
         }
 
-        
+
     }
 }

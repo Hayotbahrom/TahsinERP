@@ -20,10 +20,10 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="~/SContract/Index">Kirimlar</a>
+                                        <a href="~/BOM/Index">Kirimlar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Kirim qilish
+                                        Yangi BOM yaratish
                                     </li>
                                 </ol>
                             </div>
@@ -47,45 +47,42 @@
                                                 Maxsulotni tanlang:
                                             </h4>
                                             <div class="col-md-2 col-sm-12 form-group">
-                                                <label for="ProductID">Product</label>
+                                                <label for="ProductID">Maxsulot:</label>
                                                 @Html.DropDownListFor(model => model.ProductID, (SelectList)ViewBag.ProductList, new { @class = "form-control" })
-                                                @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
                                             </div>
+                                            <hr />
                                             <div data-repeater-list="BomList">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between align-items-center">
 
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="ProductID">Parts</label>
+                                                            <label for="PartID">Ehtiyot qismlar</label>
                                                             @Html.DropDownList("PartID", (SelectList)ViewBag.part, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.BomList[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Quantity">Quantity</label>
-                                                            <input type="number" name="Quantity" class="form-control" id="Quantity" placeholder="Quantity" />
-                                                            @Html.ValidationMessageFor(model => model.BomList[0].Quantity, "", new { @class = "text-danger" })
+                                                            <label for="Quantity">Miqdori</label>
+                                                            <input type="number" name="Quantity" class="form-control" id="Quantity" placeholder="Miqdori" />
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Unit">Unit</label>
-                                                            <input type="text" name="Unit" class="form-control" id="Unit" placeholder="Maxsulot birligi" />
-                                                            @Html.ValidationMessageFor(model => model.BomList[0].Unit, "", new { @class = "text-danger" })
+                                                            <label for="Unit">O'lchov birligi</label>
+                                                            <input type="text" name="Unit" class="form-control" id="Unit" placeholder="O'lchov birligi" />
                                                         </div>
 
-                                                        <div class="checkbox checkbox-secondary checkbox-glow">
-                                                            <input type="checkbox" name="InHouse" class="form-control" id="checkboxGlow2" />
-                                                            <label for="checkboxGlow2">InHouse ?</label>
-                                                            @Html.ValidationMessageFor(model => model.BomList[0].InHouse, "", new { @class = "text-danger" })
+                                                        <div>
+                                                            <input type="hidden" name="InHouse" value="false" />
+                                                            <input type="checkbox" name="InHouse" id="inHouse" value="true" class="form-control" />
+                                                            <label for="inHouse">In House</label>
                                                         </div>
 
                                                         <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                            <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
                                                         </div>
                                                     </div>
                                                     <hr>
                                                 </div>
                                             </div>
 
-                                            <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
+                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi qo'shish</button>
 
 
                                             // Save button
