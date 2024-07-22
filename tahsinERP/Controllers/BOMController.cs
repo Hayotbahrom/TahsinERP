@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -630,22 +631,37 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var part = db.BOMS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
-                try
-                {
-                    var rootItem = GetBomTree(part.ParentPNo);
-                    return View(rootItem);
-
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                }
-
-                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Welding").ToList();
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
-                return View();
+
+                BomViewModel model = new BomViewModel();
+
+                model.Part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == ID).FirstOrDefault();
+
+                return View(model);
             }
+        }
+
+        [HttpPost]
+        public ActionResult BomCreate(BomViewModel model,int [] processID)
+        {
+
+            if (ModelState.IsValid)
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    var selectedProcesses = db.PRODUCTIONPROCESSES
+                                              .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
+                                              .ToList();
+
+                    model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
+                    model.SelectedProcessIds = processID; 
+                }
+                return RedirectToAction("CreateWizard", model);
+            }
+
+            return View(model);
+
         }
 
         public ActionResult CompletionStatus(BomViewModel model)

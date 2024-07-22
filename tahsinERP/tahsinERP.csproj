@@ -586,10 +586,7 @@
     <Compile Include="ViewModels\BOM\BlankingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\BomViewModel.cs" />
     <Compile Include="ViewModels\BOM\BoomViewModel.cs" />
-    <Compile Include="ViewModels\BOM\ChildViewModel.cs" />
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
-    <Compile Include="ViewModels\BOM\ParentViewModel.cs" />
-    <Compile Include="ViewModels\BOM\BOMCreateViewModel.cs" />
     <Compile Include="ViewModels\BOM\StampingNormViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PackingListViewModel.cs" />
@@ -2568,8 +2565,8 @@
     <Content Include="Views\Tracing\Edit.cshtml" />
     <Content Include="Views\Tracing\Delete.cshtml" />
     <Content Include="Views\BOM\_BomTreePartial.cshtml" />
-    <Content Include="Views\BOM\CreateBom.cshtml" />
     <Content Include="Views\BOM\CompletionStatus.cshtml" />
+    <Content Include="Views\BOM\BomCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

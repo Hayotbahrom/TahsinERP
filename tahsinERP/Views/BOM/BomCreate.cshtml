@@ -1,8 +1,9 @@
-﻿@model  List<tahsinERP.ViewModels.BOM.BoomViewModel>
+﻿@model tahsinERP.ViewModels.BOM.BomViewModel
 @{
     ViewBag.Title = "BomCreate";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -19,7 +20,7 @@
                                     <a href="~/BOM/Index">BOM</a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    BOM ga mahsulot qo'shish
+                                    @Model.Part.PNo BOMI
                                 </li>
                             </ol>
                         </div>
@@ -35,8 +36,11 @@
                             <br />
                             <div class="card-content">
                                 <div class="card-body">
-                                    @using (Html.BeginForm("Create", "BomCreate", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    @using (Html.BeginForm("BomCreate", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                     {
+                                        <div>
+                                            @Html.TextBoxFor(Model => Model.Part.PNo)
+                                        </div>
                                         @Html.AntiForgeryToken()
                                         <div>
                                             <br />
@@ -47,32 +51,11 @@
                                                 <br />
                                                 <br />
                                             </fieldset>
-
-
                                             <button type="submit" class="btn btn-outline-success mr-1 mb-1">
                                                 <span class="align-middle ml-25">Keyingisi</span>
                                             </button>
                                         </div>
                                     }
-                                    <div class="table-responsive table-responsivetable-responsive">
-                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Parent Part Number</th>
-                                                    <th>Process Name</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var item in Model)
-                                                {
-                                                    <tr>
-                                                        <td>@item.ParentPNo</td>
-                                                        <td>@item.ProcessName</td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
