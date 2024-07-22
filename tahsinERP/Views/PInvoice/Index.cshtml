@@ -109,7 +109,7 @@
                                                             <td>
                                                                 <a href="~/POrder/Details/@item.OrderID">@item.P_ORDERS.OrderNo</a>
                                                             </td>
-                                                            <td>@item.InvoiceDate</td>
+                                                            <td>@item.InvoiceDate.ToString("dd.MM.yyyy")</td>
                                                             <td>
                                                                 <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
                                                             </td>
