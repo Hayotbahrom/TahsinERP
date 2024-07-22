@@ -1,11 +1,11 @@
 ﻿@model tahsinERP.ViewModels.BOM.BomViewModel
-
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(),
+    ViewContext.RouteData.Values["action"].ToString()))
 {
     <div class="app-content content">
         <div class="content-overlay"></div>
@@ -17,13 +17,13 @@
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb rounded-pill breadcrumb-divider">
                                     <li class="breadcrumb-item">
-                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="~/BOM/Index">BOM</a>
+                                        <a href="~/SContract/Index">Kirimlar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        BOM ga mahsulot qo'shish
+                                        Kirim qilish
                                     </li>
                                 </ol>
                             </div>
@@ -31,73 +31,72 @@
                     </div>
                 </div>
             </div>
+
             <div class="content-body">
-                <section id="validation">
+                <section id="form-repeater-wrapper">
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <br />
                                 <div class="card-content">
                                     <div class="card-body">
-                                        @using (Html.BeginForm("Create", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        @using (Html.BeginForm("Create", "BOM", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
                                         {
                                             @Html.AntiForgeryToken()
-                                        <div>
                                             <br />
-                                            <fieldset class="invoice-address form-group">
-                                                <label>Maxsulotni tanlang:</label>
-                                                <br />
-                                                @Html.DropDownListFor(model => model.ProductID, (SelectList)ViewBag.ProductList, "maxsulotlar", new { @class = "form-control" })
+                                            <h4>
+                                                Maxsulotni tanlang:
+                                            </h4>
+                                            <div class="col-md-2 col-sm-12 form-group">
+                                                <label for="ProductID">Product</label>
+                                                @Html.DropDownListFor(model => model.ProductID, (SelectList)ViewBag.ProductList, new { @class = "form-control" })
                                                 @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
-                                                <br />
-                                                <label>Jarayonlar ketma-ketligini tanlang:</label>
-                                                <br />
-                                                @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
-                                                <br />
-                                                <br />
+                                            </div>
+                                            <div data-repeater-list="BomList">
+                                                <div data-repeater-item>
+                                                    <div class="row justify-content-between align-items-center">
 
-                                                <div data-repeater-list="Parts">
-                                                    <div data-repeater-item>
-                                                        <div class="row justify-content-between">
-                                                            <div class="col-md-2 col-sm-12 form-group">
-                                                                <label for="ProductID">Part</label>
-                                                                @Html.DropDownList("PartID", (SelectList)ViewBag.Part, new { @class = "form-control" })
-                                                                @Html.ValidationMessageFor(model => model.BomList[0].PartID, "", new { @class = "text-danger" })
-
-                                                            </div>
-                                                            <div class="col-md-2 col-sm-12 form-group">
-                                                                <label for="Quantity">Quantity</label>
-                                                                <input type="number" name="Quantity" class="form-control" id="Quantity" placeholder="Maxsulot miqdori" />
-                                                                @Html.ValidationMessageFor(model => model.BomList[0].Quantity, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <div class="col-md-2 col-sm-12 form-group">
-                                                                <label for="Unit">Unit</label>
-                                                                <input type="text" name="Unit" class="form-control" id="Unit" placeholder="Maxsulot birligi" />
-                                                                @Html.ValidationMessageFor(model => model.BomList[0].Unit, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <div class="col-md-2 col-sm-12 form-group">
-
-                                                                <label for="InHouse">InHouse</label>
-                                                                <input type="checkbox" name="InHouse" class="form-control" id="InHouse" />
-                                                                @Html.ValidationMessageFor(model => model.BomList[0].InHouse, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                                <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
-                                                            </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="ProductID">Parts</label>
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.part, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.BomList[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
-                                                        <hr>
-                                                    </div>
-                                                </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Quantity">Quantity</label>
+                                                            <input type="number" name="Quantity" class="form-control" id="Quantity" placeholder="Quantity" />
+                                                            @Html.ValidationMessageFor(model => model.BomList[0].Quantity, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Unit">Unit</label>
+                                                            <input type="text" name="Unit" class="form-control" id="Unit" placeholder="Maxsulot birligi" />
+                                                            @Html.ValidationMessageFor(model => model.BomList[0].Unit, "", new { @class = "text-danger" })
+                                                        </div>
 
-                                                <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
-                                            </fieldset>
-                                            <button type="submit" class="btn btn-outline-success mr-1 mb-1">
-                                                <span class="align-middle ml-25">Keyingisi</span>
-                                            </button>
-                                        </div>
+                                                        <div class="checkbox checkbox-secondary checkbox-glow">
+                                                            <input type="checkbox" name="InHouse" class="form-control" id="checkboxGlow2" />
+                                                            <label for="checkboxGlow2">InHouse ?</label>
+                                                            @Html.ValidationMessageFor(model => model.BomList[0].InHouse, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            </div>
+
+                                            <button data-repeater-create type="button" class="btn btn-primary">Add New Part</button>
+
+
+                                            // Save button
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         }
                                     </div>
                                 </div>

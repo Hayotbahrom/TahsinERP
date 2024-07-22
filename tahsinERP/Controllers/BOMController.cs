@@ -171,18 +171,12 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BomViewModel model, int[] processID)
+        public ActionResult Create(BomViewModel model)
         {
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    var selectedProcesses = db.PRODUCTIONPROCESSES
-                                              .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
-                                              .ToList();
-
-                    model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
-                    model.SelectedProcessIds = processID;  // Add this line to ensure the process IDs are passed along
                     var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
                     model.Product = product;
                     model.ProductNo = product.PNo;
