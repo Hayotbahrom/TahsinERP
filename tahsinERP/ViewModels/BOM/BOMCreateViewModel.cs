@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using tahsinERP.Models;
 
-namespace tahsinERP.ViewModels.BOM
+namespace tahsinERP.ViewModels
 {
     public class BOMCreateViewModel
     {

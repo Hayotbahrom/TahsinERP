@@ -73,7 +73,7 @@ namespace tahsinERP.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, ex.Message);
+                    ModelState.AddModelError(string.Empty, ex);
                 }
                 return View();
             }
@@ -92,7 +92,7 @@ namespace tahsinERP.Controllers
                 }
 
                 // Create the root BomViewModel
-                var root = new BoomViewModel()
+                var root = new BoomViewModel
                 {
                     ParentPNo = parentPno,
                     ParentImageBase64 = GetParentImage(parentPno),
@@ -171,38 +171,35 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BomViewModel model, int[] processID)
+        public ActionResult Create(BomViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                using (DBTHSNEntities db = new DBTHSNEntities())
-                {
-                    var selectedProcesses = db.PRODUCTIONPROCESSES
-                                              .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
-                                              .ToList();
-
-                    model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
-                    model.SelectedProcessIds = processID;
-                    var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
-                    model.Product = product;
-                    model.ProductNo = product.PNo;
-                }
-                return RedirectToAction("CreateWizard", model);
-            }
-
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
+                var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
+                model.Product = product;
+                model.ProductNo = product.PNo;
 
-                var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.ProductList = new SelectList(products, "ID", "PNo");
+                List<BomPart> newList = new List<BomPart>();
 
-                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Part = new SelectList(part, "ID", "PNo");
+                foreach( var part in model.BomList)
+                {
+                    BomPart newPart = new BomPart();
+                    newPart.PartID = part.PartID;
+                    newPart.Quantity = part.Quantity;
+                    newPart.Unit = part.Unit;
+                    newPart.InHouse = part.InHouse;
+                    newPart.PART = db.PARTS.Where(p => p.ID == part.PartID && p.IsDeleted == false).FirstOrDefault();
+                    newList.Add(newPart);
+                }
+
+                TempData["PartList"] = newList;
+                //var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
+                //ViewBag.ProductList = new SelectList(products, "ID", "PNo");
+
+                //var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                //ViewBag.Part = new SelectList(part, "ID", "PNo");
             }
-
-            return View(model);
+            return RedirectToAction("CompletionStatus", model);
         }
 
         public ActionResult CreateWizard(BomViewModel model)
@@ -297,24 +294,24 @@ namespace tahsinERP.Controllers
                     {
                         var selectedSlittingNorm = db.SLITTING_NORMS.Find(model.SelectedSlittingNormID);
 
-                        var part_after = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
-                        var part_before = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
+                        var after_part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
+                        var part_before1 = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
 
-                        int cutterLines1 = (int)(part_after.PWidth) / (int)((part_before.PWidth) - 1);
-                        var cutterWidth = selectedSlittingNorm.CutterWidth;
+                        var cutterLines1 = (int)(after_part.PWidth) / ((part_before1.PWidth) - 1);
+                        var cutterWidth1 = selectedSlittingNorm.CutterWidth;
 
                         var bom = new BOM();
 
-                        bom.ChildPNo = part_before.PNo;
-                        bom.ParentPNo = part_after.PNo;
+                        bom.ChildPNo = part_before1.PNo;
+                        bom.ParentPNo = after_part.PNo;
                         bom.IsDeleted = false;
                         if (model.ProductNo != null) { bom.IsParentProduct = true; }
                         else { bom.IsParentProduct = false; }
                         bom.IsActive = true;
-                        bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines1 * cutterWidth);
+                        bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1 * cutterWidth1);
                         bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID;
                         bom.Consumption = selectedSlittingNorm.WeightOfSlittedParts / cutterLines1;
-                        bom.ConsumptionUnit = part_after.Unit;
+                        bom.ConsumptionUnit = "kg";
                         bom.Sequence = sequence + 1;
                         db.BOMS.Add(bom);
                     }
@@ -324,7 +321,7 @@ namespace tahsinERP.Controllers
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
 
                         var cutterWidth = model.SLITTING_NORMS.CutterWidth;
-                        int pieceCount = (int)(part_before.PWidth / part_after.PWidth);
+                        var pieceCount = (part_before.PWidth / part_after.PWidth);
                         var cutterLines = (pieceCount - 1);
 
                         if (part_after != null && part_before != null)
@@ -335,8 +332,8 @@ namespace tahsinERP.Controllers
                                 IsActive = model.IsActive,
                                 PartID_after = model.SLITTING_NORMS.PartID_after,
                                 PartID_before = model.SLITTING_NORMS.PartID_before,
-                                SlittingPieces = pieceCount,
-                                CutterLines = cutterLines,
+                                SlittingPieces = (int)pieceCount,
+                                CutterLines = (int)cutterLines,
                                 CutterWidth = cutterWidth,
                                 WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                                 WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
@@ -365,11 +362,12 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
+
                     if (model.BLANKING_NORMS != null || model.SelectedBlankingNormID != 0)
                     {
                         if (model.BLANKING_NORMS != null)
                         {
-                            var part_after_slitting = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after); // tepadan olish kerak yoki slitting norms jadvalidan olish
+                            var part_after_slitting = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
                             var part_after_Blanking = db.PARTS.FirstOrDefault(p => p.IsDeleted == false && p.ID == model.BLANKING_NORMS.PartID_after);
                             if (part_after_Blanking != null && part_after_slitting != null)
                             {
@@ -648,6 +646,21 @@ namespace tahsinERP.Controllers
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
                 return View();
             }
+        public ActionResult CreateBom()
+        {
+            return View();
         }
+
+        public ActionResult CompletionStatus(BomViewModel model)
+        {
+            var partList = TempData["PartList"] as List<BomPart>;
+            
+            
+
+            ViewBag.partList = partList;
+            return View(model);
+        }
+
+
     }
 }

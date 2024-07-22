@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -18,17 +17,9 @@ namespace tahsinERP.Controllers
 {
     public class SupplierController : Controller
     {
-        private string[] sources;
+        private string[] sources = ConfigurationManager.AppSettings["supplierTypes"].Split(',');
         private string supplierName = "";
         // GET: Supplier
-        public SupplierController()
-        {
-            // Retrieve the configuration string and split it into an array
-            sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
-
-            // Remove the "InHouse" element if it exists
-            sources = sources.Where(s => !s.Equals("InHouse", StringComparison.OrdinalIgnoreCase)).ToArray();
-        }
         public ActionResult Index(string type)
         {
             using(DBTHSNEntities db = new DBTHSNEntities())
