@@ -25,7 +25,7 @@
                                         BOM
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        @Model.ProductNo 
+                                        @Model.ProductNo
                                     </li>
                                 </ol>
                             </div>
@@ -43,14 +43,14 @@
                                 <div class="card-body">
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        <table id="myDataTable" class="table table-bordered" style="width:100%">
+                                        <table id="myDataTable" class="table table-bordered" style="width:100%; text-align:center">
                                             <thead>
                                                 <tr>
-                                                    <th>Detall raqami</th>
-                                                    <th>Consumption</th>
-                                                    <th>Unit</th>
-                                                    <th>IsInHouse</th>
-                                                    <th>Norma</th>
+                                                    <th>Detal raqami</th>
+                                                    <th>Ishlatilish miqdori</th>
+                                                    <th>O'lchov birligi</th>
+                                                    <th>O'zimizda chiqadimi?</th>
+                                                    <th>Normasi holati</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -60,21 +60,26 @@
                                                         <td>@item.PART.PNo</td>
                                                         <td>@item.Quantity</td>
                                                         <td>@item.Unit</td>
-                                                        <td>@item.InHouse</td>
-
                                                         @if (item.InHouse)
                                                         {
-
+                                                            <td>
+                                                                <i class="bx bxs-check-circle"></i>
+                                                            </td>
                                                             <td>
                                                                 <div>
 
-                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })">Yaratish<i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"><i class="bx bx-plus-circle"></i>Yaratish</a>
                                                                 </div>
                                                             </td>
                                                         }
                                                         else
                                                         {
-                                                            <td>-</td>
+                                                            <td>
+                                                                <i class="bx bxs-x-circle"></i>
+                                                            </td>
+                                                            <td>
+                                                                <i class="bx bx-minus"></i>
+                                                            </td>
                                                         }
                                                     </tr>
                                                 }
@@ -91,16 +96,6 @@
             </div>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        function refreshDataTable() {
-            const source = document.getElementById("SourceID").value;
-            const checked = source === 'Faqat Maxsulotlar';
-            console.log(source);// Use triple equals for strict comparison
-
-        window.location.href = '@Url.Action("Index", "BOM")?IsParentProduct=' + checked;
-    }
-    </script>
 }
 else
 {

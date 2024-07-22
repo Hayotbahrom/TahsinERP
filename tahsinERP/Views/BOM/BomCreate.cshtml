@@ -39,7 +39,7 @@
                                     @using (Html.BeginForm("BomCreate", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                     {
                                         <div>
-                                            @Html.TextBoxFor(Model => Model.Part.PNo)
+                                            @Html.TextBoxFor(Model => Model.Part.PNo, new { disabled = "disabled"})
                                         </div>
                                         @Html.AntiForgeryToken()
                                         <div>
