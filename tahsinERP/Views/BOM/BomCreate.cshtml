@@ -1,0 +1,63 @@
+﻿@model tahsinERP.ViewModels.BOM.BomViewModel
+@{
+    ViewBag.Title = "BomCreate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="~/BOM/Index">BOM</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    BOM ga mahsulot qo'shish
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <section id="validation">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <br />
+                            <div class="card-content">
+                                <div class="card-body">
+                                    @using (Html.BeginForm("Create", "BomCreate", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div>
+                                            <br />
+                                            <fieldset class="invoice-address form-group">
+                                                <label>Jarayonlar ketma-ketligini tanlang:</label>
+                                                <br />
+                                                @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
+                                                <br />
+                                                <br />
+                                            </fieldset>
+                                            <button type="submit" class="btn btn-outline-success mr-1 mb-1">
+                                                <span class="align-middle ml-25">Keyingisi</span>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

@@ -73,7 +73,7 @@ namespace tahsinERP.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, ex.Message);
+                    ModelState.AddModelError(string.Empty, ex);
                 }
                 return View();
             }
@@ -90,9 +90,9 @@ namespace tahsinERP.Controllers
                 {
                     return null;
                 }
-                
+
                 // Create the root BomViewModel
-                var root = new BoomViewModel()
+                var root = new BoomViewModel
                 {
                     ParentPNo = parentPno,
                     ParentImageBase64 = GetParentImage(parentPno),
@@ -284,7 +284,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -297,24 +297,24 @@ namespace tahsinERP.Controllers
                     {
                         var selectedSlittingNorm = db.SLITTING_NORMS.Find(model.SelectedSlittingNormID);
 
-                        var part_after = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
-                        var part_before = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
+                        var after_part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
+                        var part_before1 = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
 
-                        int cutterLines1 = (int)(part_after.PWidth) / (int)((part_before.PWidth) - 1);
-                        var cutterWidth = selectedSlittingNorm.CutterWidth;
+                        var cutterLines1 = (int)(after_part.PWidth) / ((part_before1.PWidth) - 1);
+                        var cutterWidth1 = selectedSlittingNorm.CutterWidth;
 
                         var bom = new BOM();
 
-                        bom.ChildPNo = part_before.PNo;
-                        bom.ParentPNo = part_after.PNo;
+                        bom.ChildPNo = part_before1.PNo;
+                        bom.ParentPNo = after_part.PNo;
                         bom.IsDeleted = false;
                         if (model.ProductNo != null) { bom.IsParentProduct = true; }
                         else { bom.IsParentProduct = false; }
                         bom.IsActive = true;
-                        bom.WasteAmount = (part_before.PWeight / part_before.PWidth * cutterLines1 * cutterWidth);
+                        bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1 * cutterWidth1);
                         bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID;
                         bom.Consumption = selectedSlittingNorm.WeightOfSlittedParts / cutterLines1;
-                        bom.ConsumptionUnit = part_after.Unit;
+                        bom.ConsumptionUnit = "kg";
                         bom.Sequence = sequence + 1;
                         db.BOMS.Add(bom);
                     }
@@ -324,7 +324,7 @@ namespace tahsinERP.Controllers
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
 
                         var cutterWidth = model.SLITTING_NORMS.CutterWidth;
-                        int pieceCount = (int)(part_before.PWidth / part_after.PWidth);
+                        var pieceCount = (part_before.PWidth / part_after.PWidth);
                         var cutterLines = (pieceCount - 1);
 
                         if (part_after != null && part_before != null)
@@ -335,8 +335,8 @@ namespace tahsinERP.Controllers
                                 IsActive = model.IsActive,
                                 PartID_after = model.SLITTING_NORMS.PartID_after,
                                 PartID_before = model.SLITTING_NORMS.PartID_before,
-                                SlittingPieces = pieceCount,
-                                CutterLines = cutterLines,
+                                SlittingPieces = (int)pieceCount,
+                                CutterLines = (int)cutterLines,
                                 CutterWidth = cutterWidth,
                                 WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                                 WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
@@ -365,11 +365,12 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
+
                     if (model.BLANKING_NORMS != null || model.SelectedBlankingNormID != 0)
                     {
                         if (model.BLANKING_NORMS != null)
                         {
-                            var part_after_slitting = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after); // tepadan olish kerak yoki slitting norms jadvalidan olish
+                            var part_after_slitting = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
                             var part_after_Blanking = db.PARTS.FirstOrDefault(p => p.IsDeleted == false && p.ID == model.BLANKING_NORMS.PartID_after);
                             if (part_after_Blanking != null && part_after_slitting != null)
                             {

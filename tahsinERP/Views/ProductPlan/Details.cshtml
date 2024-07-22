@@ -45,15 +45,19 @@
                                                 <hr>
                                                 <h6 class="invoice-to">Mahsulotni rejadagi miqdori</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })
+                                                    @Html.DisplayFor(model => model.PlannedQty, new { @class = "form-control" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Reja labeli</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DisplayFor(model => model.Label, new { @class = "form-control" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Boshlangan sana</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.DisplayFor(model => model.StartDate, new { @class = "form-control" })
+                                                    @Html.DisplayFor(model => model.IssueDate, new { @class = "form-control" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Muddati</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.EditorFor(model => model.DueDate.ToShortDateString(), new { @class = "form-control" })
+                                                    @Html.DisplayFor(model => model.DueDate, new { @class = "form-control" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Product nomi</h6>
                                                 <fieldset class="invoice-address form-group">
