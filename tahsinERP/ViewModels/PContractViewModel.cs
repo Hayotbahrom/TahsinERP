@@ -10,6 +10,8 @@ namespace tahsinERP.ViewModels
     {
         public int ID { get; set; }
         public string ContractNo { get; set; }
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase File;
         public DateTime IssuedDate { get; set; }
         public DateTime DueDate { get; set; }
         public int SupplierID { get; set; }

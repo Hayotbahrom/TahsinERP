@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -20,6 +21,8 @@ namespace tahsinERP.Controllers
     {
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, partNo = "";
+        private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
+
         // GET: Contracts
         public ActionResult Index(string type, int? supplierID)
         {
@@ -327,6 +330,26 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+
+                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                {
+                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                    {
+                        P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
+                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        contractDoc.ContractID = newContract.ID;
+                        contractDoc.Doc = avatar;
+
+                        db.P_CONTRACT_DOCS.Add(contractDoc);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        throw new RetryLimitExceededException();
+                    }
+                }
                 return RedirectToAction("Index");
             }
         }
