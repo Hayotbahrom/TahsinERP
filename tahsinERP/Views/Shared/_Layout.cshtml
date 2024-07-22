@@ -266,20 +266,20 @@
                         </ul>
                     </li>
                     @*<li class=" navigation-header">
-                            <span>Boshqaruv dasturlari</span>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-chat"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-check-circle"></i><span class="menu-title" data-i18n="Todo">Topshiriqlar</span></a>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-calendar"></i><span class="menu-title" data-i18n="Calendar">Kalendar</span></a>
-                        </li>
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
-                        </li>*@
+            <span>Boshqaruv dasturlari</span>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-chat"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-check-circle"></i><span class="menu-title" data-i18n="Todo">Topshiriqlar</span></a>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-calendar"></i><span class="menu-title" data-i18n="Calendar">Kalendar</span></a>
+        </li>
+        <li class=" nav-item">
+            <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
+        </li>*@
                     <li class=" navigation-header">
                         <span>SRM</span>
                     </li>
@@ -290,9 +290,6 @@
                         <ul class="menu-content">
                             <li>
                                 <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ta'minotchilar</span></a>
-                            </li>
-                            <li>
-                                <a href="/Part"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span></a>
                             </li>
                         </ul>
                     </li>
@@ -358,7 +355,8 @@
                             </ul>
                         </li>
                     }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice")) {
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
                         <li class=" nav-item">
                             <a href="#">
                                 <i class="bx bxs-right-arrow-circle"></i><span class="menu-title" data-i18n="Icons">Logistika</span>
@@ -382,8 +380,9 @@
                             </ul>
                         </li>
                     }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice")) {
-                    
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
+
                     }
                     <li class=" nav-item">
                         <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
@@ -433,6 +432,9 @@
                         <a href="/Product">
                             <i class="bx bxl-product-hunt"></i><span class="menu-title" data-i18n="File Manager">Tayyor maxsulot</span>
                         </a>
+                    </li>
+                    <li>
+                        <a href="/Part"><i class="bx bx-paragraph"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span></a>
                     </li>
                     <li class=" navigation-header">
                         <span>MES</span>

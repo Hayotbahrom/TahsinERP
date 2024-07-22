@@ -108,7 +108,7 @@ namespace tahsinERP.Controllers
                 newPart.Standart = partVM.Standart;
                 newPart.IsInHouse = partVM.IsInHouse;
                 newPart.ShopID = partVM.ShopID;
-                newPart.HSCodeID = partVM.HSCodeD;
+                newPart.HSCodeID = partVM.HSCode;
 
                 db.PARTS.Add(newPart);
                 db.SaveChanges();
@@ -166,6 +166,7 @@ namespace tahsinERP.Controllers
 
             ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
             ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
+            ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
             return View(partVM);
         }
 
