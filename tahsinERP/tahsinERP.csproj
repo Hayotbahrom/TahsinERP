@@ -584,6 +584,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\BOM\BlankingNormViewModel.cs" />
+    <Compile Include="ViewModels\BOM\BOMCreateProductViewModel.cs" />
     <Compile Include="ViewModels\BOM\BomViewModel.cs" />
     <Compile Include="ViewModels\BOM\BoomViewModel.cs" />
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />

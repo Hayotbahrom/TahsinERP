@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 using tahsinERP.ViewModels.BOM;
+using static tahsinERP.ViewModels.BOM.BOMCreateProductViewModel;
 
 namespace tahsinERP.Controllers
 {
@@ -166,18 +167,18 @@ namespace tahsinERP.Controllers
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
 
-                return View(new BomViewModel());
+                return View(new BOMCreateProductViewModel());
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BomViewModel model)
+        public ActionResult Create(BOMCreateProductViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var product = db.PRODUCTS.FirstOrDefault(x => x.ID == model.ProductID && x.IsDeleted == false);
-                model.Product = product;
+                model.PRODUCT = product;
                 model.ProductNo = product.PNo;
 
                 List<BomPart> newList = new List<BomPart>();
@@ -275,6 +276,16 @@ namespace tahsinERP.Controllers
                                      .FirstOrDefault();
 
                 return currentUser?.ID;
+            }
+        }
+
+        [HttpPost]
+        public bool IsInHouse(string pNo)
+        {
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PART part = db.PARTS.Where(p => p.PNo == pNo && p.IsDeleted == false).FirstOrDefault();
+                return part != null;
             }
         }
 
@@ -664,7 +675,7 @@ namespace tahsinERP.Controllers
 
         }
 
-        public ActionResult CompletionStatus(BomViewModel model)
+        public ActionResult CompletionStatus(BOMCreateProductViewModel model)
         {
             var partList = TempData["PartList"] as List<BomPart>;
             

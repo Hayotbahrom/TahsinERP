@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.BOM.BomViewModel
+﻿@model tahsinERP.ViewModels.BOM.BOMCreateProductViewModel
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -57,7 +57,7 @@
 
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="PartID">Ehtiyot qismlar</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.part, new { @class = "form-control" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.part, new { @class = "form-control", @id = "partList", @onmousedown="this.value=''", @onchange="myFunc(this)" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Quantity">Miqdori</label>
@@ -109,3 +109,17 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+
+<script type="text/javascript">
+    console.log("KIRDI");
+
+    function myFunc(value) {
+        console.log(value);
+
+        $.ajax({
+            url: '',
+            data: { pNo }
+        })
+    }
+</script>
