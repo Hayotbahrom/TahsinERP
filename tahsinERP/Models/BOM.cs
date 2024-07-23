@@ -14,6 +14,12 @@ namespace tahsinERP.Models
     
     public partial class BOM
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public BOM()
+        {
+            this.BOMS_AND_NORMS = new HashSet<BOMS_AND_NORMS>();
+        }
+    
         public int ID { get; set; }
         public double Consumption { get; set; }
         public string ConsumptionUnit { get; set; }
@@ -28,5 +34,7 @@ namespace tahsinERP.Models
         public Nullable<int> ProcessID { get; set; }
     
         public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BOMS_AND_NORMS> BOMS_AND_NORMS { get; set; }
     }
 }
