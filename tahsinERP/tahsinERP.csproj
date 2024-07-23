@@ -2578,6 +2578,7 @@
     <Content Include="Views\BOM\_BomTreePartial.cshtml" />
     <Content Include="Views\BOM\CompletionStatus.cshtml" />
     <Content Include="Views\BOM\BomCreate.cshtml" />
+    <Content Include="Views\BOM\BomCreateDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

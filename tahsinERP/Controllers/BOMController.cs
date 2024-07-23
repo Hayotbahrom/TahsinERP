@@ -183,14 +183,6 @@ namespace tahsinERP.Controllers
 
                 foreach (var part in model.BomList)
                 {
-                    //BomPart newPart = new BomPart();
-                    //newPart.PartID = part.PartID;
-                    //newPart.Quantity = part.Quantity;
-                    //newPart.Unit = part.Unit;
-                    //newPart.InHouse = part.InHouse;
-                    //newPart.PART = db.PARTS.Where(p => p.ID == part.PartID && p.IsDeleted == false).FirstOrDefault();
-                    //newList.Add(newPart);
-
                     var _part = db.PARTS.Include("UNIT").Where(p => p.ID == part.PartID).FirstOrDefault();
                     var unitId = db.UNITS.Where(x => x.UnitName == _part.UNIT.ShortName).FirstOrDefault();
                     TEMPORARY_BOMS tempBom = new TEMPORARY_BOMS();
@@ -206,10 +198,8 @@ namespace tahsinERP.Controllers
                     db.TEMPORARY_BOMS.Add(tempBom);
                     db.SaveChanges();
                 }
-
-                //TempData["PartList"] = newList;
             }
-            return RedirectToAction("CompletionStatus");
+            return RedirectToAction("CompletionStatus", model);
         }
 
         public ActionResult CreateWizard(BomViewModel model)
@@ -226,6 +216,7 @@ namespace tahsinERP.Controllers
                 createViewModel.SelectedProcessIds = model.SelectedProcessIds;
                 createViewModel.Process = model.Process;
                 createViewModel.IsActive = model.IsActive;
+                
 
 
 
@@ -288,16 +279,6 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
-        public bool IsInHouse(string pNo)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                PART part = db.PARTS.Where(p => p.PNo == pNo && p.IsDeleted == false).FirstOrDefault();
-                return part != null;
-            }
-        }
-
-        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateWizard(BOMCreateViewModel model, BOMCreateProductViewModel bomviewmodel)
         {
@@ -313,15 +294,11 @@ namespace tahsinERP.Controllers
                     if (model.SelectedSlittingNormID != 0)
                     {
                         var selectedSlittingNorm = db.SLITTING_NORMS.Find(model.SelectedSlittingNormID);
-
                         var after_part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
                         var part_before1 = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
-
                         var cutterLines1 = (int)(after_part.PWidth) / ((part_before1.PWidth) - 1);
                         var cutterWidth1 = selectedSlittingNorm.CutterWidth;
-
                         var bom = new BOM();
-
                         bom.ChildPNo = part_before1.PNo;
                         bom.ParentPNo = after_part.PNo;
                         bom.IsDeleted = false;
@@ -339,11 +316,9 @@ namespace tahsinERP.Controllers
                     {
                         var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
-
                         var cutterWidth = model.SLITTING_NORMS.CutterWidth;
                         var pieceCount = (part_before.PWidth / part_after.PWidth);
                         var cutterLines = (pieceCount - 1);
-
                         if (part_after != null && part_before != null)
                         {
                             var slitting_process = new SLITTING_NORMS
@@ -363,7 +338,6 @@ namespace tahsinERP.Controllers
                                 IssuedByUserID = userId.GetValueOrDefault()
                             };
                             db.SLITTING_NORMS.Add(slitting_process);
-
                             if (part_after != null)
                             {
                                 var bom = new BOM
@@ -404,7 +378,6 @@ namespace tahsinERP.Controllers
                                     IssuedByUserID = userId.GetValueOrDefault()
                                 };
                                 db.BLANKING_NORMS.Add(blanking_norms);
-
                                 var bom = new BOM
                                 {
                                     ChildPNo = part_after_slitting.PNo,
@@ -425,7 +398,6 @@ namespace tahsinERP.Controllers
                                 var part_after_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.STAMPING_NORMS.PartID_after);
                                 if (model.STAMPING_NORMS != null)
                                 {
-
                                     var stamping = new STAMPING_NORMS
                                     {
                                         IsDeleted = false,
@@ -440,7 +412,6 @@ namespace tahsinERP.Controllers
                                         IssuedByUserID = userId.GetValueOrDefault()
                                     };
                                     db.STAMPING_NORMS.Add(stamping);
-
                                     var bom = new BOM
                                     {
                                         ChildPNo = part_after_Blanking.PNo,
@@ -454,7 +425,6 @@ namespace tahsinERP.Controllers
                                         Sequence = sequence + 3,
                                     };
                                     db.BOMS.Add(bom);
-
                                 }
                                 else if (model.SelectedStampingNormID != 0)
                                 {
@@ -462,7 +432,6 @@ namespace tahsinERP.Controllers
                                     if (selectedStampingNorm != null)
                                     {
                                         var part_after_stamping = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedStampingNorm.PartID_after);
-
                                         var bom = new BOM
                                         {
                                             ChildPNo = part_after_Blanking.PNo,
@@ -488,7 +457,6 @@ namespace tahsinERP.Controllers
                                 {
                                     var part_before_Blanking = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedBlankingNorm.PartID_after);
                                     var part_after_Blanking = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == selectedBlankingNorm.PartID_before);
-
                                     if (part_after_Blanking != null && part_before_Blanking != null)
                                     {
                                         var bom = new BOM
@@ -544,9 +512,6 @@ namespace tahsinERP.Controllers
                                         var selectedStampingNorm = db.STAMPING_NORMS.Find(model.SelectedStampingNormID);
                                         var part_before_stamping = db.PARTS.Where(x => x.ID == selectedStampingNorm.PartID_before && x.IsDeleted == false).FirstOrDefault();
                                         var part_after_stamping = db.PARTS.Where(p => p.ID == selectedStampingNorm.PartID_after && p.IsDeleted == false).FirstOrDefault();
-
-
-
                                         var bom = new BOM
                                         {
                                             ChildPNo = part_after_Stamping.PNo,
@@ -559,7 +524,6 @@ namespace tahsinERP.Controllers
                                             Sequence = sequence + 3,
                                         };
                                         db.BOMS.Add(bom);
-
                                     }
                                 }
                             }
@@ -584,9 +548,7 @@ namespace tahsinERP.Controllers
                             };
                             db.BOMS.Add(bom);
                         }
-
                     }
-
                     if (model.AssemblyPart != null)
                     {
                         foreach (var part in model.AssemblyPart)
@@ -606,7 +568,6 @@ namespace tahsinERP.Controllers
                             db.BOMS.Add(bom);
                         }
                     }
-
                     if (model.PaintingPart != null)
                     {
                         foreach (var part in model.PaintingPart)
@@ -622,51 +583,72 @@ namespace tahsinERP.Controllers
                             bom.ConsumptionUnit = paint_part.UNIT.ShortName;
                             bom.Sequence = sequence + 6;
                             bom.Consumption = part.PaintingQuantity;
-
                             db.BOMS.Add(bom);
                         }
                     }
-
                     db.SaveChanges();
-
-
-                    return RedirectToAction("index", bomviewmodel);
+                    return RedirectToAction("CompletionStatus", bomviewmodel);
                 }
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
-
                 var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.ProductList = new SelectList(products, "ID", "PNo");
             }
 
             return View(model);
         }
-
         public ActionResult BomCreate(int ID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Welding" && x.ProcessName == "Painting").ToList();
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Welding" && x.ProcessName != "Painting").ToList();
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
-
+                var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
+                var part = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
                 BomViewModel model = new BomViewModel();
-                model.Part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == ID).FirstOrDefault();
+                model.Part = part;
                 return View(model);
             }
         }
+        public ActionResult BomCreateDetails(int ID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
+                var part = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
+                try
+                {
+                    if (part != null)
+                    {
+                        var rootItem = GetBomTree(part.PNo);
+                        return View(rootItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex);
+                }
+                return View();
+            }
+        }
 
+        [HttpPost]
+        public ActionResult BomCreateDetails(BomViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var tempbom = db.TEMPORARY_BOMS.Where(x => x.ChildPNo == model.Part.PNo && x.IsDeleted == false).FirstOrDefault();
 
-
-
+                return RedirectToAction("CompletionStatus", model);
+            }
+        }
 
         [HttpPost]
         public ActionResult BomCreate(BomViewModel model, int[] processID)
         {
-
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
@@ -674,30 +656,24 @@ namespace tahsinERP.Controllers
                     var selectedProcesses = db.PRODUCTIONPROCESSES
                                               .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
                                               .ToList();
-
                     model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
                     model.SelectedProcessIds = processID;
                 }
                 return RedirectToAction("CreateWizard", model);
             }
-
             return View(model);
-
         }
-
         public ActionResult CompletionStatus(BOMCreateProductViewModel model)
         {
             var userID = GetUserID(User.Identity.Name);
-            var partList = TempData["PartList"] as List<BomPart>;
-
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var bomlist = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
                 ViewBag.partList = bomlist;
+                var bom = new BomViewModel();
+                bom.ProductPno = model.ProductNo;
             }
             return View(model);
         }
-
-
     }
 }
