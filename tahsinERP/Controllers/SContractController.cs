@@ -38,6 +38,7 @@ namespace tahsinERP.Controllers
                 SContractViewModel SContractViewModel = new SContractViewModel();
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 return View(SContractViewModel);
             }
         }
@@ -63,8 +64,8 @@ namespace tahsinERP.Controllers
                     ContractNo = model.ContractNo,
                     IssuedDate = DateTime.Now,
                     CompanyID = int.Parse(ConfigurationManager.AppSettings["companyID"]),
-                    /*CustomerID = model.CustomerID,*/
-                    CustomerID = 2,
+                    CustomerID = model.CustomerID,
+                    //CustomerID = 2,
                     Currency = model.Currency,
                     Amount = (int)model.Amount,
                     Incoterms = model.Incoterms,
@@ -95,7 +96,7 @@ namespace tahsinERP.Controllers
                         ContractID = newContractID,
                         ProductID = item.ProductID,
                         PiecePrice = (int)item.PiecePrice,
-                        //Unit = item.Unit,
+                        UnitID = item.UnitID,
                         Amount = item.Amount
                     };
 
