@@ -67,8 +67,9 @@
                                                             </td>
                                                             <td>
                                                                 <div>
-
-                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"><i class="bx bx-plus-circle"></i>Yaratish</a>
+                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"><i class="bx bx-plus-circle"></i></a>
+                                                                    <a href="@Url.Action("#", "#", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("#", "#", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
                                                                 </div>
                                                             </td>
                                                         }

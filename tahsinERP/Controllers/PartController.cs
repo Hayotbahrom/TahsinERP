@@ -81,6 +81,7 @@ namespace tahsinERP.Controllers
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
                 ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");    
                 return View(partVM);
             }
         }
@@ -92,6 +93,7 @@ namespace tahsinERP.Controllers
             {
                 try
                 {
+                    var unitshortName = db.UNITS.Where(u => u.ID == partVM.UnitID).FirstOrDefault();
                     PART newPart = new PART();
                     newPart.PNo = partVM.PNo;
                     newPart.PName = partVM.PName;
@@ -99,7 +101,7 @@ namespace tahsinERP.Controllers
                     newPart.PLength = partVM.PLength;
                     newPart.PWidth = partVM.PWidth;
                     newPart.PHeight = partVM.PHeight;
-                    //newPart.Unit = partVM.Unit;
+                    newPart.UnitID = partVM.UnitID;
                     newPart.Type = partVM.Type;
                     newPart.Description = partVM.Description;
                     newPart.IsDeleted = false;
@@ -170,6 +172,7 @@ namespace tahsinERP.Controllers
 
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 return View(partVM);
             }
         }
@@ -198,7 +201,7 @@ namespace tahsinERP.Controllers
                     PLength = part.PLength,
                     PWidth = part.PWidth,
                     PHeight = part.PHeight,
-                    //Unit = part.Unit,
+                    Units = part.UNIT,
                     Type = part.Type,
                     Description = part.Description,
                     Thickness = part.Thickness,
@@ -216,7 +219,7 @@ namespace tahsinERP.Controllers
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
                 ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
-
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 return View(partVM);
             }
         }
@@ -241,7 +244,7 @@ namespace tahsinERP.Controllers
                     partToUpdate.PLength = partVM.PLength;
                     partToUpdate.PWidth = partVM.PWidth;
                     partToUpdate.PHeight = partVM.PHeight;
-                    //partToUpdate.Unit = partVM.Unit;
+                    partToUpdate.UNIT.ShortName = partVM.Units.ShortName;
                     partToUpdate.Type = partVM.Type;
                     partToUpdate.Description = partVM.Description;
                     partToUpdate.Thickness = partVM.Thickness;
@@ -375,7 +378,7 @@ namespace tahsinERP.Controllers
                     PLength = part.PLength,
                     PWidth = part.PWidth,
                     PHeight = part.PHeight,
-                   // Unit = part.Unit,
+                    Units = part.UNIT,
                     Type = part.Type,
                     Description = part.Description,
                     Thickness = part.Thickness,
@@ -570,7 +573,7 @@ namespace tahsinERP.Controllers
                                 newPart.Coating = row["Coating"].ToString();
                                 newPart.Marka = row["Standart"].ToString();
                                 newPart.Standart = row["Standart"].ToString();
-                                //newPart.Unit = row["Unit"].ToString();
+                                //newPart.UNIT.ShortName = db.UNITS.Where(u => u.ShortName.Equals(row["Unit"].ToString())).FirstOrDefault();
                                 if (row["InHouse?"].ToString().CompareTo("Yes") == 0)
                                     newPart.IsInHouse = true;
                                 else

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.UI.WebControls;
+using tahsinERP.Models;
 
 namespace tahsinERP.ViewModels
 {
@@ -17,7 +19,8 @@ namespace tahsinERP.ViewModels
         public double PLength { get; set; }
         public double PWidth { get; set; }
         public double PHeight { get; set; }
-        public string Unit { get; set; }
+        public int UnitID { get; set; }
+        public UNIT Units { get; set; }
         [Display(Name = "Selected Part Type")]
         public string Type { get; set; }
         [DataType(DataType.Text)]

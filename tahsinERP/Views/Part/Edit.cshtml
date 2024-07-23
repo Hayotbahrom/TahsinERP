@@ -106,8 +106,8 @@
                                                             </fieldset>
                                                             <h6 class="invoice-to">O'lchov birligi</h6>
                                                             <fieldset class="invoice-address form-group">
-                                                                @Html.TextBoxFor(model => model.Unit, new { @class = "form-control", @placeholder = "O'lchov birligini kiriting" })
-                                                                @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                                                                @Html.TextBoxFor(model => model.Units.ShortName, new { @class = "form-control", @placeholder = "O'lchov birligini kiriting" })
+                                                                @Html.ValidationMessageFor(model => model.Units.ShortName, "", new { @class = "text-danger" })
                                                             </fieldset>
                                                             <h6 class="invoice-to">Marka</h6>
                                                             <fieldset class="invoice-address form-group">
