@@ -25,7 +25,7 @@ namespace tahsinERP.ViewModels
         public int SContractID { get; set; }
         public int ProductID { get; set; }
         public decimal PiecePrice { get; set; }
-        public string Unit { get; set; }
+        public int UnitID { get; set; }
         public int Amount { get; set; }
         public ProductViewModel PRODUCT { get; set; }
     }

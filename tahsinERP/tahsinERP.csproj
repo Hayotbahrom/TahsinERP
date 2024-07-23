@@ -315,6 +315,9 @@
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BOMS_AND_NORMS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\COMPANy.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -2579,6 +2582,8 @@
     <Content Include="Views\BOM\CompletionStatus.cshtml" />
     <Content Include="Views\BOM\BomCreate.cshtml" />
     <Content Include="Views\BOM\BomCreateDetails.cshtml" />
+    <Content Include="Views\SOrder\Index.cshtml" />
+    <Content Include="Views\SOrder\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

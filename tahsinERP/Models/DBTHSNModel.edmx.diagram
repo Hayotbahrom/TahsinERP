@@ -77,7 +77,7 @@
         <EntityTypeShape EntityType="DBTHSNModel.SPL" Width="1.5" PointX="14.25" PointY="80.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.STAMPING_NORMS" Width="1.5" PointX="19.25" PointY="63.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.SUPPLIER" Width="1.5" PointX="1.5" PointY="72.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.TEMPORARY_BOMS" Width="1.5" PointX="9" PointY="49.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTHSNModel.TEMPORARY_BOMS" Width="1.5" PointX="9.125" PointY="49" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.TRACING" Width="1.5" PointX="17.25" PointY="47" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.UNIT" Width="1.5" PointX="0.75" PointY="57.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.USER_ENTRIES" Width="1.5" PointX="3.75" PointY="23.125" IsExpanded="true" />
@@ -221,6 +221,8 @@
         <AssociationConnector Association="DBTHSNModel.FK_USERIMAGES_USERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_WASTE_STOCKS_WASTES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.USERROLES" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DBTHSNModel.BOMS_AND_NORMS" Width="1.5" PointX="11.25" PointY="42.75" />
+        <AssociationConnector Association="DBTHSNModel.FK_BOMS_AND_NORMS_BOMS" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

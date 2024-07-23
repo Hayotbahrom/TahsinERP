@@ -26,7 +26,7 @@ namespace tahsinERP.Models
         public int CompanyID { get; set; }
         public int CustomerID { get; set; }
         public string Currency { get; set; }
-        public Nullable<double> Amount { get; set; }
+        public double Amount { get; set; }
         public string Incoterms { get; set; }
         public string PaymentTerms { get; set; }
         public DateTime DueDate { get; set; }
