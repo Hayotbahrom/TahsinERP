@@ -45,6 +45,7 @@
                             <div class="card-content">
                                 <h4>@Model.ProductNo ning BOM ro'yxati</h4>
                                 <div class="card-body">
+                                    @Html.HiddenFor(model => model.ProductNo);
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
                                         <table id="myDataTable" class="table table-bordered" style="width:100%; text-align:center">
@@ -69,9 +70,9 @@
                                                             </td>
                                                             <td>
                                                                 <div>
-                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"> <i class="bi bi-eye"  style="font-size:20px"></i></a>
-                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"><i class="bx bx-plus-circle"></i></a>
+                                                                    <a href="@Url.Action("BomCreateDetails", "BOM", new { id = item.ID })"> <i class="bi bi-eye" style="font-size:20px"></i></a>
+                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.ID })"><i class="bx bx-plus-circle"></i></a>
                                                                 </div>
                                                             </td>
                                                         }
@@ -88,6 +89,15 @@
                                                 }
                                             </tbody>
                                         </table>
+
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item border-0 pb-0">
+                                                <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                    <i class='bx bx-save'></i>
+                                                    Saqlash
+                                                </button>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <!-- datatable ends -->
                                 </div>

@@ -28,6 +28,7 @@ namespace tahsinERP.Models
         public int UserID { get; set; }
         public System.DateTime IssuedDate { get; set; }
         public Nullable<bool> IsInHouse { get; set; }
+        public Nullable<bool> NormConfirmed { get; set; }
     
         public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
         public virtual UNIT UNIT { get; set; }

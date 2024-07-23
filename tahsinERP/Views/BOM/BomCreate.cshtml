@@ -39,7 +39,7 @@
                                     @using (Html.BeginForm("BomCreate", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                     {
                                         <div>
-                                            @Html.TextBoxFor(Model => Model.Part.PNo, new { disabled = "disabled"})
+                                            @Html.TextBoxFor(Model => Model.Part.PNo, new { disabled = "disabled" })
                                         </div>
                                         @Html.AntiForgeryToken()
                                         <div>
@@ -48,6 +48,7 @@
                                                 <label>Jarayonlar ketma-ketligini tanlang:</label>
                                                 <br />
                                                 @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
+                                                @Html.ValidationMessage("processID", "", new { @class = "text-danger" })
                                                 <br />
                                                 <br />
                                             </fieldset>
@@ -56,7 +57,6 @@
                                             </button>
                                         </div>
                                     }
-
                                 </div>
                             </div>
                         </div>
