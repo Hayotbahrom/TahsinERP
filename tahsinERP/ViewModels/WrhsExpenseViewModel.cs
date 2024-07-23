@@ -13,7 +13,8 @@ namespace tahsinERP.ViewModels
 
         [Required]
         public int RecieverWHID { get; set; } // Ombor IDsi auto: null
-        
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase File;
         public int SenderWHID { get; set; }
         public double Amount { get; set; }
         public string Currency { get; set; }
