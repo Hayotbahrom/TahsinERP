@@ -23,14 +23,14 @@ namespace tahsinERP.Models
     
         public int ID { get; set; }
         public string ContractNo { get; set; }
-        public int CompanyID { get; set; }
-        public int ForwarderID { get; set; }
+        public Nullable<int> CompanyID { get; set; }
+        public Nullable<int> ForwarderID { get; set; }
         public Nullable<System.DateTime> IssueDate { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
         public double Amount { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }
-        public bool IsDeleted { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

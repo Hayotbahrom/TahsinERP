@@ -44,7 +44,6 @@ namespace tahsinERP.Models
         public double PLength { get; set; }
         public double PWidth { get; set; }
         public double PHeight { get; set; }
-        public string Unit { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
@@ -59,6 +58,7 @@ namespace tahsinERP.Models
         public double Thickness { get; set; }
         public double Pitch { get; set; }
         public Nullable<int> HSCodeID { get; set; }
+        public Nullable<int> UnitID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
@@ -91,6 +91,7 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PARTPLAN> PARTPLANS { get; set; }
         public virtual SHOP SHOP { get; set; }
+        public virtual UNIT UNIT { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SLITTING_NORMS> SLITTING_NORMS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

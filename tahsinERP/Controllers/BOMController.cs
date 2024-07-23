@@ -582,7 +582,7 @@ namespace tahsinERP.Controllers
                             bom.IsDeleted = false;
                             bom.IsActive = true;
                             bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Assembly")?.ID;
-                            bom.ConsumptionUnit = assamble_part.Unit;
+                            //bom.ConsumptionUnit = assamble_part.Unit;
                             bom.Sequence = sequence + 5;
                             bom.Consumption = part.AssemblyQuantity;
 
@@ -602,7 +602,7 @@ namespace tahsinERP.Controllers
                             bom.IsDeleted = false;
                             bom.IsActive = true;
                             bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Painting")?.ID;
-                            bom.ConsumptionUnit = paint_part.Unit;
+                            //bom.ConsumptionUnit = paint_part.Unit;
                             bom.Sequence = sequence + 6;
                             bom.Consumption = part.PaintingQuantity;
 

@@ -17,13 +17,14 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public int IncomeID { get; set; }
         public int PartID { get; set; }
-        public string Unit { get; set; }
         public double Amount { get; set; }
         public Nullable<double> PiecePrice { get; set; }
         public Nullable<double> TotalPrice { get; set; }
         public string Comment { get; set; }
+        public Nullable<int> UnitID { get; set; }
     
         public virtual PART_WRHS_INCOMES PART_WRHS_INCOMES { get; set; }
         public virtual PART PART { get; set; }
+        public virtual UNIT UNIT { get; set; }
     }
 }

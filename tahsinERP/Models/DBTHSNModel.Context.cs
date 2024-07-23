@@ -19,7 +19,6 @@ namespace tahsinERP.Models
     {
         public DBTHSNEntities()
             : base("name=DBTHSNEntities")
-        
         {
         }
     
@@ -100,13 +99,16 @@ namespace tahsinERP.Models
         public virtual DbSet<SPL> SPLs { get; set; }
         public virtual DbSet<STAMPING_NORMS> STAMPING_NORMS { get; set; }
         public virtual DbSet<SUPPLIER> SUPPLIERS { get; set; }
+        public virtual DbSet<TEMPORARY_BOMS> TEMPORARY_BOMS { get; set; }
         public virtual DbSet<TRACING> TRACINGS { get; set; }
+        public virtual DbSet<UNIT> UNITS { get; set; }
         public virtual DbSet<USER_ENTRIES> USER_ENTRIES { get; set; }
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
         public virtual DbSet<WASTE_STOCKS> WASTE_STOCKS { get; set; }
         public virtual DbSet<WASTE> WASTES { get; set; }
+        public virtual DbSet<MaterialRequirement> MaterialRequirements { get; set; }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {
@@ -142,24 +144,6 @@ namespace tahsinERP.Models
                 new ObjectParameter("SupplierID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPartsInfo_by_type_and_supplierID_Result>("GetPartsInfo_by_type_and_supplierID", typeParameter, supplierIDParameter);
-        }
-    
-        public virtual int GetSupplierParts(Nullable<int> supplierID)
-        {
-            var supplierIDParameter = supplierID.HasValue ?
-                new ObjectParameter("SupplierID", supplierID) :
-                new ObjectParameter("SupplierID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetSupplierParts", supplierIDParameter);
-        }
-    
-        public virtual ObjectResult<GetProductListPerShop_Result> GetProductListPerShop(Nullable<int> shopID)
-        {
-            var shopIDParameter = shopID.HasValue ?
-                new ObjectParameter("ShopID", shopID) :
-                new ObjectParameter("ShopID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductListPerShop_Result>("GetProductListPerShop", shopIDParameter);
         }
     }
 }

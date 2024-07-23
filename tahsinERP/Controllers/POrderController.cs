@@ -119,7 +119,7 @@ namespace tahsinERP.Controllers
                     {
                         OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
-                        Unit = part.Unit,
+                        //Unit = part.Unit,
                         Amount = part.Amount,
                         Price = part.Price,
                         TotalPrice = part.TotalPrice,
@@ -412,7 +412,7 @@ namespace tahsinERP.Controllers
                         orderPartToUpdate.Price = orderPart.Price;
                         orderPartToUpdate.Amount = orderPart.Amount;
                         orderPartToUpdate.TotalPrice = orderPart.TotalPrice;
-                        orderPartToUpdate.Unit = orderPart.Unit;
+                        //orderPartToUpdate.Unit = orderPart.Unit;
                         orderPartToUpdate.MOQ = orderPart.MOQ;
                         //orderPartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
 
@@ -593,7 +593,7 @@ namespace tahsinERP.Controllers
                                         new_orderPart.PartID = part.ID;
                                         new_orderPart.OrderID = new_order.ID;
                                         new_orderPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                        new_orderPart.Unit = row["Unit"].ToString();
+                                        //new_orderPart.Unit = row["Unit"].ToString();
                                         new_orderPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                         new_orderPart.Amount = Convert.ToDouble(row["Amount"].ToString());
 
@@ -610,7 +610,7 @@ namespace tahsinERP.Controllers
                                         new_orderPart.PartID = part.ID;
                                         new_orderPart.OrderID = order.ID;
                                         new_orderPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                        new_orderPart.Unit = row["Unit"].ToString();
+                                        //new_orderPart.Unit = row["Unit"].ToString();
                                         new_orderPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                         new_orderPart.Amount = Convert.ToDouble(row["Amount"].ToString());
 

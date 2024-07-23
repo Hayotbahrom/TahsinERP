@@ -101,7 +101,7 @@ namespace tahsinERP.Controllers
                     {
                         ExpenseID = newExpenseID,
                         PartID = part.PartID,
-                        Unit = part.Unit,
+                        //Unit = part.Unit,
                         Amount = part.Amount,
                         PiecePrice = part.PiecePrice,
                         Comment = part.Comment
@@ -261,7 +261,7 @@ namespace tahsinERP.Controllers
                     {
                         whExpensePartToUpdate.PartID = whExpensePart.PartID;
                         whExpensePartToUpdate.Amount = whExpensePart.Amount;
-                        whExpensePartToUpdate.Unit = whExpensePart.Unit;
+                        //whExpensePartToUpdate.Unit = whExpensePart.Unit;
                         whExpensePartToUpdate.PiecePrice = whExpensePart.PiecePrice;
                         whExpensePartToUpdate.Comment = whExpensePart.Comment;
                         //whExpensePartToUpdate.Amount = whExpensePart.Quantity * whExpensePart.Price; SQL o'zi chiqarib beradi
