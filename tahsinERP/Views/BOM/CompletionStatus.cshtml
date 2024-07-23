@@ -1,4 +1,8 @@
 ﻿@model tahsinERP.ViewModels.BOM.BOMCreateProductViewModel
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
 {
     bool changePermit = false;
@@ -48,7 +52,6 @@
                                                 <tr>
                                                     <th>Detal raqami</th>
                                                     <th>Ishlatilish miqdori</th>
-                                                    <th>O'lchov birligi</th>
                                                     <th>O'zimizda chiqadimi?</th>
                                                     <th>Normasi holati</th>
                                                 </tr>
@@ -57,19 +60,18 @@
                                                 @foreach (var item in ViewBag.partList)
                                                 {
                                                     <tr>
-                                                        <td>@item.PART.PNo</td>
-                                                        <td>@item.Quantity</td>
-                                                        <td>@item.Unit</td>
-                                                        @if (item.InHouse)
+                                                        <td>@item.ChildPNo</td>
+                                                        <td>@item.Consumption</td>
+                                                        @if (item.IsInHouse)
                                                         {
                                                             <td>
                                                                 <i class="bx bxs-check-circle"></i>
                                                             </td>
                                                             <td>
                                                                 <div>
+                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"> <i class="bi bi-eye"  style="font-size:20px"></i></a>
+                                                                    <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"><i class="bx bx-edit-alt"></i></a>
                                                                     <a href="@Url.Action("BomCreate", "BOM", new { id = item.PART.ID })"><i class="bx bx-plus-circle"></i></a>
-                                                                    <a href="@Url.Action("#", "#", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                    <a href="@Url.Action("#", "#", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
                                                                 </div>
                                                             </td>
                                                         }

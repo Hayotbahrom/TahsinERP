@@ -30,7 +30,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                var parts = db1.PARTS
+                var parts = db1.PARTS.Include(x => x.UNIT)
                     .Where(p => p.IsDeleted == false).ToList();
                 return View(parts);
             }

@@ -159,7 +159,7 @@ namespace tahsinERP.Controllers
                 var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.ProductList = new SelectList(products, "ID", "PNo");
 
-                
+
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
 
@@ -177,22 +177,39 @@ namespace tahsinERP.Controllers
                 model.PRODUCT = product;
                 model.ProductNo = product.PNo;
 
+                var userID = GetUserID(User.Identity.Name);
+
                 List<BomPart> newList = new List<BomPart>();
 
                 foreach (var part in model.BomList)
                 {
-                    BomPart newPart = new BomPart();
-                    newPart.PartID = part.PartID;
-                    newPart.Quantity = part.Quantity;
-                    newPart.Unit = part.Unit;
-                    newPart.InHouse = part.InHouse;
-                    newPart.PART = db.PARTS.Where(p => p.ID == part.PartID && p.IsDeleted == false).FirstOrDefault();
-                    newList.Add(newPart);
+                    //BomPart newPart = new BomPart();
+                    //newPart.PartID = part.PartID;
+                    //newPart.Quantity = part.Quantity;
+                    //newPart.Unit = part.Unit;
+                    //newPart.InHouse = part.InHouse;
+                    //newPart.PART = db.PARTS.Where(p => p.ID == part.PartID && p.IsDeleted == false).FirstOrDefault();
+                    //newList.Add(newPart);
+
+                    var _part = db.PARTS.Include("UNIT").Where(p => p.ID == part.PartID).FirstOrDefault();
+                    var unitId = db.UNITS.Where(x => x.UnitName == _part.UNIT.ShortName).FirstOrDefault();
+                    TEMPORARY_BOMS tempBom = new TEMPORARY_BOMS();
+                    tempBom.Consumption = part.Quantity;
+                    tempBom.ConsumptionUnitID = unitId.ID;
+                    tempBom.ParentPNo = model.ProductNo;
+                    tempBom.ChildPNo = _part.PNo;
+                    tempBom.IsDeleted = false;
+                    tempBom.IsActive = true;
+                    tempBom.IsInHouse = part.InHouse;
+                    tempBom.UserID = userID.Value;
+                    tempBom.IssuedDate = DateTime.Now;
+                    db.TEMPORARY_BOMS.Add(tempBom);
+                    db.SaveChanges();
                 }
 
-                TempData["PartList"] = newList;
+                //TempData["PartList"] = newList;
             }
-            return RedirectToAction("CompletionStatus", model);
+            return RedirectToAction("CompletionStatus");
         }
 
         public ActionResult CreateWizard(BomViewModel model)
@@ -365,7 +382,6 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
-
                     if (model.BLANKING_NORMS != null || model.SelectedBlankingNormID != 0)
                     {
                         if (model.BLANKING_NORMS != null)
@@ -562,7 +578,7 @@ namespace tahsinERP.Controllers
                                 IsDeleted = false,
                                 IsActive = true,
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Welding")?.ID,
-                                ConsumptionUnit =unit_part.UNIT.ShortName,
+                                ConsumptionUnit = unit_part.UNIT.ShortName,
                                 Consumption = part.WeldingQuantity,
                                 Sequence = sequence + 4,
                             };
@@ -671,11 +687,14 @@ namespace tahsinERP.Controllers
 
         public ActionResult CompletionStatus(BOMCreateProductViewModel model)
         {
+            var userID = GetUserID(User.Identity.Name);
             var partList = TempData["PartList"] as List<BomPart>;
 
-
-
-            ViewBag.partList = partList;
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var bomlist = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
+                ViewBag.partList = bomlist;
+            }
             return View(model);
         }
 
