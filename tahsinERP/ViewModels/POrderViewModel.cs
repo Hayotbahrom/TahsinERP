@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,6 +10,8 @@ namespace tahsinERP.ViewModels
     { 
         public int ID { get; set; }
         public string OrderNo { get; set; }
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase File;
         public DateTime IssuedDate { get; set; }
         public int SupplierID { get; set; }
         public int ContractID { get; set; }

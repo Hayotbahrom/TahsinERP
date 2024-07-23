@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace tahsinERP.ViewModels
 {
@@ -15,6 +16,8 @@ namespace tahsinERP.ViewModels
         public int InvoiceID { get; set; }
         [Required]
         public int WaybillID { get; set; }
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase File;
         public int Amount { get; set; }
         public string Currency { get; set; }
         public int TotalPrice { get; set; } // Trigger in DB
