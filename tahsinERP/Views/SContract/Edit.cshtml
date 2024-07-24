@@ -110,6 +110,8 @@
                                                                         <tbody>
                                                                             @for (int i = 0; i < Model.ProductList.Count; i++)
                                                                             {
+                                                                                @Html.HiddenFor(model => model.ProductList[i].ProductID)
+
                                                                                 <tr>
                                                                                     <td>
                                                                                         <a href="~/SContracts/Details/@Model.ProductList[i].PRODUCT.ID">@Model.ProductList[i].PRODUCT.PNo</a>
@@ -121,7 +123,7 @@
                                                                                         @Html.TextBoxFor(model => model.ProductList[i].PiecePrice, new { @class = "form-control" })
                                                                                     </td>
                                                                                     <td>
-                                                                                        @Html.DropDownList("UnitID", (SelectList)ViewBag.Units, new { @class = "form-control" })
+                                                                                        @Html.DropDownListFor(model => model.ProductList[i].UnitID, (SelectList)ViewBag.Units, new { @class = "form-control" })
                                                                                     </td>
                                                                                     <td>
                                                                                         @Html.TextBoxFor(model => model.ProductList[i].Amount, new { @class = "form-control" })
