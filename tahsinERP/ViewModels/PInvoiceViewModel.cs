@@ -33,7 +33,7 @@ namespace tahsinERP.ViewModels
         public int InvoiceID { get; set; }
         public int PartID { get; set; }
         public double Quantuty { get; set; }
-        public string Unit { get; set; }
+        public int UnitID { get; set; }
         public double Price { get; set; }
         public double TotalPrice { get; set; }
     }

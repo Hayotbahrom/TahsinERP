@@ -8,6 +8,7 @@ namespace tahsinERP.ViewModels.BOM
 {
     public class BoomViewModel
     {
+        public string ParentPnoComplationStatus { get; set; }
         public int ID { get; set; }
         public string ParentPNo { get; set; }
         public string ChildPNo { get; set; }

@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Linq;
 using System.Web.Mvc;
@@ -9,7 +10,6 @@ namespace tahsinERP.Controllers
 {
     public class SlittingController : Controller
     {
-        // GET: Slitting
         public ActionResult Index()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -55,18 +55,13 @@ namespace tahsinERP.Controllers
                 {
                     if (ModelState.IsValid)
                     {
+                        var userID = GetUserID(User.Identity.Name).Value;
                         var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.PartID_before);
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.PartID_after);
 
                         var cutterWidth = model.CutterWidth;
                         var pieceCount = Convert.ToInt32(Math.Floor(part_before.PWidth / part_after.PWidth));
                         var cutterLines = (pieceCount - 1);
-
-                        var userImageCookie = Request.Cookies["UserImageId"];
-                        int userImageId = int.Parse(userImageCookie.Value);
-
-                        var userimage = db.USERIMAGES.FirstOrDefault(x => x.ID == userImageId);
-                        int userId = userimage.UserID;
 
                         if (part_after != null && part_before != null)
                         {
@@ -84,7 +79,7 @@ namespace tahsinERP.Controllers
                                 WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)),2, MidpointRounding.ToEven),
                                 WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                                 IssuedDateTime = DateTime.Now,
-                                IssuedByUserID = userId
+                                IssuedByUserID = userID
                             };
                             db.SLITTING_NORMS.Add(slitting_process);
                         }
@@ -104,7 +99,17 @@ namespace tahsinERP.Controllers
             }
             return View(model);
         }
+        private int? GetUserID(string email)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                USER currentUser = db.USERS
+                                     .Where(u => u.Email.CompareTo(email) == 0 && u.IsDeleted == false && u.IsActive == true)
+                                     .FirstOrDefault();
 
+                return currentUser?.ID;
+            }
+        }
 
         public ActionResult Edit(int id)
         {
@@ -133,6 +138,7 @@ namespace tahsinERP.Controllers
                 {
                     if (ModelState.IsValid)
                     {
+                        var userID = GetUserID(User.Identity.Name).Value;
                         var slittingNorm = db.SLITTING_NORMS.FirstOrDefault(x => x.ID == model.ID && x.IsDeleted == false);
                         if (slittingNorm == null)
                         {
@@ -159,7 +165,7 @@ namespace tahsinERP.Controllers
                             slittingNorm.WidthOfUsefulWaste = part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth);
                             slittingNorm.WeightOfUsefulWaste = (part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth)) * (part_before.PWeight / part_before.PWidth);
                             slittingNorm.IssuedDateTime = DateTime.Now; // This might not be necessary for an edit
-                            slittingNorm.IssuedByUserID = 5; // This might not be necessary for an edit
+                            slittingNorm.IssuedByUserID = userID; // This might not be necessary for an edit
                         }
 
                         db.SaveChanges();

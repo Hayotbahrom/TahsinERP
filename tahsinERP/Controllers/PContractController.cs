@@ -283,6 +283,8 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
                 return View();
             }
         }
@@ -319,7 +321,7 @@ namespace tahsinERP.Controllers
                     {
                         ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
-                        //Unit = part.Unit,
+                        UnitID = part.UnitID,
                         Amount = part.Amount,
                         Price = part.Price,
                         Quantity = part.Quantity,
@@ -398,6 +400,7 @@ namespace tahsinERP.Controllers
 
                 var partList = db.P_CONTRACT_PARTS
                                   .Include(pc => pc.PART)
+                                  .Include(pc => pc.UNIT)
                                   .Where(pc => pc.ContractID == contract.ID)
                                   .ToList();
 
@@ -435,6 +438,7 @@ namespace tahsinERP.Controllers
                 }
 
                 suppliers = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", contract.SupplierID);
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 partList = contract.P_CONTRACT_PARTS.ToList();
             }
@@ -466,17 +470,14 @@ namespace tahsinERP.Controllers
                         contractToUpdate.IDN = contract.IDN;      
                         contractToUpdate.IsDeleted = false;
 
-                        if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo", "IssuedDate", "SupplierID", "Price", "Currency", "Amount", "Incoterms", "PaymentTerms", "DueDate", "IDN" }))
+                        try
                         {
-                            try
-                            {
-                                db.SaveChanges();
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                     return View(contractToUpdate);
@@ -502,6 +503,7 @@ namespace tahsinERP.Controllers
                 }
                 var allParts = db.PARTS
                                 .Include(p => p.P_CONTRACT_PARTS)
+                                .Include(p=> p.UNIT)
                                 .Select(p => new SelectListItem
                                 {
                                     Value = p.ID.ToString(),
@@ -567,6 +569,7 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.P_CONTRACT_PARTS
                         .Include(pc => pc.PART)
+                        .Include(pc => pc.UNIT)
                         .Where(pc => pc.ContractID == contract.ID).ToList();
 
                 db.Entry(contract).Reference(i => i.SUPPLIER).Load();

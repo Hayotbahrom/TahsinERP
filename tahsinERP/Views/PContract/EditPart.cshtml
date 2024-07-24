@@ -79,18 +79,22 @@
 
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.UnitID, new { @class = "form-control round", @placeholder = "O'lchov birligi" })
+                                                        @Html.DropDownListFor(model => model.UnitID, ViewBag.units as SelectList,new { @class = "form-control select2", @placeholder = "O'lchov birligi" })
                                                         @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
                                                     </fieldset>
+                                                   @* <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownListFor(model => model.PartID, (IEnumerable<SelectListItem>)ViewBag.PartList, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.PartID, "", new { @class = "text-danger" })
+                                                    </fieldset>*@
 
                                                     <ul class="list-unstyled mb-0">
                                                         <li class="d-inline-block mr-2 mb-1">
-                                                             <fieldset>
-                                                                    <div class="checkbox checkbox-secondary checkbox-glow">
-                                                                        @Html.CheckBoxFor(model => model.ActivePart, new { @id = "checkboxGlow2" })
-                                                                        <label for="checkboxGlow2">Faolmi?</label>
-                                                                    </div>
-                                                             </fieldset>
+                                                            <fieldset>
+                                                                <div class="checkbox checkbox-secondary checkbox-glow">
+                                                                    @Html.CheckBoxFor(model => model.ActivePart, new { @id = "checkboxGlow2" })
+                                                                    <label for="checkboxGlow2">Faolmi?</label>
+                                                                </div>
+                                                            </fieldset>
                                                         </li>
                                                     </ul>
 

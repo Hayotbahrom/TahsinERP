@@ -38,6 +38,7 @@ namespace tahsinERP.Controllers
                 ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                 ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 WrhsExpenseViewModel viewModel = new WrhsExpenseViewModel();
                 PART_WRHS_EXPENSES expense = db.PART_WRHS_EXPENSES.OrderByDescending(p => p.IssueDateTime).FirstOrDefault();
@@ -68,6 +69,8 @@ namespace tahsinERP.Controllers
                     ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                     ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                     ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
                     return View(model);
                 }
 
@@ -101,7 +104,7 @@ namespace tahsinERP.Controllers
                     {
                         ExpenseID = newExpenseID,
                         PartID = part.PartID,
-                        //Unit = part.Unit,
+                        UnitID = part.UnitID,
                         Amount = part.Amount,
                         PiecePrice = part.PiecePrice,
                         Comment = part.Comment
@@ -134,6 +137,7 @@ namespace tahsinERP.Controllers
 
                 var partList = db1.PART_WRHS_EXPENSE_PARTS
                                   .Include(pc => pc.PART)
+                                  .Include(pc => pc.UNIT)
                                   .Where(pc => pc.ExpenseID == wrhsExpense.ID)
                                   .ToList();
 
@@ -166,12 +170,15 @@ namespace tahsinERP.Controllers
                 // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", wrhsExpense.SupplierID);
 
                 partList = db1.PART_WRHS_EXPENSE_PARTS
-                    .Where(whp => whp.ExpenseID == ID)
                     .Include(whp => whp.PART)
+                    .Include(pc => pc.UNIT)
+                    .Where(whp => whp.ExpenseID == ID)
                     .ToList();
                 //ViewBag.PartList = new SelectList(db1.PART_WRHS_EXPENSE_PARTS.Include(p => p.PART).ToList(),"ID","PName");
                // ViewBag.Invoices = new SelectList(db1.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
                 ViewBag.PartWhrs = new SelectList(db1.PART_WRHS.Where(i => i.IsDeleted == false).ToList(), "ID", "WHName");
+                ViewBag.units = new SelectList(db1.UNITS.ToList(), "ID", "UnitName");
+
             }
 
             // ViewBag.Supplier = suppliers;
@@ -229,6 +236,7 @@ namespace tahsinERP.Controllers
                 var whExpensePart = db.PART_WRHS_EXPENSE_PARTS
                                     .Include(p => p.PART_WRHS_EXPENSES)
                                     .Include(p => p.PART)
+                                    .Include(pc => pc.UNIT)
                                     .FirstOrDefault(p => p.ID == ID);
                 if (whExpensePart == null)
                 {
@@ -236,6 +244,7 @@ namespace tahsinERP.Controllers
                 }
                 var allParts = db.PARTS
                                 .Include(p => p.PART_WRHS_EXPENSE_PARTS)
+                                .Include(pc => pc.UNIT)
                                 .Select(p => new SelectListItem
                                 {
                                     Value = p.ID.ToString(),
@@ -261,7 +270,7 @@ namespace tahsinERP.Controllers
                     {
                         whExpensePartToUpdate.PartID = whExpensePart.PartID;
                         whExpensePartToUpdate.Amount = whExpensePart.Amount;
-                        //whExpensePartToUpdate.Unit = whExpensePart.Unit;
+                        whExpensePartToUpdate.UnitID = whExpensePart.UnitID;
                         whExpensePartToUpdate.PiecePrice = whExpensePart.PiecePrice;
                         whExpensePartToUpdate.Comment = whExpensePart.Comment;
                         //whExpensePartToUpdate.Amount = whExpensePart.Quantity * whExpensePart.Price; SQL o'zi chiqarib beradi
@@ -297,6 +306,7 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.PART_WRHS_EXPENSE_PARTS
                         .Include(pc => pc.PART)
+                        .Include(pc => pc.UNIT)
                         .Where(pc => pc.ExpenseID == wrhsExpense.ID).ToList();
 
                 db.Entry(wrhsExpense).Reference(i => i.PART_WRHS).Load();

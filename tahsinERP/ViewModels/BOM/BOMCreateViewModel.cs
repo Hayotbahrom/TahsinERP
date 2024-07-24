@@ -8,6 +8,7 @@ namespace tahsinERP.ViewModels.BOM
 {
     public class BOMCreateViewModel
     {
+        public  string ProductPNo { get; set; }
         public int PartID { get; set; }
         public PART Part { get; set; }
         public string PartNo { get; set; }

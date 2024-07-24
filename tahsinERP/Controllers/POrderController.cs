@@ -72,11 +72,6 @@ namespace tahsinERP.Controllers
                 return View(orders);
             }
         }
-
-
-
-
-
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -119,7 +114,7 @@ namespace tahsinERP.Controllers
                     {
                         OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
-                        //Unit = part.Unit,
+                        UnitID = part.UnitID,
                         Amount = part.Amount,
                         Price = part.Price,
                         TotalPrice = part.TotalPrice,
@@ -132,6 +127,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 return RedirectToAction("Index");
             }
         }
@@ -182,6 +178,7 @@ namespace tahsinERP.Controllers
                 foreach (var part in partList)
                 {
                     db1.Entry(part).Reference(o => o.PART).Load();
+                    db1.Entry(part).Reference(o => o.UNIT).Load();
                 }
             }
 
@@ -208,9 +205,10 @@ namespace tahsinERP.Controllers
                 db1.Entry(order).Reference(o => o.SUPPLIER).Load();
                 db1.Entry(order).Reference(o => o.P_CONTRACTS).Load();
 
-                partList = db1.P_ORDER_PARTS.Where(op => op.OrderID ==  Id).ToList();
-                foreach(var part in partList)
-                    db1.Entry(part).Reference(p => p.PART).Load();
+                partList = db1.P_ORDER_PARTS
+                    .Include(pc => pc.UNIT)
+                    .Include(pc => pc.PART)
+                    .Where(op => op.OrderID ==  Id).ToList();
             }
             
             ViewBag.partList = partList;
@@ -325,7 +323,10 @@ namespace tahsinERP.Controllers
                 // Populate ViewBag for dropdowns or other data needed in the view
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", order.SupplierID);
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo", order.ContractID);
-                ViewBag.PartList = db.P_ORDER_PARTS.Include(pc => pc.PART).Where(pc => pc.OrderID == order.ID).ToList();
+                ViewBag.PartList = db.P_ORDER_PARTS
+                                .Include(pc => pc.PART)
+                                .Include(pc => pc.UNIT)
+                                .Where(pc => pc.OrderID == order.ID).ToList();
 
                 return View(order);
             }
@@ -368,6 +369,8 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
                 ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
                 return View(order);
             }
         }
@@ -392,6 +395,7 @@ namespace tahsinERP.Controllers
                 }).ToList();
 
                 db.Entry(orderPart).Reference(o => o.P_ORDERS).Load();
+                db.Entry(orderPart).Reference(o => o.UNIT).Load();
                 ViewBag.PartList = allParts;
 
                 return View(orderPart);
@@ -412,13 +416,13 @@ namespace tahsinERP.Controllers
                         orderPartToUpdate.Price = orderPart.Price;
                         orderPartToUpdate.Amount = orderPart.Amount;
                         orderPartToUpdate.TotalPrice = orderPart.TotalPrice;
-                        //orderPartToUpdate.Unit = orderPart.Unit;
+                        orderPartToUpdate.UnitID = orderPart.UnitID;
                         orderPartToUpdate.MOQ = orderPart.MOQ;
                         //orderPartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
 
-
+/*
                         if (TryUpdateModel(orderPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, TotalPrice" }))
-                        {
+                        {*/
                             try
                             {
                                 db.SaveChanges();
@@ -428,7 +432,7 @@ namespace tahsinERP.Controllers
                             {
                                 ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                             }
-                        }
+                        
                     }
                     return View(orderPartToUpdate);
                 }

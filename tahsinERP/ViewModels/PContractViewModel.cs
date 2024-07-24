@@ -34,7 +34,7 @@ namespace tahsinERP.ViewModels
         public int PartID { get; set; }
         public int Price { get; set; }
         public int Quantity { get; set; }
-        public string Unit { get; set; }
+        public int UnitID { get; set; }
         public float Amount { get; set; } // Trigger in DB
         public float MOQ { get; set; } 
         public bool ActivePart { get; set; }

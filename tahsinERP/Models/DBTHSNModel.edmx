@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DBTHSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DBTHSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BLANKING_NORMS">
           <Key>
             <PropertyRef Name="ID" />
@@ -37,6 +37,18 @@
           <Property Name="TotalConsumption" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="Sequence" Type="int" />
           <Property Name="ProcessID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BOMS_AND_NORMS">
+          <Key>
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IssuedDT" />
+          </Key>
+          <Property Name="BOMID" Type="int" />
+          <Property Name="NormID" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IssuedDT" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="COMPANIES">
           <Key>
@@ -648,18 +660,6 @@
           <Property Name="RoleID" Type="int" />
           <Property Name="PermissionModuleID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PARTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PROD_SHOPS_PARTS">
-          <Property Name="ShopID" Type="int" />
-          <Property Name="PartID" Type="int" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PROD_SHOPS_PRODUCTS">
-          <Property Name="ShopID" Type="int" />
-          <Property Name="ProductID" Type="int" />
-        </EntityType>-->
         <EntityType Name="PROD_STOCKS">
           <Key>
             <PropertyRef Name="ID" />
@@ -1015,6 +1015,7 @@ warning 6013: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a pr
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="IssuedDate" Type="date" Nullable="false" />
           <Property Name="IsInHouse" Type="bit" />
+          <Property Name="NormConfirmed" Type="bit" />
         </EntityType>
         <EntityType Name="TRACINGS">
           <Key>
@@ -1118,72 +1119,6 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <Property Name="PartNo" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="TotalConsumption" Type="float" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'DBTHSN.dbo.PartRequirement' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="PartRequirement">
-          <Property Name="PartNo" Type="varchar" MaxLength="50" />
-          <Property Name="2024-07-01" Type="float" />
-          <Property Name="2024-07-02" Type="float" />
-          <Property Name="2024-07-03" Type="float" />
-          <Property Name="2024-07-04" Type="float" />
-          <Property Name="2024-07-05" Type="float" />
-          <Property Name="2024-07-06" Type="float" />
-          <Property Name="2024-07-07" Type="float" />
-          <Property Name="2024-07-08" Type="float" />
-          <Property Name="2024-07-09" Type="float" />
-          <Property Name="2024-07-10" Type="float" />
-          <Property Name="2024-07-11" Type="float" />
-          <Property Name="2024-07-12" Type="float" />
-          <Property Name="2024-07-13" Type="float" />
-          <Property Name="2024-07-14" Type="float" />
-          <Property Name="2024-07-15" Type="float" />
-          <Property Name="2024-07-16" Type="float" />
-          <Property Name="2024-07-17" Type="float" />
-          <Property Name="2024-07-18" Type="float" />
-          <Property Name="2024-07-19" Type="float" />
-          <Property Name="2024-07-20" Type="float" />
-          <Property Name="2024-07-21" Type="float" />
-          <Property Name="2024-07-22" Type="float" />
-          <Property Name="2024-07-23" Type="float" />
-          <Property Name="2024-07-24" Type="float" />
-          <Property Name="2024-07-25" Type="float" />
-          <Property Name="2024-07-26" Type="float" />
-          <Property Name="2024-07-27" Type="float" />
-          <Property Name="2024-07-28" Type="float" />
-          <Property Name="2024-07-29" Type="float" />
-          <Property Name="2024-07-30" Type="float" />
-          <Property Name="2024-07-31" Type="float" />
-          <Property Name="2024-08-01" Type="float" />
-          <Property Name="2024-08-02" Type="float" />
-          <Property Name="2024-08-03" Type="float" />
-          <Property Name="2024-08-04" Type="float" />
-          <Property Name="2024-08-05" Type="float" />
-          <Property Name="2024-08-06" Type="float" />
-          <Property Name="2024-08-07" Type="float" />
-          <Property Name="2024-08-08" Type="float" />
-          <Property Name="2024-08-09" Type="float" />
-          <Property Name="2024-08-10" Type="float" />
-          <Property Name="2024-08-11" Type="float" />
-          <Property Name="2024-08-12" Type="float" />
-          <Property Name="2024-08-13" Type="float" />
-          <Property Name="2024-08-14" Type="float" />
-          <Property Name="2024-08-15" Type="float" />
-          <Property Name="2024-08-16" Type="float" />
-          <Property Name="2024-08-17" Type="float" />
-          <Property Name="2024-08-18" Type="float" />
-          <Property Name="2024-08-19" Type="float" />
-          <Property Name="2024-08-20" Type="float" />
-          <Property Name="2024-08-21" Type="float" />
-          <Property Name="2024-08-22" Type="float" />
-          <Property Name="2024-08-23" Type="float" />
-          <Property Name="2024-08-24" Type="float" />
-          <Property Name="2024-08-25" Type="float" />
-          <Property Name="2024-08-26" Type="float" />
-          <Property Name="2024-08-27" Type="float" />
-          <Property Name="2024-08-28" Type="float" />
-          <Property Name="2024-08-29" Type="float" />
-          <Property Name="2024-08-30" Type="float" />
-        </EntityType>-->
         <Association Name="FK_BLANKING_NORMS_PARTS">
           <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
           <End Role="BLANKING_NORMS" Type="Self.BLANKING_NORMS" Multiplicity="*" />
@@ -1217,6 +1152,18 @@ warning 6013: The table/view 'DBTHSN.dbo.PartRequirement' does not have a primar
             </Principal>
             <Dependent Role="BLANKING_NORMS">
               <PropertyRef Name="IssuedByUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BOMS_AND_NORMS_BOMS">
+          <End Role="BOMS" Type="Self.BOMS" Multiplicity="0..1" />
+          <End Role="BOMS_AND_NORMS" Type="Self.BOMS_AND_NORMS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOMS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS_AND_NORMS">
+              <PropertyRef Name="BOMID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2204,18 +2151,6 @@ warning 6013: The table/view 'DBTHSN.dbo.PartRequirement' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PARTS_PARTS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PARTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PARTS_PROD_SHOPS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PRODUCTS_PROD_SHOPS" />-->
-        <!--Errors Found During Generation:
-error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relationship, but cannot be found.
-        <Association Name="FK_PROD_SHOPS_PRODUCTS_PRODUCTS" />-->
         <Association Name="FK_PROD_STOCKS_PROD_WRHS">
           <End Role="PROD_WRHS" Type="Self.PROD_WRHS" Multiplicity="1" />
           <End Role="PROD_STOCKS" Type="Self.PROD_STOCKS" Multiplicity="*" />
@@ -2909,6 +2844,14 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WASTE_STOCKS" EntityType="Self.WASTE_STOCKS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WASTES" EntityType="Self.WASTES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BOMS_AND_NORMS" EntityType="Self.BOMS_AND_NORMS" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BOMS_AND_NORMS].[BOMID] AS [BOMID], 
+    [BOMS_AND_NORMS].[NormID] AS [NormID], 
+    [BOMS_AND_NORMS].[IsActive] AS [IsActive], 
+    [BOMS_AND_NORMS].[IssuedDT] AS [IssuedDT]
+    FROM [dbo].[BOMS_AND_NORMS] AS [BOMS_AND_NORMS]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="USERROLES" EntityType="Self.USERROLES" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [USERROLES].[UserID] AS [UserID], 
@@ -2933,6 +2876,10 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <AssociationSet Name="FK_BLANKING_NORMS_USERS" Association="Self.FK_BLANKING_NORMS_USERS">
             <End Role="USERS" EntitySet="USERS" />
             <End Role="BLANKING_NORMS" EntitySet="BLANKING_NORMS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BOMS_AND_NORMS_BOMS" Association="Self.FK_BOMS_AND_NORMS_BOMS">
+            <End Role="BOMS" EntitySet="BOMS" />
+            <End Role="BOMS_AND_NORMS" EntitySet="BOMS_AND_NORMS" />
           </AssociationSet>
           <AssociationSet Name="FK_BOMS_PRODUCTIONPROCESSES" Association="Self.FK_BOMS_PRODUCTIONPROCESSES">
             <End Role="PRODUCTIONPROCESSES" EntitySet="PRODUCTIONPROCESSES" />
@@ -3463,8 +3410,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
             <End Role="WASTES" EntitySet="WASTES" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DBTHSNModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -3504,6 +3450,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Name="Sequence" Type="Int32" />
           <Property Name="ProcessID" Type="Int32" />
           <NavigationProperty Name="PRODUCTIONPROCESS" Relationship="Self.FK_BOMS_PRODUCTIONPROCESSES" FromRole="BOMS" ToRole="PRODUCTIONPROCESSES" />
+          <NavigationProperty Name="BOMS_AND_NORMS" Relationship="DBTHSNModel.FK_BOMS_AND_NORMS_BOMS" FromRole="BOM" ToRole="BOMS_AND_NORMS" />
         </EntityType>
         <EntityType Name="COMPANy">
           <Key>
@@ -4700,6 +4647,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <NavigationProperty Name="PRODUCTIONPROCESS" Relationship="Self.FK_TEMPORARY_BOMS_PRODUCTIONPROCESSES" FromRole="TEMPORARY_BOMS" ToRole="PRODUCTIONPROCESSES" />
           <NavigationProperty Name="UNIT" Relationship="Self.FK_TEMPORARY_BOMS_UNITS" FromRole="TEMPORARY_BOMS" ToRole="UNITS" />
           <NavigationProperty Name="USER" Relationship="Self.FK_TEMPORARY_BOMS_USERS" FromRole="TEMPORARY_BOMS" ToRole="USERS" />
+          <Property Name="NormConfirmed" Type="Boolean" />
         </EntityType>
         <EntityType Name="TRACING">
           <Key>
@@ -7046,15 +6994,20 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           </AssociationSet>
           <FunctionImport Name="GetPartsInfo" ReturnType="Collection(DBTHSNModel.GetPartsInfo_Result)" />
           <FunctionImport Name="GetPartsInfo_by_supplierID" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_supplierID_Result)">
-            <Parameter Name="SupplierID" Mode="In" Type="Int32" />
+          <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPartsInfo_by_type" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_type_Result)">
-            <Parameter Name="Type" Mode="In" Type="String" />
+          <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPartsInfo_by_type_and_supplierID" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_type_and_supplierID_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
             <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="BOMS_AND_NORMS" EntityType="DBTHSNModel.BOMS_AND_NORMS" />
+          <AssociationSet Name="FK_BOMS_AND_NORMS_BOMS" Association="DBTHSNModel.FK_BOMS_AND_NORMS_BOMS">
+            <End Role="BOM" EntitySet="BOMS" />
+            <End Role="BOMS_AND_NORMS" EntitySet="BOMS_AND_NORMS" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetPartsInfo_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
@@ -7092,6 +7045,29 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <Property Type="String" Name="ContractNo" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="ContractID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="BOMS_AND_NORMS">
+          <Key>
+            <PropertyRef Name="IsActive" />
+            <PropertyRef Name="IssuedDT" />
+          </Key>
+          <Property Name="BOMID" Type="Int32" />
+          <Property Name="NormID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IssuedDT" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="BOM" Relationship="DBTHSNModel.FK_BOMS_AND_NORMS_BOMS" FromRole="BOMS_AND_NORMS" ToRole="BOM" />
+        </EntityType>
+        <Association Name="FK_BOMS_AND_NORMS_BOMS">
+          <End Type="DBTHSNModel.BOM" Role="BOM" Multiplicity="0..1" />
+          <End Type="DBTHSNModel.BOMS_AND_NORMS" Role="BOMS_AND_NORMS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BOM">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOMS_AND_NORMS">
+              <PropertyRef Name="BOMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -8153,6 +8129,7 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
           <EntitySetMapping Name="TEMPORARY_BOMS">
             <EntityTypeMapping TypeName="DBTHSNModel.TEMPORARY_BOMS">
               <MappingFragment StoreEntitySet="TEMPORARY_BOMS">
+                <ScalarProperty Name="NormConfirmed" ColumnName="NormConfirmed" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Consumption" ColumnName="Consumption" />
                 <ScalarProperty Name="ConsumptionUnitID" ColumnName="ConsumptionUnitID" />
@@ -8328,6 +8305,16 @@ error 6004: The table 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' is referenced by a relati
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="BOMS_AND_NORMS">
+            <EntityTypeMapping TypeName="DBTHSNModel.BOMS_AND_NORMS">
+              <MappingFragment StoreEntitySet="BOMS_AND_NORMS">
+                <ScalarProperty Name="IssuedDT" ColumnName="IssuedDT" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="NormID" ColumnName="NormID" />
+                <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
