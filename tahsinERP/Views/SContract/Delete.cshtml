@@ -65,8 +65,6 @@
                                             <hr />
                                             <span><b>To'lov sharti</b>: @Html.DisplayFor(model => model.PaymentTerms, new { @class = "form-control" })</span>
                                             <hr />
-                                            <span><b>IDN raqami</b>: @Html.DisplayFor(model => model.IDN, new { @class = "form-control" })</span>
-                                            <hr />
                                         </div>
                                     </div>
                                     <section id="column-selectors">
@@ -82,39 +80,26 @@
                                                                 <table class="table table-striped dataex-html5-selectors" style="width:100%">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th>Detal raqami</th>
-                                                                            <th>Detal nomi</th>
-                                                                            <th>Birlik narxi</th>
-                                                                            <th>O'lchov birligi</th>
-                                                                            <th>Miqdori</th>
-                                                                            <th>MOQ</th>
-                                                                            <th>Faolligi</th>
-                                                                            <th>amallar</th>
+                                                                            <th>Maxsulot raqami</th>
+                                                                            <th>Nomi</th>
+                                                                            <th>Birligi</th>
+                                                                            <th>Narxi</th>
+                                                                            <th>Amallar</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        @foreach (var item in ViewBag.partList)
+                                                                        @foreach (var item in ViewBag.ProductList)
                                                                         {
                                                                             <tr>
                                                                                 <td>
-                                                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                    <a href="~/SContract/Details/@item.ID">@item.PRODUCT.PNo</a>
                                                                                 </td>
-                                                                                <td>@item.PART.PName</td>
-                                                                                <td>@item.Price</td>
-                                                                                <td>@item.UnitID</td>
+                                                                                <td>@item.PRODUCT.Name</td>
+                                                                                <td>@item.UNIT.UnitName</td>
                                                                                 <td>@item.Amount</td>
-                                                                                <td>@item.MOQ</td>
-                                                                                @if (item.ActivePart)
-                                                                                {
-                                                                                    <td><span class="badge badge-light-success">Faol</span></td>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <td><span class="badge badge-light-danger">Nofaol</span></td>
-                                                                                }
                                                                                 <td>
                                                                                     <!-- Delete button -->
-                                                                                    <a href="~/PContract/DeletePart/@item.ID" onclick="return confirm('Ushbu shartnomani ochirib yuborishga ishonchingiz komilmi?')">
+                                                                                    <a href="~/SContract/DeletePart/@item.ID" onclick="return confirm(`Ushbu shartnomani o'chirib yuborishga ishonchingiz komilmi?`)">
                                                                                         <i class="bx bx-trash"></i>
                                                                                     </a>
                                                                                 </td>

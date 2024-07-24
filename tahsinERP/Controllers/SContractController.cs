@@ -172,7 +172,7 @@ namespace tahsinERP.Controllers
                         SContractID = p.ContractID,
                         ProductID = p.ProductID,
                         PiecePrice = (int)p.PiecePrice,
-                        //Unit = p.Unit,
+                        UnitID = p.UnitID,
                         Amount = (int)p.Amount,
                         PRODUCT = new ProductViewModel
                         {
@@ -185,6 +185,7 @@ namespace tahsinERP.Controllers
 
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", contract.CustomerID);
                 ViewBag.ProductList = model.ProductList;
+                ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
 
                 return View(model);
             }
@@ -230,13 +231,11 @@ namespace tahsinERP.Controllers
                     // Update product list
                     foreach (var product in model.ProductList)
                     {
-                        var a = product.ProductID;
-
                         var existingProduct = db.S_CONTRACT_PRODUCTS.Find(product.ProductID);
                         if (existingProduct != null)
                         {
                             existingProduct.PiecePrice = (int)product.PiecePrice;
-                            //existingProduct.Unit = product.Unit;
+                            existingProduct.UnitID = product.UnitID;
                             existingProduct.Amount = product.Amount;
                             db.Entry(existingProduct).State = EntityState.Modified;
                         }
@@ -324,15 +323,21 @@ namespace tahsinERP.Controllers
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contractProduct = db.S_CONTRACTS.Find(id);
-                if (contractProduct == null)
+                var contract = db.S_CONTRACTS.Find(id);
+                if (contract == null)
                 {
                     return HttpNotFound();
+                } else
+                {
+                    ViewBag.ProductList = db.S_CONTRACT_PRODUCTS
+                                            .Include(pl => pl.PRODUCT)
+                                            .Include(pl => pl.UNIT)
+                                            .Where(pl => pl.ContractID == contract.ID)
+                                            .ToList();
                 }
 
-                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS.Where(pl => pl.ContractID == contractProduct.ID).ToList();
-                db.Entry(contractProduct).Reference(c => c.CUSTOMER).Load();
-                return View(contractProduct);
+                db.Entry(contract).Reference(c => c.CUSTOMER).Load();
+                return View(contract);
             }
         }
 

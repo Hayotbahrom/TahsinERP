@@ -30,7 +30,7 @@ namespace tahsinERP.Models
         public string Incoterms { get; set; }
         public string PaymentTerms { get; set; }
         public DateTime DueDate { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         public virtual CUSTOMER CUSTOMER { get; set; }
