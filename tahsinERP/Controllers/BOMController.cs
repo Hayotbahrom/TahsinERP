@@ -216,7 +216,7 @@ namespace tahsinERP.Controllers
                 createViewModel.SelectedProcessIds = model.SelectedProcessIds;
                 createViewModel.Process = model.Process;
                 createViewModel.IsActive = model.IsActive;
-                
+
 
 
 
@@ -587,7 +587,7 @@ namespace tahsinERP.Controllers
                         }
                     }
                     db.SaveChanges();
-                    return RedirectToAction("CompletionStatus", bomviewmodel);
+                    return RedirectToAction("CompletionStatus");
                 }
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -619,6 +619,8 @@ namespace tahsinERP.Controllers
             {
                 var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
                 var part = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
+                BoomViewModel model = new BoomViewModel();
+                model.ParentPNo = temp.ParentPNo;
                 try
                 {
                     if (part != null)
@@ -631,21 +633,41 @@ namespace tahsinERP.Controllers
                 {
                     ModelState.AddModelError(string.Empty, ex);
                 }
-                return View();
+                return View(model);
+            }
+        }
+        [HttpPost]
+        public ActionResult BomCreateDetails(BoomViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var tempbom = db.TEMPORARY_BOMS.Where(x => x.ChildPNo == model.ChildPNo && x.IsDeleted == false).FirstOrDefault();
+
+                return RedirectToAction("OldCompletionStatus", model);
             }
         }
 
         [HttpPost]
-        public ActionResult BomCreateDetails(BomViewModel model)
+        public ActionResult SaveBom(BoomViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var tempbom = db.TEMPORARY_BOMS.Where(x => x.ChildPNo == model.Part.PNo && x.IsDeleted == false).FirstOrDefault();
-
-                return RedirectToAction("CompletionStatus", model);
+                var tempBom = db.TEMPORARY_BOMS.FirstOrDefault(tb => tb.ParentPNo == model.ParentPNo);
+                if (tempBom != null)
+                {
+                    tempBom.NormConfirmed = true;
+                    db.SaveChanges();
+                }
             }
+            return RedirectToAction("CompletionStatus", new { ID = model.ID });
         }
 
+
+        [HttpPost]
+        public ActionResult EditBom(int ID)
+        {
+            return RedirectToAction("EditView", new { ID = ID });
+        }
         [HttpPost]
         public ActionResult BomCreate(BomViewModel model, int[] processID)
         {
@@ -668,12 +690,81 @@ namespace tahsinERP.Controllers
             var userID = GetUserID(User.Identity.Name);
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var bomlist = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
-                ViewBag.partList = bomlist;
-                var bom = new BomViewModel();
-                bom.ProductPno = model.ProductNo;
+                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false && x.ParentPNo == model.ProductNo).ToList();
+                var newLists = new List<BOM>();
+                foreach (var bomlist in bomlists)
+                {
+                    var boms = db.BOMS.Where(x => x.ParentPNo == bomlist.ChildPNo && x.IsDeleted == false).FirstOrDefault();
+                    if (boms != null)
+                    {
+                        newLists.Add(boms);
+                    }
+                }
+                ViewBag.bom = newLists;
+                ViewBag.partList = bomlists;
             }
             return View(model);
+        }
+
+        public ActionResult OldCompletionStatus(BomViewModel model)
+        {
+            var userID = GetUserID(User.Identity.Name);
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false && x.ChildPNo == model.ProductPno).ToList();
+                var newLists = new List<BOM>();
+                foreach (var bomlist in bomlists)
+                {
+                    var boms = db.BOMS.Where(x => x.ParentPNo == bomlist.ChildPNo && x.IsDeleted == false).FirstOrDefault();
+                    if (boms != null)
+                    {
+                        newLists.Add(boms);
+                    }
+                }
+                ViewBag.bom = newLists;
+                ViewBag.partList = bomlists;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult CreateBom(BOMCreateProductViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var prod = model.ProductNo;
+                var userID = GetUserID(User.Identity.Name);
+                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
+                foreach (var bomlist in bomlists)
+                {
+                    var oldbom = db.BOMS.Where(x => x.ParentPNo == bomlist.ChildPNo && x.IsDeleted == false).FirstOrDefault();
+                    var product = db.PRODUCTS.Where(x => x.PNo == model.ProductNo).FirstOrDefault();
+                    var bom = new BOM();
+                    bom.ChildPNo = bomlist.ChildPNo;
+                    bom.ParentPNo = model.ProductNo;
+                    bom.Consumption = bomlist.Consumption.Value;
+                    bom.ConsumptionUnit = db.UNITS.Where(x => x.ID == bomlist.ConsumptionUnitID).Select(x => x.UnitName).FirstOrDefault();
+                    bom.IsParentProduct = bom.ParentPNo == product.PNo;
+                    bom.IsDeleted = false;
+                    bom.IsActive = true;
+                    if (oldbom != null)
+                    {
+                        bom.ProcessID = oldbom.ProcessID;
+                    }
+                    else
+                    {
+                        bom.ProcessID = db.PRODUCTIONPROCESSES.Where(x => x.ProcessName == "Welding").Select(x => x.ID).FirstOrDefault();
+                    }
+                    db.BOMS.Add(bom);
+                    db.SaveChanges();
+
+
+                }
+                var tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
+                db.TEMPORARY_BOMS.RemoveRange(tempbom);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
         }
     }
 }
