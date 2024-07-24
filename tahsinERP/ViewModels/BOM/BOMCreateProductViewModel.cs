@@ -14,6 +14,8 @@ namespace tahsinERP.ViewModels.BOM
         public int ProductID { get; set; }
         public List<BomPart> BomList { get; set; }
 
+        public tahsinERP.Models.BOM BOMS { get; set; }
+
         public BOMCreateProductViewModel()
         {
             BomList = new List<BomPart>();

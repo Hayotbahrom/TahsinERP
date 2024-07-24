@@ -37,8 +37,6 @@
             PDF
         </button>
         <br />
-
-
         <div id="treeview">
             @if (Model != null)
             {
@@ -63,16 +61,28 @@
                 </ol>
             }
         </div>
-        <button type="submit" class="btn btn-outline-success mr-1 mb-1">
-            <span class="align-middle ml-25">Orqaga</span>
-        </button>
-        <button type="submit" class="btn btn-outline-success mr-1 mb-1">
-            <span class="align-middle ml-25">Tahrirlash</span>
-        </button>
-        <button type="submit" class="btn btn-outline-success mr-1 mb-1">
-            <span class="align-middle ml-25">Saqlash</span>
-        </button>
+        @using (Html.BeginForm("OldCompletionStatus", "BOM", FormMethod.Get))
+        {
+            @Html.HiddenFor(model => model.ParentPNo)
+            <button type="submit" class="btn btn-outline-success mr-1 mb-1">
+                <span class="align-middle ml-25">Orqaga</span>
+            </button>
+        }
+        @using (Html.BeginForm("EditBom", "BOM", FormMethod.Post))
+        {
 
+            @Html.HiddenFor(model => model.ParentPNo)
+            <button type="submit" class="btn btn-outline-success mr-1 mb-1">
+                <span class="align-middle ml-25">Tahrirlash</span>
+            </button>
+        }
+        @using (Html.BeginForm("SaveBom", "BOM", FormMethod.Post))
+        {
+            @Html.HiddenFor(model => model.ParentPNo)
+            <button type="submit" class="btn btn-outline-success mr-1 mb-1">
+                <span class="align-middle ml-25">Saqlash</span>
+            </button>
+        }
     </div>
 </div>
 
