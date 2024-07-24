@@ -78,6 +78,7 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo");
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
             return View();
         }
@@ -111,7 +112,7 @@ namespace tahsinERP.Controllers
                         InvoiceID = newInvoiceID,
                         PartID = item.PartID,
                         Quantity = item.Quantuty,
-                        //Unit = item.Unit,
+                        UnitID = item.UnitID,
                         Price = item.Price
                     };
                     db.P_INVOICE_PARTS.Add(newPart);
@@ -120,6 +121,7 @@ namespace tahsinERP.Controllers
                 ViewBag.POrder = new SelectList(db.P_ORDERS.Where(s => s.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -189,6 +191,7 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.P_INVOICE_PARTS
                         .Include(pc => pc.PART)
+                        .Include(pc => pc.UNIT)
                         .Where(pc => pc.InvoiceID == invoice.ID).ToList();
 
                 db.Entry(invoice).Reference(i => i.P_ORDERS).Load();
@@ -360,6 +363,7 @@ namespace tahsinERP.Controllers
                 // Re-populate dropdown lists in case of an error
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
                 ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo", invoice.OrderID);
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.partList = db.P_INVOICE_PARTS
                     .Include(pc => pc.PART)
                     .Where(pc => pc.InvoiceID == invoice.ID).ToList();

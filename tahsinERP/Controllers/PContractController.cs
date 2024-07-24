@@ -398,6 +398,7 @@ namespace tahsinERP.Controllers
 
                 var partList = db.P_CONTRACT_PARTS
                                   .Include(pc => pc.PART)
+                                  .Include(pc => pc.UNIT)
                                   .Where(pc => pc.ContractID == contract.ID)
                                   .ToList();
 
@@ -466,17 +467,14 @@ namespace tahsinERP.Controllers
                         contractToUpdate.IDN = contract.IDN;      
                         contractToUpdate.IsDeleted = false;
 
-                        if (TryUpdateModel(contractToUpdate, "", new string[] { "ContractNo", "IssuedDate", "SupplierID", "Price", "Currency", "Amount", "Incoterms", "PaymentTerms", "DueDate", "IDN" }))
+                        try
                         {
-                            try
-                            {
-                                db.SaveChanges();
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                     return View(contractToUpdate);
@@ -567,6 +565,7 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.P_CONTRACT_PARTS
                         .Include(pc => pc.PART)
+                        .Include(pc => pc.UNIT)
                         .Where(pc => pc.ContractID == contract.ID).ToList();
 
                 db.Entry(contract).Reference(i => i.SUPPLIER).Load();
