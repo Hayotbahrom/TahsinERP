@@ -169,7 +169,7 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BOMCreateProductViewModel model)
+        public ActionResult Create(BOMCreateProductViewModel model,BoomViewModel vmodel)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -198,8 +198,10 @@ namespace tahsinERP.Controllers
                     db.TEMPORARY_BOMS.Add(tempBom);
                     db.SaveChanges();
                 }
+                vmodel.ParentPnoComplationStatus = product.PNo;
+
             }
-            return RedirectToAction("CompletionStatus", model);
+            return RedirectToAction("CompletionStatus",vmodel);
         }
 
         public ActionResult CreateWizard(BomViewModel model)
@@ -216,7 +218,7 @@ namespace tahsinERP.Controllers
                 createViewModel.SelectedProcessIds = model.SelectedProcessIds;
                 createViewModel.Process = model.Process;
                 createViewModel.IsActive = model.IsActive;
-
+                createViewModel.ProductPNo = model.ProductPno;
 
 
 
@@ -280,9 +282,9 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateWizard(BOMCreateViewModel model, BOMCreateProductViewModel bomviewmodel)
+        public ActionResult CreateWizard(BOMCreateViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -586,8 +588,11 @@ namespace tahsinERP.Controllers
                             db.BOMS.Add(bom);
                         }
                     }
+                    BoomViewModel vmodel = new BoomViewModel();
+                    vmodel.ParentPnoComplationStatus = model.ProductPNo;
+
                     db.SaveChanges();
-                    return RedirectToAction("CompletionStatus");
+                    return RedirectToAction("CompletionStatus",vmodel);
                 }
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -604,16 +609,19 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Welding" && x.ProcessName != "Painting").ToList();
+                
+                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Painting").ToList();
+                var  prod = db.TEMPORARY_BOMS.Where(x => x.ID == ID).FirstOrDefault();
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
                 var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
                 var part = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
                 BomViewModel model = new BomViewModel();
                 model.Part = part;
+                model.ProductPno = prod.ParentPNo;
                 return View(model);
             }
         }
-        public ActionResult BomCreateDetails(int ID)
+        public ActionResult BomCreateDetails(int ID, BOMCreateProductViewModel model1)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -626,7 +634,18 @@ namespace tahsinERP.Controllers
                     if (part != null)
                     {
                         var rootItem = GetBomTree(part.PNo);
-                        return View(rootItem);
+                        var boom = new BoomViewModel();
+                        boom.ParentPnoComplationStatus = temp.ParentPNo;
+                        boom.ParentPNo = rootItem.ParentPNo;
+                        boom.ChildPNo = rootItem.ChildPNo;
+                        boom.Consumption = rootItem.Consumption;
+                        boom.ParentImageBase64 = rootItem.ParentImageBase64;
+                        boom.ChildImageBase64 = rootItem.ChildImageBase64;
+                        boom.ConsumptionUnit = rootItem.ConsumptionUnit;
+                        boom.Children = rootItem.Children;
+
+
+                        return View(boom);
                     }
                 }
                 catch (Exception ex)
@@ -637,13 +656,13 @@ namespace tahsinERP.Controllers
             }
         }
         [HttpPost]
-        public ActionResult BomCreateDetails(BoomViewModel model)
+        public ActionResult BomCreateDetails(BoomViewModel model1, BOMCreateProductViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var tempbom = db.TEMPORARY_BOMS.Where(x => x.ChildPNo == model.ChildPNo && x.IsDeleted == false).FirstOrDefault();
+                var tempbom = db.TEMPORARY_BOMS.Where(x => x.ChildPNo == model1.ChildPNo && x.IsDeleted == false).FirstOrDefault();
 
-                return RedirectToAction("OldCompletionStatus", model);
+                return RedirectToAction("OldCompletionStatus", model1);
             }
         }
 
@@ -652,14 +671,14 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var tempBom = db.TEMPORARY_BOMS.FirstOrDefault(tb => tb.ParentPNo == model.ParentPNo);
+                var tempBom = db.TEMPORARY_BOMS.FirstOrDefault(tb => tb.ChildPNo == model.ParentPNo);
                 if (tempBom != null)
                 {
                     tempBom.NormConfirmed = true;
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("CompletionStatus", new { ID = model.ID });
+            return RedirectToAction("CompletionStatus",model);
         }
 
 
@@ -685,33 +704,12 @@ namespace tahsinERP.Controllers
             }
             return View(model);
         }
-        public ActionResult CompletionStatus(BOMCreateProductViewModel model)
+        public ActionResult CompletionStatus(BoomViewModel model)
         {
             var userID = GetUserID(User.Identity.Name);
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false && x.ParentPNo == model.ProductNo).ToList();
-                var newLists = new List<BOM>();
-                foreach (var bomlist in bomlists)
-                {
-                    var boms = db.BOMS.Where(x => x.ParentPNo == bomlist.ChildPNo && x.IsDeleted == false).FirstOrDefault();
-                    if (boms != null)
-                    {
-                        newLists.Add(boms);
-                    }
-                }
-                ViewBag.bom = newLists;
-                ViewBag.partList = bomlists;
-            }
-            return View(model);
-        }
-
-        public ActionResult OldCompletionStatus(BomViewModel model)
-        {
-            var userID = GetUserID(User.Identity.Name);
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false && x.ChildPNo == model.ProductPno).ToList();
+                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false && x.ParentPNo == model.ParentPnoComplationStatus).ToList();
                 var newLists = new List<BOM>();
                 foreach (var bomlist in bomlists)
                 {

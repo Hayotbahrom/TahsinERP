@@ -20,9 +20,6 @@ namespace tahsinERP.ViewModels.BOM
         {
             BomList = new List<BomPart>();
         }
-
-
-
         public class BomPart
         {
             public int PartID { get; set; }

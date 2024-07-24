@@ -38,6 +38,7 @@
                                 <div class="card-body">
                                     @using (Html.BeginForm("BomCreate", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                     {
+                                        @Html.HiddenFor(x => x.ProductPno)
                                         <div>
                                             @Html.TextBoxFor(Model => Model.Part.PNo, new { disabled = "disabled" })
                                         </div>

@@ -13,6 +13,7 @@
                                     <div class="card-body">
                                         @using (Html.BeginForm("CreateWizard", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
                                         {
+                                            @Html.HiddenFor(x => x.ProductPNo)
                                             @Html.HiddenFor(model => model.PartNo)
                                             @Html.HiddenFor(model => model.PartID)
                                             @Html.AntiForgeryToken()

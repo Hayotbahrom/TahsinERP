@@ -61,9 +61,9 @@
                 </ol>
             }
         </div>
-        @using (Html.BeginForm("OldCompletionStatus", "BOM", FormMethod.Get))
+        @using (Html.BeginForm("CompletionStatus", "BOM", FormMethod.Get))
         {
-            @Html.HiddenFor(model => model.ParentPNo)
+            @Html.HiddenFor(model => model.ParentPnoComplationStatus)
             <button type="submit" class="btn btn-outline-success mr-1 mb-1">
                 <span class="align-middle ml-25">Orqaga</span>
             </button>
@@ -78,6 +78,7 @@
         }
         @using (Html.BeginForm("SaveBom", "BOM", FormMethod.Post))
         {
+            @Html.HiddenFor(model => model.ParentPnoComplationStatus)
             @Html.HiddenFor(model => model.ParentPNo)
             <button type="submit" class="btn btn-outline-success mr-1 mb-1">
                 <span class="align-middle ml-25">Saqlash</span>

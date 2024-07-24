@@ -2584,6 +2584,7 @@
     <Content Include="Views\BOM\BomCreateDetails.cshtml" />
     <Content Include="Views\SOrder\Index.cshtml" />
     <Content Include="Views\SOrder\Create.cshtml" />
+    <Content Include="Views\BOM\OldCompletionStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
