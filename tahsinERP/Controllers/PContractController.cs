@@ -283,6 +283,8 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
                 return View();
             }
         }
@@ -319,7 +321,7 @@ namespace tahsinERP.Controllers
                     {
                         ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
-                        //Unit = part.Unit,
+                        UnitID = part.UnitID,
                         Amount = part.Amount,
                         Price = part.Price,
                         Quantity = part.Quantity,
@@ -436,6 +438,7 @@ namespace tahsinERP.Controllers
                 }
 
                 suppliers = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", contract.SupplierID);
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 partList = contract.P_CONTRACT_PARTS.ToList();
             }
@@ -500,6 +503,7 @@ namespace tahsinERP.Controllers
                 }
                 var allParts = db.PARTS
                                 .Include(p => p.P_CONTRACT_PARTS)
+                                .Include(p=> p.UNIT)
                                 .Select(p => new SelectListItem
                                 {
                                     Value = p.ID.ToString(),

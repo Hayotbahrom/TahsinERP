@@ -94,7 +94,7 @@ namespace tahsinERP.Controllers
                 //ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
                 ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
-
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                 ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
 
@@ -149,7 +149,7 @@ namespace tahsinERP.Controllers
                     {
                         IncomeID = newIncomeID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
-                        //Unit = part.Unit,
+                        UnitID = part.UnitID,
                         Amount = part.Amount,
                         PiecePrice = part.PiecePrice,
                         //TotalPrice = part.TotalPrice,
@@ -219,6 +219,7 @@ namespace tahsinERP.Controllers
 
                 var partList = db1.PART_WRHS_INCOME_PARTS
                                   .Include(pc => pc.PART)
+                                  .Include(pc => pc.UNIT)
                                   .Where(pc => pc.IncomeID == wrhsIncome.ID)
                                   .ToList();
 
@@ -253,12 +254,14 @@ namespace tahsinERP.Controllers
                 // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", whrsIncome.SupplierID);
 
                 partList = db1.PART_WRHS_INCOME_PARTS
-                    .Where(whp => whp.IncomeID == ID)
                     .Include(whp => whp.PART)
+                    .Include(whp => whp.UNIT)
+                    .Where(whp => whp.IncomeID == ID)
                     .ToList();
                 //ViewBag.PartList = new SelectList(db1.PART_WRHS_INCOME_PARTS.Include(p => p.PART).ToList(),"ID","PName");
                 ViewBag.Invoices = new SelectList(db1.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
                 ViewBag.Waybills = new SelectList(db1.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
+                ViewBag.units = new SelectList(db1.UNITS.ToList(), "ID", "UnitName");
             }
 
             // ViewBag.Supplier = suppliers;
@@ -324,6 +327,7 @@ namespace tahsinERP.Controllers
                 }
                 var allParts = db.PARTS
                                 .Include(p => p.PART_WRHS_INCOME_PARTS)
+                                .Include(p=> p.UNIT)
                                 .Select(p => new SelectListItem
                                 {
                                     Value = p.ID.ToString(),
@@ -349,7 +353,7 @@ namespace tahsinERP.Controllers
                     {
                         whIncomePartToUpdate.PartID = whIncomePart.PartID;
                         whIncomePartToUpdate.Amount = whIncomePart.Amount;
-                        //whIncomePartToUpdate.Unit = whIncomePart.Unit;
+                        whIncomePartToUpdate.UnitID = whIncomePart.UnitID;
                         whIncomePartToUpdate.PiecePrice = whIncomePart.PiecePrice;
                         whIncomePartToUpdate.Comment = whIncomePart.Comment;
                         //whIncomePartToUpdate.Amount = whIncomePart.Quantity * whIncomePart.Price; SQL o'zi chiqarib beradi
@@ -385,6 +389,7 @@ namespace tahsinERP.Controllers
                 else
                     ViewBag.partList = db.PART_WRHS_INCOME_PARTS
                         .Include(pc => pc.PART)
+                        .Include(pc => pc.UNIT)
                         .Where(pc => pc.IncomeID == whrsIncome.ID).ToList();
 
                 db.Entry(whrsIncome).Reference(i => i.P_INVOICES).Load();
