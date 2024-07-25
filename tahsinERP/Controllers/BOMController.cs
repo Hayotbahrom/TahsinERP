@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -770,29 +769,26 @@ namespace tahsinERP.Controllers
                     var processname = db.PRODUCTIONPROCESSES.Where(x => x.ID == boms.ProcessID && x.IsDeleted == false).FirstOrDefault();
                     var part_befor = db.PARTS.Where(x => x.PNo == boms.ChildPNo && x.IsDeleted == false).FirstOrDefault();
                     var part_after = db.PARTS.Where(x => x.PNo == boms.ParentPNo && x.IsDeleted == false).FirstOrDefault();
-                    
+
                     switch (processname.ProcessName)
                     {
-                        case "Slitting" :
-                            var slitting_norm = db.SLITTING_NORMS.Where(x => x.PartID_after == part_after.ID  && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
+                        case "Slitting":
+                            var slitting_norm = db.SLITTING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
                             editviewmodel.SLITTING_NORMS = slitting_norm;
-                            editviewmodel.SlittingID = slitting_norm.ID;
                             editviewmodel.Slitting_After_ID = part_after.ID;
                             editviewmodel.Slitting_Before_ID = part_befor.ID;
                             break;
                         case "Blanking":
                             var blanking_norm = db.BLANKING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
                             editviewmodel.BLANKING_NORMS = blanking_norm;
-                            editviewmodel.BlankingID = blanking_norm.ID;
                             editviewmodel.Blanking_After_ID = part_after.ID;
                             editviewmodel.Blanking_Before_ID = part_befor.ID;
                             break;
                         case "Stamping":
                             var stamping_norm = db.STAMPING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
-                            editviewmodel.STAMPING_NORMS= stamping_norm;
-                            editviewmodel.StampingID = stamping_norm.ID;
-                            editviewmodel.Stamping_After_ID= part_after.ID;
-                            editviewmodel.Stamping_Before_ID= part_befor.ID;
+                            editviewmodel.STAMPING_NORMS = stamping_norm;
+                            editviewmodel.Stamping_After_ID = part_after.ID;
+                            editviewmodel.Stamping_Before_ID = part_befor.ID;
                             break;
                     }
                     processlist.Add(processname.ProcessName);
@@ -801,10 +797,72 @@ namespace tahsinERP.Controllers
                 editviewmodel.PartPno = tempbom.ChildPNo;
                 editviewmodel.ProccessList = processlist;
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Part = new SelectList(part,"ID","PNo");
+                ViewBag.Part = new SelectList(part, "ID", "PNo");
                 return View(editviewmodel);
-
             }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditBom(BomEditViewModels model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    var bomlist = new List<BOM>();
+                    var processlist = new List<string>();
+                    var userId = GetUserID(User.Identity.Name);
+                    var tempbom = db.TEMPORARY_BOMS.Where(x => x.ChildPNo == model.PartPno && x.IsDeleted == false && x.UserID == userId).FirstOrDefault();
+
+                    var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == tempbom.ChildPNo).FirstOrDefault();
+                    var child_bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == bom.ChildPNo).FirstOrDefault();
+                    var child_bom_child = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == child_bom.ChildPNo).FirstOrDefault();
+                    bomlist.Add(child_bom_child);
+                    bomlist.Add(child_bom);
+                    bomlist.Add(bom);
+                    var editviewmodel = new BomEditViewModels();
+                    foreach (var boms in bomlist)
+                    {
+                        var processname = db.PRODUCTIONPROCESSES.Where(x => x.ID == boms.ProcessID && x.IsDeleted == false).FirstOrDefault();
+
+                            switch (processname.ProcessName)
+                            {
+                                case "Slitting":
+                                    var slitting_norm = db.SLITTING_NORMS.Where(x => x.PartID_after == model.Slitting_After_ID && x.PartID_before == model.Slitting_Before_ID && x.IsDeleted == false).FirstOrDefault();
+                                    if (slitting_norm != null)
+                                    {
+                                        slitting_norm.CutterWidth = model.SLITTING_NORMS.CutterWidth;
+                                        db.Entry(slitting_norm).State = System.Data.Entity.EntityState.Modified;
+                                    }
+                                    break;
+                                case "Blanking":
+                                    var blanking_norm = db.BLANKING_NORMS.Where(x => x.PartID_after == model.Blanking_After_ID && x.PartID_before == model.Blanking_Before_ID && x.IsDeleted == false).FirstOrDefault();
+                                    if (blanking_norm != null)
+                                    {
+                                        blanking_norm.Density = model.BLANKING_NORMS.Density;
+                                        db.Entry(blanking_norm).State = System.Data.Entity.EntityState.Modified;
+                                    }
+                                    break;
+                                case "Stamping":
+                                    var stamping_norm = db.STAMPING_NORMS.Where(x => x.PartID_after == model.Stamping_After_ID && x.PartID_before == model.Stamping_Before_ID && x.IsDeleted == false).FirstOrDefault();
+                                    if (stamping_norm != null)
+                                    {
+                                        db.Entry(stamping_norm).State = System.Data.Entity.EntityState.Modified;
+                                    }
+                                    break;
+                            }
+                        
+                    }
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Part = new SelectList(part, "ID", "PNo");
+            }
+            return View(model);
         }
     }
 }

@@ -3,7 +3,7 @@
     ViewBag.Title = "EditBom";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString()))
 {
     <div class="app-content content">
         <div class="content-wrapper">
@@ -18,6 +18,7 @@
                                         {
                                             @Html.HiddenFor(x => x.ProductPNo)
                                             @Html.HiddenFor(model => model.PartPno)
+                                            @Html.HiddenFor(model => model.ProccessList)
                                             @Html.AntiForgeryToken()
                                             foreach (var processName in Model.ProccessList)
                                             {
@@ -31,7 +32,6 @@
                                                         <fieldset>
                                                             <div class="row">
                                                                 <div class="col-md-4">
-                                                                    @* Before *@
                                                                     <h6>Ehtiyot qismni tanlang</h6>
                                                                     <fieldset class="invoice-address form-group">
                                                                         @Html.DropDownListFor(model => model.Slitting_Before_ID, (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2" })
@@ -39,7 +39,6 @@
                                                                     </fieldset>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    @* After *@
                                                                     <h6>Ehtiyot qismni tanlang</h6>
                                                                     <fieldset class="invoice-address form-group">
                                                                         @Html.DropDownListFor(model => model.Slitting_After_ID, (SelectList)ViewBag.Part, "Jarayondan keyingi holatini tanlang", new { @class = "form-control select2", @id = "slitDpDnA" })
@@ -61,14 +60,12 @@
                                                         <fieldset>
                                                             <div class="row">
                                                                 <div class="col-md-4">
-                                                                    @* Before *@
                                                                     <fieldset class="invoice-address form-group">
                                                                         @Html.DropDownListFor(model => model.Blanking_Before_ID, (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2", @id = "blankDpDnB" })
                                                                         @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_before, "", new { @class = "text-danger" })
                                                                     </fieldset>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    @* After *@
                                                                     <fieldset class="invoice-address form-group">
                                                                         @Html.DropDownListFor(model => model.Blanking_After_ID, (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2", @id = "blankDpDnA" })
                                                                         @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_after, "", new { @class = "text-danger" })
@@ -88,7 +85,6 @@
                                                         <fieldset>
                                                             <div class="row">
                                                                 <div class="col-md-4">
-                                                                    @* Before *@
                                                                     <h6>Ehtiyot qismni tanlang</h6>
                                                                     <fieldset class="invoice-address form-group">
                                                                         @Html.DropDownListFor(model => model.Stamping_Before_ID, (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2", @id = "stampDpDnB" })
@@ -96,7 +92,6 @@
                                                                     </fieldset>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    @* After *@
                                                                     <h6>Ehtiyot qismni tanlang</h6>
                                                                     <fieldset class="invoice-address form-group">
                                                                         @Html.DropDownListFor(model => model.Stamping_After_ID, (SelectList)ViewBag.Part, "Jarayondan keyingi holatini tanlang", new { @class = "form-control select2", @id = "stampDpDnA" })
@@ -111,7 +106,6 @@
                                                         break;
                                                 }
                                             }
-
                                         }
                                     </div>
                                 </div>
