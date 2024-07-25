@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
+﻿﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -40,7 +40,7 @@
 
         <div id="treeview">
             @if (Model != null)
-                {
+            {
                 <ol class="wtree" id="toPDF">
                     <li class="li">
                         <div style="display: flex; align-items: center;">
@@ -52,7 +52,7 @@
                                 </a>
                             }
                             <span class="span">
-                                @Model.ParentPNo 
+                                @Model.ParentPNo
                             </span>
                         </div>
                         <ol class="wtree">
@@ -65,10 +65,8 @@
     </div>
 </div>
 
-
 <!-- TreeView -->
-    <!--
-    <script>
+<!--<script>
         document.addEventListener('DOMContentLoaded', function () {
             var treeItems = document.querySelectorAll('.wtree .li div .span');
 
@@ -102,6 +100,5 @@
                 });
             });
         });
-    </script>
-    -->
+</script>-->
 <!-- __________ -->

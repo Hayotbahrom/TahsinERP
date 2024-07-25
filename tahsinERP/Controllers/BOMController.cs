@@ -89,7 +89,7 @@ namespace tahsinERP.Controllers
                     return null;
                 }
 
-                var root = new BoomViewModel
+                var root = new BoomViewModel()
                 {
                     ParentPNo = parentPno,
                     ParentImageBase64 = GetParentImage(parentPno),
@@ -656,22 +656,12 @@ namespace tahsinERP.Controllers
             }
         }
         [HttpPost]
-        public ActionResult BomCreateDetails(BoomViewModel model1, BOMCreateProductViewModel model)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var tempbom = db.TEMPORARY_BOMS.Where(x => x.ChildPNo == model1.ChildPNo && x.IsDeleted == false).FirstOrDefault();
-
-                return RedirectToAction("OldCompletionStatus", model1);
-            }
-        }
-
-        [HttpPost]
         public ActionResult SaveBom(BoomViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var tempBom = db.TEMPORARY_BOMS.FirstOrDefault(tb => tb.ChildPNo == model.ParentPNo);
+                var userID = GetUserID(User.Identity.Name);
+                var tempBom = db.TEMPORARY_BOMS.FirstOrDefault(tb => tb.ChildPNo == model.ParentPNo && tb.UserID == userID && tb.IsDeleted == false);
                 if (tempBom != null)
                 {
                     tempBom.NormConfirmed = true;
@@ -681,12 +671,6 @@ namespace tahsinERP.Controllers
             return RedirectToAction("CompletionStatus",model);
         }
 
-
-        [HttpPost]
-        public ActionResult EditBom(int ID)
-        {
-            return RedirectToAction("EditView", new { ID = ID });
-        }
         [HttpPost]
         public ActionResult BomCreate(BomViewModel model, int[] processID)
         {
@@ -726,23 +710,23 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateBom(BOMCreateProductViewModel model)
+        public ActionResult CreateBom(BoomViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var prod = model.ProductNo;
+                var prod = model.ParentPnoComplationStatus;
                 var userID = GetUserID(User.Identity.Name);
-                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
+                var bomlists = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false && x.ParentPNo == model.ParentPnoComplationStatus).ToList();
                 foreach (var bomlist in bomlists)
                 {
                     var oldbom = db.BOMS.Where(x => x.ParentPNo == bomlist.ChildPNo && x.IsDeleted == false).FirstOrDefault();
-                    var product = db.PRODUCTS.Where(x => x.PNo == model.ProductNo).FirstOrDefault();
+                    var product = db.PRODUCTS.Where(x => x.PNo == model.ParentPnoComplationStatus).FirstOrDefault();
                     var bom = new BOM();
                     bom.ChildPNo = bomlist.ChildPNo;
-                    bom.ParentPNo = model.ProductNo;
+                    bom.ParentPNo = model.ParentPnoComplationStatus;
                     bom.Consumption = bomlist.Consumption.Value;
                     bom.ConsumptionUnit = db.UNITS.Where(x => x.ID == bomlist.ConsumptionUnitID).Select(x => x.UnitName).FirstOrDefault();
-                    bom.IsParentProduct = bom.ParentPNo == product.PNo;
+                    bom.IsParentProduct = model.ParentPnoComplationStatus == product.PNo;
                     bom.IsDeleted = false;
                     bom.IsActive = true;
                     if (oldbom != null)
@@ -763,6 +747,23 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+        }
+
+        [HttpPost]
+        public ActionResult EditBom(int ID , BomViewModel model)
+        {
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var userId = GetUserID(User.Identity.Name);
+                var tempbom = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false && x.UserID == userId).FirstOrDefault();
+                var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == tempbom.ChildPNo).FirstOrDefault();
+                var bomedit = new BOMCreateViewModel();
+                bomedit.ProductPNo = tempbom.ParentPNo;
+
+                
+            }
+            
+            return RedirectToAction("EditView", new { ID = ID });
         }
     }
 }
