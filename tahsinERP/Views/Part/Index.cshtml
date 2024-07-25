@@ -89,6 +89,7 @@
                                                     <th>Detal Raqami</th>
                                                     <th>Nomi</th>
                                                     <th>Ta'minotchi</th>
+                                                    <th>Turi</th>
                                                     <th>Shartnoma raqami</th>
                                                     @if (changePermit)
                                                     {
@@ -109,6 +110,7 @@
                                                         <td>
                                                             <a href="~/Supplier/Details/@item.SupplierID">@item.SupplierName</a>
                                                         </td>
+                                                        <td>@item.Supplier.Type</td>
                                                         <td>
                                                             <a href="~/PContract/Details/@item.ContractID">@item.ContractNo</a>
                                                         </td>

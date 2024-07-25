@@ -1,4 +1,4 @@
-﻿@model List<tahsinERP.Models.P_INVOICES>
+﻿
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -56,7 +56,7 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Turi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList,new { @class = "form-control", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4">
@@ -96,9 +96,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (Model != null)
-                                                {
-                                                    foreach (var item in Model)
+                                                @*@if (Model != null)
+                                                {*@
+                                                    @foreach (var item in ViewBag.partList)
                                                     {
                                                         <tr>
                                                             <td></td>
@@ -126,7 +126,7 @@
                                                             }
                                                         </tr>
                                                     }
-                                                 }
+                                                 
                                             </tbody>
                                         </table>
                                     </div>

@@ -28,6 +28,39 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var suppliers = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
+                if (!string.IsNullOrEmpty(type))
+                {
+                    if (supplierID.HasValue)
+                    {
+                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type)==0)).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name", supplierID);
+                    }
+                    else
+                    {
+                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name");
+                    }
+                }
+                else
+                {
+                    if (supplierID.HasValue)
+                    {
+                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
+                    }
+                    else
+                    {
+                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false).ToList();
+                        ViewBag.SourceList = new SelectList(sources);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
+                    }
+                }
+                return View();
+                /*
                 IQueryable<P_INVOICES> invoicesQuery = db.P_INVOICES
                     .Include(pi => pi.SUPPLIER)
                     .Include(pi => pi.P_ORDERS)
@@ -68,7 +101,7 @@ namespace tahsinERP.Controllers
                 ViewBag.SupplierList = new SelectList(suppliersQuery.Where(s => s.Type.CompareTo(type) == 0).ToList(), "ID", "Name");
                 ViewBag.Type = type;
 
-                return View(invoices);
+                return View(invoices);*/
             }
         }
         public ActionResult Create()
