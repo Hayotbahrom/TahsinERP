@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -172,7 +173,7 @@ namespace tahsinERP.Controllers
                         SContractID = p.ContractID,
                         ProductID = p.ProductID,
                         PiecePrice = (int)p.PiecePrice,
-                        //Unit = p.Unit,
+                        UnitID = p.UnitID,
                         Amount = (int)p.Amount,
                         PRODUCT = new ProductViewModel
                         {
@@ -184,7 +185,7 @@ namespace tahsinERP.Controllers
                 };
 
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", contract.CustomerID);
-                ViewBag.ProductList = model.ProductList;
+                ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
 
                 return View(model);
             }
@@ -209,40 +210,53 @@ namespace tahsinERP.Controllers
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    var contract = db.S_CONTRACTS.Find(model.ID);
-                    if (contract == null)
+                    var contractToUpdate = db.S_CONTRACTS.Find(model.ID);
+                    if (contractToUpdate == null)
                     {
                         return HttpNotFound();
                     }
 
-                    contract.ContractNo = model.ContractNo;
-                    contract.CustomerID = model.CustomerID;
-                    contract.IssuedDate = model.IssuedDate;
-                    contract.DueDate = model.DueDate;
-                    contract.Incoterms = model.Incoterms;
-                    contract.PaymentTerms = model.PaymentTerms;
-                    contract.Currency = model.Currency;
-                    contract.Amount = (int)model.Amount;
+                    contractToUpdate.ContractNo = model.ContractNo;
+                    contractToUpdate.CustomerID = model.CustomerID;
+                    contractToUpdate.IssuedDate = model.IssuedDate;
+                    contractToUpdate.DueDate = model.DueDate;
+                    contractToUpdate.Incoterms = model.Incoterms;
+                    contractToUpdate.PaymentTerms = model.PaymentTerms;
+                    contractToUpdate.Currency = model.Currency;
+                    contractToUpdate.Amount = (int)model.Amount;
 
-                    db.Entry(contract).State = EntityState.Modified;
-                    db.SaveChanges();
+
+                    db.Entry(contractToUpdate).State = EntityState.Modified;
+                    try
+                    {
+                        db.SaveChanges();
+                    } catch(RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Kontrakt o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    }
+
 
                     // Update product list
                     foreach (var product in model.ProductList)
                     {
-                        var a = product.ProductID;
-
                         var existingProduct = db.S_CONTRACT_PRODUCTS.Find(product.ProductID);
                         if (existingProduct != null)
                         {
                             existingProduct.PiecePrice = (int)product.PiecePrice;
-                            //existingProduct.Unit = product.Unit;
+                            existingProduct.UnitID = product.UnitID;
                             existingProduct.Amount = product.Amount;
+
                             db.Entry(existingProduct).State = EntityState.Modified;
                         }
                     }
-                    db.SaveChanges();
 
+                    try
+                    {
+                        db.SaveChanges();
+                    } catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Maxsulot o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratsiyasiga muroaat qiling.");
+                    }
                     return RedirectToAction("Index");
                 }
             }
@@ -324,15 +338,21 @@ namespace tahsinERP.Controllers
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contractProduct = db.S_CONTRACTS.Find(id);
-                if (contractProduct == null)
+                var contract = db.S_CONTRACTS.Find(id);
+                if (contract == null)
                 {
                     return HttpNotFound();
+                } else
+                {
+                    ViewBag.ProductList = db.S_CONTRACT_PRODUCTS
+                                            .Include(pl => pl.PRODUCT)
+                                            .Include(pl => pl.UNIT)
+                                            .Where(pl => pl.ContractID == contract.ID)
+                                            .ToList();
                 }
 
-                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS.Where(pl => pl.ContractID == contractProduct.ID).ToList();
-                db.Entry(contractProduct).Reference(c => c.CUSTOMER).Load();
-                return View(contractProduct);
+                db.Entry(contract).Reference(c => c.CUSTOMER).Load();
+                return View(contract);
             }
         }
 
