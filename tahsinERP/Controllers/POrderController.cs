@@ -29,47 +29,38 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                IQueryable<P_ORDERS> ordersQuery = db.P_ORDERS
-                    .Where(po => po.IsDeleted == false);
-
+                var suppliers = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
                 if (!string.IsNullOrEmpty(type))
                 {
-                    ViewBag.SourceList = new SelectList(sources, type);
-
-                    List<int> supplierIds = db.SUPPLIERS
-                        .Where(s => s.Type == type && s.IsDeleted == false)
-                        .Select(s => s.ID)
-                        .ToList();
-
-                    ordersQuery = ordersQuery
-                        .Where(po => supplierIds.Contains((int)po.SupplierID));
+                    if (supplierID.HasValue)
+                    {
+                        ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name", supplierID);
+                    }
+                    else
+                    {
+                        ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name");
+                    }
                 }
                 else
                 {
-                    ViewBag.SourceList = new SelectList(sources);
+                    if (supplierID.HasValue)
+                    {
+                        ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID).ToList();
+                        ViewBag.SourceList = new SelectList(sources, type);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
+                    }
+                    else
+                    {
+                        ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false).ToList();
+                        ViewBag.SourceList = new SelectList(sources);
+                        ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
+                    }
                 }
-
-                if (supplierID.HasValue)
-                {
-                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS
-                        .Where(s => s.ID == supplierID && s.IsDeleted == false)
-                        .ToList(), "ID", "Name", supplierID);
-
-                    ordersQuery = ordersQuery
-                        .Where(po => po.SupplierID == supplierID);
-                }
-                else
-                {
-                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS
-                        .Where(s => s.IsDeleted == false)
-                        .ToList(), "ID", "Name");
-                }
-
-                ordersQuery = ordersQuery.Include(po => po.P_CONTRACTS);
-                ViewBag.Type = type;
-                List<P_ORDERS> orders = ordersQuery.ToList();
-
-                return View(orders);
+                return View();
             }
         }
         public ActionResult Create()

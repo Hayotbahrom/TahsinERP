@@ -1,5 +1,4 @@
-﻿@model List<tahsinERP.Models.P_ORDERS>
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var type = ViewBag.Type;
@@ -43,9 +42,9 @@
                     {
                         <div class="invoice-create-btn mb-1">
                             <div class="invoice-create-btn mb-1">
-                               @* <a href="@Url.Action("UploadWithExcel", "POrder")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
-                                    Yangi Buyurtmani qo'shish
-                                </a>*@
+                                @* <a href="@Url.Action("UploadWithExcel", "POrder")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
+                                        Yangi Buyurtmani qo'shish
+                                    </a>*@
                                 <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/POrder/Create';">
                                     <span class="align-middle ml-25">Yangi Buyurtma qo'shish</span>
                                 </button>
@@ -100,43 +99,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (Model != null)
+                                                @foreach (var item in ViewBag.partList)
                                                 {
-                                                    foreach (var item in Model)
-                                                    {
-                                                        <tr>
-                                                            <td></td>
-                                                            <td></td>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="~/POrder/Details/@item.ID">@item.OrderNo</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="~/PContract/Details/@item.P_CONTRACTS.ID">@item.P_CONTRACTS.ContractNo</a>
+                                                        </td>
+                                                        <td>@item.IssuedDate.ToString("dd-MM-yyyy")</td>
+                                                        <td>
+                                                            <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
+                                                        </td>
+                                                        <td>@item.Amount</td>
+                                                        @if (changePermit)
+                                                        {
                                                             <td>
-                                                                <a href="~/POrder/Details/@item.ID">@item.OrderNo</a>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "POrder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "POrder", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                </div>
                                                             </td>
-                                                            <td>
-                                                                @if (item.P_CONTRACTS != null)
-                                                                {
-                                                                    <a href="~/PContract/Details/@item.P_CONTRACTS.ID">@item.P_CONTRACTS.ContractNo</a>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span>Shartnoma yo'q</span>
-                                                                }
-                                                            </td>
-                                                            <td>@item.IssuedDate.ToString("dd-MM-yyyy")</td>
-                                                            <td>
-                                                                <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
-                                                            </td>
-                                                            <td>@item.Amount</td>
-                                                            @if (changePermit)
-                                                            {
-                                                                <td>
-                                                                    <div>
-                                                                        <a href="@Url.Action("Edit", "POrder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                        <a href="@Url.Action("Delete", "POrder", new { id = item.ID })"><i class="bx bx-trash"></i></a>
-                                                                    </div>
-                                                                </td>
-                                                            }
-                                                        </tr>
-                                                    }
+                                                        }
+                                                    </tr>
                                                 }
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -151,12 +141,28 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
-    function refreshDataTable() {
-        var source = document.getElementById("SourceID").value;
+function refreshDataTable() {
+    var source = document.getElementById("SourceID").value;
+    const supplierID = document.getElementById("SupplierID").value;
+    window.location.href = '@Url.Action("Index", "POrder")?type=' + source;
+    ////window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
+
+    };
+  function refreshdatatablesupplier() {
+      var source = document.getElementById("SourceID").value;
         const supplierID = document.getElementById("SupplierID").value;
         window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
     }
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function refreshDataTable() {
+        var source = document.getElementById("SourceID").value;
+        var supplierID = document.getElementById("SupplierID").value;
+        window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID=' + supplierID;
+    }
+    </script>
+
 }
 else
 {
