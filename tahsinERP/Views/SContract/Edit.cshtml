@@ -37,12 +37,12 @@
                 <div class="content-body">
                     <div class="row">
                         <!-- invoice view page -->
-                        <div class="col-xl-9 col-md-8 col-12">
+                        <div class="col-xl-12 col-md-12 col-12">
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body pb-0 mx-25">
                                         <div class="row">
-                                            <div class="col-lg-12 col-md-6 mt-25">
+                                            <div class="col-lg-12 col-md-8 mt-25">
                                                 <h5 class="invoice-to">Shartnoma raqami</h5>
                                                 <fieldset class="invoice-address form-group">
                                                     @Html.TextBoxFor(model => model.ContractNo, new { @class = "form-control round" })
@@ -110,6 +110,8 @@
                                                                         <tbody>
                                                                             @for (int i = 0; i < Model.ProductList.Count; i++)
                                                                             {
+                                                                                @Html.HiddenFor(model => model.ProductList[i].ProductID)
+
                                                                                 <tr>
                                                                                     <td>
                                                                                         <a href="~/SContracts/Details/@Model.ProductList[i].PRODUCT.ID">@Model.ProductList[i].PRODUCT.PNo</a>
@@ -119,19 +121,15 @@
                                                                                     </td>
                                                                                     <td>
                                                                                         @Html.TextBoxFor(model => model.ProductList[i].PiecePrice, new { @class = "form-control" })
-                                                                                        @*@Html.DisplayFor(model => model.ProductList[i].PiecePrice, new { @class = "form-control" })*@
                                                                                     </td>
                                                                                     <td>
-                                                                                        @Html.TextBoxFor(model => model.ProductList[i].Unit, new { @class = "form-control" })
-                                                                                        @*@Html.DisplayFor(model => model.ProductList[i].Unit, new { @class = "form-control" })*@
+                                                                                        @Html.DropDownListFor(model => model.ProductList[i].UnitID, (SelectList)ViewBag.Units, new { @class = "form-control" })
                                                                                     </td>
                                                                                     <td>
                                                                                         @Html.TextBoxFor(model => model.ProductList[i].Amount, new { @class = "form-control" })
-                                                                                        @*@Html.DisplayFor(model => model.ProductList[i].Amount, new { @class = "form-control" })*@
                                                                                     </td>
                                                                                     <td>
                                                                                         <div>
-                                                                                            <a href="@Url.Action("EditProduct", "SContract", new { id = Model.ProductList[i].ID })"><i class="bx bx-edit-alt"></i></a>
                                                                                             <a href="~/SContract/DeleteProduct/@Model.ProductList[i].ID" onclick="return confirm('Ushbu shartnoma maxsulotini ochirib yuborishga ishonchingiz komilmi?')">
                                                                                                 <i class="bx bx-trash"></i>
                                                                                             </a>

@@ -19,7 +19,7 @@ namespace tahsinERP.Models
         public int ProductID { get; set; }
         public double PiecePrice { get; set; }
         public double Amount { get; set; }
-        public Nullable<int> UnitID { get; set; }
+        public int UnitID { get; set; }
     
         public virtual PRODUCT PRODUCT { get; set; }
         public virtual S_CONTRACTS S_CONTRACTS { get; set; }
