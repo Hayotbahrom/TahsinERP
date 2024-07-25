@@ -92,10 +92,10 @@
                                                         @Html.TextBoxFor(model => model.Height, new { @class = "form-control round", @placeholder = "Height" })
                                                         @Html.ValidationMessageFor(model => model.Height, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">O'lchov birligi (dona)</h6>
+                                                    <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Unit" })
-                                                        @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.UnitID, (SelectList)ViewBag.UNIT, "Select Unit", new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Tavsifi </h6>
                                                     <fieldset class="invoice-address form-group">

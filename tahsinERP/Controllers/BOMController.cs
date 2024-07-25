@@ -759,11 +759,11 @@ namespace tahsinERP.Controllers
                 var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == tempbom.ChildPNo).FirstOrDefault();
                 var bomedit = new BOMCreateViewModel();
                 bomedit.ProductPNo = tempbom.ParentPNo;
-
+                
                 
             }
             
             return RedirectToAction("EditView", new { ID = ID });
         }
     }
-}
+} 

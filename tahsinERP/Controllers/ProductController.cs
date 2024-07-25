@@ -15,7 +15,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
-
+using System.Data.Entity;
+using DocumentFormat.OpenXml.Office2010.Excel;
 namespace tahsinERP.Controllers
 {
     public class ProductController : Controller
@@ -26,21 +27,24 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                List<PRODUCT> list = db.PRODUCTS.Where(p => p.IsDeleted == false).ToList();
-                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(),"ID","Name");
+                List<PRODUCT> list = db.PRODUCTS.Include(p => p.UNIT).Where(p => p.IsDeleted == false).ToList();
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(), "ID", "Name");
                 return View(list);
             }
+
         }
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
                 return View();
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PNo, Name, Type, Weight, Length, Width, Height, Unit, Description, PNo2, PNo3, PNo4, PackID, IsDeleted")] PRODUCT product)
+        public ActionResult Create([Bind(Include = "PNo, Name, Type, Weight, Length, Width, Height, UnitID, Description, PNo2, PNo3, PNo4, PackID, IsDeleted")] PRODUCT product)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -96,8 +100,8 @@ namespace tahsinERP.Controllers
             {
                 if (id == null)
                     return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-                var product = db.PRODUCTS.Find(id);
+                
+                var product = db.PRODUCTS.Include(x => x.UNIT).Where(x => x.ID == id && x.IsDeleted == false).FirstOrDefault();
                 if (product == null)
                     return HttpNotFound();
 
@@ -119,12 +123,13 @@ namespace tahsinERP.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                var product = db.PRODUCTS.Find(id);
+                var product = db.PRODUCTS.Include(x => x.UNIT).Where(x => x.ID == id && x.IsDeleted == false);
                 if (product == null)
                 {
                     return HttpNotFound();
                 }
                 ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 return View(product);
             }
         }
@@ -147,7 +152,7 @@ namespace tahsinERP.Controllers
                         productToUpdate.Length = product.Length;
                         productToUpdate.Width = product.Width;
                         productToUpdate.Height = product.Height;
-                        //productToUpdate.Unit = product.Unit;
+                        productToUpdate.UnitID = product.UnitID;
                         productToUpdate.Type = product.Type;
                         productToUpdate.PNo2 = product.PNo2;
                         productToUpdate.PNo3 = product.PNo3;
@@ -210,7 +215,8 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var product = db.PRODUCTS.Find(Id);
+                var product = db.PRODUCTS.Include(x => x.UNIT).Where(x => x.ID == Id && x.IsDeleted == false);
+
                 if (product == null)
                 {
                     return HttpNotFound();
