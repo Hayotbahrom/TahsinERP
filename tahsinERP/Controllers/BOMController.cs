@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -169,7 +170,7 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BOMCreateProductViewModel model,BoomViewModel vmodel)
+        public ActionResult Create(BOMCreateProductViewModel model, BoomViewModel vmodel)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -201,7 +202,7 @@ namespace tahsinERP.Controllers
                 vmodel.ParentPnoComplationStatus = product.PNo;
 
             }
-            return RedirectToAction("CompletionStatus",vmodel);
+            return RedirectToAction("CompletionStatus", vmodel);
         }
 
         public ActionResult CreateWizard(BomViewModel model)
@@ -592,7 +593,7 @@ namespace tahsinERP.Controllers
                     vmodel.ParentPnoComplationStatus = model.ProductPNo;
 
                     db.SaveChanges();
-                    return RedirectToAction("CompletionStatus",vmodel);
+                    return RedirectToAction("CompletionStatus", vmodel);
                 }
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -609,9 +610,9 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                
+
                 var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Painting").ToList();
-                var  prod = db.TEMPORARY_BOMS.Where(x => x.ID == ID).FirstOrDefault();
+                var prod = db.TEMPORARY_BOMS.Where(x => x.ID == ID).FirstOrDefault();
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
                 var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
                 var part = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
@@ -668,7 +669,7 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("CompletionStatus",model);
+            return RedirectToAction("CompletionStatus", model);
         }
 
         [HttpPost]
@@ -749,21 +750,61 @@ namespace tahsinERP.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult EditBom(int ID , BomViewModel model)
+        public ActionResult EditBom(int ID, BoomViewModel model)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var bomlist = new List<BOM>();
+                var processlist = new List<string>();
                 var userId = GetUserID(User.Identity.Name);
                 var tempbom = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false && x.UserID == userId).FirstOrDefault();
                 var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == tempbom.ChildPNo).FirstOrDefault();
-                var bomedit = new BOMCreateViewModel();
-                bomedit.ProductPNo = tempbom.ParentPNo;
-                
-                
+                var child_bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == bom.ChildPNo).FirstOrDefault();
+                var child_bom_child = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == child_bom.ChildPNo).FirstOrDefault();
+                bomlist.Add(child_bom_child);
+                bomlist.Add(child_bom);
+                bomlist.Add(bom);
+                var editviewmodel = new BomEditViewModels();
+                foreach (var boms in bomlist)
+                {
+                    var processname = db.PRODUCTIONPROCESSES.Where(x => x.ID == boms.ProcessID && x.IsDeleted == false).FirstOrDefault();
+                    var part_befor = db.PARTS.Where(x => x.PNo == boms.ChildPNo && x.IsDeleted == false).FirstOrDefault();
+                    var part_after = db.PARTS.Where(x => x.PNo == boms.ParentPNo && x.IsDeleted == false).FirstOrDefault();
+                    
+                    switch (processname.ProcessName)
+                    {
+                        case "Slitting" :
+                            var slitting_norm = db.SLITTING_NORMS.Where(x => x.PartID_after == part_after.ID  && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
+                            editviewmodel.SLITTING_NORMS = slitting_norm;
+                            editviewmodel.SlittingID = slitting_norm.ID;
+                            editviewmodel.Slitting_After_ID = part_after.ID;
+                            editviewmodel.Slitting_Before_ID = part_befor.ID;
+                            break;
+                        case "Blanking":
+                            var blanking_norm = db.BLANKING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
+                            editviewmodel.BLANKING_NORMS = blanking_norm;
+                            editviewmodel.BlankingID = blanking_norm.ID;
+                            editviewmodel.Blanking_After_ID = part_after.ID;
+                            editviewmodel.Blanking_Before_ID = part_befor.ID;
+                            break;
+                        case "Stamping":
+                            var stamping_norm = db.STAMPING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
+                            editviewmodel.STAMPING_NORMS= stamping_norm;
+                            editviewmodel.StampingID = stamping_norm.ID;
+                            editviewmodel.Stamping_After_ID= part_after.ID;
+                            editviewmodel.Stamping_Before_ID= part_befor.ID;
+                            break;
+                    }
+                    processlist.Add(processname.ProcessName);
+                }
+                editviewmodel.ProductPNo = model.ParentPnoComplationStatus;
+                editviewmodel.PartPno = tempbom.ChildPNo;
+                editviewmodel.ProccessList = processlist;
+                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.Part = new SelectList(part,"ID","PNo");
+                return View(editviewmodel);
+
             }
-            
-            return RedirectToAction("EditView", new { ID = ID });
         }
     }
-} 
+}

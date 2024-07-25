@@ -74,13 +74,14 @@
                                                                         <a href="@Url.Action("BomCreateDetails", "BOM", new { id = item.ID })">
                                                                             <i class="bi bi-eye" style="font-size:20px"></i>
                                                                         </a>
-                                                                        <a href="@Url.Action("BomCreate", "BOM", new { id = item.ID })">
+                                                                        <a href="@Url.Action("EditBom", "BOM", new { id = item.ID })">
+                                                                            @Html.HiddenFor(x => x.ParentPnoComplationStatus)
                                                                             <i class="bx bx-edit-alt"></i>
                                                                         </a>
                                                                         if (item.NormConfirmed == true)
                                                                         {
 
-                                                                            <a href="@Url.Action("#", "#", new { id = item.ID })">
+                                                                            <a href="">
                                                                                 <i class="bi bi-check" style="font-size:25px"></i>
                                                                             </a>
                                                                         }

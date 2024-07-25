@@ -18,8 +18,6 @@ namespace tahsinERP.ViewModels.BOM
         public SLITTING_NORMS SLITTING_NORMS { get; set; }
         public BLANKING_NORMS BLANKING_NORMS { get; set; }
         public STAMPING_NORMS STAMPING_NORMS { get; set; }
-        //public PART Part { get; set; }
-
         public int SelectedSlittingNormID { get; set; }
         public int SelectedBlankingNormID { get; set; }
         public int SelectedStampingNormID { get; set; }
