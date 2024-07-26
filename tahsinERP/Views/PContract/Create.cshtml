@@ -67,7 +67,7 @@
                                                     </div>
                                                     <div class="col-md-6 col-12 form-group">
                                                         <label for="IDN">IDN raqami</label>
-                                                        @Html.TextBoxFor(model => model.IDN, new { @type = "text", @class = "form-control" })
+                                                        @Html.TextBoxFor(model => model.IDN, new { @type = "number", @class = "form-control" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -81,7 +81,7 @@
                                                         @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                     </div>
                                                     <div class="col-md-6 col-12 form-group">
-                                                        <label for="Currency">PaymentTerm</label>
+                                                        <label for="PaymentTerms">PaymentTerm</label>
                                                         @Html.TextBoxFor(model => model.PaymentTerms, new { @type = "text", @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                     </div>

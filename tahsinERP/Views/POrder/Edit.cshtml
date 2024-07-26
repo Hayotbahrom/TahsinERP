@@ -34,7 +34,7 @@
             <div class="content-body">
                 <div class="row">
                     <!-- invoice view page -->
-                    <div class="col-xl-9 col-md-8 col-12">
+                    <div class="col-xl-11 col-md-8 col-12">
                         <div class="card">
                             <div class="card-content">
                                 @using (Html.BeginForm("Edit", "POrder", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -90,7 +90,7 @@
                                                 <div class="col-12">
                                                     <div class="card">
                                                         <div class="card-header">
-                                                            <h4 class="card-title">Shartnoma predmeti</h4>
+                                                            <h4 class="card-title">Buyurtma predmeti</h4>
                                                         </div>
                                                         <div class="card-content">
                                                             <div class="card-body card-dashboard">
@@ -104,6 +104,7 @@
                                                                                 <th>O'lchov birligi</th>
                                                                                 <th>Miqdori</th>
                                                                                 <th>MOQ</th>
+                                                                                <th>Amallar</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -121,6 +122,9 @@
                                                                                     <td>
                                                                                         <!-- Delete button -->
                                                                                         <a href="@Url.Action("EditPart", "POrder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                                        <a href="~/POrder/DeletePart/@item.ID" onclick="return confirm('Ushbu detalni  o`chirib yuborishga ishonchingiz komilmi?')">
+                                                                                            <i class="bx bx-trash"></i>
+                                                                                        </a>
                                                                                     </td>
                                                                                 </tr>
                                                                             }

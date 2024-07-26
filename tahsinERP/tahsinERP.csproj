@@ -2593,6 +2593,7 @@
     <Content Include="Views\ProformaInvoice\Delete.cshtml" />
     <Content Include="Views\ProformaInvoice\Edit.cshtml" />
     <Content Include="Views\BOM\EditBom.cshtml" />
+    <Content Include="Views\POrder\CreateSteel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

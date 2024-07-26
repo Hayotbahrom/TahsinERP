@@ -69,6 +69,7 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
             }
 
@@ -122,32 +123,66 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrderNo, IssuedDate, CompanyID, SupplierID, ContractID, Amount, Currency, Description")] P_ORDERS order)
+        //steel coil uchun Create Actoin method
+        public ActionResult CreateSteel()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                try
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo");
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+            }
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateSteel(POrderViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var newOrder = new P_ORDERS()
                 {
-                    if (ModelState.IsValid)
+                    OrderNo = model.OrderNo,
+                    IssuedDate = model.IssuedDate,
+                    CompanyID = 1,
+                    SupplierID = model.SupplierID,
+                    ContractID = model.ContractID,
+                    Currency = model.Currency,
+                    Amount = model.Amount,
+                    Description = model.Description,
+                    IsDeleted = false
+                };
+                db.P_ORDERS.Add(newOrder);
+                db.SaveChanges();
+
+                // Yangi yozuvning IncomeID sini olish
+                int newOrderID = newOrder.ID;
+
+                // Parts ni saqlash
+                foreach (var part in model.Parts)
+                {
+                    var newPart = new P_ORDER_PARTS
                     {
-                        order.IsDeleted = false;
-                        db.P_ORDERS.Add(order);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(ex.Message, ex);
+                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                        PartID = part.PartID,
+                        UnitID = part.UnitID,
+                        Amount = part.Amount,
+                        Price = part.Price,
+                        TotalPrice = part.TotalPrice,
+                        MOQ = part.MOQ
+                    };
+
+                    db.P_ORDER_PARTS.Add(newPart);
                 }
 
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
-                return View(order);
+                db.SaveChanges();
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                return RedirectToAction("Index");
             }
-        }*/
+        }
         public ActionResult Details(int? id)
         {
             
@@ -388,7 +423,7 @@ namespace tahsinERP.Controllers
                 db.Entry(orderPart).Reference(o => o.P_ORDERS).Load();
                 db.Entry(orderPart).Reference(o => o.UNIT).Load();
                 ViewBag.PartList = allParts;
-
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 return View(orderPart);
             }
         }

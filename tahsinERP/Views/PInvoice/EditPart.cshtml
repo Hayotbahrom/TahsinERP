@@ -74,8 +74,8 @@
 
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Maximum imkoniyat" })
-                                                        @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.UnitID, (IEnumerable<SelectListItem>)ViewBag.units, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <ul class="list-group list-group-flush">

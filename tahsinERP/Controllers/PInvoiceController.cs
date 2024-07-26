@@ -189,7 +189,9 @@ namespace tahsinERP.Controllers
 
                 partList = db.P_INVOICE_PARTS
                                         .Include(ip => ip.PART)
-                                        .Where(ip => ip.InvoiceID == invoice.ID).ToList();
+                                        .Include (ip => ip.UNIT)
+                                        .Where(ip => ip.InvoiceID == invoice.ID)
+                                        .ToList();
 
                 var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
                 if (firstPackingList != null)
@@ -324,7 +326,8 @@ namespace tahsinERP.Controllers
                 // Eager loading P_INVOICE_PARTS and their associated PARTs
                 var invoice = db.P_INVOICES
                                 .Include(i => i.P_INVOICE_PARTS.Select(pc => pc.PART))
-                                .SingleOrDefault(i => i.ID == ID);
+                                .Include(i => i.P_ORDERS)
+                                .FirstOrDefault(i => i.ID == ID);
 
                 if (invoice == null)
                 {
