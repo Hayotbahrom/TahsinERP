@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System;
 
 namespace tahsinERP.ViewModels
 {
-    // General ViewModel
     public class SContractViewModel
     {
         public int ID { get; set; }
@@ -24,7 +22,8 @@ namespace tahsinERP.ViewModels
         public int ID { get; set; }
         public int SContractID { get; set; }
         public int ProductID { get; set; }
-        public decimal PiecePrice { get; set; }
+        public string ProductPNo { get; set; }
+        public double PiecePrice { get; set; }
         public int UnitID { get; set; }
         public int Amount { get; set; }
         public ProductViewModel PRODUCT { get; set; }
@@ -36,5 +35,4 @@ namespace tahsinERP.ViewModels
         public string PNo { get; set; }
         public string Name { get; set; }
     }
-
 }

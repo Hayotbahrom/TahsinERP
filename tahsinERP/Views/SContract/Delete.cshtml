@@ -99,7 +99,7 @@
                                                                                 <td>@item.Amount</td>
                                                                                 <td>
                                                                                     <!-- Delete button -->
-                                                                                    <a href="~/SContract/DeletePart/@item.ID" onclick="return confirm(`Ushbu shartnomani o'chirib yuborishga ishonchingiz komilmi?`)">
+                                                                                    <a href="~/SContract/DeleteProduct/@item.ID" onclick="return confirm(`Ushbu maxsulotni o'chirib yuborishga ishonchingiz komilmi?`)">
                                                                                         <i class="bx bx-trash"></i>
                                                                                     </a>
                                                                                 </td>
@@ -116,7 +116,7 @@
                                     </section>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item border-0 pb-0">
-                                            @using (Html.BeginForm("Delete", "PContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            @using (Html.BeginForm("Delete", "SContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                             {
                                                 @Html.AntiForgeryToken()
                                                 <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu shartnomani ochirib yuborishga ishonchingiz komilmi?')">
