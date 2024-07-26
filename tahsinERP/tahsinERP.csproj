@@ -298,6 +298,7 @@
     <Compile Include="Controllers\ProductionProcessController.cs" />
     <Compile Include="Controllers\ProductPackController.cs" />
     <Compile Include="Controllers\ProductPlanController.cs" />
+    <Compile Include="Controllers\ProformaInvoiceController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
@@ -598,6 +599,7 @@
     <Compile Include="ViewModels\BOM\BlankingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\BOMCreateProductViewModel.cs" />
     <Compile Include="ViewModels\BOM\BOMCreateViewModel.cs" />
+    <Compile Include="ViewModels\BOM\BomEditViewModels.cs" />
     <Compile Include="ViewModels\BOM\BomViewModel.cs" />
     <Compile Include="ViewModels\BOM\BoomViewModel.cs" />
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
@@ -2585,6 +2587,12 @@
     <Content Include="Views\SOrder\Index.cshtml" />
     <Content Include="Views\SOrder\Create.cshtml" />
     <Content Include="Views\BOM\OldCompletionStatus.cshtml" />
+    <Content Include="Views\ProformaInvoice\Index.cshtml" />
+    <Content Include="Views\ProformaInvoice\Create.cshtml" />
+    <Content Include="Views\ProformaInvoice\Details.cshtml" />
+    <Content Include="Views\ProformaInvoice\Delete.cshtml" />
+    <Content Include="Views\ProformaInvoice\Edit.cshtml" />
+    <Content Include="Views\BOM\EditBom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

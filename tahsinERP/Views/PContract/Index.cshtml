@@ -1,5 +1,4 @@
-﻿@model List<tahsinERP.Models.P_CONTRACTS>
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var type = ViewBag.Type;
@@ -104,7 +103,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model)
+                                                @foreach (var item in ViewBag.partList)
                                                 {
                                                     <tr>
                                                         <td></td>
