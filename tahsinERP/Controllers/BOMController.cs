@@ -612,13 +612,12 @@ namespace tahsinERP.Controllers
             {
 
                 var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Painting").ToList();
-                var prod = db.TEMPORARY_BOMS.Where(x => x.ID == ID).FirstOrDefault();
                 ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
                 var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
                 var part = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
                 BomViewModel model = new BomViewModel();
                 model.Part = part;
-                model.ProductPno = prod.ParentPNo;
+                model.ProductPno = temp.ParentPNo;
                 return View(model);
             }
         }
@@ -799,14 +798,18 @@ namespace tahsinERP.Controllers
                 editviewmodel.ProccessList = processlist;
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part, "ID", "PNo");
+                var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
+                var part_child = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
+                editviewmodel.PartPno = part_child.PNo;
+                editviewmodel.ProductPNo = temp.ParentPNo;
                 return View(editviewmodel);
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditBom(BomEditViewModels model)
+        public ActionResult EditBom(BomEditViewModels model,BoomViewModel model1)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
@@ -853,6 +856,19 @@ namespace tahsinERP.Controllers
                                     slitting_norm.IssuedDateTime = DateTime.Now;
                                     slitting_norm.IssuedByUserID = userId.GetValueOrDefault();
                                     db.Entry(slitting_norm).State = System.Data.Entity.EntityState.Modified;
+                                    var procesname = db.PRODUCTIONPROCESSES.Where(x => x.ProcessName == "Slitting").FirstOrDefault();
+                                    var bom_slitting = new BOM
+                                    {
+                                        ChildPNo = part_before.PNo,
+                                        ParentPNo = part_after.PNo,
+                                        IsDeleted = false,
+                                        IsActive = true,
+                                        WasteAmount = Math.Round((part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
+                                        ProcessID = procesname.ID,
+                                        Consumption = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth) / cutterLines), 2, MidpointRounding.ToEven),
+                                        ConsumptionUnit = "kg",
+                                    };
+                                    db.Entry(bom_slitting).State = System.Data.Entity.EntityState.Modified;
                                 }
                                 break;
                             case "Blanking":
@@ -879,6 +895,24 @@ namespace tahsinERP.Controllers
                                     blanking_norm.IssuedByUserID = userId.GetValueOrDefault();
 
                                     db.Entry(blanking_norm).State = System.Data.Entity.EntityState.Modified;
+
+                                    var procesname = db.PRODUCTIONPROCESSES.Where(x => x.ProcessName == "Blanking").FirstOrDefault();
+
+                                    var bom_blanking = new BOM
+                                    {
+                                        ChildPNo = part_after_slitting.PNo,
+                                        ParentPNo = part_after_Blanking.PNo,
+                                        IsDeleted = false,
+                                        IsActive = true,
+                                        ProcessID = procesname.ID,
+                                        WasteAmount = Math.Round((part_after_slitting.PWeight / part_after_slitting.PWidth), 2, MidpointRounding.ToEven),
+                                        Consumption = Math.Round((int)(part_after_slitting.PWidth * part_after_slitting.PLength * part_after_Blanking.Gauge * model.BLANKING_NORMS.Density) / (part_after_slitting.PWeight / part_after_Blanking.PWeight), 2, MidpointRounding.ToEven),
+                                        ConsumptionUnit = part_after_slitting.UNIT.ShortName,
+                                    };
+
+                                    db.Entry(bom_blanking).State = System.Data.Entity.EntityState.Modified;
+
+
                                 }
                                 break;
                             case "Stamping":
@@ -909,15 +943,19 @@ namespace tahsinERP.Controllers
                                         WasteAmount = Math.Round((part_after_Stamping.PWeight / part_after_Stamping.PWidth), 2, MidpointRounding.ToEven),
                                         Consumption = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight)),
                                         ConsumptionUnit = part_after_Blanking.UNIT.UnitName,
+                                        
                                     };
                                     db.Entry(stamping_norm).State = System.Data.Entity.EntityState.Modified;
                                 }
                                 break;
                         }
-
                     }
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    model1.ParentPnoComplationStatus = model.ProductPNo;
+                    var _tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userId && x.IsDeleted == false && x.ChildPNo == model.PartPno).FirstOrDefault();
+                    _tempbom.NormConfirmed = true;
+                    db.SaveChanges();
+                    return RedirectToAction("CompletionStatus", model1);
                 }
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
