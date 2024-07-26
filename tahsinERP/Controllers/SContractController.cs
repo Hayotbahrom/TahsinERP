@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -133,6 +132,7 @@ namespace tahsinERP.Controllers
 
                 var productList = db.S_CONTRACT_PRODUCTS
                                     .Include(pl => pl.PRODUCT)
+                                    .Include(pl => pl.UNIT)
                                     .Where(pl => pl.ContractID == contract.ID)
                                     .ToList();
 
@@ -150,7 +150,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contract = db.S_CONTRACTS.Find(id);
+                var contract = db.S_CONTRACTS.Include(x => x.S_CONTRACT_PRODUCTS).Where(x => x.ID == id && x.IsDeleted == false).FirstOrDefault();
                 if (contract == null)
                 {
                     return HttpNotFound();
@@ -158,10 +158,8 @@ namespace tahsinERP.Controllers
 
                 var model = new SContractViewModel
                 {
-                    ID = contract.ID,
                     ContractNo = contract.ContractNo,
                     CustomerID = contract.CustomerID,
-                    IssuedDate = contract.IssuedDate,
                     DueDate = contract.DueDate,
                     Incoterms = contract.Incoterms,
                     PaymentTerms = contract.PaymentTerms,
@@ -172,6 +170,7 @@ namespace tahsinERP.Controllers
                         ID = p.ID,
                         SContractID = p.ContractID,
                         ProductID = p.ProductID,
+                        ProductPNo = p.PRODUCT.PNo,
                         PiecePrice = (int)p.PiecePrice,
                         UnitID = p.UnitID,
                         Amount = (int)p.Amount,
@@ -230,19 +229,20 @@ namespace tahsinERP.Controllers
                     try
                     {
                         db.SaveChanges();
-                    } catch(RetryLimitExceededException)
+                    }
+                    catch (RetryLimitExceededException)
                     {
                         ModelState.AddModelError("", "Kontrakt o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                     }
 
 
-                    // Update product list
+                    // Update ProductList
                     foreach (var product in model.ProductList)
                     {
-                        var existingProduct = db.S_CONTRACT_PRODUCTS.Find(product.ProductID);
+                        var existingProduct = db.S_CONTRACT_PRODUCTS.Find(product.ID);
                         if (existingProduct != null)
                         {
-                            existingProduct.PiecePrice = (int)product.PiecePrice;
+                            existingProduct.PiecePrice = product.PiecePrice;
                             existingProduct.UnitID = product.UnitID;
                             existingProduct.Amount = product.Amount;
 
@@ -250,10 +250,12 @@ namespace tahsinERP.Controllers
                         }
                     }
 
+
                     try
                     {
                         db.SaveChanges();
-                    } catch (RetryLimitExceededException)
+                    }
+                    catch (RetryLimitExceededException)
                     {
                         ModelState.AddModelError("", "Maxsulot o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratsiyasiga muroaat qiling.");
                     }
@@ -263,65 +265,6 @@ namespace tahsinERP.Controllers
 
             ViewBag.ProductList = model.ProductList;
             return View(model);
-        }
-
-
-        // __________
-
-
-
-
-        // Edit Product
-        [HttpGet]
-        public ActionResult EditProduct(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var contractProduct = db.S_CONTRACT_PRODUCTS.Find(id);
-                if (contractProduct == null)
-                {
-                    return HttpNotFound();
-                }
-
-                var allProducts = db.PRODUCTS.Select(p => new SelectListItem
-                {
-                    Value = p.ID.ToString(),
-                    Text = p.PNo
-                }).ToList();
-
-                ViewBag.ProductList = allProducts;
-                return View(contractProduct);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult EditProduct([Bind(Include = "ID,ProductID,PiecePrice,Unit,Amount")] S_CONTRACT_PRODUCTS contractProduct)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        db.Entry(contractProduct).State = EntityState.Modified;
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", ex.Message);
-                    }
-                }
-
-                ViewBag.ContractList = db.S_CONTRACT_PRODUCTS.Where(cp => cp.ContractID == contractProduct.ContractID).ToList();
-                ViewBag.ProductList = db.S_CONTRACT_PRODUCTS.Where(p => p.ProductID == contractProduct.ProductID).ToList();
-                return View(contractProduct);
-            }
         }
         // __________
 
@@ -342,7 +285,8 @@ namespace tahsinERP.Controllers
                 if (contract == null)
                 {
                     return HttpNotFound();
-                } else
+                }
+                else
                 {
                     ViewBag.ProductList = db.S_CONTRACT_PRODUCTS
                                             .Include(pl => pl.PRODUCT)
@@ -356,7 +300,7 @@ namespace tahsinERP.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         public ActionResult Delete(int? id, FormCollection gfs)
         {
             if (!ModelState.IsValid || id == null)
@@ -381,7 +325,7 @@ namespace tahsinERP.Controllers
                             db.S_CONTRACT_PRODUCTS.Remove(contractProduct);
                         }
 
-                        db.SaveChanges();
+                        //db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -397,9 +341,6 @@ namespace tahsinERP.Controllers
 
             return View();
         }
-
-        // Delete Contract-Product
-        [HttpDelete]
         public ActionResult DeleteProduct(int id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
