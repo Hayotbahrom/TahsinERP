@@ -34,7 +34,7 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        ViewBag.partList = db.P_CONTRACTS.Include(x => x.SUPPLIER).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
+                        ViewBag.partList = db.P_CONTRACTS.Include(x => x.SUPPLIER).Where(s => s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.IsDeleted == false && x.Type.CompareTo(type) == 0), "ID", "Name");
                     }
