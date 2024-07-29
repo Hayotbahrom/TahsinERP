@@ -81,9 +81,14 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+
                 var isSameContract = db.P_CONTRACTS
                     .Include(x => x.SUPPLIER)
-                    .Where(p => p.IsDeleted == false && p.SupplierID == model.SupplierID).FirstOrDefault();
+                    .Where(p => p.IsDeleted == false && p.ID == model.ContractID).FirstOrDefault();
 
                 if (model.SupplierID != isSameContract.SupplierID)
                 {
@@ -131,9 +136,7 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false), "ID", "Name", newOrder.SupplierID);
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false), "ID", "ContractNo", newOrder.ContractID);
-                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+            
                 return RedirectToAction("Index");
             }
         }
