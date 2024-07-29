@@ -161,6 +161,8 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -296,6 +298,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db1.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Edit[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -362,6 +366,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Editpart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -420,6 +426,8 @@ namespace tahsinERP.Controllers
                                 db.PART_WRHS_INCOME_PARTS.Remove(whIncomePart);
                             }*/
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -448,6 +456,8 @@ namespace tahsinERP.Controllers
                         {
                             db.PART_WRHS_INCOME_PARTS.Remove(contractPartToDelete);
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

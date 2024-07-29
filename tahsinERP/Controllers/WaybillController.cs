@@ -84,7 +84,8 @@ namespace tahsinERP.Controllers
 
                     db.F_WAYBILLS.Add(waybill);
                     db.SaveChanges();
-
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "WaybillController", "Create[Post]");
                     return RedirectToAction("Index");
                 }
             }
@@ -193,6 +194,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db1.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WaybillController", "Edit[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -248,6 +251,8 @@ namespace tahsinERP.Controllers
                         {
                             db.Entry(waybillToDelete).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WaybillController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -263,7 +268,5 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
-
     }
 }

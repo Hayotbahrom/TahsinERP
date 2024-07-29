@@ -74,6 +74,8 @@ namespace tahsinERP.Controllers
                         db.TRACINGS.Add(tracing);
                         await db.SaveChangesAsync();
 
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "TracingController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -185,6 +187,8 @@ namespace tahsinERP.Controllers
 
                         db.Entry(tracingToUpdate).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "TracingController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
 
@@ -229,6 +233,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "TracingController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

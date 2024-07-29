@@ -47,7 +47,8 @@ namespace tahsinERP.Controllers
 
                     db.PRODUCTPACKS.Add(model);
                     db.SaveChanges();
-
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "ProductPackController", "Create[Post]");
                     return RedirectToAction("Index");
                 }
 
@@ -108,6 +109,8 @@ namespace tahsinERP.Controllers
                         db.Entry(productPack).Property(p => p.ProdID).IsModified = true; // ProdID ni modified deb belgilash
                         db.SaveChanges();
                     }
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "ProductPackController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
 
@@ -191,6 +194,8 @@ namespace tahsinERP.Controllers
                     db.Entry(prodPack).State = EntityState.Modified;
                     db.SaveChanges();
                 }
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "ProductPackController", "Edit[Post]");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

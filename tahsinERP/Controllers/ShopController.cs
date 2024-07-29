@@ -38,6 +38,8 @@ namespace tahsinERP.Controllers
                         prod_shop.CompanyID = 1;
                         db1.SHOPS.Add(prod_shop);
                         db1.SaveChanges();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "ShopController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -81,6 +83,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db1.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "ShopController", "Delete[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -128,6 +132,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db1.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "ShopController", "Edit[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)

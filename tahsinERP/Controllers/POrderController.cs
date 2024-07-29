@@ -134,6 +134,8 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false), "ID", "Name", newOrder.SupplierID);
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false), "ID", "ContractNo", newOrder.ContractID);
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "POrderController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -194,6 +196,8 @@ namespace tahsinERP.Controllers
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "POrderController", "CreateSteel[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -271,6 +275,8 @@ namespace tahsinERP.Controllers
                             db.Entry(orderToDelete).State = System.Data.Entity.EntityState.Modified;
 
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "POrderController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -299,6 +305,8 @@ namespace tahsinERP.Controllers
                         {
                             db.P_ORDER_PARTS.Remove(orderPartToDelete);
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "POrderController", "DeletePart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -395,6 +403,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -466,6 +476,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "POrderController", "EditPart[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -584,7 +596,8 @@ namespace tahsinERP.Controllers
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
 
-
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "POrderController", "CleareDataTable");
             return View("UploadWithExcel");
         }
         [HttpPost]

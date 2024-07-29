@@ -59,6 +59,8 @@ namespace tahsinERP.Controllers
                         supplier.IsDeleted = false;
                         db.SUPPLIERS.Add(supplier);
                         db.SaveChanges();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "SupplierController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -138,6 +140,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "SupplierController", "Edit[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -186,6 +190,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "SupplierController", "Delete[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -290,6 +296,8 @@ namespace tahsinERP.Controllers
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
 
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "SupplierController", "CleareDataTable");
             // Return the UploadWithExcel view
             return View("UploadWithExcel");
         }
