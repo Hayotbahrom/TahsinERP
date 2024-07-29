@@ -39,7 +39,7 @@
           <Property Name="ProcessID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BOMS_AND_NORMS">
           <Key>
             <PropertyRef Name="IsActive" />
@@ -895,6 +895,34 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="DueDate" Type="date" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="S_ORDER_PRODUCTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="TotalPrice" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="MOQ" Type="float" />
+          <Property Name="UnitID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="S_ORDERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IssuedDate" Type="datetime" Nullable="false" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="ContractID" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="15" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
         <EntityType Name="SAMPLE_FILES">
           <Key>
             <PropertyRef Name="ID" />
@@ -980,6 +1008,16 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="IssuedDateTime" Type="datetime" Nullable="false" />
           <Property Name="IssuedByUserID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="STEEL-COILS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Marka" Type="varchar" MaxLength="20" />
+          <Property Name="Standart" Type="varchar" MaxLength="30" />
+          <Property Name="Coating" Type="varchar" MaxLength="30" />
+          <Property Name="Thickness" Type="float" />
+        </EntityType>
         <EntityType Name="SUPPLIERS">
           <Key>
             <PropertyRef Name="ID" />
@@ -1064,8 +1102,18 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="Image" Type="varbinary(max)" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="USERLOGS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ControllerName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ActionName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DBTHSN-TEST.dbo.USERROLES' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="USERROLES">
           <Key>
             <PropertyRef Name="UserID" />
@@ -1109,7 +1157,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MaterialRequirement">
           <Key>
             <PropertyRef Name="ProductNo" />
@@ -2499,6 +2547,78 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_S_ORDERS">
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_UNITS">
+          <End Role="UNITS" Type="Self.UNITS" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UNITS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_CUSTOMERS">
+          <End Role="CUSTOMERS" Type="Self.CUSTOMERS" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_S_CONTRACTS">
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SCONTRACTS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
           <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
@@ -2679,6 +2799,18 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_USERLOGS_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="1" />
+          <End Role="USERLOGS" Type="Self.USERLOGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USERLOGS">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_USERROLES_ROLES">
           <End Role="ROLES" Type="Self.ROLES" Multiplicity="1" />
           <End Role="USERROLES" Type="Self.USERROLES" Multiplicity="*" />
@@ -2828,12 +2960,15 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <EntitySet Name="ROLES" EntityType="Self.ROLES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="S_CONTRACT_PRODUCTS" EntityType="Self.S_CONTRACT_PRODUCTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="S_CONTRACTS" EntityType="Self.S_CONTRACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="S_ORDER_PRODUCTS" EntityType="Self.S_ORDER_PRODUCTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="S_ORDERS" EntityType="Self.S_ORDERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SAMPLE_FILES" EntityType="Self.SAMPLE_FILES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SHOP_PLANNED_DTS" EntityType="Self.SHOP_PLANNED_DTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SHOPS" EntityType="Self.SHOPS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SLITTING_NORMS" EntityType="Self.SLITTING_NORMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SPL" EntityType="Self.SPL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="STAMPING_NORMS" EntityType="Self.STAMPING_NORMS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STEEL-COILS" EntityType="Self.STEEL-COILS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SUPPLIERS" EntityType="Self.SUPPLIERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TEMPORARY_BOMS" EntityType="Self.TEMPORARY_BOMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TRACINGS" EntityType="Self.TRACINGS" Schema="dbo" store:Type="Tables" />
@@ -2841,6 +2976,7 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <EntitySet Name="USER_ENTRIES" EntityType="Self.USER_ENTRIES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USER_LICENSES" EntityType="Self.USER_LICENSES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USERIMAGES" EntityType="Self.USERIMAGES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USERLOGS" EntityType="Self.USERLOGS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WASTE_STOCKS" EntityType="Self.WASTE_STOCKS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WASTES" EntityType="Self.WASTES" Schema="dbo" store:Type="Tables" />
@@ -3325,6 +3461,30 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
             <End Role="UNITS" EntitySet="UNITS" />
             <End Role="S_CONTRACT_PRODUCTS" EntitySet="S_CONTRACT_PRODUCTS" />
           </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_PRODUCTS" Association="Self.FK_S_ORDER_PRODUCTS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_S_ORDERS" Association="Self.FK_S_ORDER_PRODUCTS_S_ORDERS">
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_UNITS" Association="Self.FK_S_ORDER_PRODUCTS_UNITS">
+            <End Role="UNITS" EntitySet="UNITS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_COMPANIES" Association="Self.FK_S_ORDERS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_CUSTOMERS" Association="Self.FK_S_ORDERS_CUSTOMERS">
+            <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_S_CONTRACTS" Association="Self.FK_S_ORDERS_S_CONTRACTS">
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
           <AssociationSet Name="FK_SCONTRACTS_COMPANIES" Association="Self.FK_SCONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
@@ -3384,6 +3544,10 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <AssociationSet Name="FK_USERIMAGES_USERS" Association="Self.FK_USERIMAGES_USERS">
             <End Role="USERS" EntitySet="USERS" />
             <End Role="USERIMAGES" EntitySet="USERIMAGES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USERLOGS_USERS" Association="Self.FK_USERLOGS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="USERLOGS" EntitySet="USERLOGS" />
           </AssociationSet>
           <AssociationSet Name="FK_USERROLES_ROLES" Association="Self.FK_USERROLES_ROLES">
             <End Role="ROLES" EntitySet="ROLES" />
@@ -3474,6 +3638,7 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <NavigationProperty Name="SHOPS" Relationship="Self.FK_PRODUCTION_SHOPS_COMPANIES" FromRole="COMPANIES" ToRole="SHOPS" />
           <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="S_CONTRACTS" />
           <NavigationProperty Name="USERS" Relationship="Self.FK_USERS_COMPANIES" FromRole="COMPANIES" ToRole="USERS" />
+          <NavigationProperty Name="S_ORDERS" Relationship="DBTHSNModel.FK_S_ORDERS_COMPANIES" FromRole="COMPANy" ToRole="S_ORDERS" />
         </EntityType>
         <EntityType Name="COMPANY_LICENSES">
           <Key>
@@ -3501,6 +3666,7 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="CUSTOMERS" ToRole="S_CONTRACTS" />
+          <NavigationProperty Name="S_ORDERS" Relationship="DBTHSNModel.FK_S_ORDERS_CUSTOMERS" FromRole="CUSTOMER" ToRole="S_ORDERS" />
         </EntityType>
         <EntityType Name="DAMAGED_PARTS">
           <Key>
@@ -4460,6 +4626,7 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <NavigationProperty Name="UNIT" Relationship="Self.FK_PRODUCTS_UNITS" FromRole="PRODUCTS" ToRole="UNITS" />
           <NavigationProperty Name="S_CONTRACT_PRODUCTS" Relationship="Self.FK_S_CONTRACT_PRODUCTS_PRODUCTS" FromRole="PRODUCTS" ToRole="S_CONTRACT_PRODUCTS" />
           <NavigationProperty Name="SPLs" Relationship="Self.FK_SPL_PRODUCTS" FromRole="PRODUCTS" ToRole="SPL" />
+          <NavigationProperty Name="S_ORDER_PRODUCTS" Relationship="DBTHSNModel.FK_S_ORDER_PRODUCTS_PRODUCTS" FromRole="PRODUCT" ToRole="S_ORDER_PRODUCTS" />
         </EntityType>
         <EntityType Name="ROLE">
           <Key>
@@ -4504,6 +4671,7 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="S_CONTRACTS" ToRole="COMPANIES" />
           <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="S_CONTRACTS" ToRole="CUSTOMERS" />
           <NavigationProperty Name="S_CONTRACT_PRODUCTS" Relationship="Self.FK_S_CONTRACT_PRODUCTS_S_CONTRACTS" FromRole="S_CONTRACTS" ToRole="S_CONTRACT_PRODUCTS" />
+          <NavigationProperty Name="S_ORDERS" Relationship="DBTHSNModel.FK_S_ORDERS_S_CONTRACTS" FromRole="S_CONTRACTS" ToRole="S_ORDERS" />
         </EntityType>
         <EntityType Name="SAMPLE_FILES">
           <Key>
@@ -4682,6 +4850,7 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <NavigationProperty Name="PRODUCTS" Relationship="Self.FK_PRODUCTS_UNITS" FromRole="UNITS" ToRole="PRODUCTS" />
           <NavigationProperty Name="S_CONTRACT_PRODUCTS" Relationship="Self.FK_S_CONTRACT_PRODUCTS_UNITS" FromRole="UNITS" ToRole="S_CONTRACT_PRODUCTS" />
           <NavigationProperty Name="TEMPORARY_BOMS" Relationship="Self.FK_TEMPORARY_BOMS_UNITS" FromRole="UNITS" ToRole="TEMPORARY_BOMS" />
+          <NavigationProperty Name="S_ORDER_PRODUCTS" Relationship="DBTHSNModel.FK_S_ORDER_PRODUCTS_UNITS" FromRole="UNIT" ToRole="S_ORDER_PRODUCTS" />
         </EntityType>
         <EntityType Name="USER_ENTRIES">
           <Key>
@@ -4737,6 +4906,7 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
           <NavigationProperty Name="USER_ENTRIES" Relationship="Self.FK_USER_ENTRIES_USERS" FromRole="USERS" ToRole="USER_ENTRIES" />
           <NavigationProperty Name="USERIMAGES" Relationship="Self.FK_USERIMAGES_USERS" FromRole="USERS" ToRole="USERIMAGES" />
           <NavigationProperty Name="ROLES" Relationship="Self.USERROLES" FromRole="USERS" ToRole="ROLES" />
+          <NavigationProperty Name="USERLOGS" Relationship="DBTHSNModel.FK_USERLOGS_USERS" FromRole="USER" ToRole="USERLOG" />
         </EntityType>
         <EntityType Name="WASTE_STOCKS">
           <Key>
@@ -7008,6 +7178,38 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
             <End Role="BOM" EntitySet="BOMS" />
             <End Role="BOMS_AND_NORMS" EntitySet="BOMS_AND_NORMS" />
           </AssociationSet>
+          <EntitySet Name="S_ORDER_PRODUCTS" EntityType="DBTHSNModel.S_ORDER_PRODUCTS" />
+          <EntitySet Name="S_ORDERS" EntityType="DBTHSNModel.S_ORDERS" />
+          <EntitySet Name="STEEL_COILS" EntityType="DBTHSNModel.STEEL_COILS" />
+          <EntitySet Name="USERLOGS" EntityType="DBTHSNModel.USERLOG" />
+          <AssociationSet Name="FK_S_ORDERS_COMPANIES" Association="DBTHSNModel.FK_S_ORDERS_COMPANIES">
+            <End Role="COMPANy" EntitySet="COMPANIES" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_CUSTOMERS" Association="DBTHSNModel.FK_S_ORDERS_CUSTOMERS">
+            <End Role="CUSTOMER" EntitySet="CUSTOMERS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_PRODUCTS" Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_PRODUCTS">
+            <End Role="PRODUCT" EntitySet="PRODUCTS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_S_CONTRACTS" Association="DBTHSNModel.FK_S_ORDERS_S_CONTRACTS">
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_S_ORDERS" Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_S_ORDERS">
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_UNITS" Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_UNITS">
+            <End Role="UNIT" EntitySet="UNITS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USERLOGS_USERS" Association="DBTHSNModel.FK_USERLOGS_USERS">
+            <End Role="USER" EntitySet="USERS" />
+            <End Role="USERLOG" EntitySet="USERLOGS" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetPartsInfo_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
@@ -7065,6 +7267,146 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
             </Principal>
             <Dependent Role="BOMS_AND_NORMS">
               <PropertyRef Name="BOMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="S_ORDER_PRODUCTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="TotalPrice" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="MOQ" Type="Double" />
+          <Property Name="UnitID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PRODUCT" Relationship="DBTHSNModel.FK_S_ORDER_PRODUCTS_PRODUCTS" FromRole="S_ORDER_PRODUCTS" ToRole="PRODUCT" />
+          <NavigationProperty Name="S_ORDERS" Relationship="DBTHSNModel.FK_S_ORDER_PRODUCTS_S_ORDERS" FromRole="S_ORDER_PRODUCTS" ToRole="S_ORDERS" />
+          <NavigationProperty Name="UNIT" Relationship="DBTHSNModel.FK_S_ORDER_PRODUCTS_UNITS" FromRole="S_ORDER_PRODUCTS" ToRole="UNIT" />
+        </EntityType>
+        <EntityType Name="S_ORDERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IssuedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="COMPANy" Relationship="DBTHSNModel.FK_S_ORDERS_COMPANIES" FromRole="S_ORDERS" ToRole="COMPANy" />
+          <NavigationProperty Name="CUSTOMER" Relationship="DBTHSNModel.FK_S_ORDERS_CUSTOMERS" FromRole="S_ORDERS" ToRole="CUSTOMER" />
+          <NavigationProperty Name="S_CONTRACTS" Relationship="DBTHSNModel.FK_S_ORDERS_S_CONTRACTS" FromRole="S_ORDERS" ToRole="S_CONTRACTS" />
+          <NavigationProperty Name="S_ORDER_PRODUCTS" Relationship="DBTHSNModel.FK_S_ORDER_PRODUCTS_S_ORDERS" FromRole="S_ORDERS" ToRole="S_ORDER_PRODUCTS" />
+        </EntityType>
+        <EntityType Name="STEEL_COILS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marka" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Standart" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Coating" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Thickness" Type="Double" />
+        </EntityType>
+        <EntityType Name="USERLOG">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ControllerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="USER" Relationship="DBTHSNModel.FK_USERLOGS_USERS" FromRole="USERLOG" ToRole="USER" />
+        </EntityType>
+        <Association Name="FK_S_ORDERS_COMPANIES">
+          <End Type="DBTHSNModel.COMPANy" Role="COMPANy" Multiplicity="1" />
+          <End Type="DBTHSNModel.S_ORDERS" Role="S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANy">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_CUSTOMERS">
+          <End Type="DBTHSNModel.CUSTOMER" Role="CUSTOMER" Multiplicity="1" />
+          <End Type="DBTHSNModel.S_ORDERS" Role="S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMER">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_PRODUCTS">
+          <End Type="DBTHSNModel.PRODUCT" Role="PRODUCT" Multiplicity="1" />
+          <End Type="DBTHSNModel.S_ORDER_PRODUCTS" Role="S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_S_CONTRACTS">
+          <End Type="DBTHSNModel.S_CONTRACTS" Role="S_CONTRACTS" Multiplicity="1" />
+          <End Type="DBTHSNModel.S_ORDERS" Role="S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_S_ORDERS">
+          <End Type="DBTHSNModel.S_ORDERS" Role="S_ORDERS" Multiplicity="1" />
+          <End Type="DBTHSNModel.S_ORDER_PRODUCTS" Role="S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_UNITS">
+          <End Type="DBTHSNModel.UNIT" Role="UNIT" Multiplicity="1" />
+          <End Type="DBTHSNModel.S_ORDER_PRODUCTS" Role="S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UNIT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USERLOGS_USERS">
+          <End Type="DBTHSNModel.USER" Role="USER" Multiplicity="1" />
+          <End Type="DBTHSNModel.USERLOG" Role="USERLOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USER">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USERLOG">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8312,6 +8654,58 @@ warning 6002: The table/view 'DBTHSN.dbo.MaterialRequirement' does not have a pr
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="NormID" ColumnName="NormID" />
                 <ScalarProperty Name="BOMID" ColumnName="BOMID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="S_ORDER_PRODUCTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.S_ORDER_PRODUCTS">
+              <MappingFragment StoreEntitySet="S_ORDER_PRODUCTS">
+                <ScalarProperty Name="UnitID" ColumnName="UnitID" />
+                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="S_ORDERS">
+            <EntityTypeMapping TypeName="DBTHSNModel.S_ORDERS">
+              <MappingFragment StoreEntitySet="S_ORDERS">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STEEL_COILS">
+            <EntityTypeMapping TypeName="DBTHSNModel.STEEL_COILS">
+              <MappingFragment StoreEntitySet="STEEL-COILS">
+                <ScalarProperty Name="Thickness" ColumnName="Thickness" />
+                <ScalarProperty Name="Coating" ColumnName="Coating" />
+                <ScalarProperty Name="Standart" ColumnName="Standart" />
+                <ScalarProperty Name="Marka" ColumnName="Marka" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USERLOGS">
+            <EntityTypeMapping TypeName="DBTHSNModel.USERLOG">
+              <MappingFragment StoreEntitySet="USERLOGS">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

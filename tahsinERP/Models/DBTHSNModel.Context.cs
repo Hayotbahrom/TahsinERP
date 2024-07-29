@@ -110,6 +110,10 @@ namespace tahsinERP.Models
         public virtual DbSet<WASTE> WASTES { get; set; }
         public virtual DbSet<MaterialRequirement> MaterialRequirements { get; set; }
         public virtual DbSet<BOMS_AND_NORMS> BOMS_AND_NORMS { get; set; }
+        public virtual DbSet<S_ORDER_PRODUCTS> S_ORDER_PRODUCTS { get; set; }
+        public virtual DbSet<S_ORDERS> S_ORDERS { get; set; }
+        public virtual DbSet<STEEL_COILS> STEEL_COILS { get; set; }
+        public virtual DbSet<USERLOG> USERLOGS { get; set; }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {

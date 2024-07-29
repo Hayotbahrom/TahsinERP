@@ -12,31 +12,29 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CUSTOMER
+    public partial class S_ORDERS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CUSTOMER()
+        public S_ORDERS()
         {
-            this.S_CONTRACTS = new HashSet<S_CONTRACTS>();
-            this.S_ORDERS = new HashSet<S_ORDERS>();
+            this.S_ORDER_PRODUCTS = new HashSet<S_ORDER_PRODUCTS>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string ContactPersonName { get; set; }
-        public string DirectorName { get; set; }
+        public string OrderNo { get; set; }
+        public System.DateTime IssuedDate { get; set; }
+        public int CompanyID { get; set; }
+        public int CustomerID { get; set; }
+        public int ContractID { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public string Currency { get; set; }
+        public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public string DUNS { get; set; }
-        public string Type { get; set; }
-        public string City { get; set; }
     
+        public virtual COMPANy COMPANy { get; set; }
+        public virtual CUSTOMER CUSTOMER { get; set; }
+        public virtual S_CONTRACTS S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_CONTRACTS> S_CONTRACTS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_ORDERS> S_ORDERS { get; set; }
+        public virtual ICollection<S_ORDER_PRODUCTS> S_ORDER_PRODUCTS { get; set; }
     }
 }

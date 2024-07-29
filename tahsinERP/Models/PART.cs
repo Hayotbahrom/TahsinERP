@@ -47,8 +47,8 @@ namespace tahsinERP.Models
         public string Type { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
-        public Nullable<int> PackID { get; set; }
-        public Nullable<int> ShopID { get; set; }
+        public int PackID { get; set; }
+        public int ShopID { get; set; }
         public bool IsInHouse { get; set; }
         public string Marka { get; set; }
         public string Standart { get; set; }
@@ -57,8 +57,8 @@ namespace tahsinERP.Models
         public double Gauge { get; set; }
         public double Thickness { get; set; }
         public double Pitch { get; set; }
-        public Nullable<int> HSCodeID { get; set; }
-        public Nullable<int> UnitID { get; set; }
+        public int HSCodeID { get; set; }
+        public int UnitID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
