@@ -291,9 +291,6 @@
                             <li>
                                 <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Ta'minotchilar</span></a>
                             </li>
-                            <li>
-                                <a href="/Part"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span></a>
-                            </li>
                         </ul>
                     </li>
 
@@ -358,33 +355,36 @@
                             </ul>
                         </li>
                     }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice")) {
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
                         <li class=" nav-item">
                             <a href="#">
                                 <i class="bx bxs-right-arrow-circle"></i><span class="menu-title" data-i18n="Icons">Logistika</span>
                             </a>
                             <ul class="menu-content">
                                 <li>
-                                    <a href="~/Waybill/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Logistika ma'lumotlari</span></a>
+                                    <a href="~/Forwarder/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Forwarderlar</span></a>
                                 </li>
                                 <li>
-                                    <a href="~/FContract/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Logistika shartnomalari</span></a>
-                                    <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Ro'yxat</span></a>
+                                    <a href="~/FContract/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Shartnomalar</span></a>
                                 </li>
+                                <li>
+                                    <a href="~/Waybill/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Aktlar</span></a>
+                                </li>
+
                                 <li>
                                     <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
                                 </li>
+
                                 <li>
-                                    <a href="~/Forwarder/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Forwarder lar</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/FTransportType/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Transport turi</span></a>
+                                    <a href="~/FTransportType/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Transport turlari</span></a>
                                 </li>
                             </ul>
                         </li>
                     }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice")) {
-                    
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
+
                     }
                     <li class=" nav-item">
                         <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
@@ -399,7 +399,7 @@
                                 <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
                             </li>
                             <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
+                                <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
                             </li>
                         </ul>
                     </li>
@@ -424,7 +424,7 @@
                                         <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Blanking normalari</span></a>
                                     </li>
                                     <li>
-                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Glyatina normalari</span></a>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Stamping normalari</span></a>
                                     </li>
                                 </ul>
                             </li>
@@ -435,6 +435,11 @@
                             <i class="bx bxl-product-hunt"></i><span class="menu-title" data-i18n="File Manager">Tayyor maxsulot</span>
                         </a>
                     </li>
+                    <li class=" nav-item">
+                        <a href="/Part/GetAllParts">
+                            <i class="bx bxl-pocket"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span>
+                        </a>
+                    </li>
                     <li class=" navigation-header">
                         <span>MES</span>
                     </li>
@@ -442,8 +447,10 @@
                         <a href="~/ProductPlan/Index">
                             <i class="bx bx-line-chart"></i><span class="menu-title" data-i18n="File Manager">Rejalashtirish</span>
                         </a>
+                    </li>
+                    <li class=" nav-item">
                         <a href="~/ComingSoon/Index">
-                            <i class="bx bx-line-chart"></i><span class="menu-title" data-i18n="File Manager">Ishlab chiqarish</span>
+                            <i class="bx bx-magnet"></i><span class="menu-title" data-i18n="File Manager">Ishlab chiqarish</span>
                         </a>
                     </li>
                     <li class=" nav-item">

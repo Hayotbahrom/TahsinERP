@@ -47,7 +47,7 @@
                                                 <span><b>Buyurtma raqami </b>: @Html.DisplayFor(model => model.OrderNo, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Tuzilgan sanasi </b>: @Model.IssuedDate.ToString("dd.yy.yyyy")</span>
+                                                <span><b>Tuzilgan sanasi </b>: @Model.IssuedDate.ToString("dd.MM.yyyy")</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Ta'minotchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
@@ -83,8 +83,9 @@
                                                                                 <th>Detal raqami</th>
                                                                                 <th>Detal nomi</th>
                                                                                 <th>Birlik narxi</th>
-                                                                                <th>O'lchov birligi</th>
                                                                                 <th>Miqdori</th>
+                                                                                <th>O'lchov birligi</th>
+                                                                                <th>Summa</th>
                                                                                 <th>MOQ</th>
                                                                             </tr>
                                                                         </thead>
@@ -96,9 +97,10 @@
                                                                                         <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
                                                                                     </td>
                                                                                     <td>@item.PART.PName</td>
-                                                                                    <td>@item.Price</td>
-                                                                                    <td>@item.UNIT.UnitName</td>
+                                                                                    <td>@item.Price @Model.Currency</td>
                                                                                     <td>@item.Amount</td>
+                                                                                    <td>@item.UNIT.UnitName</td>
+                                                                                    <td>@item.TotalPrice @Model.Currency</td>
                                                                                     <td>@item.MOQ</td>
                                                                                 </tr>
                                                                             }

@@ -1,10 +1,10 @@
 ﻿@*@model tahsinERP.Models.P_CONTRACTS
 
-@{
-    ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var type = ViewBag.Type;
-}*@
+    @{
+        ViewBag.Title = "Create";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        var type = ViewBag.Type;
+    }*@
 ﻿@model tahsinERP.ViewModels.PContractViewModel
 @{
     ViewBag.Title = "Create";
@@ -48,69 +48,69 @@
                                         {
                                             @Html.AntiForgeryToken()
                                             // WRHS_InComes
-                                        <div class="row justify-content-around d-flex align-items-start">
-                                            @*Left Part*@
-                                            <div class="col-lg-6 col-sm-12">
-                                                <div class="row">
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <label for="DocNo">Shartnoma raqam</label>
-                                                        @Html.TextBoxFor(model => model.ContractNo, new { @type = "text", @class = "form-control" })
-                                                    </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <label for="InvoiceId">Invoice</label>
-                                                        @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <label for="Description">Valyuta</label>
-                                                        @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control" })
-                                                    </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <label for="IDN">IDN raqami</label>
-                                                        @Html.TextBoxFor(model => model.IDN, new { @type = "number", @class = "form-control" })
+                                            <div class="row justify-content-around d-flex align-items-start">
+                                                @*Left Part*@
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">Shartnoma raqami</h6>
+                                                            @Html.TextBoxFor(model => model.ContractNo, new { @type = "text", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">Ta'minotchi</h6>
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">Valyuta</h6>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">IDN raqami</h6>
+                                                            @Html.TextBoxFor(model => model.IDN, new { @type = "number", @class = "form-control" })
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            @*Right Part*@
-                                            <div class="col-lg-6 col-sm-12">
-                                                <div class="row">
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <label for="Currency">Incoterm</label>
-                                                        @Html.TextBoxFor(model => model.Incoterms, new { @type = "text", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <label for="PaymentTerms">PaymentTerm</label>
-                                                        @Html.TextBoxFor(model => model.PaymentTerms, new { @type = "text", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <h6 class="invoice-to">Tuzilgan sanasi</h6>
-                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi" })
-                                                        @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
-                                                        <div class="form-control-position">
-                                                            <i class='bx bx-calendar'></i>
+                                                @*Right Part*@
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">Incoterms</h6>
+                                                            @Html.TextBoxFor(model => model.Incoterms, new { @type = "text", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <h6 class="invoice-to">Tugaydgan sanasi</h6>
-                                                        @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma muddati" })
-                                                        @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
-                                                        <div class="form-control-position">
-                                                            <i class='bx bx-calendar'></i>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">To'lov sharti</h6>
+                                                            @Html.TextBoxFor(model => model.PaymentTerms, new { @type = "text", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.PaymentTerms, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">Tuzilgan sanasi</h6>
+                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi" })
+                                                            @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <h6 class="invoice-to">Tugaydigan sanasi</h6>
+                                                            @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma muddati" })
+                                                            @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <br />
+                                                <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
+                                                    <h4 class="text-primary">Shartnoma faylini yuklang</h4>
+                                                    <hr />
+                                                    <input type="file" id="partPhotoUpload" name="partPhotoUpload" />
+                                                    @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                </div>
                                             </div>
-                                            <br />
-                                            <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
-                                                <h4 class="text-primary">Shartnoma faylini yuklang</h4>
-                                                <hr />
-                                                <input type="file" id="partPhotoUpload" name="partPhotoUpload" />
-                                                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
 
                                             // WRHS_InCome_Parts
                                             <br />
@@ -133,17 +133,17 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Quantity">Miqdori</label>
-                                                            <input type="number" name="Quantity" class="form-control" id="Part_Quantity"/>
+                                                            <input type="number" name="Quantity" class="form-control" id="Part_Quantity" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Quantity, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.01" class="form-control" id="Part_Price"/>
+                                                            <input type="number" name="Price" step="0.01" class="form-control" id="Part_Price" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_MOQ">MOQ</label>
-                                                            <input type="text" name="MOQ" class="form-control" id="Part_MOQ"/>
+                                                            <input type="text" name="MOQ" class="form-control" id="Part_MOQ" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
