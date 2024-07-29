@@ -2550,7 +2550,6 @@
     <Content Include="Views\Slitting\Delete.cshtml" />
     <Content Include="Views\WhIncome\Details.cshtml" />
     <Content Include="Views\WhIncome\Edit.cshtml" />
-    <Content Include="Views\WhIncome\DeletePart.cshtml" />
     <Content Include="Views\WhIncome\EditPart.cshtml" />
     <Content Include="Views\Blanking\Index.cshtml" />
     <Content Include="Views\Blanking\Create.cshtml" />
