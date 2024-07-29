@@ -223,6 +223,17 @@
         <AssociationConnector Association="DBTHSNModel.USERROLES" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DBTHSNModel.BOMS_AND_NORMS" Width="1.5" PointX="11.25" PointY="42.75" />
         <AssociationConnector Association="DBTHSNModel.FK_BOMS_AND_NORMS_BOMS" />
+        <EntityTypeShape EntityType="DBTHSNModel.S_ORDER_PRODUCTS" Width="1.5" PointX="22.5" PointY="47.875" />
+        <EntityTypeShape EntityType="DBTHSNModel.S_ORDERS" Width="1.5" PointX="20.25" PointY="36.125" />
+        <EntityTypeShape EntityType="DBTHSNModel.STEEL_COILS" Width="1.5" PointX="3.375" PointY="3.75" />
+        <EntityTypeShape EntityType="DBTHSNModel.USERLOG" Width="1.5" PointX="3.75" PointY="32.5" />
+        <AssociationConnector Association="DBTHSNModel.FK_S_ORDERS_COMPANIES" />
+        <AssociationConnector Association="DBTHSNModel.FK_S_ORDERS_CUSTOMERS" />
+        <AssociationConnector Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_PRODUCTS" />
+        <AssociationConnector Association="DBTHSNModel.FK_S_ORDERS_S_CONTRACTS" />
+        <AssociationConnector Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_S_ORDERS" />
+        <AssociationConnector Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_UNITS" />
+        <AssociationConnector Association="DBTHSNModel.FK_USERLOGS_USERS" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

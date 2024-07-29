@@ -212,8 +212,8 @@ namespace tahsinERP.Controllers
                     Marka = part.Marka,
                     Standart = part.Standart,
                     IsInHouse = part.IsInHouse,
-                    HSCodeD = part.HSCodeID ?? 0,
-                    ShopID = part.ShopID ?? 0
+                    HSCodeD = part.HSCodeID ,
+                    ShopID = part.ShopID
                 };
 
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
@@ -389,7 +389,7 @@ namespace tahsinERP.Controllers
                     Marka = part.Marka,
                     Standart = part.Standart,
                     IsInHouse = part.IsInHouse,
-                    ShopID = part.ShopID ?? 0, // Default to 0 if null
+                    ShopID = part.ShopID, // Default to 0 if null
                     ShopName = shopName // Set the shop name
                 };
 

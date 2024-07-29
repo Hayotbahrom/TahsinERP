@@ -12,20 +12,19 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_PROFORMA_INVOICES
+    public partial class S_ORDER_PRODUCTS
     {
         public int ID { get; set; }
-        public string PrInvoiceNo { get; set; }
-        public int InvoiceID { get; set; }
-        public Nullable<int> SupplierID { get; set; }
+        public int OrderID { get; set; }
+        public int ProductID { get; set; }
+        public double Price { get; set; }
         public double Amount { get; set; }
-        public System.DateTime InvoiceDate { get; set; }
-        public string Currency { get; set; }
-        public Nullable<int> CompanyID { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public double TotalPrice { get; set; }
+        public Nullable<double> MOQ { get; set; }
+        public int UnitID { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
-        public virtual P_INVOICES P_INVOICES { get; set; }
-        public virtual SUPPLIER SUPPLIER { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
+        public virtual S_ORDERS S_ORDERS { get; set; }
+        public virtual UNIT UNIT { get; set; }
     }
 }

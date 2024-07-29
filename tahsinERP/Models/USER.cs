@@ -30,6 +30,7 @@ namespace tahsinERP.Models
             this.USER_ENTRIES = new HashSet<USER_ENTRIES>();
             this.USERIMAGES = new HashSet<USERIMAGE>();
             this.ROLES = new HashSet<ROLE>();
+            this.USERLOGS = new HashSet<USERLOG>();
         }
     
         public int ID { get; set; }
@@ -69,5 +70,7 @@ namespace tahsinERP.Models
         public virtual ICollection<USERIMAGE> USERIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ROLE> ROLES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<USERLOG> USERLOGS { get; set; }
     }
 }
