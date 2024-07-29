@@ -571,6 +571,12 @@
             </section>
             <!-- Dashboard Analytics end -->
 
+            @if (ViewBag.ShowCookieConsent)
+            {
+                <script>$(document).ready(function () {
+                    $("#cookieConsent").modal('show');
+                });</script>
+            }
         </div>
     </div>
 </div>
