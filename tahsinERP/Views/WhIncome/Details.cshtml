@@ -35,7 +35,7 @@
                 <section class="invoice-edit-wrapper">
                     <div class="row">
                         <!-- invoice view page -->
-                        <div class="col-xl-9 col-md-8 col-12">
+                        <div class="col-xl-11 col-md-8 col-12">
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body pb-0 mx-25">
@@ -62,7 +62,7 @@
                                                 <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Umuiy narxi</b>: @Html.DisplayFor(model => model.TotalPrice, new { @class = "form-control" })</span>
+                                                <span><b>Umumiy narxi</b>: @Html.DisplayFor(model => model.TotalPrice, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Qabul qilinganmi</b>:@* @Html.DisplayFor(model => model.RecieveStatus, new { @class = "form-control" })*@</span>
@@ -112,7 +112,7 @@
                                                                                     </td>
                                                                                     <td>@item.PART.PName</td>
                                                                                     <td>@item.Amount</td>
-                                                                                    <td>@item.Unit</td>
+                                                                                    <td>@item.UNIT.UnitName</td>
                                                                                     <td>@item.PiecePrice</td>
                                                                                     <td>@item.TotalPrice</td>
                                                                                     <td>@item.Comment</td>

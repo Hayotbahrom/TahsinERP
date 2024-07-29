@@ -39,6 +39,7 @@
                                     <div class="card-body">
                                         @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
                                         {
+                                            @Html.HiddenFor(model => model.DocNo)
                                             @Html.AntiForgeryToken()
                                             // WRHS_InComes
                                             <div class="row justify-content-around d-flex align-items-start">
@@ -96,8 +97,8 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">O'lchov birligi</label>
-                                                            <input type="text" name="Unit" class="form-control" id="Part_Unit" placeholder="Birligini kiriting" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
+                                                            @Html.DropDownListFor(model => model.Parts[0].UnitID, ViewBag.units as SelectList, new {@class = "form-control select2"})
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>

@@ -67,8 +67,8 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo");
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
             }
@@ -81,6 +81,15 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var isSameContract = db.P_CONTRACTS
+                    .Include(x => x.SUPPLIER)
+                    .Where(p => p.IsDeleted == false && p.SupplierID == model.SupplierID).FirstOrDefault();
+
+                if (model.SupplierID != isSameContract.SupplierID)
+                {
+                    ModelState.AddModelError("", "Supplier and contract mismatch.");
+                    return View(model);
+                }
                 var newOrder = new P_ORDERS()
                 {
                     OrderNo = model.OrderNo,
@@ -102,6 +111,11 @@ namespace tahsinERP.Controllers
                 // Parts ni saqlash
                 foreach (var part in model.Parts)
                 {
+                    if (part.MOQ >= part.Amount)
+                    {
+                        ModelState.AddModelError("","Kiritilgan miqdor MOQ dan kichik");
+                        return View();
+                    }
                     var newPart = new P_ORDER_PARTS
                     {
                         OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
@@ -117,8 +131,8 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false), "ID", "Name", newOrder.SupplierID);
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false), "ID", "ContractNo", newOrder.ContractID);
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 return RedirectToAction("Index");
             }

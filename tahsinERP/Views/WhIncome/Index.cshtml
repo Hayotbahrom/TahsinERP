@@ -91,6 +91,8 @@
                                                     <th>Hujjat raqami</th>
                                                     <th>Invoice raqami</th>
                                                     <th>Yuk xati raqami</th>
+                                                    <th>Ta'minotchi</th>
+                                                    <th>Umumiy summasi</th>
                                                     <th>Qabul sanasi</th>
                                                     @if (changePermit)
                                                     {
@@ -122,6 +124,8 @@
                                                             {
                                                                 <td>-</td>
                                                             }
+                                                            <td>@item.P_INVOICES.SUPPLIER.Name</td>
+                                                            <td>@item.TotalPrice</td>
                                                             <td>@item.IssueDateTime.ToShortDateString()</td>
                                                             @if (changePermit)
                                                             {
