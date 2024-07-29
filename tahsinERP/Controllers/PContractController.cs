@@ -162,7 +162,8 @@ namespace tahsinERP.Controllers
             ViewBag.DataTableModel = null;
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
-
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PContractController", "CleareDataTable");
             // Return the UploadWithExcel view
             return View("UploadWithExcel");
         }
@@ -329,6 +330,8 @@ namespace tahsinERP.Controllers
                         throw new RetryLimitExceededException();
                     }
                 }
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -459,6 +462,8 @@ namespace tahsinERP.Controllers
                     return View(contractToUpdate);
                 }
             }
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Edit[Post]");
             return View(contract);
         }
         public ActionResult EditPart(int? ID)
@@ -516,6 +521,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "EditPart[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -575,6 +582,8 @@ namespace tahsinERP.Controllers
                                 db.P_CONTRACT_PARTS.Remove(contractPart);
                             }
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -603,6 +612,8 @@ namespace tahsinERP.Controllers
                         {
                             db.P_CONTRACT_PARTS.Remove(contractPartToDelete);
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Deletepart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

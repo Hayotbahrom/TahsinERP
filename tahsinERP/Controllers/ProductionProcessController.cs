@@ -36,6 +36,8 @@ namespace tahsinERP.Controllers
                         productionProcess.IsDeleted = false;
                         db1.PRODUCTIONPROCESSES.Add(productionProcess);
                         db1.SaveChanges();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "ProductionProcessController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -79,6 +81,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db1.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "ProductionProcessController", "Delete[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -126,6 +130,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db1.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "ProductionProcessController", "Edit[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)

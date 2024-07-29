@@ -50,7 +50,8 @@ namespace tahsinERP.Controllers
                     i++;
                 }
                 db.SaveChanges();
-
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "RoleController", "Create[Post]");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -96,7 +97,8 @@ namespace tahsinERP.Controllers
                     try
                     {
                         db.SaveChanges();
-
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "RoleController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (RetryLimitExceededException)
@@ -130,6 +132,8 @@ namespace tahsinERP.Controllers
                 try
                 {
                     db.SaveChanges();
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "RoleController", "Delete[Post]");
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)
@@ -204,6 +208,8 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "RoleController", "Permissions[Post]");
                 return RedirectToAction("Edit", new { id = role.ID });
             }
         }

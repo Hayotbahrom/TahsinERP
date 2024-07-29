@@ -51,6 +51,9 @@ namespace tahsinERP.Controllers
                     {
                         db.F_TRANSPORT_TYPES.Add(transportType);
                         db.SaveChanges();
+
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "FTransportTypeController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -176,6 +179,8 @@ namespace tahsinERP.Controllers
                     try
                     {
                         db.SaveChanges();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "FTransportTypeController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -222,6 +227,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "FTransportTypeController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

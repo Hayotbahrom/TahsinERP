@@ -45,6 +45,8 @@ namespace tahsinERP.Controllers
                 }
             }
 
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PermissionController", "Permission[Post]");
             // Redirect to a relevant page after saving the changes
             return RedirectToAction("Index", "Role");
         }

@@ -114,6 +114,8 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -211,6 +213,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db1.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Edit[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -252,7 +256,6 @@ namespace tahsinERP.Controllers
                                 }).ToList();
 
                 ViewBag.PartList = allParts;
-
                 return View(whExpensePart);
             }
         }
@@ -278,6 +281,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "EditPart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -331,6 +336,8 @@ namespace tahsinERP.Controllers
                             db.Entry(whExpenseToDelete).State = System.Data.Entity.EntityState.Modified;
                             
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -359,6 +366,8 @@ namespace tahsinERP.Controllers
                         {
                             db.PART_WRHS_EXPENSE_PARTS.Remove(whExpensePartToDelete);
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "DeletePart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

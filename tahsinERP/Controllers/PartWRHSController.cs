@@ -71,7 +71,8 @@ namespace tahsinERP.Controllers
                                     .Where(u => u.ROLES.Any(r => r.RName == "MRP"))
                                     .ToList();
                 ViewBag.MRPUsers = new SelectList(mrpUsers, "ID", "FullName", MRPUserID);
-
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Create[Post]");
                 return View(model);
             }
         }
@@ -115,6 +116,8 @@ namespace tahsinERP.Controllers
                     partWRHS.IsDeleted = false;
                     db.Entry(partWRHS).State = EntityState.Modified;
                     db.SaveChanges();
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -156,6 +159,8 @@ namespace tahsinERP.Controllers
                     db.Entry(partWRHS).State = EntityState.Modified;
                     db.SaveChanges();
                 }
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Delete[Post]");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

@@ -110,6 +110,8 @@ namespace tahsinERP.Controllers
                                 db.PRODUCTPLANS_DAILY.Add(dailyPlan);
                             }
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "ProductPlanController", "Create[Post]");
                             return RedirectToAction("Index");
                         }
                     }
@@ -184,6 +186,8 @@ namespace tahsinERP.Controllers
                             db.Entry(existingProductPlan).State = EntityState.Modified;
                             db.SaveChanges();
                         }
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "ProductPlanController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -233,7 +237,8 @@ namespace tahsinERP.Controllers
                     productPlan.IsDeleted = true;
                     db.Entry(productPlan).State = EntityState.Modified;
                     db.SaveChanges();
-
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "ProductPlanController", "Delete[Post]");
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)

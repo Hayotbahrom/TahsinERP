@@ -54,6 +54,9 @@ namespace tahsinERP.Controllers
                 }
                 
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "ForwarderController", "Create[Post]");
             return View(forwarder);
         }
         public async Task<ActionResult> Details(int? id)
@@ -107,6 +110,9 @@ namespace tahsinERP.Controllers
                         
                         db.Entry(forwarderToUpdate).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
+
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "FContractController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
 
@@ -159,6 +165,9 @@ namespace tahsinERP.Controllers
                         
                     }
                 }
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "FContractController", "Delete[Post]");
                 return View();
             }
         }

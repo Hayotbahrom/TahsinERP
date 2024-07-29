@@ -50,6 +50,8 @@ namespace tahsinERP.Controllers
                         db.F_CONTRACTS.Add(contract);
                         await db.SaveChangesAsync();
 
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "FContractController", "Create[Post]");
                         return RedirectToAction("Index"); 
                     }
                 }
@@ -133,6 +135,9 @@ namespace tahsinERP.Controllers
                             ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "FContractController", "Edit[Post]");
                     return View(contractToUpdate);
                 }
             }
@@ -185,6 +190,9 @@ namespace tahsinERP.Controllers
                     }
                 }
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "FContractController", "Delete[Post]");
             return View();
         }
 

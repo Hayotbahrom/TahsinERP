@@ -40,6 +40,8 @@ namespace tahsinERP.Controllers
                         db.HSCODES.Add(hsCode);
 
                         await db.SaveChangesAsync();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -90,6 +92,8 @@ namespace tahsinERP.Controllers
                     try
                     {
                         await db.SaveChangesAsync();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", "Delete[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (RetryLimitExceededException)
@@ -131,6 +135,8 @@ namespace tahsinERP.Controllers
                     try
                     {
                         await db.SaveChangesAsync();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (RetryLimitExceededException)

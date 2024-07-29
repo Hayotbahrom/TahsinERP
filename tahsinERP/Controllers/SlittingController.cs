@@ -85,7 +85,8 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
-
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "SlittingController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -169,7 +170,8 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
-
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "SlittingController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -222,7 +224,8 @@ namespace tahsinERP.Controllers
 
                 slittingNorm.IsDeleted = true;
                 db.SaveChanges();
-
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "SlittingController", "Delete[Post]");
                 return RedirectToAction("Index");
             }
         }

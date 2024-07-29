@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.EMMA;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -86,7 +87,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
                 ROLE selectedRole = db.ROLES.Where(r => r.ID.Equals(userVM.RoleID)).FirstOrDefault();
-                if (selectedRole != null)
+                if (selectedRole != null && selectedRole.RName != "Developer" || selectedRole.ID != 1)
                 {
                     int roleID = db.Database.SqlQuery<Int32>("Select roleid from userroles where roleid=" + selectedRole.ID + " and userid = " + user.ID + "").FirstOrDefault();
                     if (roleID != selectedRole.ID)
@@ -94,6 +95,11 @@ namespace tahsinERP.Controllers
                         int noOfRowInserted = db.Database.ExecuteSqlCommand("INSERT INTO USERROLES ([UserID],[RoleID]) VALUES(" + user.ID + "," + selectedRole.ID + ")");
                         db.SaveChanges();
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Birinchi martada 'Developer' role biriktirish mumkin emas.");
+                    throw new RetryLimitExceededException();
                 }
                 if (Request.Files["userPhotoUpload"].ContentLength > 0)
                 {
@@ -114,6 +120,9 @@ namespace tahsinERP.Controllers
                         throw new RetryLimitExceededException();
                     }
                 }
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "UserController", "Create[Post]");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -216,6 +225,8 @@ namespace tahsinERP.Controllers
                         }
                     }
                     db.SaveChanges();
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "UserController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)
@@ -304,6 +315,8 @@ namespace tahsinERP.Controllers
                 try
                 {
                     db.SaveChanges();
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "UserController", "Delete[Post]");
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)

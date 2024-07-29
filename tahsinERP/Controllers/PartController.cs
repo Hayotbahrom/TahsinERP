@@ -173,6 +173,8 @@ namespace tahsinERP.Controllers
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PartController", "Create[Post]");
                 return View(partVM);
             }
         }
@@ -290,6 +292,8 @@ namespace tahsinERP.Controllers
                         }
                     }
 
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PartController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -299,6 +303,7 @@ namespace tahsinERP.Controllers
 
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
+
                 return View(partVM);
             }
         }
@@ -334,7 +339,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
-
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "PartController", "Delete[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -537,6 +543,8 @@ namespace tahsinERP.Controllers
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
 
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PartController", "ClearDataTable");
             // Return the UploadWithExcel view
             return View("UploadWithExcel");
         }
