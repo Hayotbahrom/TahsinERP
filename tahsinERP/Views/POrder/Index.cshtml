@@ -91,6 +91,7 @@
                                                     <th>Shartnoma raqami</th>
                                                     <th>Tuzilgan sanasi</th>
                                                     <th>Ta'minotchi</th>
+                                                    <th>Turi</th>
                                                     <th>Miqdori</th>
                                                     @if (changePermit)
                                                     {
@@ -114,6 +115,7 @@
                                                         <td>
                                                             <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
                                                         </td>
+                                                        <td>@item.SUPPLIER.Type</td>
                                                         <td>@item.Amount</td>
                                                         @if (changePermit)
                                                         {
@@ -139,23 +141,13 @@
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
-function refreshDataTable() {
-    var source = document.getElementById("SourceID").value;
-    const supplierID = document.getElementById("SupplierID").value;
-    window.location.href = '@Url.Action("Index", "POrder")?type=' + source;
-    ////window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
-
-    };
-  function refreshdatatablesupplier() {
-      var source = document.getElementById("SourceID").value;
-        const supplierID = document.getElementById("SupplierID").value;
-        window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
-    }
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
+      function refreshdatatablesupplier() {
+          var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
+       }
+    
     function refreshDataTable() {
         var source = document.getElementById("SourceID").value;
         var supplierID = document.getElementById("SupplierID").value;
