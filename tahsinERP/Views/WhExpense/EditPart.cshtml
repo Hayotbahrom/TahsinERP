@@ -40,7 +40,7 @@
                     <section class="basic-select2">
                         <div class="row">
                             <!-- invoice view page -->
-                            <div class="col-xl-9 col-md-8 col-12">
+                            <div class="col-xl-11 col-md-8 col-12">
                                 <div class="card">
                                     <div class="card-content">
                                         <div class="card-body pb-0 mx-25">
@@ -68,8 +68,8 @@
 
                                                     <h6 class="invoice-to">Unit</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Birligi" })
-                                                        @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.UnitID, ViewBag.units as SelectList,new { @class = "form-control round" })
+                                                        @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
                                                     </fieldset>
 
                                                     <h6 class="invoice-to">Birlik narxi</h6>

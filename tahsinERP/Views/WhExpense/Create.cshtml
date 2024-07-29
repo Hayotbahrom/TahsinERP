@@ -100,8 +100,8 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Unit</label>
-                                                            <input type="text" name="Unit" class="form-control" id="Part_Unit" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
+                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>

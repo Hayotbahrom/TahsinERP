@@ -119,6 +119,7 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(WrhsIncomeViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -134,7 +135,7 @@ namespace tahsinERP.Controllers
                     Description = model.Description,
                     IssueDateTime = DateTime.Now,
                     SenderWHID = null,
-                    RecieveStatus = model.RecieveStatus,
+                    RecieveStatus = model.RecieveStatus
                 };
                 db.PART_WRHS_INCOMES.Add(newIncome);
                 db.SaveChanges();
