@@ -692,6 +692,8 @@
         </script>
         <!-- __________ -->
 
+
+
         <!-- Cookie -->
         @* Add this in the <head> or at the end of the <body> in _Layout.cshtml *@
         <script>
@@ -701,7 +703,7 @@
                 }
 
                 $j("#acceptCookies").click(function () {
-                    setCookie("cookieConsent", "true", 2);
+                    setCookie("cookieConsent", "true", 1);
                     $j("#cookieConsent").modal('hide');
                 });
 
@@ -730,8 +732,9 @@
                 }
             });
         </script>
-
         <!-- __________ -->
+
+
 
         <!-- Export PDF as View -->
         <script>
