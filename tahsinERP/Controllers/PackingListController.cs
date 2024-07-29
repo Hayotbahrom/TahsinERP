@@ -65,6 +65,8 @@ namespace tahsinERP.Controllers
                 ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "PName", packingList.TransportTypeID);
             }
 
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PackingListController", "Create[Post]");
             return View(packingList);
         }
 
@@ -104,7 +106,6 @@ namespace tahsinERP.Controllers
                 // Manually load the related entities
                 db.Entry(packingList).Reference(i => i.P_INVOICES).Load();
                 //db.Entry(packingList).Reference(i => i.PART).Load();
-
                 return View(packingList);
             }
         }
@@ -124,6 +125,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PackingListController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -182,6 +185,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "PackingListController", "Edit[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)

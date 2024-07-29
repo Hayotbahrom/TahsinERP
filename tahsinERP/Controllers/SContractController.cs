@@ -5,9 +5,11 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web.Mvc;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
+using System.Web.Security;
 
 namespace tahsinERP.Controllers
 {
@@ -39,6 +41,8 @@ namespace tahsinERP.Controllers
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
                 ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Get]");
                 return View(SContractViewModel);
             }
         }
@@ -104,6 +108,10 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Post]");
+
                 return RedirectToAction("Index");
             }
         }
@@ -185,7 +193,6 @@ namespace tahsinERP.Controllers
 
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", contract.CustomerID);
                 ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
-
                 return View(model);
             }
         }
@@ -250,7 +257,6 @@ namespace tahsinERP.Controllers
                         }
                     }
 
-
                     try
                     {
                         db.SaveChanges();
@@ -262,6 +268,9 @@ namespace tahsinERP.Controllers
                     return RedirectToAction("Index");
                 }
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "SContractController", "Edit[Post]");
 
             ViewBag.ProductList = model.ProductList;
             return View(model);
@@ -339,6 +348,9 @@ namespace tahsinERP.Controllers
                 }
             }
 
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "SContractController", "Delete[Post]");
+
             return View();
         }
         public ActionResult DeleteProduct(int id)
@@ -368,6 +380,8 @@ namespace tahsinERP.Controllers
                     }
                 }
 
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "SContractController", "DeleteProduct[Post]");
                 return View(contractProductToDelete);
             }
         }

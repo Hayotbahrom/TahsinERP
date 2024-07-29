@@ -202,6 +202,10 @@ namespace tahsinERP.Controllers
                 vmodel.ParentPnoComplationStatus = product.PNo;
 
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "BOMController", "Create[Post]");
+
             return RedirectToAction("CompletionStatus", vmodel);
         }
 
@@ -604,6 +608,8 @@ namespace tahsinERP.Controllers
                 ViewBag.ProductList = new SelectList(products, "ID", "PNo");
             }
 
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
             return View(model);
         }
         public ActionResult BomCreate(int ID)
@@ -668,6 +674,9 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
                 }
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "BOMController", "SaveBom[Post]");
             return RedirectToAction("CompletionStatus", model);
         }
 
@@ -684,6 +693,8 @@ namespace tahsinERP.Controllers
                     model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
                     model.SelectedProcessIds = processID;
                 }
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BOMController", "BomCreate[Post]");
                 return RedirectToAction("CreateWizard", model);
             }
             return View(model);
@@ -745,6 +756,8 @@ namespace tahsinERP.Controllers
                 var tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
                 db.TEMPORARY_BOMS.RemoveRange(tempbom);
                 db.SaveChanges();
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BOMController", "CreateBom[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -955,6 +968,8 @@ namespace tahsinERP.Controllers
                     var _tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userId && x.IsDeleted == false && x.ChildPNo == model.PartPno).FirstOrDefault();
                     _tempbom.NormConfirmed = true;
                     db.SaveChanges();
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
                     return RedirectToAction("CompletionStatus", model1);
                 }
             }

@@ -27,6 +27,8 @@ namespace tahsinERP.Controllers
                 return View(customers);
             }
         }
+
+
         public ActionResult Details(int? Id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -45,11 +47,13 @@ namespace tahsinERP.Controllers
             }
         }
 
+
         public ActionResult Create()
         {
             ViewBag.Customer = ConfigurationManager.AppSettings["Customer"]?.Split(',').ToList() ?? new List<string>();
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name, Address,DUNS, Type, Country, City, Address, Telephone, Email, ContactPersonName, DirectorName, IsDeleted")] CUSTOMER customer)
@@ -71,9 +75,12 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError(ex.Message, ex);
                 }
                 ViewBag.Customer = ConfigurationManager.AppSettings["Customer"]?.Split(',').ToList() ?? new List<string>();
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "CustomerController", "Create[Post]");
                 return View(customer);
             }
         }
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -110,6 +117,8 @@ namespace tahsinERP.Controllers
             }
 
             ViewBag.Customer = ConfigurationManager.AppSettings["Customer"]?.Split(',').ToList() ?? new List<string>();
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "CustomerController", "Edit[Post]");
             return View(customer);
         }
         public ActionResult Delete(int? id)
@@ -144,6 +153,8 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
                 }
 
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "CustomerController", "Delete[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -242,6 +253,8 @@ namespace tahsinERP.Controllers
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
 
             // Return the UploadWithExcel view
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "CustomerController", "ClearDataTable");
             return View("UploadWithExcel");
         }
         [HttpPost]
@@ -287,6 +300,8 @@ namespace tahsinERP.Controllers
                 }
             }
 
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "CustomerController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }

@@ -283,6 +283,7 @@
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
     <Compile Include="Controllers\HSCodeController.cs" />
+    <Compile Include="Controllers\LogHelper.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />

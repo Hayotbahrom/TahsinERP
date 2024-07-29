@@ -157,6 +157,8 @@ namespace tahsinERP.Controllers
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 db.SaveChanges();
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PinvoiceController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -250,6 +252,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -278,6 +282,8 @@ namespace tahsinERP.Controllers
                         {
                             db.P_INVOICE_PARTS.Remove(invoicePartToDelete);
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "DeletePart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -365,6 +371,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Edit[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (DbUpdateException ex)
@@ -460,6 +468,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "PInvoiceController", "EditPart[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -576,7 +586,8 @@ namespace tahsinERP.Controllers
             ViewBag.DataTableModel = null;
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
-
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "CleareDataTable");
             return View("UploadWithExcel");
         }
         [HttpPost]

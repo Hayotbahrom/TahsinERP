@@ -91,6 +91,9 @@ namespace tahsinERP.Controllers
                 var partList = db.PARTS.Where(pr => pr.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(partList, "ID", "PNo");
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "BlankingController", "Create[Post]");
             return View(model);
         }
         public ActionResult Edit(int id)
@@ -106,6 +109,8 @@ namespace tahsinERP.Controllers
                 var partList = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(partList, "ID", "PNo");
 
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BlankingController", "Create[Get]");
                 return View(blankingNorm);
             }
         }
@@ -158,6 +163,9 @@ namespace tahsinERP.Controllers
                 var partList = db.PARTS.Where(pr => pr.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(partList, "ID", "PNo");
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "BlankingController", "Edit[Post]");
             return View(model);
         }
 
@@ -201,6 +209,8 @@ namespace tahsinERP.Controllers
                 blankingNorm.IsDeleted = true;
                 db.SaveChanges();
 
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BlankingController", "Delete[Post]");
                 return RedirectToAction("Index");
             }
         }
