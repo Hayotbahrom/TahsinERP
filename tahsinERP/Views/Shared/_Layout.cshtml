@@ -47,24 +47,24 @@
     @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Layout"))
     {
         <!-- Begin Modal -->
-        <div id="cookieConsentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cookieConsentModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cookieConsentModalLabel">Cookie Consent</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="acceptCookiesBtn">OK</button>
+        @*<div id="cookieConsentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cookieConsentModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cookieConsentModalLabel">Cookie Consent</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="acceptCookiesBtn">OK</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>*@
         <!-- Ends Modal -->
 
 
@@ -587,6 +587,9 @@
         </footer>
         <!-- END: Footer-->
 
+        @* Add this at the end of the <body> in _Layout.cshtml *@
+        @Html.Partial("_CookieConsent")
+
 
         @Scripts.Render("~/bundles/jquery") //v3.7.1
         <script src="~/Scripts/bootstrap.bundle.js"></script>
@@ -690,19 +693,41 @@
         <!-- __________ -->
 
         <!-- Cookie -->
+        @* Add this in the <head> or at the end of the <body> in _Layout.cshtml *@
         <script>
             $j(document).ready(function () {
-                if (showCookieConsentModal) {
-                    alert("used");
-                    $j('#cookieConsentModal').modal('show');
+                if (!getCookie("cookieConsent")) {
+                    $j("#cookieConsent").modal('show');
                 }
 
-                $j('#acceptCookiesBtn').click(function () {
-                    document.cookie = "CookieConsent=true; path=/";
-                    $j('#cookieConsentModal').modal('hide');
+                $j("#acceptCookies").click(function () {
+                    setCookie("cookieConsent", "true", 1);
+                    $j("#cookieConsent").modal('hide');
                 });
+
+                function setCookie(name, value, days) {
+                    var expires = "";
+                    if (days) {
+                        var date = new Date();
+                        date.setTime(date.getTime() + (minutes * 24 * 60 * 60 * 1000));
+                        expires = "; expires=" + date.toUTCString();
+                    }
+                    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+                }
+
+                function getCookie(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
             });
         </script>
+
         <!-- __________ -->
 
         <!-- Export PDF as View -->

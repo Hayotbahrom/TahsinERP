@@ -6,6 +6,16 @@ namespace tahsinERP.Controllers
     {
         public ActionResult Index()
         {
+            if (Session["HasSeenCookieConsent"] == null)
+            {
+                Session["HasSeenCookieConsent"] = true;
+                ViewBag.ShowCookieConsent = true;
+            }
+            else
+            {
+                ViewBag.ShowCookieConsent = false;
+            }
+
             return View();
         }
 
