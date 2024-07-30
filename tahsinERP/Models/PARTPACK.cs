@@ -30,7 +30,7 @@ namespace tahsinERP.Models
         public Nullable<double> PrWidth { get; set; }
         public Nullable<double> PrHeight { get; set; }
         public Nullable<double> PrWeight { get; set; }
-        public Nullable<double> PrPackQty { get; set; }
+        public double PrPackQty { get; set; }
         public string ScPackMaterial { get; set; }
         public Nullable<double> ScLength { get; set; }
         public Nullable<double> ScWidth { get; set; }
@@ -42,7 +42,7 @@ namespace tahsinERP.Models
         public Nullable<double> PltHeight { get; set; }
         public Nullable<double> PltWeight { get; set; }
         public Nullable<double> ScPackQty { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public bool IsActive { get; set; }
         public Nullable<System.DateTime> RegDate { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     

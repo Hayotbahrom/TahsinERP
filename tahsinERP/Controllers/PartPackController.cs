@@ -1,0 +1,223 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using tahsinERP.Models;
+using tahsinERP.ViewModels;
+
+namespace tahsinERP.Controllers
+{
+    public class PartPackController : Controller
+    {
+        public ActionResult Index()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var partpackVM = new PartIndexViewModel();
+                var partpack = db.PARTPACKS
+                    .Where(x => x.IsDeleted == false)
+                    .Include(p => p.PARTS)
+                    .ToList();
+                var partlist = new List<PartIndexViewModel>();
+                foreach (var partpc in partpack)
+                {
+                    var part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == partpc.PartID).FirstOrDefault();
+                    partpackVM.PName = part.PName;
+                    partpackVM.PrPackMaterial = partpc.PrPackMaterial;
+                    partpackVM.PrPackQty = partpc.PrPackQty;
+                    partpackVM.ID = partpc.ID;
+                    partlist.Add(partpackVM);
+                }
+
+                return View(partlist);
+            }
+        }
+        public ActionResult Create()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.PartsList = new SelectList(parts, "ID", "PName");
+                return View();
+            }
+        }
+        [HttpPost]
+        public ActionResult Create(PARTPACK model, int partID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                if (ModelState.IsValid)
+                {
+                    model.PartID = partID;
+                    model.RegDate = DateTime.Now;
+                    model.IsDeleted = false;
+
+                    db.PARTPACKS.Add(model);
+                    db.SaveChanges();
+                    //var userEmail = User.Identity.Name;
+                    //LogHelper.LogToDatabase(userEmail, "PartPackController", "Create[Post]");
+                    return RedirectToAction("Index");
+                }
+                var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                ViewBag.PartsList = new SelectList(parts, "ID", "PName", model.PartID);
+
+                return View(model);
+            }
+        }
+
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            try
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    PARTPACK partpack = db.PARTPACKS
+                                                .Include(p => p.PARTS)
+                                                .FirstOrDefault(p => p.ID == id);
+
+                    if (partpack == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                    ViewBag.PartList = new SelectList(parts, "ID", "PName", partpack.PartID);
+
+                    return View(partpack);
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Error occurred while fetching data: " + ex.Message;
+                return View("Error");
+            }
+        }
+        [HttpPost]
+        public ActionResult Edit(PARTPACK model, int partId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (DBTHSNEntities db = new DBTHSNEntities())
+                    {
+                        model.IsDeleted = false;
+                        model.RegDate = DateTime.Now;
+                        model.PartID = partId;
+
+                        db.Entry(model).State = EntityState.Modified;
+                        db.Entry(model).Property(p => p.PartID).IsModified = true;
+                        db.SaveChanges();
+                    }
+                    //var userEmail = User.Identity.Name;
+                    //LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
+                    return RedirectToAction("Index");
+                }
+
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                    ViewBag.PartList = new SelectList(parts, "ID", "PName", model.PartID);
+                }
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Error occurred while saving data: " + ex.Message;
+                return View("Error");
+            }
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                try
+                {
+                    using (DBTHSNEntities db = new DBTHSNEntities())
+                    {
+
+                        var partpack = db.PARTPACKS.Include(pr => pr.PART).FirstOrDefault(p => p.ID == id);
+                        if (partpack == null)
+                        {
+                            return HttpNotFound();
+                        }
+                        return View(partpack);
+                    }
+                }
+                catch
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Malumotni olishda hatolik yuz berdi!");
+
+                }
+
+            }
+            return View();
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    PARTPACK partpack = db.PARTPACKS.Find(id);
+                    if (partpack != null)
+                    {
+                        partpack.IsDeleted = true;
+                        db.Entry(partpack).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    //var userEmail = User.Identity.Name;
+                    //LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        public ActionResult Details(int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                try
+                {
+                    using (DBTHSNEntities db = new DBTHSNEntities())
+                    {
+                        var partpack = db.PARTPACKS.Include(pr => pr.PART).FirstOrDefault(p => p.ID == id);
+                        if (partpack == null)
+                        {
+                            return HttpNotFound();
+                        }
+                        return View(partpack);
+                    }
+                }
+                catch
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Malumotni olishda hatolik yuz berdi!");
+
+                }
+
+            }
+            return View();
+        }
+    }
+}

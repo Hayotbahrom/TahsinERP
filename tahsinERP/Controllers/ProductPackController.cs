@@ -127,7 +127,6 @@ namespace tahsinERP.Controllers
                 return View("Error");
             }
         }
-
         public ActionResult Details(int? id)
         {
             if (ModelState.IsValid)
@@ -181,7 +180,6 @@ namespace tahsinERP.Controllers
             }
             return View();
         }
-
         [HttpPost, ActionName("Delete")]
         public ActionResult Delete(int id)
         {
@@ -203,9 +201,5 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-
-
-
-
     }
 }
