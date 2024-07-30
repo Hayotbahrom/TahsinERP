@@ -589,11 +589,61 @@
         </footer>
         <!-- END: Footer-->
 
-        <script src="~/assets/js/app.js"></script>
+        <!-- SweetAlert -->
+
+        // Pop-Up
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="warning.svg" alt="" />
+                <p class="pop-up__text">
+                    Tasdiqlaysizmi ?
+                </p>
+                <div class="pop-up__btns">
+                    <button class="pop-up__close" type="button" id="pop-up__close">
+                        Yo'q
+                    </button>
+                    <button class="pop-up__confirm" type="submit" id="pop-up__action">
+                        Ha !
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        // Alert-Error
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="error.svg" alt="" />
+                <p class="pop-up__text">
+                    Xatolik yuz berdi
+                </p>
+                <button class="success-btn error">Ok</button>
+            </div>
+        </div>
+
+        // Alert-Succes
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="success.svg" alt="" />
+                <p class="pop-up__text">
+                    O'zgarishlar saqlandi
+                </p>
+                <button class="success-btn">Ok</button>
+            </div>
+        </div>
+
+        <!-- __________ -->
+
 
 
         @* Add this at the end of the <body> in _Layout.cshtml *@
         @Html.Partial("_CookieConsent")
+
+        // Additioanal JSs(Cookie and Alerts)
+        // SweetAlert
+        <script src="~/assets/js/app.js"></script>
+
+        // Cookie using
+        // _______________
 
 
         @Scripts.Render("~/bundles/jquery") //v3.7.1
@@ -601,6 +651,7 @@
         //v5.3.3
 
         @RenderSection("scripts", required: false)
+
 
         <!-- BEGIN: Vendor JS-->
         <script src="~/app-assets/vendors/js/vendors.min.js"></script>

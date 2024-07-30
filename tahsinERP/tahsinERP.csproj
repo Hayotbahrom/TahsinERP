@@ -2577,7 +2577,6 @@
     <Content Include="Views\Stamping\Edit.cshtml" />
     <Content Include="Views\Stamping\Delete.cshtml" />
     <Content Include="Views\Stamping\Details.cshtml" />
-    <Content Include="Views\SContract\EditProduct.cshtml" />
     <Content Include="Views\WhIncome\Delete.cshtml" />
     <Content Include="Views\WhExpense\Create.cshtml" />
     <Content Include="Views\WhExpense\Index.cshtml" />
