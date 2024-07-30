@@ -1,0 +1,74 @@
+﻿﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/app-assets/css/list/list.css" />
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                <li class="breadcrumb-item">
+                                    <a href="/Home"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="~/BOM">BOM</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    Bir maxsulot BOMi
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
+            <i class='bx bx-save'></i>
+            PDF
+        </button>
+        <br />
+
+
+        <div id="treeview">
+            @if (Model != null)
+            {
+                <ol class="wtree" id="toPDF">
+                    <li class="li">
+                        <div style="display: flex; align-items: center;">
+                            @if (Model.ParentImageBase64 != null)
+                            {
+                                <a href="@Model.ParentImageBase64" target="_blank">
+                                    <img src="@Model.ParentImageBase64" alt="Product Image"
+                                         style="width: 150px; height: 150px; object-fit: cover; margin-right: 5px;" />
+                                </a>
+                            }
+                            <span class="span">
+                                @Model.ParentPNo
+                            </span>
+                        </div>
+                        <ol class="wtree">
+                            @Html.Partial("_BomTreePartial", Model)
+                        </ol>
+                    </li>
+                </ol>
+            }
+        </div>
+        <h6>Haqiqatan ham ushbu  norma  malumotlarini oʻchirib tashlamoqchimisiz?</h6>
+        @using (Html.BeginForm("Delete", "Bom", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.ID)
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            <a href="~/Bom" class="btn btn-secondary">Cancel</a>
+        }
+    </div>
+</div>
+
