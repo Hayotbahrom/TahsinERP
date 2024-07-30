@@ -1,0 +1,164 @@
+﻿@model tahsinERP.Models.P_ORDERS
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/POrder/Index">Buyurtmalar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Buyurtma sahifasi
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <!-- invoice view page -->
+                    <div class="col-xl-11 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                @using (Html.BeginForm("Edit", "POrder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    <div class="card-body pb-0 mx-25">
+                                        @Html.AntiForgeryToken()
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <hr>
+                                                <h6 class="invoice-to">Buyurtma raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.OrderNo, new { @class = "form-control round", @placeholder = "Buyurtma raqami" })
+                                                    @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Ta'minotchi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.SupplierID, ViewBag.Supplier as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Shartnoma raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.ContractID, ViewBag.PContract as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Sanasi</h6>
+                                                <fieldset class="form-group position-relative has-icon-left">
+                                                    @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma muddati" })
+                                                    @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+                                                    <div class="form-control-position">
+                                                        <i class='bx bx-calendar'></i>
+                                                    </div>
+                                                </fieldset>
+                                                <h6 class="invoice-to">Valyuta</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
+                                                    @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Batafsil ma`lumot</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control round", @placeholder = "Qisqacha tavsifi" })
+                                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                            </div>
+                                        </div>
+                                        <section id="column-selectors">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h4 class="card-title">Buyurtma predmeti</h4>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body card-dashboard">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Detal raqami</th>
+                                                                                <th>Detal nomi</th>
+                                                                                <th>Birlik narxi</th>
+                                                                                <th>O'lchov birligi</th>
+                                                                                <th>Miqdori</th>
+                                                                                <th>MOQ</th>
+                                                                                <th>Amallar</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach (var item in ViewBag.partList)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                    </td>
+                                                                                    <td>@item.PART.PName</td>
+                                                                                    <td>@item.Price</td>
+                                                                                    <td>@item.UnitID</td>
+                                                                                    <td>@item.Amount</td>
+                                                                                    <td>@item.MOQ</td>
+                                                                                    <td>
+                                                                                        <!-- Delete button -->
+                                                                                        <a href="@Url.Action("EditPart", "POrder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                                        <a href="~/POrder/DeletePart/@item.ID" onclick="return confirm('Ushbu detalni  o`chirib yuborishga ishonchingiz komilmi?')">
+                                                                                            <i class="bx bx-trash"></i>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item border-0 pb-0">
+                                                <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                    <i class='bx bx-save'></i>
+                                                    Saqlash
+                                                </button>
+                                            </li>
+                                        </ul>
+
+                                        <hr>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
