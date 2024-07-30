@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openButtons = document.querySelectorAll('.open-modal');
     const closeButton = document.getElementById('pop-up__close');
     const confirmButton = document.getElementById('pop-up__action');
+    const successBtn = document.querySelector(".success-btn")
     let formToSubmit = null;
 
     function openPopup() {

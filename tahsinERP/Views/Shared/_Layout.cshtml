@@ -590,7 +590,6 @@
         <!-- END: Footer-->
 
         <!-- SweetAlert -->
-
         // Pop-Up
         <div id="pop-up" class="pop-up">
             <div class="pop-up__content">
@@ -630,19 +629,11 @@
                 <button class="success-btn">Ok</button>
             </div>
         </div>
-
         <!-- __________ -->
 
-
-
+        // Cookie using(Modal)
         @* Add this at the end of the <body> in _Layout.cshtml *@
         @Html.Partial("_CookieConsent")
-
-        // Additioanal JSs(Cookie and Alerts)
-        // SweetAlert
-        <script src="~/assets/js/app.js"></script>
-
-        // Cookie using
         // _______________
 
 
@@ -715,12 +706,9 @@
         <script src="~/app-assets/js/scripts/forms/form-tooltip-valid.js"></script>
         <!-- END: Page JS-->
 
-        <!--sweet alert uchun js filelar-->
-        <script src="~/app-assets/js/scripts/extensions/sweet-alerts.js"></script>
-        <script src="~/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
-        <script src="~/app-assets/vendors/js/extensions/polyfill.min.js"></script>
 
-
+        // Additioanal(Custom) JSs(for SweetAlert)
+        <script src="~/assets/js/app.js"></script>
 
 
 
@@ -767,9 +755,6 @@
                     var expires = "";
                     if (days) {
                         var date = new Date();
-                        // For Days
-                        // date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                        // For Minutes
                         date.setTime(date.getTime() + (days * 60 * 1000));
                         expires = "; expires=" + date.toUTCString();
                     }
