@@ -20,7 +20,7 @@
                                     <a href="~/BOM/Index">BOM</a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    @Model.Part.PNo BOMI
+                                    @Model.PartNo BOMI
                                 </li>
                             </ol>
                         </div>
@@ -39,17 +39,18 @@
                                     @using (Html.BeginForm("BomCreate", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                     {
                                         @Html.HiddenFor(x => x.ProductPno)
+                                        @Html.HiddenFor(x => x.PartNo)
                                         <div>
-                                            @Html.TextBoxFor(Model => Model.Part.PNo, new { disabled = "disabled" })
+                                            @Html.TextBoxFor(Model => Model.PartNo, new { disabled = "disabled" })
                                         </div>
-                                        @Html.AntiForgeryToken()
                                         <div>
                                             <br />
                                             <fieldset class="invoice-address form-group">
                                                 <label>Jarayonlar ketma-ketligini tanlang:</label>
                                                 <br />
-                                                @Html.ListBox("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
-                                                @Html.ValidationMessage("processID", "", new { @class = "text-danger" })
+                                                @Html.DropDownList("processID", ViewBag.Process as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
+                                                @Html.ValidationMessage("ProcessSelection", "", new { @class = "text-danger" })
+                                                
                                                 <br />
                                                 <br />
                                             </fieldset>

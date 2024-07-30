@@ -305,6 +305,7 @@
     <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SlittingController.cs" />
+    <Compile Include="Controllers\SOrderController.cs" />
     <Compile Include="Controllers\StampingController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\TracingController.cs" />
@@ -2614,6 +2615,7 @@
     <Content Include="Views\PartPack\Edit.cshtml" />
     <Content Include="Views\PartPack\Delete.cshtml" />
     <Content Include="Views\PartPack\Details.cshtml" />
+    <Content Include="Views\BOM\Delete.cshtml" />
     <Content Include="Views\SOrder\Delete.cshtml" />
     <Content Include="Views\SOrder\Details.cshtml" />
     <Content Include="Views\SOrder\Edit.cshtml" />
