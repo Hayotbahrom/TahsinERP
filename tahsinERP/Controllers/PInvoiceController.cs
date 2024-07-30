@@ -20,9 +20,14 @@ namespace tahsinERP.Controllers
 {
     public class PInvoiceController : Controller
     {
-        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, invoiceNo, orderNo, partNo = "";
-        //private DBTHSNEntities db = new DBTHSNEntities();
+        private string[] sources;
+        public PInvoiceController()
+        {
+            sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
+            sources = sources.Where(x => !x.Equals("InHouse", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
+        
         // GET: PInvoice
         public ActionResult Index(string type, int? supplierID)
         {
@@ -60,108 +65,85 @@ namespace tahsinERP.Controllers
                     }
                 }
                 return View();
-                /*
-                IQueryable<P_INVOICES> invoicesQuery = db.P_INVOICES
-                    .Include(pi => pi.SUPPLIER)
-                    .Include(pi => pi.P_ORDERS)
-                    .Where(pi => pi.IsDeleted == false);
-
-                // Filter by type if provided
-                if (!string.IsNullOrEmpty(type))
-                {
-                    invoicesQuery = invoicesQuery.Where(pi => pi.SUPPLIER.Type.CompareTo(type) == 0);
-                    ViewBag.SourceList = new SelectList(sources, type);
-                }
-                else
-                {
-                    ViewBag.SourceList = new SelectList(sources);
-                }
-
-                // Filter by supplierID if provided
-                if (supplierID.HasValue)
-                {
-                    invoicesQuery = invoicesQuery.Where(pi => pi.SupplierID == supplierID.Value);
-                }
-
-                List<P_INVOICES> invoices = invoicesQuery.ToList();
-
-                // Prepare ViewBag.SupplierList based on filters
-                var suppliersQuery = db.SUPPLIERS.Where(s => s.IsDeleted == false);
-
-                if (!string.IsNullOrEmpty(type))
-                {
-                    suppliersQuery = suppliersQuery.Where(s => s.Type.CompareTo(type) == 0);
-                }
-
-                if (supplierID.HasValue)
-                {
-                    suppliersQuery = suppliersQuery.Where(s => s.ID == supplierID.Value);
-                }
-
-                ViewBag.SupplierList = new SelectList(suppliersQuery.Where(s => s.Type.CompareTo(type) == 0).ToList(), "ID", "Name");
-                ViewBag.Type = type;
-
-                return View(invoices);*/
             }
         }
         public ActionResult Create()
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
-                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo");
-                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
-                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-            }
+            PopulateViewBags();
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(PInvoiceViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                P_INVOICES invoice = new P_INVOICES()
-                {
-                    InvoiceNo = model.InvoiceNo,
-                    OrderID = model.OrderID,
-                    SupplierID = model.SupplierID,
-                    Amount = model.Amount,
-                    Currency = model.Currency,
-                    InvoiceDate = model.InvoiceDate,
-                    CompanyID = 1,
-                    IsDeleted = false
-                };
-                
-                db.P_INVOICES.Add(invoice);
-                db.SaveChanges();
-                int newInvoiceID = invoice.ID;
+                var isSameContract = db.P_ORDERS
+                    .Include(x => x.SUPPLIER)
+                    .FirstOrDefault(p => p.IsDeleted == false && p.ID == model.OrderID);
 
-
-                foreach (var item in model.Parts)
+                if (isSameContract == null || model.SupplierID != isSameContract.SupplierID)
                 {
-                    var newPart = new P_INVOICE_PARTS
-                    {
-                        InvoiceID = newInvoiceID,
-                        PartID = item.PartID,
-                        Quantity = item.Quantuty,
-                        UnitID = item.UnitID,
-                        Price = item.Price
-                    };
-                    db.P_INVOICE_PARTS.Add(newPart);
+                    ModelState.AddModelError("", "Ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
+                    PopulateViewBags();
+                    return View(model);
                 }
 
-                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(s => s.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
-                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
-                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+               
+                    P_INVOICES invoice = new P_INVOICES
+                    {
+                        InvoiceNo = model.InvoiceNo,
+                        OrderID = model.OrderID,
+                        SupplierID = model.SupplierID,
+                        Amount = model.Amount,
+                        Currency = model.Currency,
+                        InvoiceDate = model.InvoiceDate,
+                        CompanyID = 1,
+                        IsDeleted = false
+                    };
 
-                db.SaveChanges();
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PinvoiceController", "Create[Post]");
-                return RedirectToAction("Index");
+                    db.P_INVOICES.Add(invoice);
+                    db.SaveChanges();
+
+                    int newInvoiceID = invoice.ID;
+
+                    foreach (var item in model.Parts)
+                    {
+                        var newPart = new P_INVOICE_PARTS
+                        {
+                            InvoiceID = newInvoiceID,
+                            PartID = item.PartID,
+                            Quantity = item.Quantuty,
+                            UnitID = item.UnitID,
+                            Price = item.Price
+                        };
+                        db.P_INVOICE_PARTS.Add(newPart);
+                    }
+
+                    db.SaveChanges();
+
+                    var userEmail = User.Identity.Name;
+                    //LogHelper.LogToDatabase(userEmail, "PinvoiceController", "Create[Post]");
+                    return RedirectToAction("Index");
+                
+
+                PopulateViewBags();
+                return View(model);
             }
         }
+
+        private void PopulateViewBags()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+            }
+        }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -183,11 +165,6 @@ namespace tahsinERP.Controllers
 
                 if (invoice == null)
                     return HttpNotFound();
-
-              /*  // Manually load the related entities
-                db.Entry(invoice).Reference(i => i.P_ORDERS).Load();
-                db.Entry(invoice).Reference(i => i.SUPPLIER).Load();
-                db.Entry(invoice).Reference(i => i.COMPANy).Load();*/
 
                 partList = db.P_INVOICE_PARTS
                                         .Include(ip => ip.PART)
@@ -299,27 +276,6 @@ namespace tahsinERP.Controllers
                 return View(invoicePartToDelete);
             }
         }
-        /*public ActionResult Edit(int? ID)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                if (ID == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                var invoice = db.P_INVOICES.Find(ID);
-                if (invoice == null)
-                {
-                    return HttpNotFound();
-                }
-
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
-                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo", invoice.OrderID);
-                ViewBag.partList = db.P_INVOICE_PARTS.Where(pc => pc.InvoiceID == invoice.ID).ToList();
-
-                return View(invoice);
-            }
-        }*/
         public ActionResult Edit(int? ID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -340,8 +296,8 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
-                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo", invoice.OrderID);
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
+                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
                 ViewBag.partList = invoice.P_INVOICE_PARTS.ToList();
 
                 return View(invoice);
@@ -405,8 +361,8 @@ namespace tahsinERP.Controllers
                 }
 
                 // Re-populate dropdown lists in case of an error
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", invoice.SupplierID);
-                ViewBag.POrder = new SelectList(db.P_ORDERS.ToList(), "ID", "OrderNo", invoice.OrderID);
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
+                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.partList = db.P_INVOICE_PARTS
                     .Include(pc => pc.PART)
@@ -462,20 +418,16 @@ namespace tahsinERP.Controllers
                         invoicePartToUpdate.UnitID = invoicePart.UnitID;
                         //invoicePartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
 
-
-                        if (TryUpdateModel(invoicePartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit" }))
+                        try
                         {
-                            try
-                            {
-                                db.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "PInvoiceController", "EditPart[Post]");
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "EditPart[Post]");
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                     return View(invoicePartToUpdate);

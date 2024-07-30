@@ -22,9 +22,13 @@ namespace tahsinERP.Controllers
     public class POrderController : Controller
     {
         
-        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, orderNo, partNo = "";
-
+        private string[] sources;
+        public POrderController()
+        {
+            sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
+            sources = sources.Where(x => !x.Equals("InHouse", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
         // GET: POrder
         public ActionResult Index(string type, int? supplierID)
         {
@@ -94,7 +98,7 @@ namespace tahsinERP.Controllers
 
                 if (model.SupplierID != isSameContract.SupplierID)
                 {
-                    ModelState.AddModelError("", "Ta'minotchi and shartnomadagi ta'minotchi bir xil emas!");
+                    ModelState.AddModelError("", "Ta'minotchi va shartnomadagi ta'minotchi bir xil bo'lishi shart!");
                 }
 
                 foreach (var part in model.Parts)

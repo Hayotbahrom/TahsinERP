@@ -12,7 +12,7 @@ namespace tahsinERP.ViewModels
         public string InvoiceNo { get; set; }
         [Required]
         public int OrderID { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Taminotchi va Buyurtma ta'minotchisi bir xil bo'lishi shart!")]
         public int SupplierID { get; set; }
         public double Amount { get; set; }
         public System.DateTime InvoiceDate { get; set; }
@@ -31,8 +31,10 @@ namespace tahsinERP.ViewModels
     {
         public int ID { get; set; }
         public int InvoiceID { get; set; }
+        [Required]
         public int PartID { get; set; }
         public double Quantuty { get; set; }
+        [Required]
         public int UnitID { get; set; }
         public double Price { get; set; }
         public double TotalPrice { get; set; }
