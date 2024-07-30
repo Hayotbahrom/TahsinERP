@@ -66,7 +66,7 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Ta'minotchisi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, "", new { @class = "form-control", onchange = "refreshdatatablesupplier()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
@@ -141,20 +141,19 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-      function refreshdatatablesupplier() {
-          var source = document.getElementById("SourceID").value;
+       <script type="text/javascript">
+        function refreshDataTable() {
+            var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "POrder")?type=' + source;
+            ////window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
+        };
+        function refreshdatatablesupplier() {
+            var source = document.getElementById("SourceID").value;
             const supplierID = document.getElementById("SupplierID").value;
             window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
-       }
-    
-    function refreshDataTable() {
-        var source = document.getElementById("SourceID").value;
-        var supplierID = document.getElementById("SupplierID").value;
-        window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID=' + supplierID;
-    }
-    </script>
-
+        }
+        </script>
 }
 else
 {
