@@ -146,15 +146,24 @@
 
 
                                             // Save button
+                                           <div id="popup" class="popup-overlay">
+                                                <div class="popup-content">
+                                                    <button id="popup-close">No</button>
+                                                    <form id="popup-form">
+                                                        <button type="submit" id="popup-action">Yes</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
-                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn open-modal" name="create" type="button" value="Create">
                                                         <i class='bx bx-save'></i>
                                                         Saqlash
                                                     </button>
                                                 </li>
                                             </ul>
-                                        }
+                                            }
                                     </div>
                                 </div>
                             </div>
