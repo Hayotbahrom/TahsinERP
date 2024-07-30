@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.EMMA;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -21,9 +22,13 @@ namespace tahsinERP.Controllers
     public class POrderController : Controller
     {
         
-        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, orderNo, partNo = "";
-
+        private string[] sources;
+        public POrderController()
+        {
+            sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
+            sources = sources.Where(x => !x.Equals("InHouse", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
         // GET: POrder
         public ActionResult Index(string type, int? supplierID)
         {
@@ -75,6 +80,7 @@ namespace tahsinERP.Controllers
 
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(POrderViewModel model)
@@ -92,9 +98,22 @@ namespace tahsinERP.Controllers
 
                 if (model.SupplierID != isSameContract.SupplierID)
                 {
-                    ModelState.AddModelError("", "Supplier and contract mismatch.");
+                    ModelState.AddModelError("", "Ta'minotchi va shartnomadagi ta'minotchi bir xil bo'lishi shart!");
+                }
+
+                foreach (var part in model.Parts)
+                {
+                    if (part.MOQ > part.Amount)
+                    {
+                        ModelState.AddModelError("", "Kiritilgan miqdor MOQ dan kichik");
+                    }
+                }
+
+                if (!ModelState.IsValid)
+                {
                     return View(model);
                 }
+
                 var newOrder = new P_ORDERS()
                 {
                     OrderNo = model.OrderNo,
@@ -107,23 +126,17 @@ namespace tahsinERP.Controllers
                     Description = model.Description,
                     IsDeleted = false
                 };
+
                 db.P_ORDERS.Add(newOrder);
                 db.SaveChanges();
 
-                // Yangi yozuvning IncomeID sini olish
                 int newOrderID = newOrder.ID;
 
-                // Parts ni saqlash
                 foreach (var part in model.Parts)
                 {
-                    if (part.MOQ >= part.Amount)
-                    {
-                        ModelState.AddModelError("","Kiritilgan miqdor MOQ dan kichik");
-                        return View();
-                    }
                     var newPart = new P_ORDER_PARTS
                     {
-                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                        OrderID = newOrderID,
                         PartID = part.PartID,
                         UnitID = part.UnitID,
                         Amount = part.Amount,
@@ -136,17 +149,19 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
-            
                 return RedirectToAction("Index");
             }
         }
+
+
         //steel coil uchun Create Actoin method
         public ActionResult CreateSteel()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo");
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
             }
 
@@ -323,32 +338,6 @@ namespace tahsinERP.Controllers
                 return View(orderPartToDelete);
             }
         }
-
-
-        /* public ActionResult Edit(int? ID)
-         {
-             if (ID == null)
-             {
-                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-             }
-             using (DBTHSNEntities db = new DBTHSNEntities())
-             {
-                 var order = db.P_ORDERS.Find(ID);
-                 if (order == null)
-                 {
-                     return HttpNotFound();
-                 }
-
-                 db.Entry(order).Reference(o => o.SUPPLIER).Load();
-                 db.Entry(order).Reference(o => o.P_CONTRACTS).Load();
-
-                 ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
-                 ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
-                 ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
-
-                 return View(order);
-             }
-         }*/
         public ActionResult Edit(int? ID)
         {
             if (ID == null)
@@ -389,6 +378,28 @@ namespace tahsinERP.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
+                    // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+                    ViewBag.partList = db.P_ORDER_PARTS
+                                                .Include(x => x.PART)                    
+                                                .Where(pc => pc.OrderID == order.ID).ToList();
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
+                    var isSameContract = db.P_CONTRACTS
+                    .Include(x => x.SUPPLIER)
+                   .Where(p => p.IsDeleted == false && p.ID == order.ContractID).FirstOrDefault();
+
+                    if (order.SupplierID != isSameContract.SupplierID)
+                    {
+                        ModelState.AddModelError("", "Ta'minotchi and shartnomadagi ta'minotchi bir xil emas!");
+                    }
+
+                    if (!ModelState.IsValid)
+                    {
+                        return View(order);
+                    }
                     P_ORDERS orderToUpdate = db.P_ORDERS.Find(order.ID);
                     if (orderToUpdate != null)
                     {
@@ -399,28 +410,20 @@ namespace tahsinERP.Controllers
                         orderToUpdate.Currency = order.Currency;
                         orderToUpdate.Description = order.Description;
 
-                        if (TryUpdateModel(orderToUpdate, "", new string[] { "OrderNo, IssuedDate, SupplierID, ContractID, Currency, Description" }))
+                        try
                         {
-                            try
-                            {
-                                db.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            // LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
                     }
                     return View(orderToUpdate);
                 }
-                // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", order.SupplierID);
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", order.ContractID);
-                ViewBag.partList = db.P_ORDER_PARTS.Where(pc => pc.OrderID == order.ID).ToList();
-                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 return View(order);
             }
@@ -439,15 +442,11 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
-                var allParts = db.PARTS.Select(p => new SelectListItem
-                {
-                    Value = p.ID.ToString(),
-                    Text = p.PNo
-                }).ToList();
+                var allParts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
 
                 db.Entry(orderPart).Reference(o => o.P_ORDERS).Load();
                 db.Entry(orderPart).Reference(o => o.UNIT).Load();
-                ViewBag.PartList = allParts;
+                ViewBag.partList = new SelectList(allParts, "ID", "PNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 return View(orderPart);
             }
@@ -470,22 +469,26 @@ namespace tahsinERP.Controllers
                         orderPartToUpdate.UnitID = orderPart.UnitID;
                         orderPartToUpdate.MOQ = orderPart.MOQ;
                         //orderPartToUpdate.Amount = orderPart.Quantity * orderPart.Price; SQL o'zi chiqarib beradi
+                        if (orderPart.MOQ > orderPart.Amount)
+                        {
+                            ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                            ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
-/*
-                        if (TryUpdateModel(orderPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, TotalPrice" }))
-                        {*/
-                            try
-                            {
-                                db.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "POrderController", "EditPart[Post]");
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
-                        
+                            ModelState.AddModelError("", "Kiritilgan miqdor MOQ dan kichik");
+                            return View(orderPart);
+                        }
+
+                        try
+                        {
+                            db.SaveChanges();
+                           /* var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "POrderController", "EditPart[Post]");*/
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
                     }
                     return View(orderPartToUpdate);
                 }

@@ -761,7 +761,6 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
-
         public ActionResult EditBom(int ID, BoomViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

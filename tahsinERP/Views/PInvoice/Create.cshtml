@@ -42,6 +42,8 @@
                                         @using (Html.BeginForm("Create", "PInvoice", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
                                         {
                                             @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                                             <div class="row justify-content-around d-flex align-items-start">
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
@@ -51,12 +53,12 @@
                                                             @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Buyurta raqami</label>
+                                                            <label for="OrderId">Buyurta raqami</label>
                                                             @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, new { @id = "OrderID", @class = "form-control select2" })
                                                             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Ta`minotchi</label>
+                                                            <label for="SupplierId">Ta`minotchi</label>
                                                             @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @id = "SupplierID", @class = "form-control select2" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
@@ -89,44 +91,44 @@
                                             </div>
 
                                             <!--<br />
-                                            <h4>Ehtiyot qismlar</h4>
+        <h4>Ehtiyot qismlar</h4>
 
-                                            <div data-repeater-list="Parts">
-                                                <div data-repeater-item>
-                                                    <div class="row justify-content-between">
-                                                        <input type="hidden" name="Parts[0].ID" />
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Parts[0].PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("Parts[0].PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
-                                                        </div>-->
-                                                        @*<div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Parts[0].Unit">Unit</label>
-                                                            <input type="text" name="Parts[0].Unit" class="form-control" id="Parts[0].Unit" placeholder="Unit" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
-                                                        </div>*@
-                                                        <!--<div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Unit">Unit</label>
-                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Parts[0].Quantuty">Soni</label>
-                                                            <input type="number" name="Parts[0].Quantuty" class="form-control" id="Parts[0].Quantuty" placeholder="soni" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Quantuty, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Parts[0].Price">Birlik narxi</label>
-                                                            <input type="number" name="Parts[0].Price" step="0.01" class="form-control" id="Parts[0].Price" placeholder="Qism narxini kiriting" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                            <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                </div>
-                                            </div>-->
+        <div data-repeater-list="Parts">
+            <div data-repeater-item>
+                <div class="row justify-content-between">
+                    <input type="hidden" name="Parts[0].ID" />
+                    <div class="col-md-2 col-sm-12 form-group">
+                        <label for="Parts[0].PartID">Ehtiyot qismni tanlang</label>
+                        @Html.DropDownList("Parts[0].PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
+                    </div>-->
+                                            @*<div class="col-md-2 col-sm-12 form-group">
+                <label for="Parts[0].Unit">Unit</label>
+                <input type="text" name="Parts[0].Unit" class="form-control" id="Parts[0].Unit" placeholder="Unit" />
+                @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
+            </div>*@
+                                            <!--<div class="col-md-2 col-sm-12 form-group">
+                        <label for="Part_Unit">Unit</label>
+                        @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 col-sm-12 form-group">
+                        <label for="Parts[0].Quantuty">Soni</label>
+                        <input type="number" name="Parts[0].Quantuty" class="form-control" id="Parts[0].Quantuty" placeholder="soni" />
+                        @Html.ValidationMessageFor(model => model.Parts[0].Quantuty, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 col-sm-12 form-group">
+                        <label for="Parts[0].Price">Birlik narxi</label>
+                        <input type="number" name="Parts[0].Price" step="0.01" class="form-control" id="Parts[0].Price" placeholder="Qism narxini kiriting" />
+                        @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                        <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>-->
 
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
@@ -140,10 +142,10 @@
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         @*<div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Parts[0].Unit">Unit</label>
-                                                            <input type="text" name="Parts[0].Unit" class="form-control" id="Parts[0].Unit" placeholder="Unit" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
-                                                        </div>*@
+                            <label for="Parts[0].Unit">Unit</label>
+                            <input type="text" name="Parts[0].Unit" class="form-control" id="Parts[0].Unit" placeholder="Unit" />
+                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
+                        </div>*@
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Unit</label>
                                                             @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })

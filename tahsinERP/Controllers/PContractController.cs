@@ -20,10 +20,15 @@ namespace tahsinERP.Controllers
 {
     public class PContractController : Controller
     {
-        private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
         private string supplierName, contractNo, partNo = "";
         private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
 
+        private string[] sources;
+        public PContractController()
+        {
+            sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
+            sources = sources.Where(x => !x.Equals("InHouse", StringComparison.OrdinalIgnoreCase)).ToArray();
+        }
         // GET: Contracts
         public ActionResult Index(string type, int? supplierID)
         {
@@ -34,7 +39,7 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        ViewBag.partList = db.P_CONTRACTS.Include(x => x.SUPPLIER).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
+                        ViewBag.partList = db.P_CONTRACTS.Include(x => x.SUPPLIER).Where(s => s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.IsDeleted == false && x.Type.CompareTo(type) == 0), "ID", "Name");
                     }
@@ -258,7 +263,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name");
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
@@ -335,30 +340,6 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
-        /*[HttpPost]  
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ContractNo, IssuedDate, CompanyID, SupplierID, PartID, Price, Currency, Amount, Incoterms, PaymentTerms, MOQ,MaximumCapacity, Unit,DueDate, IDN")] P_CONTRACTS contract)
-        {
-
-            try
-            {
-                using (DBTHSNEntities db = new DBTHSNEntities())
-                {
-                    if (ModelState.IsValid)
-                    {
-                        db.P_CONTRACTS.Add(contract);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(ex.Message, ex);
-            }
-            return View(contract);
-        }*/
-
         public ActionResult Details(int? ID)
         {
             if (ID == null)
@@ -370,7 +351,7 @@ namespace tahsinERP.Controllers
             {
                 var contract = db.P_CONTRACTS
                                   .Include(p => p.SUPPLIER)
-                                  .FirstOrDefault(p => p.ID == ID);
+                                  .FirstOrDefault(p => p.ID == ID && p.IsDeleted == false);
 
                 if (contract == null)
                 {
@@ -409,14 +390,14 @@ namespace tahsinERP.Controllers
                 contract = db.P_CONTRACTS
                     .Include(c => c.SUPPLIER)
                     .Include(c => c.P_CONTRACT_PARTS.Select(p => p.PART))
-                    .FirstOrDefault(c => c.ID == ID);
+                    .FirstOrDefault(c => c.ID == ID && c.IsDeleted == false);
 
                 if (contract == null)
                 {
                     return HttpNotFound();
                 }
 
-                suppliers = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", contract.SupplierID);
+                suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", contract.SupplierID);
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 partList = contract.P_CONTRACT_PARTS.ToList();
@@ -485,13 +466,10 @@ namespace tahsinERP.Controllers
                 var allParts = db.PARTS
                                 .Include(p => p.P_CONTRACT_PARTS)
                                 .Include(p=> p.UNIT)
-                                .Select(p => new SelectListItem
-                                {
-                                    Value = p.ID.ToString(),
-                                    Text = p.PNo
-                                }).ToList();
+                                .Where(p => p.IsDeleted == false)
+                                .ToList();
 
-                ViewBag.PartList = allParts;
+                ViewBag.PartList = new SelectList(allParts, "ID", "PNo");
 
                 return View(contractPart);
             }
@@ -511,25 +489,22 @@ namespace tahsinERP.Controllers
                         contractPartToUpdate.PartID = contractPart.PartID;
                         contractPartToUpdate.Price = contractPart.Price;
                         contractPartToUpdate.Quantity = contractPart.Quantity;
-                        //contractPartToUpdate.Unit = contractPart.Unit;
+                        contractPartToUpdate.UnitID = contractPart.UnitID;
                         contractPartToUpdate.MOQ = contractPart.MOQ;
                         contractPartToUpdate.ActivePart = contractPart.ActivePart;
                         //contractPartToUpdate.Amount = contractPart.Quantity * contractPart.Price; SQL o'zi chiqarib beradi
-
-                        if (TryUpdateModel(contractPartToUpdate, "", new string[] { "PartID, Price, Quantity, Unit, MOQ, ActivePart" }))
+                        try
                         {
-                            try
-                            {
-                                db.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "EditPart[Post]");
-                                return RedirectToAction("Index");
-                            }
-                            catch (RetryLimitExceededException)
-                            {
-                                ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            }
+                            db.SaveChanges();
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "EditPart[Post]");
+                            return RedirectToAction("Index");
                         }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
+                        
                     }
                     return RedirectToAction("Edit");
                 }

@@ -41,7 +41,7 @@ namespace tahsinERP.Models
         public Nullable<double> PltHeight { get; set; }
         public Nullable<double> PltWeight { get; set; }
         public Nullable<double> ScPackQty { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public bool IsActive { get; set; }
         public Nullable<System.DateTime> RegDate { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     

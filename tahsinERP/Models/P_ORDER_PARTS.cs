@@ -16,7 +16,7 @@ namespace tahsinERP.Models
     {
         public int ID { get; set; }
         public int OrderID { get; set; }
-        public int PartID { get; set; }
+        public Nullable<int> PartID { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
         public double TotalPrice { get; set; }
