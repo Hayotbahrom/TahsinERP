@@ -280,6 +280,8 @@
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DefectTypeController.cs" />
+    <Compile Include="Controllers\DamagedPartController.cs" />
+    <Compile Include="Controllers\DamagedProductController.cs" />
     <Compile Include="Controllers\FContractController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
@@ -621,6 +623,7 @@
     <Compile Include="ViewModels\BOM\BoomViewModel.cs" />
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
     <Compile Include="ViewModels\BOM\StampingNormViewModel.cs" />
+    <Compile Include="ViewModels\DamagedPartIndexViewModel.cs" />
     <Compile Include="ViewModels\SOrderViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PackingListViewModel.cs" />
@@ -2624,6 +2627,16 @@
     <Content Include="Views\DefectType\Edit.cshtml" />
     <Content Include="Views\DefectType\Create.cshtml" />
     <Content Include="Views\DefectType\Delete.cshtml" />
+    <Content Include="Views\DamagedPart\Index.cshtml" />
+    <Content Include="Views\DamagedPart\Create.cshtml" />
+    <Content Include="Views\DamagedPart\Edit.cshtml" />
+    <Content Include="Views\DamagedPart\Details.cshtml" />
+    <Content Include="Views\DamagedPart\Delete.cshtml" />
+    <Content Include="Views\DamagedProduct\Index.cshtml" />
+    <Content Include="Views\DamagedProduct\Create.cshtml" />
+    <Content Include="Views\DamagedProduct\Edit.cshtml" />
+    <Content Include="Views\DamagedProduct\Delete.cshtml" />
+    <Content Include="Views\DamagedProduct\Details.cshtml" />
     <Content Include="Views\PartStock\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
