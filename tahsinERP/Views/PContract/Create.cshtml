@@ -47,6 +47,8 @@
                                         @using (Html.BeginForm("Create", "PContract", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
                                         {
                                             @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                                             // WRHS_InComes
                                             <div class="row justify-content-around d-flex align-items-start">
                                                 @*Left Part*@
