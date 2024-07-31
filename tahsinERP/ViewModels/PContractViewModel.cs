@@ -8,14 +8,21 @@ namespace tahsinERP.ViewModels
 {
     public class PContractViewModel
     {
+        [Required]
         public string ContractNo { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
+        [Required]
         public DateTime IssuedDate { get; set; }
+        [Required]
         public DateTime DueDate { get; set; }
+        [Required]
         public int SupplierID { get; set; }
+        [Required]
         public string Incoterms { get; set; }
+        [Required]
         public string PaymentTerms { get; set; }
+        [Required]
         public string Currency { get; set; }
         public double Amount { get; set; }
         public string IDN { get; set; }
