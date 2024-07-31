@@ -286,6 +286,7 @@
     <Compile Include="Controllers\LogHelper.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
+    <Compile Include="Controllers\PartStockController.cs" />
     <Compile Include="Controllers\PartWRHSController.cs" />
     <Compile Include="Controllers\PContractController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2604,6 +2605,7 @@
     <Content Include="Views\BOM\EditBom.cshtml" />
     <Content Include="Views\POrder\CreateSteel.cshtml" />
     <Content Include="Views\Shared\_CookieConsent.cshtml" />
+    <Content Include="Views\PartStock\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -355,7 +355,7 @@
                             </ul>
                         </li>
                     }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forwarder"))
                     {
                         <li class=" nav-item">
                             <a href="#">
@@ -384,25 +384,24 @@
                     }
                     @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
                     {
-
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/PartStock/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
+                                </li>
+                            </ul>
+                        </li>
                     }
-                    <li class=" nav-item">
-                        <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
-                            </li>
-                            <li>
-                                <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
-                            </li>
-                            <li>
-                                <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
-                            </li>
-                            <li>
-                                <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
-                            </li>
-                        </ul>
-                    </li>
                     <li class=" navigation-header">
                         <span>Engineering</span>
                     </li>
