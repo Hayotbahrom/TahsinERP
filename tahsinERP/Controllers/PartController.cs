@@ -395,11 +395,9 @@ namespace tahsinERP.Controllers
                     Marka = part.Marka,
                     Standart = part.Standart,
                     IsInHouse = part.IsInHouse,
-                    ShopID = (int)part.ShopID, // Default to 0 if null
-                    ShopName = shopName // Set the shop name
+                    ShopID = (int)part.ShopID,
+                    ShopName = shopName
                 };
-
-                // Assuming the image is stored as a base64 string in the viewbag
                 var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == part.ID);
                 if (partImage != null)
                 {
