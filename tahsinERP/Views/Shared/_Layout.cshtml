@@ -737,8 +737,6 @@
 
         <!-- Cookie -->
         <script>
-            //var $ = jQuery.noConflict();
-
             document.addEventListener("DOMContentLoaded", function () {
                 if (!getCookie("cookieConsent")) {
                     $("#cookieConsent").modal('show');
@@ -755,7 +753,7 @@
 
                 function setCookie(name, value, days) {
                     var expires = "";
-                    if (minutes) {
+                    if (days) {
                         var date = new Date();
                         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
                         expires = "; expires=" + date.toUTCString();
@@ -775,6 +773,7 @@
                 }
             });
         </script>
+
         <!-- __________ -->
 
 
