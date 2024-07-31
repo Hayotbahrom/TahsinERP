@@ -2,6 +2,7 @@
 using System;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using tahsinERP.Models;
 
@@ -20,7 +21,9 @@ namespace tahsinERP.Controllers
                         ControllerName = controllerName,
                         ActionName = actionName,
                         DateTime = DateTime.Now,
-                        UserID = GetUserId(userEmail)
+                        UserID = GetUserId(userEmail),
+                        IP = NetworkHelper.GetIpAddress(),
+                        MacAddr = NetworkHelper.GetMacAddress(NetworkHelper.GetIpAddress())
                     };
 
                     db.USERLOGS.Add(log);
@@ -55,6 +58,6 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-    }
 
+    }
 }
