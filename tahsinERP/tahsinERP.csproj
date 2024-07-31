@@ -279,6 +279,7 @@
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\DefectTypeController.cs" />
     <Compile Include="Controllers\FContractController.cs" />
     <Compile Include="Controllers\ForwarderController.cs" />
     <Compile Include="Controllers\FTransportTypeController.cs" />
@@ -2619,6 +2620,11 @@
     <Content Include="Views\SOrder\Delete.cshtml" />
     <Content Include="Views\SOrder\Details.cshtml" />
     <Content Include="Views\SOrder\Edit.cshtml" />
+    <Content Include="Views\DefectType\Index.cshtml" />
+    <Content Include="Views\DefectType\Details.cshtml" />
+    <Content Include="Views\DefectType\Edit.cshtml" />
+    <Content Include="Views\DefectType\Create.cshtml" />
+    <Content Include="Views\DefectType\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
