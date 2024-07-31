@@ -67,11 +67,11 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Ta'minotchisi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, "", new { @class = "form-control", onchange = "refreshdatatablesupplier()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
-                                    <a href="~/WhIncome" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                    <a href="~/POrder" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
                                         Ro'yxatni yangilash
                                     </a>
                                 </div>
@@ -151,9 +151,14 @@
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
         function refreshDataTable() {
+            var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "WhIncome")?type=' + source;
+            ////window.location.href = '@Url.Action("Index", "WhIncome")?type=' + source + '&supplierID='+ supplierID;
+        };
+        function refreshdatatablesupplier() {
             var source = document.getElementById("SourceID").value;
             const supplierID = document.getElementById("SupplierID").value;
             window.location.href = '@Url.Action("Index", "WhIncome")?type=' + source + '&supplierID='+ supplierID;

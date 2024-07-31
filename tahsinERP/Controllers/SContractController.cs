@@ -331,7 +331,7 @@ namespace tahsinERP.Controllers
                             db.S_CONTRACT_PRODUCTS.Remove(contractProduct);
                         }
 
-                        //db.SaveChanges();
+                        db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)

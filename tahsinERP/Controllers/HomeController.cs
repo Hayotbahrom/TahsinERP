@@ -6,6 +6,7 @@ namespace tahsinERP.Controllers
     {
         public ActionResult Index()
         {
+            // Check if the cookie consent session variable is not set
             if (Session["HasSeenCookieConsent"] == null)
             {
                 Session["HasSeenCookieConsent"] = true;

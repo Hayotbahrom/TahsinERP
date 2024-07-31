@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const popup = document.getElementById('popup');
+    const popup = document.getElementById('pop-up');
     const openButtons = document.querySelectorAll('.open-modal');
-    const closeButton = document.getElementById('popup-close');
-    const popupForm = document.getElementById('popup-form');
-    let functionToCall = null;
+    const closeButton = document.getElementById('pop-up__close');
+    const confirmButton = document.getElementById('pop-up__action');
+    const successBtn = document.querySelector(".success-btn")
+    let formToSubmit = null;
 
     function openPopup() {
         popup.classList.add('show');
@@ -13,16 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.classList.remove('show');
     }
 
-
-
     openButtons.forEach(button => {
         button.addEventListener('click', (event) => {
             event.preventDefault();
-            functionToCall = button.getAttribute('data-function');
+            formToSubmit = button.closest('form');
             openPopup();
         });
     });
 
     closeButton.addEventListener('click', closePopup);
-    popupForm.addEventListener('submit', executeFunction);
+    confirmButton.addEventListener('click', () => {
+        if (formToSubmit) {
+            formToSubmit.submit();
+        }
+        closePopup();
+    });
 });

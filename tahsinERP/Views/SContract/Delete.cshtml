@@ -119,7 +119,7 @@
                                             @using (Html.BeginForm("Delete", "SContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                             {
                                                 @Html.AntiForgeryToken()
-                                                <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu shartnomani ochirib yuborishga ishonchingiz komilmi?')">
+                                                <button class="open-modal btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="button" id="button2">
                                                     <i class='bx bx-trash'></i>
                                                     O'chirish
                                                 </button>
