@@ -41,8 +41,12 @@
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-invoice.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
 
-    <link rel="stylesheet" type="text/css" href="~/assets/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="~/assets/css/app.css" />
     <!-- END: Page CSS-->
+
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 
 <body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
@@ -631,25 +635,40 @@
         <!-- __________ -->
 
         // Cookie using(Modal)
-        @* Add this at the end of the <body> in _Layout.cshtml *@
-        @Html.Partial("_CookieConsent")
+        <div id="cookieConsent" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cookie-fayllardan foydalanish</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeCookies">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Biz sizga veb-saytimizda eng yaxshi tajribani taqdim etishimiz uchun cookie-fayllardan foydalanamiz.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="acceptCookies">Qabul qilaman</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         // _______________
 
 
-        @Scripts.Render("~/bundles/jquery") //v3.7.1
+        //v3.7.1
+        @Scripts.Render("~/bundles/jquery")
         <script src="~/Scripts/bootstrap.bundle.js"></script>
         //v5.3.3
-
         @RenderSection("scripts", required: false)
-
 
         <!-- BEGIN: Vendor JS-->
         <script src="~/app-assets/vendors/js/vendors.min.js"></script>
-        <script src="~/assets/js/jquery.min.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
         <!-- END Vendor JS-->
+
 
 
         <!-- BEGIN: Page Vendor JS-->
@@ -680,7 +699,6 @@
         <script src="~/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
         <script src="~/app-assets/vendors/js/pickers/daterange/moment.min.js"></script>
         <script src="~/app-assets/vendors/js/pickers/daterange/daterangepicker.js"></script>
-
         // Export PDF as View
         <script src="~/app-assets/js/scripts/pdfMake/html2pdf.bundle.min.js"></script>
         <!-- END: Page Vendor JS-->
@@ -704,6 +722,8 @@
         <script src="~/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js"></script>
         <script src="~/app-assets/js/scripts/forms/form-tooltip-valid.js"></script>
         <!-- END: Page JS-->
+        // jQuery: v3.6.0
+        <script src="~/assets/js/jquery.min.js"></script>
 
 
         // Additioanal(Custom) JSs(for SweetAlert)
@@ -711,8 +731,48 @@
 
 
 
-        // jQuery: v3.6.0
-        <script src="~/assets/js/jquery.min.js"></script>
+        <!-- Cookie -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (!getCookie("cookieConsent")) {
+                    $("#cookieConsent").modal('show');
+                }
+
+                $j("#acceptCookies").on("click", function () {
+                    setCookie("cookieConsent", "true", 1);
+                    $("#cookieConsent").modal('hide');
+                });
+
+                $("#closeCookies").on("click", function () {
+                    $("#cookieConsent").modal('hide');
+                });
+
+                function setCookie(name, value, days) {
+                    var expires = "";
+                    if (days) {
+                        var date = new Date();
+                        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                        expires = "; expires=" + date.toUTCString();
+                    }
+                    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+                }
+
+                function getCookie(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+            });
+        </script>
+        <!-- __________ -->
+
+
+
         <!-- REPEATER -->
         <script src="~/assets/js/jquery.repeater.min.js"></script>
         <script>
@@ -731,45 +791,6 @@
                         }
                     }
                 });
-            });
-        </script>
-        <!-- __________ -->
-
-
-
-        <!-- Cookie -->
-        @* Add this in the <head> or at the end of the <body> in _Layout.cshtml *@
-        <script>
-            $j(document).ready(function () {
-                if (!getCookie("cookieConsent")) {
-                    $j("#cookieConsent").modal('show');
-                }
-
-                $j("#acceptCookies").click(function () {
-                    setCookie("cookieConsent", "true", 1);
-                    $j("#cookieConsent").modal('hide');
-                });
-
-                function setCookie(name, value, days) {
-                    var expires = "";
-                    if (days) {
-                        var date = new Date();
-                        date.setTime(date.getTime() + (days * 60 * 1000));
-                        expires = "; expires=" + date.toUTCString();
-                    }
-                    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-                }
-
-                function getCookie(name) {
-                    var nameEQ = name + "=";
-                    var ca = document.cookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-                    }
-                    return null;
-                }
             });
         </script>
         <!-- __________ -->
