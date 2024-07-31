@@ -114,6 +114,7 @@ namespace tahsinERP.Models
         public virtual DbSet<S_ORDERS> S_ORDERS { get; set; }
         public virtual DbSet<STEEL_COILS> STEEL_COILS { get; set; }
         public virtual DbSet<USERLOG> USERLOGS { get; set; }
+        public virtual DbSet<COOKIES_CONFIRMATION> COOKIES_CONFIRMATION { get; set; }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {

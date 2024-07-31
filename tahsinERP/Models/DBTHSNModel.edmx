@@ -72,6 +72,16 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="CompanyID" Type="int" Nullable="false" />
           <Property Name="LicenseKey" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="COOKIES_CONFIRMATION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="IssuedDT" Type="datetime" Nullable="false" />
+          <Property Name="MacAdress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Confirmation" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="CUSTOMERS">
           <Key>
             <PropertyRef Name="ID" />
@@ -1106,11 +1116,13 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="ControllerName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ActionName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DateTime" Type="datetime" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IP" Type="varchar" MaxLength="50" />
+          <Property Name="MacAddr" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'DBTHSN-TEST.dbo.USERROLES' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1236,6 +1248,18 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             </Principal>
             <Dependent Role="COMPANY_LICENSES">
               <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_COOKIES_CONFIRMATION_USERS">
+          <End Role="USERS" Type="Self.USERS" Multiplicity="1" />
+          <End Role="COOKIES_CONFIRMATION" Type="Self.COOKIES_CONFIRMATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="COOKIES_CONFIRMATION">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2899,6 +2923,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySet Name="BOMS" EntityType="Self.BOMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMPANIES" EntityType="Self.COMPANIES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMPANY_LICENSES" EntityType="Self.COMPANY_LICENSES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="COOKIES_CONFIRMATION" EntityType="Self.COOKIES_CONFIRMATION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CUSTOMERS" EntityType="Self.CUSTOMERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DAMAGED_PARTS" EntityType="Self.DAMAGED_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DAMAGED_PRODUCTS" EntityType="Self.DAMAGED_PRODUCTS" Schema="dbo" store:Type="Tables" />
@@ -3024,6 +3049,10 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <AssociationSet Name="FK_COMPANY_LICENSES_COMPANIES" Association="Self.FK_COMPANY_LICENSES_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="COMPANY_LICENSES" EntitySet="COMPANY_LICENSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COOKIES_CONFIRMATION_USERS" Association="Self.FK_COOKIES_CONFIRMATION_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="COOKIES_CONFIRMATION" EntitySet="COOKIES_CONFIRMATION" />
           </AssociationSet>
           <AssociationSet Name="FK_DAMAGED_PARTS_DEFECT_TYPES" Association="Self.FK_DAMAGED_PARTS_DEFECT_TYPES">
             <End Role="DEFECT_TYPES" EntitySet="DEFECT_TYPES" />
@@ -4907,6 +4936,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="USERIMAGES" Relationship="Self.FK_USERIMAGES_USERS" FromRole="USERS" ToRole="USERIMAGES" />
           <NavigationProperty Name="ROLES" Relationship="Self.USERROLES" FromRole="USERS" ToRole="ROLES" />
           <NavigationProperty Name="USERLOGS" Relationship="DBTHSNModel.FK_USERLOGS_USERS" FromRole="USER" ToRole="USERLOG" />
+          <NavigationProperty Name="COOKIES_CONFIRMATION" Relationship="DBTHSNModel.FK_COOKIES_CONFIRMATION_USERS" FromRole="USER" ToRole="COOKIES_CONFIRMATION" />
         </EntityType>
         <EntityType Name="WASTE_STOCKS">
           <Key>
@@ -7210,6 +7240,11 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             <End Role="USER" EntitySet="USERS" />
             <End Role="USERLOG" EntitySet="USERLOGS" />
           </AssociationSet>
+          <EntitySet Name="COOKIES_CONFIRMATION" EntityType="DBTHSNModel.COOKIES_CONFIRMATION" />
+          <AssociationSet Name="FK_COOKIES_CONFIRMATION_USERS" Association="DBTHSNModel.FK_COOKIES_CONFIRMATION_USERS">
+            <End Role="USER" EntitySet="USERS" />
+            <End Role="COOKIES_CONFIRMATION" EntitySet="COOKIES_CONFIRMATION" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetPartsInfo_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
@@ -7325,6 +7360,8 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="USER" Relationship="DBTHSNModel.FK_USERLOGS_USERS" FromRole="USERLOG" ToRole="USER" />
+          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MacAddr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_S_ORDERS_COMPANIES">
           <End Type="DBTHSNModel.COMPANy" Role="COMPANy" Multiplicity="1" />
@@ -7406,6 +7443,29 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="USERLOG">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="COOKIES_CONFIRMATION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="IssuedDT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MacAdress" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Confirmation" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="USER" Relationship="DBTHSNModel.FK_COOKIES_CONFIRMATION_USERS" FromRole="COOKIES_CONFIRMATION" ToRole="USER" />
+        </EntityType>
+        <Association Name="FK_COOKIES_CONFIRMATION_USERS">
+          <End Type="DBTHSNModel.USER" Role="USER" Multiplicity="1" />
+          <End Type="DBTHSNModel.COOKIES_CONFIRMATION" Role="COOKIES_CONFIRMATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USER">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="COOKIES_CONFIRMATION">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -8701,10 +8761,23 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySetMapping Name="USERLOGS">
             <EntityTypeMapping TypeName="DBTHSNModel.USERLOG">
               <MappingFragment StoreEntitySet="USERLOGS">
+                <ScalarProperty Name="MacAddr" ColumnName="MacAddr" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="DateTime" ColumnName="DateTime" />
                 <ScalarProperty Name="ActionName" ColumnName="ActionName" />
                 <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COOKIES_CONFIRMATION">
+            <EntityTypeMapping TypeName="DBTHSNModel.COOKIES_CONFIRMATION">
+              <MappingFragment StoreEntitySet="COOKIES_CONFIRMATION">
+                <ScalarProperty Name="Confirmation" ColumnName="Confirmation" />
+                <ScalarProperty Name="MacAdress" ColumnName="MacAdress" />
+                <ScalarProperty Name="IssuedDT" ColumnName="IssuedDT" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

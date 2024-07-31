@@ -22,27 +22,27 @@ namespace tahsinERP.Models
         }
     
         public int ID { get; set; }
-        public Nullable<int> PartID { get; set; }
+        public int PartID { get; set; }
         public string PrPackMaterial { get; set; }
         public string Securement { get; set; }
         public string Dunnage { get; set; }
-        public Nullable<double> PrLength { get; set; }
-        public Nullable<double> PrWidth { get; set; }
-        public Nullable<double> PrHeight { get; set; }
-        public Nullable<double> PrWeight { get; set; }
+        public double PrLength { get; set; }
+        public double PrWidth { get; set; }
+        public double PrHeight { get; set; }
+        public double PrWeight { get; set; }
         public double PrPackQty { get; set; }
         public string ScPackMaterial { get; set; }
-        public Nullable<double> ScLength { get; set; }
-        public Nullable<double> ScWidth { get; set; }
-        public Nullable<double> ScHeight { get; set; }
-        public Nullable<double> ScWeight { get; set; }
+        public double ScLength { get; set; }
+        public double ScWidth { get; set; }
+        public double ScHeight { get; set; }
+        public double ScWeight { get; set; }
         public string PalletType { get; set; }
-        public Nullable<double> PltLength { get; set; }
-        public Nullable<double> PltWidth { get; set; }
-        public Nullable<double> PltHeight { get; set; }
-        public Nullable<double> PltWeight { get; set; }
-        public Nullable<double> ScPackQty { get; set; }
-        public bool IsActive { get; set; }
+        public double PltLength { get; set; }
+        public double PltWidth { get; set; }
+        public double PltHeight { get; set; }
+        public double PltWeight { get; set; }
+        public double ScPackQty { get; set; }
+        public Nullable<bool> IsActive { get; set; }
         public Nullable<System.DateTime> RegDate { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     

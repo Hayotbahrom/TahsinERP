@@ -11,9 +11,7 @@ namespace tahsinERP.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class USERLOG
     {
         public int ID { get; set; }
@@ -21,6 +19,8 @@ namespace tahsinERP.Models
         public string ActionName { get; set; }
         public System.DateTime DateTime { get; set; }
         public int UserID { get; set; }
+        public string IP { get; set; }
+        public string MacAddr { get; set; }
     
         public virtual USER USER { get; set; }
     }
