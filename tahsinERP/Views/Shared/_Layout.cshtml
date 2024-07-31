@@ -40,6 +40,8 @@
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/dashboard-ecommerce.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-invoice.css">
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
+
+    <link rel="stylesheet" type="text/css" href="~/assets/css/app.css"/>
     <!-- END: Page CSS-->
 </head>
 
@@ -586,8 +588,52 @@
         </footer>
         <!-- END: Footer-->
 
+        <!-- SweetAlert -->
+        // Pop-Up
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="warning.svg" alt="" />
+                <p class="pop-up__text">
+                    Tasdiqlaysizmi ?
+                </p>
+                <div class="pop-up__btns">
+                    <button class="pop-up__close" type="button" id="pop-up__close">
+                        Yo'q
+                    </button>
+                    <button class="pop-up__confirm" type="submit" id="pop-up__action">
+                        Ha !
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        // Alert-Error
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="error.svg" alt="" />
+                <p class="pop-up__text">
+                    Xatolik yuz berdi
+                </p>
+                <button class="success-btn error">Ok</button>
+            </div>
+        </div>
+
+        // Alert-Succes
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="success.svg" alt="" />
+                <p class="pop-up__text">
+                    O'zgarishlar saqlandi
+                </p>
+                <button class="success-btn">Ok</button>
+            </div>
+        </div>
+        <!-- __________ -->
+
+        // Cookie using(Modal)
         @* Add this at the end of the <body> in _Layout.cshtml *@
         @Html.Partial("_CookieConsent")
+        // _______________
 
 
         @Scripts.Render("~/bundles/jquery") //v3.7.1
@@ -595,6 +641,7 @@
         //v5.3.3
 
         @RenderSection("scripts", required: false)
+
 
         <!-- BEGIN: Vendor JS-->
         <script src="~/app-assets/vendors/js/vendors.min.js"></script>
@@ -658,12 +705,9 @@
         <script src="~/app-assets/js/scripts/forms/form-tooltip-valid.js"></script>
         <!-- END: Page JS-->
 
-        <!--sweet alert uchun js filelar-->
-        <script src="~/app-assets/js/scripts/extensions/sweet-alerts.js"></script>
-        <script src="~/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
-        <script src="~/app-assets/vendors/js/extensions/polyfill.min.js"></script>
 
-
+        // Additioanal(Custom) JSs(for SweetAlert)
+        <script src="~/assets/js/app.js"></script>
 
 
 
@@ -710,9 +754,6 @@
                     var expires = "";
                     if (days) {
                         var date = new Date();
-                        // For Days
-                        // date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                        // For Minutes
                         date.setTime(date.getTime() + (days * 60 * 1000));
                         expires = "; expires=" + date.toUTCString();
                     }

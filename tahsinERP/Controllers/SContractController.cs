@@ -41,8 +41,6 @@ namespace tahsinERP.Controllers
                 ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
                 ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Get]");
                 return View(SContractViewModel);
             }
         }
@@ -68,8 +66,7 @@ namespace tahsinERP.Controllers
                     ContractNo = model.ContractNo,
                     IssuedDate = DateTime.Now,
                     CompanyID = int.Parse(ConfigurationManager.AppSettings["companyID"]),
-                    CustomerID = model.CustomerID,
-                    //CustomerID = 2,
+                    CustomerID = (int)model.CustomerID,
                     Currency = model.Currency,
                     Amount = (int)model.Amount,
                     Incoterms = model.Incoterms,
@@ -110,7 +107,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Post]");
+                //LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Post]");
 
                 return RedirectToAction("Index");
             }
@@ -167,7 +164,7 @@ namespace tahsinERP.Controllers
                 var model = new SContractViewModel
                 {
                     ContractNo = contract.ContractNo,
-                    CustomerID = contract.CustomerID,
+                    CustomerID = (int)contract.CustomerID,
                     DueDate = contract.DueDate,
                     Incoterms = contract.Incoterms,
                     PaymentTerms = contract.PaymentTerms,
@@ -334,7 +331,7 @@ namespace tahsinERP.Controllers
                             db.S_CONTRACT_PRODUCTS.Remove(contractProduct);
                         }
 
-                        //db.SaveChanges();
+                        db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)

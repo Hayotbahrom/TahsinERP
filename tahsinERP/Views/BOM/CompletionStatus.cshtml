@@ -1,16 +1,10 @@
 ﻿@model tahsinERP.ViewModels.BOM.BoomViewModel
-
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
 {
-    bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, "BOM"))
-    {
-        changePermit = true;
-    }
-    var bomDictionary = ((IEnumerable<dynamic>)ViewBag.bom).ToDictionary(b => (string)b.ParentPNo, b => b);
+    var bomDictionary = ((IEnumerable<dynamic>)ViewBag.bom).ToDictionary(b => (string)b.ParentPNo,b => b);
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">

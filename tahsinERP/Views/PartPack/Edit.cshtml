@@ -1,0 +1,184 @@
+﻿@model tahsinERP.Models.PARTPACK
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Edit", "PartPack", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        @Html.AntiForgeryToken()
+
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/ProductPack/Index">Mahsulotlarni qadoq malumotlari</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Yangi qadoq malumotlari qo'shish
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <!-- app invoice View Page -->
+                    <section class="basic-select2">
+                        <div class="row">
+                            <!-- invoice view page -->
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    <h4 class="text-primary">Qadoqlashga kerakli mahsulotni tanlash</h4>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownList("PartID", (SelectList)ViewBag.PartList, "Select Part", new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.PartID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Qadoq mahsuloti nomi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PrPackMaterial, new { @class = "form-control", @placeholder = "Packaging Material" })
+                                                        @Html.ValidationMessageFor(model => model.PrPackMaterial, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Xafsizlik</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Securement, new { @class = "form-control", @placeholder = "Securement" })
+                                                        @Html.ValidationMessageFor(model => model.Securement, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to"> Qadoq mahsulotini tagiga solinadigon mahsulot</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Dunnage, new { @class = "form-control", @placeholder = "Dunnage" })
+                                                        @Html.ValidationMessageFor(model => model.Dunnage, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Mahsulotni sof og'irligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PrWeight, new { @class = "form-control", @placeholder = "Og'irlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PrWeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Mahsulotni uzunligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PrLength, new { @class = "form-control", @placeholder = "Uzunlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PrWeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Mahsulotni eni</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PrWidth, new { @class = "form-control", @placeholder = "Enini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PrWidth, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Mahsulotni balandligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PrHeight, new { @class = "form-control", @placeholder = "Balandligini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PrHeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Qadoq mahsulot miqdori</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PrPackQty, new { @class = "form-control", @placeholder = "Qadoq mahsuloti miqdorini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PrPackQty, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Sc qadoq materiali</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ScPackMaterial, new { @class = "form-control", @placeholder = "SC qadoq materialini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.ScPackMaterial, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Sc Mahsulotni sof og'irligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ScWeight, new { @class = "form-control", @placeholder = "Og'irlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.ScWeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Sc Mahsulotni uzunligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ScLength, new { @class = "form-control", @placeholder = "Uzunlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.ScLength, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Sc Mahsulotni eni</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ScWidth, new { @class = "form-control", @placeholder = "Enini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.ScWidth, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Sc Mahsulotni balandligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ScHeight, new { @class = "form-control", @placeholder = "Balandligini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.ScHeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Sc Qadoq mahsulot miqdori</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ScPackQty, new { @class = "form-control", @placeholder = "Sc Qadoq mahsuloti miqdorini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.ScPackQty, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Pallet turi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PalletType, new { @class = "form-control", @placeholder = "Pallet turini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PalletType, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Pallet Mahsulotni uzunligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PltLength, new { @class = "form-control", @placeholder = "Pallet mahsulotni uzunlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PltLength, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Pallet Mahsulotni sof og'irligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PltWeight, new { @class = "form-control", @placeholder = "Pallet mahsulotni og'irlikni kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PltWeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Pallet Mahsulotni eni</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PltWidth, new { @class = "form-control", @placeholder = "Pallet mahsulotni enini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PltWidth, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Pallet Mahsulotni balandligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.PltHeight, new { @class = "form-control", @placeholder = "Pallet mahsulotni balandligini kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.PltHeight, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Activity</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        <div class="checkbox checkbox-secondary checkbox-glow">
+                                                            @Html.CheckBoxFor(model => model.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
+                                                            <label for="checkboxGlow2">Activity</label>
+                                                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <br />
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

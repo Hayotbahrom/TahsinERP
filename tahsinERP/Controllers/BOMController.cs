@@ -203,8 +203,8 @@ namespace tahsinERP.Controllers
 
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "BOMController", "Create[Post]");
+            //var userEmail = User.Identity.Name;
+            //LogHelper.LogToDatabase(userEmail, "BOMController", "Create[Post]");
 
             return RedirectToAction("CompletionStatus", vmodel);
         }
@@ -608,25 +608,11 @@ namespace tahsinERP.Controllers
                 ViewBag.ProductList = new SelectList(products, "ID", "PNo");
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
+            //var userEmail = User.Identity.Name;
+            //LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
             return View(model);
         }
-        public ActionResult BomCreate(int ID)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
 
-                var process = db.PRODUCTIONPROCESSES.Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Painting").ToList();
-                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
-                var temp = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
-                var part = db.PARTS.Where(x => x.PNo == temp.ChildPNo).FirstOrDefault();
-                BomViewModel model = new BomViewModel();
-                model.Part = part;
-                model.ProductPno = temp.ParentPNo;
-                return View(model);
-            }
-        }
         public ActionResult BomCreateDetails(int ID, BOMCreateProductViewModel model1)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -675,14 +661,47 @@ namespace tahsinERP.Controllers
                 }
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "BOMController", "SaveBom[Post]");
+            //var userEmail = User.Identity.Name;
+            //LogHelper.LogToDatabase(userEmail, "BOMController", "SaveBom[Post]");
             return RedirectToAction("CompletionStatus", model);
         }
+
+        public ActionResult BomCreate(int ID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var process = db.PRODUCTIONPROCESSES
+                                .Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Painting")
+                                .ToList();
+                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
+
+                var temp = db.TEMPORARY_BOMS
+                             .Where(x => x.ID == ID && x.IsDeleted == false)
+                             .FirstOrDefault();
+                var part = db.PARTS
+                             .Where(x => x.PNo == temp.ChildPNo)
+                             .FirstOrDefault();
+
+                BomViewModel model = new BomViewModel
+                {
+                    Part = part,
+                    ProductPno = temp.ParentPNo,
+                    PartNo = temp.ChildPNo
+                };
+
+                return View(model);
+            }
+        }
+
 
         [HttpPost]
         public ActionResult BomCreate(BomViewModel model, int[] processID)
         {
+            if (processID == null || processID.Length == 0)
+            {
+                ModelState.AddModelError("ProcessSelection", "Jarayonlarni tanlamadingiz tanlab qaytadan urinib ko'ring !");
+            }
+
             if (ModelState.IsValid)
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
@@ -693,12 +712,23 @@ namespace tahsinERP.Controllers
                     model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
                     model.SelectedProcessIds = processID;
                 }
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "BOMController", "BomCreate[Post]");
+
+                //var userEmail = User.Identity.Name;
+                //LogHelper.LogToDatabase(userEmail, "BOMController", "BomCreate[Post]");
                 return RedirectToAction("CreateWizard", model);
             }
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var process = db.PRODUCTIONPROCESSES
+                                .Where(x => x.IsDeleted == false && x.ProcessName != "Assembly" && x.ProcessName != "Painting")
+                                .ToList();
+                ViewBag.Process = new MultiSelectList(process, "ID", "ProcessName");
+            }
+
             return View(model);
         }
+
         public ActionResult CompletionStatus(BoomViewModel model)
         {
             var userID = GetUserID(User.Identity.Name);
@@ -756,12 +786,11 @@ namespace tahsinERP.Controllers
                 var tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
                 db.TEMPORARY_BOMS.RemoveRange(tempbom);
                 db.SaveChanges();
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "BOMController", "CreateBom[Post]");
+                //var userEmail = User.Identity.Name;
+                //LogHelper.LogToDatabase(userEmail, "BOMController", "CreateBom[Post]");
                 return RedirectToAction("Index");
             }
         }
-
         public ActionResult EditBom(int ID, BoomViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -968,8 +997,8 @@ namespace tahsinERP.Controllers
                     var _tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userId && x.IsDeleted == false && x.ChildPNo == model.PartPno).FirstOrDefault();
                     _tempbom.NormConfirmed = true;
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
+                    //var userEmail = User.Identity.Name;
+                    //LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
                     return RedirectToAction("CompletionStatus", model1);
                 }
             }
@@ -980,5 +1009,97 @@ namespace tahsinERP.Controllers
             }
             return View(model);
         }
+
+        public ActionResult Delete(int ID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PRODUCT product = db.PRODUCTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
+                PART part = db.PARTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
+                try
+                {
+                    if (product != null)
+                    {
+                        var rootItem = GetBomTree(product.PNo);
+                        return View(rootItem);
+                    }
+                    else if (part != null)
+                    {
+                        var rootItem = GetBomTree(part.PNo);
+                        return View(rootItem);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex);
+                }
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int ID,FormCollection fmc)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                PRODUCT product = db.PRODUCTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
+                PART part = db.PARTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
+
+                try
+                {
+                    if (product != null)
+                    {
+                        MarkAsDeleted(product.PNo);
+                    }
+                    else if (part != null)
+                    {
+                        MarkAsDeleted(part.PNo);
+                    }
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index"); // Or another view as appropriate
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+                return View();
+            }
+        }
+
+        private void MarkAsDeleted(string parentPno)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var itemsToDelete = db.BOMS.Where(b => b.ParentPNo == parentPno && b.IsDeleted == false).ToList();
+
+                foreach (var item in itemsToDelete)
+                {
+                    item.IsDeleted = true;
+
+                    var slittingNorms = db.SLITTING_NORMS.Where(s => s.ID == item.ID && s.IsDeleted == false).ToList();
+                    var blankingNorms = db.BLANKING_NORMS.Where(b => b.ID == item.ID && b.IsDeleted == false).ToList();
+                    var stampingNorms = db.STAMPING_NORMS.Where(s => s.ID == item.ID && s.IsDeleted == false).ToList();
+
+                    foreach (var norm in slittingNorms)
+                    {
+                        norm.IsDeleted = true;
+                    }
+
+                    foreach (var norm in blankingNorms)
+                    {
+                        norm.IsDeleted = true;
+                    }
+
+                    foreach (var norm in stampingNorms)
+                    {
+                        norm.IsDeleted = true;
+                    }
+
+                    MarkAsDeleted(item.ChildPNo);
+                }
+            }
+        }
+
     }
 }

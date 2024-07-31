@@ -1,10 +1,8 @@
-﻿@model List<tahsinERP.Models.PRODUCTPACK>
+﻿@model List<tahsinERP.Models.DEFECT_TYPES>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     bool changePermit = false;
@@ -24,9 +22,11 @@
                                     <li class="breadcrumb-item">
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
+
                                     <li class="breadcrumb-item active">
-                                        Mahsulotlarni qadoq malumotlari
+                                        Defect Turlari
                                     </li>
+
                                 </ol>
                             </div>
                         </div>
@@ -36,37 +36,30 @@
             <div class="content-body">
                 <!-- users list start -->
                 <section class="invoice-list-wrapper">
-                    <div class="invoice-create-btn mb-1">
+                    @if (changePermit)
+                    {
                         <div class="invoice-create-btn mb-1">
-                            @if (changePermit)
-                            {
-                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/ProductPack/Create';">
-                                    <span class="align-middle ml-25">Mahsulot qadoq malumotlarini qo'shish</span>
-                                </button>
-                                <a href="@Url.Action("UploadWithExcel", "ProductPack")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
-                                    Mahsulot qadoq malumotlarini excel orqali qo'shish
-                                </a>
-                            }
+                            <a href="@Url.Action("Create", "DefectType")" class="btn btn-success bg-light invoice-create" role="button" aria-pressed="true">
+                                Yangi Defect Turi qo'shish
+                            </a>
                         </div>
-                    </div>
-
+                    }
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
                                     <!-- datatable start -->
-                                    <div class="table-responsive table-responsivetable-responsive">
+                                    <div class="card-datatable table-responsivetable-responsive">
                                         <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
-                                                    <th>Mahsulot nomi</th>
-                                                    <th>Mahsulot qadoq materiali</th>
-                                                    <th>Mahsulot qadoq miqdori</th>
+                                                    <th>Defect Turi</th>
+                                                    <th>Batafsil</th>
                                                     @if (changePermit)
                                                     {
-                                                        <th>amallar</th>
+                                                        <th>Amallar</th>
                                                     }
                                                 </tr>
                                             </thead>
@@ -77,17 +70,15 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td>
-                                                            <a href="~/Product/Details/@item.ProdID">@item.PRODUCT.Name</a>
+                                                            <a href="~/DefectType/Details/@item.ID">@item.DefectType</a>
                                                         </td>
-                                                        <td> <a href="~/ProductPack/Details/@item.ID">@item.PrPackMaterial</a></td>
-                                                        <td>@item.PrPackQty</td>
-
+                                                        <td>@item.Description</td>
                                                         @if (changePermit)
                                                         {
                                                             <td>
                                                                 <div>
-                                                                    <a href="@Url.Action("Edit", "ProductPack", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                    <a href="@Url.Action("Delete", "ProductPack", new { id = item.ID})"><i class="bx bx-trash"></i></a>
+                                                                    <a href="@Url.Action("Edit", "DefectType", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "DefectType", new { id = item.ID })"><i class="bx bx-trash"></i></a>
                                                                 </div>
                                                             </td>
                                                         }
@@ -96,6 +87,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!-- datatable ends -->
                                 </div>
                             </div>
                         </div>
