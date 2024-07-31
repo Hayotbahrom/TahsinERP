@@ -103,7 +103,7 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">O'lchov birligi</label>
-                                                            @Html.DropDownListFor(model => model.Parts[0].UnitID, ViewBag.units as SelectList, new { @class = "form-control select2" })
+                                                            @Html.DropDownListFor(model => model.Parts[0].UnitID, ViewBag.units as SelectList, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
