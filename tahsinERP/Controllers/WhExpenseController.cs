@@ -19,7 +19,7 @@ namespace tahsinERP.Controllers
         private string[] sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
 
         // GET: WhExpense
-        public ActionResult Index()
+        public ActionResult Index(string type, int? supplierID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {

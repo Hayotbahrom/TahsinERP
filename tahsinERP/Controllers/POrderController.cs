@@ -478,6 +478,7 @@ namespace tahsinERP.Controllers
                             return View(orderPart);
                         }
 
+                        //shartnomadagi miqdor va editpart dagi miqdorni taqqoslash
                         var order = db.P_ORDERS.Where(x => x.ID == orderPartToUpdate.OrderID).FirstOrDefault();
                         var summ = db.P_ORDER_PARTS.Where(x => x.OrderID == order.ID && x.OrderID!=orderPartToUpdate.ID).Sum(p => p.Amount);
                         summ += orderPart.Amount;
