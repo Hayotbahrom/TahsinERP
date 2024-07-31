@@ -43,6 +43,10 @@
 
     <link rel="stylesheet" type="text/css" href="~/assets/css/app.css" />
     <!-- END: Page CSS-->
+
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 
 <body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
@@ -357,7 +361,7 @@
                             </ul>
                         </li>
                     }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forwarder"))
                     {
                         <li class=" nav-item">
                             <a href="#">
@@ -386,25 +390,24 @@
                     }
                     @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
                     {
-
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/PartStock/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
+                                </li>
+                            </ul>
+                        </li>
                     }
-                    <li class=" nav-item">
-                        <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
-                            </li>
-                            <li>
-                                <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
-                            </li>
-                            <li>
-                                <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
-                            </li>
-                            <li>
-                                <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
-                            </li>
-                        </ul>
-                    </li>
                     <li class=" navigation-header">
                         <span>Engineering</span>
                     </li>
@@ -589,25 +592,83 @@
         </footer>
         <!-- END: Footer-->
 
-        <script src="~/assets/js/app.js"></script>
+        <!-- SweetAlert -->
+        // Pop-Up
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="warning.svg" alt="" />
+                <p class="pop-up__text">
+                    Tasdiqlaysizmi ?
+                </p>
+                <div class="pop-up__btns">
+                    <button class="pop-up__close" type="button" id="pop-up__close">
+                        Yo'q
+                    </button>
+                    <button class="pop-up__confirm" type="submit" id="pop-up__action">
+                        Ha !
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        // Alert-Error
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="error.svg" alt="" />
+                <p class="pop-up__text">
+                    Xatolik yuz berdi
+                </p>
+                <button class="success-btn error">Ok</button>
+            </div>
+        </div>
+
+        // Alert-Succes
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="success.svg" alt="" />
+                <p class="pop-up__text">
+                    O'zgarishlar saqlandi
+                </p>
+                <button class="success-btn">Ok</button>
+            </div>
+        </div>
+        <!-- __________ -->
+
+        // Cookie using(Modal)
+        <div id="cookieConsent" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cookie-fayllardan foydalanish</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeCookies">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Biz sizga veb-saytimizda eng yaxshi tajribani taqdim etishimiz uchun cookie-fayllardan foydalanamiz.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="acceptCookies">Qabul qilaman</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        // _______________
 
 
-        @* Add this at the end of the <body> in _Layout.cshtml *@
-
-
-        @Scripts.Render("~/bundles/jquery") //v3.7.1
+        //v3.7.1
+        @Scripts.Render("~/bundles/jquery")
         <script src="~/Scripts/bootstrap.bundle.js"></script>
         //v5.3.3
-
         @RenderSection("scripts", required: false)
 
         <!-- BEGIN: Vendor JS-->
         <script src="~/app-assets/vendors/js/vendors.min.js"></script>
-        <script src="~/assets/js/jquery.min.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
         <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
         <!-- END Vendor JS-->
+
 
 
         <!-- BEGIN: Page Vendor JS-->
@@ -638,7 +699,6 @@
         <script src="~/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
         <script src="~/app-assets/vendors/js/pickers/daterange/moment.min.js"></script>
         <script src="~/app-assets/vendors/js/pickers/daterange/daterangepicker.js"></script>
-
         // Export PDF as View
         <script src="~/app-assets/js/scripts/pdfMake/html2pdf.bundle.min.js"></script>
         <!-- END: Page Vendor JS-->
@@ -662,18 +722,57 @@
         <script src="~/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js"></script>
         <script src="~/app-assets/js/scripts/forms/form-tooltip-valid.js"></script>
         <!-- END: Page JS-->
-
-        <!--sweet alert uchun js filelar-->
-        <script src="~/app-assets/js/scripts/extensions/sweet-alerts.js"></script>
-        <script src="~/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
-        <script src="~/app-assets/vendors/js/extensions/polyfill.min.js"></script>
-
-
-
-
-
         // jQuery: v3.6.0
         <script src="~/assets/js/jquery.min.js"></script>
+
+
+        // Additioanal(Custom) JSs(for SweetAlert)
+        <script src="~/assets/js/app.js"></script>
+
+
+
+        <!-- Cookie -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                if (!getCookie("cookieConsent")) {
+                    $("#cookieConsent").modal('show');
+                }
+
+                $j("#acceptCookies").on("click", function () {
+                    setCookie("cookieConsent", "true", 1);
+                    $("#cookieConsent").modal('hide');
+                });
+
+                $("#closeCookies").on("click", function () {
+                    $("#cookieConsent").modal('hide');
+                });
+
+                function setCookie(name, value, days) {
+                    var expires = "";
+                    if (days) {
+                        var date = new Date();
+                        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                        expires = "; expires=" + date.toUTCString();
+                    }
+                    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+                }
+
+                function getCookie(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+            });
+        </script>
+        <!-- __________ -->
+
+
+
         <!-- REPEATER -->
         <script src="~/assets/js/jquery.repeater.min.js"></script>
         <script>
@@ -692,48 +791,6 @@
                         }
                     }
                 });
-            });
-        </script>
-        <!-- __________ -->
-
-
-
-        <!-- Cookie -->
-        @* Add this in the <head> or at the end of the <body> in _Layout.cshtml *@
-        <script>
-            $j(document).ready(function () {
-                if (!getCookie("cookieConsent")) {
-                    $j("#cookieConsent").modal('show');
-                }
-
-                $j("#acceptCookies").click(function () {
-                    setCookie("cookieConsent", "true", 1);
-                    $j("#cookieConsent").modal('hide');
-                });
-
-                function setCookie(name, value, days) {
-                    var expires = "";
-                    if (days) {
-                        var date = new Date();
-                        // For Days
-                        // date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                        // For Minutes
-                        date.setTime(date.getTime() + (days * 60 * 1000));
-                        expires = "; expires=" + date.toUTCString();
-                    }
-                    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-                }
-
-                function getCookie(name) {
-                    var nameEQ = name + "=";
-                    var ca = document.cookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-                    }
-                    return null;
-                }
             });
         </script>
         <!-- __________ -->
