@@ -18,11 +18,10 @@ namespace tahsinERP.Models
         public PARTPACK()
         {
             this.PART1738DOCS = new HashSet<PART1738DOCS>();
-            this.PARTS = new HashSet<PART>();
         }
     
         public int ID { get; set; }
-        public int PartID { get; set; }
+        public Nullable<int> PartID { get; set; }
         public string PrPackMaterial { get; set; }
         public string Securement { get; set; }
         public string Dunnage { get; set; }
@@ -49,7 +48,5 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART1738DOCS> PART1738DOCS { get; set; }
         public virtual PART PART { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART> PARTS { get; set; }
     }
 }

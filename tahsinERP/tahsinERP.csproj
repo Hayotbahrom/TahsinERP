@@ -278,6 +278,7 @@
     <Compile Include="Controllers\BlankingController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
+    <Compile Include="Controllers\CookieHelper.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DefectTypeController.cs" />
     <Compile Include="Controllers\DamagedPartController.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BomIsParentProduct.cs" />
     <Compile Include="Models\BOMS_AND_NORMS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>

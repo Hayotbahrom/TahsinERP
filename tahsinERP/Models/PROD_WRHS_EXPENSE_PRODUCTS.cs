@@ -24,7 +24,7 @@ namespace tahsinERP.Models
         public Nullable<int> UnitID { get; set; }
     
         public virtual PROD_WRHS_EXPENSES PROD_WRHS_EXPENSES { get; set; }
-        public virtual PRODUCT PRODUCT { get; set; }
         public virtual UNIT UNIT { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

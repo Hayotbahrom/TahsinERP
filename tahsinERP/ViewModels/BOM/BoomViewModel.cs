@@ -12,6 +12,8 @@ namespace tahsinERP.ViewModels.BOM
         public int ID { get; set; }
         public string ParentPNo { get; set; }
         public string ChildPNo { get; set; }
+        public int PartId { get; set; }
+        public int TempBomID { get; set; }
         public PRODUCT PRODUCT { get; set; }
         public string ParentImageBase64 { get; set; }
         public string ChildImageBase64 { get; set; }

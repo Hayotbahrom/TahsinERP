@@ -144,6 +144,7 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "Invoice dan ortiqcha hajmni kirim qilib bo'lmaydi.");
                     return View(model);
                 }
+                warehouse = GetWarehouseOfMRP(User.Identity.Name);
                 PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
                 {
                     DocNo = model.DocNo,
@@ -182,7 +183,7 @@ namespace tahsinERP.Controllers
 
                 db.SaveChanges();
                 var userEmail = User.Identity.Name;
-                //LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
+                LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -386,7 +387,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Editpart[Post]");
+                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "EditPart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

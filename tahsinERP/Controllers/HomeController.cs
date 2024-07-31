@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace tahsinERP.Controllers
 {
@@ -6,8 +7,8 @@ namespace tahsinERP.Controllers
     {
         public ActionResult Index()
         {
-            // Check if the cookie consent session variable is not set
-            if (Session["HasSeenCookieConsent"] == null)
+            var userEmail = User.Identity.Name;
+            if (CookieHelper.IsConfirmed(userEmail) == false)
             {
                 Session["HasSeenCookieConsent"] = true;
                 ViewBag.ShowCookieConsent = true;
@@ -16,8 +17,22 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.ShowCookieConsent = false;
             }
-
             return View();
+        }
+
+
+        public JsonResult CookieConfirm()
+        {
+            try
+            {
+                var userEmail = User.Identity.Name;
+                CookieHelper.Confirm(userEmail);
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex) {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
         public ActionResult About()

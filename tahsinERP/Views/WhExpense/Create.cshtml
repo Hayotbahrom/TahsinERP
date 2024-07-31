@@ -42,6 +42,8 @@
                                         {
                                             @Html.HiddenFor(model => model.DocNo);
                                             @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                                             <div class="row justify-content-around d-flex align-items-start">
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
@@ -50,17 +52,12 @@
                                                             @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disable" })
                                                             @Html.ValidationMessageFor(model => model.DocNo, "", new { @class = "text-danger" })
                                                         </div>
+
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="InvoiceId">Qabul qiluvchi</label>
                                                             @Html.DropDownListFor(model => model.RecieverWHID, (SelectList)ViewBag.PartWrhs, new { @id = "RecieverWhID", @class = "form-control select2" })
                                                             @Html.ValidationMessageFor(model => model.RecieverWHID, "", new { @class = "text-danger" })
                                                         </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Amount">Miqdori</label>
-                                                            @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Miqdorini kiriting" })
-                                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        
                                                     </div>
                                                 </div>
 
@@ -71,11 +68,13 @@
                                                             @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency" })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
+
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Currency">Batafsil ma`lumot</label>
                                                             @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Currency" })
                                                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                         </div>
+
                                                         <div class="col-md-6 col-12 form-group">
                                                             <div class="checkbox checkbox-secondary checkbox-glow">
                                                                 @Html.CheckBoxFor(model => model.SendStatus, new { @type = "checkbox", @id = "RecieveStatus" })
@@ -99,13 +98,13 @@
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Unit">Unit</label>
+                                                            <label for="Part_Unit">Birligi</label>
                                                             @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount"/>
+                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -115,7 +114,7 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Comment">Izoh</label>
-                                                            <input type="text" name="Comment" class="form-control" id="Part_Comment"/>
+                                                            <input type="text" name="Comment" class="form-control" id="Part_Comment" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Comment, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">

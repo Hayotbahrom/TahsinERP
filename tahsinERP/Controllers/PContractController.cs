@@ -335,7 +335,7 @@ namespace tahsinERP.Controllers
                     }
                 }
                 var userEmail = User.Identity.Name;
-                //LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Create[Post]");
+                LogHelper.LogToDatabase(userEmail, "PContractController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -443,7 +443,7 @@ namespace tahsinERP.Controllers
                 }
             }
             var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Edit[Post]");
+            LogHelper.LogToDatabase(userEmail, "PContractController", "Edit[Post]");
             return View(contract);
         }
         public ActionResult EditPart(int? ID)
@@ -496,7 +496,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "EditPart[Post]");
+                            LogHelper.LogToDatabase(userEmail, "PContractController", "EditPart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -557,7 +557,7 @@ namespace tahsinERP.Controllers
                             }
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Delete[Post]");
+                            LogHelper.LogToDatabase(userEmail, "PContractController", "Delete[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -587,7 +587,7 @@ namespace tahsinERP.Controllers
                             db.P_CONTRACT_PARTS.Remove(contractPartToDelete);
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Deletepart[Post]");
+                            LogHelper.LogToDatabase(userEmail, "PContractController", "DeletePart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

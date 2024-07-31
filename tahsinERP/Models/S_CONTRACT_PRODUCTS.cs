@@ -21,8 +21,8 @@ namespace tahsinERP.Models
         public double Amount { get; set; }
         public int UnitID { get; set; }
     
-        public virtual PRODUCT PRODUCT { get; set; }
         public virtual S_CONTRACTS S_CONTRACTS { get; set; }
         public virtual UNIT UNIT { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

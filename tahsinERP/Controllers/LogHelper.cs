@@ -40,7 +40,7 @@ namespace tahsinERP.Controllers
             }
         }
 
-        private static int GetUserId(string userEmail)
+        public static int GetUserId(string userEmail)
         {
             using (var db = new DBTHSNEntities())
             {

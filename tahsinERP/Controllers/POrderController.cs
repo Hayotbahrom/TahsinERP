@@ -176,6 +176,8 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var steelCoil = db.STEEL_COILS.ToList();
+
                 var newOrder = new P_ORDERS()
                 {
                     OrderNo = model.OrderNo,
@@ -414,7 +416,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
-                            // LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");
+                            LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -495,8 +497,8 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                           /* var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "POrderController", "EditPart[Post]");*/
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "POrderController", "EditPart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -606,9 +608,6 @@ namespace tahsinERP.Controllers
         }
         public ActionResult ClearDataTable()
         {
-
-            // Perform CPU-bound work here
-            // For example, heavy computations or other synchronous tasks
             ViewBag.DataTable = null;
             ViewBag.DataTableModel = null;
             ViewBag.IsFileUploaded = false;

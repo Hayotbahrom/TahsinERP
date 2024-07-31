@@ -39,12 +39,14 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
+                ViewBag.HSCODESS = new SelectList(db.HSCODES.Where(cs => cs.IsDeleted == false).ToList(),"ID", "HSCODE1");
+
                 return View();
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PNo, Name, Type, Weight, Length, Width, Height, UnitID, Description, PNo2, PNo3, PNo4, PackID, IsDeleted")] PRODUCT product)
+        public ActionResult Create([Bind(Include = "PNo, Name, Type, Weight, Length, Width, Height, UnitID, Description, PNo2, PNo3, PNo4, PackID,HSCodeId, IsDeleted")] PRODUCT product)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -159,7 +161,6 @@ namespace tahsinERP.Controllers
                         productToUpdate.PNo2 = product.PNo2;
                         productToUpdate.PNo3 = product.PNo3;
                         productToUpdate.PNo4 = product.PNo4;
-                        productToUpdate.PackID = product.PackID;
 
                         var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
                         if (imageFile != null && imageFile.ContentLength > 0)

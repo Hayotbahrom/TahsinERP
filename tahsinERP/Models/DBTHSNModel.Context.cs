@@ -72,7 +72,6 @@ namespace tahsinERP.Models
         public virtual DbSet<PARTPACK> PARTPACKS { get; set; }
         public virtual DbSet<PARTPLAN> PARTPLANS { get; set; }
         public virtual DbSet<PARTPLANS_DAILY> PARTPLANS_DAILY { get; set; }
-        public virtual DbSet<PART> PARTS { get; set; }
         public virtual DbSet<PERMISSIONMODULE> PERMISSIONMODULES { get; set; }
         public virtual DbSet<PERMISSION> PERMISSIONS { get; set; }
         public virtual DbSet<PROD_STOCKS> PROD_STOCKS { get; set; }
@@ -88,7 +87,6 @@ namespace tahsinERP.Models
         public virtual DbSet<PRODUCTPACK> PRODUCTPACKS { get; set; }
         public virtual DbSet<PRODUCTPLAN> PRODUCTPLANS { get; set; }
         public virtual DbSet<PRODUCTPLANS_DAILY> PRODUCTPLANS_DAILY { get; set; }
-        public virtual DbSet<PRODUCT> PRODUCTS { get; set; }
         public virtual DbSet<ROLE> ROLES { get; set; }
         public virtual DbSet<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         public virtual DbSet<S_CONTRACTS> S_CONTRACTS { get; set; }
@@ -115,6 +113,8 @@ namespace tahsinERP.Models
         public virtual DbSet<STEEL_COILS> STEEL_COILS { get; set; }
         public virtual DbSet<USERLOG> USERLOGS { get; set; }
         public virtual DbSet<COOKIES_CONFIRMATION> COOKIES_CONFIRMATION { get; set; }
+        public virtual DbSet<PART> PARTS { get; set; }
+        public virtual DbSet<PRODUCT> PRODUCTS { get; set; }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {

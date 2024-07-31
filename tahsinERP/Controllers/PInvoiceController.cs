@@ -90,41 +90,41 @@ namespace tahsinERP.Controllers
                     return View(model);
                 }
 
-               
-                    P_INVOICES invoice = new P_INVOICES
+                P_INVOICES invoice = new P_INVOICES
+                {
+                    InvoiceNo = model.InvoiceNo,
+                    OrderID = model.OrderID,
+                    SupplierID = model.SupplierID,
+                    Currency = model.Currency,
+                    InvoiceDate = model.InvoiceDate,
+                    CompanyID = 1,
+                    IsDeleted = false
+                };
+
+                db.P_INVOICES.Add(invoice);
+                db.SaveChanges();
+
+                int newInvoiceID = invoice.ID;
+
+                foreach (var item in model.Parts)
+                {
+                    var newPart = new P_INVOICE_PARTS
                     {
-                        InvoiceNo = model.InvoiceNo,
-                        OrderID = model.OrderID,
-                        SupplierID = model.SupplierID,
-                        Currency = model.Currency,
-                        InvoiceDate = model.InvoiceDate,
-                        CompanyID = 1,
-                        IsDeleted = false
+                        InvoiceID = newInvoiceID,
+                        PartID = item.PartID,
+                        Quantity = item.Quantuty,
+                        UnitID = item.UnitID,
+                        Price = item.Price
                     };
 
-                    db.P_INVOICES.Add(invoice);
-                    db.SaveChanges();
+                    db.P_INVOICE_PARTS.Add(newPart);
+                }
 
-                    int newInvoiceID = invoice.ID;
+                db.SaveChanges();
 
-                    foreach (var item in model.Parts)
-                    {
-                        var newPart = new P_INVOICE_PARTS
-                        {
-                            InvoiceID = newInvoiceID,
-                            PartID = item.PartID,
-                            Quantity = item.Quantuty,
-                            UnitID = item.UnitID,
-                            Price = item.Price
-                        };
-                        db.P_INVOICE_PARTS.Add(newPart);
-                    }
-
-                    db.SaveChanges();
-
-                    var userEmail = User.Identity.Name;
-                    //LogHelper.LogToDatabase(userEmail, "PinvoiceController", "Create[Post]");
-                    return RedirectToAction("Index");
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
+                return RedirectToAction("Index");
             }
         }
 
