@@ -96,7 +96,6 @@ namespace tahsinERP.Controllers
                         InvoiceNo = model.InvoiceNo,
                         OrderID = model.OrderID,
                         SupplierID = model.SupplierID,
-                        Amount = model.Amount,
                         Currency = model.Currency,
                         InvoiceDate = model.InvoiceDate,
                         CompanyID = 1,
@@ -126,10 +125,6 @@ namespace tahsinERP.Controllers
                     var userEmail = User.Identity.Name;
                     //LogHelper.LogToDatabase(userEmail, "PinvoiceController", "Create[Post]");
                     return RedirectToAction("Index");
-                
-
-                PopulateViewBags();
-                return View(model);
             }
         }
 
@@ -319,7 +314,6 @@ namespace tahsinERP.Controllers
                         invoiceToUpdate.OrderID = invoice.OrderID;
                         invoiceToUpdate.InvoiceDate = invoice.InvoiceDate;
                         invoiceToUpdate.Currency = invoice.Currency;
-                        invoiceToUpdate.Amount = invoice.Amount;
                         invoiceToUpdate.IsDeleted = false;
 
                         db.Entry(invoiceToUpdate).State = EntityState.Modified;

@@ -62,11 +62,6 @@
                                                             @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @id = "SupplierID", @class = "form-control select2" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Amount">Miqdori</label>
-                                                            @Html.TextBoxFor(model => model.Amount, new { @type = "text", @class = "form-control", @id = "Amount", @placeholder = "Miqdori" })
-                                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                                                        </div>
                                                     </div>
                                                 </div>
 
