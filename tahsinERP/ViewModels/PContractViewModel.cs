@@ -31,10 +31,13 @@ namespace tahsinERP.ViewModels
         //public int ID { set; get; } // Auto Increment in DB
        // public int ContractID { get; set; } // User dan olinmaydi
         public int PartID { get; set; }
-        public int Price { get; set; }
-        public int Quantity { get; set; }
         public int UnitID { get; set; }
-       // public float Amount { get; set; } // Trigger in DB
+        [Required]
+        public int Price { get; set; }
+        [Required]
+        public int Quantity { get; set; }
+        // public float Amount { get; set; } // Trigger in DB
+        [Required]
         public float MOQ { get; set; } 
         public bool ActivePart { get; set; }
     }
