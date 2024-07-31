@@ -108,7 +108,12 @@ namespace tahsinERP.Controllers
                         ModelState.AddModelError("", "Kiritilgan miqdor MOQ dan kichik");
                     }
                 }
-
+                var summ = model.Parts.Sum(x => x.Amount);
+                var contractAmount = db.P_CONTRACTS.Where(x => x.IsDeleted == false && x.ID == model.ContractID).FirstOrDefault().Amount;
+                if (summ>contractAmount)
+                {
+                    ModelState.AddModelError("", "Shartnomadan ortiqcha hajmni buyurtma qilib bo'lmaydi");
+                }
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -122,7 +127,6 @@ namespace tahsinERP.Controllers
                     SupplierID = model.SupplierID,
                     ContractID = model.ContractID,
                     Currency = model.Currency,
-                    Amount = model.Amount,
                     Description = model.Description,
                     IsDeleted = false
                 };
@@ -141,7 +145,6 @@ namespace tahsinERP.Controllers
                         UnitID = part.UnitID,
                         Amount = part.Amount,
                         Price = part.Price,
-                        TotalPrice = part.TotalPrice,
                         MOQ = part.MOQ
                     };
 
@@ -181,7 +184,6 @@ namespace tahsinERP.Controllers
                     SupplierID = model.SupplierID,
                     ContractID = model.ContractID,
                     Currency = model.Currency,
-                    Amount = model.Amount,
                     Description = model.Description,
                     IsDeleted = false
                 };
@@ -201,7 +203,6 @@ namespace tahsinERP.Controllers
                         UnitID = part.UnitID,
                         Amount = part.Amount,
                         Price = part.Price,
-                        TotalPrice = part.TotalPrice,
                         MOQ = part.MOQ
                     };
 
@@ -378,7 +379,6 @@ namespace tahsinERP.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
                     ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
                     ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
@@ -473,8 +473,21 @@ namespace tahsinERP.Controllers
                         {
                             ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
                             ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-
+                            
                             ModelState.AddModelError("", "Kiritilgan miqdor MOQ dan kichik");
+                            return View(orderPart);
+                        }
+
+                        var order = db.P_ORDERS.Where(x => x.ID == orderPartToUpdate.OrderID).FirstOrDefault();
+                        var summ = db.P_ORDER_PARTS.Where(x => x.OrderID == order.ID && x.OrderID!=orderPartToUpdate.ID).Sum(p => p.Amount);
+                        summ += orderPart.Amount;
+                        var contractAmount = db.P_CONTRACTS.Where(x => x.IsDeleted == false && x.ID == order.ContractID).FirstOrDefault().Amount;
+                        if (summ > contractAmount)
+                        {
+                            ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                            ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
+                            ModelState.AddModelError("", "Shartnomadan ortiqcha hajmni buyurtma qilib bo'lmaydi");
                             return View(orderPart);
                         }
 

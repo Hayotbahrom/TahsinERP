@@ -8,7 +8,6 @@ namespace tahsinERP.ViewModels
 {
     public class POrderViewModel
     { 
-        public int ID { get; set; }
         public string OrderNo { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
@@ -17,9 +16,8 @@ namespace tahsinERP.ViewModels
         public int SupplierID { get; set; }
         [Required(ErrorMessage ="Shartnoma tarkibidagi ta'minotchi va belgilangan ta'minotchi bir xil emas!")]
         public int ContractID { get; set; }
-        public int CompanyID { get; set; }
         public string Currency { get; set; }
-        public double Amount { get; set; }
+       // public double Amount { get; set; }
         public string Description { get; set; }
         public List<POrderPart> Parts { get; set; }
         public POrderViewModel()
@@ -30,12 +28,13 @@ namespace tahsinERP.ViewModels
     // Part ViewModel
     public class POrderPart
     {
-        public int ID { set; get; } // Auto Increment in DB
-        public int OrderID { get; set; } // User dan olinmaydi
+        //public int OrderID { get; set; } // User dan olinmaydi
         public int PartID { get; set; }
+        [Required]
         public float Price { get; set; }
-        public float Amount { get; set; } 
-        public float TotalPrice { get; set; }
+        [Required]
+        public float Amount { get; set; }
+        [Required]
         public float MOQ { get; set; }
         public int UnitID { get; set; }
     }
