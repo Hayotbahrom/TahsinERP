@@ -89,47 +89,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <!--<br />
-        <h4>Ehtiyot qismlar</h4>
-
-        <div data-repeater-list="Parts">
-            <div data-repeater-item>
-                <div class="row justify-content-between">
-                    <input type="hidden" name="Parts[0].ID" />
-                    <div class="col-md-2 col-sm-12 form-group">
-                        <label for="Parts[0].PartID">Ehtiyot qismni tanlang</label>
-                        @Html.DropDownList("Parts[0].PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
-                    </div>-->
-                                            @*<div class="col-md-2 col-sm-12 form-group">
-                <label for="Parts[0].Unit">Unit</label>
-                <input type="text" name="Parts[0].Unit" class="form-control" id="Parts[0].Unit" placeholder="Unit" />
-                @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
-            </div>*@
-                                            <!--<div class="col-md-2 col-sm-12 form-group">
-                        <label for="Part_Unit">Unit</label>
-                        @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-2 col-sm-12 form-group">
-                        <label for="Parts[0].Quantuty">Soni</label>
-                        <input type="number" name="Parts[0].Quantuty" class="form-control" id="Parts[0].Quantuty" placeholder="soni" />
-                        @Html.ValidationMessageFor(model => model.Parts[0].Quantuty, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-2 col-sm-12 form-group">
-                        <label for="Parts[0].Price">Birlik narxi</label>
-                        <input type="number" name="Parts[0].Price" step="0.01" class="form-control" id="Parts[0].Price" placeholder="Qism narxini kiriting" />
-                        @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
-                        <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
-                    </div>
-                </div>
-                <hr>
-            </div>
-        </div>-->
-
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">
@@ -141,11 +100,6 @@
                                                             @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
-                                                        @*<div class="col-md-2 col-sm-12 form-group">
-                            <label for="Parts[0].Unit">Unit</label>
-                            <input type="text" name="Parts[0].Unit" class="form-control" id="Parts[0].Unit" placeholder="Unit" />
-                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
-                        </div>*@
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Unit</label>
                                                             @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })

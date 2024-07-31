@@ -304,7 +304,6 @@ namespace tahsinERP.Controllers
                         ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
                         PartID = part.PartID,
                         UnitID = part.UnitID,
-                        Amount = part.Amount,
                         Price = part.Price,
                         Quantity = part.Quantity,
                         ActivePart = true,
@@ -331,12 +330,12 @@ namespace tahsinERP.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Rasmni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
                         throw new RetryLimitExceededException();
                     }
                 }
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Create[Post]");
+                //LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }

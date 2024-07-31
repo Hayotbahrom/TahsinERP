@@ -162,11 +162,10 @@ namespace tahsinERP.Controllers
 
                 db.SaveChanges();
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
+                //LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
-
 
         public async Task<ActionResult> Download()
         {
