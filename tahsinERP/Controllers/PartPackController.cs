@@ -18,7 +18,6 @@ namespace tahsinERP.Controllers
                 var partpackVM = new PartIndexViewModel();
                 var partpack = db.PARTPACKS
                     .Where(x => x.IsDeleted == false)
-                    .Include(p => p.PARTS)
                     .ToList();
                 var partlist = new List<PartIndexViewModel>();
                 foreach (var partpc in partpack)
@@ -78,9 +77,7 @@ namespace tahsinERP.Controllers
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    PARTPACK partpack = db.PARTPACKS
-                                                .Include(p => p.PARTS)
-                                                .FirstOrDefault(p => p.ID == id);
+                    PARTPACK partpack = db.PARTPACKS.FirstOrDefault(p => p.ID == id);
 
                     if (partpack == null)
                     {

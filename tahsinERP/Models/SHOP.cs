@@ -19,7 +19,6 @@ namespace tahsinERP.Models
         {
             this.PART_PRODUCTION = new HashSet<PART_PRODUCTION>();
             this.PART_WRHS = new HashSet<PART_WRHS>();
-            this.PARTS = new HashSet<PART>();
             this.PROD_WRHS = new HashSet<PROD_WRHS>();
             this.PRODUCT_PRODUCTION = new HashSet<PRODUCT_PRODUCTION>();
             this.SHOP_PLANNED_DTS = new HashSet<SHOP_PLANNED_DTS>();
@@ -36,8 +35,6 @@ namespace tahsinERP.Models
         public virtual ICollection<PART_PRODUCTION> PART_PRODUCTION { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART> PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PROD_WRHS> PROD_WRHS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

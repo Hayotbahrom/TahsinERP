@@ -161,7 +161,6 @@ namespace tahsinERP.Controllers
                         productToUpdate.PNo2 = product.PNo2;
                         productToUpdate.PNo3 = product.PNo3;
                         productToUpdate.PNo4 = product.PNo4;
-                        productToUpdate.PackID = product.PackID;
 
                         var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
                         if (imageFile != null && imageFile.ContentLength > 0)
