@@ -56,10 +56,7 @@
                                                 <span><b>Shartnoma raqami</b>: @Html.DisplayFor(model => model.P_CONTRACTS.ContractNo, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
-                                                <br />
-                                                <hr />
-                                                <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
+                                                <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Batafsil ma`lumot</b>: @Html.DisplayFor(model => model.Description, new { @class = "form-control" })</span>
