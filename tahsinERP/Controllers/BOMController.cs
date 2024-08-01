@@ -604,11 +604,11 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
                 return RedirectToAction("CompletionStatus", vmodel);
             }
-        }
 
             var userEmail = User.Identity.Name;
             LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
             return View(model);
+
         }
 
         public ActionResult BomCreateDetails(int ID, BOMCreateProductViewModel model1)
@@ -636,7 +636,6 @@ namespace tahsinERP.Controllers
                         boom.Children = rootItem.Children;
                         boom.PartId = part.ID;
                         boom.TempBomID = temp.ID;
-
 
                         return View(boom);
                     }
@@ -1000,50 +999,6 @@ namespace tahsinERP.Controllers
                 //LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
                 return RedirectToAction("CompletionStatus", model1);
             }
-                                    stamping_norm.IsDeleted = false;
-                                    stamping_norm.IsActive = model.STAMPING_NORMS.IsActive;
-                                    stamping_norm.PartID_before = part_after_Blanking.ID;
-                                    stamping_norm.PartID_after = part_after_Stamping.ID;
-                                    stamping_norm.Density = model.STAMPING_NORMS.Density;
-                                    stamping_norm.QuantityOfStamps = (int)(Math.Round((part_after_Blanking.PWeight / part_after_Stamping.PWeight), 2, MidpointRounding.ToEven));
-                                    stamping_norm.WeightOfStamps = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density));
-                                    stamping_norm.WeightOfWaste = (part_after_Blanking.PWeight - (part_after_Blanking.PWeight * part_after_Stamping.PWeight));
-                                    stamping_norm.IssuedDateTime = DateTime.Now;
-                                    stamping_norm.IssuedByUserID = userId.GetValueOrDefault();
-                                    var procesname = db.PRODUCTIONPROCESSES.Where(x => x.ProcessName == "Stamping").FirstOrDefault();
-                                    var bom1 = new BOM
-                                    {
-                                        ChildPNo = part_after_Blanking.PNo,
-                                        ParentPNo = part_after_Stamping.PNo,
-                                        IsDeleted = false,
-                                        IsActive = true,
-                                        ProcessID = procesname.ID,
-                                        WasteAmount = Math.Round((part_after_Stamping.PWeight / part_after_Stamping.PWidth), 2, MidpointRounding.ToEven),
-                                        Consumption = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight)),
-                                        ConsumptionUnit = part_after_Blanking.UNIT.UnitName,
-                                        
-                                    };
-                                    db.Entry(stamping_norm).State = System.Data.Entity.EntityState.Modified;
-                                }
-                                break;
-                        }
-                    }
-                    db.SaveChanges();
-                    model1.ParentPnoComplationStatus = model.ProductPNo;
-                    var _tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userId && x.IsDeleted == false && x.ChildPNo == model.PartPno).FirstOrDefault();
-                    _tempbom.NormConfirmed = true;
-                    db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
-                    return RedirectToAction("CompletionStatus", model1);
-                }
-            }
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.Part = new SelectList(part, "ID", "PNo");
-            }
-            return View(model);
         }
 
         public ActionResult Delete(int ID)
@@ -1136,6 +1091,6 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-
     }
 }
+
