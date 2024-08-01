@@ -60,7 +60,7 @@
                                                     </fieldset>
                                                     <input type="submit" class="btn btn-light-primary mr-1 mb-1 round" value="Yuklash" />
                                                 }
-                                                @using (Html.BeginForm("ClearDataTable", "Part", FormMethod.Post))
+                                                @using (Html.BeginForm("ClearDataTable", "Part", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                                 {
                                                     <fieldset class="form-group">
                                                         <div>
