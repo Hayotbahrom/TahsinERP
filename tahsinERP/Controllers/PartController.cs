@@ -105,7 +105,6 @@ namespace tahsinERP.Controllers
                     newPart.Type = partVM.Type;
                     newPart.Description = partVM.Description;
                     newPart.IsDeleted = false;
-                    newPart.Thickness = partVM.Thickness;
                     newPart.Grade = partVM.Grade;
                     newPart.Gauge = partVM.Gauge;
                     newPart.Pitch = partVM.Pitch;
@@ -113,7 +112,6 @@ namespace tahsinERP.Controllers
                     newPart.Marka = partVM.Marka;
                     newPart.Standart = partVM.Standart;
                     newPart.IsInHouse = partVM.IsInHouse;
-                    newPart.ShopID = partVM.ShopID;
                     newPart.HSCodeID = partVM.HSCodeD;
 
                     db.PARTS.Add(newPart);
@@ -206,7 +204,6 @@ namespace tahsinERP.Controllers
                     Units = part.UNIT,
                     Type = part.Type,
                     Description = part.Description,
-                    Thickness = part.Thickness,
                     Grade = part.Grade,
                     Gauge = part.Gauge,
                     Pitch = part.Pitch,
@@ -214,8 +211,7 @@ namespace tahsinERP.Controllers
                     Marka = part.Marka,
                     Standart = part.Standart,
                     IsInHouse = part.IsInHouse,
-                    HSCodeD = (int)part.HSCodeID ,
-                    ShopID = (int)part.ShopID
+                    HSCodeD = (int)part.HSCodeID
                 };
 
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
@@ -249,7 +245,6 @@ namespace tahsinERP.Controllers
                     partToUpdate.UNIT.ShortName = partVM.Units.ShortName;
                     partToUpdate.Type = partVM.Type;
                     partToUpdate.Description = partVM.Description;
-                    partToUpdate.Thickness = partVM.Thickness;
                     partToUpdate.Grade = partVM.Grade;
                     partToUpdate.Gauge = partVM.Gauge;
                     partToUpdate.Pitch = partVM.Pitch;
@@ -257,7 +252,6 @@ namespace tahsinERP.Controllers
                     partToUpdate.Marka = partVM.Marka;
                     partToUpdate.Standart = partVM.Standart;
                     partToUpdate.IsInHouse = partVM.IsInHouse;
-                    partToUpdate.ShopID = partVM.ShopID;
 
                     db.Entry(partToUpdate).State = EntityState.Modified;
                     db.SaveChanges();
@@ -372,8 +366,8 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                var shop = db.SHOPS.Find(part.ShopID);
-                string shopName = shop != null ? shop.ShopName : "Unknown";
+                
+                //string shopName = shop != null ? shop.ShopName : "Unknown";
 
                 PartViewModel partVM = new PartViewModel
                 {
@@ -387,16 +381,13 @@ namespace tahsinERP.Controllers
                     Units = part.UNIT,
                     Type = part.Type,
                     Description = part.Description,
-                    Thickness = part.Thickness,
                     Grade = part.Grade,
                     Gauge = part.Gauge,
                     Pitch = part.Pitch,
                     Coating = part.Coating,
                     Marka = part.Marka,
                     Standart = part.Standart,
-                    IsInHouse = part.IsInHouse,
-                    ShopID = (int)part.ShopID,
-                    ShopName = shopName
+                    IsInHouse = part.IsInHouse
                 };
                 var partImage = db.PARTIMAGES.FirstOrDefault(pi => pi.PartID == part.ID);
                 if (partImage != null)
@@ -572,18 +563,19 @@ namespace tahsinERP.Controllers
                                 newPart.PLength = Double.Parse(row["Length"].ToString());
                                 newPart.PWidth = Double.Parse(row["Width"].ToString());
                                 newPart.PHeight = Double.Parse(row["Height"].ToString());
-                                newPart.Thickness = Double.Parse(row["Thickness"].ToString());
                                 newPart.Grade = row["Grade"].ToString();
                                 newPart.Gauge = Double.Parse(row["Gauge"].ToString());
                                 newPart.Pitch = Double.Parse(row["Pitch"].ToString());
                                 newPart.Coating = row["Coating"].ToString();
                                 newPart.Marka = row["Standart"].ToString();
                                 newPart.Standart = row["Standart"].ToString();
-                                //newPart.UNIT.ShortName = db.UNITS.Where(u => u.ShortName.Equals(row["Unit"].ToString())).FirstOrDefault();
+                                var unit = row["Unit"].ToString();
+                                newPart.UNIT = db.UNITS.Where(u => u.ShortName.Equals(unit)).FirstOrDefault();
                                 if (row["InHouse?"].ToString().CompareTo("Yes") == 0)
                                     newPart.IsInHouse = true;
                                 else
                                     newPart.IsInHouse = false;
+                                newPart.HSCodeID = 1;
                                 newPart.IsDeleted = false;
 
                                 db.PARTS.Add(newPart);

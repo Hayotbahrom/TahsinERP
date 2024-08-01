@@ -42,15 +42,22 @@ namespace tahsinERP.Controllers
 
                 WrhsExpenseViewModel viewModel = new WrhsExpenseViewModel();
                 PART_WRHS_EXPENSES expense = db.PART_WRHS_EXPENSES.OrderByDescending(p => p.IssueDateTime).FirstOrDefault();
-                var monthAndNumber = expense.DocNo.Split('_');
-
-                if (int.Parse(monthAndNumber[0]) == int.Parse(DateTime.Now.Month.ToString()))
+                if (expense is null)
                 {
-                    int docNoNumber = int.Parse(monthAndNumber[1]) + 1;
-                    viewModel.DocNo = DateTime.Now.Month + "_" + docNoNumber;
+                    viewModel.DocNo = DateTime.Now.Month + "_" + 1;
                 }
                 else
-                    viewModel.DocNo = DateTime.Now.Month + "_" + 1;
+                {
+                    var monthAndNumber = expense.DocNo.Split('_');
+
+                    if (int.Parse(monthAndNumber[0]) == int.Parse(DateTime.Now.Month.ToString()))
+                    {
+                        int docNoNumber = int.Parse(monthAndNumber[1]) + 1;
+                        viewModel.DocNo = DateTime.Now.Month + "_" + docNoNumber;
+                    }
+                    else
+                        viewModel.DocNo = DateTime.Now.Month + "_" + 1;
+                }
 
                 return View(viewModel);
             }
@@ -79,7 +86,6 @@ namespace tahsinERP.Controllers
                 {
                     DocNo = model.DocNo,
                     ReceiverWhID = model.RecieverWHID,
-                    Amount = model.Amount,
                     Currency = model.Currency,
                     IsDeleted = false,
                     Description = model.Description,
@@ -112,8 +118,18 @@ namespace tahsinERP.Controllers
 
                     db.PART_WRHS_EXPENSE_PARTS.Add(newPart);
                 }
-
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+                    ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                    ModelState.AddModelError(ex.Message, "O‘zgarishlarni saqlab bo‘lmadi. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    return View(model);
+                }
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
                 return RedirectToAction("Index");

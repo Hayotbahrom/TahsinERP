@@ -144,6 +144,7 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "Invoice dan ortiqcha hajmni kirim qilib bo'lmaydi.");
                     return View(model);
                 }
+                warehouse = GetWarehouseOfMRP(User.Identity.Name);
                 PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
                 {
                     DocNo = model.DocNo,

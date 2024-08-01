@@ -176,6 +176,8 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var steelCoil = db.STEEL_COILS.ToList();
+
                 var newOrder = new P_ORDERS()
                 {
                     OrderNo = model.OrderNo,
