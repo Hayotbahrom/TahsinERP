@@ -50,8 +50,8 @@ namespace tahsinERP.Controllers
                         model.IssueDateTime = DateTime.Now;
                         db.DAMAGED_PARTS.Add(model);
                         db.SaveChanges();
-                        //var userEmail = User.Identity.Name;
-                        //LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Create[Post]");
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }

@@ -108,7 +108,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
                 var userEmail = User.Identity.Name;
-                //LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Post]");
+                LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Post]");
 
                 return RedirectToAction("Index");
             }
@@ -332,8 +332,10 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
+
                         var userEmail = User.Identity.Name;
                         LogHelper.LogToDatabase(userEmail, "SContractController", "Delete[Post]");
+
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -378,6 +380,7 @@ namespace tahsinERP.Controllers
 
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "SContractController", "DeleteProduct[Post]");
+
                 return View(contractProductToDelete);
             }
         }
