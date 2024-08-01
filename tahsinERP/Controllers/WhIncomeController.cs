@@ -183,7 +183,7 @@ namespace tahsinERP.Controllers
 
                 db.SaveChanges();
                 var userEmail = User.Identity.Name;
-                //LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
+                LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -387,7 +387,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Editpart[Post]");
+                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "EditPart[Post]");
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

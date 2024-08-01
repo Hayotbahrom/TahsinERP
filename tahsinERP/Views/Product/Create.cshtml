@@ -98,8 +98,13 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.UnitID, (SelectList)ViewBag.UNIT, "Select Unit", new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.UnitID, (SelectList)ViewBag.UNIT, "", new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">HSCODES</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownListFor(model => model.HSCodeID, (SelectList)ViewBag.HSCODESS, "", new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.HSCodeID, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Tavsifi </h6>
                                                     <fieldset class="invoice-address form-group">

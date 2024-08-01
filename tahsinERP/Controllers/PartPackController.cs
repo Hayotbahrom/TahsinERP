@@ -39,7 +39,7 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.PartsList = new SelectList(parts, "ID", "PName");
+                ViewBag.PartsList = new SelectList(parts, "ID", "PNo");
                 return View();
             }
         }
@@ -56,12 +56,12 @@ namespace tahsinERP.Controllers
 
                     db.PARTPACKS.Add(model);
                     db.SaveChanges();
-                    //var userEmail = User.Identity.Name;
-                    //LogHelper.LogToDatabase(userEmail, "PartPackController", "Create[Post]");
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PartPackController", "Create[Post]");
                     return RedirectToAction("Index");
                 }
                 var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.PartsList = new SelectList(parts, "ID", "PName", model.PartID);
+                ViewBag.PartsList = new SelectList(parts, "ID", "PNo", model.PartID);
 
                 return View(model);
             }
@@ -88,7 +88,7 @@ namespace tahsinERP.Controllers
                     }
 
                     var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                    ViewBag.PartList = new SelectList(parts, "ID", "PName", partpack.PartID);
+                    ViewBag.PartList = new SelectList(parts, "ID", "PNo", partpack.PartID);
 
                     return View(partpack);
                 }
@@ -116,15 +116,15 @@ namespace tahsinERP.Controllers
                         db.Entry(model).Property(p => p.PartID).IsModified = true;
                         db.SaveChanges();
                     }
-                    //var userEmail = User.Identity.Name;
-                    //LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
 
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
                     var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                    ViewBag.PartList = new SelectList(parts, "ID", "PName", model.PartID);
+                    ViewBag.PartList = new SelectList(parts, "ID", "PNo", model.PartID);
                 }
                 return View(model);
             }
@@ -180,8 +180,8 @@ namespace tahsinERP.Controllers
                         db.Entry(partpack).State = EntityState.Modified;
                         db.SaveChanges();
                     }
-                    //var userEmail = User.Identity.Name;
-                    //LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
             }

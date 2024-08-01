@@ -45,6 +45,8 @@ namespace tahsinERP.Controllers
                         model.IssueDateTime = DateTime.Now;
                         db.DAMAGED_PRODUCTS.Add(model);
                         db.SaveChanges();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "DamagedProductController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -93,6 +95,8 @@ namespace tahsinERP.Controllers
                     damaged_product.DefectTypeID = damagedProduct.DefectTypeID;
                     damaged_product.Quantity = damagedProduct.Quantity;
                     db.SaveChanges();
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "DamagedProductController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
                 var products = db.PRODUCTS.Where(x => x.IsDeleted == false).ToList();
@@ -140,7 +144,8 @@ namespace tahsinERP.Controllers
                 damagedProduct.IsDeleted = true;
                 db.Entry(damagedProduct).State = EntityState.Modified;
                 db.SaveChanges();
-
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "DamagedProductController", "Delete[Post]");
                 return RedirectToAction("Index");
             }
         }

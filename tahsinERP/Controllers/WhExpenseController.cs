@@ -131,7 +131,7 @@ namespace tahsinERP.Controllers
                     return View(model);
                 }
                 var userEmail = User.Identity.Name;
-                //LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
+                LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }

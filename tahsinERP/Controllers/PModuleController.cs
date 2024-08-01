@@ -75,8 +75,8 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
-                        //var userEmail = User.Identity.Name;
-                        //LogHelper.LogToDatabase(userEmail, "PModuleController", "Create[Post]");
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "PModuleController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -122,6 +122,7 @@ namespace tahsinERP.Controllers
                 return Json(new List<string>());
             }
         }
+
         [HttpPost]
         public ActionResult Edit(PERMISSIONMODULE permissions, int[] RoleID)
         {
@@ -173,6 +174,8 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "PModuleController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (DbUpdateConcurrencyException)
@@ -295,8 +298,8 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
             }
 
-            //var userEmail = User.Identity.Name;
-            //LogHelper.LogToDatabase(userEmail, "PModuleController", "Delete[Post]");
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PModuleController", "Delete[Post]");
             return RedirectToAction("Index");
         }
 

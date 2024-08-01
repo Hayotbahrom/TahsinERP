@@ -66,8 +66,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
-                                //var userEmail = User.Identity.Name;
-                                //LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Edit[Post]");
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Edit[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -97,8 +97,8 @@ namespace tahsinERP.Controllers
                         model.IsDeleted = false;
                         db.DEFECT_TYPES.Add(model);
                         db.SaveChanges();
-                        //var userEmail = User.Identity.Name;
-                        //LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Create[Post]");
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -141,8 +141,8 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
-                                //var userEmail = User.Identity.Name;
-                                //LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Delete[Post]");
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Delete[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)

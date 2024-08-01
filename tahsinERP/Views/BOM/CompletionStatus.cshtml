@@ -4,7 +4,6 @@
 </head>
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
 {
-    var bomDictionary = ((IEnumerable<dynamic>)ViewBag.bom).ToDictionary(b => (string)b.ParentPNo,b => b);
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -52,7 +51,6 @@
                                             <tbody>
                                                 @foreach (var item in ViewBag.partList)
                                                 {
-                                                    var bomItem = bomDictionary.ContainsKey(item.ChildPNo) ? bomDictionary[item.ChildPNo] : null;
                                                     <tr>
                                                         <td>@item.ChildPNo</td>
                                                         <td>@item.Consumption</td>
@@ -63,7 +61,7 @@
                                                             </td>
                                                             <td>
                                                                 <div>
-                                                                    @if (bomItem != null)
+                                                                    @if (tahsinERP.Models.BomIsParentProduct.IsParentProduct(item.ChildPNo))
                                                                     {
                                                                         <a href="@Url.Action("BomCreateDetails", "BOM", new { id = item.ID })">
                                                                             <i class="bi bi-eye" style="font-size:20px"></i>

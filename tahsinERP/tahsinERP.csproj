@@ -324,6 +324,7 @@
     <Compile Include="Models\BOM.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BomIsParentProduct.cs" />
     <Compile Include="Models\BOMS_AND_NORMS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
