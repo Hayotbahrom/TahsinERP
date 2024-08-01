@@ -12,19 +12,14 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_ORDER_PARTS
+    public partial class COOKIES_CONFIRMATION
     {
         public int ID { get; set; }
-        public int OrderID { get; set; }
-        public int PartID { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
-        public double TotalPrice { get; set; }
-        public double MOQ { get; set; }
-        public int UnitID { get; set; }
+        public int UserID { get; set; }
+        public System.DateTime IssuedDT { get; set; }
+        public string MacAdress { get; set; }
+        public bool Confirmation { get; set; }
     
-        public virtual P_ORDERS P_ORDERS { get; set; }
-        public virtual PART PART { get; set; }
-        public virtual UNIT UNIT { get; set; }
+        public virtual USER USER { get; set; }
     }
 }

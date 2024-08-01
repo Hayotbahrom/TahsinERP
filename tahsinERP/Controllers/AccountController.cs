@@ -123,7 +123,7 @@ namespace tahsinERP.Controllers
                     IP = ip,
                     MAC = macAddress
                 };
-                using(DBTHSNEntities db = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
                     db.USER_ENTRIES.Add(userEntry);
                     db.SaveChanges();

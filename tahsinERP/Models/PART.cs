@@ -58,7 +58,7 @@ namespace tahsinERP.Models
         public double Thickness { get; set; }
         public double Pitch { get; set; }
         public Nullable<int> HSCodeID { get; set; }
-        public int UnitID { get; set; }
+        public Nullable<int> UnitID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
