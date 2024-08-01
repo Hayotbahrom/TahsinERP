@@ -224,8 +224,6 @@ namespace tahsinERP.Controllers
                 createViewModel.IsActive = model.IsActive;
                 createViewModel.ProductPNo = model.ProductPno;
 
-
-
                 var part2 = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(part2, "ID", "PNo");
 
@@ -601,14 +599,12 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
                 }
 
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
                 db.SaveChanges();
                 return RedirectToAction("CompletionStatus", vmodel);
             }
-
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
-            return View(model);
-
         }
 
         public ActionResult BomCreateDetails(int ID, BOMCreateProductViewModel model1)
