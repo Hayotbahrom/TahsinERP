@@ -278,6 +278,7 @@
     <Compile Include="Controllers\BlankingController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
+    <Compile Include="Controllers\CookieHelper.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DefectTypeController.cs" />
     <Compile Include="Controllers\DamagedPartController.cs" />
