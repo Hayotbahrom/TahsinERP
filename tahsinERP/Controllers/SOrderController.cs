@@ -1,9 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using tahsinERP.Models;
 
@@ -13,12 +8,16 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, contractNo, orderNo, partNo = "";
         private string[] sources;
-        public SOrderController()
+
+        // GET: SOrder
+        public ActionResult Index(string type, int? supplierID)
         {
             return View();
         }
 
+
         // GET: Create
+        [HttpGet]
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -31,48 +30,6 @@ namespace tahsinERP.Controllers
 
             return View();
         }
-
-        // GET: SOrder
-        //public ActionResult Index(string type, int? supplierID)
-        //{
-        //    using (DBTHSNEntities db = new DBTHSNEntities())
-        //    {
-        //        var suppliers = db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList();
-        //        if (!string.IsNullOrEmpty(type))
-        //        {
-        //            if (supplierID.HasValue)
-        //            {
-        //                ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
-        //                ViewBag.SourceList = new SelectList(sources, type);
-        //                ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name", supplierID);
-        //            }
-        //            else
-        //            {
-        //                ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
-        //                ViewBag.SourceList = new SelectList(sources, type);
-        //                ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (supplierID.HasValue)
-        //            {
-        //                ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID).ToList();
-        //                ViewBag.SourceList = new SelectList(sources, type);
-        //                ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name", supplierID);
-        //            }
-        //            else
-        //            {
-        //                ViewBag.partList = db.P_ORDERS.Include(x => x.P_CONTRACTS).Where(s => s.IsDeleted == false).ToList();
-        //                ViewBag.SourceList = new SelectList(sources);
-        //                ViewBag.SupplierList = new SelectList(suppliers, "ID", "Name");
-        //            }
-        //        }
-        //        return View();
-        //    }
-        //}
-
-        // GET: Creste
 
         // POST: Create
 
