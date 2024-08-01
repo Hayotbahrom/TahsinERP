@@ -23,8 +23,16 @@ namespace tahsinERP.Controllers
         public ActionResult Index(string type, int? supplierID)
         {
             this.warehouse = GetWarehouseOfMRP(User.Identity.Name);
+            
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                if (warehouse is null)
+                {
+                    ViewBag.SourceList = new SelectList(sources, type);
+                    ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
+                    List<PART_WRHS_INCOMES> list = new List<PART_WRHS_INCOMES>();
+                    return View(list);
+                }
                 if (!string.IsNullOrEmpty(type))
                 {
                     if (supplierID.HasValue)
@@ -32,7 +40,7 @@ namespace tahsinERP.Controllers
                         List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES
                             .Include(pr => pr.P_INVOICES)
                             .Include(pr => pr.F_WAYBILLS)
-                            .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.P_INVOICES.SupplierID == supplierID)
+                            .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.P_INVOICES.SupplierID == supplierID && pi.PART_WRHS.ID==warehouse.ID)
                             .ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
@@ -43,7 +51,7 @@ namespace tahsinERP.Controllers
                         List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES
                             .Include(pr => pr.P_INVOICES)
                             .Include(pr => pr.F_WAYBILLS)
-                            .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0)
+                            .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.PART_WRHS.ID == warehouse.ID)
                             .ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
@@ -57,7 +65,7 @@ namespace tahsinERP.Controllers
                         List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES
                             .Include(pr => pr.P_INVOICES)
                             .Include(pr => pr.F_WAYBILLS)
-                            .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SupplierID == supplierID)
+                            .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SupplierID == supplierID && pi.PART_WRHS.ID == warehouse.ID)
                             .ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
@@ -68,7 +76,7 @@ namespace tahsinERP.Controllers
                         List<PART_WRHS_INCOMES> list = db.PART_WRHS_INCOMES
                             .Include(pr => pr.P_INVOICES)
                             .Include(pr => pr.F_WAYBILLS)
-                            .Where(pi => pi.IsDeleted == false)
+                            .Where(pi => pi.IsDeleted == false && pi.PART_WRHS.ID == warehouse.ID)
                             .ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name");
@@ -113,7 +121,6 @@ namespace tahsinERP.Controllers
                     model.DocNo = DateTime.Now.Month + "_" +1;
                 }
 
-
                 return View(model);
             }
         }
@@ -124,6 +131,19 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var sumModelPartsQuantity = model.Parts.Sum(x => x.Amount);
+                var invoiceAmount = db.P_INVOICES.Where(x => x.IsDeleted == false && x.ID == model.InvoiceID).FirstOrDefault().Amount;
+                if (sumModelPartsQuantity > invoiceAmount)
+                {
+                    ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                    ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                    ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
+                    ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+
+                    ModelState.AddModelError("", "Invoice dan ortiqcha hajmni kirim qilib bo'lmaydi.");
+                    return View(model);
+                }
                 PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
                 {
                     DocNo = model.DocNo,

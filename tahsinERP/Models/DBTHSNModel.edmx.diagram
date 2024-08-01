@@ -234,6 +234,8 @@
         <AssociationConnector Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_S_ORDERS" />
         <AssociationConnector Association="DBTHSNModel.FK_S_ORDER_PRODUCTS_UNITS" />
         <AssociationConnector Association="DBTHSNModel.FK_USERLOGS_USERS" />
+        <EntityTypeShape EntityType="DBTHSNModel.COOKIES_CONFIRMATION" Width="1.5" PointX="3.75" PointY="15.625" />
+        <AssociationConnector Association="DBTHSNModel.FK_COOKIES_CONFIRMATION_USERS" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

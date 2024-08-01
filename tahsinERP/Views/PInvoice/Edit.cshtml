@@ -72,12 +72,6 @@
                                                     </div>
                                                 </fieldset>
 
-                                                <h6 class="invoice-to">Miqdori</h6>
-                                                <fieldset class="invoice-address form-group">
-                                                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @placeholder = "Miqdori" })
-                                                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                                                </fieldset>
-
                                                 <h6 class="invoice-to">Valyuta</h6>
                                                 <fieldset class="invoice-address form-group">
                                                     @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })

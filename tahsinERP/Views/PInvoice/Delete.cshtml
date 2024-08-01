@@ -53,10 +53,7 @@
                                             <span><b>Buyurtma raqami</b>: @Html.DisplayFor(model => model.P_ORDERS.OrderNo, new { @class = "form-control" })</span>
                                             <br />
                                             <hr />
-                                            <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
-                                            <br />
-                                            <hr />
-                                            <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
+                                            <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
                                             <br />
                                             <hr />
                                         </div>

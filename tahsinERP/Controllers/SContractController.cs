@@ -38,7 +38,8 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 SContractViewModel SContractViewModel = new SContractViewModel();
-                ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
+                var customers = db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList();
+                ViewBag.CustomerID = new SelectList(customers, "ID", "Name");
                 ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
                 ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 return View(SContractViewModel);
@@ -262,12 +263,11 @@ namespace tahsinERP.Controllers
                     {
                         ModelState.AddModelError("", "Maxsulot o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratsiyasiga muroaat qiling.");
                     }
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "SContractController", "Edit[Post]");
                     return RedirectToAction("Index");
                 }
             }
-
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "SContractController", "Edit[Post]");
 
             ViewBag.ProductList = model.ProductList;
             return View(model);
@@ -332,6 +332,8 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "SContractController", "Delete[Post]");
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -344,9 +346,6 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
                 }
             }
-
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "SContractController", "Delete[Post]");
 
             return View();
         }

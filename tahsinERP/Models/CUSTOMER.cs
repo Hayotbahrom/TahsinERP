@@ -29,7 +29,7 @@ namespace tahsinERP.Models
         public string Email { get; set; }
         public string ContactPersonName { get; set; }
         public string DirectorName { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         public string DUNS { get; set; }
         public string Type { get; set; }
         public string City { get; set; }

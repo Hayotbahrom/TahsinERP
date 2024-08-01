@@ -57,9 +57,7 @@
                                             <hr />
                                             <span><b>Amal qilish sanasi</b>: @Html.DisplayFor(model => model.DueDate, new { @class = "form-control" })</span>
                                             <hr />
-                                            <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
-                                            <hr />
-                                            <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
+                                            <span><b>Umumiy summasi</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
                                             <hr />
                                             <span><b>Incoterms</b>: @Html.DisplayFor(model => model.Incoterms, new { @class = "form-control" })</span>
                                             <hr />

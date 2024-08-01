@@ -287,6 +287,7 @@
     <Compile Include="Controllers\FTransportTypeController.cs" />
     <Compile Include="Controllers\HSCodeController.cs" />
     <Compile Include="Controllers\LogHelper.cs" />
+    <Compile Include="Controllers\NetworkHelper.cs" />
     <Compile Include="Controllers\PackingListController.cs" />
     <Compile Include="Controllers\PartController.cs" />
     <Compile Include="Controllers\PartPackController.cs" />
@@ -331,6 +332,9 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\COMPANY_LICENSES.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\COOKIES_CONFIRMATION.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CUSTOMER.cs">
