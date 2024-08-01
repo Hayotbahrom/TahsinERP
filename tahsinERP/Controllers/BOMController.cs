@@ -601,14 +601,11 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
                 }
 
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
                 db.SaveChanges();
                 return RedirectToAction("CompletionStatus", vmodel);
             }
-
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
-            return View(model);
-
         }
 
         public ActionResult BomCreateDetails(int ID, BOMCreateProductViewModel model1)

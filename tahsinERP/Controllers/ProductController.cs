@@ -85,8 +85,8 @@ namespace tahsinERP.Controllers
                             }
                         }
 
-                        //var userEmail = User.Identity.Name;
-                        //LogHelper.LogToDatabase(userEmail, "ProdctController", "Create[Post]");
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "ProdctController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
