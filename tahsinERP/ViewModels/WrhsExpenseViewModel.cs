@@ -8,21 +8,14 @@ namespace tahsinERP.ViewModels
 {
     public class WrhsExpenseViewModel
     {
-        //public int ID { get; set; } // Auto Increment in DB
         public string DocNo { get; set; }
-        public int RecieverWHID { get; set; } // Ombor IDsi auto: null
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
-        public int SenderWHID { get; set; }
-        public double Amount { get; set; }
+        public int RecieverWHID { get; set; }
         public string Currency { get; set; }
-        //public double TotalPrice { get; set; } // Trigger in DB
-        public bool IsDeleted { get; set; }
         [DataType(DataType.Text)]
         public string Description { get; set; }
-        //public DateTime IssueDateTime { get; set; } // From Controller
         public bool SendStatus { get; set; }
-        // Parts
         public List<WhrsExpensePart> Parts { get; set; }
         public WrhsExpenseViewModel()
         {
@@ -32,6 +25,7 @@ namespace tahsinERP.ViewModels
     // Part ViewModel
     public class WhrsExpensePart
     {
+        [Required]
         public int PartID { get; set; }
         [Required]
         public int UnitID { get; set; }

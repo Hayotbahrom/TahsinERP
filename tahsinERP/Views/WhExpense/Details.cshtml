@@ -59,7 +59,7 @@
                                                 <span><b>Qabul qiluvchi ombor</b>: @Html.DisplayFor(model => model.PART_WRHS.WHName, new {@class = "form-control"})</span>
                                                 <br />
                                                 <hr />
-                                                <span><b>Umuiy narxi</b>: @Html.DisplayFor(model => model.TotalPrice, new { @class = "form-control" })</span>
+                                                <span><b>Umumiy narxi</b>: @Html.DisplayFor(model => model.TotalPrice, new { @class = "form-control" })</span>
                                                 <br />
                                                 <hr />
                                                 <span><b>Jo`natilganmi</b>:@* @Html.DisplayFor(model => model.SendStatus, new { @class = "form-control" })*@</span>
@@ -109,7 +109,7 @@
                                                                                     </td>
                                                                                     <td>@item.PART.PName</td>
                                                                                     <td>@item.Amount</td>
-                                                                                    <td>@item.Unit</td>
+                                                                                    <td>@item.UNIT.UnitName</td>
                                                                                     <td>@item.PiecePrice</td>
                                                                                     <td>@item.TotalPrice</td>
                                                                                     <td>@item.Comment</td>
