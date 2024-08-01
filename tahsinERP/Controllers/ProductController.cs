@@ -39,12 +39,14 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
+                ViewBag.HSCODESS = new SelectList(db.HSCODES.Where(cs => cs.IsDeleted == false).ToList(),"ID", "HSCODE1");
+
                 return View();
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PNo, Name, Type, Weight, Length, Width, Height, UnitID, Description, PNo2, PNo3, PNo4, PackID, IsDeleted")] PRODUCT product)
+        public ActionResult Create([Bind(Include = "PNo, Name, Type, Weight, Length, Width, Height, UnitID, Description, PNo2, PNo3, PNo4, PackID,HSCodeId, IsDeleted")] PRODUCT product)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -83,8 +85,8 @@ namespace tahsinERP.Controllers
                             }
                         }
 
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ProdctController", "Create[Post]");
+                        //var userEmail = User.Identity.Name;
+                        //LogHelper.LogToDatabase(userEmail, "ProdctController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
