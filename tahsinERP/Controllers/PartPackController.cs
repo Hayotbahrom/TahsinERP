@@ -39,7 +39,7 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.PartsList = new SelectList(parts, "ID", "PName");
+                ViewBag.PartsList = new SelectList(parts, "ID", "PNo");
                 return View();
             }
         }
@@ -61,7 +61,7 @@ namespace tahsinERP.Controllers
                     return RedirectToAction("Index");
                 }
                 var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                ViewBag.PartsList = new SelectList(parts, "ID", "PName", model.PartID);
+                ViewBag.PartsList = new SelectList(parts, "ID", "PNo", model.PartID);
 
                 return View(model);
             }
@@ -88,7 +88,7 @@ namespace tahsinERP.Controllers
                     }
 
                     var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                    ViewBag.PartList = new SelectList(parts, "ID", "PName", partpack.PartID);
+                    ViewBag.PartList = new SelectList(parts, "ID", "PNo", partpack.PartID);
 
                     return View(partpack);
                 }
@@ -124,7 +124,7 @@ namespace tahsinERP.Controllers
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
                     var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
-                    ViewBag.PartList = new SelectList(parts, "ID", "PName", model.PartID);
+                    ViewBag.PartList = new SelectList(parts, "ID", "PNo", model.PartID);
                 }
                 return View(model);
             }
