@@ -526,7 +526,13 @@ namespace tahsinERP.Controllers
         }
         public ActionResult ClearDataTable()
         {
-            return RedirectToAction("UploadWithExcel");
+            // Clear the DataTable and related ViewBag properties
+            ViewBag.DataTable = null;
+            ViewBag.DataTableModel = null;
+            ViewBag.IsFileUploaded = false;
+            ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
+            // Return the UploadWithExcel view
+            return View("UploadWithExcel");
         }
         [HttpPost]
         public ActionResult Save(string dataTableModel)
@@ -591,6 +597,9 @@ namespace tahsinERP.Controllers
                         ModelState.AddModelError("", ex.Message);
                     }
                 }
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PartController", "Save[Post]");
                 return RedirectToAction("Index");
             }
         }

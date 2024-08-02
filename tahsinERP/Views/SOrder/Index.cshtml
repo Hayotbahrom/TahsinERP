@@ -60,7 +60,7 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Turi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SourceID", (SelectList)ViewBag.SourceList, new { @class = "form-control", onchange = "refreshDataTable()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4">
@@ -144,13 +144,13 @@
         function refreshDataTable() {
             var source = document.getElementById("SourceID").value;
             var supplierID = document.getElementById("SupplierID").value;
-            window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID=' + supplierID;
+            window.location.href = '@Url.Action("Index", "SOrder")?type=' + source + '&customerID=' + supplierID;
         }
 
-        function refreshdatatablesupplier() {
+        function refreshdatatablecustomer() {
               var source = document.getElementById("SourceID").value;
-                const supplierID = document.getElementById("SupplierID").value;
-                window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
+                const supplierID = document.getElementById("CustomerID").value;
+                window.location.href = '@Url.Action("Index", "SOrder")?type=' + source + '&customerID='+ supplierID;
         };
     </script>
 }

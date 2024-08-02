@@ -9,19 +9,22 @@ namespace tahsinERP.ViewModels
 {
     public class SOrderViewModel
     {
-        public int Id { get; set; }
         public string OrderNo { get; set; }
+        public DateTime IssuedDate { get; set; }
         public int CustomerID { get; set; }
         public int ContractID { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }
 
-
+        public List<SOrderProduct> Products { get; set; }
+        public SOrderViewModel()
+        {
+            Products = new List<SOrderProduct>();
+        }
     }
 
     public class SOrderProduct
     {
-        public int Id { get; set; }
         public int ProductID { get; set; }
         public float Price { get; set; }
         public float Amount { get; set; }
