@@ -1,5 +1,5 @@
-﻿
-@model tahsinERP.ViewModels.POrderViewModel
+﻿@model tahsinERP.ViewModels.POrderSteelViewModel
+
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -23,7 +23,7 @@
                                         <a href="~/POrder/Index">Buyurtmalar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Buyurtma  yaratish
+                                        Buyurtma yaratish
                                     </li>
                                 </ol>
                             </div>
@@ -38,26 +38,28 @@
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-body">
-                                        @using (Html.BeginForm("Create", "POrder", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                        @using (Html.BeginForm("CreateSteel", "POrder", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
                                         {
                                             @Html.AntiForgeryToken()
-                                            // WRHS_InComes
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                                             <div class="row justify-content-around d-flex align-items-start">
                                                 @*Left Part*@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="DocNo">Buyurtma raqam</label>
-                                                            @Html.TextBoxFor(model => model.OrderNo, new { @type = "text", @class = "form-control" })
+                                                            <label for="OrderNo">Buyurtma raqam</label>
+                                                            @Html.TextBoxFor(model => model.OrderNo, new { @type = "text", @class = "form-control", id = "OrderNo" })
+                                                            @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control" })
+                                                            <label for="SupplierID">Ta`minotchi</label>
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control", id = "SupplierID" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control" })
+                                                            <label for="ContractID">Shartnoma raqami</label>
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control", id = "ContractID" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
@@ -68,18 +70,18 @@
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Currency">Valyuta</label>
-                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control" })
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", id = "Currency" })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
 
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="Currency">Qisqacha tavsifi</label>
-                                                            @Html.TextAreaFor(model => model.Description, new { @type = "text", @class = "form-control" })
+                                                            <label for="Description">Qisqacha tavsifi</label>
+                                                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", id = "Description" })
                                                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <h6 class="invoice-to">Buyurtma berilgan sanasi</h6>
-                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi" })
+                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi", id = "IssuedDate" })
                                                             @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
                                                             <div class="form-control-position">
                                                                 <i class='bx bx-calendar'></i>
@@ -89,39 +91,31 @@
                                                 </div>
                                             </div>
 
-                                            // WRHS_InCome_Parts
                                             <br />
-                                            <h4>
-                                                Parts
-                                            </h4>
+                                            <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
+                                                            <label for="Part_Marka">Marka</label>
+                                                            @Html.DropDownList("Marka", (SelectList)ViewBag.steelMarka, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Marka, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Unit">Birligi</label>
-                                                            <input type="text" name="Unit" class="form-control" id="Part_Unit" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Unit, "", new { @class = "text-danger" })
+                                                            <label for="Part_Standart">Standart</label>
+                                                            @Html.DropDownList("Standart", (SelectList)ViewBag.steelStandart, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Standart, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
+                                                            <label for="Part_Coating">Coating</label>
+                                                            @Html.DropDownList("Coating", (SelectList)ViewBag.steelCoating, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Coating, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.01" class="form-control" id="Part_Price" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_MOQ">MOQ</label>
-                                                            <input type="text" name="MOQ" class="form-control" id="Part_MOQ" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
+                                                            <label for="Part_Unit">Thickness</label>
+                                                            @Html.DropDownList("Thickness", (SelectList)ViewBag.steelThickness, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Thickness, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
                                                             <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
@@ -130,16 +124,12 @@
                                                     <hr>
                                                 </div>
                                             </div>
-
                                             <button data-repeater-create type="button" class="btn btn-primary">Yangi detal qo'shish</button>
 
-
-                                            // Save button
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
                                                     <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
-                                                        <i class='bx bx-save'></i>
-                                                        Saqlash
+                                                        <i class='bx bx-save'></i> Saqlash
                                                     </button>
                                                 </li>
                                             </ul>

@@ -201,22 +201,36 @@ namespace tahsinERP.Controllers
 
                 // Yangi yozuvning IncomeID sini olish
                 int newOrderID = newOrder.ID;
-                /*
-                                // Parts ni saqlash
-                                foreach (var part in model.Parts)
-                                {
-                                    var newPart = new P_ORDER_PARTS
-                                    {
-                                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
-                                        PartID = part.PartID,
-                                        UnitID = part.UnitID,
-                                        Amount = part.Amount,
-                                        Price = part.Price,
-                                        MOQ = part.MOQ
-                                    };
 
-                                    db.P_ORDER_PARTS.Add(newPart);
-                                }*/
+                // Parts ni saqlash
+                foreach (var part in model.Parts)
+                {
+                    var existPart = db.PARTS.Where(p => p.IsDeleted == false &&
+                                                        p.Marka == part.Marka &&
+                                                        p.Coating == part.Coating &&
+                                                        p.Standart == part.Standart 
+                                                        /* && p.Thickness == part.Thickness*/).FirstOrDefault();
+                    if (existPart is null)
+                    {
+                        var newPartInsert = new PART
+                        {
+                            Marka = part.Marka,
+                            Coating = part.Coating,
+                            Standart = part.Standart
+                        };
+                        db.PARTS.Add(newPartInsert);
+                        db.SaveChanges();
+                    }
+
+                    var newPart = new P_ORDER_PARTS
+                    {
+                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                        PartID = existPart.ID,
+                        UnitID = existPart.UnitID
+                    };
+
+                    db.P_ORDER_PARTS.Add(newPart);
+                }
 
                 try
                 {
