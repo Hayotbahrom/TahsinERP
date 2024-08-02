@@ -253,8 +253,6 @@ namespace tahsinERP.Controllers
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
 
             // Return the UploadWithExcel view
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "CustomerController", "ClearDataTable");
             return View("UploadWithExcel");
         }
         [HttpPost]
@@ -289,6 +287,8 @@ namespace tahsinERP.Controllers
                                 new_supplier.IsDeleted = false;
 
                                 db.SUPPLIERS.Add(new_supplier);
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "CustomerController", "Save[Post]");
                                 db.SaveChanges();
                             }
                         }
@@ -300,8 +300,6 @@ namespace tahsinERP.Controllers
                 }
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "CustomerController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }

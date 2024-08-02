@@ -24,7 +24,7 @@ namespace tahsinERP.Models
         public Nullable<int> UnitID { get; set; }
     
         public virtual PART_WRHS_INCOMES PART_WRHS_INCOMES { get; set; }
-        public virtual PART PART { get; set; }
         public virtual UNIT UNIT { get; set; }
+        public virtual PART PART { get; set; }
     }
 }

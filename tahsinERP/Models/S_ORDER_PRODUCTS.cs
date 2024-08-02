@@ -23,8 +23,8 @@ namespace tahsinERP.Models
         public Nullable<double> MOQ { get; set; }
         public int UnitID { get; set; }
     
-        public virtual PRODUCT PRODUCT { get; set; }
         public virtual S_ORDERS S_ORDERS { get; set; }
         public virtual UNIT UNIT { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

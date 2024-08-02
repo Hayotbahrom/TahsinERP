@@ -992,8 +992,8 @@ namespace tahsinERP.Controllers
                 var _tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userId && x.IsDeleted == false && x.ChildPNo == model1.ParentPNo).FirstOrDefault();
                 _tempbom.NormConfirmed = true;
                 db.SaveChanges();
-                //var userEmail = User.Identity.Name;
-                //LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
                 return RedirectToAction("CompletionStatus", model1);
             }
         }
