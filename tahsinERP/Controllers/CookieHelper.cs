@@ -11,7 +11,7 @@ namespace tahsinERP.Controllers
     {
         public static bool IsConfirmed(string userEmail)
         {
-            var UserID = LogHelper.GetUserId(userEmail);
+            var UserID = UserHelper.GetUserId(userEmail);
             var MacAddress = NetworkHelper.GetMacAddress(NetworkHelper.GetIpAddress());
 
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -32,7 +32,7 @@ namespace tahsinERP.Controllers
 
             using(DBTHSNEntities dB = new DBTHSNEntities())
             {
-                var UserID = LogHelper.GetUserId(userEmail);
+                var UserID = UserHelper.GetUserId(userEmail);
 
                 var cookieConfirm = new COOKIES_CONFIRMATION
                 {

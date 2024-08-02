@@ -274,6 +274,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\LastActionsController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\BlankingController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
@@ -316,6 +317,7 @@
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\TracingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserHelper.cs" />
     <Compile Include="Controllers\WaybillController.cs" />
     <Compile Include="Controllers\WhExpenseController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
@@ -2644,6 +2646,7 @@
     <Content Include="Views\DamagedProduct\Delete.cshtml" />
     <Content Include="Views\DamagedProduct\Details.cshtml" />
     <Content Include="Views\PartStock\Index.cshtml" />
+    <Content Include="Views\LastActions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

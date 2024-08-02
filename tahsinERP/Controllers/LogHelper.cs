@@ -21,7 +21,7 @@ namespace tahsinERP.Controllers
                         ControllerName = controllerName,
                         ActionName = actionName,
                         DateTime = DateTime.Now,
-                        UserID = GetUserId(userEmail),
+                        UserID = UserHelper.GetUserId(userEmail),
                         IP = NetworkHelper.GetIpAddress(),
                         MacAddr = NetworkHelper.GetMacAddress(NetworkHelper.GetIpAddress())
                     };
@@ -39,25 +39,5 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-
-        public static int GetUserId(string userEmail)
-        {
-            using (var db = new DBTHSNEntities())
-            {
-                USER getUser = db.USERS
-                                 .Where(u => u.IsDeleted == false && u.Email.Equals(userEmail))
-                                 .FirstOrDefault();
-
-                if (getUser != null)
-                {
-                    return getUser.ID;
-                }
-                else
-                {
-                    throw new Exception("User not found");
-                }
-            }
-        }
-
     }
 }
