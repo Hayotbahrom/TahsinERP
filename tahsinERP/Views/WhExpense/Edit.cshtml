@@ -47,7 +47,7 @@
                                                 <hr>
                                                 <h6 class="invoice-to">Doc raqami</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.TextBoxFor(model => model.DocNo, new { @class = "form-control round", @placeholder = "Doc raqami" })
+                                                    @Html.TextBoxFor(model => model.DocNo, new { @class = "form-control round", @placeholder = "Doc raqami", @disabled = "disable" })
                                                     @Html.ValidationMessageFor(model => model.DocNo, "", new { @class = "text-danger" })
                                                 </fieldset>
 
@@ -117,7 +117,7 @@
                                                                                     </td>
                                                                                     <td>@item.PART.PName</td>
                                                                                     <td>@item.Amount</td>
-                                                                                    <td>@item.Unit</td>
+                                                                                    <td>@item.UNIT.UnitName</td>
                                                                                     <td>@item.PiecePrice</td>
                                                                                     <td>@item.TotalPrice</td>
                                                                                     <td>

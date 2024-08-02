@@ -165,14 +165,21 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+
+                var steelCoils = db.STEEL_COILS.ToList();
+
+                ViewBag.steelMarka = new SelectList(steelCoils, "ID", "Marka");
+                ViewBag.steelStandart = new SelectList(steelCoils, "ID", "Standart");
+                ViewBag.steelCoating = new SelectList(steelCoils, "ID", "Coating");
+                ViewBag.steelThickness = new SelectList(steelCoils, "ID", "Thickness");
             }
 
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateSteel(POrderViewModel model)
+        public ActionResult CreateSteel(POrderSteelViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -194,27 +201,41 @@ namespace tahsinERP.Controllers
 
                 // Yangi yozuvning IncomeID sini olish
                 int newOrderID = newOrder.ID;
+                /*
+                                // Parts ni saqlash
+                                foreach (var part in model.Parts)
+                                {
+                                    var newPart = new P_ORDER_PARTS
+                                    {
+                                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                                        PartID = part.PartID,
+                                        UnitID = part.UnitID,
+                                        Amount = part.Amount,
+                                        Price = part.Price,
+                                        MOQ = part.MOQ
+                                    };
 
-                // Parts ni saqlash
-                foreach (var part in model.Parts)
+                                    db.P_ORDER_PARTS.Add(newPart);
+                                }*/
+
+                try
                 {
-                    var newPart = new P_ORDER_PARTS
-                    {
-                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
-                        PartID = part.PartID,
-                        UnitID = part.UnitID,
-                        Amount = part.Amount,
-                        Price = part.Price,
-                        MOQ = part.MOQ
-                    };
+                    db.SaveChanges();
+                }
+                catch
+                {
+                    ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
+                    ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
-                    db.P_ORDER_PARTS.Add(newPart);
+                    ViewBag.steelMarka = new SelectList(db.STEEL_COILS.ToList(), "ID", "Marka");
+                    ViewBag.steelStandart = new SelectList(db.STEEL_COILS.ToList(), "ID", "Standart");
+                    ViewBag.steelCoating = new SelectList(db.STEEL_COILS.ToList(), "ID", "Coating");
+                    ViewBag.steelThickness = new SelectList(db.STEEL_COILS.ToList(), "ID", "Thickness");
+
+                    return View(model);
                 }
 
-                db.SaveChanges();
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
-                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "POrderController", "CreateSteel[Post]");
                 return RedirectToAction("Index");
