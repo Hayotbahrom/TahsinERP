@@ -13,7 +13,7 @@ namespace tahsinERP.Models
             {
                 if (childPno != null) 
                 {
-                    var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == childPno).FirstOrDefault();
+                    var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == childPno || x.ChildPNo == childPno && x.IsDeleted == false).FirstOrDefault();
                     if (bom != null)
                     {
                         return true;
