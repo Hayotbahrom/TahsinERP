@@ -532,8 +532,8 @@ namespace tahsinERP.Controllers
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "PartController", "ClearDataTable");
+            //var userEmail = User.Identity.Name;
+            //LogHelper.LogToDatabase(userEmail, "PartController", "ClearDataTable");
             // Return the UploadWithExcel view
             return View("UploadWithExcel");
         }
