@@ -147,14 +147,14 @@
                                                         @Html.TextBoxFor(model => model.PltHeight, new { @class = "form-control", @placeholder = "Pallet mahsulotni balandligini kiriting" })
                                                         @Html.ValidationMessageFor(model => model.PltHeight, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">Activity</h6>
-                                                    <fieldset class="invoice-address form-group">
+                                                    @*<h6 class="invoice-to">Activity</h6>*@
+                                                    @*<fieldset class="invoice-address form-group">
                                                         <div class="checkbox checkbox-secondary checkbox-glow">
                                                             @Html.CheckBoxFor(model => model.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
                                                             <label for="checkboxGlow2">Activity</label>
                                                             @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-warning" })
                                                         </div>
-                                                    </fieldset>
+                                                    </fieldset>*@
                                                 </div>
                                                 <br />
                                             </div>

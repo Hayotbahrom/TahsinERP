@@ -68,7 +68,7 @@
                 <span class="align-middle ml-25">Orqaga</span>
             </button>
         }
-        @using (Html.BeginForm("EditBom", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @*@using (Html.BeginForm("EditBom", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.HiddenFor(x => x.ParentPnoComplationStatus)
             @Html.HiddenFor(model => model.ParentPNo)
@@ -76,8 +76,10 @@
                 <span class="align-middle ml-25">Tahrirlash</span>
             </button>
 
-        }
-        <a href="@Url.Action("EditBom", "BOM", new { id = Model.TempBomID })" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">Tahrirlash</a>
+        }*@
+        <a href="@Url.Action("EditBom", "BOM", new { id = Model.TempBomID })" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">Tahrirlash</a>
+        @Html.HiddenFor(x => x.ParentPnoComplationStatus)
+        @Html.HiddenFor(model => model.ParentPNo)
         @using (Html.BeginForm("SaveBom", "BOM", FormMethod.Post))
         {
             @Html.HiddenFor(model => model.ParentPnoComplationStatus)

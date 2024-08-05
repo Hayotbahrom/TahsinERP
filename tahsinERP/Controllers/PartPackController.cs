@@ -15,22 +15,8 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var partpackVM = new PartIndexViewModel();
-                var partpack = db.PARTPACKS
-                    .Where(x => x.IsDeleted == false)
-                    .ToList();
-                var partlist = new List<PartIndexViewModel>();
-                foreach (var partpc in partpack)
-                {
-                    var part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == partpc.PartID).FirstOrDefault();
-                    partpackVM.PName = part.PName;
-                    partpackVM.PrPackMaterial = partpc.PrPackMaterial;
-                    partpackVM.PrPackQty = partpc.PrPackQty;
-                    partpackVM.ID = partpc.ID;
-                    partlist.Add(partpackVM);
-                }
-
-                return View(partlist);
+                var partpacks = db.PARTPACKS.Include(x => x.PART).Where(x  => x.IsDeleted == false).ToList();
+                return View(partpacks);
             }
         }
         public ActionResult Create()
