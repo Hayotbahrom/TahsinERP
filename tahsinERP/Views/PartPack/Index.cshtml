@@ -1,4 +1,4 @@
-﻿@model List<tahsinERP.ViewModels.PartIndexViewModel>
+﻿@model List<tahsinERP.Models.PARTPACK>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -76,7 +76,7 @@
                                                         <td></td>
                                                         <td>
 
-                                                            <a href="~/Part/Details/@item.PartID">@item.PName</a>
+                                                            <a href="~/Part/Details/@item.PART.ID">@item.PART.PNo</a>
 
                                                         </td>
                                                         <td> <a href="~/PartPack/Details/@item.ID">@item.PrPackMaterial</a></td>
