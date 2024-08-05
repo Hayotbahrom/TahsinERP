@@ -96,7 +96,14 @@
                                                                                     <td>@item.PART.PName</td>
                                                                                     <td>@item.Price @Model.Currency</td>
                                                                                     <td>@item.Amount</td>
-                                                                                    <td>@item.UNIT.UnitName</td>
+                                                                                    @if (item.UnitID is null)
+                                                                                    {
+                                                                                        <td>-</td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td>@item.UNIT.UnitName</td>
+                                                                                    }
                                                                                     <td>@item.TotalPrice @Model.Currency</td>
                                                                                     <td>@item.MOQ</td>
                                                                                 </tr>

@@ -155,23 +155,42 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
-
-
-        //steel coil uchun Create Actoin method
-        public ActionResult CreateSteel()
+        public ActionResult GetContractsBySupplier(int supplierID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
+                var contracts = db.P_CONTRACTS
+                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
+                    .Select(x => new { x.ID, x.ContractNo })
+                    .ToList();
+
+                return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.ContractNo }), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //steel coil uchun Create Actoin method
+        public ActionResult CreateSteel(int? supplierID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                if (supplierID.HasValue)
+                {
+                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false && x.Type.CompareTo("Steel") == 0).ToList(), "ID", "Name");
+                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false && x.SupplierID == supplierID.Value).ToList(), "ID", "ContractNo");
+                }
+                else
+                {
+                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false && x.Type.CompareTo("Steel") == 0).ToList(), "ID", "Name");
+                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
+                }
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 var steelCoils = db.STEEL_COILS.ToList();
 
-                ViewBag.steelMarka = new SelectList(steelCoils, "ID", "Marka");
-                ViewBag.steelStandart = new SelectList(steelCoils, "ID", "Standart");
-                ViewBag.steelCoating = new SelectList(steelCoils, "ID", "Coating");
-                ViewBag.steelThickness = new SelectList(steelCoils, "ID", "Thickness");
+                ViewBag.steelMarka = new SelectList(steelCoils.ToList(), "ID", "Marka");
+                ViewBag.steelStandart = new SelectList(steelCoils.ToList(), "ID", "Standart");
+                ViewBag.steelCoating = new SelectList(steelCoils.ToList(), "ID", "Coating");
+                ViewBag.steelThickness = new SelectList(steelCoils.ToList(), "ID", "Thickness");
             }
 
             return View();
@@ -183,63 +202,72 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var steelCoil = db.STEEL_COILS.ToList();
-
-                var newOrder = new P_ORDERS()
-                {
-                    OrderNo = model.OrderNo,
-                    IssuedDate = model.IssuedDate,
-                    CompanyID = 1,
-                    SupplierID = model.SupplierID,
-                    ContractID = model.ContractID,
-                    Currency = model.Currency,
-                    Description = model.Description,
-                    IsDeleted = false
-                };
-                db.P_ORDERS.Add(newOrder);
-                db.SaveChanges();
-
-                // Yangi yozuvning IncomeID sini olish
-                int newOrderID = newOrder.ID;
-
-                // Parts ni saqlash
-                foreach (var part in model.Parts)
-                {
-                    var existPart = db.PARTS.Where(p => p.IsDeleted == false &&
-                                                        p.Marka == part.Marka &&
-                                                        p.Coating == part.Coating &&
-                                                        p.Standart == part.Standart 
-                                                        /* && p.Thickness == part.Thickness*/).FirstOrDefault();
-                    if (existPart is null)
-                    {
-                        var newPartInsert = new PART
-                        {
-                            Marka = part.Marka,
-                            Coating = part.Coating,
-                            Standart = part.Standart
-                        };
-                        db.PARTS.Add(newPartInsert);
-                        db.SaveChanges();
-                    }
-
-                    var newPart = new P_ORDER_PARTS
-                    {
-                        OrderID = newOrderID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
-                        PartID = existPart.ID,
-                        UnitID = existPart.UnitID
-                    };
-
-                    db.P_ORDER_PARTS.Add(newPart);
-                }
-
                 try
                 {
+                    var steelCoil = db.STEEL_COILS.ToList();
+
+                    var newOrder = new P_ORDERS()
+                    {
+                        OrderNo = model.OrderNo,
+                        IssuedDate = model.IssuedDate,
+                        CompanyID = 1,
+                        SupplierID = model.SupplierID,
+                        ContractID = model.ContractID,
+                        Currency = model.Currency,
+                        Description = model.Description,
+                        IsDeleted = false
+                    };
+                    db.P_ORDERS.Add(newOrder);
                     db.SaveChanges();
+
+                    // Yangi yozuvning IncomeID sini olish
+                    int newOrderID = newOrder.ID;
+
+                    // Parts ni saqlash
+                    foreach (var part in model.Parts)
+                    {
+                        var existPart = db.PARTS.Where(p => p.IsDeleted == false &&
+                                                            p.Marka == part.Marka &&
+                                                            p.Coating == part.Coating &&
+                                                            p.Standart == part.Standart 
+                                                            && p.Gauge == part.Thickness).FirstOrDefault();
+                        if (existPart is null)
+                        {
+                            var newPartInsert = new PART
+                            {
+                                Marka = part.Marka,
+                                Coating = part.Coating,
+                                Standart = part.Standart,
+                                PNo = part.Standart + "" + part.Thickness+"x"+part.Width,
+                                IsInHouse = false,
+                                IsDeleted = false
+                            };
+                            db.PARTS.Add(newPartInsert);
+                            db.SaveChanges();
+
+                            var newOrderPart = new P_ORDER_PARTS
+                            {
+                                OrderID = newOrderID,
+                                PartID = newPartInsert.ID,
+                                UnitID = newPartInsert.UnitID
+                            };
+                            db.P_ORDER_PARTS.Add(newOrderPart);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            var existNewOrderPart = new P_ORDER_PARTS
+                            {
+                                OrderID = newOrderID
+                            };
+                            db.P_ORDER_PARTS.Add(existNewOrderPart);
+                        }
+                    }
                 }
                 catch
                 {
-                    ViewBag.PContract = new SelectList(db.P_CONTRACTS, "ID", "ContractNo", newOrder.ContractID);
-                    ViewBag.Supplier = new SelectList(db.SUPPLIERS, "ID", "Name", newOrder.SupplierID);
+                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", model.ContractID);
+                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false && x.Type.CompareTo("Steel") == 0).ToList(), "ID", "Name", model.SupplierID);
                     ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                     ViewBag.steelMarka = new SelectList(db.STEEL_COILS.ToList(), "ID", "Marka");
