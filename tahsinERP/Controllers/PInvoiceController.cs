@@ -532,8 +532,6 @@ namespace tahsinERP.Controllers
             ViewBag.DataTableModel = null;
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "CleareDataTable");
             return View("UploadWithExcel");
         }
         [HttpPost]
@@ -618,6 +616,9 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", ex.Message);
                 }
             }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }

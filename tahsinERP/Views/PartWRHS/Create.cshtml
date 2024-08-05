@@ -58,13 +58,19 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">MRP</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownList("MRPUserID", (SelectList)ViewBag.MRPUsers, "Select MRP User", new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.MRP, (SelectList)ViewBag.MRPUsers, "omborchi foydalanuvchini tanlang", new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.MRP, "", new { @class = "text-danger" })
                                                     </fieldset>
-                                                    <h6 class="invoice-to">Bog'lanadigon tsex nomi</h6>
+                                                    <h6 class="invoice-to">Ushbu ombor ishlab chiqarish tsexiga tegishlimi?</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownList("ShopID", (SelectList)ViewBag.ShopList, "Select Shop", new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.ShopID, "", new { @class = "text-danger" })
+                                                        <div class="checkbox checkbox-primary checkbox-glow">
+                                                            <input type="checkbox" id="checkboxGlow1" onchange="checkboxClicked()">
+                                                            <label for="checkboxGlow1">Primary</label>
+                                                        </div>
+                                                        <div id="shopArea">
+                                                            @Html.DropDownListFor(model => model.ShopID, (SelectList)ViewBag.ShopList,"tsexni tanlang", new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.ShopID, "", new { @class = "text-danger" })
+                                                        </div>
                                                     </fieldset>
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item border-0 pb-0">
@@ -92,3 +98,16 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+
+<script>
+    function checkboxClicked() {
+        var checkBox = document.getElementById("checkboxGlow1");
+        var shopArea = document.getElementById("shopArea");
+        if (checkBox.checked) {
+            shopArea.style.display = "none";
+        } else {
+            shopArea.style.display = "block";
+        }
+    }
+</script>

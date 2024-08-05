@@ -294,7 +294,7 @@
                     <li class=" nav-item">
                         <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
                         <ul class="menu-content">
-                            
+
                             <li>
                                 <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
                             </li>
@@ -744,39 +744,34 @@
         <!-- Cookie -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                if (!getCookie("cookieConsent")) {
+                var showCookieConsent = @Html.Raw((ViewBag.ShowCookieConsent ?? false).ToString().ToLower());
+
+                if (showCookieConsent) {
                     $("#cookieConsent").modal('show');
                 }
 
                 $j("#acceptCookies").on("click", function () {
-                    setCookie("cookieConsent", "true", 1);
+                    $.ajax({
+                        url: '@Url.Action("CookieConfirm", "Home")',
+                        type: 'POST',
+                        success: function (res) {
+                            if (res.success) {
+                                $("#cookieConsent").modal('hide');
+                            } else {
+                                alert("There was an error processing your request.");
+                            }
+                        },
+                        error: function () {
+                            alert("There was an error processing your request.");
+                        }
+                    });
+
                     $("#cookieConsent").modal('hide');
                 });
 
                 $("#closeCookies").on("click", function () {
                     $("#cookieConsent").modal('hide');
                 });
-
-                function setCookie(name, value, days) {
-                    var expires = "";
-                    if (days) {
-                        var date = new Date();
-                        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                        expires = "; expires=" + date.toUTCString();
-                    }
-                    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-                }
-
-                function getCookie(name) {
-                    var nameEQ = name + "=";
-                    var ca = document.cookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-                    }
-                    return null;
-                }
             });
         </script>
         <!-- __________ -->

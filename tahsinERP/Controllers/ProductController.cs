@@ -86,7 +86,7 @@ namespace tahsinERP.Controllers
                         }
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ProdctController", "Create[Post]");
+                        LogHelper.LogToDatabase(userEmail, "ProductController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -202,7 +202,7 @@ namespace tahsinERP.Controllers
                         db.Entry(productToUpdate).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ProdctController", "Edit[Post]");
+                        LogHelper.LogToDatabase(userEmail, "ProductController", "Edit[Post]");
                         return RedirectToAction("Index");
                     }
 
@@ -249,7 +249,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "ProdctController", "Delete[Post]");
+                                LogHelper.LogToDatabase(userEmail, "ProductController", "Delete[Post]");
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -353,8 +353,6 @@ namespace tahsinERP.Controllers
             ViewBag.DataTableModel = null;
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "ProdctController", "CleareDataTable");
             return View("UploadWithExcel");
         }
         [HttpPost]
@@ -408,6 +406,8 @@ namespace tahsinERP.Controllers
                     }
                 });
             }
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "ProductController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }

@@ -81,7 +81,7 @@ namespace tahsinERP.Controllers
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
                 ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
-                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");    
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 return View(partVM);
             }
         }
@@ -366,7 +366,7 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                
+
                 //string shopName = shop != null ? shop.ShopName : "Unknown";
 
                 PartViewModel partVM = new PartViewModel
@@ -531,9 +531,6 @@ namespace tahsinERP.Controllers
             ViewBag.DataTableModel = null;
             ViewBag.IsFileUploaded = false;
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
-
-            //var userEmail = User.Identity.Name;
-            //LogHelper.LogToDatabase(userEmail, "PartController", "ClearDataTable");
             // Return the UploadWithExcel view
             return View("UploadWithExcel");
         }
@@ -586,6 +583,7 @@ namespace tahsinERP.Controllers
                                 ViewBag.Message = "Muammo!. Yuklangan faylda ayni vaqtda ma'lumotlar bazasida bor ma'lumot kiritilishga harakat bo'lmoqda.";
                             }
                         }
+                        LogHelper.LogToDatabase(User.Identity.Name, "PartController", "UploadWithExcelSave");
                     }
                     catch (JsonReaderException jex)
                     {
@@ -599,6 +597,9 @@ namespace tahsinERP.Controllers
                         ModelState.AddModelError("", ex.Message);
                     }
                 }
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "PartController", "Save[Post]");
                 return RedirectToAction("Index");
             }
         }

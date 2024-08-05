@@ -274,10 +274,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\LastActionsController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\BlankingController.cs" />
     <Compile Include="Controllers\BOMController.cs" />
     <Compile Include="Controllers\ComingSoonController.cs" />
+    <Compile Include="Controllers\CookieHelper.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DefectTypeController.cs" />
     <Compile Include="Controllers\DamagedPartController.cs" />
@@ -315,6 +317,7 @@
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Controllers\TracingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserHelper.cs" />
     <Compile Include="Controllers\WaybillController.cs" />
     <Compile Include="Controllers\WhExpenseController.cs" />
     <Compile Include="Controllers\WhIncomeController.cs" />
@@ -629,6 +632,7 @@
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
     <Compile Include="ViewModels\BOM\StampingNormViewModel.cs" />
     <Compile Include="ViewModels\DamagedPartIndexViewModel.cs" />
+    <Compile Include="ViewModels\POrderSteelViewModel.cs" />
     <Compile Include="ViewModels\SOrderViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PackingListViewModel.cs" />
@@ -2643,6 +2647,7 @@
     <Content Include="Views\DamagedProduct\Delete.cshtml" />
     <Content Include="Views\DamagedProduct\Details.cshtml" />
     <Content Include="Views\PartStock\Index.cshtml" />
+    <Content Include="Views\LastActions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -41,39 +41,20 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(PART_WRHS model, int MRPUserID, int ShopID)
+        public ActionResult Create(PART_WRHS model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    model.MRP = MRPUserID;
-                    model.ShopID = ShopID;
                     model.IsDeleted = false;
 
                     db.PART_WRHS.Add(model);
                     db.SaveChanges();
-                    var mrpUser = db.USERS.Find(MRPUserID);
-                    if (mrpUser != null)
-                    {
-                        mrpUser.PART_WRHS.Add(model);
-                        db.Entry(mrpUser).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-
                     return RedirectToAction("Index"); 
                 }
-
-                var shops = db.SHOPS.ToList();
-                ViewBag.ShopList = new SelectList(shops, "ID", "ShopName", model.ShopID);
-
-                var mrpUsers = db.USERS
-                                    .Where(u => u.ROLES.Any(r => r.RName == "MRP"))
-                                    .ToList();
-                ViewBag.MRPUsers = new SelectList(mrpUsers, "ID", "FullName", MRPUserID);
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Create[Post]");
-                return View(model);
+                LogHelper.LogToDatabase(User.Identity.Name, "PartWRHSController", "Create[Post]");
+                return RedirectToAction("Index");
             }
         }
         private readonly DBTHSNEntities db = new DBTHSNEntities();
