@@ -240,7 +240,8 @@ namespace tahsinERP.Controllers
                                 Standart = part.Standart,
                                 PNo = part.Standart + "" + part.Thickness+"x"+part.Width,
                                 IsInHouse = false,
-                                IsDeleted = false
+                                IsDeleted = false,
+                                PWidth = part.Width
                             };
                             db.PARTS.Add(newPartInsert);
                             db.SaveChanges();
@@ -249,7 +250,8 @@ namespace tahsinERP.Controllers
                             {
                                 OrderID = newOrderID,
                                 PartID = newPartInsert.ID,
-                                UnitID = newPartInsert.UnitID
+                                UnitID = newPartInsert.UnitID,
+                                //Amount = part.Amount,
                             };
                             db.P_ORDER_PARTS.Add(newOrderPart);
                             db.SaveChanges();
