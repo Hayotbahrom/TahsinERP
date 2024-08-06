@@ -54,7 +54,7 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control", id = "SupplierID" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
@@ -102,11 +102,11 @@
                                                             @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>@*
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Unit">Birligi</label>
-                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
-                                                        </div>*@
+                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                <label for="Part_Unit">Birligi</label>
+                                                                @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
+                                                            </div>*@
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Birligi</label>
                                                             @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
@@ -153,6 +153,26 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+    function refreshdatatablesupplier() {
+        const supplierID = document.getElementById("SupplierID").value;
+        $.ajax({
+            url: '@Url.Action("GetContractsBySupplier", "POrder")',
+            type: 'GET',
+            data: { supplierID: supplierID },
+            success: function (data) {
+                var contractDropdown = $("#ContractID");
+                contractDropdown.empty();
+                $.each(data, function (index, item) {
+                    contractDropdown.append(new Option(item.Text, item.Value));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching contracts:", error);
+            }
+        });
+    }
+    </script>
 }
 else
 {

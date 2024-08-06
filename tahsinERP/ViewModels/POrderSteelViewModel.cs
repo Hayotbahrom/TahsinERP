@@ -32,6 +32,7 @@ namespace tahsinERP.ViewModels
         public string Marka { get; set; }
         public string Standart { get; set; }
         public string Coating { get; set; }
-        public string Thickness { get; set; }
+        public float Thickness { get; set; }
+        public float Width { get; set; }    
     }
 }
