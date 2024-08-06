@@ -26,13 +26,22 @@ namespace tahsinERP.Controllers
         private string partNo = "";
 
         // GET: Part
-        public ActionResult GetAllParts()
+        public ActionResult GetAllParts(string type)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                var parts = db1.PARTS.Include(x => x.UNIT)
-                    .Where(p => p.IsDeleted == false).ToList();
-                return View(parts);
+                if (!string.IsNullOrEmpty(type))
+                {
+                    var parttype = db1.PARTS.Include(x => x.UNIT).Where(x => x.IsDeleted == false && x.Type.CompareTo(type) == 0).ToList();
+                    ViewBag.SourceList = new SelectList(sources, type);
+                    return View(parttype);
+                }
+                else
+                {
+                    var parts = db1.PARTS.Include(x => x.UNIT).Where(x => x.IsDeleted == false).ToList();
+                    ViewBag.SourceList = new SelectList(sources, type);
+                    return View(parts);
+                }
             }
         }
         public ActionResult Index(string type, int? supplierID)
@@ -161,7 +170,7 @@ namespace tahsinERP.Controllers
                         }
                     }
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("GetAllParts");
                 }
                 catch (Exception ex)
                 {
@@ -288,7 +297,7 @@ namespace tahsinERP.Controllers
 
                     var userEmail = User.Identity.Name;
                     LogHelper.LogToDatabase(userEmail, "PartController", "Edit[Post]");
-                    return RedirectToAction("Index");
+                    return RedirectToAction("GetAllParts");
                 }
                 catch (Exception ex)
                 {
@@ -309,7 +318,7 @@ namespace tahsinERP.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var part = db.PARTS.Find(ID);
+                var part = db.PARTS.Include(x => x.UNIT).Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
                 if (part == null)
                     return HttpNotFound();
 
@@ -335,7 +344,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
                                 var userEmail = User.Identity.Name;
                                 LogHelper.LogToDatabase(userEmail, "PartController", "Delete[Post]");
-                                return RedirectToAction("Index");
+                                return RedirectToAction("GetAllParts");
                             }
                             catch (RetryLimitExceededException)
                             {
@@ -600,7 +609,7 @@ namespace tahsinERP.Controllers
 
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PartController", "Save[Post]");
-                return RedirectToAction("Index");
+                return RedirectToAction("GetAllParts");
             }
         }
 

@@ -55,6 +55,8 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
+                ViewBag.dailyPlan = db.PRODUCTPLANS_DAILY.Where(p => p.PlanID == productPlan.ID).ToList();
+
                 return View(productPlan);
 
             }
