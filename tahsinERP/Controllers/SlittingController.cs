@@ -59,7 +59,6 @@ namespace tahsinERP.Controllers
                         var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.PartID_before);
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.PartID_after);
 
-                        var cutterWidth = model.CutterWidth;
                         var pieceCount = Convert.ToInt32(Math.Floor(part_before.PWidth / part_after.PWidth));
                         var cutterLines = (pieceCount - 1);
 
@@ -73,11 +72,10 @@ namespace tahsinERP.Controllers
                                 PartID_before = model.PartID_before,
                                 SlittingPieces = pieceCount,
                                 CutterLines = cutterLines,
-                                CutterWidth = cutterWidth,
                                 WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2 , MidpointRounding.ToEven),
-                                WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines * cutterWidth), 2 ,MidpointRounding.ToEven),
-                                WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)),2, MidpointRounding.ToEven),
-                                WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
+                                WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines), 2 ,MidpointRounding.ToEven),
+                                WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)),2, MidpointRounding.ToEven),
+                                WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                                 IssuedDateTime = DateTime.Now,
                                 IssuedByUserID = userID
                             };
@@ -150,7 +148,6 @@ namespace tahsinERP.Controllers
                         var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.PartID_after);
 
                         var cutterLines = (int)((part_before.PWidth) / (part_after.PWidth) - 1);
-                        var cutterWidth = model.CutterWidth;
                         var pieceCount = Convert.ToInt32(Math.Round(part_before.PWidth / part_after.PWidth));
 
                         if (part_after != null && part_before != null)
@@ -160,11 +157,10 @@ namespace tahsinERP.Controllers
                             slittingNorm.PartID_before = model.PartID_before;
                             slittingNorm.SlittingPieces = pieceCount;
                             slittingNorm.CutterLines = cutterLines;
-                            slittingNorm.CutterWidth = cutterWidth;
                             slittingNorm.WeightOfSlittedParts = part_after.PWidth * (part_before.PWeight / part_before.PWidth);
-                            slittingNorm.WeightOfCutWaste = (part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth);
-                            slittingNorm.WidthOfUsefulWaste = part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth);
-                            slittingNorm.WeightOfUsefulWaste = (part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines - cutterWidth)) * (part_before.PWeight / part_before.PWidth);
+                            slittingNorm.WeightOfCutWaste = (part_before.PWeight / part_before.PWidth * cutterLines);
+                            slittingNorm.WidthOfUsefulWaste = part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines);
+                            slittingNorm.WeightOfUsefulWaste = (part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)) * (part_before.PWeight / part_before.PWidth);
                             slittingNorm.IssuedDateTime = DateTime.Now; // This might not be necessary for an edit
                             slittingNorm.IssuedByUserID = userID; // This might not be necessary for an edit
                         }

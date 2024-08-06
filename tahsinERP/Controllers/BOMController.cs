@@ -188,7 +188,7 @@ namespace tahsinERP.Controllers
 
                     TEMPORARY_BOMS tempBom = new TEMPORARY_BOMS();
                     tempBom.Consumption = part.Quantity;
-                    tempBom.ConsumptionUnitID = unitId.ID;
+                    tempBom.ConsumptionUnitID = _part.UNIT.ID;
                     tempBom.ParentPNo = model.ProductNo;
                     tempBom.ChildPNo = _part.PNo;
                     tempBom.IsDeleted = false;
@@ -300,7 +300,6 @@ namespace tahsinERP.Controllers
                     var after_part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_after).FirstOrDefault();
                     var part_before1 = db.PARTS.Where(x => x.IsDeleted == false && x.ID == selectedSlittingNorm.PartID_before).FirstOrDefault();
                     var cutterLines1 = (int)(after_part.PWidth) / ((part_before1.PWidth) - 1);
-                    var cutterWidth1 = selectedSlittingNorm.CutterWidth;
                     var bom = new BOM();
                     bom.ChildPNo = part_before1.PNo;
                     bom.ParentPNo = after_part.PNo;
@@ -308,7 +307,7 @@ namespace tahsinERP.Controllers
                     if (model.PartNo != null) { bom.IsParentProduct = true; }
                     else { bom.IsParentProduct = false; }
                     bom.IsActive = true;
-                    bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1 * cutterWidth1);
+                    bom.WasteAmount = (part_before1.PWeight / part_before1.PWidth * cutterLines1);
                     bom.ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID;
                     bom.Consumption = selectedSlittingNorm.WeightOfSlittedParts / cutterLines1;
                     bom.ConsumptionUnit = part_before1.UNIT.ShortName;
@@ -319,7 +318,6 @@ namespace tahsinERP.Controllers
                 {
                     var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_before);
                     var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
-                    var cutterWidth = model.SLITTING_NORMS.CutterWidth;
                     var pieceCount = (part_before.PWidth / part_after.PWidth);
                     var cutterLines = (pieceCount - 1);
                     if (part_after != null && part_before != null)
@@ -332,11 +330,10 @@ namespace tahsinERP.Controllers
                             PartID_before = model.SLITTING_NORMS.PartID_before,
                             SlittingPieces = (int)pieceCount,
                             CutterLines = (int)cutterLines,
-                            CutterWidth = cutterWidth,
                             WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
-                            WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
-                            WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)), 2, MidpointRounding.ToEven),
-                            WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
+                            WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines ), 2, MidpointRounding.ToEven),
+                            WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)), 2, MidpointRounding.ToEven),
+                            WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                             IssuedDateTime = DateTime.Now,
                             IssuedByUserID = userId.GetValueOrDefault()
                         };
@@ -349,7 +346,7 @@ namespace tahsinERP.Controllers
                                 ParentPNo = part_after.PNo,
                                 IsDeleted = false,
                                 IsActive = true,
-                                WasteAmount = Math.Round((part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth), 2, MidpointRounding.ToEven),
+                                WasteAmount = Math.Round((part_before.PWeight / part_before.PWidth * cutterLines), 2, MidpointRounding.ToEven),
                                 ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Slitting")?.ID,
                                 Consumption = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth) / cutterLines), 2, MidpointRounding.ToEven),
                                 ConsumptionUnit = part_before.UNIT.ShortName,
@@ -901,7 +898,6 @@ namespace tahsinERP.Controllers
                 {
                     var part_before = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == slitting_norm.PartID_before);
                     var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == slitting_norm.PartID_after);
-                    var cutterWidth = model.SLITTING_NORMS.CutterWidth;
                     var pieceCount = (part_before.PWidth / part_after.PWidth);
                     var cutterLines = (pieceCount - 1);
                     slitting_norm.CutterWidth = model.SLITTING_NORMS.CutterWidth;
@@ -912,11 +908,10 @@ namespace tahsinERP.Controllers
                     slitting_norm.PartID_before = slitting_norm.PartID_before;
                     slitting_norm.SlittingPieces = (int)pieceCount;
                     slitting_norm.CutterLines = (int)cutterLines;
-                    slitting_norm.CutterWidth = cutterWidth;
                     slitting_norm.WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven);
-                    slitting_norm.WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines * cutterWidth), 2, MidpointRounding.ToEven);
-                    slitting_norm.WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)), 2, MidpointRounding.ToEven);
-                    slitting_norm.WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines * cutterWidth)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven);
+                    slitting_norm.WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines), 2, MidpointRounding.ToEven);
+                    slitting_norm.WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)), 2, MidpointRounding.ToEven);
+                    slitting_norm.WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven);
                     slitting_norm.IssuedDateTime = DateTime.Now;
                     slitting_norm.IssuedByUserID = userId.GetValueOrDefault();
                     var isproduct = db.PRODUCTS.Where(x => x.PNo == part_after.PNo).FirstOrDefault();
@@ -927,7 +922,7 @@ namespace tahsinERP.Controllers
                     slitting_bom.IsDeleted = false;
                     slitting_bom.IsActive = true;
                     slitting_bom.IsParentProduct = isproduct != null;
-                    slitting_bom.WasteAmount = Math.Round((part_before.PWeight / part_before.PWidth * cutterLines * cutterWidth), 2, MidpointRounding.ToEven);
+                    slitting_bom.WasteAmount = Math.Round((part_before.PWeight / part_before.PWidth * cutterLines), 2, MidpointRounding.ToEven);
                     slitting_bom.ProcessID = db.PRODUCTIONPROCESSES.Where(x => x.ProcessName == "Slitting" && x.IsDeleted == false).FirstOrDefault().ID;
                     slitting_bom.Consumption = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth) / cutterLines), 2, MidpointRounding.ToEven);
                     slitting_bom.ConsumptionUnit = part_before.UNIT.UnitName;

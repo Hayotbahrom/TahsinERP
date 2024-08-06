@@ -60,12 +60,6 @@
                                                                 @Html.ValidationMessageFor(model => model.PartID_after, "", new { @class = "text-danger" })
                                                             </fieldset>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <fieldset class="invoice-address form-group">
-                                                                @Html.TextBoxFor(model => model.CutterWidth, new { @class = "form-control", @placeholder = "Cutter width" })
-                                                                @Html.ValidationMessageFor(model => model.CutterWidth, "", new { @class = "text-danger" })
-                                                            </fieldset>
-                                                        </div>
                                                         <div class="checkbox checkbox-secondary checkbox-glow" style="margin-left:30px">
                                                             @Html.CheckBoxFor(model => model.IsActive, new { @type = "checkbox", @id = "checkboxGlow2" })
                                                             <label for="checkboxGlow2">Eng oxirgi faolimi?</label>
