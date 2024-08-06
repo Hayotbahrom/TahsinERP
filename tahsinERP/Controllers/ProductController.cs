@@ -127,16 +127,18 @@ namespace tahsinERP.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                var product = db.PRODUCTS.Include(x => x.UNIT).Where(x => x.ID == id && x.IsDeleted == false);
+                var product = db.PRODUCTS.Include(x => x.UNIT).SingleOrDefault(x => x.ID == id && x.IsDeleted == false);
                 if (product == null)
                 {
                     return HttpNotFound();
                 }
-                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
-                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName", product.UnitID); 
+
                 return View(product);
             }
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(PRODUCT product)
@@ -211,21 +213,22 @@ namespace tahsinERP.Controllers
                 return View(product);
             }
         }
-        public ActionResult Delete(int? Id)
+        public ActionResult Delete(int? id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-
-                if (Id == null)
+                if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var product = db.PRODUCTS.Include(x => x.UNIT).Where(x => x.ID == Id && x.IsDeleted == false);
 
+                var product = db.PRODUCTS.Include(x => x.UNIT).SingleOrDefault(x => x.ID == id && x.IsDeleted == false);
                 if (product == null)
                 {
                     return HttpNotFound();
                 }
+                ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName", product.UnitID);
 
                 return View(product);
             }

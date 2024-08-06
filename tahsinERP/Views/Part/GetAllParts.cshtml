@@ -3,12 +3,12 @@
     ViewBag.Title = "GetAllParts";
 }
 @*
-<style>
-    /* Add a bottom border to each table row */
-    #myDataTable tr {
-        border-bottom: 1px solid #ccc;
-    }
-</style>*@
+    <style>
+        /* Add a bottom border to each table row */
+        #myDataTable tr {
+            border-bottom: 1px solid #ccc;
+        }
+    </style>*@
 
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
@@ -35,6 +35,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="users-list-filter px-1">
+                <form>
+                    <div class="row border rounded py-2 mb-2">
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <label for="users-list-role">Turi</label>
+                            <fieldset class="form-group">
+                                @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                            </fieldset>
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                            <a href="~/Part/GetAllParts" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                Ro'yxatni yangilash
+                            </a>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="content-body">
                 <!-- users list start -->
@@ -97,3 +115,13 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+<script type="text/javascript">
+    function refreshDataTable() {
+        var source = document.getElementById("SourceID").value;
+        //const supplierID = document.getElementById("SupplierID").value;
+        window.location.href = '@Url.Action("GetAllParts", "Part")?type=' + source;
+        @*////window.location.href = '@Url.Action("GetAllParts", "Part")*@
+
+        };
+</script>
