@@ -241,7 +241,6 @@ namespace tahsinERP.Controllers
                                 PNo = part.Standart + "" + part.Thickness+"x"+part.Width,
                                 IsInHouse = false,
                                 IsDeleted = false,
-                                UnitID = part.UnitID,
                                 PWidth = part.Width
                             };
                             db.PARTS.Add(newPartInsert);
