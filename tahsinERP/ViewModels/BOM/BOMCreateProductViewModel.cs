@@ -26,7 +26,6 @@ namespace tahsinERP.ViewModels.BOM
             public PART PART { get; set; }
             public int Quantity { get; set; }
             public string Unit { get; set; }
-            public bool InHouse { get; set; }
         }
     }
 }

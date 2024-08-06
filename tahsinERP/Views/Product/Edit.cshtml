@@ -22,7 +22,7 @@
                                             <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                         </li>
                                         <li class="breadcrumb-item">
-                                            <a href="~/Product/Index">Maxsulot</a>
+                                            <a href="~/Product/Index">Maxsulotlar</a>
                                         </li>
                                         <li class="breadcrumb-item active">
                                             Maxsulot @Model.PNo ni tahrirlash
@@ -51,12 +51,12 @@
                                                         <div class="col-sm-6 col-12 order-2 order-sm-1">
                                                             <h4 class="text-primary">Maxsulot raqami</h4>
                                                             <fieldset class="invoice-address form-group">
-                                                                @Html.TextBoxFor(model => model.PNo, new { @class = "form-control round", @placeholder = "PNo" })
+                                                                @Html.TextBoxFor(model => model.PNo, new { @class = "form-control round", @placeholder = "Maxsulot raqami" })
                                                                 @Html.ValidationMessageFor(model => model.PNo, "", new { @class = "text-danger" })
                                                             </fieldset>
-                                                            <h6 class="invoice-to">Nomi</h6>
+                                                            <h6 class="invoice-to">Maxsulot nomi</h6>
                                                             <fieldset class="invoice-address form-group">
-                                                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control round", @placeholder = "Name" })
+                                                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control round", @placeholder = "Maxsulot nomi" })
                                                                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                                                             </fieldset>
                                                         </div>
@@ -69,27 +69,27 @@
                                                     </div>
                                                     <h6 class="invoice-to">Turi</h6>
                                                     <fieldset class="form-group">
-                                                        @Html.TextBoxFor(model => model.Type, new { @class = "form-control round", @placeholder = "Type" })
+                                                        @Html.TextBoxFor(model => model.Type, new { @class = "form-control round", @placeholder = "Turi" })
                                                         @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Og'irligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control round", @placeholder = "Weight" })
+                                                        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control round", @placeholder = "O'g'irligi" })
                                                         @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Uzunligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Length, new { @class = "form-control round", @placeholder = "Length" })
+                                                        @Html.TextBoxFor(model => model.Length, new { @class = "form-control round", @placeholder = "Uzunligi" })
                                                         @Html.ValidationMessageFor(model => model.Length, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Kengligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Width, new { @class = "form-control round", @placeholder = "Width" })
+                                                        @Html.TextBoxFor(model => model.Width, new { @class = "form-control round", @placeholder = "Kengligi" })
                                                         @Html.ValidationMessageFor(model => model.Width, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Balandligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Height, new { @class = "form-control round", @placeholder = "Height" })
+                                                        @Html.TextBoxFor(model => model.Height, new { @class = "form-control round", @placeholder = "Balandligi" })
                                                         @Html.ValidationMessageFor(model => model.Height, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
@@ -99,22 +99,22 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">Tavsifi </h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control round", @placeholder = "Description" })
+                                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control round", @placeholder = "Tavsifi" })
                                                         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Maxsulot raqami 2</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.PNo2, new { @class = "form-control round", @placeholder = "PNo2" })
+                                                        @Html.TextBoxFor(model => model.PNo2, new { @class = "form-control round", @placeholder = "Maxsulot raqami 2" })
                                                         @Html.ValidationMessageFor(model => model.PNo2, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Maxsulot raqami 3</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.PNo3, new { @class = "form-control round", @placeholder = "PNo3" })
+                                                        @Html.TextBoxFor(model => model.PNo3, new { @class = "form-control round", @placeholder = "Maxsulot raqami 3" })
                                                         @Html.ValidationMessageFor(model => model.PNo3, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Maxsulot raqami 4</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.PNo4, new { @class = "form-control round", @placeholder = "PNo4" })
+                                                        @Html.TextBoxFor(model => model.PNo4, new { @class = "form-control round", @placeholder = "Maxsulot raqami 4" })
                                                         @Html.ValidationMessageFor(model => model.PNo4, "", new { @class = "text-danger" })
                                                     </fieldset>
 
@@ -122,7 +122,7 @@
                                                         <li class="list-group-item border-0 pb-0">
                                                             <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
                                                                 <i class='bx bx-save'></i>
-                                                                Save
+                                                                Saqlash
                                                             </button>
                                                         </li>
                                                     </ul>
