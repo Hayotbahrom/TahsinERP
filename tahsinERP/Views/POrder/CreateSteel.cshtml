@@ -129,9 +129,20 @@
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Thickness, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Unit">Unit</label>
+                                                            @Html.DropDownList("Thickness", (SelectList)ViewBag.units, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_width">Eni</label>
+                                                            <input type="number" name="Width" class="form-control" id="Part_Amount" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Width, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
                                                             <input type="number" name="Amount" class="form-control" id="Part_Amount" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Width, "", new { @class = "text-danger" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
                                                             <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>

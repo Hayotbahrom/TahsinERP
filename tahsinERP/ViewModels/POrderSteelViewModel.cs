@@ -33,6 +33,8 @@ namespace tahsinERP.ViewModels
         public string Standart { get; set; }
         public string Coating { get; set; }
         public float Thickness { get; set; }
-        public float Width { get; set; }    
+        public float Width { get; set; }
+        public int UnitID { get; set; }
+        public float Amount { get; set; }
     }
 }
