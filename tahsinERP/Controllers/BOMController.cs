@@ -18,7 +18,7 @@ namespace tahsinERP.Controllers
                 if (viewModel.IsParentProduct == true)
                 {
                     //var results = db.BOMS.Where(bom => bom.IsParentProduct == true).GroupBy(bom => bom.ParentPNo).Select(group => group.FirstOrDefault()).ToList();
-                    List<IndexViewModel> result = db.BOMS.Join(db.PRODUCTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
+                    List<IndexViewModel> result = db.BOMS.Where(x => x.IsDeleted == false).Join(db.PRODUCTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
                     new IndexViewModel
                     {
                         ParentPNo = bom.ParentPNo,
@@ -34,7 +34,7 @@ namespace tahsinERP.Controllers
                 }
                 else
                 {
-                    List<IndexViewModel> result = db.BOMS.Join(db.PARTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
+                    List<IndexViewModel> result = db.BOMS.Where(x => x.IsDeleted == false).Join(db.PARTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
                    new IndexViewModel
                    {
                        ParentPNo = bom.ParentPNo,
@@ -1020,8 +1020,25 @@ namespace tahsinERP.Controllers
             }
         }
 
+        private void DeleteBomTree(string parentPno)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var parentItems = db.BOMS.Where(b => b.ParentPNo == parentPno && b.IsDeleted == false).ToList();
+
+                foreach (var item in parentItems)
+                {
+                    DeleteBomTree(item.ChildPNo);
+
+                    item.IsDeleted = true;
+                }
+
+                db.SaveChanges();
+            }
+        }
+
         [HttpPost]
-        public ActionResult Delete(int ID, FormCollection fmc)
+        public ActionResult Delete(int ID,FormCollection fmc)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -1032,23 +1049,31 @@ namespace tahsinERP.Controllers
                 {
                     if (product != null)
                     {
-                        MarkAsDeleted(product.PNo);
+                        DeleteBomTree(product.PNo);
+
+                        product.IsDeleted = true;
+                        db.SaveChanges();
+
                     }
                     else if (part != null)
                     {
-                        MarkAsDeleted(part.PNo);
-                    }
+                        DeleteBomTree(part.PNo);
 
-                    db.SaveChanges();
-                    return RedirectToAction("Index"); // Or another view as appropriate
+                        part.IsDeleted = true;
+                        db.SaveChanges();
+
+                    }
+                    return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, ex.Message);
+                    ModelState.AddModelError(string.Empty, ex);
                 }
+
                 return View();
             }
         }
+
 
         private void MarkAsDeleted(string parentPno)
         {
