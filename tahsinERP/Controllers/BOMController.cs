@@ -5,14 +5,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using tahsinERP.Models;
 using tahsinERP.ViewModels.BOM;
 using static tahsinERP.ViewModels.BOM.BOMCreateProductViewModel;
-
 namespace tahsinERP.Controllers
 {
     public class BOMController : Controller
@@ -337,7 +335,7 @@ namespace tahsinERP.Controllers
                             SlittingPieces = (int)pieceCount,
                             CutterLines = (int)cutterLines,
                             WeightOfSlittedParts = Math.Round((part_after.PWidth * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
-                            WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines ), 2, MidpointRounding.ToEven),
+                            WeightOfCutWaste = Math.Round(((part_before.PWeight / part_before.PWidth) * cutterLines), 2, MidpointRounding.ToEven),
                             WidthOfUsefulWaste = Math.Round((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)), 2, MidpointRounding.ToEven),
                             WeightOfUsefulWaste = Math.Round(((part_before.PWidth - (pieceCount * part_after.PWidth) - (cutterLines)) * (part_before.PWeight / part_before.PWidth)), 2, MidpointRounding.ToEven),
                             IssuedDateTime = DateTime.Now,
@@ -692,7 +690,6 @@ namespace tahsinERP.Controllers
             }
         }
 
-
         [HttpPost]
         public ActionResult BomCreate(BomViewModel model, int[] processID)
         {
@@ -799,11 +796,20 @@ namespace tahsinERP.Controllers
                 var userId = GetUserID(User.Identity.Name);
                 var tempbom = db.TEMPORARY_BOMS.Where(x => x.ID == ID && x.IsDeleted == false && x.UserID == userId).FirstOrDefault();
                 var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == tempbom.ChildPNo).FirstOrDefault();
-                var child_bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == bom.ChildPNo).FirstOrDefault();
-                var child_bom_child = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == child_bom.ChildPNo).FirstOrDefault();
-                bomlist.Add(child_bom_child);
-                bomlist.Add(child_bom);
-                bomlist.Add(bom);
+                if (bom != null)
+                {
+                    var child_bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == bom.ChildPNo).FirstOrDefault();
+                    if (child_bom != null)
+                    {
+                        var child_bom_child = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == child_bom.ChildPNo).FirstOrDefault();
+                        if (child_bom_child != null)
+                        {
+                            bomlist.Add(child_bom_child);
+                        }
+                        bomlist.Add(child_bom);
+                    }
+                    bomlist.Add(bom);
+                }
                 var editviewmodel = new BomEditViewModels();
                 foreach (var boms in bomlist)
                 {
@@ -853,7 +859,7 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var userId = GetUserID(User.Identity.Name);
-          
+
                 EditSlitting(model.Slitting_After_ID, model.Slitting_Before_ID, model);
 
                 EditBlanking(model.Blanking_After_ID, model.Blanking_Before_ID, model);
@@ -908,7 +914,6 @@ namespace tahsinERP.Controllers
                     var part_after = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == slitting_norm.PartID_after);
                     var pieceCount = (part_before.PWidth / part_after.PWidth);
                     var cutterLines = (pieceCount - 1);
-                    slitting_norm.CutterWidth = model.SLITTING_NORMS.CutterWidth;
 
                     slitting_norm.IsDeleted = false;
                     slitting_norm.IsActive = true;
@@ -1041,7 +1046,7 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int ID,FormCollection fmc)
+        public ActionResult Delete(int ID, FormCollection fmc)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -1186,6 +1191,86 @@ namespace tahsinERP.Controllers
                 return View("UploadWithExcel");
             }
             return View("UploadWithExcel");
+        }
+
+        public ActionResult Edit(int ID, BoomViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var bomlist = new List<BOM>();
+                var processlist = new List<string>();
+                var userId = GetUserID(User.Identity.Name);
+                var part = db.PARTS.Where(x => x.IsDeleted == false && x.ID == ID).FirstOrDefault();
+                var bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == part.PNo).FirstOrDefault();
+                if (bom != null)
+                {
+                    var child_bom = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == bom.ChildPNo).FirstOrDefault();
+                    if (child_bom != null)
+                    {
+                        var child_bom_child = db.BOMS.Where(x => x.IsDeleted == false && x.ParentPNo == child_bom.ChildPNo).FirstOrDefault();
+                        if (child_bom_child != null)
+                        {
+                            bomlist.Add(child_bom_child);
+                        }
+                        bomlist.Add(child_bom);
+                    }
+                    bomlist.Add(bom);
+                }
+                var editviewmodel = new BomEditViewModels();
+                foreach (var boms in bomlist)
+                {
+                    var processname = db.PRODUCTIONPROCESSES.Where(x => x.ID == boms.ProcessID && x.IsDeleted == false).FirstOrDefault();
+                    var part_befor = db.PARTS.Where(x => x.PNo == boms.ChildPNo && x.IsDeleted == false).FirstOrDefault();
+                    var part_after = db.PARTS.Where(x => x.PNo == boms.ParentPNo && x.IsDeleted == false).FirstOrDefault();
+
+                    if (processname.ProcessName == "Slitting")
+                    {
+                        var slitting_norm = db.SLITTING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
+                        editviewmodel.SLITTING_NORMS = slitting_norm;
+                        editviewmodel.Slitting_After_ID = part_after.ID;
+                        editviewmodel.Slitting_Before_ID = part_befor.ID;
+                    }
+                    if (processname.ProcessName == "Blanking")
+                    {
+                        var blanking_norm = db.BLANKING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
+                        editviewmodel.BLANKING_NORMS = blanking_norm;
+                        editviewmodel.Blanking_After_ID = part_after.ID;
+                        editviewmodel.Blanking_Before_ID = part_befor.ID;
+                    }
+                    if (processname.ProcessName == "Stamping")
+                    {
+                        var stamping_norm = db.STAMPING_NORMS.Where(x => x.PartID_after == part_after.ID && x.PartID_before == part_befor.ID && x.IsDeleted == false).FirstOrDefault();
+                        editviewmodel.STAMPING_NORMS = stamping_norm;
+                        editviewmodel.Stamping_After_ID = part_after.ID;
+                        editviewmodel.Stamping_Before_ID = part_befor.ID;
+                    }
+
+                    processlist.Add(processname.ProcessName);
+                    editviewmodel.ProccessList = processlist;
+                    var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
+                    ViewBag.Part = new SelectList(parts, "ID", "PNo");
+                }
+                return View(editviewmodel);
+            }
+        }
+        [HttpPost]
+        public ActionResult Edit(BomEditViewModels model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var userId = GetUserID(User.Identity.Name);
+
+                EditSlitting(model.Slitting_After_ID, model.Slitting_Before_ID, model);
+
+                EditBlanking(model.Blanking_After_ID, model.Blanking_Before_ID, model);
+
+                EditStamping(model.Stamping_After_ID, model.Stamping_Before_ID, model);
+
+                db.SaveChanges();
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
+                return RedirectToAction("Index");
+            }
         }
     }
 }

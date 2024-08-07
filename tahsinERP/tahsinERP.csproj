@@ -2650,6 +2650,7 @@
     <Content Include="Views\PartStock\Index.cshtml" />
     <Content Include="Views\LastActions\Index.cshtml" />
     <Content Include="Views\BOM\UpdloadWithExcel.cshtml" />
+    <Content Include="Views\BOM\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
