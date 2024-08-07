@@ -1,6 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using tahsinERP.Models;
@@ -1102,6 +1108,82 @@ namespace tahsinERP.Controllers
                     MarkAsDeleted(item.ChildPNo);
                 }
             }
+        }
+
+        public ActionResult UpdloadWithExcel()
+        {
+            ViewBag.IsFileUploaded = false;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UpdloadWithExcel(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                if (Path.GetExtension(file.FileName).ToLower() == ".xlsx")
+                {
+                    try
+                    {
+                        var dataTable = new System.Data.DataTable();
+                        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                        using (var package = new ExcelPackage(file.InputStream))
+                        {
+                            var worksheet = package.Workbook.Worksheets[0];
+                            var rowCount = worksheet.Dimension.Rows;
+                            var colCount = worksheet.Dimension.Columns;
+
+                            for (int col = 1; col <= colCount; col++)
+                            {
+                                dataTable.Columns.Add(worksheet.Cells[1, col].Text);
+                            }
+
+                            for (int row = 2; row <= rowCount; row++)
+                            {
+                                var dataRow = dataTable.NewRow();
+                                for (int col = 1; col <= colCount; col++)
+                                {
+                                    dataRow[col - 1] = worksheet.Cells[row, col].Text;
+                                }
+                                dataTable.Rows.Add(dataRow);
+                            }
+                        }
+
+                        ViewBag.DataTable = dataTable;
+                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                        ViewBag.IsFileUploaded = true;
+                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        {
+                            foreach (DataRow row in dataTable.Rows)
+                            {
+                                string Pno = row["Partnumber"].ToString();
+                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                if (product != null)
+                                {
+                                    ViewBag.ExistingRecordsCount = 1;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Message = $"Faylni yuklashda quyidagicha muammo tug'ildi: {ex.Message}";
+                        return View("UploadWithExcel");
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Format noto'g'ri. Faqat .xlsx fayllarni yuklash mumkin.";
+                    return View("UploadWithExcel");
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Fayl bo'm-bo'sh yoki yuklanmadi!";
+                return View("UploadWithExcel");
+            }
+            return View("UploadWithExcel");
         }
     }
 }
