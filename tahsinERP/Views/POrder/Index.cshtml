@@ -42,16 +42,13 @@
                     {
                         <div class="invoice-create-btn mb-1">
                             <div class="invoice-create-btn mb-1">
-                                @* <a href="@Url.Action("UploadWithExcel", "POrder")" class="btn btn-outline-success mr-1 mb-1" role="button" aria-pressed="true">
-            Yangi Buyurtmani qo'shish
-        </a>*@
-                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/POrder/Create';">
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" id="createButton" onclick="window.location.href='/POrder/Create';">
                                     <span class="align-middle ml-25">Yangi Buyurtma qo'shish</span>
                                 </button>
-                                <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/POrder/UploadWithExcel'">
+                                <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="uploadButton" onclick="window.location.href='/POrder/UploadWithExcel'">
                                     <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali buyurtma qo'shish</span>
                                 </button>
-                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/POrder/CreateSteel';">
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" id="createSteelButton" style="display:none;" onclick="window.location.href='/POrder/CreateSteel';">
                                     <span class="align-middle ml-25">Steel-Coil Buyurtma qo'shish</span>
                                 </button>
                             </div>
@@ -63,13 +60,13 @@
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Turi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", id = "SourceID", onchange = "refreshDataTable(); toggleButtons()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4">
                                     <label>Ta'minotchisi</label>
                                     <fieldset class="form-group">
-                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, "", new { @class = "form-control", onchange = "refreshdatatablesupplier()" })
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, "", new { @class = "form-control", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
                                     </fieldset>
                                 </div>
                                 <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
@@ -144,19 +141,38 @@
         </div>
     </div>
 
-       <script type="text/javascript">
+    <script type="text/javascript">
         function refreshDataTable() {
             var source = document.getElementById("SourceID").value;
             const supplierID = document.getElementById("SupplierID").value;
             window.location.href = '@Url.Action("Index", "POrder")?type=' + source;
-            ////window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
-        };
+            //window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
+        }
+
         function refreshdatatablesupplier() {
             var source = document.getElementById("SourceID").value;
             const supplierID = document.getElementById("SupplierID").value;
             window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
         }
-        </script>
+
+        function toggleButtons() {
+            var source = document.getElementById("SourceID").value;
+            if (source === "Steel") {
+                document.getElementById("createButton").style.display = "none";
+                document.getElementById("uploadButton").style.display = "none";
+                document.getElementById("createSteelButton").style.display = "inline-block";
+            } else {
+                document.getElementById("createButton").style.display = "inline-block";
+                document.getElementById("uploadButton").style.display = "inline-block";
+                document.getElementById("createSteelButton").style.display = "none";
+            }
+        }
+
+        // Initial call to set the correct button visibility on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            toggleButtons();
+        });
+    </script>
 }
 else
 {
