@@ -242,7 +242,8 @@ namespace tahsinERP.Controllers
                                 IsInHouse = false,
                                 IsDeleted = false,
                                 PWidth = part.Width,
-                                UnitID = part.UnitID
+                                UnitID = part.UnitID,
+                                Type = "Steel"
                             };
                             db.PARTS.Add(newPartInsert);
                             db.SaveChanges();

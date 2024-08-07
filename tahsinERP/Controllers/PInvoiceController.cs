@@ -177,6 +177,7 @@ namespace tahsinERP.Controllers
                 {
                     db.Entry(part).Reference(p => p.PART).Load();
                 }
+                ViewBag.Invoice = db.P_INVOICE_PACKINGLISTS.Include(x => x.F_TRANSPORT_TYPES).Where(x => x.InvoiceID == id).ToList();
             }
             ViewBag.packingListNo = packingListNo;
             ViewBag.transportNo = transportNo;

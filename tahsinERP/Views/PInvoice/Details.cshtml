@@ -55,146 +55,155 @@
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
-           @* <div class="breadcrumb-wrapper col-12">
-                <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                    <li class="breadcrumb-item">
-                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="~/PInvoice">Invoices</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        Invoice ma`lumotlari
-                    </li>
-                </ol>
-            </div>*@
-            <div class="content-header row">
-                <div class="content-header-left col-12 mb-2 mt-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                                    <li class="breadcrumb-item">
-                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
-                                    </li>
-                                    <li class="breadcrumb-item ">
-                                        <a href="~/PInvoice">Invoice lar</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">
-                                        Invoice ma'lumotlari
-                                    </li>
-                                </ol>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="content-header row">
+                        <div class="content-header-left col-12 mb-2 mt-1">
+                            <div class="row breadcrumbs-top">
+                                <div class="col-12">
+                                    <div class="breadcrumb-wrapper col-12">
+                                        <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                            <li class="breadcrumb-item">
+                                                <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                            </li>
+                                            <li class="breadcrumb-item ">
+                                                <a href="~/PInvoice">Invoice lar</a>
+                                            </li>
+                                            <li class="breadcrumb-item active">
+                                                Invoice ma'lumotlari
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab-fill" data-toggle="tab" href="#home-fill" role="tab" aria-controls="home-fill" aria-selected="true">
+                                Invoice
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab-fill" data-toggle="tab" href="#profile-fill" role="tab" aria-controls="profile-fill" aria-selected="false">
+                                PackingList
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content pt-1">
+                        <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
+                            <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
+                                <i class='bx bx-save'></i>
+                                PDF
+                            </button>
+                            <br />
+                            <br />
 
-            <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
-                <i class='bx bx-save'></i>
-                PDF
-            </button>
-            <br />
-            <br />
+                            <div class="invoice-container" id="toPDF">
+                                <div class="header">
+                                    <table>
+                                        <tr>
+                                            <th>Shipper</th>
+                                            <th>Invoice No.</th>
+                                            <th>Issued Date</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Model.SUPPLIER.Name<br>
+                                                @Model.SUPPLIER.Address, @Model.SUPPLIER.City<br>
+                                                @Model.SUPPLIER.Country
+                                            </td>
+                                            <td>@Model.InvoiceNo</td>
+                                            <td>@Model.InvoiceDate.ToString("dd.MM.yyyy")</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Ship to</th>
+                                            <th>Bill to</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Transport & Vessel information</th>
+                                            <th>PackingList No</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @transportNo<br>
+                                            </td>
+                                            <td>@packingListNo</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Other references</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Terms of delivery and payment: @Model.P_ORDERS.P_CONTRACTS.Incoterms<br>
+                                                Payment: @Model.P_ORDERS.P_CONTRACTS.PaymentTerms
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br />
+                                    <table>
+                                        <tr>
+                                            <th>Detall raqami</th>
+                                            <th>Nomi</th>
+                                            <th>Soni</th>
+                                            <th>Unit</th>
+                                            <th>Unit narxi</th>
+                                            <th>Amount (USD)</th>
+                                        </tr>
+                                        @foreach (var item in ViewBag.partList)
+                                        {
+                                            totalAmount += item.TotalPrice;
+                                            totalQty += item.Quantity;
+                                            <tr>
+                                                <td>
+                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                </td>
+                                                <td>@item.PART.PName</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.UNIT.UnitName</td>
+                                                <td>@item.Price</td>
+                                                <td>@item.TotalPrice</td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                                <div class="content">
 
-            <div class="invoice-container" id="toPDF">
-                <div class="header">
-                    <table>
-                        <tr>
-                            <th>Shipper</th>
-                            <th>Invoice No.</th>
-                            <th>Issued Date</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                @Model.SUPPLIER.Name<br>
-                                @Model.SUPPLIER.Address, @Model.SUPPLIER.City<br>
-                                @Model.SUPPLIER.Country
-                            </td>
-                            <td>@Model.InvoiceNo</td>
-                            <td>@Model.InvoiceDate.ToString("dd.MM.yyyy")</td>
-                        </tr>
-                    </table>
-                    <br>
-                    <table>
-                        <tr>
-                            <th>Ship to</th>
-                            <th>Bill to</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                @Model.COMPANy.Name<br>
-                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
-                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
-                                Tel: @Model.COMPANy.Telephone<br>
-                                Email: @Model.COMPANy.Email
-                            </td>
-                            <td>
-                                @Model.COMPANy.Name<br>
-                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
-                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
-                                Tel: @Model.COMPANy.Telephone<br>
-                                Email: @Model.COMPANy.Email
-                            </td>
-                        </tr>
-                    </table>
-                    <br>
-                    <table>
-                        <tr>
-                            <th>Transport & Vessel information</th>
-                            <th>PackingList No</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                @transportNo<br>
-                            </td>
-                            <td>@packingListNo</td>
-                        </tr>
-                    </table>
-                    <br>
-                    <table>
-                        <tr>
-                            <th>Other references</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                Terms of delivery and payment: @Model.P_ORDERS.P_CONTRACTS.Incoterms<br>
-                                Payment: @Model.P_ORDERS.P_CONTRACTS.PaymentTerms
-                            </td>
-                        </tr>
-                    </table>
-                    <br />
-                    <table>
-                        <tr>
-                            <th>Detall raqami</th>
-                            <th>Nomi</th>
-                            <th>Soni</th>
-                            <th>Unit</th>
-                            <th>Unit narxi</th>
-                            <th>Amount (USD)</th>
-                        </tr>
-                        @foreach (var item in ViewBag.partList)
-                        {
-                            totalAmount += item.TotalPrice;
-                            totalQty += item.Quantity;
-                            <tr>
-                                <td>
-                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
-                                </td>
-                                <td>@item.PART.PName</td>
-                                <td>@item.Quantity</td>
-                                <td>@item.UNIT.UnitName</td>
-                                <td>@item.Price</td>
-                                <td>@item.TotalPrice</td>
-                            </tr>
-                        }
-                    </table>
-                </div>
-                <div class="content">
-
-                </div>
-                <div class="footer">
-                    <p>Total Qty: <b>@totalQty</b> &nbsp;&nbsp;&nbsp;&nbsp; TOTAL Amount: <b> $@totalAmount.ToString("N2")</b></p>
+                                </div>
+                                <div class="footer">
+                                    <p>Total Qty: <b>@totalQty</b> &nbsp;&nbsp;&nbsp;&nbsp; TOTAL Amount: <b> $@totalAmount.ToString("N2")</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="profile-fill" role="tabpanel" aria-labelledby="profile-tab-fill">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
