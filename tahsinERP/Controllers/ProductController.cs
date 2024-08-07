@@ -392,7 +392,6 @@ namespace tahsinERP.Controllers
                                     newProduct.PNo3 = row["PNo3"].ToString();
                                     newProduct.PNo4 = row["PNo4"].ToString();
                                     newProduct.IsDeleted = false;
-
                                     db.PRODUCTS.Add(newProduct);
                                     db.SaveChanges();
                                 }

@@ -2649,6 +2649,7 @@
     <Content Include="Views\DamagedProduct\Details.cshtml" />
     <Content Include="Views\PartStock\Index.cshtml" />
     <Content Include="Views\LastActions\Index.cshtml" />
+    <Content Include="Views\BOM\UpdloadWithExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
