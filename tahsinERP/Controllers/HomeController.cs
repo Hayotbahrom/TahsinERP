@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
+using tahsinERP.Models;
+using tahsinERP.ViewModels.Home;
 
 namespace tahsinERP.Controllers
 {
@@ -17,10 +20,17 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.ShowCookieConsent = false;
             }
-            return View();
+            StatisticsVM model = new StatisticsVM();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                model.NoOfProducts = db.PRODUCTS.Where(p => p.IsDeleted == false).ToList().Count;
+                model.NoOfParts = db.PARTS.Where(p => p.IsDeleted == false).ToList().Count;
+                model.NoOfUsers = db.USERS.Where(u => u.IsDeleted == false && u.IsActive == true).ToList().Count;
+                model.NoOfRoles = db.ROLES.Where(r => r.IsDeleted == false).ToList().Count;
+                model.NoOfParentBOMs = db.BOMS.Where(b => b.IsDeleted == false && b.IsParentProduct == true).Select(b => b.ParentPNo).Distinct().Count();
+            }
+            return View(model);
         }
-
-
         public JsonResult CookieConfirm()
         {
             try
@@ -30,7 +40,8 @@ namespace tahsinERP.Controllers
 
                 return Json(new { success = true });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return Json(new { success = false, message = ex.Message });
             }
         }

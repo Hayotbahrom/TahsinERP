@@ -28,7 +28,7 @@ namespace tahsinERP.ViewModels
         public string IP_adrr { get; set; }
         public string MAC_adrr { get; set; }
         public DateTime datetime { get; set; }
-        public List<USER_ENTRIES> sessions { get; set; }
+        public List<USERLOG> logs { get; set; }
 
     }
 }

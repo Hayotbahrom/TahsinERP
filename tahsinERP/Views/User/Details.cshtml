@@ -50,7 +50,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link d-flex align-items-center" id="account-pill-info" data-toggle="pill" href="#account-vertical-info" aria-expanded="false">
                                                 <i class="bx bx-info-circle"></i>
-                                                <span>Uni faolligi to'g'risida ma'lumot</span>
+                                                <span>Uni amallari to'g'risida ma'lumot</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -112,6 +112,8 @@
                                                                                     <table class="table table-striped dataex-html5-selectors">
                                                                                         <thead>
                                                                                             <tr>
+                                                                                                <th>Controller</th>
+                                                                                                <th>Amali</th>
                                                                                                 <th>Sanasi</th>
                                                                                                 <th>Vaqti</th>
                                                                                                 <th>IP manzili</th>
@@ -119,24 +121,18 @@
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>
-                                                                                            @foreach (var item in Model.sessions)
+                                                                                            @foreach (var item in Model.logs)
                                                                                             {
                                                                                                 <tr>
+                                                                                                    <td>@item.ControllerName</td>
+                                                                                                    <td>@item.ActionName</td>
                                                                                                     <td>@item.DateTime.ToString("yyyy-MM-dd")</td>
                                                                                                     <td>@item.DateTime.ToString("HH:mm:ss")</td>
                                                                                                     <td>@item.IP</td>
-                                                                                                    <td>@item.MAC</td>
+                                                                                                    <td>@item.MacAddr</td>
                                                                                                 </tr>
                                                                                             }
                                                                                         </tbody>
-                                                                                        <tfoot>
-                                                                                            <tr>
-                                                                                                <th>Sanasi</th>
-                                                                                                <th>Vaqti</th>
-                                                                                                <th>IP manzili</th>
-                                                                                                <th>MAC manzili</th>
-                                                                                            </tr>
-                                                                                        </tfoot>
                                                                                     </table>
                                                                                 </div>
                                                                             </div>

@@ -6,11 +6,6 @@
 
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
-    bool changePermit = false;
-    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
-    {
-        changePermit = true;
-    }
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -27,7 +22,7 @@
                                         Admin Panel
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Oxirgi amallar
+                                        Log lar
                                     </li>
                                 </ol>
                             </div>
@@ -50,9 +45,9 @@
                                                     <th></th>
                                                     <th>F.I.Sh</th>
                                                     <th>Controller nomi</th>
-                                                    <th>Action nomi</th>
-                                                    <th>IP Address</th>
-                                                    <th>MacAddress</th>
+                                                    <th>Amal</th>
+                                                    <th>IP manzili</th>
+                                                    <th>Mac manzili</th>
                                                     <th>Amal vaqti</th>
                                                 </tr>
                                             </thead>

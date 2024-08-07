@@ -246,7 +246,6 @@ namespace tahsinERP.Controllers
             }
             UserViewModel userviewmodel = new UserViewModel();
             USER user = db.USERS.Find(ID);
-            USER_ENTRIES entry = db.USER_ENTRIES.Where(ue => ue.UserID == user.ID).FirstOrDefault();
             if (user == null)
             {
                 return HttpNotFound();
@@ -262,7 +261,7 @@ namespace tahsinERP.Controllers
                 {
                     userviewmodel.Role = db.ROLES.Where(r => r.ID == role.ID).Select(r => r.RName).FirstOrDefault();
                 }
-                userviewmodel.sessions = user.USER_ENTRIES.ToList();
+                userviewmodel.logs = user.USERLOGS.ToList();
             }
             USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
             if (userimage != null)
@@ -279,7 +278,6 @@ namespace tahsinERP.Controllers
             }
             UserViewModel userviewmodel = new UserViewModel();
             USER user = db.USERS.Find(ID);
-            USER_ENTRIES entry = db.USER_ENTRIES.Where(ue => ue.UserID == user.ID).FirstOrDefault();
             if (user == null)
             {
                 return HttpNotFound();
@@ -295,7 +293,7 @@ namespace tahsinERP.Controllers
                 {
                     userviewmodel.Role = db.ROLES.Where(r => r.ID == role.ID).Select(r => r.RName).FirstOrDefault();
                 }
-                userviewmodel.sessions = user.USER_ENTRIES.ToList();
+                userviewmodel.logs = user.USERLOGS.ToList();
             }
             USERIMAGE userimage = db.USERIMAGES.Where(ui => ui.UserID == user.ID).FirstOrDefault();
             if (userimage != null)
