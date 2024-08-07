@@ -394,7 +394,73 @@ $(window).on("load", function () {
   );
 
   donutChart.render();
+ /*My customized js classes*/
+    var donutChartOptionForProd = {
+        chart: {
+            width: 200,
+            type: 'donut',
+        },
+        dataLabels: {
+            enabled: false
+        },
+        series: [150, 60, 70],
+        labels: ["GM", "Service", "Kia"],
+        stroke: {
+            width: 0,
+            lineCap: 'round',
+        },
+        colors: [$primary, $info, $warning],
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '90%',
+                    labels: {
+                        show: true,
+                        name: {
+                            show: true,
+                            fontSize: '15px',
+                            colors: $sub_label_color,
+                            offsetY: 20,
+                            fontFamily: 'IBM Plex Sans',
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '26px',
+                            fontFamily: 'Rubik',
+                            color: $label_color,
+                            offsetY: -20,
+                            formatter: function (val) {
+                                return val
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Impression',
+                            color: $gray_light,
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce(function (a, b) {
+                                    return a + b
+                                }, 0)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        legend: {
+            show: false
+        }
+    }
 
+    var donutChartProducts = new ApexCharts(
+        document.querySelector("#donut-chart-products"),
+        donutChartOptionForProd
+    );
+
+    donutChartProducts.render();
+
+
+ /* */
   // Stacked Bar Nagetive Chart
   // ----------------------------------
   var barNegativeChartoptions = {

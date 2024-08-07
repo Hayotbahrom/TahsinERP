@@ -241,7 +241,8 @@ namespace tahsinERP.Controllers
                                 PNo = part.Standart + "" + part.Thickness+"x"+part.Width,
                                 IsInHouse = false,
                                 IsDeleted = false,
-                                PWidth = part.Width
+                                PWidth = part.Width,
+                                UnitID = part.UnitID
                             };
                             db.PARTS.Add(newPartInsert);
                             db.SaveChanges();
@@ -277,6 +278,9 @@ namespace tahsinERP.Controllers
                     ViewBag.steelCoating = new SelectList(db.STEEL_COILS.ToList(), "ID", "Coating");
                     ViewBag.steelThickness = new SelectList(db.STEEL_COILS.ToList(), "ID", "Thickness");
 
+                    ModelState.AddModelError("", "Unable to save changes. " +
+        "Try again, and if the problem persists, " +
+        "see your system administrator.");
                     return View(model);
                 }
 
