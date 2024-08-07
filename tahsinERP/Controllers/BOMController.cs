@@ -366,7 +366,7 @@ namespace tahsinERP.Controllers
                 {
                     if (model.BLANKING_NORMS != null)
                     {
-                        var part_after_slitting = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.SLITTING_NORMS.PartID_after);
+                        var part_after_slitting = db.PARTS.FirstOrDefault(x => x.IsDeleted == false && x.ID == model.BLANKING_NORMS.PartID_before);
                         var part_after_Blanking = db.PARTS.FirstOrDefault(p => p.IsDeleted == false && p.ID == model.BLANKING_NORMS.PartID_after);
                         if (part_after_Blanking != null && part_after_slitting != null)
                         {
@@ -402,32 +402,34 @@ namespace tahsinERP.Controllers
                         {
 
                             var part_after_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.STAMPING_NORMS.PartID_after);
+                            var part_Before_Stamping = db.PARTS.FirstOrDefault(x => x.ID == model.STAMPING_NORMS.PartID_before);
+
                             if (model.STAMPING_NORMS != null)
                             {
                                 var stamping = new STAMPING_NORMS
                                 {
                                     IsDeleted = false,
                                     IsActive = model.STAMPING_NORMS.IsActive,
-                                    PartID_before = part_after_Blanking.ID,
+                                    PartID_before = part_Before_Stamping.ID,
                                     PartID_after = part_after_Stamping.ID,
-                                    Density = model.STAMPING_NORMS.Density,
-                                    QuantityOfStamps = (int)(Math.Round((part_after_Blanking.PWeight / part_after_Stamping.PWeight), 2, MidpointRounding.ToEven)),
-                                    WeightOfStamps = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density)),
-                                    WeightOfWaste = (part_after_Blanking.PWeight - (part_after_Blanking.PWeight * part_after_Stamping.PWeight)),
+                                    Density = model.BLANKING_NORMS.Density,
+                                    QuantityOfStamps = (int)(Math.Round((part_Before_Stamping.PWeight / part_after_Stamping.PWeight), 2, MidpointRounding.ToEven)),
+                                    WeightOfStamps = (Math.Round(part_Before_Stamping.PWidth * part_Before_Stamping.PLength * part_after_Stamping.Gauge * model.BLANKING_NORMS.Density)),
+                                    WeightOfWaste = (part_Before_Stamping.PWeight - (part_Before_Stamping.PWeight * part_after_Stamping.PWeight)),
                                     IssuedDateTime = DateTime.Now,
                                     IssuedByUserID = userId.GetValueOrDefault()
                                 };
                                 db.STAMPING_NORMS.Add(stamping);
                                 var bom = new BOM
                                 {
-                                    ChildPNo = part_after_Blanking.PNo,
+                                    ChildPNo = part_Before_Stamping.PNo,
                                     ParentPNo = part_after_Stamping.PNo,
                                     IsDeleted = false,
                                     IsActive = true,
                                     ProcessID = processNames.FirstOrDefault(p => p.ProcessName == "Stamping")?.ID,
                                     WasteAmount = Math.Round((part_after_Stamping.PWeight / part_after_Stamping.PWidth), 2, MidpointRounding.ToEven),
-                                    Consumption = (Math.Round(part_after_Blanking.PWidth * part_after_Blanking.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_after_Blanking.PWeight / part_after_Stamping.PWeight)),
-                                    ConsumptionUnit = part_after_Blanking.UNIT.UnitName,
+                                    Consumption = (Math.Round(part_Before_Stamping.PWidth * part_Before_Stamping.PLength * part_after_Stamping.Gauge * model.STAMPING_NORMS.Density) / (part_Before_Stamping.PWeight / part_after_Stamping.PWeight)),
+                                    ConsumptionUnit = part_Before_Stamping.UNIT.UnitName,
                                     Sequence = sequence + 3,
                                 };
                                 db.BOMS.Add(bom);
