@@ -339,6 +339,8 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
+        
+
         public ActionResult Details(int? ID)
         {
             if (ID == null)
@@ -370,6 +372,19 @@ namespace tahsinERP.Controllers
                     ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partImage.Doc);
                 }
                 return View(contract);
+            }
+        }
+        public ActionResult GetPartsBySupplier(int supplierId)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var supplier = db.SUPPLIERS.Where(x => x.IsDeleted == false && x.ID == supplierId).FirstOrDefault();
+                var parts = db.PARTS
+                    .Where(p => p.Type.CompareTo(supplier.Type) == 0 && p.IsDeleted == false)
+                    .Select(p => new { p.ID, p.PNo })
+                    .ToList();
+
+                return Json(parts, JsonRequestBehavior.AllowGet);
             }
         }
 
