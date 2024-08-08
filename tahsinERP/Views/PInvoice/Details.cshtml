@@ -7,6 +7,7 @@
     int totalQty = 0;
     string transportNo = ViewBag.transportNo as string;
     string packingListNo = ViewBag.packingListNo as string;
+    var packingLists = ViewBag.PackingLists as List<tahsinERP.Models.P_INVOICE_PACKINGLISTS>;
 }
 
 <style>
@@ -26,16 +27,16 @@
         margin-bottom: 20px;
     }
 
-    .header table, .content table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+        .header table, .content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    .header th, .header td, .content th, .content td {
-        border: 1px solid #000;
-        padding: 8px;
-        text-align: left;
-    }
+        .header th, .header td, .content th, .content td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
 
     .content th {
         background-color: #f2f2f2;
@@ -201,7 +202,26 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="profile-fill" role="tabpanel" aria-labelledby="profile-tab-fill">
-                            
+                            <h3>Packing List Details</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Transport Type</th>
+                                        <th>Packing List No</th>
+                                        <th>Transport No</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var packingList in packingLists)
+                                    {
+                                        <tr>
+                                            <td>@packingList.F_TRANSPORT_TYPES.TransportType    </td>
+                                            <td>@packingList.PackingListNo</td>
+                                            <td>@packingList.TransportNo</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

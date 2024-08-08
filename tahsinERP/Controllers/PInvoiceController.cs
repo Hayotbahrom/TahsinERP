@@ -148,6 +148,7 @@ namespace tahsinERP.Controllers
             List<P_INVOICE_PARTS> partList;
             string transportNo = null;
             string packingListNo = null;
+            List<P_INVOICE_PACKINGLISTS> packingLists;
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -162,29 +163,40 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
 
                 partList = db.P_INVOICE_PARTS
-                                        .Include(ip => ip.PART)
-                                        .Include (ip => ip.UNIT)
-                                        .Where(ip => ip.InvoiceID == invoice.ID)
-                                        .ToList();
+                    .Include(ip => ip.PART)
+                    .Include(ip => ip.UNIT)
+                    .Where(ip => ip.InvoiceID == invoice.ID)
+                    .ToList();
+
+                packingLists = db.P_INVOICE_PACKINGLISTS
+                    .Include(p => p.F_TRANSPORT_TYPES)
+                    .Where(p => p.InvoiceID == invoice.ID)
+                    .ToList();
 
                 var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
                 if (firstPackingList != null)
                 {
-                    transportNo = firstPackingList.TransportNo; // Assuming TransportType has a TransportNo property
+                    transportNo = firstPackingList.TransportNo;
                     packingListNo = firstPackingList.PackingListNo;
                 }
+
                 foreach (var part in partList)
                 {
                     db.Entry(part).Reference(p => p.PART).Load();
                 }
-                ViewBag.Invoice = db.P_INVOICE_PACKINGLISTS.Include(x => x.F_TRANSPORT_TYPES).Where(x => x.InvoiceID == id).ToList();
+
+                ViewBag.Invoice = invoice;
+                ViewBag.PartList = partList;
+                ViewBag.PackingLists = packingLists;
             }
+
             ViewBag.packingListNo = packingListNo;
             ViewBag.transportNo = transportNo;
             ViewBag.partList = partList;
-                
+
             return View(invoice);
         }
+
         public ActionResult Delete(int? Id)
         {
             if (Id == null)
