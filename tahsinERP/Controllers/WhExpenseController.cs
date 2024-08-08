@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -109,6 +110,142 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                // Populate dropdown lists
+                ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+                ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
+                ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
+                // Initialize view model
+                WrhsExpenseViewModel viewModel = new WrhsExpenseViewModel();
+                PART_WRHS_EXPENSES expense = db.PART_WRHS_EXPENSES.OrderByDescending(p => p.IssueDateTime).FirstOrDefault();
+                if (expense == null)
+                {
+                    viewModel.DocNo = DateTime.Now.Month + "_" + 1;
+                }
+                else
+                {
+                    var monthAndNumber = expense.DocNo.Split('_');
+                    if (int.Parse(monthAndNumber[0]) == DateTime.Now.Month)
+                    {
+                        int docNoNumber = int.Parse(monthAndNumber[1]) + 1;
+                        viewModel.DocNo = DateTime.Now.Month + "_" + docNoNumber;
+                    }
+                    else
+                    {
+                        viewModel.DocNo = DateTime.Now.Month + "_" + 1;
+                    }
+                }
+
+                return View(viewModel);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Create(WrhsExpenseViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                if (!ModelState.IsValid)
+                {
+                    PopulateViewBags(db);
+                    return View(model);
+                }
+
+                // Validate ReceiverWhID exists
+                var receiverWarehouse = db.PART_WRHS.FirstOrDefault(w => w.ID == model.RecieverWHID && w.IsDeleted == false);
+                if (receiverWarehouse == null)
+                {
+                    ModelState.AddModelError("RecieverWHID", "The selected warehouse does not exist.");
+                    PopulateViewBags(db);
+                    return View(model);
+                }
+
+                // Create a new PART_WRHS_EXPENSES record
+                PART_WRHS_EXPENSES newExpense = new PART_WRHS_EXPENSES
+                {
+                    DocNo = model.DocNo,
+                    ReceiverWhID = model.RecieverWHID,
+                    Currency = model.Currency,
+                    IsDeleted = false,
+                    Description = model.Description,
+                    IssueDateTime = DateTime.Now,
+                    SendStatus = model.SendStatus,
+                    SenderWHID = 1 // Assuming SenderWHID is always 1
+                };
+
+                db.PART_WRHS_EXPENSES.Add(newExpense);
+                db.SaveChanges();
+
+                // Update SenderWHID with the newly created ExpenseID
+                newExpense.SenderWHID = newExpense.ID;
+                db.Entry(newExpense).State = EntityState.Modified;
+
+                // Save parts
+                foreach (var part in model.Parts)
+                {
+                    var existStock = db.PART_STOCKS.FirstOrDefault(x => x.PartID == part.PartID);
+                    if (existStock == null)
+                    {
+                        PopulateViewBags(db);
+                        ModelState.AddModelError("", "Omborda bunday ehtiyot qism topilmadi.");
+                        return View(model);
+                    }
+                    else if (existStock.Amount >= part.Amount)
+                    {
+                        PART_STOCKS newStock = new PART_STOCKS
+                        {
+                            WHID = (int)existStock.WHID,
+                            PartID = existStock.PartID,
+                            Unit = existStock.Unit,
+                            Amount = existStock.Amount - part.Amount
+                        };
+
+                        db.PART_STOCKS.Add(newStock);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        PopulateViewBags(db);
+                        ModelState.AddModelError("", "Kiritilgan miqdor CHIQIM qilish uchun ombordagi bor imkoniyatdan oshib ketdi.");
+                        return View(model);
+                    }
+                }
+
+               /* try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var innerException = ex.InnerException?.InnerException as SqlException;
+                    if (innerException != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine(innerException.Message);
+                    }
+                    PopulateViewBags(db);
+                    ModelState.AddModelError("", "O‘zgarishlarni saqlab bo‘lmadi. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    return View(model);
+                }*/
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
+                return RedirectToAction("Index");
+            }
+        }
+
+        private void PopulateViewBags(DBTHSNEntities db)
+        {
+            ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+            ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
+            ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+            ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+        }
+
+        /*public ActionResult Create()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
                 ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
                 ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
@@ -189,19 +326,28 @@ namespace tahsinERP.Controllers
                             Unit = db.UNITS.Where(x => x.ID == part.UnitID).FirstOrDefault().ShortName,
                             WHID = 1
                         };
+                        ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+                        ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                        ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                        ModelState.AddModelError("", "Omborda bunday ehtiyot qism topilmadi.");
+                        return View(model);
                     }
-
-                    PART_WRHS_EXPENSE_PARTS newPart = new PART_WRHS_EXPENSE_PARTS
+                    else
                     {
-                        ExpenseID = newExpenseID,
-                        PartID = part.PartID,
-                        UnitID = part.UnitID,
-                        Amount = part.Amount,
-                        PiecePrice = part.PiecePrice,
-                        Comment = part.Comment
-                    };
-
-                    db.PART_WRHS_EXPENSE_PARTS.Add(newPart);
+                        if (existStock.Amount>=part.Amount)
+                        {
+                            existStock.Amount -= part.Amount;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+                            ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                            ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                            ModelState.AddModelError("", "Kiritilgan miqdor CHIQIM qilish uchun ombordagi bor imkoniyatdan oshib ketdi.");
+                            return View(model);
+                        }
+                    }
                 }
                 try
                 {
@@ -219,7 +365,7 @@ namespace tahsinERP.Controllers
                 LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
                 return RedirectToAction("Index");
             }
-        }
+        }*/
         public ActionResult Details(int? ID)
         {
             if (ID == null)
