@@ -197,7 +197,7 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                foreach (var permission in role.PERMISSIONS)
+                foreach (var permission in existingRole.PERMISSIONS)
                 {
                     var existingPermission = existingRole.PERMISSIONS.FirstOrDefault(p => p.ID == permission.ID);
                     if (existingPermission != null)
@@ -205,9 +205,9 @@ namespace tahsinERP.Controllers
                         existingPermission.ViewPermit = permission.ViewPermit;
                         existingPermission.ChangePermit = permission.ChangePermit;
                     }
+                    db.SaveChanges();
                 }
 
-                db.SaveChanges();
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "RoleController", "Permissions[Post]");
                 return RedirectToAction("Edit", new { id = role.ID });
