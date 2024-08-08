@@ -167,6 +167,25 @@ namespace tahsinERP.Controllers
                 return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.ContractNo }), JsonRequestBehavior.AllowGet);
             }
         }
+        public ActionResult GetPartsByContract(int contractID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var partIDs = db.P_CONTRACT_PARTS
+                    .Where(x => x.ContractID == contractID)
+                    .Select(x => x.PartID)
+                    .ToList();
+
+                var parts = db.PARTS
+                    .Where(x => partIDs.Contains(x.ID) && x.IsDeleted == false)
+                    .Select(x => new { x.ID, x.PNo })
+                    .ToList();
+
+                return Json(parts.Select(p => new SelectListItem { Value = p.ID.ToString(), Text = p.PNo }), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
 
         //steel coil uchun Create Actoin method
         public ActionResult CreateSteel(int? supplierID)
