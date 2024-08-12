@@ -185,8 +185,6 @@ namespace tahsinERP.Controllers
             }
         }
 
-
-
         //steel coil uchun Create Actoin method
         public ActionResult CreateSteel(int? supplierID)
         {

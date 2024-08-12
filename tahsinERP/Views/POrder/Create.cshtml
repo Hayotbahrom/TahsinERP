@@ -44,7 +44,7 @@
                                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                                             <div class="row justify-content-around d-flex align-items-start">
-                                                @*Left Part*@
+                                                @* Left Part *@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
@@ -59,13 +59,13 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control", id = "ContractID", onchange = "refreshPartsByContract()" })
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control", id = "ContractID" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                @*Right Part*@
+                                                @* Right Part *@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
@@ -99,12 +99,12 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control", id = "PartID" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Birligi</label>
-                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
+                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control", id = "UnitID" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -148,48 +148,49 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
     function refreshdatatablesupplier() {
-    const supplierID = document.getElementById("SupplierID").value;
-    $.ajax({
-        url: '@Url.Action("GetContractsBySupplier", "POrder")',
-        type: 'GET',
-        data: { supplierID: supplierID },
-        success: function (data) {
-            var contractDropdown = $("#ContractID");
-            contractDropdown.empty();
-            $.each(data, function (index, item) {
-                contractDropdown.append(new Option(item.Text, item.Value));
-            });
-        },
-        error: function (xhr, status, error) {
-            console.error("Error fetching contracts:", error);
-        }
+        const supplierID = document.getElementById("SupplierID").value;
+        $.ajax({
+            url: '@Url.Action("GetContractsBySupplier", "POrder")',
+            type: 'GET',
+            data: { supplierID: supplierID },
+            success: function (data) {
+                var contractDropdown = $("#ContractID");
+                contractDropdown.empty();
+                $.each(data, function (index, item) {
+                    contractDropdown.append(new Option(item.Text, item.Value));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching contracts:", error);
+            }
         });
     }
 
-    $('#ContractID').change(function() {
+    $('#ContractID').change(function () {
         const contractID = $(this).val();
+        console.log("Selected contract ID:", contractID); // Debugging purpose
+
         $.ajax({
             url: '@Url.Action("GetPartsByContract", "POrder")',
             type: 'GET',
             data: { contractID: contractID },
             success: function (data) {
                 var partDropdown = $("#PartID");
-                partDropdown.empty();
+                partDropdown.empty(); // Clear previous options
+
                 $.each(data, function (index, item) {
                     partDropdown.append(new Option(item.Text, item.Value));
                 });
+
+                console.log("Parts dropdown updated successfully."); // Debugging purpose
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching parts:", error);
             }
         });
     });
-
     </script>
-}
-else
-{
-    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
