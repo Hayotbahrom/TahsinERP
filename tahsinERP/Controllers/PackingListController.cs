@@ -30,7 +30,7 @@ namespace tahsinERP.Controllers
                 return View(list);
             }
         }
-
+        /*
         public ActionResult Create()
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
@@ -68,6 +68,57 @@ namespace tahsinERP.Controllers
             var userEmail = User.Identity.Name;
             LogHelper.LogToDatabase(userEmail, "PackingListController", "Create[Post]");
             return View(packingList);
+        }
+        */
+        public ActionResult Create(int? invoiceId)
+        {
+            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            {
+                // Populate the Invoice dropdown
+                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", invoiceId);
+
+                // Populate the TransportType dropdown
+                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
+
+                // If an invoice ID is provided, create a new PackingList model with it
+                var model = new P_INVOICE_PACKINGLISTS
+                {
+                    InvoiceID = invoiceId ?? 0 // Use the invoiceId if provided, otherwise default to 0
+                };
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(P_INVOICE_PACKINGLISTS packingList)
+        {
+            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            {
+                try
+                {
+                    if (ModelState.IsValid)
+                    {
+                        // Save the PackingList entity
+                        packingList.IsDeleted = false;
+                        db1.P_INVOICE_PACKINGLISTS.Add(packingList);
+                        db1.SaveChanges();
+
+                        return RedirectToAction("Index");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+
+                // Retain the dropdown lists if there's an error
+                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", packingList.InvoiceID);
+                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", packingList.TransportTypeID);
+
+                return View(packingList);
+            }
         }
 
         public ActionResult Details(int? id)
@@ -160,7 +211,6 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoice = new SelectList(db.P_INVOICES.ToList(), "ID", "InvoiceNo");
                 ViewBag.Part = new SelectList(db.PARTS.ToList(), "ID", "PName");
                 return View(packingList);
-
             }
         }
         [HttpPost]
