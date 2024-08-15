@@ -171,8 +171,6 @@
 
     $('#ContractID').change(function () {
         const contractID = $(this).val();
-        console.log("Selected contract ID:", contractID); // Debugging purpose
-
         $.ajax({
             url: '@Url.Action("GetPartsByContract", "POrder")',
             type: 'GET',
@@ -184,8 +182,6 @@
                 $.each(data, function (index, item) {
                     partDropdown.append(new Option(item.Text, item.Value));
                 });
-
-                console.log("Parts dropdown updated successfully."); // Debugging purpose
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching parts:", error);
@@ -193,4 +189,5 @@
         });
     });
     </script>
+
 }

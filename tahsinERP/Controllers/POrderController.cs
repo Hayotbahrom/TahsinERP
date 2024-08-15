@@ -75,7 +75,7 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.partList = new SelectList(Enumerable.Empty<SelectListItem>(), "ID", "PNo");
             }
 
             return View();
@@ -110,7 +110,7 @@ namespace tahsinERP.Controllers
                 }
                 var summ = model.Parts.Sum(x => x.Amount);
                 var contractAmount = db.P_CONTRACTS.Where(x => x.IsDeleted == false && x.ID == model.ContractID).FirstOrDefault().Amount;
-                if (summ>contractAmount)
+                if (summ > contractAmount)
                 {
                     ModelState.AddModelError("", "Shartnomadan ortiqcha hajmni buyurtma qilib bo'lmaydi");
                 }
@@ -155,6 +155,7 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
+
         public ActionResult GetContractsBySupplier(int supplierID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -167,6 +168,7 @@ namespace tahsinERP.Controllers
                 return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.ContractNo }), JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult GetPartsByContract(int contractID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
