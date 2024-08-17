@@ -170,7 +170,7 @@ namespace tahsinERP.Controllers
                     IsDeleted = false,
                     Description = model.Description,
                     IssueDateTime = DateTime.Now,
-                    SendStatus = model.SendStatus,
+                    SendStatus = true,
                     SenderWHID = 1 // Assuming SenderWHID is always 1
                 };
 
