@@ -70,10 +70,11 @@
                                         <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th>CarModel1</th>
-                                                    <th>CarModel2</th>
-                                                    <th>CarModel3</th>
-                                                    
+                                                    <th>ProductNo</th>
+                                                    <th>CarModel</th>
+                                                    <th>Option1</th>
+                                                    <th>Option1UsageQuantity</th>
+                                                    <th>Unit</th>
                                                     @if (changePermit)
                                                     {
                                                         <th>amallar</th>
@@ -84,10 +85,11 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <tr>
+                                                        <td>@item.PRODUCT.PNo</td>
                                                         <td>@item.CarModel1</td>
-                                                        <td>@item.CarModel2</td>
-                                                        <td>@item.CarModel3</td>
-
+                                                        <td>@item.Option1</td>
+                                                        <td>@item.Option1UsageQty</td>
+                                                        <th>@item.Option1UsageUnit</th>
                                                         @if (changePermit)
                                                         {
                                                             <td>

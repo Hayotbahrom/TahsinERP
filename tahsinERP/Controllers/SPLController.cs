@@ -2,6 +2,7 @@
 using OfficeOpenXml;
 using System;
 using System.Data;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -17,7 +18,10 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var list = db.SPLs.Where(x => x.IsDeleted == false).ToList();
+                var list = db.SPLs
+                    .Where(x => x.IsDeleted == false)
+                    .Include(x => x.PRODUCT)
+                    .ToList();
                 return View(list);
             }
         }
@@ -138,14 +142,7 @@ namespace tahsinERP.Controllers
                         foreach (DataRow row in tableModel.Rows)
                         {
                             string productNo = row["Product No."].ToString();
-                            var existingRecord = new SPL();
-                            if (db.SPLs.Where(x => x.IsDeleted == false).ToList().Count == 0)
-                            {
-                                existingRecord = null;
-                            }
-                            else
-                                existingRecord = db.SPLs.FirstOrDefault(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false);
-                            
+                           
                             var prodID = db.PRODUCTS.FirstOrDefault(x => x.IsDeleted == false && x.PNo.CompareTo(productNo) == 0)?.ID;
                             if (prodID is null)
                             {
@@ -158,7 +155,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
                                 prodID = db.PRODUCTS.Where(x => x.PNo.CompareTo(newProduct.PNo)==0 && x.Name.CompareTo(newProduct.Name)==0).FirstOrDefault().ID;
                             }
-                            if (existingRecord == null && prodID != null)
+                            if (prodID != null)
                             {
                                 SPL newSplRecord = new SPL
                                 {
