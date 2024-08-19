@@ -161,7 +161,6 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
-
                 var model = new SContractViewModel
                 {
                     ContractNo = contract.ContractNo,

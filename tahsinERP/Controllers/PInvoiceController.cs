@@ -67,12 +67,79 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
+      
+        /*
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public ActionResult Create(PInvoiceViewModel model)
+                {
+                    using (DBTHSNEntities db = new DBTHSNEntities())
+                    {
+                        var isSameContract = db.P_ORDERS
+                            .Include(x => x.SUPPLIER)
+                            .FirstOrDefault(p => p.IsDeleted == false && p.ID == model.OrderID);
+
+                        if (isSameContract == null || model.SupplierID != isSameContract.SupplierID)
+                        {
+                            ModelState.AddModelError("", "Ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
+                            PopulateViewBags();
+                            return View(model);
+                        }
+
+                        P_INVOICES invoice = new P_INVOICES
+                        {
+                            InvoiceNo = model.InvoiceNo,
+                            OrderID = model.OrderID,
+                            SupplierID = model.SupplierID,
+                            Currency = model.Currency,
+                            InvoiceDate = model.InvoiceDate,
+                            CompanyID = 1,
+                            IsDeleted = false
+                        };
+
+                        db.P_INVOICES.Add(invoice);
+                        db.SaveChanges();   
+
+                        int newInvoiceID = invoice.ID;
+
+                        foreach (var item in model.Parts)
+                        {
+                            var newPart = new P_INVOICE_PARTS
+                            {
+                                InvoiceID = newInvoiceID,
+                                PartID = item.PartID,
+                                Quantity = item.Quantuty,
+                                UnitID = item.UnitID,
+                                Price = item.Price
+                            };
+
+                            db.P_INVOICE_PARTS.Add(newPart);
+                        }
+
+                        db.SaveChanges();
+
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
+                        return RedirectToAction("Index");
+                    }
+                }*/
+        public JsonResult GetOrdersBySupplier(int supplierID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var contracts = db.P_ORDERS
+                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
+                    .Select(x => new { x.ID, x.OrderNo })
+                    .ToList();
+
+                return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.OrderNo }), JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult Create()
         {
             PopulateViewBags();
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(PInvoiceViewModel model)
@@ -124,10 +191,12 @@ namespace tahsinERP.Controllers
 
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
-                return RedirectToAction("Index");
+
+                // Redirect to PackingList create view with necessary Invoice properties
+                return RedirectToAction("Create", "PackingList", new { invoiceId = newInvoiceID, invoiceNo = invoice.InvoiceNo });
             }
         }
-
+        
         private void PopulateViewBags()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

@@ -12,6 +12,7 @@ namespace tahsinERP.ViewModels
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
         public int RecieverWHID { get; set; }
+        [Required]
         public string Currency { get; set; }
         [DataType(DataType.Text)]
         public string Description { get; set; }
