@@ -805,12 +805,33 @@
                 $j('.repeater-default').repeater({
                     show: function () {
                         $j(this).slideDown();
+
+                        //$(this).find('.select').select2({
+                        //    width: '100%'
+                        //});
+
+                        $(this).find('.select').each(function () {
+                            if ($(this).hasClass("select2-hidden-accessible")) {
+                                $(this).select2('destroy');  // Select2'ni yo'q qilish
+                                $(this).next('.select2').remove(); // Qoldiqlarni olib tashlash
+                            }
+                            $(this).select2({
+                                width: '100%'
+                            });
+                        });
+
                     },
                     hide: function (deleteElement) {
                         if (confirm('Are you sure you want to delete this element?')) {
                             $j(this).slideUp(deleteElement);
                         }
                     }
+                });
+            });
+
+            $(document).ready(function () {
+                $('.select').select2({
+                    width: '100%'
                 });
             });
         </script>
