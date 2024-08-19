@@ -80,7 +80,7 @@ namespace tahsinERP.Controllers
                             {
                                 string productNo = row["Product No."].ToString();
 
-                                SPL existingRecord = db.SPL.Where(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                SPL existingRecord = db.SPLs.Where(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false).FirstOrDefault();
                                 if (existingRecord != null)
                                 {
                                     ViewBag.ExistingRecordsCount = 1;
@@ -131,7 +131,7 @@ namespace tahsinERP.Controllers
                         foreach (DataRow row in tableModel.Rows)
                         {
                             string productNo = row["Product No."].ToString();
-                            SPL existingRecord = db.SPL.Where(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false).FirstOrDefault();
+                            SPL existingRecord = db.SPLs.Where(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false).FirstOrDefault();
                             var prodID = db.PRODUCTS.Where(x => x.IsDeleted == false && x.PNo.CompareTo(productNo) == 0).FirstOrDefault().ID;
                             if (existingRecord == null)
                             {
@@ -144,7 +144,7 @@ namespace tahsinERP.Controllers
                                 newSplRecord.IsActive = true;  // Assuming new entries are active by default
                                 newSplRecord.IsDeleted = false; // Assuming new entries are not deleted by default
 
-                                db.SPL.Add(newSplRecord);
+                                db.SPLs.Add(newSplRecord);
                                 db.SaveChanges();
                             }
                         }
