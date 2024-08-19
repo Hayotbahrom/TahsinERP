@@ -7,7 +7,8 @@ using System.Web;
 namespace tahsinERP.ViewModels
 {
     public class POrderViewModel
-    { 
+    {
+        [Required]
         public string OrderNo { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
