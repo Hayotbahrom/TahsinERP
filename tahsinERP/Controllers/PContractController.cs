@@ -339,8 +339,6 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
-        
-
         public ActionResult Details(int? ID)
         {
             if (ID == null)
