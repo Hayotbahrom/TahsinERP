@@ -81,7 +81,7 @@ namespace tahsinERP.Controllers
                                     Response.Cookies.Set(userImageCookie);
                                 }
 
-                                //SetUserEntry(getUser.ID);
+                                SetUserEntry(getUser.ID);
                                 return RedirectToAction("Index", "Home");
                             }
                         }
@@ -97,44 +97,44 @@ namespace tahsinERP.Controllers
             }
         }
 
-        //private void SetUserEntry(int userID)
-        //{
-        //    try
-        //    {
-        //        string ip = string.Empty;
-        //        IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
-        //        IPAddress[] addr = ipEntry.AddressList;
-        //        ip = addr[1].ToString();
+        private void SetUserEntry(int userID)
+        {
+            try
+            {
+                string ip = string.Empty;
+                IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
+                IPAddress[] addr = ipEntry.AddressList;
+                ip = addr[1].ToString();
 
-        //        int ldest = inet_addr(ip);
-        //        int lhost = inet_addr("");
-        //        long macInfo = 0;
-        //        int len = 6;
-        //        int result = SendARP(ldest, 0, ref macInfo, ref len);
-        //        string macSrc = macInfo.ToString("X");
-        //        while (macSrc.Length < 12)
-        //        {
-        //            macSrc = macSrc.Insert(0, "0");
-        //        }
-        //        string macAddress = string.Join(":", Enumerable.Range(0, 12).Where(x => x % 2 == 0).Select(x => macSrc.Substring(x, 2)));
-        //        var userEntry = new USER_ENTRIES
-        //        {
-        //            UserID = userID,
-        //            DateTime = DateTime.Now,
-        //            IP = ip,
-        //            MAC = macAddress
-        //        };
-        //        using (DBTHSNEntities db = new DBTHSNEntities())
-        //        {
-        //            db.USER_ENTRIES.Add(userEntry);
-        //            db.SaveChanges();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.AddModelError("", ex.Message);
-        //    }
-        //}
+                int ldest = inet_addr(ip);
+                int lhost = inet_addr("");
+                long macInfo = 0;
+                int len = 6;
+                int result = SendARP(ldest, 0, ref macInfo, ref len);
+                string macSrc = macInfo.ToString("X");
+                while (macSrc.Length < 12)
+                {
+                    macSrc = macSrc.Insert(0, "0");
+                }
+                string macAddress = string.Join(":", Enumerable.Range(0, 12).Where(x => x % 2 == 0).Select(x => macSrc.Substring(x, 2)));
+                var userEntry = new USER_ENTRIES
+                {
+                    UserID = userID,
+                    DateTime = DateTime.Now,
+                    IP = ip,
+                    MAC = macAddress
+                };
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    db.USER_ENTRIES.Add(userEntry);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+        }
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
