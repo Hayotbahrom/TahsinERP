@@ -2654,6 +2654,10 @@
     <Content Include="Views\BOM\Edit.cshtml" />
     <Content Include="Views\SPL\Index.cshtml" />
     <Content Include="Views\SPL\UploadWithExcel.cshtml" />
+    <Content Include="Views\SPL\Create.cshtml" />
+    <Content Include="Views\SPL\Details.cshtml" />
+    <Content Include="Views\SPL\Edit.cshtml" />
+    <Content Include="Views\SPL\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
