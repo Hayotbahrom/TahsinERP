@@ -280,7 +280,7 @@ namespace tahsinERP.Controllers
                 {
                     ContractNo = model.ContractNo,
                     IssuedDate = model.IssuedDate,
-                    CompanyID = 1,
+                    CompanyID = 1,  
                     SupplierID = model.SupplierID,
                     Currency = model.Currency,
                     Amount = model.Amount,

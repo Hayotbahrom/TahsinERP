@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
-using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -16,14 +16,21 @@ namespace tahsinERP.Controllers
         // GET: SPL
         public ActionResult Index()
         {
-            return View();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var list = db.SPLs
+                    .Where(x => x.IsDeleted == false)
+                    .Include(x => x.PRODUCT)
+                    .ToList();
+                return View(list);
+            }
         }
 
         public ActionResult Download()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                SAMPLE_FILES sampleFile = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("sql.xlsx") == 0).FirstOrDefault();
+                SAMPLE_FILES sampleFile = db.SAMPLE_FILES.FirstOrDefault(s => s.FileName.CompareTo("spl.xlsx") == 0);
                 if (sampleFile != null)
                     return File(sampleFile.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 return View();
@@ -33,6 +40,7 @@ namespace tahsinERP.Controllers
         public ActionResult UploadWithExcel()
         {
             ViewBag.IsFileUploaded = false;
+            ViewBag.ExistingRecordsCount = 0;
             return View();
         }
 
@@ -74,35 +82,38 @@ namespace tahsinERP.Controllers
                         ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                         ViewBag.IsFileUploaded = true;
 
+                        int duplicateCount = 0;
                         using (DBTHSNEntities db = new DBTHSNEntities())
                         {
                             foreach (DataRow row in dataTable.Rows)
                             {
                                 string productNo = row["Product No."].ToString();
 
-                                SPL existingRecord = db.SPL.Where(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                SPL existingRecord = db.SPLs.FirstOrDefault(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false);
                                 if (existingRecord != null)
                                 {
-                                    ViewBag.ExistingRecordsCount = 1;
+                                    duplicateCount++;
                                 }
                             }
                         }
+                        ViewBag.ExistingRecordsCount = duplicateCount;
+
                     }
                     catch (Exception ex)
                     {
-                        ViewBag.Message = $"Error occurred while uploading the file: {ex.Message}";
+                        ViewBag.Message = $"Faylni yuklashda xatolik: {ex.Message}";
                         return View("UploadWithExcel");
                     }
                 }
                 else
                 {
-                    ViewBag.Message = "Invalid format. Only .xlsx files are allowed.";
+                    ViewBag.Message = "Noto'g'ri format. Faqat .xlsx fayllar qabul qilinadi.";
                     return View("UploadWithExcel");
                 }
             }
             else
             {
-                ViewBag.Message = "File is empty or not uploaded!";
+                ViewBag.Message = "Fayl tanlanmagan yoki fayl bo'sh!";
                 return View("UploadWithExcel");
             }
             return View("UploadWithExcel");
@@ -113,7 +124,7 @@ namespace tahsinERP.Controllers
             ViewBag.DataTable = null;
             ViewBag.DataTableModel = null;
             ViewBag.IsFileUploaded = false;
-            ViewBag.Message = "Table data has been cleared.";
+            ViewBag.Message = "Jadval ma'lumotlari tozalandi.";
             return View("UploadWithExcel");
         }
 
@@ -131,20 +142,33 @@ namespace tahsinERP.Controllers
                         foreach (DataRow row in tableModel.Rows)
                         {
                             string productNo = row["Product No."].ToString();
-                            SPL existingRecord = db.SPL.Where(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false).FirstOrDefault();
-                            var prodID = db.PRODUCTS.Where(x => x.IsDeleted == false && x.PNo.CompareTo(productNo) == 0).FirstOrDefault().ID;
-                            if (existingRecord == null)
+                           
+                            var prodID = db.PRODUCTS.FirstOrDefault(x => x.IsDeleted == false && x.PNo.CompareTo(productNo) == 0)?.ID;
+                            if (prodID is null)
                             {
-                                SPL newSplRecord = new SPL();
-                                newSplRecord.ProdID = prodID;
-                                newSplRecord.CarModel1 = row["Model"].ToString();
-                                newSplRecord.Option1 = row["OptionID"].ToString();
-                                newSplRecord.Option1UsageQty = Convert.ToInt32(row["Usage"]);
-                                newSplRecord.Option1UsageUnit = row["Unit"].ToString();
-                                newSplRecord.IsActive = true;  // Assuming new entries are active by default
-                                newSplRecord.IsDeleted = false; // Assuming new entries are not deleted by default
+                                PRODUCT newProduct = new PRODUCT
+                                {
+                                    PNo = productNo,
+                                    Name = row["Name"].ToString()
+                                };
+                                db.PRODUCTS.Add(newProduct);
+                                db.SaveChanges();
+                                prodID = db.PRODUCTS.Where(x => x.PNo.CompareTo(newProduct.PNo)==0 && x.Name.CompareTo(newProduct.Name)==0).FirstOrDefault().ID;
+                            }
+                            if (prodID != null)
+                            {
+                                SPL newSplRecord = new SPL
+                                {
+                                    ProdID = (int)prodID,
+                                    CarModel1 = row["Model"].ToString(),
+                                    Option1 = row["OptionID"].ToString(),
+                                    Option1UsageQty = Convert.ToInt32(row["Usage"]),
+                                    Option1UsageUnit = row["Unit"].ToString(),
+                                    IsActive = true,  // Assuming new entries are active by default
+                                    IsDeleted = false // Assuming new entries are not deleted by default
+                                };
 
-                                db.SPL.Add(newSplRecord);
+                                db.SPLs.Add(newSplRecord);
                                 db.SaveChanges();
                             }
                         }
@@ -160,6 +184,5 @@ namespace tahsinERP.Controllers
             LogHelper.LogToDatabase(userEmail, "SPLController", "Save[Post]");
             return RedirectToAction("Index");
         }
-
     }
 }

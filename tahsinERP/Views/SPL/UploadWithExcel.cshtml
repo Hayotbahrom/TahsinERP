@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "UploadWithExcel";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -18,7 +17,7 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        <a href="~/SPL">SPL</a>
+                                        <a href="~/SPL">SPL lar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
                                         Excel orqali yuklash
@@ -45,7 +44,7 @@
                                                 <fieldset class="form-group">
                                                     <label>Shablon faylni yuklab oling</label>
                                                     <br />
-                                                    @Html.ActionLink("spl.xlsx", "Download", "SPL")
+                                                    @Html.ActionLink("shartnoma.xlsx", "download")
                                                 </fieldset>
                                             </div>
                                             <div class="col-lg-6 col-md-12">
@@ -103,6 +102,8 @@
                                             <div class="card-body">
                                                 <!-- datatable start -->
                                                 <div class="table-responsive">
+
+
                                                     <table class="table zero-configuration" style="width:100%">
                                                         <thead>
                                                             <tr>
@@ -124,12 +125,13 @@
                                                             }
                                                         </tbody>
                                                     </table>
+
                                                 </div>
                                                 @if (ViewBag.IsFileUploaded != null)
                                                 {
                                                     <br />
                                                     <h6>
-                                                        Agar ma'lumotlar to'g'riligiga ishonchingiz komil bo'lsa, quyidagi tugma orqali ma'lumotlarni bazaga saqlashingiz mumkin.
+                                                        Agar ma'lumotlar to'g'riliga ishonch xosil qilgan bo'lsangiz quyidagi tugma orqali ma'lumotlar bazasiga saqlashingiz mumkin.
                                                     </h6>
                                                     <input type="hidden" name="dataTableModel" value='@Html.Raw(ViewBag.DataTableModel)' />
                                                     <input type="submit" value="Saqlash" class="btn btn-outline-success round mr-1 mb-1" onclick="return confirmSave()" />
@@ -165,3 +167,4 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
