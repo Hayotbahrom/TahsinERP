@@ -191,7 +191,7 @@ namespace tahsinERP.Controllers
                     }
                     else
                     {
-                        existStock.Amount += part.Amount;
+                        existStock.Amount = existStock.Amount + part.Amount;
                     }
 
                     db.PART_WRHS_INCOME_PARTS.Add(newPart);

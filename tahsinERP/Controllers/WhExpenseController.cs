@@ -162,7 +162,7 @@ namespace tahsinERP.Controllers
                 }
 
                 // Create a new PART_WRHS_EXPENSES record
-                PART_WRHS_EXPENSES newExpense = new PART_WRHS_EXPENSES
+                /*PART_WRHS_EXPENSES newExpense = new PART_WRHS_EXPENSES
                 {
                     DocNo = model.DocNo,
                     ReceiverWhID = model.RecieverWHID,
@@ -175,11 +175,11 @@ namespace tahsinERP.Controllers
                 };
 
                 db.PART_WRHS_EXPENSES.Add(newExpense);
-                db.SaveChanges();
+                db.SaveChanges();*/
 
                 // Update SenderWHID with the newly created ExpenseID
-                newExpense.SenderWHID = newExpense.ID;
-                db.Entry(newExpense).State = EntityState.Modified;
+               /* newExpense.SenderWHID = newExpense.ID;
+                db.Entry(newExpense).State = EntityState.Modified;*/
 
                 // Save parts
                 foreach (var part in model.Parts)
@@ -193,15 +193,7 @@ namespace tahsinERP.Controllers
                     }
                     else if (existStock.Amount >= part.Amount)
                     {
-                        PART_STOCKS newStock = new PART_STOCKS
-                        {
-                            WHID = (int)existStock.WHID,
-                            PartID = existStock.PartID,
-                            Unit = existStock.Unit,
-                            Amount = existStock.Amount - part.Amount
-                        };
-
-                        db.PART_STOCKS.Add(newStock);
+                        existStock.Amount = existStock.Amount-part.Amount;
                         db.SaveChanges();
                     }
                     else
