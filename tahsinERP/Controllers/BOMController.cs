@@ -1117,14 +1117,23 @@ namespace tahsinERP.Controllers
             }
         }
 
-        public ActionResult UpdloadWithExcel()
+        public ActionResult UploadWithExcel()
         {
             ViewBag.IsFileUploaded = false;
             return View();
         }
-
+        public ActionResult Download()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                SAMPLE_FILES detal = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("boms.xlsx") == 0).FirstOrDefault();
+                if (detal != null)
+                    return File(detal.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return View();
+            }
+        }
         [HttpPost]
-        public ActionResult UpdloadWithExcel(HttpPostedFileBase file)
+        public ActionResult UploadWithExcel(HttpPostedFileBase file)
         {
             if (file != null && file.ContentLength > 0)
             {
@@ -1192,7 +1201,21 @@ namespace tahsinERP.Controllers
             }
             return View("UploadWithExcel");
         }
-
+        public ActionResult ClearDataTable()
+        {
+            // Clear the DataTable and related ViewBag properties
+            ViewBag.DataTable = null;
+            ViewBag.DataTableModel = null;
+            ViewBag.IsFileUploaded = false;
+            ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
+            // Return the UploadWithExcel view
+            return View("UploadWithExcel");
+        }
+        [HttpPost]
+        public ActionResult Save(string dataTableModel)
+        {
+            return RedirectToAction("Index");
+        }
         public ActionResult Edit(int ID, BoomViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
