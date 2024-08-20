@@ -5,45 +5,63 @@ using System.Web;
 
 namespace tahsinERP.ViewModels
 {
-    // General
+    // ViewModel for Warehouse Income
     public class WrhsIncomeViewModel
     {
-       // public int ID { get; set; } // Auto Increment in DB
+        [Required(ErrorMessage = "Document number is required.")]
         public string DocNo { get; set; }
-        public int WHID { get; set; } // Ombor IDsi auto: null
-        [Required]
+
+        public int WHID { get; set; } // Warehouse ID, defaults to null
+
+        [Required(ErrorMessage = "Invoice ID is required.")]
         public int InvoiceID { get; set; }
-        public int WaybillID { get; set; }
+
+        public int WaybillID { get; set; } // Waybill ID, defaults to null
+
         [DataType(DataType.Upload)]
-        public HttpPostedFileBase File;
+        public HttpPostedFileBase File { get; set; } // File upload
+
+        [Required(ErrorMessage = "Amount is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Amount must be a positive number.")]
         public int Amount { get; set; }
+
+        [Required(ErrorMessage = "Currency is required.")]
         public string Currency { get; set; }
-        //public int TotalPrice { get; set; } // Trigger in DB
-        //public bool IsDeleted { get; set; }
+
         [DataType(DataType.Text)]
-        public string Description { get; set; }
-        public DateTime IssueDateTime { get; set; } // From Controller
-        public int SenderWHID { get; set; } // Auto: null
-        public bool RecieveStatus { get; set; }
-        // Parts
+        public string Description { get; set; } // Optional description
+
+        public DateTime IssueDateTime { get; set; } // Set in controller
+
+        public int SenderWHID { get; set; } // Sender Warehouse ID, defaults to null
+
+        public bool RecieveStatus { get; set; } // Receive status
+
+        // Parts associated with the warehouse income
         public List<WhrsIncomePart> Parts { get; set; }
+
         public WrhsIncomeViewModel()
         {
             Parts = new List<WhrsIncomePart>();
         }
     }
-    // Part ViewModel
+
+    // ViewModel for parts in Warehouse Income
     public class WhrsIncomePart
     {
-       // public int ID { set; get; } // Auto Increment in DB
-        //public int IncomeID { get; set; } // User dan olinmaydi
         public int PartID { get; set; }
+
+        [Required(ErrorMessage = "Unit ID is required.")]
         public int UnitID { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Amount is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Amount must be a positive number.")]
         public int Amount { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Piece price is required.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Piece price must be a positive number.")]
         public int PiecePrice { get; set; }
-       // public int TotalPrice { get; set; } // Trigger in DB
-        public string Comment { get; set; }
+
+        public string Comment { get; set; } // Optional comment
     }
 }
