@@ -8,6 +8,7 @@ namespace tahsinERP.ViewModels
 {
     public class WrhsExpenseViewModel
     {
+        [Required]
         public string DocNo { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;

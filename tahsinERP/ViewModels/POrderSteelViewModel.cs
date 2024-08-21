@@ -8,6 +8,7 @@ namespace tahsinERP.ViewModels
 {
     public class POrderSteelViewModel
     {
+        [Required]
         public string OrderNo { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
@@ -35,6 +36,7 @@ namespace tahsinERP.ViewModels
         public float Thickness { get; set; }
         public float Width { get; set; }
         public int UnitID { get; set; }
+        [Required]
         public float Amount { get; set; }
     }
 }

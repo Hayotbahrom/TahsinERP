@@ -79,20 +79,22 @@
                             </div>
                         </div>
                     </div>
-                    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab-fill" data-toggle="tab" href="#home-fill" role="tab" aria-controls="home-fill" aria-selected="true">
-                                Invoice
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" aria-controls="profile" role="tab" aria-selected="false">
+                                <i class="bx bx-user align-middle"></i>
+                                <span class="align-middle">Service</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-fill" data-toggle="tab" href="#profile-fill" role="tab" aria-controls="profile-fill" aria-selected="false">
-                                PackingList
+                            <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" aria-controls="about" role="tab" aria-selected="false">
+                                <i class="bx bx-message-square align-middle"></i>
+                                <span class="align-middle">Messages</span>
                             </a>
                         </li>
                     </ul>
-                    <div class="tab-content pt-1">
-                        <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
+                    <div class="tab-content">
+                        <div class="tab-pane" id="profile" aria-labelledby="profile-tab" role="tabpanel">
                             <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
                                 <i class='bx bx-save'></i>
                                 PDF
@@ -192,48 +194,48 @@
                                             </tr>
                                         }
                                     </table>
+                                    <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
+                                        <div class="footer">
+                                            <p>Total Qty: <b>@totalQty</b> &nbsp;&nbsp;&nbsp;&nbsp; TOTAL Amount: <b> $@totalAmount.ToString("N2")</b></p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="content">
-
-                                </div>
-                                <div class="footer">
-                                    <p>Total Qty: <b>@totalQty</b> &nbsp;&nbsp;&nbsp;&nbsp; TOTAL Amount: <b> $@totalAmount.ToString("N2")</b></p>
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane" id="profile-fill" role="tabpanel" aria-labelledby="profile-tab-fill">
-                            <h3>Packing List Details</h3>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Transport Type</th>
-                                        <th>Packing List No</th>
-                                        <th>Transport No</th>
-                                        <th>Umumiy sig'imi</th>
-                                        <th>Umumiy balandligi</th>
-                                        <th>Umumiy og'irligi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var packingList in packingLists)
-                                    {
+                            <div class="tab-pane" id="about" aria-labelledby="about-tab" role="tabpanel">
+                                <h3>Packing List Details</h3>
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <td>@packingList.F_TRANSPORT_TYPES.TransportType    </td>
-                                            <td>@packingList.PackingListNo</td>
-                                            <td>@packingList.TransportNo</td>
-                                            <td>@packingList.TotalCBM</td>
-                                            <td>@packingList.TotalGrWeight</td>
-                                            <td>@packingList.TotalNetWeight</td>
+                                            <th>Transport Type</th>
+                                            <th>Packing List No</th>
+                                            <th>Transport No</th>
+                                            <th>Umumiy sig'imi</th>
+                                            <th>Umumiy balandligi</th>
+                                            <th>Umumiy og'irligi</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var packingList in packingLists)
+                                        {
+                                            <tr>
+                                                <td>@packingList.F_TRANSPORT_TYPES.TransportType    </td>
+                                                <td>@packingList.PackingListNo</td>
+                                                <td>@packingList.TransportNo</td>
+                                                <td>@packingList.TotalCBM</td>
+                                                <td>@packingList.TotalGrWeight</td>
+                                                <td>@packingList.TotalNetWeight</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+   
 }
 else
 {
