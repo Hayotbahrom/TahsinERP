@@ -81,20 +81,21 @@
                     </div>
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" aria-controls="profile" role="tab" aria-selected="false">
-                                <i class="bx bx-user align-middle"></i>
-                                <span class="align-middle">Service</span>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" aria-controls="home" role="tab" aria-selected="true">
+                                <!-- Remove the icon element -->
+                                <span class="align-middle">Invoice</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" aria-controls="about" role="tab" aria-selected="false">
-                                <i class="bx bx-message-square align-middle"></i>
-                                <span class="align-middle">Messages</span>
+                                <!-- Remove the icon element -->
+                                <span class="align-middle">PackingList</span>
                             </a>
                         </li>
                     </ul>
+
                     <div class="tab-content">
-                        <div class="tab-pane" id="profile" aria-labelledby="profile-tab" role="tabpanel">
+                        <div class="tab-pane active" id="home" aria-labelledby="home-tab" role="tabpanel">
                             <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
                                 <i class='bx bx-save'></i>
                                 PDF
@@ -147,13 +148,13 @@
                                     <table>
                                         <tr>
                                             <th>Transport & Vessel information</th>
-                                            <th>PackingList No</th>
+                                            <th>Departure date</th>
                                         </tr>
                                         <tr>
                                             <td>
                                                 @transportNo<br>
                                             </td>
-                                            <td>@packingListNo</td>
+                                            <td></td>
                                         </tr>
                                     </table>
                                     <br>
@@ -171,12 +172,12 @@
                                     <br />
                                     <table>
                                         <tr>
-                                            <th>Detall raqami</th>
-                                            <th>Nomi</th>
-                                            <th>Soni</th>
+                                            <th>Part number</th>
+                                            <th>Part name</th>
+                                            <th>Quantity</th>
                                             <th>Unit</th>
-                                            <th>Unit narxi</th>
-                                            <th>Amount (USD)</th>
+                                            <th>Unit price</th>
+                                            <th>Amount (@Model.Currency)</th>
                                         </tr>
                                         @foreach (var item in ViewBag.partList)
                                         {
@@ -200,38 +201,114 @@
                                         </div>
                                     </div>
                                 </div>
-                                </div>
                             </div>
-                            <div class="tab-pane" id="about" aria-labelledby="about-tab" role="tabpanel">
-                                <h3>Packing List Details</h3>
-                                <table class="table">
-                                    <thead>
+                        </div>
+                        <div class="tab-pane" id="about" aria-labelledby="about-tab" role="tabpanel">
+                            <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
+                                <i class='bx bx-save'></i>
+                                PDF
+                            </button>
+                            <br />
+                            <br />
+
+                            <div class="invoice-container" id="toPDF">
+                                <div class="header">
+                                    <table>
                                         <tr>
-                                            <th>Transport Type</th>
-                                            <th>Packing List No</th>
-                                            <th>Transport No</th>
-                                            <th>Umumiy sig'imi</th>
-                                            <th>Umumiy balandligi</th>
-                                            <th>Umumiy og'irligi</th>
+                                            <th>Shipper</th>
+                                            <th>Invoice No.</th>
+                                            <th>Issued Date</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var packingList in packingLists)
+                                        <tr>
+                                            <td>
+                                                @Model.SUPPLIER.Name<br>
+                                                @Model.SUPPLIER.Address, @Model.SUPPLIER.City<br>
+                                                @Model.SUPPLIER.Country
+                                            </td>
+                                            <td>@Model.InvoiceNo</td>
+                                            <td>@Model.InvoiceDate.ToString("dd.MM.yyyy")</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Ship to</th>
+                                            <th>Bill to</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Transport & Vessel information</th>
+                                            <th>Departure date</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @transportNo<br>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Other references</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Total CBM: @packingLists[0].TotalCBM<br>
+                                                Total Net Weight: @packingLists[0].TotalNetWeight
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br />
+                                    <table>
+                                        <tr>
+                                            <th>Part number</th>
+                                            <th>Part name</th>
+                                            <th>CBM</th>
+                                            <th>Net</th>
+                                        </tr>
+                                        @foreach (var item in ViewBag.partList)
                                         {
+                                            totalAmount += item.TotalPrice;
+                                            totalQty += item.Quantity;
                                             <tr>
-                                                <td>@packingList.F_TRANSPORT_TYPES.TransportType    </td>
-                                                <td>@packingList.PackingListNo</td>
-                                                <td>@packingList.TransportNo</td>
-                                                <td>@packingList.TotalCBM</td>
-                                                <td>@packingList.TotalGrWeight</td>
-                                                <td>@packingList.TotalNetWeight</td>
+                                                <td>
+                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                </td>
+                                                <td>@item.PART.PName</td>
+                                                <td>@packingLists[0].TotalCBM</td>
+                                                <td>@packingLists[0].TotalNetWeight</td>]
                                             </tr>
                                         }
-                                    </tbody>
-                                </table>
+                                    </table>
+                                    <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
+                                        <div class="footer">
+                                            <p>Total Qty: <b>@totalQty</b> &nbsp;&nbsp;&nbsp;&nbsp; TOTAL Amount: <b> $@totalAmount.ToString("N2")</b></p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

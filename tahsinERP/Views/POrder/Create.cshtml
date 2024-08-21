@@ -5,6 +5,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    /* Hide the default file input */
+    .custom-file-input {
+        display: none;
+    }
+
+    /* Style the custom button */
+    .custom-file-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+        /* Optional: Change button color on hover */
+        .custom-file-button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     <div class="app-content content">
@@ -90,7 +115,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
+                                                <h4>Buyurtma faylini yuklang</h4>
+                                                <hr />
+                                                <!-- Hidden file input -->
+                                                <input type="file" id="partPhotoUpload" name="partPhotoUpload" class="custom-file-input" />
+                                                <!-- Custom button -->
+                                                <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
+                                                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                            </div>
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">

@@ -8,7 +8,6 @@ namespace tahsinERP.ViewModels
 {
     public class PInvoiceViewModel
     {
-        public int ID { get; set; }
         [Required]
         public string InvoiceNo { get; set; }
         [Required]
@@ -30,7 +29,7 @@ namespace tahsinERP.ViewModels
     }
     public class PInvoicePartViewModel
     {
-        public int ID { get; set; }
+        [Required]
         public int InvoiceID { get; set; }
         [Required]
         public int PartID { get; set; }

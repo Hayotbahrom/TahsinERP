@@ -21,6 +21,7 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, contractNo, orderNo, partNo = "";
         private string[] sources;
+        private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         public POrderController()
         {
             sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
@@ -149,6 +150,26 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+
+                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                {
+                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                    {
+                        P_ORDER_DOCS contractDoc = new P_ORDER_DOCS();
+                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        contractDoc.OrderID = newOrder.ID;
+                        contractDoc.Doc = avatar;
+
+                        db.P_ORDER_DOCS.Add(contractDoc);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        throw new RetryLimitExceededException();
+                    }
+                }
                 return RedirectToAction("Index");
             }
         }

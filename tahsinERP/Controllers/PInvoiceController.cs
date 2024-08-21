@@ -22,6 +22,7 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, invoiceNo, orderNo, partNo = "";
         private string[] sources;
+        private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         public PInvoiceController()
         {
             sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
@@ -188,6 +189,25 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                {
+                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                    {
+                        P_INVOICE_DOCS contractDoc = new P_INVOICE_DOCS();
+                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        contractDoc.InvoiceID = invoice.ID;
+                        contractDoc.Doc = avatar;
+
+                        db.P_INVOICE_DOCS.Add(contractDoc);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        throw new RetryLimitExceededException();
+                    }
+                }
 
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
@@ -366,6 +386,7 @@ namespace tahsinERP.Controllers
                 var invoice = db.P_INVOICES
                                 .Include(i => i.P_INVOICE_PARTS.Select(pc => pc.PART))
                                 .Include(i => i.P_ORDERS)
+                                
                                 .FirstOrDefault(i => i.ID == ID);
 
                 if (invoice == null)
@@ -375,7 +396,7 @@ namespace tahsinERP.Controllers
 
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
                 ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
-                ViewBag.partList = invoice.P_INVOICE_PARTS.ToList();
+                ViewBag.partList = db.P_INVOICE_PARTS.Include(x => x.UNIT).Where(x => x.InvoiceID == ID).ToList();
 
                 return View(invoice);
             }
