@@ -54,7 +54,7 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <h6 class="invoice-to">Ta'minotchi</h6>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control", @id = "supplierDropdown" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control select2", @id = "supplierDropdown" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">

@@ -54,7 +54,7 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
@@ -81,7 +81,7 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <h6 class="invoice-to">Buyurtma berilgan sanasi</h6>
-                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi", id = "IssuedDate" })
+                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", id = "IssuedDate" })
                                                             @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
                                                             <div class="form-control-position">
                                                                 <i class='bx bx-calendar'></i>
@@ -99,7 +99,7 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control", id = "PartID" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select", id = "PartID" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
