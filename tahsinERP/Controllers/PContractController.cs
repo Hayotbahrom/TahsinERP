@@ -425,7 +425,6 @@ namespace tahsinERP.Controllers
 
             ViewBag.Supplier = suppliers;
             ViewBag.partList = partList;
-
             return View(contract);
         }
 
@@ -490,6 +489,7 @@ namespace tahsinERP.Controllers
                                 .ToList();
 
                 ViewBag.PartList = new SelectList(allParts, "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 return View(contractPart);
             }

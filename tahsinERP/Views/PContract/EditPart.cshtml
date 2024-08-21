@@ -79,7 +79,7 @@
 
                                                     <h6 class="invoice-to">O'lchov birligi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.UnitID, ViewBag.units as SelectList,new { @class = "form-control select2", @placeholder = "O'lchov birligi" })
+                                                        @Html.DropDownListFor(model => model.UnitID, (IEnumerable<SelectListItem>)ViewBag.units, new { @class = "form-control select2", @placeholder = "O'lchov birligi" })
                                                         @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                    @* <fieldset class="invoice-address form-group">
