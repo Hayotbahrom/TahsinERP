@@ -276,6 +276,14 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                    ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
+                    return View(model);
+                }
                 var newContract = new P_CONTRACTS()
                 {
                     ContractNo = model.ContractNo,
@@ -339,8 +347,6 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
-        
-
         public ActionResult Details(int? ID)
         {
             if (ID == null)

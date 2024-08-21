@@ -1199,6 +1199,7 @@ namespace tahsinERP.Controllers
                 ViewBag.Message = "Fayl bo'm-bo'sh yoki yuklanmadi!";
                 return View("UploadWithExcel");
             }
+
             return View("UploadWithExcel");
         }
         public ActionResult ClearDataTable()

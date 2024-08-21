@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -10,8 +11,10 @@ namespace tahsinERP.ViewModels
         public int ID { get; set; }
         public int InvoiceID { get; set; }
         public int TransportTypeID { get; set; }
+        [Required]
         public string TransportNo { get; set; }
-        public string PackingListNo { get; set; }
+        [Required]
+         public string PackingListNo { get; set; }
         public string SealNo { get; set; }
         public string Comment { get; set; }
         public bool IsDeleted { get; set; }

@@ -632,6 +632,7 @@
     <Compile Include="ViewModels\BOM\BoomViewModel.cs" />
     <Compile Include="ViewModels\BOM\IndexViewModel.cs" />
     <Compile Include="ViewModels\BOM\StampingNormViewModel.cs" />
+    <Compile Include="ViewModels\CreateAvtoViewModel.cs" />
     <Compile Include="ViewModels\DamagedPartIndexViewModel.cs" />
     <Compile Include="ViewModels\Home\StatisticsVM.cs" />
     <Compile Include="ViewModels\POrderSteelViewModel.cs" />
@@ -2658,6 +2659,7 @@
     <Content Include="Views\SPL\Details.cshtml" />
     <Content Include="Views\SPL\Edit.cshtml" />
     <Content Include="Views\SPL\Delete.cshtml" />
+    <Content Include="Views\ProductPlan\CreateAvto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
