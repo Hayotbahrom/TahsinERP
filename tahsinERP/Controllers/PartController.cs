@@ -200,34 +200,36 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
-
-                PartViewModel partVM = new PartViewModel
+                else
                 {
-                    ID = part.ID,
-                    PNo = part.PNo,
-                    PName = part.PName,
-                    PWeight = part.PWeight,
-                    PLength = part.PLength,
-                    PWidth = part.PWidth,
-                    PHeight = part.PHeight,
-                    Units = part.UNIT,
-                    Type = part.Type,
-                    Description = part.Description,
-                    Grade = part.Grade,
-                    Gauge = part.Gauge,
-                    Pitch = part.Pitch,
-                    Coating = part.Coating,
-                    Marka = part.Marka,
-                    Standart = part.Standart,
-                    IsInHouse = part.IsInHouse,
-                    HSCodeD = (int)part.HSCodeID
-                };
+                    PartViewModel partVM = new PartViewModel
+                    {
+                        ID = part.ID,
+                        PNo = part.PNo,
+                        PName = part.PName,
+                        PWeight = part.PWeight,
+                        PLength = part.PLength,
+                        PWidth = part.PWidth,
+                        PHeight = part.PHeight,
+                        Units = part.UNIT,
+                        Type = part.Type,
+                        Description = part.Description,
+                        Grade = part.Grade,
+                        Gauge = part.Gauge,
+                        Pitch = part.Pitch,
+                        Coating = part.Coating,
+                        Marka = part.Marka,
+                        Standart = part.Standart,
+                        IsInHouse = part.IsInHouse,
+                        HSCodeD = (int)part.HSCodeID
+                    };
 
-                ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-                ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
-                ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
-                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                return View(partVM);
+                    ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
+                    ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
+                    ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
+                    ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                    return View(partVM);
+                }
             }
         }
 
