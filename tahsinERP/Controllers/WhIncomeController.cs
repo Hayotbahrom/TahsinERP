@@ -203,6 +203,20 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
+        public JsonResult GetPartsByInvoice(int invoiceId)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var parts = db.P_INVOICE_PARTS
+                              .Where(p => p.InvoiceID == invoiceId)
+                              .Select(p => new { p.ID, p.PART.PNo }) // Assuming PNo is the part number
+                              .ToList();
+
+                return Json(parts, JsonRequestBehavior.AllowGet);
+
+            }
+        }
+
 
         public async Task<ActionResult> Download()
         {
