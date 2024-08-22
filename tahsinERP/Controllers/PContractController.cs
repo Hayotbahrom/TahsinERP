@@ -276,72 +276,80 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (!ModelState.IsValid)
+                try
                 {
-                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                    ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-
-                    return View(model);
-                }
-                var newContract = new P_CONTRACTS()
-                {
-                    ContractNo = model.ContractNo,
-                    IssuedDate = model.IssuedDate,
-                    CompanyID = 1,  
-                    SupplierID = model.SupplierID,
-                    Currency = model.Currency,
-                    Amount = model.Amount,
-                    Incoterms = model.Incoterms,
-                    PaymentTerms = model.PaymentTerms,
-                    DueDate = model.DueDate,
-                    IsDeleted = false,
-                    IDN = model.IDN,
-                };
-                db.P_CONTRACTS.Add(newContract);
-                db.SaveChanges();
-
-                // Yangi yozuvning IncomeID sini olish
-                int newContractID = newContract.ID;
-
-                // Parts ni saqlash
-                foreach (var part in model.Parts)
-                {
-                    var newPart = new P_CONTRACT_PARTS
+                    var newContract = new P_CONTRACTS()
                     {
-                        ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
-                        PartID = part.PartID,
-                        UnitID = part.UnitID,
-                        Price = part.Price,
-                        Quantity = part.Quantity,
-                        ActivePart = true,
-                        MOQ = part.MOQ
+                        ContractNo = model.ContractNo,
+                        IssuedDate = model.IssuedDate,
+                        CompanyID = 1,
+                        SupplierID = model.SupplierID,
+                        Currency = model.Currency,
+                        Amount = model.Amount,
+                        Incoterms = model.Incoterms,
+                        PaymentTerms = model.PaymentTerms,
+                        DueDate = model.DueDate,
+                        IsDeleted = false,
+                        IDN = model.IDN,
                     };
+                    db.P_CONTRACTS.Add(newContract);
+                    db.SaveChanges();
 
-                    db.P_CONTRACT_PARTS.Add(newPart);
+                    // Yangi yozuvning IncomeID sini olish
+                    int newContractID = newContract.ID;
+
+                    // Parts ni saqlash
+                    foreach (var part in model.Parts)
+                    {
+                        var newPart = new P_CONTRACT_PARTS
+                        {
+                            ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
+                            PartID = part.PartID,
+                            UnitID = part.UnitID,
+                            Price = part.Price,
+                            Quantity = part.Quantity,
+                            ActivePart = true,
+                            MOQ = part.MOQ
+                        };
+
+                        db.P_CONTRACT_PARTS.Add(newPart);
+                    }
+
+                    db.SaveChanges();
+
+                    if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                    {
+                        if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                        {
+                            P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
+                            byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                            Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                            contractDoc.ContractID = newContract.ID;
+                            contractDoc.Doc = avatar;
+
+                            db.P_CONTRACT_DOCS.Add(contractDoc);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                            throw new RetryLimitExceededException();
+                        }
+                    }
                 }
-
-                db.SaveChanges();
-
-                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                catch
                 {
-                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                    if (!ModelState.IsValid && Request.Files["partPhotoUpload"].ContentLength <= 0)
                     {
-                        P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
-                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                        contractDoc.ContractID = newContract.ID;
-                        contractDoc.Doc = avatar;
+                        ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                        ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                        ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
-                        db.P_CONTRACT_DOCS.Add(contractDoc);
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
-                        throw new RetryLimitExceededException();
+                        return View(model);
                     }
                 }
+               
+                
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PContractController", "Create[Post]");
                 return RedirectToAction("Index");

@@ -1,0 +1,149 @@
+﻿@model tahsinERP.Models.CAR_PLANS
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    @using (Html.BeginForm("Create", "CarPlan", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/CarPlan/Index">Rejalashtirish</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Avtomobilga reja berish
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <section class="basic-select2">
+                        <div class="row">
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <h6 class="invoice-to">Avtomobileni tanlang</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownList("CarID", (SelectList)ViewBag.CarList, "--tanlang--", new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.CarID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Rejadagi mahsulot miqdori</h6>
+                                                    <fieldset class="form-group">
+                                                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Boshlanish sana</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
+                                                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Tugash sana </h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
+                                                        @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                                <i class='bx bx-save'></i>
+                                                                Save
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    
+                                </div>
+
+                                @if (ViewBag.PlanUploaded == true)
+                                {
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Maxsulot rejasi</h4>
+                                        </div>
+                                        @using (Html.BeginForm("Save", "CarPlan", FormMethod.Post))
+                                        {
+                                            <div class="card-content">
+                                                <div class="card-body">
+                                                    <!-- datatable start -->
+                                                    <div class="table-responsive">
+
+
+                                                        <table class="table zero-configuration" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    @*@foreach (var col in ViewBag.DataTable.Columns)
+                                                                    {
+                                                                        <th>@col.ColumnName</th>
+                                                                    }*@
+                                                                    <th>1</th>
+                                                                    <th>2</th>
+                                                                    <th>3</th>
+                                                                    <th>4</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @*@foreach (var row in ViewBag.DataTable.Rows)
+                                                                {
+                                                                    <tr>
+                                                                        @foreach (var item in row.ItemArray)
+                                                                        {
+                                                                            <td>@item</td>
+                                                                        }
+                                                                    </tr>
+                                                                }*@
+                                                                <tr>12</tr>
+                                                                <tr>23</tr>
+                                                                <tr>34</tr>
+                                                                <tr>45</tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    @if (ViewBag.PlanUploaded == true)
+                                                    {
+                                                        <br />
+                                                        <h6>
+                                                            Agar ma'lumotlar to'g'riliga ishonch xosil qilgan bo'lsangiz quyidagi tugma orqali ma'lumotlar bazasiga saqlashingiz mumkin.
+                                                        </h6>
+                                                        <input type="submit" value="Saqlash" class="btn btn-outline-success round mr-1 mb-1" onclick="return confirmSave()" />
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    }
+</body>
