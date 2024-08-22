@@ -308,6 +308,7 @@
     <Compile Include="Controllers\ProductPackController.cs" />
     <Compile Include="Controllers\ProductPlanController.cs" />
     <Compile Include="Controllers\ProformaInvoiceController.cs" />
+    <Compile Include="Controllers\PurchasingContractController.cs" />
     <Compile Include="Controllers\PurchasingItemController.cs" />
     <Compile Include="Controllers\PurchasingOrderController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
@@ -663,6 +664,7 @@
     <Compile Include="ViewModels\DamagedPartIndexViewModel.cs" />
     <Compile Include="ViewModels\Home\StatisticsVM.cs" />
     <Compile Include="ViewModels\POrderSteelViewModel.cs" />
+    <Compile Include="ViewModels\PurchasingContractViewModel.cs" />
     <Compile Include="ViewModels\PurchasingItemViewModel.cs" />
     <Compile Include="ViewModels\PurchasingOrderViewModel.cs" />
     <Compile Include="ViewModels\SOrderViewModel.cs" />
@@ -2699,6 +2701,11 @@
     <Content Include="Views\PurchasingOrder\Edit.cshtml" />
     <Content Include="Views\PurchasingOrder\Delete.cshtml" />
     <Content Include="Views\PurchasingOrder\Details.cshtml" />
+    <Content Include="Views\PurchasingContract\Create.cshtml" />
+    <Content Include="Views\PurchasingContract\Edit.cshtml" />
+    <Content Include="Views\PurchasingContract\Delete.cshtml" />
+    <Content Include="Views\PurchasingContract\Details.cshtml" />
+    <Content Include="Views\PurchasingContract\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

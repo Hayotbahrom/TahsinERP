@@ -79,7 +79,7 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", invoiceId);
 
                 // Populate the TransportType dropdown
-                // ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
+                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
 
                 var invoice = db1.P_INVOICES.Where(x => x.IsDeleted == false && x.ID == invoiceId).FirstOrDefault();
 
@@ -126,7 +126,7 @@ namespace tahsinERP.Controllers
                             PackingListNo = model.PackingListNo,
                             SealNo = model.SealNo,
                             Comment = model.Comment,
-                            InTransit = true,
+                            InTransit = false,
                             TotalCBM = model.TotalCBM,
                             TotalGrWeight = model.TotalGrWeight,
                             TotalNetWeight = model.TotalNetWeight,
@@ -161,7 +161,7 @@ namespace tahsinERP.Controllers
                 // Retain the dropdown lists if there's an error
                 ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
                 ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", model.TransportTypeID);
-
+                
                 return View(model);
             }
         }
