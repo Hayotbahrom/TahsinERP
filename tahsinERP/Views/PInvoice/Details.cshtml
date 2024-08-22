@@ -27,16 +27,16 @@
         margin-bottom: 20px;
     }
 
-    .header table, .content table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+        .header table, .content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    .header th, .header td, .content th, .content td {
-        border: 1px solid #000;
-        padding: 8px;
-        text-align: left;
-    }
+        .header th, .header td, .content th, .content td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
 
     .content th {
         background-color: #f2f2f2;
@@ -54,7 +54,9 @@
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     <div class="app-content content">
-        <div class="content-overlay"></div>
+        <div class="content-overlay">
+
+        </div>
         <div class="content-wrapper">
             <div class="card-content">
                 <div class="card-body">
@@ -100,6 +102,16 @@
                                 <i class='bx bx-save'></i>
                                 PDF
                             </button>
+                            <div  style="text-align: center">
+                                <div class="col-md-4 col-sm-6 col-12 fonticon-container">
+                                    <div class="fonticon-wrap">
+                                        <a href="@ViewBag.Base64String" download="fayl.pdf">
+                                            <i class="bx bxs-download">faylni yuklash</i>
+                                        </a>
+                                    </div>
+                                    <label>shartnoma fayli</label>
+                                </div>
+                            </div>
                             <br />
                             <br />
 
@@ -266,17 +278,6 @@
                                         </tr>
                                     </table>
                                     <br>
-                                    <table>
-                                        <tr>
-                                            <th>Other references</th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Total CBM: @packingLists[0].TotalCBM<br>
-                                                Total Net Weight: @packingLists[0].TotalNetWeight
-                                            </td>
-                                        </tr>
-                                    </table>
                                     <br />
                                     <table>
                                         <tr>
@@ -295,13 +296,13 @@
                                                 </td>
                                                 <td>@item.PART.PName</td>
                                                 <td>@packingLists[0].TotalCBM</td>
-                                                <td>@packingLists[0].TotalNetWeight</td>]
+                                                <td>@packingLists[0].TotalNetWeight</td>
                                             </tr>
                                         }
                                     </table>
                                     <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
                                         <div class="footer">
-                                            <p>Total Qty: <b>@totalQty</b> &nbsp;&nbsp;&nbsp;&nbsp; TOTAL Amount: <b> $@totalAmount.ToString("N2")</b></p>
+                                            <p>Total CBM: <b>@totalQty</b>  Total NET Weght: <b>@packingLists[0].TotalNetWeight </b> Total Gros Weight: <b>@packingLists[0].TotalGrWeight</b></p>
                                         </div>
                                     </div>
                                 </div>
@@ -309,10 +310,9 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
-   
+    </div>
 }
 else
 {

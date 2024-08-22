@@ -87,6 +87,14 @@
                                                             @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control", id = "ContractID" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
+                                                        <div class="form-group position-relative has-icon-left">
+                                                            <label>Buyurtma berilgan sanasi</label>
+                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
+                                                            @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position mt-2">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -104,26 +112,21 @@
                                                             @Html.TextAreaFor(model => model.Description, new { @class = "form-control", id = "Description" })
                                                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                         </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <h6 class="invoice-to">Buyurtma berilgan sanasi</h6>
-                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", id = "IssuedDate" })
-                                                            @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
-                                                            <div class="form-control-position">
-                                                                <i class='bx bx-calendar'></i>
-                                                            </div>
-                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
-                                                <h4>Buyurtma faylini yuklang</h4>
+                                            <div class="col-md-6 col-12 form-group">
                                                 <hr />
+                                                <label>Buyurtma faylini yuklang</label>
                                                 <!-- Hidden file input -->
                                                 <input type="file" id="partPhotoUpload" name="partPhotoUpload" class="custom-file-input" />
                                                 <!-- Custom button -->
                                                 <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
                                                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                <hr />
                                             </div>
+
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">

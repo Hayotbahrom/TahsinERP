@@ -107,33 +107,34 @@
                                                         @Html.TextBoxFor(model => model.PaymentTerms, new { @type = "text", @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentTerms, "", new { @class = "text-danger" })
                                                     </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <h6 class="invoice-to">Tuzilgan sanasi</h6>
-                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi" })
+                                                    <div class="form-group position-relative has-icon-left">
+                                                        <label>Tuzilgan sanasi</label>
+                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
                                                         @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
-                                                        <div class="form-control-position">
+                                                        <div class="form-control-position mt-2">
                                                             <i class='bx bx-calendar'></i>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 col-12 form-group">
-                                                        <h6 class="invoice-to">Tugaydigan sanasi</h6>
-                                                        @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma muddati" })
+                                                    <div class="form-group position-relative has-icon-left">
+                                                        <label>Tugaydigan sanasi</label>
+                                                        @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
                                                         @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
-                                                        <div class="form-control-position">
+                                                        <div class="form-control-position mt-2">
                                                             <i class='bx bx-calendar'></i>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <br />
-                                            <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
-                                                <h4>Shartnoma faylini yuklang</h4>
+                                            <div class="col-md-6 col-12 form-group">
                                                 <hr />
+                                                <label>Buyurtma faylini yuklang</label>
                                                 <!-- Hidden file input -->
                                                 <input type="file" id="partPhotoUpload" name="partPhotoUpload" class="custom-file-input" />
                                                 <!-- Custom button -->
                                                 <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
                                                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                <hr />
                                             </div>
 
                                         </div>

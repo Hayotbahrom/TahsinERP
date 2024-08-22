@@ -78,44 +78,45 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, "", new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Buyurtma raqami</label>
-                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, new { @class = "form-control", id = "OrderID" })
+                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control", id = "OrderID" })
                                                             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
                                                         </div>
+                                                        
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
+                                                        <div class="form-group position-relative has-icon-left">
+                                                            <label>invoice sanasi</label>
+                                                            @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
+                                                            @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position mt-2">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Currency">Valyuta</label>
                                                             @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Valyuta" })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
-
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceDate">Invoice sanasi</label>
-                                                            @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
-                                                            @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
-                                                            <div class="form-control-position">
-                                                                <i class='bx bx-calendar'></i>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end">
-                                                <h4>Invoice faylini yuklang</h4>
+                                            <div class="col-md-6 col-12 form-group">
                                                 <hr />
+                                                <label>Buyurtma faylini yuklang</label>
                                                 <!-- Hidden file input -->
                                                 <input type="file" id="partPhotoUpload" name="partPhotoUpload" class="custom-file-input" />
                                                 <!-- Custom button -->
                                                 <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
                                                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                <hr />
                                             </div>
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
