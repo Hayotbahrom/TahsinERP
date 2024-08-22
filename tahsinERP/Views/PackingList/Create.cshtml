@@ -46,6 +46,7 @@
                                                 <h6 class="invoice-to">Packing List raqami</h6>
                                                 <fieldset class="invoice-address form-group">
                                                     @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @placeholder = "packingList raqami", @requires = "required" })
+                                                    @Html.HiddenFor(model => model.InvoiceID) <!-- Add this line -->
                                                     @Html.ValidationMessageFor(model => model.PackingListNo, "", new { @class = "text-danger" })
                                                 </fieldset>
 
@@ -117,6 +118,7 @@
                                                                             @for (int i = 0; i < Model.Parts.Count; i++)
                                                                             {
                                                                                 <tr>
+                                                                                    @Html.HiddenFor(model => model.Parts[i].PartID) <!-- Add this line -->
                                                                                     <td>
                                                                                         <a href="~/PackingList/Details/@Model.Parts[i].PartID">@Model.Parts[i].Part.PNo</a>
                                                                                     </td>
