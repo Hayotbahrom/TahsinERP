@@ -18,7 +18,6 @@ namespace tahsinERP.ViewModels
         public string PackingListNo { get; set; }
         public string SealNo { get; set; }
         public string Comment { get; set; }
-        public Nullable<bool> InTransit { get; set; }
         public Nullable<double> TotalCBM { get; set; }
         public Nullable<double> TotalGrWeight { get; set; }
         public Nullable<double> TotalNetWeight { get; set; }

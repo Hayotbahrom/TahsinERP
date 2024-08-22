@@ -9,7 +9,6 @@ namespace tahsinERP.Controllers
 {
     public class PurchasingItemController : Controller
     {
-        // GET: PurchosingItem
         public ActionResult Index()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
