@@ -127,29 +127,29 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
 
 
-                    SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
-                    if (pROD_SHOPS != null)
-                    {
-                        bool exists = db.Database.SqlQuery<int>(
-                    "SELECT COUNT(*) FROM Prod_Shops_Parts WHERE ShopId = @ShopId AND PartId = @PartId",
-                    new SqlParameter("@ShopId", pROD_SHOPS.ID),
-                    new SqlParameter("@PartId", newPart.ID)
-                ).FirstOrDefault() > 0;
-                        if (!exists)
-                        {
+                //    SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
+                //    if (pROD_SHOPS != null)
+                //    {
+                //        bool exists = db.Database.SqlQuery<int>(
+                //    "SELECT COUNT(*) FROM Prod_Shops_Parts WHERE ShopId = @ShopId AND PartId = @PartId",
+                //    new SqlParameter("@ShopId", pROD_SHOPS.ID),
+                //    new SqlParameter("@PartId", newPart.ID)
+                //).FirstOrDefault() > 0;
+                //        if (!exists)
+                //        {
 
-                            int shopId = db.Database.SqlQuery<int>("Select shopId from Prod_Shops_Parts where ShopId=" + pROD_SHOPS.ID + "and PartId = " + newPart.ID + "").FirstOrDefault();
-                            if (shopId != pROD_SHOPS.ID)
-                            {
-                                int noOfRowInserted = db.Database.ExecuteSqlCommand("Insert Into Prod_Shops_Parts ([ShopId],[PartId]) Values(" + pROD_SHOPS.ID + "," + newPart.ID + ")");
-                                db.SaveChanges();
-                            }
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Bu Shop va Part kombinatsiyasi allaqachon mavjud.");
-                        }
-                    }
+                //            int shopId = db.Database.SqlQuery<int>("Select shopId from Prod_Shops_Parts where ShopId=" + pROD_SHOPS.ID + "and PartId = " + newPart.ID + "").FirstOrDefault();
+                //            if (shopId != pROD_SHOPS.ID)
+                //            {
+                //                int noOfRowInserted = db.Database.ExecuteSqlCommand("Insert Into Prod_Shops_Parts ([ShopId],[PartId]) Values(" + pROD_SHOPS.ID + "," + newPart.ID + ")");
+                //                db.SaveChanges();
+                //            }
+                //        }
+                //        else
+                //        {
+                //            ModelState.AddModelError("", "Bu Shop va Part kombinatsiyasi allaqachon mavjud.");
+                //        }
+                //    }
                     if (Request.Files["partPhotoUpload"].ContentLength > 0)
                     {
                         if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)

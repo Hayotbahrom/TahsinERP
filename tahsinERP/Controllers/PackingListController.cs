@@ -139,14 +139,17 @@ namespace tahsinERP.Controllers
                             TotalCBM = model.TotalCBM,
                             TotalGrWeight = model.TotalGrWeight,
                             TotalNetWeight = model.TotalNetWeight,
+                            
                             IsDeleted = false
                         };
                         db1.P_INVOICE_PACKINGLISTS.Add(packingList);
                         db1.SaveChanges();
+                        var packinglistID = packingList.ID;
                         foreach (var item in model.Parts)
                         {
                             P_PACKINGLIST_PARTS newPart = new P_PACKINGLIST_PARTS
                             {
+                                PackingListID = packinglistID,
                                 PartID = item.PartID,
                                 PrLength = item.PrLength,
                                 PrWidth = item.PrWidth,
