@@ -180,7 +180,7 @@
         $.ajax({
             url: '@Url.Action("GetOrdersBySupplier", "PInvoice")',
             type: 'GET',
-            data: { supplierID: supplierID },
+            data: { supplierID: supplierID }
             success: function (data) {
                 var contractDropdown = $("#OrderID");
                 contractDropdown.empty();

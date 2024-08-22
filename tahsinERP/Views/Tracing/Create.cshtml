@@ -47,8 +47,19 @@
                                                     <hr>
                                                     <h6 class="invoice-to">Transport raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.PackingListID, ViewBag.packingList as SelectList, new { @class = "form-control select2" })
+                                                        @Html.DropDownListFor(model => model.PackingListID, ViewBag.packingList as SelectList, new { @class = "form-control select2", @id = "packingList", onchange = "getInfo()" })
                                                         @Html.ValidationMessageFor(model => model.PackingListID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <fieldset class="d-flex justify-content-between mb-1">
+                                                        <fieldset class="w-50 mr-1">
+                                                            <h6 class="invoice-to">Invoice raqami</h6>
+                                                            @Html.TextBox("test", null, new { @class = "form-control", @id = "InvoiceNo", @disabled = "disabled" })
+                                                        </fieldset>
+
+                                                        <fieldset class="w-50">
+                                                            <h6 class="invoice-to">Yetkazib beruvchi</h6>
+                                                            @Html.TextBox("test", null, new { @class = "form-control", @id = "Supplier", @disabled = "disabled" })
+                                                        </fieldset>
                                                     </fieldset>
                                                     <h6 class="invoice-to">Hozirgi manzili</h6>
                                                     <fieldset class="invoice-address form-group">
@@ -107,3 +118,29 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+<script type="text/javascript">
+    function getInfo() {
+        var packingList = document.getElementById("packingList").value;
+
+        $.ajax({
+            url: '@Url.Action("GetInvoiceNo_Supplier", "Tracing")',
+            type: 'GET',
+            data: { packingListID: packingList },
+            success: function(data) {
+                if (data.success) {
+                    var InvoiceNo = $("#InvoiceNo");
+                    InvoiceNo.val(data.invoiceNo);
+
+                    var Supplier = $("#Supplier");
+                    Supplier.val(data.supplierName);
+                } else {
+                    console.error("Error: " + data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+</script>
