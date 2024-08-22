@@ -8,6 +8,8 @@
     using (Html.BeginForm("Create", "PackingList", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
@@ -43,7 +45,7 @@
 
                                                 <h6 class="invoice-to">Packing List raqami</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @placeholder = "packingList raqami" })
+                                                    @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @placeholder = "packingList raqami", @requires = "required" })
                                                     @Html.ValidationMessageFor(model => model.PackingListNo, "", new { @class = "text-danger" })
                                                 </fieldset>
 
@@ -165,13 +167,13 @@
     }
 }
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         function updateTotals() {
             var totalCBM = 0;
             var totalNetWeight = 0;
             var totalGrWeight = 0;
 
-            $('.part-row').each(function(index) {
+            $('.part-row').each(function (index) {
                 var length = parseFloat($('#PrLength_' + index).val()) || 0;
                 var width = parseFloat($('#PrWidth_' + index).val()) || 0;
                 var height = parseFloat($('#PrHeight_' + index).val()) || 0;
