@@ -150,44 +150,55 @@
     </div>
 
     <script type="text/javascript">
-    function refreshdatatablesupplier() {
-        const supplierID = document.getElementById("SupplierID").value;
-        $.ajax({
-            url: '@Url.Action("GetContractsBySupplier", "POrder")',
-            type: 'GET',
-            data: { supplierID: supplierID },
-            success: function (data) {
-                var contractDropdown = $("#ContractID");
-                contractDropdown.empty();
-                $.each(data, function (index, item) {
-                    contractDropdown.append(new Option(item.Text, item.Value));
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching contracts:", error);
+        function refreshdatatablesupplier() {
+            const supplierID = document.getElementById("SupplierID").value;
+            $.ajax({
+                url: '@Url.Action("GetContractsBySupplier", "POrder")',
+                type: 'GET',
+                data: { supplierID: supplierID },
+                success: function (data) {
+                    var contractDropdown = $("#ContractID");
+                    contractDropdown.empty();
+                    $.each(data, function (index, item) {
+                        contractDropdown.append(new Option(item.Text, item.Value));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching contracts:", error);
+                }
+            });
+        }
+
+        $('#ContractID').change(function () {
+            const contractID = $(this).val();
+            $.ajax({
+                url: '@Url.Action("GetPartsByContract", "POrder")',
+                type: 'GET',
+                data: { contractID: contractID },
+                success: function (data) {
+                    var partDropdown = $("#PartID");
+                    partDropdown.empty(); // Clear previous options
+
+                    $.each(data, function (index, item) {
+                        partDropdown.append(new Option(item.Text, item.Value));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching parts:", error);
+                }
+            });
+        });
+
+
+        $('.pickadate-months-year').pickadate({
+            selectYears: true,       // Yillar tanlashni yoqish
+            selectMonths: true,      // Oylik tanlashni yoqish
+            format: 'mm, yyyy',      // Faqat oy va yilni ko'rsatish uchun format
+            formatSubmit: 'yyyy-mm', // Faqat oy va yilni submit qilish uchun format
+            onSet: function(context) {
+                this.close();        // Tanlashdan keyin datepicker'ni yopish
             }
         });
-    }
-
-    $('#ContractID').change(function () {
-        const contractID = $(this).val();
-        $.ajax({
-            url: '@Url.Action("GetPartsByContract", "POrder")',
-            type: 'GET',
-            data: { contractID: contractID },
-            success: function (data) {
-                var partDropdown = $("#PartID");
-                partDropdown.empty(); // Clear previous options
-
-                $.each(data, function (index, item) {
-                    partDropdown.append(new Option(item.Text, item.Value));
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching parts:", error);
-            }
-        });
-    });
     </script>
 
 }

@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -22,7 +24,9 @@ namespace tahsinERP.Controllers
                 if (viewModel.IsParentProduct == true)
                 {
                     //var results = db.BOMS.Where(bom => bom.IsParentProduct == true).GroupBy(bom => bom.ParentPNo).Select(group => group.FirstOrDefault()).ToList();
-                    List<IndexViewModel> result = db.BOMS.Where(x => x.IsDeleted == false).Join(db.PRODUCTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
+                    List<IndexViewModel> result = db.BOMS
+                                                    .Where(x => x.IsDeleted == false)
+                                                    .Join(db.PRODUCTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
                     new IndexViewModel
                     {
                         ParentPNo = bom.ParentPNo,
@@ -30,25 +34,28 @@ namespace tahsinERP.Controllers
                         ProductID = product.ID,
                         IsParentProduct = true,
                         ID = product.ID
-                    })
-                        .GroupBy(item => new { item.ParentPNo, item.ID })
-                        .Select(group => group.FirstOrDefault()).ToList();
+                    }).GroupBy(item => new { item.ParentPNo, item.ID })
+                      .Select(group => group.FirstOrDefault())
+                      .ToList();
+
                     ViewBag.IsParentProduct = true;
                     return View(result);
                 }
                 else
                 {
-                    List<IndexViewModel> result = db.BOMS.Where(x => x.IsDeleted == false).Join(db.PARTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
-                   new IndexViewModel
-                   {
-                       ParentPNo = bom.ParentPNo,
-                       ProductName = product.PName,
-                       ProductID = product.ID,
-                       IsParentProduct = false,
-                       ID = product.ID
-                   })
-                       .GroupBy(item => new { item.ParentPNo, item.ID })
-                       .Select(group => group.FirstOrDefault()).ToList();
+                    List<IndexViewModel> result = db.BOMS
+                                                    .Where(x => x.IsDeleted == false)
+                                                    .Join(db.PARTS, bom => bom.ParentPNo, product => product.PNo, (bom, product) =>
+                    new IndexViewModel
+                    {
+                        ParentPNo = bom.ParentPNo,
+                        ProductName = product.PName,
+                        ProductID = product.ID,
+                        IsParentProduct = false,
+                        ID = product.ID
+                    }).GroupBy(item => new { item.ParentPNo, item.ID })
+                      .Select(group => group.FirstOrDefault())
+                      .ToList();
 
                     ViewBag.IsParentProduct = false;
                     return View(result);
@@ -59,8 +66,13 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                PRODUCT product = db.PRODUCTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
-                PART part = db.PARTS.Where(p => p.ID == ID && p.IsDeleted == false).FirstOrDefault();
+                PRODUCT product = db.PRODUCTS
+                                    .Where(p => p.ID == ID && p.IsDeleted == false)
+                                    .FirstOrDefault();
+                PART part = db.PARTS
+                              .Where(p => p.ID == ID && p.IsDeleted == false)
+                              .FirstOrDefault();
+
                 try
                 {
                     if (product != null)
@@ -1116,12 +1128,6 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-
-        public ActionResult UploadWithExcel()
-        {
-            ViewBag.IsFileUploaded = false;
-            return View();
-        }
         public ActionResult Download()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -1132,6 +1138,13 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
+
+        public ActionResult UploadWithExcel()
+        {
+            ViewBag.IsFileUploaded = false;
+            return View();
+        }
+        
         [HttpPost]
         public ActionResult UploadWithExcel(HttpPostedFileBase file)
         {
@@ -1169,13 +1182,26 @@ namespace tahsinERP.Controllers
                         ViewBag.DataTable = dataTable;
                         ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                         ViewBag.IsFileUploaded = true;
+
                         using (DBTHSNEntities db = new DBTHSNEntities())
                         {
                             foreach (DataRow row in dataTable.Rows)
                             {
-                                string Pno = row["Partnumber"].ToString();
-                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(Pno) == 0 && p.IsDeleted == false).FirstOrDefault();
-                                if (product != null)
+                                string ParentPNo = row["ParentPNo"].ToString();
+                                string ChildPNo = row["ChildPNo"].ToString();
+                                string ConsumptionUnit = row["ConsumptionUnit"].ToString();
+                                string Consumption = row["Consumption"].ToString();
+                                string IsParentProduct = row["IsParentProduct"].ToString();
+
+
+
+                                BOM existBom = db.BOMS
+                                                 .Where(p => p.ParentPNo.CompareTo(ParentPNo) == 0 && 
+                                                             p.ChildPNo.CompareTo(ChildPNo) == 0 &&
+                                                             p.IsDeleted == false)
+                                                 .FirstOrDefault();
+
+                                if (existBom != null)
                                 {
                                     ViewBag.ExistingRecordsCount = 1;
                                 }
@@ -1202,6 +1228,8 @@ namespace tahsinERP.Controllers
 
             return View("UploadWithExcel");
         }
+
+        [HttpPost]
         public ActionResult ClearDataTable()
         {
             // Clear the DataTable and related ViewBag properties
@@ -1212,11 +1240,55 @@ namespace tahsinERP.Controllers
             // Return the UploadWithExcel view
             return View("UploadWithExcel");
         }
+
         [HttpPost]
-        public ActionResult Save(string dataTableModel)
+        public async Task<ActionResult> Save(string dataTableModel)
         {
+            if (!string.IsNullOrEmpty(dataTableModel))
+            {
+                await Task.Run(() =>
+                {
+                    var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
+
+                    try
+                    {
+                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        {
+                            foreach (DataRow row in tableModel.Rows)
+                            {
+                                string ParentPNo = row["ParentPNo"].ToString();
+                                string ChildPNo = row["ChildPNo"].ToString();
+                                string ConsumptionUnit = row["ConsumptionUnit"].ToString();
+                                string Consumption = row["Consumption"].ToString();
+                                string IsParentProduct = row["IsParentProduct"].ToString();
+
+                                BOM bom = new BOM();
+                                bom.Consumption = Convert.ToDouble(Consumption);
+                                bom.ConsumptionUnit = ConsumptionUnit;
+                                bom.ParentPNo = ParentPNo;
+                                bom.ChildPNo = ChildPNo;
+                                bom.IsDeleted = false;
+                                bom.IsParentProduct = IsParentProduct.ToLower() == "yes";
+
+                                db.BOMS.Add(bom);
+                                db.SaveChanges();
+                            }
+
+
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "BOMController", "Save[Post]");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
+                });
+            }
+
             return RedirectToAction("Index");
         }
+
         public ActionResult Edit(int ID, BoomViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

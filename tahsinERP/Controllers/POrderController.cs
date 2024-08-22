@@ -779,6 +779,9 @@ namespace tahsinERP.Controllers
                                     }
                                 }
                             }
+
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "POrderController", "Save[Post]");
                         }
                     }
                     catch (Exception ex)
@@ -788,8 +791,6 @@ namespace tahsinERP.Controllers
                 });
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "POrderController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }
