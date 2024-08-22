@@ -1,4 +1,5 @@
-﻿using Irony.Ast;
+﻿
+using Irony.Ast;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -36,7 +37,6 @@ namespace tahsinERP.ViewModels
         public string Coating { get; set; }
         public string Grade { get; set; }
         public double Gauge { get; set; }
-        public double Thickness { get; set; }
         public double Pitch { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
