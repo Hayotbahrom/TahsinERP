@@ -1,0 +1,79 @@
+﻿
+@model  tahsinERP.ViewModels.PurchasingItemViewModel
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/PurchosingItem/Index">PurchosingItem</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        PurchosingItem o'chirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-xl-9 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            <hr />
+                                            <span><b>O'lchov birligi</b>: @Html.DisplayFor(model => model.UNIT.ShortName, new { @class = "form-control" })</span>
+                                            <hr>
+                                            <span><b>Item Code</b>: @Html.DisplayFor(model => model.ItemCode, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Item Name</b>: @Html.DisplayFor(model => model.ItemName, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Batafsil ma`lumot</b>: @Html.DisplayFor(model => model.Desciption, new { @class = "form-control" })</span>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item border-0 pb-0">
+                                            @using (Html.BeginForm("Delete", "PurchosingItem", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu PurchosingItem ochirib yuborishga ishonchingiz komilmi?')">
+                                                    <i class='bx bx-trash'></i>
+                                                    O'chirish
+                                                </button>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+
+
+
