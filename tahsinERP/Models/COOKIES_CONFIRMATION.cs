@@ -17,8 +17,9 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public int UserID { get; set; }
         public System.DateTime IssuedDT { get; set; }
-        public string MacAdress { get; set; }
+        public string MacAddress { get; set; }
         public bool Confirmation { get; set; }
+        public string IPAddress { get; set; }
     
         public virtual USER USER { get; set; }
     }

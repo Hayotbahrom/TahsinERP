@@ -27,7 +27,7 @@ namespace tahsinERP.Models
         public Nullable<double> TotalPrice { get; set; }
         public Nullable<int> ReceiverWhID { get; set; }
         public int SenderWHID { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         public string Description { get; set; }
         public System.DateTime IssueDateTime { get; set; }
         public Nullable<bool> SendStatus { get; set; }

@@ -17,7 +17,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var list = await db.HSCODES.Where(x => x.IsDeleted == false).ToListAsync();
+                var list = await db.HSCODES.ToListAsync();
                 return View(list);
             }
         }
@@ -36,7 +36,6 @@ namespace tahsinERP.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        hsCode.IsDeleted = false;
                         db.HSCODES.Add(hsCode);
 
                         await db.SaveChangesAsync();
@@ -88,7 +87,6 @@ namespace tahsinERP.Controllers
                 var hscodeToDelete = await db.HSCODES.FindAsync(id);
                 if(hscodeToDelete != null)
                 {
-                    hscodeToDelete.IsDeleted = true;
                     try
                     {
                         await db.SaveChangesAsync();

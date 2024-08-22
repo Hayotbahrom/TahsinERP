@@ -41,7 +41,7 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
-                ViewBag.HSCODESS = new SelectList(db.HSCODES.Where(cs => cs.IsDeleted == false).ToList(),"ID", "HSCODE1");
+                ViewBag.HSCODESS = new SelectList(db.HSCODES.ToList(),"ID", "HSCODE1");
 
                 return View();
             }

@@ -117,14 +117,6 @@ namespace tahsinERP.Controllers
                         splToUpdate.Option1 = spl.Option1;
                         splToUpdate.Option1UsageQty = spl.Option1UsageQty;
                         splToUpdate.Option1UsageUnit = spl.Option1UsageUnit;
-                        splToUpdate.Option2UsageUnit = spl.Option2UsageUnit;
-                        splToUpdate.Option3UsageUnit = spl.Option3UsageUnit;
-                        splToUpdate.CarModel2 = spl.CarModel2;
-                        splToUpdate.Option2 = spl.Option2;
-                        splToUpdate.Option2UsageQty = spl.Option2UsageQty;  
-                        splToUpdate.CarModel3 = spl.CarModel3;
-                        splToUpdate.Option3 = spl.Option3;
-                        splToUpdate.Option3UsageQty = spl.Option3UsageQty;
 
                         db.Entry(splToUpdate).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();

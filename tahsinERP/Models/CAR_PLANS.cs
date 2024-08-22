@@ -12,25 +12,23 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class WASTE
+    public partial class CAR_PLANS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public WASTE()
+        public CAR_PLANS()
         {
-            this.PART_WASTE_WRHS_EXPENSE_WASTES = new HashSet<PART_WASTE_WRHS_EXPENSE_WASTES>();
-            this.WASTE_STOCKS = new HashSet<WASTE_STOCKS>();
+            this.CAR_PLANS1 = new HashSet<CAR_PLANS>();
         }
     
         public int ID { get; set; }
-        public string WasteName { get; set; }
-        public int ProcessID { get; set; }
-        public string Description { get; set; }
+        public int CarID { get; set; }
+        public double Amount { get; set; }
         public bool IsDeleted { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime DueDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
-        public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WASTE_STOCKS> WASTE_STOCKS { get; set; }
+        public virtual ICollection<CAR_PLANS> CAR_PLANS1 { get; set; }
+        public virtual CAR_PLANS CAR_PLANS2 { get; set; }
     }
 }

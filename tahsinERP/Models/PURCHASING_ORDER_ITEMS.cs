@@ -12,10 +12,17 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class MaterialRequirement
+    public partial class PURCHASING_ORDER_ITEMS
     {
-        public string ProductNo { get; set; }
-        public string PartNo { get; set; }
-        public Nullable<double> TotalConsumption { get; set; }
+        public int ID { get; set; }
+        public int OrderID { get; set; }
+        public int ItemID { get; set; }
+        public double Price { get; set; }
+        public double Amount { get; set; }
+        public string Currency { get; set; }
+        public double TotalPrice { get; set; }
+    
+        public virtual PURCHASING_ITEMS PURCHASING_ITEMS { get; set; }
+        public virtual PURCHASING_ORDERS PURCHASING_ORDERS { get; set; }
     }
 }

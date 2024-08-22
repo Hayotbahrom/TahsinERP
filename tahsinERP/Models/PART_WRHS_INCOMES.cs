@@ -23,7 +23,7 @@ namespace tahsinERP.Models
     
         public int ID { get; set; }
         public string DocNo { get; set; }
-        public Nullable<int> WHID { get; set; }
+        public int WHID { get; set; }
         public Nullable<int> InvoiceID { get; set; }
         public Nullable<int> WaybillID { get; set; }
         public Nullable<double> Amount { get; set; }

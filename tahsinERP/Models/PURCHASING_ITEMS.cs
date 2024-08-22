@@ -12,29 +12,25 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class S_ORDERS
+    public partial class PURCHASING_ITEMS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public S_ORDERS()
+        public PURCHASING_ITEMS()
         {
-            this.S_ORDER_PRODUCTS = new HashSet<S_ORDER_PRODUCTS>();
+            this.PURCHASING_CONTRACT_ITEMS = new HashSet<PURCHASING_CONTRACT_ITEMS>();
+            this.PURCHASING_ORDER_ITEMS = new HashSet<PURCHASING_ORDER_ITEMS>();
         }
     
         public int ID { get; set; }
-        public string OrderNo { get; set; }
-        public System.DateTime IssuedDate { get; set; }
-        public int CompanyID { get; set; }
-        public int CustomerID { get; set; }
-        public int ContractID { get; set; }
-        public Nullable<double> Amount { get; set; }
-        public string Currency { get; set; }
+        public string ItemCode { get; set; }
+        public string ItemName { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public int UnitID { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
-        public virtual CUSTOMER CUSTOMER { get; set; }
-        public virtual S_CONTRACTS S_CONTRACTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_ORDER_PRODUCTS> S_ORDER_PRODUCTS { get; set; }
+        public virtual ICollection<PURCHASING_CONTRACT_ITEMS> PURCHASING_CONTRACT_ITEMS { get; set; }
+        public virtual UNIT UNIT { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PURCHASING_ORDER_ITEMS> PURCHASING_ORDER_ITEMS { get; set; }
     }
 }

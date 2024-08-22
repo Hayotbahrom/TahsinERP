@@ -14,11 +14,11 @@ namespace tahsinERP.Models
     
     public partial class USERLOG
     {
-        public int ID { get; set; }
         public string ControllerName { get; set; }
         public string ActionName { get; set; }
         public System.DateTime DateTime { get; set; }
         public int UserID { get; set; }
+        public int ID { get; set; }
         public string IP { get; set; }
         public string MacAddr { get; set; }
     

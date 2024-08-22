@@ -26,8 +26,8 @@ namespace tahsinERP.Models
             this.PRODUCTPACKS = new HashSet<PRODUCTPACK>();
             this.PRODUCTPLANS = new HashSet<PRODUCTPLAN>();
             this.S_CONTRACT_PRODUCTS = new HashSet<S_CONTRACT_PRODUCTS>();
-            this.S_ORDER_PRODUCTS = new HashSet<S_ORDER_PRODUCTS>();
             this.SPLs = new HashSet<SPL>();
+            this.SHOPS = new HashSet<SHOP>();
         }
     
         public int ID { get; set; }
@@ -39,12 +39,12 @@ namespace tahsinERP.Models
         public Nullable<double> Height { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         public string PNo2 { get; set; }
         public string PNo3 { get; set; }
         public string PNo4 { get; set; }
         public Nullable<int> HSCodeID { get; set; }
-        public Nullable<int> UnitID { get; set; }
+        public int UnitID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DAMAGED_PRODUCTS> DAMAGED_PRODUCTS { get; set; }
@@ -67,8 +67,8 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<S_ORDER_PRODUCTS> S_ORDER_PRODUCTS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPL> SPLs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SHOP> SHOPS { get; set; }
     }
 }
