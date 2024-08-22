@@ -113,10 +113,19 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
+                for (int i = 0; i < model.Parts.Count; i++)
+                {
+                    model.Parts[i].PrCBM = model.Parts[i].PrWidth * model.Parts[i].PrLength * model.Parts[i].PrHeight;
+                }
+
+                model.TotalCBM = model.Parts.Sum(x => x.PrCBM);
+                model.TotalGrWeight = model.Parts.Sum(x => x.PrGrWeight);
+                model.TotalNetWeight = model.Parts.Sum(x => x.PrNetWeight);
+
                 try
                 {
-                    if (ModelState.IsValid)
-                    {
+                    /*if (ModelState.IsValid)
+                    {*/
                         // Save the PackingList entity
                         var packingList = new P_INVOICE_PACKINGLISTS
                         {
@@ -148,10 +157,10 @@ namespace tahsinERP.Controllers
                             };
                             db1.P_PACKINGLIST_PARTS.Add(newPart);
                         }
-                        
+
                         db1.SaveChanges();
                         return RedirectToAction("Index", "PInvoice");
-                    }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -161,7 +170,10 @@ namespace tahsinERP.Controllers
                 // Retain the dropdown lists if there's an error
                 ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
                 ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", model.TransportTypeID);
-                
+                for (int i = 0; i<model.Parts.Count; i++)
+                {
+                    model.Parts[i].Part.PNo = db1.PARTS.Where(x => x.IsDeleted == false && x.ID == model.Parts[i].PartID).FirstOrDefault().PNo;
+                }
                 return View(model);
             }
         }
