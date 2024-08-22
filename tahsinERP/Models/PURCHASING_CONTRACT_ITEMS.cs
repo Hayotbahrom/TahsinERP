@@ -12,19 +12,20 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class S_ORDER_PRODUCTS
+    public partial class PURCHASING_CONTRACT_ITEMS
     {
         public int ID { get; set; }
-        public int OrderID { get; set; }
-        public int ProductID { get; set; }
+        public int ContractID { get; set; }
+        public int ItemID { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
         public double TotalPrice { get; set; }
         public Nullable<double> MOQ { get; set; }
-        public int UnitID { get; set; }
+        public Nullable<bool> ActivePart { get; set; }
+        public Nullable<int> UnitID { get; set; }
     
-        public virtual S_ORDERS S_ORDERS { get; set; }
+        public virtual PURCHASING_CONTRACTS PURCHASING_CONTRACTS { get; set; }
+        public virtual PURCHASING_ITEMS PURCHASING_ITEMS { get; set; }
         public virtual UNIT UNIT { get; set; }
-        public virtual PRODUCT PRODUCT { get; set; }
     }
 }

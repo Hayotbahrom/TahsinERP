@@ -334,6 +334,12 @@
     <Compile Include="Models\BOMS_AND_NORMS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CAR.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CAR_PLANS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\COMPANy.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -401,12 +407,13 @@
     <Compile Include="Models\GetPartsInfo_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetProductListPerShop_Result.cs" />
-    <Compile Include="Models\GetSupplierParts_Result.cs" />
-    <Compile Include="Models\HSCODE.cs">
+    <Compile Include="Models\GetProductListPerShop_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MaterialRequirement.cs">
+    <Compile Include="Models\GetSupplierParts_Result.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HSCODE.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PART.cs">
@@ -496,6 +503,9 @@
     <Compile Include="Models\PRODUCT_PRODUCTION.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PROD_SHOPS_PARTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PROD_STOCKS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -512,6 +522,27 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PROD_WRHS_INCOME_PRODUCTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PURCHASING_CONTRACTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PURCHASING_CONTRACT_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PURCHASING_CONTRACT_ITEMS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PURCHASING_ITEMS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PURCHASING_ORDERS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PURCHASING_ORDER_DOCS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PURCHASING_ORDER_ITEMS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\P_CONTRACTS.cs">
@@ -581,12 +612,6 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\S_CONTRACT_PRODUCTS.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\S_ORDERS.cs">
-      <DependentUpon>DBTHSNModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\S_ORDER_PRODUCTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TEMPORARY_BOMS.cs">

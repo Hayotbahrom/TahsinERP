@@ -13,24 +13,25 @@ namespace tahsinERP.Controllers
         {
             var UserID = UserHelper.GetUserId(userEmail);
             var MacAddress = NetworkHelper.GetMacAddress(NetworkHelper.GetIpAddress());
+            var IP = NetworkHelper.GetIpAddress();
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var confirmation = db.COOKIES_CONFIRMATION.Where(c => c.UserID == UserID).FirstOrDefault();
+                var confirmation = db.COOKIES_CONFIRMATION.Where(c => c.UserID == UserID && c.MacAddress == MacAddress && c.IPAddress == IP).FirstOrDefault();
 
                 if (confirmation == null)
                 {
                     return false;
                 }
-                    
-                return confirmation.MacAdress == MacAddress ? true : false;
+                else
+                    return true;
             }
         }
 
         public static void Confirm(string userEmail)
         {
 
-            using(DBTHSNEntities dB = new DBTHSNEntities())
+            using (DBTHSNEntities dB = new DBTHSNEntities())
             {
                 var UserID = UserHelper.GetUserId(userEmail);
 
@@ -38,7 +39,8 @@ namespace tahsinERP.Controllers
                 {
                     UserID = UserID,
                     IssuedDT = DateTime.Now,
-                    MacAdress = NetworkHelper.GetMacAddress(NetworkHelper.GetIpAddress()),
+                    MacAddress = NetworkHelper.GetMacAddress(NetworkHelper.GetIpAddress()),
+                    IPAddress = NetworkHelper.GetIpAddress(),
                     Confirmation = true
                 };
 

@@ -89,7 +89,7 @@ namespace tahsinERP.Controllers
                 PartViewModel partVM = new PartViewModel();
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
-                ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
+                ViewBag.HsCode = new SelectList(db.HSCODES.ToList(), "ID", "HSCODE1");
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 return View(partVM);
             }
@@ -226,7 +226,7 @@ namespace tahsinERP.Controllers
 
                     ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                     ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
-                    ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
+                    ViewBag.HsCode = new SelectList(db.HSCODES.ToList(), "ID", "HSCODE1");
                     ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                     return View(partVM);
                 }

@@ -20,14 +20,6 @@ namespace tahsinERP.Models
         public string Option1 { get; set; }
         public Nullable<double> Option1UsageQty { get; set; }
         public string Option1UsageUnit { get; set; }
-        public string CarModel2 { get; set; }
-        public string Option2 { get; set; }
-        public Nullable<double> Option2UsageQty { get; set; }
-        public string Option2UsageUnit { get; set; }
-        public string CarModel3 { get; set; }
-        public string Option3 { get; set; }
-        public Nullable<double> Option3UsageQty { get; set; }
-        public string Option3UsageUnit { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     

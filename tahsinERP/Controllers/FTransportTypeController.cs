@@ -40,7 +40,7 @@ namespace tahsinERP.Controllers
                     IntLgth = viewModel.IntLgth,
                     IntWdth = viewModel.IntWdth,
                     IntHght = viewModel.IntHght,
-                    Unit = viewModel.UnitID.ToString(),
+                    //Unit = viewModel.UnitID.ToString(),
                     CapableOfLifting = viewModel.CapableOfLifting,
                     TransportWeight = viewModel.TransportWeight
                 };

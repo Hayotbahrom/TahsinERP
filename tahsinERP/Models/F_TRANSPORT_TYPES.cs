@@ -23,16 +23,17 @@ namespace tahsinERP.Models
     
         public int ID { get; set; }
         public string TransportType { get; set; }
-        public Nullable<double> ExtLgth { get; set; }
-        public Nullable<double> ExtWdth { get; set; }
-        public Nullable<double> ExtHght { get; set; }
-        public Nullable<double> IntLgth { get; set; }
-        public Nullable<double> IntWdth { get; set; }
-        public Nullable<double> IntHght { get; set; }
-        public string Unit { get; set; }
+        public double ExtLgth { get; set; }
+        public double ExtWdth { get; set; }
+        public double ExtHght { get; set; }
+        public double IntLgth { get; set; }
+        public double IntWdth { get; set; }
+        public double IntHght { get; set; }
         public Nullable<double> CapableOfLifting { get; set; }
         public Nullable<double> TransportWeight { get; set; }
+        public int UnitID { get; set; }
     
+        public virtual UNIT UNIT { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

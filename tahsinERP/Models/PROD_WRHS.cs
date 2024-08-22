@@ -29,7 +29,7 @@ namespace tahsinERP.Models
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public Nullable<int> MRP { get; set; }
-        public Nullable<int> ShopID { get; set; }
+        public int ShopID { get; set; }
         public Nullable<int> Account { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

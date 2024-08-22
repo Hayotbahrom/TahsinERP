@@ -31,6 +31,7 @@ namespace tahsinERP.Models
             this.PARTIMAGES = new HashSet<PARTIMAGE>();
             this.PARTPACKS = new HashSet<PARTPACK>();
             this.PARTPLANS = new HashSet<PARTPLAN>();
+            this.PROD_SHOPS_PARTS = new HashSet<PROD_SHOPS_PARTS>();
             this.SLITTING_NORMS = new HashSet<SLITTING_NORMS>();
             this.SLITTING_NORMS1 = new HashSet<SLITTING_NORMS>();
             this.STAMPING_NORMS = new HashSet<STAMPING_NORMS>();
@@ -38,6 +39,7 @@ namespace tahsinERP.Models
         }
     
         public int ID { get; set; }
+        public string PNo { get; set; }
         public string PName { get; set; }
         public double PWeight { get; set; }
         public double PLength { get; set; }
@@ -46,16 +48,17 @@ namespace tahsinERP.Models
         public string Type { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
+        public Nullable<int> PackID { get; set; }
+        public Nullable<int> ShopID { get; set; }
         public bool IsInHouse { get; set; }
         public string Marka { get; set; }
         public string Standart { get; set; }
+        public string Coating { get; set; }
+        public string Grade { get; set; }
         public double Gauge { get; set; }
         public double Pitch { get; set; }
         public Nullable<int> HSCodeID { get; set; }
-        public Nullable<int> UnitID { get; set; }
-        public string PNo { get; set; }
-        public string Grade { get; set; }
-        public string Coating { get; set; }
+        public int UnitID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
@@ -84,9 +87,13 @@ namespace tahsinERP.Models
         public virtual ICollection<PARTIMAGE> PARTIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PARTPACK> PARTPACKS { get; set; }
+        public virtual PARTPACK PARTPACK { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PARTPLAN> PARTPLANS { get; set; }
+        public virtual SHOP SHOP { get; set; }
         public virtual UNIT UNIT { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PROD_SHOPS_PARTS> PROD_SHOPS_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SLITTING_NORMS> SLITTING_NORMS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

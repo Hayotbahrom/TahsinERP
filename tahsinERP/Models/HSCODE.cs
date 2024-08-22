@@ -22,9 +22,8 @@ namespace tahsinERP.Models
         }
     
         public int ID { get; set; }
-        public int HSCODE1 { get; set; }
+        public string HSCODE1 { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART> PARTS { get; set; }

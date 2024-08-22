@@ -12,19 +12,11 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PART_WRHS_EXPENSE_PARTS
+    public partial class CAR
     {
+        public string Model { get; set; }
+        public string OptionName { get; set; }
+        public string OptionCode { get; set; }
         public int ID { get; set; }
-        public int ExpenseID { get; set; }
-        public int PartID { get; set; }
-        public double Amount { get; set; }
-        public Nullable<double> PiecePrice { get; set; }
-        public Nullable<double> TotalPrice { get; set; }
-        public string Comment { get; set; }
-        public int UnitID { get; set; }
-    
-        public virtual PART_WRHS_EXPENSES PART_WRHS_EXPENSES { get; set; }
-        public virtual PART PART { get; set; }
-        public virtual UNIT UNIT { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace tahsinERP.Models
         public Nullable<bool> IsDeleted { get; set; }
         public string Description { get; set; }
         public System.DateTime IssueDateTime { get; set; }
-        public Nullable<int> SenderWHID { get; set; }
+        public int SenderWHID { get; set; }
         public Nullable<bool> RecieveStatus { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

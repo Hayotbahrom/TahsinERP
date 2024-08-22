@@ -12,31 +12,31 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class F_CONTRACTS
+    public partial class PURCHASING_CONTRACTS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public F_CONTRACTS()
+        public PURCHASING_CONTRACTS()
         {
-            this.F_CONTRACT_DOCS = new HashSet<F_CONTRACT_DOCS>();
-            this.F_WAYBILLS = new HashSet<F_WAYBILLS>();
+            this.PURCHASING_CONTRACT_DOCS = new HashSet<PURCHASING_CONTRACT_DOCS>();
+            this.PURCHASING_CONTRACT_ITEMS = new HashSet<PURCHASING_CONTRACT_ITEMS>();
         }
     
         public int ID { get; set; }
         public string ContractNo { get; set; }
+        public System.DateTime IssueDT { get; set; }
         public int CompanyID { get; set; }
-        public int ForwarderID { get; set; }
-        public System.DateTime IssueDate { get; set; }
-        public System.DateTime DueDate { get; set; }
-        public double Amount { get; set; }
+        public string Supplier { get; set; }
         public string Currency { get; set; }
-        public string Description { get; set; }
-        public bool IsDeleted { get; set; }
+        public double Amount { get; set; }
+        public string Incoterms { get; set; }
+        public string PaymentTerms { get; set; }
+        public System.DateTime DueDT { get; set; }
+        public string Comment { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<F_CONTRACT_DOCS> F_CONTRACT_DOCS { get; set; }
-        public virtual FORWARDER FORWARDER { get; set; }
+        public virtual ICollection<PURCHASING_CONTRACT_DOCS> PURCHASING_CONTRACT_DOCS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<F_WAYBILLS> F_WAYBILLS { get; set; }
+        public virtual ICollection<PURCHASING_CONTRACT_ITEMS> PURCHASING_CONTRACT_ITEMS { get; set; }
     }
 }

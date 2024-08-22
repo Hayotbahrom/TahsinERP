@@ -33,8 +33,8 @@ namespace tahsinERP.Models
         public Nullable<int> Sequence { get; set; }
         public Nullable<int> ProcessID { get; set; }
     
-        public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BOMS_AND_NORMS> BOMS_AND_NORMS { get; set; }
+        public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
     }
 }
