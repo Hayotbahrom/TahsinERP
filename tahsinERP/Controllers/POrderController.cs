@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.EMMA;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -21,9 +19,9 @@ namespace tahsinERP.Controllers
 {
     public class POrderController : Controller
     {
-        
         private string supplierName, contractNo, orderNo, partNo = "";
         private string[] sources;
+        private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         public POrderController()
         {
             sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
@@ -152,6 +150,26 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+
+                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                {
+                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                    {
+                        P_ORDER_DOCS contractDoc = new P_ORDER_DOCS();
+                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        contractDoc.OrderID = newOrder.ID;
+                        contractDoc.Doc = avatar;
+
+                        db.P_ORDER_DOCS.Add(contractDoc);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        throw new RetryLimitExceededException();
+                    }
+                }
                 return RedirectToAction("Index");
             }
         }
@@ -248,7 +266,7 @@ namespace tahsinERP.Controllers
                         var existPart = db.PARTS.Where(p => p.IsDeleted == false &&
                                                             p.Marka == part.Marka &&
                                                             p.Coating == part.Coating &&
-                                                            p.Standart == part.Standart 
+                                                            p.Standart == part.Standart
                                                             && p.Gauge == part.Thickness).FirstOrDefault();
                         if (existPart is null)
                         {
@@ -257,7 +275,7 @@ namespace tahsinERP.Controllers
                                 Marka = part.Marka,
                                 Coating = part.Coating,
                                 Standart = part.Standart,
-                                PNo = part.Standart + "" + part.Thickness+"x"+part.Width,
+                                PNo = part.Standart + "" + part.Thickness + "x" + part.Width,
                                 IsInHouse = false,
                                 IsDeleted = false,
                                 PWidth = part.Width,
@@ -311,7 +329,7 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Details(int? id)
         {
-            
+
             if (id == null)
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
@@ -360,9 +378,9 @@ namespace tahsinERP.Controllers
                 partList = db1.P_ORDER_PARTS
                     .Include(pc => pc.UNIT)
                     .Include(pc => pc.PART)
-                    .Where(op => op.OrderID ==  Id).ToList();
+                    .Where(op => op.OrderID == Id).ToList();
             }
-            
+
             ViewBag.partList = partList;
             return View(order);
         }
@@ -474,7 +492,7 @@ namespace tahsinERP.Controllers
                     ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
                     ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
                     ViewBag.partList = db.P_ORDER_PARTS
-                                                .Include(x => x.PART)                    
+                                                .Include(x => x.PART)
                                                 .Where(pc => pc.OrderID == order.ID).ToList();
                     ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
@@ -564,14 +582,14 @@ namespace tahsinERP.Controllers
                         {
                             ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
                             ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                            
+
                             ModelState.AddModelError("", "Kiritilgan miqdor MOQ dan kichik");
                             return View(orderPart);
                         }
 
                         //shartnomadagi miqdor va editpart dagi miqdorni taqqoslash
                         var order = db.P_ORDERS.Where(x => x.ID == orderPartToUpdate.OrderID).FirstOrDefault();
-                        var summ = db.P_ORDER_PARTS.Where(x => x.OrderID == order.ID && x.OrderID!=orderPartToUpdate.ID).Sum(p => p.Amount);
+                        var summ = db.P_ORDER_PARTS.Where(x => x.OrderID == order.ID && x.OrderID != orderPartToUpdate.ID).Sum(p => p.Amount);
                         summ += orderPart.Amount;
                         var contractAmount = db.P_CONTRACTS.Where(x => x.IsDeleted == false && x.ID == order.ContractID).FirstOrDefault().Amount;
                         if (summ > contractAmount)

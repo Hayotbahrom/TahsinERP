@@ -5,6 +5,30 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var type = ViewBag.Type;
 }
+<style>
+    /* Hide the default file input */
+    .custom-file-input {
+        display: none;
+    }
+
+    /* Style the custom button */
+    .custom-file-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+        /* Optional: Change button color on hover */
+        .custom-file-button:hover {
+            background-color: #0056b3;
+        }
+</style>
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString(), type))
 {
@@ -54,35 +78,45 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, "", new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="ContractID">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, new { @class = "form-control", id = "OrderID" })
+                                                            <label for="ContractID">Buyurtma raqami</label>
+                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control select2", id = "OrderID" })
                                                             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
                                                         </div>
+                                                        
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
+                                                        <div class="form-group position-relative has-icon-left">
+                                                            <label>invoice sanasi</label>
+                                                            @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
+                                                            @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position mt-2">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Currency">Valyuta</label>
                                                             @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Valyuta" })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
-
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceDate">Invoice sanasi</label>
-                                                            @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
-                                                            @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
-                                                            <div class="form-control-position">
-                                                                <i class='bx bx-calendar'></i>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 form-group">
+                                                <hr />
+                                                <label>Buyurtma faylini yuklang</label>
+                                                <!-- Hidden file input -->
+                                                <input type="file" id="partPhotoUpload" name="partPhotoUpload" class="custom-file-input" />
+                                                <!-- Custom button -->
+                                                <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
+                                                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                <hr />
                                             </div>
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
@@ -92,7 +126,7 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control", id = "PartID" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select", id = "PartID" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -119,7 +153,7 @@
                                                 </div>
                                             </div>
 
-                                            <button data-repeater-create type="button" class="btn btn-primary">Detall qo'shish</button>
+                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi qism qo'shish</button>
 
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">

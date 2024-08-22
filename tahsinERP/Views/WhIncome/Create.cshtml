@@ -52,10 +52,9 @@
                                                             <label for="DocNo">Kirim hujjat raqami</label>
                                                             @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disabled" })
                                                         </div>
-
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="InvoiceId">Invoys</label>
-                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, new { @id = "InvoiceId", @class = "form-control" })
+                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, new { @id = "InvoiceId", @class = "form-control select2" })
                                                             @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
@@ -96,7 +95,7 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.InComeParts, new { @class = "form-control" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.InComeParts, new { @class = "form-control select" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                        @* <div class="col-md-2 col-sm-12 form-group">

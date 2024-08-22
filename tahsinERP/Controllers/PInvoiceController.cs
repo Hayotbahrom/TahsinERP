@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, invoiceNo, orderNo, partNo = "";
         private string[] sources;
+        private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         public PInvoiceController()
         {
             sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
@@ -188,6 +190,25 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
+                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                {
+                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                    {
+                        P_INVOICE_DOCS contractDoc = new P_INVOICE_DOCS();
+                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        contractDoc.InvoiceID = invoice.ID;
+                        contractDoc.Doc = avatar;
+
+                        db.P_INVOICE_DOCS.Add(contractDoc);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                        throw new RetryLimitExceededException();
+                    }
+                }
 
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
@@ -202,7 +223,8 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
+                //ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
+                ViewBag.POrder = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
@@ -239,9 +261,11 @@ namespace tahsinERP.Controllers
 
                 packingLists = db.P_INVOICE_PACKINGLISTS
                     .Include(p => p.F_TRANSPORT_TYPES)
+                    .Include(p=> p.P_PACKINGLIST_PARTS)
                     .Where(p => p.InvoiceID == invoice.ID)
                     .ToList();
-
+                var packinglistParts = db.P_PACKINGLIST_PARTS
+                    .Where(x => x.PackingListID == packingLists[0].ID).ToList();
                 var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
                 if (firstPackingList != null)
                 {
@@ -257,6 +281,13 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoice = invoice;
                 ViewBag.PartList = partList;
                 ViewBag.PackingLists = packingLists;
+                ViewBag.packinglistParts = packinglistParts;
+
+                var partImage = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == id);
+                if (partImage != null)
+                {
+                    ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partImage.Doc);
+                }
             }
 
             ViewBag.packingListNo = packingListNo;
@@ -366,6 +397,7 @@ namespace tahsinERP.Controllers
                 var invoice = db.P_INVOICES
                                 .Include(i => i.P_INVOICE_PARTS.Select(pc => pc.PART))
                                 .Include(i => i.P_ORDERS)
+                                
                                 .FirstOrDefault(i => i.ID == ID);
 
                 if (invoice == null)
@@ -375,7 +407,7 @@ namespace tahsinERP.Controllers
 
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
                 ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
-                ViewBag.partList = invoice.P_INVOICE_PARTS.ToList();
+                ViewBag.partList = db.P_INVOICE_PARTS.Include(x => x.UNIT).Where(x => x.InvoiceID == ID).ToList();
 
                 return View(invoice);
             }

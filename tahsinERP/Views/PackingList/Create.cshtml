@@ -1,10 +1,8 @@
-﻿@model tahsinERP.Models.P_INVOICE_PACKINGLISTS
-
+﻿@model tahsinERP.ViewModels.PackingListViewModel
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     using (Html.BeginForm("Create", "PackingList", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -23,10 +21,10 @@
                                             <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                         </li>
                                         <li class="breadcrumb-item">
-                                            <a href="~/PackingList/Index">PackingList lar</a>
+                                            <a href="~/PackingList/Index">PackingList</a>
                                         </li>
                                         <li class="breadcrumb-item active">
-                                            Yangi packing list qo'shish
+                                            PackingList sahifasi
                                         </li>
                                     </ol>
                                 </div>
@@ -35,150 +33,135 @@
                     </div>
                 </div>
                 <div class="content-body">
-                    <section class="basic-select2">
-                        <div class="row">
-                            <div class="col-xl-9 col-md-8 col-12">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <div class="card-body pb-0 mx-25">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-20">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 mt-25">
+                                                
+                                                <h6 class="invoice-to">Packing List raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @placeholder = "packingList raqami" })
+                                                    @Html.ValidationMessageFor(model => model.PackingListNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Invoice raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.InvoiceID, ViewBag.Invoice as SelectList, new { @class = "form-control select2", @disabled = "disabled" })
+                                                    @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Transport turi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.TransportTypeID, ViewBag.FTransportType as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.TransportTypeID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">TransportNo </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.TransportNo, new { @class = "form-control round", @placeholder = "TransportNo" })
+                                                    @Html.ValidationMessageFor(model => model.TransportNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">SealNo </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.SealNo, new { @class = "form-control round", @placeholder = "SealNo" })
+                                                    @Html.ValidationMessageFor(model => model.SealNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+@*
+                                                <h6 class="invoice-to">Izoh </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Comment, new { @class = "form-control round", @placeholder = "Izoh" })
+                                                    @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                                                </fieldset>*@
+
+                                                <h6 class="invoice-to">Umumiy CBM </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.TotalCBM, new { @class = "form-control round", @placeholder = "Umumiy CBM", @disabled = "disabled" })
+                                                    @Html.ValidationMessageFor(model => model.TotalCBM, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Umumiy og'irligi </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.TotalGrWeight, new { @class = "form-control round", @placeholder = "Umumiy og'irligi", @disabled = "disabled" })
+                                                    @Html.ValidationMessageFor(model => model.TransportNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <section id="column-selectors">
                                             <div class="row">
-                                                <div class="col-lg-12 col-md-6 mt-25">
-                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                    <hr>
-                                                    <h6 class="invoice-to">Packing List raqami</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @placeholder = "packingList raqami" })
-                                                        @Html.ValidationMessageFor(model => model.PackingListNo, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Invoice raqami</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.InvoiceID, ViewBag.Invoice as SelectList, new { @class = "form-control select2" })
-                                                        @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Transport turi</h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.TransportTypeID, ViewBag.FTransportType as SelectList, new { @class = "form-control select2" })
-                                                        @Html.ValidationMessageFor(model => model.TransportTypeID, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">TransportNo </h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.TransportNo, new { @class = "form-control round", @placeholder = "TransportNo" })
-                                                        @Html.ValidationMessageFor(model => model.TransportNo, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">SealNo </h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.SealNo, new { @class = "form-control round", @placeholder = "SealNo" })
-                                                        @Html.ValidationMessageFor(model => model.SealNo, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Izoh </h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Comment, new { @class = "form-control round", @placeholder = "Izoh" })
-                                                        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Umumiy CBM </h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.TotalCBM, new { @class = "form-control round", @placeholder = "Umumiy CBM" })
-                                                        @Html.ValidationMessageFor(model => model.TotalCBM, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Umumiy og'irligi </h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.TotalGrWeight, new { @class = "form-control round", @placeholder = "Umumiy og'irligi" })
-                                                        @Html.ValidationMessageFor(model => model.TransportNo, "", new { @class = "text-danger" })
-                                                    </fieldset>
-
-                                                    <h6 class="invoice-to">Sof og'irligi </h6>
-                                                    <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.TotalNetWeight, new { @class = "form-control round", @placeholder = "Sof og'irligi" })
-                                                        @Html.ValidationMessageFor(model => model.TotalNetWeight, "", new { @class = "text-danger" })
-                                                    </fieldset>
-                                                    @*<div class="row">
-            <div class="col-12 col-sm-6">
-                <h6 class="invoice-to">Birinchi uzunligi</h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.PrLength, new { @class = "form-control round", @placeholder = "PrLenth" })
-                    @Html.ValidationMessageFor(model => model.PrLength, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Birinchi kengligi</h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.PrWidth, new { @class = "form-control round", @placeholder = "PrWidth" })
-                    @Html.ValidationMessageFor(model => model.PrWidth, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Birinchi balandligi</h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.PrHeight, new { @class = "form-control round", @placeholder = "PrHeight" })
-                    @Html.ValidationMessageFor(model => model.PrHeight, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Umumiy vazni </h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.PrGrWeight, new { @class = "form-control round", @placeholder = "PrGrWeight" })
-                    @Html.ValidationMessageFor(model => model.PrGrWeight, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Qadoqlash material </h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.PrPackMaterial, new { @class = "form-control round", @placeholder = "PrPackMaterial" })
-                    @Html.ValidationMessageFor(model => model.PrPackMaterial, "", new { @class = "text-danger" })
-                </fieldset>
-            </div>
-            <div class="col-12 col-sm-6">
-                <h6 class="invoice-to">Ikkinchi uzunligi</h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.ScLength, new { @class = "form-control round", @placeholder = "ScLenth" })
-                    @Html.ValidationMessageFor(model => model.PrLength, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Ikkinchi kengligi</h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.ScWidth, new { @class = "form-control round", @placeholder = "ScWidth" })
-                    @Html.ValidationMessageFor(model => model.PrWidth, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Ikkinchi balandligi</h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.ScHeight, new { @class = "form-control round", @placeholder = "ScHeight" })
-                    @Html.ValidationMessageFor(model => model.ScHeight, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Ikkinchi Umumiy vazni </h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.ScGrWeight, new { @class = "form-control round", @placeholder = "ScGrWeight" })
-                    @Html.ValidationMessageFor(model => model.PrGrWeight, "", new { @class = "text-danger" })
-                </fieldset>
-                <h6 class="invoice-to">Ikkinchi Qadoqlash material </h6>
-                <fieldset class="invoice-address form-group">
-                    @Html.TextBoxFor(model => model.ScPackMaterial, new { @class = "form-control round", @placeholder = "ScPackMaterial" })
-                    @Html.ValidationMessageFor(model => model.ScPackMaterial, "", new { @class = "text-danger" })
-                </fieldset>
-
-            </div>
-        </div>*@
-
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item border-0 pb-0">
-                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
-                                                                <i class='bx bx-save'></i>
-                                                                Saqlash
-                                                            </button>
-                                                        </li>
-                                                    </ul>
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h4 class="card-title">Shartnoma predmeti</h4>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body card-dashboard">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Detal raqami</th>
+                                                                                <th>Uzunligi</th>
+                                                                                <th>Eni</th>
+                                                                                <th>Balandligi</th>
+                                                                                <th>CBM</th>
+                                                                                <th>Net og'irligi</th>
+                                                                                <th>Gr og'irligi</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @for (int i = 0; i < Model.Parts.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <a href="~/PackingList/Details/@Model.Parts[i].PartID">@Model.Parts[i].Part.PNo</a>
+                                                                                        @* @Html.HiddenFor(model => model.ProductList[i].ProductID)
+            @Html.HiddenFor(Model => Model.ProductList[i].ID)*@
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrLength, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrWidth, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrHeight, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrCBM, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrNetWeight, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrGrWeight, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <hr>
-                                        </div>
+                                        </section>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 mt-25">
+                        <button class="open-modal btn btn-primary round" type="button" id="button2">Saqlash</button>
+                        <a href="~/PackingList/Index" class="btn btn-danger round">Bekor qilish</a>
+                    </div>
                 </div>
             </div>
         </div>
     }
-}
-else
-{
-    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }

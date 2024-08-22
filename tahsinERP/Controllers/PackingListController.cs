@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -70,7 +71,7 @@ namespace tahsinERP.Controllers
             return View(packingList);
         }
         */
-        public ActionResult Create(int? invoiceId)
+        public ActionResult Create(int invoiceId)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
@@ -78,17 +79,34 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", invoiceId);
 
                 // Populate the TransportType dropdown
-                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
+                // ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
 
-                // If an invoice ID is provided, create a new PackingList model with it
-                var model = new P_INVOICE_PACKINGLISTS
+                var invoice = db1.P_INVOICES.Where(x => x.IsDeleted == false && x.ID == invoiceId).FirstOrDefault();
+
+                // Create a new PackingList model
+                var model = new PackingListViewModel
                 {
-                    InvoiceID = invoiceId ?? 0 // Use the invoiceId if provided, otherwise default to 0
+                    InvoiceID = invoiceId, // Use the invoiceId if provided, otherwise default to 0
+                    Parts = new List<PackingListPart>() // Initialize the Parts list
                 };
+
+                // Get the parts associated with the invoice
+                var invoiceParts = db1.P_INVOICE_PARTS.Where(x => x.InvoiceID == invoice.ID).ToList();
+
+                // Populate the model.Parts list
+                foreach (var invoicePart in invoiceParts)
+                {
+                    model.Parts.Add(new PackingListPart
+                    {
+                        PartID = invoicePart.PartID,
+                        Part = invoicePart.PART
+                    });
+                }
 
                 return View(model);
             }
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -105,7 +123,7 @@ namespace tahsinERP.Controllers
                         db1.P_INVOICE_PACKINGLISTS.Add(packingList);
                         db1.SaveChanges();
 
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", "PInvoice");
                     }
                 }
                 catch (Exception ex)
