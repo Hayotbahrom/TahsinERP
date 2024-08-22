@@ -44,7 +44,7 @@ namespace tahsinERP.ViewModels
         [Required]
         public float Price { get; set; }
         [Required]
-        public int Quantity { get; set; }
+        public float Quantity { get; set; }
         // public float Amount { get; set; } // Trigger in DB
         [Required]
         public float MOQ { get; set; } 
