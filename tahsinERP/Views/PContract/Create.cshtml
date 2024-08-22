@@ -109,7 +109,7 @@
                                                     </div>
                                                     <div class="form-group position-relative has-icon-left">
                                                         <label>Tuzilgan sanasi</label>
-                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
+                                                        @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Tuzilgan sanasi" })
                                                         @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
                                                         <div class="form-control-position mt-2">
                                                             <i class='bx bx-calendar'></i>
@@ -117,7 +117,7 @@
                                                     </div>
                                                     <div class="form-group position-relative has-icon-left">
                                                         <label>Tugaydigan sanasi</label>
-                                                        @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
+                                                        @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Tugaydigan sanasi" })
                                                         @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
                                                         <div class="form-control-position mt-2">
                                                             <i class='bx bx-calendar'></i>
@@ -163,11 +163,6 @@
                                                             <input type="number" name="Quantity" class="form-control" id="Part_Quantity" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Quantity, "", new { @class = "text-danger" })
                                                         </div>
-                                                        @*<div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.001" class="form-control" id="Part_Price" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
-                                                        </div>*@
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
                                                             <input type="number" name="Price" step="0.01" class="form-control" id="Part_Price" />

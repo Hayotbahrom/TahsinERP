@@ -63,12 +63,6 @@
                                                 @*Right Part*@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
-
-                                                        @*<div class="col-md-6 col-12 form-group">
-                            <label for="WbID">Yuk xati raqami</label>
-                            @Html.DropDownListFor(model => model.WaybillID, (SelectList)ViewBag.Waybills, new { @id = "WbID", @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.WaybillID, "", new { @class = "text-danger" })
-                        </div>*@
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="Description">Batafsil ma'lumot</label>
                                                             @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @placeholder = "Batafsil ma'lumot kiriting" })
