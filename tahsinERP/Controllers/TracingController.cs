@@ -42,6 +42,56 @@ namespace tahsinERP.Controllers
         }
 
 
+        public async Task<JsonResult> GetInvoiceNo_Supplier(int packingListID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                // PackingListni olish
+                var packingList = await db.P_INVOICE_PACKINGLISTS
+                                          .Where(x => x.IsDeleted == false && x.ID == packingListID)
+                                          .Select(x => new { x.InvoiceID })
+                                          .FirstOrDefaultAsync();
+
+                // Agar packingList topilmasa, null qaytarish
+                if (packingList == null)
+                {
+                    return Json(new { success = false, message = "Packing list not found." }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Invoice'ni olish
+                var invoice = await db.P_INVOICES
+                                      .Where(x => x.IsDeleted == false && x.ID == packingList.InvoiceID)
+                                      .Select(x => new { x.InvoiceNo, x.SupplierID })
+                                      .FirstOrDefaultAsync();
+
+                // Agar invoice topilmasa, null qaytarish
+                if (invoice == null)
+                {
+                    return Json(new { success = false, message = "Invoice not found." }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Supplier'ni olish
+                var supplier = await db.SUPPLIERS
+                                       .Where(x => x.IsDeleted == false && x.ID == invoice.SupplierID)
+                                       .Select(x => new { x.Name })
+                                       .FirstOrDefaultAsync();
+
+                // Agar supplier topilmasa, null qaytarish
+                if (supplier == null)
+                {
+                    return Json(new { success = false, message = "Supplier not found." }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Natijani JSON ko'rinishida qaytarish
+                return Json(new
+                {
+                    success = true,
+                    invoiceNo = invoice.InvoiceNo,
+                    supplierName = supplier.Name
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         public async Task<ActionResult> Create()
         {
