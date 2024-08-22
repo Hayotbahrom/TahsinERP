@@ -52,7 +52,6 @@
                                                             <label for="DocNo">Kirim hujjat raqami</label>
                                                             @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disabled" })
                                                         </div>
-
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="InvoiceId">Invoys</label>
                                                             @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, new { @id = "InvoiceId", @class = "form-control select2" })
