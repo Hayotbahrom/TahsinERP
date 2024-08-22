@@ -140,7 +140,7 @@ namespace tahsinERP.Controllers
                     IntLgth = transportType.IntLgth,
                     IntWdth = transportType.IntWdth,
                     IntHght = transportType.IntHght,
-                    UnitID = (int)transportType.UnitID,
+                    //UnitID = (int)transportType.UnitID,
                     CapableOfLifting = transportType.CapableOfLifting,
                     TransportWeight = transportType.TransportWeight
                 };
@@ -172,7 +172,7 @@ namespace tahsinERP.Controllers
                     transportTypeToUpdate.IntLgth = viewModel.IntLgth;
                     transportTypeToUpdate.IntWdth = viewModel.IntWdth;
                     transportTypeToUpdate.IntHght = viewModel.IntHght;
-                    transportTypeToUpdate.UnitID = viewModel.UnitID;
+                   // transportTypeToUpdate.UnitID = viewModel.UnitID;
                     transportTypeToUpdate.CapableOfLifting = viewModel.CapableOfLifting;
                     transportTypeToUpdate.TransportWeight = viewModel.TransportWeight;
 

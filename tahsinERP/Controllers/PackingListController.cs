@@ -107,10 +107,9 @@ namespace tahsinERP.Controllers
             }
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(P_INVOICE_PACKINGLISTS packingList)
+        public ActionResult Create(PackingListViewModel model)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
@@ -119,10 +118,38 @@ namespace tahsinERP.Controllers
                     if (ModelState.IsValid)
                     {
                         // Save the PackingList entity
-                        packingList.IsDeleted = false;
+                        var packingList = new P_INVOICE_PACKINGLISTS
+                        {
+                            InvoiceID = model.InvoiceID,
+                            TransportNo = model.TransportNo,
+                            TransportTypeID = model.TransportTypeID,
+                            PackingListNo = model.PackingListNo,
+                            SealNo = model.SealNo,
+                            Comment = model.Comment,
+                            InTransit = true,
+                            TotalCBM = model.TotalCBM,
+                            TotalGrWeight = model.TotalGrWeight,
+                            TotalNetWeight = model.TotalNetWeight,
+                            IsDeleted = false
+                        };
                         db1.P_INVOICE_PACKINGLISTS.Add(packingList);
                         db1.SaveChanges();
-
+                        foreach (var item in model.Parts)
+                        {
+                            P_PACKINGLIST_PARTS newPart = new P_PACKINGLIST_PARTS
+                            {
+                                PartID = item.PartID,
+                                PrLength = item.PrLength,
+                                PrWidth = item.PrWidth,
+                                PrHeight = item.PrHeight,
+                                PrGrWeight = item.PrGrWeight,
+                                PrNetWeight = item.PrNetWeight,
+                                PrCBM = item.PrCBM,
+                            };
+                            db1.P_PACKINGLIST_PARTS.Add(newPart);
+                        }
+                        
+                        db1.SaveChanges();
                         return RedirectToAction("Index", "PInvoice");
                     }
                 }
@@ -132,10 +159,10 @@ namespace tahsinERP.Controllers
                 }
 
                 // Retain the dropdown lists if there's an error
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", packingList.InvoiceID);
-                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", packingList.TransportTypeID);
+                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
+                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", model.TransportTypeID);
 
-                return View(packingList);
+                return View(model);
             }
         }
 

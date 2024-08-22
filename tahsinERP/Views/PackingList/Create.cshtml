@@ -53,10 +53,10 @@
                                                     @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Transport turi</h6>
-                                                <fieldset class="invoice-address form-group">
+                                               @* <fieldset class="invoice-address form-group">
                                                     @Html.DropDownListFor(model => model.TransportTypeID, ViewBag.FTransportType as SelectList, new { @class = "form-control select2" })
                                                     @Html.ValidationMessageFor(model => model.TransportTypeID, "", new { @class = "text-danger" })
-                                                </fieldset>
+                                                </fieldset>*@
 
                                                 <h6 class="invoice-to">TransportNo </h6>
                                                 <fieldset class="invoice-address form-group">
