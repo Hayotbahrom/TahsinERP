@@ -274,6 +274,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CarPlanController.cs" />
     <Compile Include="Controllers\LastActionsController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\BlankingController.cs" />
@@ -2688,7 +2689,6 @@
     <Content Include="Views\SPL\Details.cshtml" />
     <Content Include="Views\SPL\Edit.cshtml" />
     <Content Include="Views\SPL\Delete.cshtml" />
-    <Content Include="Views\ProductPlan\CreateAvto.cshtml" />
     <Content Include="Views\PurchasingItem\Index.cshtml" />
     <Content Include="Views\PurchasingItem\Create.cshtml" />
     <Content Include="Views\PurchasingItem\Edit.cshtml" />
@@ -2699,6 +2699,7 @@
     <Content Include="Views\PurchasingOrder\Edit.cshtml" />
     <Content Include="Views\PurchasingOrder\Delete.cshtml" />
     <Content Include="Views\PurchasingOrder\Details.cshtml" />
+    <Content Include="Views\CarPlan\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
