@@ -261,9 +261,11 @@ namespace tahsinERP.Controllers
 
                 packingLists = db.P_INVOICE_PACKINGLISTS
                     .Include(p => p.F_TRANSPORT_TYPES)
+                    .Include(p=> p.P_PACKINGLIST_PARTS)
                     .Where(p => p.InvoiceID == invoice.ID)
                     .ToList();
-
+                var packinglistParts = db.P_PACKINGLIST_PARTS
+                    .Where(x => x.PackingListID == packingLists[0].ID).ToList();
                 var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
                 if (firstPackingList != null)
                 {
@@ -279,6 +281,8 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoice = invoice;
                 ViewBag.PartList = partList;
                 ViewBag.PackingLists = packingLists;
+                ViewBag.packinglistParts = packinglistParts;
+
                 var partImage = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == id);
                 if (partImage != null)
                 {
