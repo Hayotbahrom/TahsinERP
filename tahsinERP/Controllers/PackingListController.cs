@@ -105,7 +105,7 @@ namespace tahsinERP.Controllers
                         db1.P_INVOICE_PACKINGLISTS.Add(packingList);
                         db1.SaveChanges();
 
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", "PInvoice");
                     }
                 }
                 catch (Exception ex)

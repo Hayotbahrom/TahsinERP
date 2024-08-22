@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -222,7 +223,8 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
+                //ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
+                ViewBag.POrder = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
@@ -277,6 +279,11 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoice = invoice;
                 ViewBag.PartList = partList;
                 ViewBag.PackingLists = packingLists;
+                var partImage = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == id);
+                if (partImage != null)
+                {
+                    ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partImage.Doc);
+                }
             }
 
             ViewBag.packingListNo = packingListNo;
