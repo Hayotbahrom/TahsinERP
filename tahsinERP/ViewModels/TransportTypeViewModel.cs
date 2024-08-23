@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using tahsinERP.Models;
 
 namespace tahsinERP.ViewModels
 {
@@ -19,6 +20,7 @@ namespace tahsinERP.ViewModels
         public double IntWdth { get; set; }
         public double IntHght { get; set; }
         public int UnitID { get; set; }
+        public UNIT UNIT { get; set; }
         public Nullable<double> CapableOfLifting { get; set; }
         public Nullable<double> TransportWeight { get; set; }
     }
