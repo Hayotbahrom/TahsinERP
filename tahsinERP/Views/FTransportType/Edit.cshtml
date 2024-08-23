@@ -55,8 +55,8 @@
                                                 </fieldset>
                                                 <h6 class="invoice-to">Unit</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.TextBoxFor(model => model.Unit, new { @class = "form-control round", @placeholder = "Unit" })
-                                                    @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                                                    @Html.DropDownListFor(model => model.UnitID, ViewBag.units as SelectList,"", new { @class = "form-control select2", @placeholder = "Unit" })
+                                                    @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Ko`tarish imkoniyati</h6>
                                                 <fieldset class="form-group">

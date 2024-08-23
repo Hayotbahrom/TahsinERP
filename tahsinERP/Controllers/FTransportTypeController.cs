@@ -22,7 +22,11 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Create()
         {
-            return View();
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                return View();
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -40,7 +44,7 @@ namespace tahsinERP.Controllers
                     IntLgth = viewModel.IntLgth,
                     IntWdth = viewModel.IntWdth,
                     IntHght = viewModel.IntHght,
-                    //Unit = viewModel.UnitID.ToString(),
+                    UnitID = viewModel.UnitID,
                     CapableOfLifting = viewModel.CapableOfLifting,
                     TransportWeight = viewModel.TransportWeight
                 };
@@ -59,6 +63,7 @@ namespace tahsinERP.Controllers
                     catch (Exception ex)
                     {
                         ModelState.AddModelError("", "Error: " + ex.Message);
+                        ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                     }
                 }
             }
@@ -109,6 +114,7 @@ namespace tahsinERP.Controllers
                 if (transportType == null)
                     return HttpNotFound();
 
+                db.Entry(transportType).Reference(x => x.UNIT).Load();
                 return View(transportType);
             }
         }
@@ -128,6 +134,7 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
+                db.Entry(transportType).Reference(x => x.UNIT).Load();
 
                 // Map entity to view model
                 var viewModel = new TransportTypeViewModel
@@ -140,11 +147,12 @@ namespace tahsinERP.Controllers
                     IntLgth = transportType.IntLgth,
                     IntWdth = transportType.IntWdth,
                     IntHght = transportType.IntHght,
-                    //UnitID = (int)transportType.UnitID,
+                    UnitID = (int)transportType.UnitID,
+                    UNIT = transportType.UNIT,
                     CapableOfLifting = transportType.CapableOfLifting,
                     TransportWeight = transportType.TransportWeight
                 };
-
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 return View(viewModel);
             }
         }
@@ -207,6 +215,7 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
+                db.Entry(transportType).Reference(x => x.UNIT).Load();
 
                 return View(transportType);
             }
