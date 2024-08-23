@@ -1,5 +1,5 @@
 ﻿
-@model  tahsinERP.Models.P_CONTRACTS
+@model  tahsinERP.Models.PURCHASING_CONTRACTS
 @{
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -20,7 +20,7 @@
                                         <a href="~/Home"><i class="bx bx-home-alt"></i></a>
                                     </li>
                                     <li class="breadcrumb-item ">
-                                        <a href="~/PContract">Shartnomalar</a>
+                                        <a href="~/PurchasingContract">Purchasing Shartnomalar</a>
                                     </li>
                                     <li class="breadcrumb-item active">
                                         @Model.ContractNo raqamli shartnomani o'chirish
@@ -40,31 +40,24 @@
                                     <div class="row invoice-info">
                                         <div class="col-lg-12 col-md-6 mt-25">
                                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                            <section>
-                                                <div>
-                                                    <br />
-                                                    <h4 class="text-primary">Taminotchi  ma'lumotlari</h4>
-                                                    <span><b>Nomi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
-                                                    <hr />
-                                                    <span><b>DUNS</b>: @Html.DisplayFor(model => model.SUPPLIER.DUNS, new { @class = "form-control" })</span>
-                                                    <hr />
-                                                </div>
-                                            </section>
+                                            <br />
                                             <h4 class="text-primary">Shartnoma  ma'lumotlari</h4>
+                                            <hr />
+                                            <span><b>Ta'minotchi</b>: @Html.DisplayFor(model => model.Supplier, new { @class = "form-control" })</span>
                                             <hr />
                                             <span><b>Shartnoma raqami</b>: @Html.DisplayFor(model => model.ContractNo, new { @class = "form-control" })</span>
                                             <hr />
-                                            <span><b>Tuzilgan sanasi</b>: @Html.DisplayFor(model => model.IssuedDate, new { @class = "form-control" })</span>
+                                            <span><b>Tuzilgan sanasi</b>: @Html.DisplayFor(model => model.IssueDT, new { @class = "form-control" })</span>
                                             <hr />
-                                            <span><b>Amal qilish sanasi</b>: @Html.DisplayFor(model => model.DueDate, new { @class = "form-control" })</span>
+                                            <span><b>Amal qilish sanasi</b>: @Html.DisplayFor(model => model.DueDT, new { @class = "form-control" })</span>
                                             <hr />
-                                            <span><b>Umumiy summasi</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
+                                            <span><b>Umumiy miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
                                             <hr />
                                             <span><b>Incoterms</b>: @Html.DisplayFor(model => model.Incoterms, new { @class = "form-control" })</span>
                                             <hr />
                                             <span><b>To'lov sharti</b>: @Html.DisplayFor(model => model.PaymentTerms, new { @class = "form-control" })</span>
                                             <hr />
-                                            <span><b>IDN raqami</b>: @Html.DisplayFor(model => model.IDN, new { @class = "form-control" })</span>
+                                            <span><b>Komment</b>: @Html.DisplayFor(model => model.Comment, new { @class = "form-control" })</span>
                                             <hr />
                                         </div>
                                     </div>
@@ -81,8 +74,8 @@
                                                                 <table class="table table-striped dataex-html5-selectors" style="width:100%">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th>Detal raqami</th>
-                                                                            <th>Detal nomi</th>
+                                                                            <th>Item kodi</th>
+                                                                            <th>Item nomi</th>
                                                                             <th>Birlik narxi</th>
                                                                             <th>O'lchov birligi</th>
                                                                             <th>Miqdori</th>
@@ -92,18 +85,18 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        @foreach (var item in ViewBag.partList)
+                                                                        @foreach (var item in Model.PURCHASING_CONTRACT_ITEMS)
                                                                         {
                                                                             <tr>
                                                                                 <td>
-                                                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                    <a href="~/Part/Details/@item.ItemID">@item.PURCHASING_ITEMS.ItemCode</a>
                                                                                 </td>
-                                                                                <td>@item.PART.PName</td>
+                                                                                <td>@item.PURCHASING_ITEMS.ItemName</td>
                                                                                 <td>@item.Price</td>
                                                                                 <td>@item.UNIT.UnitName</td>
                                                                                 <td>@item.Amount</td>
                                                                                 <td>@item.MOQ</td>
-                                                                                @if (item.ActivePart)
+                                                                                @if (item.ActivePart is null)
                                                                                 {
                                                                                     <td><span class="badge badge-light-success">Faol</span></td>
                                                                                 }

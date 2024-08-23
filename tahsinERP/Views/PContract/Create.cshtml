@@ -73,7 +73,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6 col-12 form-group">
                                                         <h6 class="invoice-to">Shartnoma raqami</h6>
-                                                        @Html.TextBoxFor(model => model.ContractNo, new { @type = "text", @class = "form-control" })
+                                                        @Html.TextBoxFor(model => model.ContractNo, new { @type = "text", @class = "form-control", @required = "required" })
                                                         @Html.ValidationMessageFor(model => model.ContractNo, "", new { @class = "text-danger" })
                                                     </div>
                                                     <div class="col-md-6 col-12 form-group">
