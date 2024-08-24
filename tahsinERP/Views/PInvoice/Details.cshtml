@@ -103,13 +103,12 @@
                                 PDF
                             </button>
                             <div  style="text-align: center">
-                                <div class="col-md-4 col-sm-6 col-12 fonticon-container">
-                                    <div class="fonticon-wrap">
-                                        <a href="@ViewBag.Base64String" download="fayl.pdf">
-                                            <i class="bx bxs-download">faylni yuklash</i>
-                                        </a>
-                                    </div>
-                                    <label>shartnoma fayli</label>
+                                <div class="col-lg-6 col-md-12">
+                                    <fieldset class="form-group">
+                                        <label>Shablon faylni yuklab oling</label>
+                                        <br />
+                                        @Html.ActionLink("invoys","download", Model.ID)
+                                    </fieldset>
                                 </div>
                             </div>
                             <br />
@@ -284,25 +283,25 @@
                                             <th>Part number</th>
                                             <th>Part name</th>
                                             <th>CBM</th>
-                                            <th>Net</th>
+                                            <th>Net Wght</th>
+                                            <th>Gr. Wght</th>
                                         </tr>
-                                        @foreach (var item in ViewBag.partList)
+                                        @foreach (var item in ViewBag.PackingListParts)
                                         {
-                                            totalAmount += item.TotalPrice;
-                                            totalQty += item.Quantity;
                                             <tr>
                                                 <td>
                                                     <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
                                                 </td>
                                                 <td>@item.PART.PName</td>
-                                                <td>@packingLists[0].TotalCBM</td>
-                                                <td>@packingLists[0].TotalNetWeight</td>
+                                                <td>@item.PrCBM</td>
+                                                <td>@item.PrNetWeight</td>
+                                                <td>@item.PrGrWeight</td>
                                             </tr>
                                         }
                                     </table>
                                     <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
                                         <div class="footer">
-                                            <p>Total CBM: <b>@totalQty</b>  Total NET Weght: <b>@packingLists[0].TotalNetWeight </b> Total Gros Weight: <b>@packingLists[0].TotalGrWeight</b></p>
+                                            <p>Total CBM: <b>@packingLists[0].TotalCBM</b>  Total NET Weight: <b>@packingLists[0].TotalNetWeight </b> Total Gross Weight: <b>@packingLists[0].TotalGrWeight</b></p>
                                         </div>
                                     </div>
                                 </div>

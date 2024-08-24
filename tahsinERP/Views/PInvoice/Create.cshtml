@@ -73,20 +73,20 @@
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="InvoiceNo">Invoice raqami</label>
-                                                            @Html.TextBoxFor(model => model.InvoiceNo, new { @type = "text", @class = "form-control", @id = "InvoiceNo", @placeholder = "Invoice raqami" })
+                                                            @Html.TextBoxFor(model => model.InvoiceNo, new { @type = "text", @class = "form-control", @id = "InvoiceNo", @placeholder = "Invoice raqami", @required = "required" })
                                                             @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, "", new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, "", new { @class = "form-control select2", id = "SupplierID", onchange = "refreshOrderListbySupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Buyurtma raqami</label>
-                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control select2", id = "OrderID" })
+                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control select2", id = "OrderID", onchange = "refreshpartListbyOrder()" })
                                                             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
 
@@ -94,7 +94,7 @@
                                                     <div class="row">
                                                         <div class="form-group position-relative has-icon-left">
                                                             <label>invoice sanasi</label>
-                                                            @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi" })
+                                                            @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi", @required = "required" })
                                                             @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
                                                             <div class="form-control-position mt-2">
                                                                 <i class='bx bx-calendar'></i>
@@ -110,11 +110,11 @@
                                             </div>
                                             <div class="col-md-6 col-12 form-group">
                                                 <hr />
-                                                <label>Buyurtma faylini yuklang</label>
+                                                <label>Invoys faylini yuklang:</label>
                                                 <!-- Hidden file input -->
-                                                <input type="file" id="partPhotoUpload" name="partPhotoUpload" class="custom-file-input" />
+                                                <input type="file" id="docUpload" name="docUpload" class="custom-file-input" />
                                                 <!-- Custom button -->
-                                                <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
+                                                <label style="font-size:smaller;" for="docUpload" class="custom-file-button">Faylni yuklang</label>
                                                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
                                                 <hr />
                                             </div>
@@ -136,8 +136,8 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Quantuty">Miqdori</label>
-                                                            <input type="number" name="Quantuty" class="form-control" id="Part_Quantuty" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Quantuty, "", new { @class = "text-danger" })
+                                                            <input type="number" name="Quantity" class="form-control" id="Part_Quantuty" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Quantity, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
@@ -175,12 +175,12 @@
     </div>
 
     <script type="text/javascript">
-    function refreshdatatablesupplier() {
+        function refreshOrderListbySupplier() {
         const supplierID = document.getElementById("SupplierID").value;
         $.ajax({
             url: '@Url.Action("GetOrdersBySupplier", "PInvoice")',
             type: 'GET',
-            data: { supplierID: supplierID }
+            data: { supplierID: supplierID },
             success: function (data) {
                 var contractDropdown = $("#OrderID");
                 contractDropdown.empty();
@@ -193,8 +193,27 @@
             }
         });
     }
+    </script>
+    @*function refreshpartListbyOrder() {
+        const orderID = document.getElementById("OrderID").value;
+        $.ajax({
+            url: '@Url.Action("GetPartsByOrder", "PInvoice")',
+            type: 'GET',
+            data: { orderID: orderID },
+            success: function (data) {
+                var partDropDown = $("#PartID");
+                partDropDown.empty();
+                $.each(data, function (index, item) {
+                    partDropDown.append(new Option(item.Text, item.Value));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching contracts:", error);
+            }
+        });*@
+}
 
-    $('#OrderID').change(function () {
+@*$('#OrderID').change(function () {
         const contractID = $(this).val();
         console.log("Selected order ID:", orderID); // Debugging purpose
 
@@ -216,8 +235,9 @@
                 console.error("Error fetching parts:", error);
             }
         });
-    });
-    </script>
+    });*@
+
+
 }
 else
 {

@@ -12,15 +12,15 @@ namespace tahsinERP.ViewModels
         public string InvoiceNo { get; set; }
         [Required]
         public int OrderID { get; set; }
-        [Required(ErrorMessage ="Taminotchi va Buyurtma ta'minotchisi bir xil bo'lishi shart!")]
+        [Required(ErrorMessage ="Siz tanlagan Taminotchi va Buyurtma ta'minotchisi bir xil bo'lishi shart!")]
         public int SupplierID { get; set; }
-        public System.DateTime InvoiceDate { get; set; }
+        public DateTime InvoiceDate { get; set; }
         [Required]
         public string Currency { get; set; }
         public int CompanyID { get; set; }
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File;
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         public List<PInvoicePartViewModel> Parts { get; set; }
         public PInvoiceViewModel()
         {
@@ -34,11 +34,12 @@ namespace tahsinERP.ViewModels
         [Required]
         public int PartID { get; set; }
         [Required]
-        public double Quantuty { get; set; }
+        public double Quantity { get; set; }
         [Required]
         public int UnitID { get; set; }
         [Required]
         public double Price { get; set; }
+        [Required]
         public double TotalPrice { get; set; }
     }
 }

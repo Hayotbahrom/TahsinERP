@@ -113,11 +113,6 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
-                for (int i = 0; i < model.Parts.Count; i++)
-                {
-                    model.Parts[i].PrCBM = model.Parts[i].PrWidth * model.Parts[i].PrLength * model.Parts[i].PrHeight;
-                }
-
                 model.TotalCBM = model.Parts.Sum(x => x.PrCBM);
                 model.TotalGrWeight = model.Parts.Sum(x => x.PrGrWeight);
                 model.TotalNetWeight = model.Parts.Sum(x => x.PrNetWeight);
@@ -126,44 +121,43 @@ namespace tahsinERP.Controllers
                 {
                     /*if (ModelState.IsValid)
                     {*/
-                        // Save the PackingList entity
-                        var packingList = new P_INVOICE_PACKINGLISTS
-                        {
-                            InvoiceID = model.InvoiceID,
-                            TransportNo = model.TransportNo,
-                            TransportTypeID = model.TransportTypeID,
-                            PackingListNo = model.PackingListNo,
-                            SealNo = model.SealNo,
-                            Comment = model.Comment,
-                            InTransit = false,
-                            TotalCBM = model.TotalCBM,
-                            TotalGrWeight = model.TotalGrWeight,
-                            TotalNetWeight = model.TotalNetWeight,
-                            
-                            IsDeleted = false
-                        };
-                        db1.P_INVOICE_PACKINGLISTS.Add(packingList);
-                        db1.SaveChanges();
-                        var packinglistID = packingList.ID;
-                        foreach (var item in model.Parts)
-                        {
-                            P_PACKINGLIST_PARTS newPart = new P_PACKINGLIST_PARTS
-                            {
-                                PackingListID = packinglistID,
-                                PartID = item.PartID,
-                                PrLength = item.PrLength,
-                                PrWidth = item.PrWidth,
-                                PrHeight = item.PrHeight,
-                                PrGrWeight = item.PrGrWeight,
-                                PrNetWeight = item.PrNetWeight,
-                                PrCBM = item.PrCBM,
-                            };
-                            db1.P_PACKINGLIST_PARTS.Add(newPart);
-                        }
+                    // Save the PackingList entity
+                    var packingList = new P_INVOICE_PACKINGLISTS
+                    {
+                        InvoiceID = model.InvoiceID,
+                        TransportNo = model.TransportNo,
+                        TransportTypeID = model.TransportTypeID,
+                        PackingListNo = model.PackingListNo,
+                        SealNo = model.SealNo,
+                        Comment = model.Comment,
+                        InTransit = false,
+                        TotalCBM = model.TotalCBM,
+                        TotalGrWeight = model.TotalGrWeight,
+                        TotalNetWeight = model.TotalNetWeight,
 
-                        db1.SaveChanges();
-                        return RedirectToAction("Index", "PInvoice");
-                    
+                        IsDeleted = false
+                    };
+                    db1.P_INVOICE_PACKINGLISTS.Add(packingList);
+                    db1.SaveChanges();
+                    var packinglistID = packingList.ID;
+                    foreach (var item in model.Parts)
+                    {
+                        P_PACKINGLIST_PARTS newPart = new P_PACKINGLIST_PARTS
+                        {
+                            PackingListID = packinglistID,
+                            PartID = item.PartID,
+                            PrLength = item.PrLength,
+                            PrWidth = item.PrWidth,
+                            PrHeight = item.PrHeight,
+                            PrGrWeight = item.PrGrWeight,
+                            PrCBM = item.PrCBM,
+                        };
+                        db1.P_PACKINGLIST_PARTS.Add(newPart);
+                    }
+
+                    db1.SaveChanges();
+                    return RedirectToAction("Index", "PInvoice");
+
                 }
                 catch (Exception ex)
                 {
@@ -173,7 +167,7 @@ namespace tahsinERP.Controllers
                 // Retain the dropdown lists if there's an error
                 ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
                 ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", model.TransportTypeID);
-                for (int i = 0; i<model.Parts.Count; i++)
+                for (int i = 0; i < model.Parts.Count; i++)
                 {
                     model.Parts[i].Part.PNo = db1.PARTS.Where(x => x.IsDeleted == false && x.ID == model.Parts[i].PartID).FirstOrDefault().PNo;
                 }
@@ -203,7 +197,7 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Delete(int? Id)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (Id == null)
                 {
@@ -285,13 +279,14 @@ namespace tahsinERP.Controllers
                     P_INVOICE_PACKINGLISTS packingListToUpdate = db.P_INVOICE_PACKINGLISTS.Find(packingList.ID);
                     if (packingListToUpdate != null)
                     {
-                        
+
                         if (TryUpdateModel(packingListToUpdate, "", new string[]
                         {
                             "InvoiceID", "PackingListNo", "PartID", "PrLength", "PrWidth", "PrHeight",
                             "PrCMB", "PrGrWeight", "PrPackMaterial", "ScLength", "ScWidth", "ScHeight",
                             "ScCMB", "ScGrWeight", "ScPackMaterial", "PltType", "IsDeleted"
-                        })) { 
+                        }))
+                        {
                             try
                             {
                                 db.SaveChanges();

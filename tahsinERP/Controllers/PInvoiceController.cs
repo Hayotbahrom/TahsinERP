@@ -23,13 +23,12 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, invoiceNo, orderNo, partNo = "";
         private string[] sources;
-        private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
         public PInvoiceController()
         {
             sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
             sources = sources.Where(x => !x.Equals("InHouse", StringComparison.OrdinalIgnoreCase)).ToArray();
         }
-        
+
         // GET: PInvoice
         public ActionResult Index(string type, int? supplierID)
         {
@@ -40,7 +39,7 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type)==0)).ToList();
+                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name", supplierID);
                     }
@@ -69,7 +68,7 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-      
+
         /*
                 [HttpPost]
                 [ValidateAntiForgeryToken]
@@ -137,6 +136,18 @@ namespace tahsinERP.Controllers
                 return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.OrderNo }), JsonRequestBehavior.AllowGet);
             }
         }
+        public JsonResult GetPartsByOrder(int orderID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var parts = db.P_ORDER_PARTS
+                    .Where(po => po.OrderID == orderID)
+                    .Select(x => new { x.ID, x.PART.PNo })
+                    .ToList();
+
+                return Json(parts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.PNo }), JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult Create()
         {
             PopulateViewBags();
@@ -148,13 +159,13 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var isSameContract = db.P_ORDERS
+                var isSameOrder = db.P_ORDERS
                     .Include(x => x.SUPPLIER)
                     .FirstOrDefault(p => p.IsDeleted == false && p.ID == model.OrderID);
 
-                if (isSameContract == null || model.SupplierID != isSameContract.SupplierID)
+                if (isSameOrder == null || model.SupplierID != isSameOrder.SupplierID)
                 {
-                    ModelState.AddModelError("", "Ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
+                    ModelState.AddModelError("", "Siz tanlagan ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
                     PopulateViewBags();
                     return View(model);
                 }
@@ -181,7 +192,7 @@ namespace tahsinERP.Controllers
                     {
                         InvoiceID = newInvoiceID,
                         PartID = item.PartID,
-                        Quantity = item.Quantuty,
+                        Quantity = item.Quantity,
                         UnitID = item.UnitID,
                         Price = item.Price
                     };
@@ -190,17 +201,17 @@ namespace tahsinERP.Controllers
                 }
 
                 db.SaveChanges();
-                if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                if (Request.Files["docUpload"].ContentLength > 0)
                 {
-                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                    if (Request.Files["docUpload"].InputStream.Length < 5)
                     {
-                        P_INVOICE_DOCS contractDoc = new P_INVOICE_DOCS();
-                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                        contractDoc.InvoiceID = invoice.ID;
-                        contractDoc.Doc = avatar;
+                        P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
+                        byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                        Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                        invoiceDoc.InvoiceID = invoice.ID;
+                        invoiceDoc.Doc = avatar;
 
-                        db.P_INVOICE_DOCS.Add(contractDoc);
+                        db.P_INVOICE_DOCS.Add(invoiceDoc);
                         db.SaveChanges();
                     }
                     else
@@ -217,7 +228,7 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Create", "PackingList", new { invoiceId = newInvoiceID, invoiceNo = invoice.InvoiceNo });
             }
         }
-        
+
         private void PopulateViewBags()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -229,7 +240,17 @@ namespace tahsinERP.Controllers
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
         }
-
+        public ActionResult Download(string invoiceID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var invoiceDoc = db.P_INVOICE_DOCS.FirstOrDefault(pi => pi.InvoiceID == Convert.ToInt32(invoiceID));
+                if (invoiceDoc != null)
+                    return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                else
+                    return View();
+            }
+        }
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -261,11 +282,12 @@ namespace tahsinERP.Controllers
 
                 packingLists = db.P_INVOICE_PACKINGLISTS
                     .Include(p => p.F_TRANSPORT_TYPES)
-                    .Include(p=> p.P_PACKINGLIST_PARTS)
+                    .Include(p => p.P_PACKINGLIST_PARTS)
                     .Where(p => p.InvoiceID == invoice.ID)
                     .ToList();
-                /*var packinglistParts = db.P_PACKINGLIST_PARTS
-                    .Where(x => x.PackingListID == packingLists[0].ID).ToList();*/
+
+                List<P_PACKINGLIST_PARTS> packingListParts = db.P_PACKINGLIST_PARTS.Include(p => p.P_INVOICE_PACKINGLISTS).Include(p => p.PART).ToList();
+
                 var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
                 if (firstPackingList != null)
                 {
@@ -281,13 +303,7 @@ namespace tahsinERP.Controllers
                 ViewBag.Invoice = invoice;
                 ViewBag.PartList = partList;
                 ViewBag.PackingLists = packingLists;
-                //ViewBag.packinglistParts = packinglistParts;
-
-                var partImage = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == id);
-                if (partImage != null)
-                {
-                    ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(partImage.Doc);
-                }
+                ViewBag.PackingListParts = packingListParts;
             }
 
             ViewBag.packingListNo = packingListNo;
@@ -296,7 +312,6 @@ namespace tahsinERP.Controllers
 
             return View(invoice);
         }
-
         public ActionResult Delete(int? Id)
         {
             if (Id == null)
@@ -397,7 +412,7 @@ namespace tahsinERP.Controllers
                 var invoice = db.P_INVOICES
                                 .Include(i => i.P_INVOICE_PARTS.Select(pc => pc.PART))
                                 .Include(i => i.P_ORDERS)
-                                
+
                                 .FirstOrDefault(i => i.ID == ID);
 
                 if (invoice == null)

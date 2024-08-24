@@ -48,17 +48,6 @@ namespace tahsinERP.ViewModels
         public Nullable<double> PrNetWeight { get; set; }
         [Required]
         public Nullable<double> PrGrWeight { get; set; }
-        //public string PrPackMaterial { get; set; }
-/*      public string ScPackMaterial { get; set; }
-        public Nullable<double> ScLength { get; set; }
-        public Nullable<double> ScWidth { get; set; }
-        public Nullable<double> ScHeight { get; set; }
-        public Nullable<double> ScCBM { get; set; }
-        public Nullable<double> NoOfBoxes { get; set; }
-        public Nullable<double> SchedPack { get; set; }
-        public Nullable<double> ScNetWeight { get; set; }
-        public Nullable<double> ScGrWeight { get; set; }
-        public string PalletType { get; set; }*/
         public int PackingListID { get; set; }
     }
 }
