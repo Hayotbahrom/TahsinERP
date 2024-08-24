@@ -20,10 +20,14 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.CarList = new SelectList(db.CARS.ToList(), "ID", "OptionCode"); 
+                var carList = db.CARS.Select(c => new { c.ID, c.Model }).Distinct().ToList();
+                ViewBag.CarList = new SelectList(carList, "ID", "Model");
+
                 return View();
             }
-        }
+        }   
+
+
 
         [HttpPost]
         public ActionResult Create(CAR_PLANS plan)
