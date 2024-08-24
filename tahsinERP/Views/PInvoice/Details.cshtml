@@ -102,12 +102,13 @@
                                 <i class='bx bx-save'></i>
                                 PDF
                             </button>
-
+                            <br />
                             <button class="btn btn-outline-warning buttons-pdf buttons-html5 color-warning">
                                 <i class='bx bx-save'></i>
-                                @Html.ActionLink("Shablon faylni yuklab olish", "Download", "PInvoice", new { Model.ID }, new { @class = "text-warning" })
+                                @*<a href="~/PInvoice/DownloadDoc/@Model.ID">Invoys fayli</a>*@
+                                @Html.ActionLink("Original fayl", "DownloadDoc", "PInvoice", new { Model.ID }, new { @class = "text-warning" })
                             </button>
-
+                            <p>@ViewBag.DocNotFoundMessage</p>
                             <br />
                             <br />
 

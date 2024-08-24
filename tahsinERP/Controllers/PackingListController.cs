@@ -146,6 +146,7 @@ namespace tahsinERP.Controllers
                         {
                             PackingListID = packinglistID,
                             PartID = item.PartID,
+                            PieceWeight = item.Part.PWeight,
                             PrLength = item.PrLength,
                             PrWidth = item.PrWidth,
                             PrHeight = item.PrHeight,

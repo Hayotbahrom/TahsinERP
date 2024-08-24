@@ -203,7 +203,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
                 if (Request.Files["docUpload"].ContentLength > 0)
                 {
-                    if (Request.Files["docUpload"].InputStream.Length < 5)
+                    if (Request.Files["docUpload"].InputStream.Length < 5242880)
                     {
                         P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
                         byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
@@ -240,31 +240,31 @@ namespace tahsinERP.Controllers
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
         }
-        public ActionResult Download(int invoiceID)
+        public ActionResult DownloadDoc(int? invoiceID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var invoiceDoc = db.P_INVOICE_DOCS.FirstOrDefault(pi => pi.InvoiceID == invoiceID);
                 if (invoiceDoc != null)
                     return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                else
-                    return HttpNotFound("Fayl topilmadi.");
+                return HttpNotFound("Fayl yuklanmagan");
             }
         }
 
         public ActionResult Details(int? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-            P_INVOICES invoice;
-            List<P_INVOICE_PARTS> partList;
-            string transportNo = null;
-            string packingListNo = null;
-            List<P_INVOICE_PACKINGLISTS> packingLists;
-
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                if (id == null)
+                    return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+                P_INVOICES invoice;
+                List<P_INVOICE_PARTS> partList;
+                string transportNo = null;
+                string packingListNo = null;
+                List<P_INVOICE_PACKINGLISTS> packingLists;
+
+
                 invoice = db.P_INVOICES
                     .Include(i => i.COMPANy)
                     .Include(i => i.SUPPLIER)
@@ -274,44 +274,60 @@ namespace tahsinERP.Controllers
 
                 if (invoice == null)
                     return HttpNotFound();
-
-                partList = db.P_INVOICE_PARTS
-                    .Include(ip => ip.PART)
-                    .Include(ip => ip.UNIT)
-                    .Where(ip => ip.InvoiceID == invoice.ID)
-                    .ToList();
-
-                packingLists = db.P_INVOICE_PACKINGLISTS
-                    .Include(p => p.F_TRANSPORT_TYPES)
-                    .Include(p => p.P_PACKINGLIST_PARTS)
-                    .Where(p => p.InvoiceID == invoice.ID)
-                    .ToList();
-
-                List<P_PACKINGLIST_PARTS> packingListParts = db.P_PACKINGLIST_PARTS.Include(p => p.P_INVOICE_PACKINGLISTS).Include(p => p.PART).ToList();
-
-                var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
-                if (firstPackingList != null)
+                else
                 {
-                    transportNo = firstPackingList.TransportNo;
-                    packingListNo = firstPackingList.PackingListNo;
-                }
 
-                foreach (var part in partList)
-                {
-                    db.Entry(part).Reference(p => p.PART).Load();
-                }
+                    //partList = invoice.P_INVOICE_PARTS.ToList();
+                    partList = db.P_INVOICE_PARTS
+                        .Include(ip => ip.PART)
+                        .Include(ip => ip.UNIT)
+                        .Where(ip => ip.InvoiceID == invoice.ID)
+                        .ToList();
 
-                ViewBag.Invoice = invoice;
-                ViewBag.PartList = partList;
-                ViewBag.PackingLists = packingLists;
-                ViewBag.PackingListParts = packingListParts;
+                    packingLists = invoice.P_INVOICE_PACKINGLISTS.ToList();
+                    //packingLists = db.P_INVOICE_PACKINGLISTS
+                    //    .Include(p => p.F_TRANSPORT_TYPES)
+                    //    .Include(p => p.P_PACKINGLIST_PARTS)
+                    //    .Where(p => p.InvoiceID == invoice.ID)
+                    //    .ToList();
+
+                    List<P_PACKINGLIST_PARTS> packingListParts = new List<P_PACKINGLIST_PARTS>();
+                    List<P_PACKINGLIST_PARTS> VP = new List<P_PACKINGLIST_PARTS>();
+
+                    for (int i = 0; i < packingLists.Count; i++)
+                    {
+                        VP = packingLists[i].P_PACKINGLIST_PARTS.ToList();
+                        for (int j = 0; j < VP.Count; j++)
+                        {
+                            packingListParts.Add(VP[j]);
+                        }
+                    }
+
+                    ViewBag.Invoice = invoice;
+                    ViewBag.PartList = partList;
+                    ViewBag.PackingLists = packingLists;
+                    ViewBag.PackingListParts = packingListParts;
+                }
+                //var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
+                //if (firstPackingList != null)
+                //{
+                //    transportNo = firstPackingList.TransportNo;
+                //    packingListNo = firstPackingList.PackingListNo;
+                //}
+
+                //foreach (var part in partList)
+                //{
+                //    db.Entry(part).Reference(p => p.PART).Load();
+                //}
+
+
+
+                ViewBag.packingListNo = packingListNo;
+                ViewBag.transportNo = transportNo;
+                ViewBag.partList = partList;
+
+                return View(invoice);
             }
-
-            ViewBag.packingListNo = packingListNo;
-            ViewBag.transportNo = transportNo;
-            ViewBag.partList = partList;
-
-            return View(invoice);
         }
         public ActionResult Delete(int? Id)
         {
