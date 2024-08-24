@@ -102,7 +102,7 @@
                                                         <div class="card-content">
                                                             <div class="card-body card-dashboard">
                                                                 <div class="table-responsive">
-                                                                    <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                                                    <table class="table table-striped" style="width:100%">
                                                                         <thead>
                                                                             <tr>
                                                                                 <th>Detal raqami</th>
@@ -135,7 +135,7 @@
                                                                                         @Html.TextBoxFor(model => model.Parts[i].PrCBM, new { @class = "form-control", @id = $"PrCBM_{i}", @readonly = "readonly" })
                                                                                     </td>
                                                                                     <td>
-                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrNetWeight, new { @class = "form-control", @id = $"PrNetWeight_{i}", @oninput = "calculateTotals()" })
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrNetWeight, new { @class = "form-control", @id = $"PrNetWeight_{i}", @readonly = "readonly", @oninput = "calculateTotals()" })
                                                                                     </td>
                                                                                     <td>
                                                                                         @Html.TextBoxFor(model => model.Parts[i].PrGrWeight, new { @class = "form-control", @id = $"PrGrWeight_{i}", @oninput = "calculateTotals()" })

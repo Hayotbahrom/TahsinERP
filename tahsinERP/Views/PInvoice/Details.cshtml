@@ -102,15 +102,12 @@
                                 <i class='bx bx-save'></i>
                                 PDF
                             </button>
-                            <div  style="text-align: center">
-                                <div class="col-lg-6 col-md-12">
-                                    <fieldset class="form-group">
-                                        <label>Shablon faylni yuklab oling</label>
-                                        <br />
-                                        @Html.ActionLink("invoys","download", Model.ID)
-                                    </fieldset>
-                                </div>
-                            </div>
+
+                            <button class="btn btn-outline-warning buttons-pdf buttons-html5 color-warning">
+                                <i class='bx bx-save'></i>
+                                @Html.ActionLink("Shablon faylni yuklab olish", "Download", "PInvoice", new { Model.ID }, new { @class = "text-warning" })
+                            </button>
+
                             <br />
                             <br />
 

@@ -136,12 +136,12 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Quantuty">Miqdori</label>
-                                                            <input type="number" name="Quantity" class="form-control" id="Part_Quantuty" />
+                                                            <input type="number" name="Quantity" step="0.0001" class="form-control" id="Part_Quantuty" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Quantity, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.001" class="form-control" id="Part_Price" />
+                                                            <input type="number" name="Price" step="0.0001" class="form-control" id="Part_Price" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
 

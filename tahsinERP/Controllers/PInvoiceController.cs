@@ -240,17 +240,18 @@ namespace tahsinERP.Controllers
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
         }
-        public ActionResult Download(string invoiceID)
+        public ActionResult Download(int invoiceID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var invoiceDoc = db.P_INVOICE_DOCS.FirstOrDefault(pi => pi.InvoiceID == Convert.ToInt32(invoiceID));
+                var invoiceDoc = db.P_INVOICE_DOCS.FirstOrDefault(pi => pi.InvoiceID == invoiceID);
                 if (invoiceDoc != null)
                     return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 else
-                    return View();
+                    return HttpNotFound("Fayl topilmadi.");
             }
         }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
