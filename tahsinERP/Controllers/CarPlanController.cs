@@ -27,7 +27,9 @@ namespace tahsinERP.Controllers
                 ViewBag.CarList = new SelectList(db.CARS.ToList(), "ID", "OptionCode");
                 return View();
             }
-        }
+        }   
+
+
 
         [HttpPost]
         public ActionResult Create(CAR_PLANS plan)
