@@ -17,6 +17,8 @@ namespace tahsinERP.Controllers
 {
     public class BOMController : Controller
     {
+        List<string> missingParts = new List<string>();
+        List<string> missingProducts = new List<string>();
         public ActionResult Index(IndexViewModel viewModel)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -1039,7 +1041,6 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-
         private void DeleteBomTree(string parentPno)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -1056,7 +1057,6 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
             }
         }
-
         [HttpPost]
         public ActionResult Delete(int ID, FormCollection fmc)
         {
@@ -1093,8 +1093,6 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-
-
         private void MarkAsDeleted(string parentPno)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -1138,13 +1136,11 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-
         public ActionResult UploadWithExcel()
         {
             ViewBag.IsFileUploaded = false;
             return View();
         }
-        
         [HttpPost]
         public ActionResult UploadWithExcel(HttpPostedFileBase file)
         {
@@ -1178,35 +1174,55 @@ namespace tahsinERP.Controllers
                                 dataTable.Rows.Add(dataRow);
                             }
                         }
-
-                        ViewBag.DataTable = dataTable;
-                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
-                        ViewBag.IsFileUploaded = true;
-
-                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        if (CheckForExistenceOfProducts(dataTable))
                         {
-                            foreach (DataRow row in dataTable.Rows)
+                            if (CheckForExistenceOfParts(dataTable))
                             {
-                                string ParentPNo = row["ParentPNo"].ToString();
-                                string ChildPNo = row["ChildPNo"].ToString();
-                                string ConsumptionUnit = row["ConsumptionUnit"].ToString();
-                                string Consumption = row["Consumption"].ToString();
-                                string IsParentProduct = row["IsParentProduct"].ToString();
+                                ViewBag.DataTable = dataTable;
+                                ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                                ViewBag.IsFileUploaded = true;
 
-
-
-                                BOM existBom = db.BOMS
-                                                 .Where(p => p.ParentPNo.CompareTo(ParentPNo) == 0 && 
-                                                             p.ChildPNo.CompareTo(ChildPNo) == 0 &&
-                                                             p.IsDeleted == false)
-                                                 .FirstOrDefault();
-
-                                if (existBom != null)
+                                using (DBTHSNEntities db = new DBTHSNEntities())
                                 {
-                                    ViewBag.ExistingRecordsCount = 1;
+                                    foreach (DataRow row in dataTable.Rows)
+                                    {
+                                        string ParentPNo = row["ParentPNo"].ToString();
+                                        string ChildPNo = row["ChildPNo"].ToString();
+                                        string ConsumptionUnit = row["ConsumptionUnit"].ToString();
+                                        string Consumption = row["Consumption"].ToString();
+                                        string IsParentProduct = row["IsParentProduct?"].ToString();
+
+                                        BOM existBom = db.BOMS.Where(p => p.ParentPNo.CompareTo(ParentPNo) == 0 && p.ChildPNo.CompareTo(ChildPNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+
+                                        if (existBom != null)
+                                        {
+                                            ViewBag.ExistingRecordsCount = 1;
+                                        }
+                                    }
                                 }
                             }
+                            else
+                            {
+                                var message = "";
+                                foreach (var word in missingParts)
+                                {
+                                    message += word + ", ";
+                                }
+                                ViewBag.Message = "Ushbu BOM faylda kiritilgan ehtiyot qismlar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Ehtiyot qismlar bazasiga kiritib keyin qayta urining.";
+                                return View("UploadWithExcel");
+                            }
                         }
+                        else
+                        {
+                            var message = "";
+                            foreach (var word in missingProducts)
+                            {
+                                message += word + ", ";
+                            }
+                            ViewBag.Message = "Ushbu BOM faylda kiritilgan maxsulotlar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Maxsulotlar bazasiga kiritib keyin qayta urining.";
+                            return View("UploadWithExcel");
+                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -1228,7 +1244,57 @@ namespace tahsinERP.Controllers
 
             return View("UploadWithExcel");
         }
+        private bool CheckForExistenceOfParts(DataTable dataTable)
+        {
+            bool flag = false;
+            if (dataTable != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        string childPNo = row["ChildPNo"].ToString();
+                        if (db.PARTS.Where(p => p.PNo.CompareTo(childPNo) == 0).Any())
+                            flag = true;
+                        else
+                        {
+                            if (!missingParts.Contains(childPNo))
+                                missingParts.Add(childPNo);
+                        }
+                    }
+                    if (missingParts.Count > 0)
+                        return false;
+                    else
+                        return flag;
+                }
+            else
+                return flag;
+        }
+        private bool CheckForExistenceOfProducts(DataTable dataTable)
+        {
+            bool flag = false;
+            if (dataTable != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        string parentPNo = row["ParentPNo"].ToString();
+                        if (db.PRODUCTS.Where(p => p.PNo.CompareTo(parentPNo) == 0).Any())
+                            flag = true;
+                        else
+                        {
+                            if (!missingProducts.Contains(parentPNo))
+                                missingProducts.Add(parentPNo);
+                        }
+                    }
+                    if (missingProducts.Count > 0)
+                        return false;
+                    else
+                        return flag;
+                }
+            else
+                return flag;
 
+        }
         [HttpPost]
         public ActionResult ClearDataTable()
         {
@@ -1260,7 +1326,7 @@ namespace tahsinERP.Controllers
                                 string ChildPNo = row["ChildPNo"].ToString();
                                 string ConsumptionUnit = row["ConsumptionUnit"].ToString();
                                 string Consumption = row["Consumption"].ToString();
-                                string IsParentProduct = row["IsParentProduct"].ToString();
+                                string IsParentProduct = row["IsParentProduct?"].ToString();
 
                                 BOM bom = new BOM();
                                 bom.Consumption = Convert.ToDouble(Consumption);
@@ -1268,7 +1334,10 @@ namespace tahsinERP.Controllers
                                 bom.ParentPNo = ParentPNo;
                                 bom.ChildPNo = ChildPNo;
                                 bom.IsDeleted = false;
-                                bom.IsParentProduct = IsParentProduct.ToLower() == "yes";
+                                if (IsParentProduct.CompareTo("Yes") == 0)
+                                    bom.IsParentProduct = true;
+                                else
+                                    bom.IsParentProduct = false;
 
                                 db.BOMS.Add(bom);
                                 db.SaveChanges();

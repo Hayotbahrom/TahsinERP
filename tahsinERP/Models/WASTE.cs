@@ -18,6 +18,7 @@ namespace tahsinERP.Models
         public WASTE()
         {
             this.PART_WASTE_WRHS_EXPENSE_WASTES = new HashSet<PART_WASTE_WRHS_EXPENSE_WASTES>();
+            this.PART_WASTE_WRHS_INCOME_WASTES = new HashSet<PART_WASTE_WRHS_INCOME_WASTES>();
             this.WASTE_STOCKS = new HashSet<WASTE_STOCKS>();
         }
     
@@ -29,6 +30,8 @@ namespace tahsinERP.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PART_WASTE_WRHS_INCOME_WASTES> PART_WASTE_WRHS_INCOME_WASTES { get; set; }
         public virtual PRODUCTIONPROCESS PRODUCTIONPROCESS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WASTE_STOCKS> WASTE_STOCKS { get; set; }

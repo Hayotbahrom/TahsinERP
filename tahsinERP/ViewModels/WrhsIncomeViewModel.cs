@@ -58,7 +58,7 @@ namespace tahsinERP.ViewModels
         [Range(1, int.MaxValue, ErrorMessage = "Amount must be a positive number.")]
         public int Amount { get; set; }
 
-        [Required(ErrorMessage = "Piece price is required.")]
+        
         [Range(0.01, double.MaxValue, ErrorMessage = "Piece price must be a positive number.")]
         public int PiecePrice { get; set; }
 

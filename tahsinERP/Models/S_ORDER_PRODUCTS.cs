@@ -12,19 +12,19 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PART_WASTE_WRHS_INCOME_WASTES
+    public partial class S_ORDER_PRODUCTS
     {
         public int ID { get; set; }
-        public int IncomeID { get; set; }
-        public int WasteID { get; set; }
+        public int OrderID { get; set; }
+        public int ProductID { get; set; }
+        public double Price { get; set; }
         public double Amount { get; set; }
-        public Nullable<double> PiecePrice { get; set; }
-        public Nullable<double> TotalPrice { get; set; }
-        public string Comment { get; set; }
+        public double TotalPrice { get; set; }
+        public Nullable<double> MOQ { get; set; }
         public int UnitID { get; set; }
     
-        public virtual PART_WASTE_WRHS_INCOMES PART_WASTE_WRHS_INCOMES { get; set; }
+        public virtual PRODUCT PRODUCT { get; set; }
+        public virtual S_ORDERS S_ORDERS { get; set; }
         public virtual UNIT UNIT { get; set; }
-        public virtual WASTE WASTE { get; set; }
     }
 }

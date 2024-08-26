@@ -102,12 +102,15 @@ namespace tahsinERP.Models
         public virtual DbSet<ROLE> ROLES { get; set; }
         public virtual DbSet<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
         public virtual DbSet<S_CONTRACTS> S_CONTRACTS { get; set; }
+        public virtual DbSet<S_ORDER_PRODUCTS> S_ORDER_PRODUCTS { get; set; }
+        public virtual DbSet<S_ORDERS> S_ORDERS { get; set; }
         public virtual DbSet<SAMPLE_FILES> SAMPLE_FILES { get; set; }
         public virtual DbSet<SHOP_PLANNED_DTS> SHOP_PLANNED_DTS { get; set; }
         public virtual DbSet<SHOP> SHOPS { get; set; }
         public virtual DbSet<SLITTING_NORMS> SLITTING_NORMS { get; set; }
         public virtual DbSet<SPL> SPLs { get; set; }
         public virtual DbSet<STAMPING_NORMS> STAMPING_NORMS { get; set; }
+        public virtual DbSet<STEEL_COILS> STEEL_COILS { get; set; }
         public virtual DbSet<SUPPLIER> SUPPLIERS { get; set; }
         public virtual DbSet<TEMPORARY_BOMS> TEMPORARY_BOMS { get; set; }
         public virtual DbSet<TRACING> TRACINGS { get; set; }
@@ -115,13 +118,23 @@ namespace tahsinERP.Models
         public virtual DbSet<USER_ENTRIES> USER_ENTRIES { get; set; }
         public virtual DbSet<USER_LICENSES> USER_LICENSES { get; set; }
         public virtual DbSet<USERIMAGE> USERIMAGES { get; set; }
+        public virtual DbSet<USERLOG> USERLOGS { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
         public virtual DbSet<WASTE_STOCKS> WASTE_STOCKS { get; set; }
         public virtual DbSet<WASTE> WASTES { get; set; }
         public virtual DbSet<BOMS_AND_NORMS> BOMS_AND_NORMS { get; set; }
         public virtual DbSet<PROD_SHOPS_PARTS> PROD_SHOPS_PARTS { get; set; }
-        public virtual DbSet<USERLOG> USERLOGS { get; set; }
-        public virtual DbSet<STEEL_COILS> STEEL_COILS { get; set; }
+        public virtual DbSet<CarPlanRequirement> CarPlanRequirements { get; set; }
+        public virtual DbSet<MaterialRequirement> MaterialRequirements { get; set; }
+    
+        public virtual ObjectResult<GetCarPlanRequirements_Result> GetCarPlanRequirements(string optionCode)
+        {
+            var optionCodeParameter = optionCode != null ?
+                new ObjectParameter("OptionCode", optionCode) :
+                new ObjectParameter("OptionCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCarPlanRequirements_Result>("GetCarPlanRequirements", optionCodeParameter);
+        }
     
         public virtual ObjectResult<GetPartsInfo_Result> GetPartsInfo()
         {
@@ -175,6 +188,25 @@ namespace tahsinERP.Models
                 new ObjectParameter("SupplierID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSupplierParts_Result>("GetSupplierParts", supplierIDParameter);
+        }
+    
+        public virtual int WeeklyPartRequirementByProductPlan()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WeeklyPartRequirementByProductPlan");
+        }
+    
+        public virtual int InTransitView()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InTransitView");
+        }
+    
+        public virtual int WeeklyCoverage(Nullable<System.DateTime> todayDate)
+        {
+            var todayDateParameter = todayDate.HasValue ?
+                new ObjectParameter("TodayDate", todayDate) :
+                new ObjectParameter("TodayDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WeeklyCoverage", todayDateParameter);
         }
     }
 }

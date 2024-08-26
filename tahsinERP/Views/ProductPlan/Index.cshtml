@@ -43,7 +43,7 @@
                                 Yangi
                                 reja qo'shish
                             </a>
-                            <a href="@Url.Action("CreateAvto", "ProductPlan")" class="btn btn-outline-warning" role="button" aria-pressed="true">
+                            <a href="@Url.Action("Create", "CarPlan")" class="btn btn-outline-warning" role="button" aria-pressed="true">
                                 Avtomobilga
                                 reja qo'shish
                             </a>
@@ -71,8 +71,8 @@
                             <div class="card-content">
                                 <div class="card-body">
                                     <!-- datatable start -->
-                                    <div class="card-datatable table-responsivetable-responsive">
-                                        <table class="table dt-responsive nowrap" style="width:100%">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped dataex-html5-selectors">
                                             <thead>
                                                 <tr>
                                                     <th>Maxsulot</th>
@@ -93,7 +93,7 @@
                                                         {
                                                             <td><a href="~/ProductPlan/Details/@item.ID">@item.PRODUCT.PNo</a></td>
                                                         }
-                                                        else if(!ViewBag.shopIsNotSelected)
+                                                        else if (!ViewBag.shopIsNotSelected)
                                                         {
                                                             <td><a href="~/ProductPlan/Details/@item.ID">@item.EneniAmi</a></td>
                                                         }

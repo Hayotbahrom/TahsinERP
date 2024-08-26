@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -14,6 +15,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -157,76 +160,108 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(PInvoiceViewModel model)
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
+            PopulateViewBags();
+            try
             {
-                var isSameOrder = db.P_ORDERS
-                    .Include(x => x.SUPPLIER)
-                    .FirstOrDefault(p => p.IsDeleted == false && p.ID == model.OrderID);
-
-                if (isSameOrder == null || model.SupplierID != isSameOrder.SupplierID)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    ModelState.AddModelError("", "Siz tanlagan ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
-                    PopulateViewBags();
-                    return View(model);
-                }
+                    var isSameOrder = db.P_ORDERS
+                        .Include(x => x.SUPPLIER)
+                        .FirstOrDefault(p => p.IsDeleted == false && p.ID == model.OrderID);
 
-                P_INVOICES invoice = new P_INVOICES
-                {
-                    InvoiceNo = model.InvoiceNo,
-                    OrderID = model.OrderID,
-                    SupplierID = model.SupplierID,
-                    Currency = model.Currency,
-                    InvoiceDate = model.InvoiceDate,
-                    CompanyID = 1,
-                    IsDeleted = false
-                };
-
-                db.P_INVOICES.Add(invoice);
-                db.SaveChanges();
-
-                int newInvoiceID = invoice.ID;
-
-                foreach (var item in model.Parts)
-                {
-                    var newPart = new P_INVOICE_PARTS
+                    if (isSameOrder == null || model.SupplierID != isSameOrder.SupplierID)
                     {
-                        InvoiceID = newInvoiceID,
-                        PartID = item.PartID,
-                        Quantity = item.Quantity,
-                        UnitID = item.UnitID,
-                        Price = item.Price
+                        ModelState.AddModelError("", "Siz tanlagan ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
+                        PopulateViewBags();
+                        return View(model);
+                    }
+
+                    P_INVOICES invoice = new P_INVOICES
+                    {
+                        InvoiceNo = model.InvoiceNo,
+                        OrderID = model.OrderID,
+                        SupplierID = model.SupplierID,
+                        Currency = model.Currency,
+                        InvoiceDate = model.InvoiceDate,
+                        CompanyID = 1,
+                        IsDeleted = false
                     };
 
-                    db.P_INVOICE_PARTS.Add(newPart);
-                }
+                    db.P_INVOICES.Add(invoice);
+                    db.SaveChanges();
 
-                db.SaveChanges();
-                if (Request.Files["docUpload"].ContentLength > 0)
-                {
-                    if (Request.Files["docUpload"].InputStream.Length < 5242880)
+                    List<P_ORDER_PARTS> orderParts = db.P_ORDER_PARTS.Where(po => po.OrderID == model.OrderID).ToList();
+                    List<string> notInOrderParts = new List<string>();
+
+                    foreach (var item in model.Parts)
                     {
-                        P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
-                        byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
-                        Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                        invoiceDoc.InvoiceID = invoice.ID;
-                        invoiceDoc.Doc = avatar;
+                        var orderPart = orderParts.Where(p => p.PartID == item.PartID).FirstOrDefault();
+                        if (orderParts.Where(cp => cp.PartID == item.PartID).Any())
+                        {
+                            var newPart = new P_INVOICE_PARTS
+                            {
+                                InvoiceID = invoice.ID,
+                                PartID = item.PartID,
+                                Quantity = item.Quantity,
+                                UnitID = item.UnitID
+                            };
 
-                        db.P_INVOICE_DOCS.Add(invoiceDoc);
+                            newPart.Price = orderPart.Price;
+                            db.P_INVOICE_PARTS.Add(newPart);
+                        }
+                        else
+                        {
+                            PART paart = db.PARTS.Where(p => p.ID == item.PartID).FirstOrDefault();
+                            notInOrderParts.Add(paart.PNo);
+                        }
+                    }
+                    if (notInOrderParts.Count > 0)
+                    {
+                        var message = "";
+                        foreach (var word in notInOrderParts)
+                        {
+                            message += word + " ,";
+                        }
+                        ModelState.AddModelError("", "Ushbu ehtiyot qism(lar): " + message + " buyurtmadan topilmadi, buyurtmada yo'q narsaga invoys qilib bo'lmaydi! Qaytadan urinib ko'ring!");
+                        db.Entry(invoice).State = System.Data.Entity.EntityState.Deleted;
                         db.SaveChanges();
+                        return View(model);
                     }
-                    else
+                    db.SaveChanges();
+
+
+                    if (Request.Files["docUpload"].ContentLength > 0)
                     {
-                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
-                        throw new RetryLimitExceededException();
+                        if (Request.Files["docUpload"].InputStream.Length < 5242880)
+                        {
+                            P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
+                            byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                            Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                            invoiceDoc.InvoiceID = invoice.ID;
+                            invoiceDoc.Doc = avatar;
+
+                            db.P_INVOICE_DOCS.Add(invoiceDoc);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                            throw new RetryLimitExceededException();
+                        }
                     }
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
+
+                    // Redirect to PackingList create view with necessary Invoice properties
+                    return RedirectToAction("Create", "PackingList", new { invoiceId = invoice.ID, invoiceNo = invoice.InvoiceNo });
                 }
-
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
-
-                // Redirect to PackingList create view with necessary Invoice properties
-                return RedirectToAction("Create", "PackingList", new { invoiceId = newInvoiceID, invoiceNo = invoice.InvoiceNo });
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            return View(model);
         }
 
         private void PopulateViewBags()
@@ -276,8 +311,6 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 else
                 {
-
-                    //partList = invoice.P_INVOICE_PARTS.ToList();
                     partList = db.P_INVOICE_PARTS
                         .Include(ip => ip.PART)
                         .Include(ip => ip.UNIT)
@@ -308,12 +341,12 @@ namespace tahsinERP.Controllers
                     ViewBag.PackingLists = packingLists;
                     ViewBag.PackingListParts = packingListParts;
                 }
-                //var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
-                //if (firstPackingList != null)
-                //{
-                //    transportNo = firstPackingList.TransportNo;
-                //    packingListNo = firstPackingList.PackingListNo;
-                //}
+                var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
+                if (firstPackingList != null)
+                {
+                    transportNo = firstPackingList.TransportNo;
+                    packingListNo = firstPackingList.PackingListNo;
+                }
 
                 //foreach (var part in partList)
                 //{

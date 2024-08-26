@@ -555,7 +555,6 @@ namespace tahsinERP.Controllers
                     var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
                     try
                     {
-
                         foreach (DataRow row in tableModel.Rows)
                         {
                             partNo = row["Partnumber"].ToString();

@@ -95,12 +95,29 @@ namespace tahsinERP.Controllers
 
         public async Task<ActionResult> Create()
         {
+
+            LoadViewBags();
+
+            return View();
+
+        }
+        private void LoadViewBags()
+        {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.packingList = new SelectList(await db.P_INVOICE_PACKINGLISTS
+                // Get the list of packing lists that are not deleted
+                var packingLists = db.P_INVOICE_PACKINGLISTS
                     .Where(p => p.IsDeleted == false)
-                    .ToListAsync(), "ID", "TransportNo");
-                return View();
+                    .ToList();
+
+                // Group by TransportNo and select the first item from each group to ensure distinct TransportNo values
+                var distinctPackingLists = packingLists
+                    .GroupBy(p => p.TransportNo)
+                    .Select(g => g.First())
+                    .ToList();
+
+                // Create the SelectList with distinct TransportNo
+                ViewBag.packingList = new SelectList(distinctPackingLists, "ID", "TransportNo");
             }
         }
         [HttpPost]
@@ -113,7 +130,6 @@ namespace tahsinERP.Controllers
                 if (checkExistTracing)
                 {
                     ModelState.AddModelError("", "Bu sana bilan ma'lumot allaqachon kiritilgan. Qaytadan urunib ko'ring!");
-                    return View(tracing);
                 }
                 try
                 {
@@ -122,6 +138,7 @@ namespace tahsinERP.Controllers
                         // Set IsDeleted to false and save the tracing to get the ID
                         tracing.IsDeleted = false;
                         db.TRACINGS.Add(tracing);
+                        setPackingListInTransit(tracing.PackingListID);
                         await db.SaveChangesAsync();
 
                         var userEmail = User.Identity.Name;
@@ -135,7 +152,21 @@ namespace tahsinERP.Controllers
                 }
 
             }
+            LoadViewBags();
             return View(tracing);
+        }
+        private void setPackingListInTransit(int packingListID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                P_INVOICE_PACKINGLISTS packingList = db.P_INVOICE_PACKINGLISTS.Where(x => x.ID == packingListID).FirstOrDefault();
+                if (packingList != null)
+                {
+                    packingList.InTransit = true;
+                    db.Entry(packingList).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
         }
 
         private bool checkForTodaysInput(int packingListID, DateTime issueDateTime)
@@ -159,7 +190,7 @@ namespace tahsinERP.Controllers
             {
                 var existTracingTransportNo = await db.TRACINGS
                                                     .Include(p => p.P_INVOICE_PACKINGLISTS)
-                                                    .Where(p=> p.IsDeleted == false && p.PackingListID == id)
+                                                    .Where(p => p.IsDeleted == false && p.PackingListID == id)
                                                     .FirstOrDefaultAsync();
 
                 var tracingList = await db.TRACINGS
@@ -217,13 +248,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                bool checkExistTracing = checkForTodaysInput(tracing.PackingListID, tracing.IssueDateTime); //await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime.ToShortDateString().CompareTo(tracing.IssueDateTime.ToShortDateString()) == 0).FirstOrDefaultAsync();
-                if (checkExistTracing)
-                {
-                    ModelState.AddModelError("", "Bu sana bilan ma'lumot allaqachon kiritilgan. Qaytadan urunib ko'ring!");
-                    return View(tracing);
-                }
-
+                
                 if (ModelState.IsValid)
                 {
                     var tracingToUpdate = await db.TRACINGS.FindAsync(tracing.ID);

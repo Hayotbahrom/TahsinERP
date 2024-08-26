@@ -34,12 +34,12 @@ namespace tahsinERP.ViewModels
         [Required]
         public int PartID { get; set; }
         [Required]
-        public float Price { get; set; }
+        public double Price { get; set; }
         [Required]
-        public float Amount { get; set; }
-        [Required]
-        public float MOQ { get; set; }
-        [Required]
+        public double Amount { get; set; }
+        
+        public double MOQ { get; set; }
+        
         public int UnitID { get; set; }
     }
 }
