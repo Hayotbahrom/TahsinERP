@@ -349,7 +349,6 @@ namespace tahsinERP.Controllers
                     }
                 }
                
-                
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PContractController", "Create[Post]");
                 return RedirectToAction("Index");
