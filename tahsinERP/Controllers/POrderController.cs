@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-﻿using Antlr.Runtime.Tree;
-using Microsoft.Ajax.Utilities;
-=======
-﻿using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Office2010.Excel;
->>>>>>> 45af4e4971ff6c54757c83b391aa5ca128f696f2
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -13,15 +6,12 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
-using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
