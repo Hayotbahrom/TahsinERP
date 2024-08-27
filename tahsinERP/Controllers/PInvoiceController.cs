@@ -26,6 +26,11 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, invoiceNo, orderNo, partNo = "";
         private string[] sources;
+
+        private List<string> missingOrders = new List<string>();
+        private List<string> missingSuppliers = new List<string>();
+        private List<string> missingParts = new List<string>();
+
         public PInvoiceController()
         {
             sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
@@ -625,8 +630,87 @@ namespace tahsinERP.Controllers
             ViewBag.IsFileUploaded = false;
             return View();
         }
+
+        private async Task<bool> CheckForExistenceOfOrders(DataTable dataTable)
+        {
+            if (dataTable == null)
+                return false;
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string orderNo = row["OrderNo"].ToString();
+
+                    bool orderExists = await db.P_CONTRACTS.AnyAsync(p => p.ContractNo.CompareTo(orderNo) == 0);
+                    if (!orderExists)
+                    {
+                        if (!missingOrders.Contains(orderNo))
+                        {
+                            missingOrders.Add(orderNo);
+                        }
+                        return false;  // Return false immediately if any contract is missing
+                    }
+                }
+            }
+
+            return true;  // Return true if all contracts exist
+        }
+
+        private async Task<bool> CheckForExistenceOfParts(DataTable dataTable)
+        {
+            if (dataTable == null)
+                return false;
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string partPNo = row["Part Number"].ToString();
+
+                    bool partExists = await db.PARTS.AnyAsync(p => p.PNo.CompareTo(partPNo) == 0);
+                    if (!partExists)
+                    {
+                        if (!missingParts.Contains(partPNo))
+                        {
+                            missingParts.Add(partPNo);
+                        }
+                        return false;  // Return false immediately if any part is missing
+                    }
+                }
+            }
+
+            return true;  // Return true if all parts exist
+        }
+
+        private async Task<bool> CheckForExistenceOfSuppliers(DataTable dataTable)
+        {
+            if (dataTable == null)
+                return false;
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string supplierName = row["Supplier Name"].ToString();
+
+                    bool supplierExists = await db.SUPPLIERS.AnyAsync(s => s.Name.CompareTo(supplierName) == 0);
+                    if (!supplierExists)
+                    {
+                        if (!missingSuppliers.Contains(supplierName))
+                        {
+                            missingSuppliers.Add(supplierName);
+                        }
+                        return false;  // Return false immediately if any supplier is missing
+                    }
+                }
+            }
+
+            return true;  // Return true if all suppliers exist
+        }
+
         [HttpPost]
-        public ActionResult UploadWithExcel(HttpPostedFileBase file)
+        public async Task<ActionResult> UploadWithExcel(HttpPostedFileBase file)
         {
             if (file != null && file.ContentLength > 0)
             {
@@ -659,31 +743,70 @@ namespace tahsinERP.Controllers
                             }
                         }
 
-                        ViewBag.DataTable = dataTable;
-                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
-                        ViewBag.IsFileUploaded = true;
-
-                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        if (await CheckForExistenceOfOrders(dataTable))
                         {
-                            foreach (DataRow row in dataTable.Rows)
+                            if (await CheckForExistenceOfSuppliers(dataTable))
                             {
-                                orderNo = row["OrderNo"].ToString();
-                                supplierName = row["Supplier Name"].ToString();
-                                partNo = row["Part Number"].ToString();
-                                invoiceNo = row["Invoice No."].ToString();
-
-                                SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                                PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                                P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                                P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
-
-                                if (invoice != null)
+                                if (await CheckForExistenceOfParts(dataTable))
                                 {
-                                    P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pop => pop.PartID == part.ID && pop.InvoiceID == invoice.ID).FirstOrDefault();
-                                    if (invoicePart != null)
-                                        ViewBag.ExistingRecordsCount = 1;
+                                    ViewBag.DataTable = dataTable;
+                                    ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                                    ViewBag.IsFileUploaded = true;
+
+                                    using (DBTHSNEntities db = new DBTHSNEntities())
+                                    {
+                                        foreach (DataRow row in dataTable.Rows)
+                                        {
+                                            orderNo = row["OrderNo"].ToString();
+                                            supplierName = row["Supplier Name"].ToString();
+                                            partNo = row["Part Number"].ToString();
+                                            invoiceNo = row["Invoice No."].ToString();
+
+                                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                            P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
+                                            P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
+
+                                            if (invoice != null)
+                                            {
+                                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pop => pop.PartID == part.ID && pop.InvoiceID == invoice.ID).FirstOrDefault();
+                                                if (invoicePart != null)
+                                                    ViewBag.ExistingRecordsCount = 1;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    var message = "";
+                                    foreach (var word in missingParts)
+                                    {
+                                        message += word + ", ";
+                                    }
+                                    ViewBag.Message = "Ushbu fakturalar faylida kiritilgan ehtiyot qismlar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Fakturalar bazasiga kiritib keyin qayta urining.";
+                                    return View("UploadWithExcel");
                                 }
                             }
+                            else
+                            {
+                                var message = "";
+                                foreach (var word in missingSuppliers)
+                                {
+                                    message += word + ", ";
+                                }
+                                ViewBag.Message = "Ushbu fakturalar faylda kiritilgan ta'minotchilar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Fakturalar kiritib keyin qayta urining.";
+                                return View("UploadWithExcel");
+                            }
+                        }
+                        else
+                        {
+                            var message = "";
+                            foreach (var word in missingOrders)
+                            {
+                                message += word + ", ";
+                            }
+                            ViewBag.Message = "Ushbu faktura faylda kiritilgan buyurtmalar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Buyurtmalar bazasiga kiritib keyin qayta urining.";
+                            return View("UploadWithExcel");
                         }
                     }
                     catch (Exception ex)
