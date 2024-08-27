@@ -12,16 +12,12 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PART_STOCKS
+    public partial class CarPlanRequirement
     {
-        public int ID { get; set; }
-        public int WHID { get; set; }
-        public int PartID { get; set; }
-        public string Unit { get; set; }
-        public double Amount { get; set; }
-        public System.DateTime ToDate { get; set; }
-    
-        public virtual PART_WRHS PART_WRHS { get; set; }
-        public virtual PART PART { get; set; }
+        public string OptionCode { get; set; }
+        public string PNo { get; set; }
+        public Nullable<double> Requirement { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime DueDate { get; set; }
     }
 }

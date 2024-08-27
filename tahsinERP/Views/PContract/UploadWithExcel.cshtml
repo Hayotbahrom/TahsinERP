@@ -151,7 +151,6 @@
     @section Scripts {
         <script>
         function confirmSave() {
-            console.log("Save button clicked!"); // Check if this message appears in the console
             var duplicateRecords = @ViewBag.ExistingRecordsCount;
             if (duplicateRecords > 0) {
                 alert("Siz yuklagan fayldagi ma'lumotlar tizimning ma'lumotlar bazasida mavjud. Yuklayotgan ma'lumotingizni sinchkovlik bilan tekshirib qayta urinib ko'ring.");

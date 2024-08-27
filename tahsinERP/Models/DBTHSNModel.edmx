@@ -26,20 +26,20 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Consumption" Type="float" />
+          <Property Name="Consumption" Type="float" Nullable="false" />
           <Property Name="ConsumptionUnit" Type="varchar" MaxLength="15" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="ParentPNo" Type="varchar" MaxLength="50" />
           <Property Name="ChildPNo" Type="varchar" MaxLength="50" />
           <Property Name="IsParentProduct" Type="bit" />
-          <Property Name="WasteAmount" Type="float" />
-          <Property Name="TotalConsumption" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="WasteAmount" Type="float" Nullable="false" />
           <Property Name="Sequence" Type="int" />
           <Property Name="ProcessID" Type="int" />
+          <Property Name="TotalConsumption" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BOMS_AND_NORMS">
           <Key>
             <PropertyRef Name="IsActive" />
@@ -228,7 +228,7 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="HSCODE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="HSCODE" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="P_CONTRACT_DOCS">
@@ -350,8 +350,8 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="OrderNo" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IssuedDate" Type="datetime" Nullable="false" />
           <Property Name="CompanyID" Type="int" />
-          <Property Name="SupplierID" Type="int" Nullable="false" />
-          <Property Name="ContractID" Type="int" Nullable="false" />
+          <Property Name="SupplierID" Type="int" />
+          <Property Name="ContractID" Type="int" />
           <Property Name="Amount" Type="float" />
           <Property Name="Currency" Type="varchar" MaxLength="15" />
           <Property Name="Description" Type="text" />
@@ -367,7 +367,6 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="PrLength" Type="float" />
           <Property Name="PrWidth" Type="float" />
           <Property Name="PrHeight" Type="float" />
-          <Property Name="PrCBM" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="PrAmount" Type="float" />
           <Property Name="PrNetWeight" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="PrGrWeight" Type="float" />
@@ -376,13 +375,14 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="ScLength" Type="float" />
           <Property Name="ScWidth" Type="float" />
           <Property Name="ScHeight" Type="float" />
-          <Property Name="ScCBM" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="NoOfBoxes" Type="float" />
           <Property Name="SchedPack" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="ScNetWeight" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="ScGrWeight" Type="float" />
           <Property Name="PalletType" Type="varchar" MaxLength="30" />
           <Property Name="PackingListID" Type="int" Nullable="false" />
+          <Property Name="PrCBM" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="ScCBM" Type="float" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -420,6 +420,7 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="PartID" Type="int" Nullable="false" />
           <Property Name="Unit" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="ToDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="PART_WASTE_WRHS_EXPENSE_WASTES">
           <Key>
@@ -650,10 +651,10 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PNo" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="PName" Type="varchar" MaxLength="50" />
-          <Property Name="PWeight" Type="float" />
-          <Property Name="PLength" Type="float" />
-          <Property Name="PWidth" Type="float" />
-          <Property Name="PHeight" Type="float" />
+          <Property Name="PWeight" Type="float" Nullable="false" />
+          <Property Name="PLength" Type="float" Nullable="false" />
+          <Property Name="PWidth" Type="float" Nullable="false" />
+          <Property Name="PHeight" Type="float" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="50" />
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
@@ -664,9 +665,8 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="Standart" Type="varchar" MaxLength="50" />
           <Property Name="Coating" Type="varchar" MaxLength="20" />
           <Property Name="Grade" Type="varchar" MaxLength="20" />
-          <Property Name="Gauge" Type="float" />
-          <Property Name="Thickness" Type="float" />
-          <Property Name="Pitch" Type="float" />
+          <Property Name="Gauge" Type="float" Nullable="false" />
+          <Property Name="Pitch" Type="float" Nullable="false" />
           <Property Name="HSCodeID" Type="int" />
           <Property Name="UnitID" Type="int" Nullable="false" />
         </EntityType>
@@ -691,7 +691,7 @@ warning 6002: The table/view 'DBTHSN.dbo.BOMS_AND_NORMS' does not have a primary
           <Property Name="PermissionModuleID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DBTHSN.dbo.PROD_SHOPS_PARTS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DBTHSN-TEST.dbo.PROD_SHOPS_PARTS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PROD_SHOPS_PARTS">
           <Key>
             <PropertyRef Name="ShopID" />
@@ -700,7 +700,7 @@ warning 6002: The table/view 'DBTHSN.dbo.PROD_SHOPS_PARTS' does not have a prima
           <Property Name="PartID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DBTHSN-TEST.dbo.PROD_SHOPS_PRODUCTS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PROD_SHOPS_PRODUCTS">
           <Key>
             <PropertyRef Name="ShopID" />
@@ -1025,6 +1025,34 @@ warning 6002: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a pr
           <Property Name="DueDate" Type="date" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="S_ORDER_PRODUCTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="TotalPrice" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="MOQ" Type="float" />
+          <Property Name="UnitID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="S_ORDERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IssuedDate" Type="datetime" Nullable="false" />
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="ContractID" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="varchar" MaxLength="15" />
+          <Property Name="Description" Type="text" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
         <EntityType Name="SAMPLE_FILES">
           <Key>
             <PropertyRef Name="ID" />
@@ -1107,10 +1135,10 @@ warning 6002: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a pr
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Marka" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Standart" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Coating" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Thickness" Type="float" Nullable="false" />
+          <Property Name="Marka" Type="varchar" MaxLength="20" />
+          <Property Name="Standart" Type="varchar" MaxLength="30" />
+          <Property Name="Coating" Type="varchar" MaxLength="30" />
+          <Property Name="Thickness" Type="float" />
         </EntityType>
         <EntityType Name="SUPPLIERS">
           <Key>
@@ -1210,7 +1238,7 @@ warning 6002: The table/view 'DBTHSN.dbo.PROD_SHOPS_PRODUCTS' does not have a pr
           <Property Name="MacAddr" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'DBTHSN-TEST.dbo.USERROLES' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="USERROLES">
           <Key>
             <PropertyRef Name="UserID" />
@@ -1252,6 +1280,32 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="ProcessID" Type="int" Nullable="false" />
           <Property Name="Description" Type="text" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DBTHSN-TEST.dbo.CarPlanRequirements' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CarPlanRequirements">
+          <Key>
+            <PropertyRef Name="OptionCode" />
+            <PropertyRef Name="PNo" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="DueDate" />
+          </Key>
+          <Property Name="OptionCode" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="PNo" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Requirement" Type="float" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="DueDate" Type="date" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MaterialRequirement">
+          <Key>
+            <PropertyRef Name="ProductNo" />
+            <PropertyRef Name="PartNo" />
+          </Key>
+          <Property Name="ProductNo" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="PartNo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TotalConsumption" Type="float" />
         </EntityType>
         <Association Name="FK_BLANKING_NORMS_PARTS">
           <End Role="PARTS" Type="Self.PARTS" Multiplicity="1" />
@@ -1314,13 +1368,13 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CAR_PLANS_CARS">
-          <End Role="CAR_PLANS" Type="Self.CAR_PLANS" Multiplicity="1" />
-          <End Role="CAR_PLANS1" Type="Self.CAR_PLANS" Multiplicity="*" />
+          <End Role="CARS" Type="Self.CARS" Multiplicity="1" />
+          <End Role="CAR_PLANS" Type="Self.CAR_PLANS" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CAR_PLANS">
+            <Principal Role="CARS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="CAR_PLANS1">
+            <Dependent Role="CAR_PLANS">
               <PropertyRef Name="CarID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1722,7 +1776,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_P_ORDERS_P_CONTRACTS">
-          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="1" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
           <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="P_CONTRACTS">
@@ -1734,7 +1788,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_P_ORDERS_SUPPLIERS">
-          <End Role="SUPPLIERS" Type="Self.SUPPLIERS" Multiplicity="1" />
+          <End Role="SUPPLIERS" Type="Self.SUPPLIERS" Multiplicity="0..1" />
           <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SUPPLIERS">
@@ -2057,18 +2111,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES">
-          <End Role="PART_WASTE_WRHS_INCOME_WASTES" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="1" />
-          <End Role="PART_WASTE_WRHS_INCOME_WASTES1" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="PART_WASTE_WRHS_INCOME_WASTES">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PART_WASTE_WRHS_INCOME_WASTES1">
-              <PropertyRef Name="ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PART_WASTE_WRHS_INCOME_WASTES_UNITS">
           <End Role="UNITS" Type="Self.UNITS" Multiplicity="1" />
           <End Role="PART_WASTE_WRHS_INCOME_WASTES" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="*" />
@@ -2078,6 +2120,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="PART_WASTE_WRHS_INCOME_WASTES">
               <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES">
+          <End Role="WASTES" Type="Self.WASTES" Multiplicity="1" />
+          <End Role="PART_WASTE_WRHS_INCOME_WASTES" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WASTES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART_WASTE_WRHS_INCOME_WASTES">
+              <PropertyRef Name="WasteID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2873,6 +2927,78 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_S_ORDERS">
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_UNITS">
+          <End Role="UNITS" Type="Self.UNITS" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UNITS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_CUSTOMERS">
+          <End Role="CUSTOMERS" Type="Self.CUSTOMERS" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_S_CONTRACTS">
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SCONTRACTS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANIES" Multiplicity="1" />
           <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
@@ -3137,6 +3263,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetCarPlanRequirements" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OptionCode" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="GetPartsInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetPartsInfo_by_supplierID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SupplierID" Type="int" Mode="In" />
@@ -3154,6 +3283,11 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
         <Function Name="GetSupplierParts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SupplierID" Type="int" Mode="In" />
         </Function>
+        <Function Name="InTransitView" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="WeeklyCoverage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TodayDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="WeeklyPartRequirementByProductPlan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="DBTHSNModelStoreContainer">
           <EntitySet Name="BLANKING_NORMS" EntityType="Self.BLANKING_NORMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BOMS" EntityType="Self.BOMS" Schema="dbo" store:Type="Tables" />
@@ -3230,6 +3364,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySet Name="ROLES" EntityType="Self.ROLES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="S_CONTRACT_PRODUCTS" EntityType="Self.S_CONTRACT_PRODUCTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="S_CONTRACTS" EntityType="Self.S_CONTRACTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="S_ORDER_PRODUCTS" EntityType="Self.S_ORDER_PRODUCTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="S_ORDERS" EntityType="Self.S_ORDERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SAMPLE_FILES" EntityType="Self.SAMPLE_FILES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SHOP_PLANNED_DTS" EntityType="Self.SHOP_PLANNED_DTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SHOPS" EntityType="Self.SHOPS" Schema="dbo" store:Type="Tables" />
@@ -3274,6 +3410,22 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
     [USERROLES].[RoleID] AS [RoleID]
     FROM [dbo].[USERROLES] AS [USERROLES]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="CarPlanRequirements" EntityType="Self.CarPlanRequirements" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CarPlanRequirements].[OptionCode] AS [OptionCode], 
+    [CarPlanRequirements].[PNo] AS [PNo], 
+    [CarPlanRequirements].[Requirement] AS [Requirement], 
+    [CarPlanRequirements].[StartDate] AS [StartDate], 
+    [CarPlanRequirements].[DueDate] AS [DueDate]
+    FROM [dbo].[CarPlanRequirements] AS [CarPlanRequirements]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="MaterialRequirement" EntityType="Self.MaterialRequirement" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MaterialRequirement].[ProductNo] AS [ProductNo], 
+    [MaterialRequirement].[PartNo] AS [PartNo], 
+    [MaterialRequirement].[TotalConsumption] AS [TotalConsumption]
+    FROM [dbo].[MaterialRequirement] AS [MaterialRequirement]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_BLANKING_NORMS_PARTS" Association="Self.FK_BLANKING_NORMS_PARTS">
             <End Role="PARTS" EntitySet="PARTS" />
             <End Role="BLANKING_NORMS" EntitySet="BLANKING_NORMS" />
@@ -3295,8 +3447,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="BOMS" EntitySet="BOMS" />
           </AssociationSet>
           <AssociationSet Name="FK_CAR_PLANS_CARS" Association="Self.FK_CAR_PLANS_CARS">
+            <End Role="CARS" EntitySet="CARS" />
             <End Role="CAR_PLANS" EntitySet="CAR_PLANS" />
-            <End Role="CAR_PLANS1" EntitySet="CAR_PLANS" />
           </AssociationSet>
           <AssociationSet Name="FK_COMPANY_LICENSES_COMPANIES" Association="Self.FK_COMPANY_LICENSES_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
@@ -3542,12 +3694,12 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PART_WASTE_WRHS_INCOMES" EntitySet="PART_WASTE_WRHS_INCOMES" />
             <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
           </AssociationSet>
-          <AssociationSet Name="FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES" Association="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES">
-            <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
-            <End Role="PART_WASTE_WRHS_INCOME_WASTES1" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
-          </AssociationSet>
           <AssociationSet Name="FK_PART_WASTE_WRHS_INCOME_WASTES_UNITS" Association="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_UNITS">
             <End Role="UNITS" EntitySet="UNITS" />
+            <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES" Association="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES">
+            <End Role="WASTES" EntitySet="WASTES" />
             <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
           </AssociationSet>
           <AssociationSet Name="FK_PART_WASTE_WRHS_INCOMES" Association="Self.FK_PART_WASTE_WRHS_INCOMES">
@@ -3814,6 +3966,30 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="UNITS" EntitySet="UNITS" />
             <End Role="S_CONTRACT_PRODUCTS" EntitySet="S_CONTRACT_PRODUCTS" />
           </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_PRODUCTS" Association="Self.FK_S_ORDER_PRODUCTS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_S_ORDERS" Association="Self.FK_S_ORDER_PRODUCTS_S_ORDERS">
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_UNITS" Association="Self.FK_S_ORDER_PRODUCTS_UNITS">
+            <End Role="UNITS" EntitySet="UNITS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_COMPANIES" Association="Self.FK_S_ORDERS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_CUSTOMERS" Association="Self.FK_S_ORDERS_CUSTOMERS">
+            <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_S_CONTRACTS" Association="Self.FK_S_ORDERS_S_CONTRACTS">
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
           <AssociationSet Name="FK_SCONTRACTS_COMPANIES" Association="Self.FK_SCONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
@@ -3931,17 +4107,17 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Consumption" Type="Double" />
+          <Property Name="Consumption" Type="Double" Nullable="false" />
           <Property Name="ConsumptionUnit" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="ParentPNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ChildPNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsParentProduct" Type="Boolean" />
-          <Property Name="WasteAmount" Type="Double" />
-          <Property Name="TotalConsumption" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="WasteAmount" Type="Double" Nullable="false" />
           <Property Name="Sequence" Type="Int32" />
           <Property Name="ProcessID" Type="Int32" />
+          <Property Name="TotalConsumption" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="BOMS_AND_NORMS" Relationship="Self.FK_BOMS_AND_NORMS_BOMS" FromRole="BOMS" ToRole="BOMS_AND_NORMS" />
           <NavigationProperty Name="PRODUCTIONPROCESS" Relationship="Self.FK_BOMS_PRODUCTIONPROCESSES" FromRole="BOMS" ToRole="PRODUCTIONPROCESSES" />
         </EntityType>
@@ -3955,8 +4131,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="CAR_PLANS1" Relationship="Self.FK_CAR_PLANS_CARS" FromRole="CAR_PLANS" ToRole="CAR_PLANS1" />
-          <NavigationProperty Name="CAR_PLANS2" Relationship="Self.FK_CAR_PLANS_CARS" FromRole="CAR_PLANS1" ToRole="CAR_PLANS" />
+          <NavigationProperty Name="CAR" Relationship="Self.FK_CAR_PLANS_CARS" FromRole="CAR_PLANS" ToRole="CARS" />
         </EntityType>
         <EntityType Name="CAR">
           <Key>
@@ -3966,6 +4141,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="OptionName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="OptionCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="CAR_PLANS" Relationship="Self.FK_CAR_PLANS_CARS" FromRole="CARS" ToRole="CAR_PLANS" />
         </EntityType>
         <EntityType Name="COMPANy">
           <Key>
@@ -3988,6 +4164,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="P_CONTRACTS" Relationship="Self.FK_PCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="P_CONTRACTS" />
           <NavigationProperty Name="SHOPS" Relationship="Self.FK_PRODUCTION_SHOPS_COMPANIES" FromRole="COMPANIES" ToRole="SHOPS" />
           <NavigationProperty Name="PURCHASING_CONTRACTS" Relationship="Self.FK_PURCHASING_CONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="PURCHASING_CONTRACTS" />
+          <NavigationProperty Name="S_ORDERS" Relationship="Self.FK_S_ORDERS_COMPANIES" FromRole="COMPANIES" ToRole="S_ORDERS" />
           <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="COMPANIES" ToRole="S_CONTRACTS" />
           <NavigationProperty Name="USERS" Relationship="Self.FK_USERS_COMPANIES" FromRole="COMPANIES" ToRole="USERS" />
         </EntityType>
@@ -4029,6 +4206,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="CUSTOMERS" ToRole="S_CONTRACTS" />
+          <NavigationProperty Name="S_ORDERS" Relationship="Self.FK_S_ORDERS_CUSTOMERS" FromRole="CUSTOMERS" ToRole="S_ORDERS" />
         </EntityType>
         <EntityType Name="DAMAGED_PARTS">
           <Key>
@@ -4159,7 +4337,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="HSCODE1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="HSCODE1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="PARTS" Relationship="Self.FK_PARTS_HSCODES" FromRole="HSCODES" ToRole="PARTS" />
           <NavigationProperty Name="PRODUCTS" Relationship="Self.FK_PRODUCTS_HSCODES" FromRole="HSCODES" ToRole="PRODUCTS" />
@@ -4313,8 +4491,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IssuedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CompanyID" Type="Int32" />
-          <Property Name="SupplierID" Type="Int32" Nullable="false" />
-          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="SupplierID" Type="Int32" />
+          <Property Name="ContractID" Type="Int32" />
           <Property Name="Amount" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -4336,7 +4514,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="PrLength" Type="Double" />
           <Property Name="PrWidth" Type="Double" />
           <Property Name="PrHeight" Type="Double" />
-          <Property Name="PrCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="PrAmount" Type="Double" />
           <Property Name="PrNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="PrGrWeight" Type="Double" />
@@ -4345,13 +4522,14 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="ScLength" Type="Double" />
           <Property Name="ScWidth" Type="Double" />
           <Property Name="ScHeight" Type="Double" />
-          <Property Name="ScCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="NoOfBoxes" Type="Double" />
           <Property Name="SchedPack" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="ScNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="ScGrWeight" Type="Double" />
           <Property Name="PalletType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="PackingListID" Type="Int32" Nullable="false" />
+          <Property Name="PrCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ScCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" FromRole="P_PACKINGLIST_PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
           <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="P_PACKINGLIST_PARTS" ToRole="PARTS" />
         </EntityType>
@@ -4398,6 +4576,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Amount" Type="Double" Nullable="false" />
           <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_PART_STOCKS_PART_WRHS" FromRole="PART_STOCKS" ToRole="PART_WRHS" />
           <NavigationProperty Name="PART" Relationship="Self.FK_PART_STOCKS_PARTS" FromRole="PART_STOCKS" ToRole="PARTS" />
+          <Property Name="ToDate" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityType Name="PART_WASTE_WRHS_EXPENSE_WASTES">
           <Key>
@@ -4447,9 +4626,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UnitID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="PART_WASTE_WRHS_INCOMES" Relationship="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_P_WRHS_INCOMES" FromRole="PART_WASTE_WRHS_INCOME_WASTES" ToRole="PART_WASTE_WRHS_INCOMES" />
-          <NavigationProperty Name="PART_WASTE_WRHS_INCOME_WASTES1" Relationship="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES" FromRole="PART_WASTE_WRHS_INCOME_WASTES" ToRole="PART_WASTE_WRHS_INCOME_WASTES1" />
-          <NavigationProperty Name="PART_WASTE_WRHS_INCOME_WASTES2" Relationship="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES" FromRole="PART_WASTE_WRHS_INCOME_WASTES1" ToRole="PART_WASTE_WRHS_INCOME_WASTES" />
           <NavigationProperty Name="UNIT" Relationship="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_UNITS" FromRole="PART_WASTE_WRHS_INCOME_WASTES" ToRole="UNITS" />
+          <NavigationProperty Name="WASTE" Relationship="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES" FromRole="PART_WASTE_WRHS_INCOME_WASTES" ToRole="WASTES" />
         </EntityType>
         <EntityType Name="PART_WASTE_WRHS_INCOMES">
           <Key>
@@ -4681,10 +4859,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PWeight" Type="Double" />
-          <Property Name="PLength" Type="Double" />
-          <Property Name="PWidth" Type="Double" />
-          <Property Name="PHeight" Type="Double" />
+          <Property Name="PWeight" Type="Double" Nullable="false" />
+          <Property Name="PLength" Type="Double" Nullable="false" />
+          <Property Name="PWidth" Type="Double" Nullable="false" />
+          <Property Name="PHeight" Type="Double" Nullable="false" />
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
@@ -4695,8 +4873,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Standart" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Coating" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Grade" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Gauge" Type="Double" />
-          <Property Name="Pitch" Type="Double" />
+          <Property Name="Gauge" Type="Double" Nullable="false" />
+          <Property Name="Pitch" Type="Double" Nullable="false" />
           <Property Name="HSCodeID" Type="Int32" />
           <Property Name="UnitID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="BLANKING_NORMS" Relationship="Self.FK_BLANKING_NORMS_PARTS" FromRole="PARTS" ToRole="BLANKING_NORMS" />
@@ -4989,6 +5167,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PRODUCTPLANS" Relationship="Self.FK_PRODUCTPLANS_PRODUCTS" FromRole="PRODUCTS" ToRole="PRODUCTPLANS" />
           <NavigationProperty Name="UNIT" Relationship="Self.FK_PRODUCTS_UNITS" FromRole="PRODUCTS" ToRole="UNITS" />
           <NavigationProperty Name="S_CONTRACT_PRODUCTS" Relationship="Self.FK_S_CONTRACT_PRODUCTS_PRODUCTS" FromRole="PRODUCTS" ToRole="S_CONTRACT_PRODUCTS" />
+          <NavigationProperty Name="S_ORDER_PRODUCTS" Relationship="Self.FK_S_ORDER_PRODUCTS_PRODUCTS" FromRole="PRODUCTS" ToRole="S_ORDER_PRODUCTS" />
           <NavigationProperty Name="SPLs" Relationship="Self.FK_SPL_PRODUCTS" FromRole="PRODUCTS" ToRole="SPL" />
           <NavigationProperty Name="SHOPS" Relationship="Self.PROD_SHOPS_PRODUCTS" FromRole="PRODUCTS" ToRole="SHOPS" />
         </EntityType>
@@ -5134,6 +5313,42 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_SCONTRACTS_COMPANIES" FromRole="S_CONTRACTS" ToRole="COMPANIES" />
           <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_PCONTRACTS_CUSTOMERS" FromRole="S_CONTRACTS" ToRole="CUSTOMERS" />
           <NavigationProperty Name="S_CONTRACT_PRODUCTS" Relationship="Self.FK_S_CONTRACT_PRODUCTS_S_CONTRACTS" FromRole="S_CONTRACTS" ToRole="S_CONTRACT_PRODUCTS" />
+          <NavigationProperty Name="S_ORDERS" Relationship="Self.FK_S_ORDERS_S_CONTRACTS" FromRole="S_CONTRACTS" ToRole="S_ORDERS" />
+        </EntityType>
+        <EntityType Name="S_ORDER_PRODUCTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="TotalPrice" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="MOQ" Type="Double" />
+          <Property Name="UnitID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_S_ORDER_PRODUCTS_PRODUCTS" FromRole="S_ORDER_PRODUCTS" ToRole="PRODUCTS" />
+          <NavigationProperty Name="S_ORDERS" Relationship="Self.FK_S_ORDER_PRODUCTS_S_ORDERS" FromRole="S_ORDER_PRODUCTS" ToRole="S_ORDERS" />
+          <NavigationProperty Name="UNIT" Relationship="Self.FK_S_ORDER_PRODUCTS_UNITS" FromRole="S_ORDER_PRODUCTS" ToRole="UNITS" />
+        </EntityType>
+        <EntityType Name="S_ORDERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IssuedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="COMPANy" Relationship="Self.FK_S_ORDERS_COMPANIES" FromRole="S_ORDERS" ToRole="COMPANIES" />
+          <NavigationProperty Name="CUSTOMER" Relationship="Self.FK_S_ORDERS_CUSTOMERS" FromRole="S_ORDERS" ToRole="CUSTOMERS" />
+          <NavigationProperty Name="S_CONTRACTS" Relationship="Self.FK_S_ORDERS_S_CONTRACTS" FromRole="S_ORDERS" ToRole="S_CONTRACTS" />
+          <NavigationProperty Name="S_ORDER_PRODUCTS" Relationship="Self.FK_S_ORDER_PRODUCTS_S_ORDERS" FromRole="S_ORDERS" ToRole="S_ORDER_PRODUCTS" />
         </EntityType>
         <EntityType Name="SAMPLE_FILES">
           <Key>
@@ -5229,6 +5444,16 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PART1" Relationship="Self.FK_STAMPING_NORMS_PARTS1" FromRole="STAMPING_NORMS" ToRole="PARTS" />
           <NavigationProperty Name="USER" Relationship="Self.FK_STAMPING_NORMS_USERS" FromRole="STAMPING_NORMS" ToRole="USERS" />
         </EntityType>
+        <EntityType Name="STEEL_COILS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marka" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Standart" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Coating" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Thickness" Type="Double" />
+        </EntityType>
         <EntityType Name="SUPPLIER">
           <Key>
             <PropertyRef Name="ID" />
@@ -5311,6 +5536,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="PURCHASING_CONTRACT_ITEMS" Relationship="Self.FK_PURCHASING_CONTRACT_ITEMS_UNITS" FromRole="UNITS" ToRole="PURCHASING_CONTRACT_ITEMS" />
           <NavigationProperty Name="PURCHASING_ITEMS" Relationship="Self.FK_PURCHASING_ITEMS_UNITS" FromRole="UNITS" ToRole="PURCHASING_ITEMS" />
           <NavigationProperty Name="S_CONTRACT_PRODUCTS" Relationship="Self.FK_S_CONTRACT_PRODUCTS_UNITS" FromRole="UNITS" ToRole="S_CONTRACT_PRODUCTS" />
+          <NavigationProperty Name="S_ORDER_PRODUCTS" Relationship="Self.FK_S_ORDER_PRODUCTS_UNITS" FromRole="UNITS" ToRole="S_ORDER_PRODUCTS" />
           <NavigationProperty Name="TEMPORARY_BOMS" Relationship="Self.FK_TEMPORARY_BOMS_UNITS" FromRole="UNITS" ToRole="TEMPORARY_BOMS" />
         </EntityType>
         <EntityType Name="USER_ENTRIES">
@@ -5339,6 +5565,19 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="USER" Relationship="Self.FK_USERIMAGES_USERS" FromRole="USERIMAGES" ToRole="USERS" />
+        </EntityType>
+        <EntityType Name="USERLOG">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ControllerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MacAddr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="USER" Relationship="Self.FK_USERLOGS_USERS" FromRole="USERLOGS" ToRole="USERS" />
         </EntityType>
         <EntityType Name="USER">
           <Key>
@@ -5369,8 +5608,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <NavigationProperty Name="TEMPORARY_BOMS" Relationship="Self.FK_TEMPORARY_BOMS_USERS" FromRole="USERS" ToRole="TEMPORARY_BOMS" />
           <NavigationProperty Name="USER_ENTRIES" Relationship="Self.FK_USER_ENTRIES_USERS" FromRole="USERS" ToRole="USER_ENTRIES" />
           <NavigationProperty Name="USERIMAGES" Relationship="Self.FK_USERIMAGES_USERS" FromRole="USERS" ToRole="USERIMAGES" />
+          <NavigationProperty Name="USERLOGS" Relationship="Self.FK_USERLOGS_USERS" FromRole="USERS" ToRole="USERLOGS" />
           <NavigationProperty Name="ROLES" Relationship="Self.USERROLES" FromRole="USERS" ToRole="ROLES" />
-          <NavigationProperty Name="USERLOGS" Relationship="DBTHSNModel.FK_USERLOGS_USERS" FromRole="USER" ToRole="USERLOG" />
         </EntityType>
         <EntityType Name="WASTE_STOCKS">
           <Key>
@@ -5394,6 +5633,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PART_WASTE_WRHS_EXPENSE_WASTES" Relationship="Self.FK_PART_WASTE_WRHS_EXPENSE_WASTE_WASTES" FromRole="WASTES" ToRole="PART_WASTE_WRHS_EXPENSE_WASTES" />
+          <NavigationProperty Name="PART_WASTE_WRHS_INCOME_WASTES" Relationship="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES" FromRole="WASTES" ToRole="PART_WASTE_WRHS_INCOME_WASTES" />
           <NavigationProperty Name="PRODUCTIONPROCESS" Relationship="Self.FK_WASTES_PRODUCTIONPROCESSES" FromRole="WASTES" ToRole="PRODUCTIONPROCESSES" />
           <NavigationProperty Name="WASTE_STOCKS" Relationship="Self.FK_WASTE_STOCKS_WASTES" FromRole="WASTES" ToRole="WASTE_STOCKS" />
         </EntityType>
@@ -5416,6 +5656,28 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Name="PartID" Type="Int32" />
           <NavigationProperty Name="PART" Relationship="Self.FK_PROD_SHOPS_PARTS_PARTS" FromRole="PROD_SHOPS_PARTS" ToRole="PARTS" />
           <NavigationProperty Name="SHOP" Relationship="Self.FK_PROD_SHOPS_PARTS_PROD_SHOPS" FromRole="PROD_SHOPS_PARTS" ToRole="SHOPS" />
+        </EntityType>
+        <EntityType Name="CarPlanRequirement">
+          <Key>
+            <PropertyRef Name="OptionCode" />
+            <PropertyRef Name="PNo" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="DueDate" />
+          </Key>
+          <Property Name="OptionCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Requirement" Type="Double" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="MaterialRequirement">
+          <Key>
+            <PropertyRef Name="ProductNo" />
+            <PropertyRef Name="PartNo" />
+          </Key>
+          <Property Name="ProductNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PartNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TotalConsumption" Type="Double" />
         </EntityType>
         <Association Name="FK_BLANKING_NORMS_PARTS">
           <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
@@ -5478,13 +5740,13 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CAR_PLANS_CARS">
-          <End Role="CAR_PLANS" Type="Self.CAR_PLANS" Multiplicity="1" />
-          <End Role="CAR_PLANS1" Type="Self.CAR_PLANS" Multiplicity="*" />
+          <End Role="CARS" Type="Self.CAR" Multiplicity="1" />
+          <End Role="CAR_PLANS" Type="Self.CAR_PLANS" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CAR_PLANS">
+            <Principal Role="CARS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="CAR_PLANS1">
+            <Dependent Role="CAR_PLANS">
               <PropertyRef Name="CarID" />
             </Dependent>
           </ReferentialConstraint>
@@ -5585,6 +5847,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_S_ORDERS_COMPANIES">
+          <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMPANIES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SCONTRACTS_COMPANIES">
           <End Role="COMPANIES" Type="Self.COMPANy" Multiplicity="1" />
           <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="*" />
@@ -5629,6 +5903,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="S_CONTRACTS">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDERS_CUSTOMERS">
+          <End Role="CUSTOMERS" Type="Self.CUSTOMER" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUSTOMERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
@@ -5862,7 +6148,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_P_ORDERS_P_CONTRACTS">
-          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="1" />
+          <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="0..1" />
           <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="P_CONTRACTS">
@@ -6066,7 +6352,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_P_ORDERS_SUPPLIERS">
-          <End Role="SUPPLIERS" Type="Self.SUPPLIER" Multiplicity="1" />
+          <End Role="SUPPLIERS" Type="Self.SUPPLIER" Multiplicity="0..1" />
           <End Role="P_ORDERS" Type="Self.P_ORDERS" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SUPPLIERS">
@@ -6221,18 +6507,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES">
-          <End Role="PART_WASTE_WRHS_INCOME_WASTES" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="1" />
-          <End Role="PART_WASTE_WRHS_INCOME_WASTES1" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="PART_WASTE_WRHS_INCOME_WASTES">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PART_WASTE_WRHS_INCOME_WASTES1">
-              <PropertyRef Name="ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PART_WASTE_WRHS_INCOME_WASTES_UNITS">
           <End Role="UNITS" Type="Self.UNIT" Multiplicity="1" />
           <End Role="PART_WASTE_WRHS_INCOME_WASTES" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="*" />
@@ -6242,6 +6516,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Principal>
             <Dependent Role="PART_WASTE_WRHS_INCOME_WASTES">
               <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES">
+          <End Role="WASTES" Type="Self.WASTE" Multiplicity="1" />
+          <End Role="PART_WASTE_WRHS_INCOME_WASTES" Type="Self.PART_WASTE_WRHS_INCOME_WASTES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WASTES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART_WASTE_WRHS_INCOME_WASTES">
+              <PropertyRef Name="WasteID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6977,6 +7263,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_PRODUCTS">
+          <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SPL_PRODUCTS">
           <End Role="PRODUCTS" Type="Self.PRODUCT" Multiplicity="1" />
           <End Role="SPL" Type="Self.SPL" Multiplicity="*" />
@@ -7133,6 +7431,42 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_S_ORDERS_S_CONTRACTS">
+          <End Role="S_CONTRACTS" Type="Self.S_CONTRACTS" Multiplicity="1" />
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_CONTRACTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDERS">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_S_ORDERS">
+          <End Role="S_ORDERS" Type="Self.S_ORDERS" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="S_ORDERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_S_ORDER_PRODUCTS_UNITS">
+          <End Role="UNITS" Type="Self.UNIT" Multiplicity="1" />
+          <End Role="S_ORDER_PRODUCTS" Type="Self.S_ORDER_PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UNITS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="S_ORDER_PRODUCTS">
+              <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SHOP_PLANNED_DTS_SHOPS">
           <End Role="SHOPS" Type="Self.SHOP" Multiplicity="1" />
           <End Role="SHOP_PLANNED_DTS" Type="Self.SHOP_PLANNED_DTS" Multiplicity="*" />
@@ -7225,6 +7559,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="USERIMAGES">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USERLOGS_USERS">
+          <End Role="USERS" Type="Self.USER" Multiplicity="1" />
+          <End Role="USERLOGS" Type="Self.USERLOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="USERLOGS">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -7325,12 +7671,15 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySet Name="ROLES" EntityType="Self.ROLE" />
           <EntitySet Name="S_CONTRACT_PRODUCTS" EntityType="Self.S_CONTRACT_PRODUCTS" />
           <EntitySet Name="S_CONTRACTS" EntityType="Self.S_CONTRACTS" />
+          <EntitySet Name="S_ORDER_PRODUCTS" EntityType="Self.S_ORDER_PRODUCTS" />
+          <EntitySet Name="S_ORDERS" EntityType="Self.S_ORDERS" />
           <EntitySet Name="SAMPLE_FILES" EntityType="Self.SAMPLE_FILES" />
           <EntitySet Name="SHOP_PLANNED_DTS" EntityType="Self.SHOP_PLANNED_DTS" />
           <EntitySet Name="SHOPS" EntityType="Self.SHOP" />
           <EntitySet Name="SLITTING_NORMS" EntityType="Self.SLITTING_NORMS" />
           <EntitySet Name="SPLs" EntityType="Self.SPL" />
           <EntitySet Name="STAMPING_NORMS" EntityType="Self.STAMPING_NORMS" />
+          <EntitySet Name="STEEL_COILS" EntityType="Self.STEEL_COILS" />
           <EntitySet Name="SUPPLIERS" EntityType="Self.SUPPLIER" />
           <EntitySet Name="TEMPORARY_BOMS" EntityType="Self.TEMPORARY_BOMS" />
           <EntitySet Name="TRACINGS" EntityType="Self.TRACING" />
@@ -7338,11 +7687,14 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySet Name="USER_ENTRIES" EntityType="Self.USER_ENTRIES" />
           <EntitySet Name="USER_LICENSES" EntityType="Self.USER_LICENSES" />
           <EntitySet Name="USERIMAGES" EntityType="Self.USERIMAGE" />
+          <EntitySet Name="USERLOGS" EntityType="Self.USERLOG" />
           <EntitySet Name="USERS" EntityType="Self.USER" />
           <EntitySet Name="WASTE_STOCKS" EntityType="Self.WASTE_STOCKS" />
           <EntitySet Name="WASTES" EntityType="Self.WASTE" />
           <EntitySet Name="BOMS_AND_NORMS" EntityType="Self.BOMS_AND_NORMS" />
           <EntitySet Name="PROD_SHOPS_PARTS" EntityType="Self.PROD_SHOPS_PARTS" />
+          <EntitySet Name="CarPlanRequirements" EntityType="Self.CarPlanRequirement" />
+          <EntitySet Name="MaterialRequirements" EntityType="Self.MaterialRequirement" />
           <AssociationSet Name="FK_BLANKING_NORMS_PARTS" Association="Self.FK_BLANKING_NORMS_PARTS">
             <End Role="PARTS" EntitySet="PARTS" />
             <End Role="BLANKING_NORMS" EntitySet="BLANKING_NORMS" />
@@ -7364,8 +7716,8 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="BOMS" EntitySet="BOMS" />
           </AssociationSet>
           <AssociationSet Name="FK_CAR_PLANS_CARS" Association="Self.FK_CAR_PLANS_CARS">
+            <End Role="CARS" EntitySet="CARS" />
             <End Role="CAR_PLANS" EntitySet="CAR_PLANS" />
-            <End Role="CAR_PLANS1" EntitySet="CAR_PLANS" />
           </AssociationSet>
           <AssociationSet Name="FK_COMPANY_LICENSES_COMPANIES" Association="Self.FK_COMPANY_LICENSES_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
@@ -7399,6 +7751,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="PURCHASING_CONTRACTS" EntitySet="PURCHASING_CONTRACTS" />
           </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_COMPANIES" Association="Self.FK_S_ORDERS_COMPANIES">
+            <End Role="COMPANIES" EntitySet="COMPANIES" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
           <AssociationSet Name="FK_SCONTRACTS_COMPANIES" Association="Self.FK_SCONTRACTS_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
             <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
@@ -7414,6 +7770,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <AssociationSet Name="FK_PCONTRACTS_CUSTOMERS" Association="Self.FK_PCONTRACTS_CUSTOMERS">
             <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
             <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_CUSTOMERS" Association="Self.FK_S_ORDERS_CUSTOMERS">
+            <End Role="CUSTOMERS" EntitySet="CUSTOMERS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
           </AssociationSet>
           <AssociationSet Name="FK_DAMAGED_PARTS_DEFECT_TYPES" Association="Self.FK_DAMAGED_PARTS_DEFECT_TYPES">
             <End Role="DEFECT_TYPES" EntitySet="DEFECT_TYPES" />
@@ -7611,12 +7971,12 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PART_WASTE_WRHS_INCOMES" EntitySet="PART_WASTE_WRHS_INCOMES" />
             <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
           </AssociationSet>
-          <AssociationSet Name="FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES" Association="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_PART_WASTE_WRHS_INCOME_WASTES">
-            <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
-            <End Role="PART_WASTE_WRHS_INCOME_WASTES1" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
-          </AssociationSet>
           <AssociationSet Name="FK_PART_WASTE_WRHS_INCOME_WASTES_UNITS" Association="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_UNITS">
             <End Role="UNITS" EntitySet="UNITS" />
+            <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES" Association="Self.FK_PART_WASTE_WRHS_INCOME_WASTES_WASTES">
+            <End Role="WASTES" EntitySet="WASTES" />
             <End Role="PART_WASTE_WRHS_INCOME_WASTES" EntitySet="PART_WASTE_WRHS_INCOME_WASTES" />
           </AssociationSet>
           <AssociationSet Name="FK_PART_WASTE_WRHS_INCOMES" Association="Self.FK_PART_WASTE_WRHS_INCOMES">
@@ -7863,6 +8223,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
             <End Role="S_CONTRACT_PRODUCTS" EntitySet="S_CONTRACT_PRODUCTS" />
           </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_PRODUCTS" Association="Self.FK_S_ORDER_PRODUCTS_PRODUCTS">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_SPL_PRODUCTS" Association="Self.FK_SPL_PRODUCTS">
             <End Role="PRODUCTS" EntitySet="PRODUCTS" />
             <End Role="SPL" EntitySet="SPLs" />
@@ -7915,6 +8279,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="UNITS" EntitySet="UNITS" />
             <End Role="S_CONTRACT_PRODUCTS" EntitySet="S_CONTRACT_PRODUCTS" />
           </AssociationSet>
+          <AssociationSet Name="FK_S_ORDERS_S_CONTRACTS" Association="Self.FK_S_ORDERS_S_CONTRACTS">
+            <End Role="S_CONTRACTS" EntitySet="S_CONTRACTS" />
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_S_ORDERS" Association="Self.FK_S_ORDER_PRODUCTS_S_ORDERS">
+            <End Role="S_ORDERS" EntitySet="S_ORDERS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_S_ORDER_PRODUCTS_UNITS" Association="Self.FK_S_ORDER_PRODUCTS_UNITS">
+            <End Role="UNITS" EntitySet="UNITS" />
+            <End Role="S_ORDER_PRODUCTS" EntitySet="S_ORDER_PRODUCTS" />
+          </AssociationSet>
           <AssociationSet Name="FK_SHOP_PLANNED_DTS_SHOPS" Association="Self.FK_SHOP_PLANNED_DTS_SHOPS">
             <End Role="SHOPS" EntitySet="SHOPS" />
             <End Role="SHOP_PLANNED_DTS" EntitySet="SHOP_PLANNED_DTS" />
@@ -7947,6 +8323,10 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="USERS" EntitySet="USERS" />
             <End Role="USERIMAGES" EntitySet="USERIMAGES" />
           </AssociationSet>
+          <AssociationSet Name="FK_USERLOGS_USERS" Association="Self.FK_USERLOGS_USERS">
+            <End Role="USERS" EntitySet="USERS" />
+            <End Role="USERLOGS" EntitySet="USERLOGS" />
+          </AssociationSet>
           <AssociationSet Name="FK_WASTE_STOCKS_WASTES" Association="Self.FK_WASTE_STOCKS_WASTES">
             <End Role="WASTES" EntitySet="WASTES" />
             <End Role="WASTE_STOCKS" EntitySet="WASTE_STOCKS" />
@@ -7959,6 +8339,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
             <End Role="ROLES" EntitySet="ROLES" />
             <End Role="USERS" EntitySet="USERS" />
           </AssociationSet>
+          <FunctionImport Name="GetCarPlanRequirements" ReturnType="Collection(DBTHSNModel.GetCarPlanRequirements_Result)">
+          <Parameter Name="OptionCode" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="GetPartsInfo" ReturnType="Collection(DBTHSNModel.GetPartsInfo_Result)" />
           <FunctionImport Name="GetPartsInfo_by_supplierID" ReturnType="Collection(DBTHSNModel.GetPartsInfo_by_supplierID_Result)">
           <Parameter Name="SupplierID" Mode="In" Type="Int32" />
@@ -7976,13 +8359,18 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <FunctionImport Name="GetSupplierParts" ReturnType="Collection(DBTHSNModel.GetSupplierParts_Result)">
           <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="USERLOGS" EntityType="DBTHSNModel.USERLOG" />
-          <AssociationSet Name="FK_USERLOGS_USERS" Association="DBTHSNModel.FK_USERLOGS_USERS">
-            <End Role="USER" EntitySet="USERS" />
-            <End Role="USERLOG" EntitySet="USERLOGS" />
-          </AssociationSet>
-          <EntitySet Name="STEEL_COILS" EntityType="DBTHSNModel.STEEL_COILS" />
+          <FunctionImport Name="WeeklyPartRequirementByProductPlan" />
+          <FunctionImport Name="InTransitView" />
+          <FunctionImport Name="WeeklyCoverage">
+          <Parameter Name="TodayDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="GetCarPlanRequirements_Result">
+          <Property Type="String" Name="PNo" Nullable="false" MaxLength="15" />
+          <Property Type="Double" Name="Requirement" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" />
+          <Property Type="DateTime" Name="DueDate" Nullable="false" />
+        </ComplexType>
         <ComplexType Name="GetPartsInfo_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
           <Property Type="String" Name="PNo" Nullable="false" MaxLength="20" />
@@ -8037,41 +8425,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <Property Type="Int32" Name="ImageID" Nullable="false" />
           <Property Type="Binary" Name="Image" Nullable="true" MaxLength="Max" />
         </ComplexType>
-        <EntityType Name="USERLOG">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ControllerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ActionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MacAddr" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="USER" Relationship="DBTHSNModel.FK_USERLOGS_USERS" FromRole="USERLOG" ToRole="USER" />
-        </EntityType>
-        <Association Name="FK_USERLOGS_USERS">
-          <End Type="DBTHSNModel.USER" Role="USER" Multiplicity="1" />
-          <End Type="DBTHSNModel.USERLOG" Role="USERLOG" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="USER">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="USERLOG">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="STEEL_COILS">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Marka" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Standart" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Coating" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Thickness" Type="Double" Nullable="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -8107,9 +8460,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="ChildPNo" ColumnName="ChildPNo" />
                 <ScalarProperty Name="IsParentProduct" ColumnName="IsParentProduct" />
                 <ScalarProperty Name="WasteAmount" ColumnName="WasteAmount" />
-                <ScalarProperty Name="TotalConsumption" ColumnName="TotalConsumption" />
                 <ScalarProperty Name="Sequence" ColumnName="Sequence" />
                 <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="TotalConsumption" ColumnName="TotalConsumption" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8455,7 +8808,6 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="PrLength" ColumnName="PrLength" />
                 <ScalarProperty Name="PrWidth" ColumnName="PrWidth" />
                 <ScalarProperty Name="PrHeight" ColumnName="PrHeight" />
-                <ScalarProperty Name="PrCBM" ColumnName="PrCBM" />
                 <ScalarProperty Name="PrAmount" ColumnName="PrAmount" />
                 <ScalarProperty Name="PrNetWeight" ColumnName="PrNetWeight" />
                 <ScalarProperty Name="PrGrWeight" ColumnName="PrGrWeight" />
@@ -8464,13 +8816,14 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="ScLength" ColumnName="ScLength" />
                 <ScalarProperty Name="ScWidth" ColumnName="ScWidth" />
                 <ScalarProperty Name="ScHeight" ColumnName="ScHeight" />
-                <ScalarProperty Name="ScCBM" ColumnName="ScCBM" />
                 <ScalarProperty Name="NoOfBoxes" ColumnName="NoOfBoxes" />
                 <ScalarProperty Name="SchedPack" ColumnName="SchedPack" />
                 <ScalarProperty Name="ScNetWeight" ColumnName="ScNetWeight" />
                 <ScalarProperty Name="ScGrWeight" ColumnName="ScGrWeight" />
                 <ScalarProperty Name="PalletType" ColumnName="PalletType" />
                 <ScalarProperty Name="PackingListID" ColumnName="PackingListID" />
+                <ScalarProperty Name="PrCBM" ColumnName="PrCBM" />
+                <ScalarProperty Name="ScCBM" ColumnName="ScCBM" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8506,6 +8859,7 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
           <EntitySetMapping Name="PART_STOCKS">
             <EntityTypeMapping TypeName="DBTHSNModel.PART_STOCKS">
               <MappingFragment StoreEntitySet="PART_STOCKS">
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="WHID" ColumnName="WHID" />
                 <ScalarProperty Name="PartID" ColumnName="PartID" />
@@ -9141,6 +9495,36 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="S_ORDER_PRODUCTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.S_ORDER_PRODUCTS">
+              <MappingFragment StoreEntitySet="S_ORDER_PRODUCTS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="MOQ" ColumnName="MOQ" />
+                <ScalarProperty Name="UnitID" ColumnName="UnitID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="S_ORDERS">
+            <EntityTypeMapping TypeName="DBTHSNModel.S_ORDERS">
+              <MappingFragment StoreEntitySet="S_ORDERS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="IssuedDate" ColumnName="IssuedDate" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="SAMPLE_FILES">
             <EntityTypeMapping TypeName="DBTHSNModel.SAMPLE_FILES">
               <MappingFragment StoreEntitySet="SAMPLE_FILES">
@@ -9221,6 +9605,17 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="IssuedDateTime" ColumnName="IssuedDateTime" />
                 <ScalarProperty Name="IssuedByUserID" ColumnName="IssuedByUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STEEL_COILS">
+            <EntityTypeMapping TypeName="DBTHSNModel.STEEL_COILS">
+              <MappingFragment StoreEntitySet="STEEL-COILS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Marka" ColumnName="Marka" />
+                <ScalarProperty Name="Standart" ColumnName="Standart" />
+                <ScalarProperty Name="Coating" ColumnName="Coating" />
+                <ScalarProperty Name="Thickness" ColumnName="Thickness" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9316,6 +9711,19 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="USERLOGS">
+            <EntityTypeMapping TypeName="DBTHSNModel.USERLOG">
+              <MappingFragment StoreEntitySet="USERLOGS">
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="MacAddr" ColumnName="MacAddr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="USERS">
             <EntityTypeMapping TypeName="DBTHSNModel.USER">
               <MappingFragment StoreEntitySet="USERS">
@@ -9371,6 +9779,26 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CarPlanRequirements">
+            <EntityTypeMapping TypeName="DBTHSNModel.CarPlanRequirement">
+              <MappingFragment StoreEntitySet="CarPlanRequirements">
+                <ScalarProperty Name="OptionCode" ColumnName="OptionCode" />
+                <ScalarProperty Name="PNo" ColumnName="PNo" />
+                <ScalarProperty Name="Requirement" ColumnName="Requirement" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MaterialRequirements">
+            <EntityTypeMapping TypeName="DBTHSNModel.MaterialRequirement">
+              <MappingFragment StoreEntitySet="MaterialRequirement">
+                <ScalarProperty Name="ProductNo" ColumnName="ProductNo" />
+                <ScalarProperty Name="PartNo" ColumnName="PartNo" />
+                <ScalarProperty Name="TotalConsumption" ColumnName="TotalConsumption" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="PROD_SHOPS_PRODUCTS" TypeName="DBTHSNModel.PROD_SHOPS_PRODUCTS" StoreEntitySet="PROD_SHOPS_PRODUCTS">
             <EndProperty Name="SHOPS">
               <ScalarProperty Name="ID" ColumnName="ShopID" />
@@ -9387,6 +9815,16 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               <ScalarProperty Name="ID" ColumnName="UserID" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="GetCarPlanRequirements" FunctionName="DBTHSNModel.Store.GetCarPlanRequirements">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBTHSNModel.GetCarPlanRequirements_Result">
+                <ScalarProperty Name="PNo" ColumnName="PNo" />
+                <ScalarProperty Name="Requirement" ColumnName="Requirement" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetPartsInfo" FunctionName="DBTHSNModel.Store.GetPartsInfo">
             <ResultMapping>
               <ComplexTypeMapping TypeName="DBTHSNModel.GetPartsInfo_Result">
@@ -9465,30 +9903,9 @@ warning 6002: The table/view 'DBTHSN.dbo.USERROLES' does not have a primary key 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="USERLOGS">
-            <EntityTypeMapping TypeName="DBTHSNModel.USERLOG">
-              <MappingFragment StoreEntitySet="USERLOGS">
-                <ScalarProperty Name="MacAddr" ColumnName="MacAddr" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
-                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
-                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="STEEL_COILS">
-            <EntityTypeMapping TypeName="DBTHSNModel.STEEL_COILS">
-              <MappingFragment StoreEntitySet="STEEL-COILS">
-                <ScalarProperty Name="Thickness" ColumnName="Thickness" />
-                <ScalarProperty Name="Coating" ColumnName="Coating" />
-                <ScalarProperty Name="Standart" ColumnName="Standart" />
-                <ScalarProperty Name="Marka" ColumnName="Marka" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="WeeklyPartRequirementByProductPlan" FunctionName="DBTHSNModel.Store.WeeklyPartRequirementByProductPlan" />
+          <FunctionImportMapping FunctionImportName="InTransitView" FunctionName="DBTHSNModel.Store.InTransitView" />
+          <FunctionImportMapping FunctionImportName="WeeklyCoverage" FunctionName="DBTHSNModel.Store.WeeklyCoverage" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

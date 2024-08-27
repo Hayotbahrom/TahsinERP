@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using tahsinERP.Models;
 
 namespace tahsinERP.ViewModels
 {
     public class POrderViewModel
     {
+        public int ID { get; set; }
         [Required]
         public string OrderNo { get; set; }
         [DataType(DataType.Upload)]
@@ -30,16 +32,19 @@ namespace tahsinERP.ViewModels
     // Part ViewModel
     public class POrderPart
     {
+        public int ID { get; set; }
+        public int OrderID { get; set; }
         //public int OrderID { get; set; } // User dan olinmaydi
         [Required]
         public int PartID { get; set; }
+        public PART Part { get; set; }
         [Required]
-        public float Price { get; set; }
+        public double Price { get; set; }
         [Required]
-        public float Amount { get; set; }
-        [Required]
-        public float MOQ { get; set; }
-        [Required]
+        public double Amount { get; set; }
+        
+        public double MOQ { get; set; }
+        
         public int UnitID { get; set; }
     }
 }

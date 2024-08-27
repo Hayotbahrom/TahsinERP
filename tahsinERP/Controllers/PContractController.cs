@@ -22,6 +22,8 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, contractNo, partNo = "";
         private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
+        private List<string> missingSuppliers = new List<string>();
+        private List<string> missingParts = new List<string>();
 
         private string[] sources;
         public PContractController()
@@ -56,7 +58,7 @@ namespace tahsinERP.Controllers
                     {
                         ViewBag.partList = db.P_CONTRACTS.Include(x => x.SUPPLIER).Where(s => s.IsDeleted == false && s.SupplierID == supplierID).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
-                        ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.IsDeleted == false ), "ID", "Name");
+                        ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.IsDeleted == false), "ID", "Name");
                     }
                     else
                     {
@@ -116,29 +118,58 @@ namespace tahsinERP.Controllers
                                 dataTable.Rows.Add(dataRow);
                             }
                         }
-
-                        ViewBag.DataTable = dataTable;
-                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
-                        ViewBag.IsFileUploaded = true;
-
-                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        if (CheckForExistenceOfSuppliers(dataTable))
                         {
-                            foreach (DataRow row in dataTable.Rows)
+                            if (CheckForExistenceOfParts(dataTable))
                             {
-                                contractNo = row["ContractNo"].ToString();
-                                supplierName = row["Supplier Name"].ToString();
-                                partNo = row["Part Number"].ToString();
+                                ViewBag.DataTable = dataTable;
+                                ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                                ViewBag.IsFileUploaded = true;
 
-                                SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                                PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                                P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.SupplierID == supplier.ID && pc.IsDeleted == false).FirstOrDefault();
-                                if (contract != null)
+                                using (DBTHSNEntities db = new DBTHSNEntities())
                                 {
-                                    P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.PartID == part.ID && pcp.ContractID == contract.ID).FirstOrDefault();
-                                    if (contractPart != null)
-                                        ViewBag.ExistingRecordsCount = 1;
+                                    foreach (DataRow row in dataTable.Rows)
+                                    {
+                                        contractNo = row["ContractNo"].ToString();
+                                        supplierName = row["Supplier Name"].ToString();
+                                        partNo = row["Part Number"].ToString();
+
+                                        SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                        PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                        P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.SupplierID == supplier.ID && pc.IsDeleted == false).FirstOrDefault();
+
+                                        if (contract != null)
+                                        {
+                                            if (part != null)
+                                            {
+                                                P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.PartID == part.ID && pcp.ContractID == contract.ID).FirstOrDefault();
+                                                if (contractPart != null)
+                                                    ViewBag.ExistingRecordsCount = 1;
+                                            }
+                                        }
+                                    }
                                 }
                             }
+                            else
+                            {
+                                var message = "";
+                                foreach (var word in missingParts)
+                                {
+                                    message += word + ", ";
+                                }
+                                ViewBag.Message = "Ushbu shartnomalar faylida kiritilgan ehtiyot qismlar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Ehtiyot qismlar bazasiga kiritib keyin qayta urining.";
+                                return View("UploadWithExcel");
+                            }
+                        }
+                        else
+                        {
+                            var message = "";
+                            foreach (var word in missingSuppliers)
+                            {
+                                message += word + ", ";
+                            }
+                            ViewBag.Message = "Ushbu shartnomalar faylda kiritilgan ta'minotchilar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Ta'minotchilar bazasiga kiritib keyin qayta urining.";
+                            return View("UploadWithExcel");
                         }
                     }
                     catch (Exception ex)
@@ -159,6 +190,57 @@ namespace tahsinERP.Controllers
                 return View("UploadWithExcel");
             }
             return View("UploadWithExcel");
+        }
+        private bool CheckForExistenceOfParts(DataTable dataTable)
+        {
+            bool flag = false;
+            if (dataTable != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        string partPNo = row["Part Number"].ToString();
+                        if (db.PARTS.Where(p => p.PNo.CompareTo(partPNo) == 0).Any())
+                            flag = true;
+                        else
+                        {
+                            if (!missingParts.Contains(partPNo))
+                                missingParts.Add(partPNo);
+                        }
+                    }
+                    if (missingParts.Count > 0)
+                        return false;
+                    else
+                        return flag;
+                }
+            else
+                return flag;
+        }
+        private bool CheckForExistenceOfSuppliers(DataTable dataTable)
+        {
+            bool flag = false;
+            if (dataTable != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        string supplierName = row["Supplier Name"].ToString();
+                        if (db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0).Any())
+                            flag = true;
+                        else
+                        {
+                            if (!missingSuppliers.Contains(supplierName))
+                                missingSuppliers.Add(supplierName);
+                        }
+                    }
+                    if (missingSuppliers.Count > 0)
+                        return false;
+                    else
+                        return flag;
+                }
+            else
+                return flag;
+
         }
         public ActionResult ClearDataTable()
         {
@@ -215,13 +297,17 @@ namespace tahsinERP.Controllers
                                     new_contractPart.PartID = part.ID;
                                     new_contractPart.ContractID = new_contract.ID;
                                     new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    //new_contractPart.Unit = row["Unit"].ToString();
+                                    UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(row["Unit"].ToString()) == 0).FirstOrDefault();
+                                    if (unit != null)
+                                        new_contractPart.UNIT = unit;
+                                    else
+                                        new_contractPart.UnitID = 1;
                                     new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                     new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
                                     new_contractPart.ActivePart = true;
 
                                     db.P_CONTRACT_PARTS.Add(new_contractPart);
-                                    int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + new_contract.ID + " AND PartID =" + part.ID + "");
+                                    //int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + new_contract.ID + " AND PartID =" + part.ID + "");
 
                                     db.SaveChanges();
                                 }
@@ -235,9 +321,14 @@ namespace tahsinERP.Controllers
                                     new_contractPart.PartID = part.ID;
                                     new_contractPart.ContractID = contract.ID;
                                     new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    //new_contractPart.Unit = row["Unit"].ToString();
+                                    UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(row["Unit"].ToString()) == 0).FirstOrDefault();
+                                    if (unit != null)
+                                        new_contractPart.UNIT = unit;
+                                    else
+                                        new_contractPart.UnitID = 1;
                                     new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                     new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+                                    new_contractPart.ActivePart = true;
 
                                     db.P_CONTRACT_PARTS.Add(new_contractPart);
                                     int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + contract.ID + " AND PartID =" + part.ID + "");
@@ -348,8 +439,8 @@ namespace tahsinERP.Controllers
                         return View(model);
                     }
                 }
-               
-                
+
+
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PContractController", "Create[Post]");
                 return RedirectToAction("Index");
@@ -454,7 +545,7 @@ namespace tahsinERP.Controllers
                         contractToUpdate.Currency = contract.Currency;
                         contractToUpdate.Incoterms = contract.Incoterms;
                         contractToUpdate.PaymentTerms = contract.PaymentTerms;
-                        contractToUpdate.IDN = contract.IDN;      
+                        contractToUpdate.IDN = contract.IDN;
                         contractToUpdate.IsDeleted = false;
 
                         try
@@ -492,7 +583,7 @@ namespace tahsinERP.Controllers
                 }
                 var allParts = db.PARTS
                                 .Include(p => p.P_CONTRACT_PARTS)
-                                .Include(p=> p.UNIT)
+                                .Include(p => p.UNIT)
                                 .Where(p => p.IsDeleted == false)
                                 .ToList();
 
@@ -532,7 +623,7 @@ namespace tahsinERP.Controllers
                         {
                             ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
                         }
-                        
+
                     }
                     return RedirectToAction("Edit");
                 }
@@ -562,7 +653,7 @@ namespace tahsinERP.Controllers
                 return View(contract);
             }
         }
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

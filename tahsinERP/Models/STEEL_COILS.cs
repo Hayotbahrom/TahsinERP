@@ -18,6 +18,6 @@ namespace tahsinERP.Models
         public string Marka { get; set; }
         public string Standart { get; set; }
         public string Coating { get; set; }
-        public double Thickness { get; set; }
+        public Nullable<double> Thickness { get; set; }
     }
 }

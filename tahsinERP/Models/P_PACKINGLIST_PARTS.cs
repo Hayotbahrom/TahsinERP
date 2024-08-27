@@ -20,7 +20,6 @@ namespace tahsinERP.Models
         public Nullable<double> PrLength { get; set; }
         public Nullable<double> PrWidth { get; set; }
         public Nullable<double> PrHeight { get; set; }
-        public Nullable<double> PrCBM { get; set; }
         public Nullable<double> PrAmount { get; set; }
         public Nullable<double> PrNetWeight { get; set; }
         public Nullable<double> PrGrWeight { get; set; }
@@ -29,13 +28,14 @@ namespace tahsinERP.Models
         public Nullable<double> ScLength { get; set; }
         public Nullable<double> ScWidth { get; set; }
         public Nullable<double> ScHeight { get; set; }
-        public Nullable<double> ScCBM { get; set; }
         public Nullable<double> NoOfBoxes { get; set; }
         public Nullable<double> SchedPack { get; set; }
         public Nullable<double> ScNetWeight { get; set; }
         public Nullable<double> ScGrWeight { get; set; }
         public string PalletType { get; set; }
         public int PackingListID { get; set; }
+        public Nullable<double> PrCBM { get; set; }
+        public Nullable<double> ScCBM { get; set; }
     
         public virtual P_INVOICE_PACKINGLISTS P_INVOICE_PACKINGLISTS { get; set; }
         public virtual PART PART { get; set; }

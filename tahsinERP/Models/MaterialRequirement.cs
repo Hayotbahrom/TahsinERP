@@ -12,16 +12,10 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PART_STOCKS
+    public partial class MaterialRequirement
     {
-        public int ID { get; set; }
-        public int WHID { get; set; }
-        public int PartID { get; set; }
-        public string Unit { get; set; }
-        public double Amount { get; set; }
-        public System.DateTime ToDate { get; set; }
-    
-        public virtual PART_WRHS PART_WRHS { get; set; }
-        public virtual PART PART { get; set; }
+        public string ProductNo { get; set; }
+        public string PartNo { get; set; }
+        public Nullable<double> TotalConsumption { get; set; }
     }
 }

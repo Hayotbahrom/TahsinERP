@@ -78,12 +78,12 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, "", new { @class = "form-control select2", id = "SupplierID", onchange = "refreshOrderListbySupplier()" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, "", new { @class = "form-control select2", id = "SupplierID", @required = "required", onchange = "refreshOrderListbySupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Buyurtma raqami</label>
-                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control select2", id = "OrderID", onchange = "refreshpartListbyOrder()" })
+                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control select2", id = "OrderID", @required = "required", onchange = "refreshpartListbyOrder()" })
                                                             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
                                                         </div>
 
@@ -141,7 +141,7 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.0001" class="form-control" id="Part_Price" />
+                                                            <input type="number" name="Price" step="0.0001" class="form-control" id="Part_Price" disabled="disabled" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
 

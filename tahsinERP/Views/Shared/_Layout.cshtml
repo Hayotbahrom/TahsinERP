@@ -258,7 +258,7 @@
             <div class="main-menu-content">
                 <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
                     <li class="nav-item">
-                        <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2">2</span></a>
+                        <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2"></span></a>
                         <ul class="menu-content">
                             <li>
                                 <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Sotuv</span></a>
@@ -271,26 +271,25 @@
                             </li>
                         </ul>
                     </li>
-                    @*<li class=" navigation-header">
-            <span>Boshqaruv dasturlari</span>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-chat"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-check-circle"></i><span class="menu-title" data-i18n="Todo">Topshiriqlar</span></a>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-calendar"></i><span class="menu-title" data-i18n="Calendar">Kalendar</span></a>
-        </li>
-        <li class=" nav-item">
-            <a href="#"><i class="bx bx-grid-alt"></i><span class="menu-title" data-i18n="Kanban">Kanban</span></a>
-        </li>*@
+                    <li class="nav-item">
+                        <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Xisobotlar</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2">HOT</span></a>
+                        <ul class="menu-content">
+                            <li>
+                                <a href="~/Reports/Coverage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Coverage</span></a>
+                            </li>
+                            <li>
+                                <a href="~/Reports/PartRequirement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Part Requierement</span></a>
+                            </li>
+                            <li>
+                                <a href="~/Reports/InTransit"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">InTransit</span></a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class=" navigation-header">
                         <span>SRM</span>
                     </li>
                     @*@if (RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))*@
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Supplier"))
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Suppliers"))
                     {
 
                         <li class=" nav-item">
@@ -392,7 +391,7 @@
                                 </li>
 
                                 <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
+                                    <a href="~/Tracing"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
                                 </li>
 
                                 <li>
@@ -432,7 +431,7 @@
                             </a>
                             <ul class="menu-content">
                                 <li>
-                                    <a href="~/BOM/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">BOM</span></a>
+                                    <a href="~/BOM?IsParentProduct=true"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">BOM</span></a>
                                 </li>
                                 <li>
                                     <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">Нормы расхода</span></a>
@@ -653,7 +652,7 @@
             </div>
         </div>
 
-        // Alert-Succes 
+        // Alert-Succes
         <div id="pop-up" class="pop-up">
             <div class="pop-up__content">
                 <img class="pop-up__img" src="success.svg" alt="" />
@@ -761,6 +760,17 @@
         <script src="~/assets/js/app.js"></script>
 
 
+        <script>
+            $('#IssuedDate').pickadate({
+                selectYears: true,       // Yillar tanlashni yoqish
+                selectMonths: true,      // Oylik tanlashni yoqish
+                format: 'mmmm, yyyy',    // Faqat oy va yilni ko'rsatish uchun format
+                formatSubmit: 'yyyy-mm', // Faqat oy va yilni submit qilish uchun format
+                onSet: function (context) {
+                    this.close();        // Tanlashdan keyin datepicker'ni yopish
+                }
+            });
+        </script>
 
         <!-- Cookie -->
         <script>
@@ -845,7 +855,7 @@
                     const element = document.getElementById('toPDF');
                     const opt = {
                         margin: 0.3,
-                        filename: 'maxsulot.pdf',
+                        filename: 'fayl.pdf',
                         image: { type: 'jpeg', quality: 1 },
                         html2canvas: { scale: 2 },
                         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }

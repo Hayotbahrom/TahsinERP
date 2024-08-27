@@ -14,9 +14,18 @@ namespace tahsinERP.Models
     
     public partial class CAR
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CAR()
+        {
+            this.CAR_PLANS = new HashSet<CAR_PLANS>();
+        }
+    
         public string Model { get; set; }
         public string OptionName { get; set; }
         public string OptionCode { get; set; }
         public int ID { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CAR_PLANS> CAR_PLANS { get; set; }
     }
 }

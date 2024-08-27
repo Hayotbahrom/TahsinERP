@@ -18,6 +18,7 @@ namespace tahsinERP.Models
         public S_CONTRACTS()
         {
             this.S_CONTRACT_PRODUCTS = new HashSet<S_CONTRACT_PRODUCTS>();
+            this.S_ORDERS = new HashSet<S_ORDERS>();
         }
     
         public int ID { get; set; }
@@ -36,5 +37,7 @@ namespace tahsinERP.Models
         public virtual CUSTOMER CUSTOMER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<S_CONTRACT_PRODUCTS> S_CONTRACT_PRODUCTS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<S_ORDERS> S_ORDERS { get; set; }
     }
 }

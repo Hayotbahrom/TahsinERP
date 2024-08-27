@@ -45,14 +45,14 @@
 
                                                 <h6 class="invoice-to">Packing List raqami</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @placeholder = "packingList raqami", @requires = "required" })
+                                                    @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @requires = "required", value = ViewBag.Invoice?.ToString() + "_PL" })
                                                     @Html.HiddenFor(model => model.InvoiceID) <!-- Add this line -->
                                                     @Html.ValidationMessageFor(model => model.PackingListNo, "", new { @class = "text-danger" })
                                                 </fieldset>
 
                                                 <h6 class="invoice-to">Invoice raqami</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.DropDownListFor(model => model.InvoiceID, ViewBag.Invoice as SelectList, new { @class = "form-control select2", @disabled = "disabled" })
+                                                    @Html.TextBoxFor(model => model.InvoiceID, new { @class = "form-control round", @disabled = "disabled", value = ViewBag.Invoice?.ToString()})
                                                     @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
                                                 </fieldset>
                                                 <h6 class="invoice-to">Transport turi</h6>

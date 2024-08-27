@@ -312,6 +312,7 @@
     <Compile Include="Controllers\PurchasingContractController.cs" />
     <Compile Include="Controllers\PurchasingItemController.cs" />
     <Compile Include="Controllers\PurchasingOrderController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SContractController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
@@ -337,6 +338,9 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CAR.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CarPlanRequirement.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CAR_PLANS.cs">
@@ -397,6 +401,9 @@
     <Compile Include="Models\F_WAYBILL_DOCS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetCarPlanRequirements_Result.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetPartsInfo_by_supplierID_Result.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
@@ -416,6 +423,9 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\HSCODE.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MaterialRequirement.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PART.cs">
@@ -614,6 +624,12 @@
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\S_CONTRACT_PRODUCTS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\S_ORDERS.cs">
+      <DependentUpon>DBTHSNModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\S_ORDER_PRODUCTS.cs">
       <DependentUpon>DBTHSNModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TEMPORARY_BOMS.cs">
@@ -2707,6 +2723,9 @@
     <Content Include="Views\PurchasingContract\Details.cshtml" />
     <Content Include="Views\PurchasingContract\Index.cshtml" />
     <Content Include="Views\CarPlan\Create.cshtml" />
+    <Content Include="Views\Reports\InTransit.cshtml" />
+    <Content Include="Views\Reports\PartRequirement.cshtml" />
+    <Content Include="Views\Reports\Coverage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,12 +14,6 @@ namespace tahsinERP.Models
     
     public partial class CAR_PLANS
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CAR_PLANS()
-        {
-            this.CAR_PLANS1 = new HashSet<CAR_PLANS>();
-        }
-    
         public int ID { get; set; }
         public int CarID { get; set; }
         public double Amount { get; set; }
@@ -27,8 +21,6 @@ namespace tahsinERP.Models
         public System.DateTime StartDate { get; set; }
         public System.DateTime DueDate { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CAR_PLANS> CAR_PLANS1 { get; set; }
-        public virtual CAR_PLANS CAR_PLANS2 { get; set; }
+        public virtual CAR CAR { get; set; }
     }
 }

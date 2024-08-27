@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ﻿using Antlr.Runtime.Tree;
 using Microsoft.Ajax.Utilities;
+=======
+﻿using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Office2010.Excel;
+>>>>>>> 45af4e4971ff6c54757c83b391aa5ca128f696f2
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -16,6 +21,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -158,97 +164,135 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(POrderViewModel model)
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
+            try
             {
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
-                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
-
-                var isSameContract = db.P_CONTRACTS
-                    .Include(x => x.SUPPLIER)
-                    .Where(p => p.IsDeleted == false && p.ID == model.ContractID).FirstOrDefault();
-
-                if (model.SupplierID != isSameContract.SupplierID)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    ModelState.AddModelError("", "Ta'minotchi va shartnomadagi ta'minotchi bir xil bo'lishi shart!");
-                }
+                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                    ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
 
-                foreach (var part in model.Parts)
-                {
-                    if (part.MOQ > part.Amount)
+                    var isSameContract = db.P_CONTRACTS.Where(p => p.IsDeleted == false && p.SupplierID == model.SupplierID && p.ID == model.ContractID).FirstOrDefault();
+
+                    if (isSameContract == null)
                     {
-                        ModelState.AddModelError("", "Kiritilgan miqdor MOQ dan kichik");
+                        ModelState.AddModelError("", "Ta'minotchi va shartnomadagi ta'minotchi bir xil bo'lishi shart!");
                     }
-                }
-                var summ = model.Parts.Sum(x => x.Amount);
-                var contractAmount = db.P_CONTRACTS.Where(x => x.IsDeleted == false && x.ID == model.ContractID).FirstOrDefault().Amount;
-                if (summ > contractAmount)
-                {
-                    ModelState.AddModelError("", "Shartnomadan ortiqcha hajmni buyurtma qilib bo'lmaydi");
-                }
-                if (!ModelState.IsValid)
-                {
+
+                    foreach (var part in model.Parts)
+                    {
+                        if (part.MOQ > part.Amount)
+                        {
+                            ModelState.AddModelError("", db.PARTS.Where(p => p.ID == part.PartID).Select(p => p.PNo) + " uchun kiritilgan miqdor MOQ dan kichik");
+                        }
+                    }
+                    if (checkForContractPartsAmount(model))
+                    {
+                        var message = "";
+                        foreach (var word in contractExceedingParts)
+                        {
+                            message += word + " ,";
+                        }
+                        ModelState.AddModelError("", "Ushbu ehtiyot qismlarda " + message + " shartnomadan ortiqcha hajmni buyurtma qilmoqchisiz, bunday qilib bo'lmaydi!");
+
+                    }
+                    if (!ModelState.IsValid)
+                    {
+                        return View(model);
+                    }
+                    if (ModelState.IsValid)
+                    {
+                        var newOrder = new P_ORDERS()
+                        {
+                            OrderNo = model.OrderNo,
+                            IssuedDate = model.IssuedDate,
+                            CompanyID = 1,
+                            SupplierID = model.SupplierID,
+                            ContractID = model.ContractID,
+                            Currency = model.Currency,
+                            Description = model.Description,
+                            IsDeleted = false
+                        };
+
+                        db.P_ORDERS.Add(newOrder);
+                        db.SaveChanges();
+
+                        List<P_CONTRACT_PARTS> contractParts = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == model.ContractID).ToList();
+                        List<string> notInContractParts = new List<string>();
+
+                        foreach (var part in model.Parts)
+                        {
+                            var contractPart = contractParts.Where(p => p.PartID == part.PartID).FirstOrDefault();
+                            if (contractParts.Where(cp => cp.PartID == part.PartID).Any())
+                            {
+                                var newPart = new P_ORDER_PARTS
+                                {
+                                    OrderID = newOrder.ID,
+                                    PartID = part.PartID,
+                                    UnitID = part.UnitID,
+                                    Amount = part.Amount
+                                };
+
+                                newPart.MOQ = contractPart.MOQ;
+                                newPart.Price = contractPart.Price;
+
+                                db.P_ORDER_PARTS.Add(newPart);
+                            }
+                            else
+                            {
+                                PART paart = db.PARTS.Where(p => p.ID == part.PartID).FirstOrDefault();
+                                notInContractParts.Add(paart.PNo);
+                            }
+                        }
+                        if (notInContractParts.Count > 0)
+                        {
+                            var message = "";
+                            foreach (var word in notInContractParts)
+                            {
+                                message += word + " ,";
+                            }
+                            ModelState.AddModelError("", "Ushbu ehtiyot qism(lar): " + message + " shartnomadan topilmadi, shartnomada yo'q narsaga buyurtma qilib bo'lmaydi! Qaytadan urinib ko'ring!");
+                            db.Entry(newOrder).State = System.Data.Entity.EntityState.Deleted;
+                            db.SaveChanges();
+                            return View(model);
+                        }
+
+                        db.SaveChanges();
+
+                        return RedirectToAction("Index");
+                    }
                     return View(model);
                 }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            return View(model);
+        }
+        private List<string> contractExceedingParts = new List<string>();
+        private bool checkForContractPartsAmount(POrderViewModel model)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                List<P_CONTRACT_PARTS> contractParts = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == model.ContractID).ToList();
 
-                var newOrder = new P_ORDERS()
+                foreach (var orderPart in model.Parts)
                 {
-                    OrderNo = model.OrderNo,
-                    IssuedDate = model.IssuedDate,
-                    CompanyID = 1,
-                    SupplierID = model.SupplierID,
-                    ContractID = model.ContractID,
-                    Currency = model.Currency,
-                    Description = model.Description,
-                    IsDeleted = false
-                };
-
-                db.P_ORDERS.Add(newOrder);
-                db.SaveChanges();
-
-                int newOrderID = newOrder.ID;
-
-                foreach (var part in model.Parts)
-                {
-                    var newPart = new P_ORDER_PARTS
+                    for (int i = 0; i < contractParts.Count; i++)
                     {
-                        OrderID = newOrderID,
-                        PartID = part.PartID,
-                        UnitID = part.UnitID,
-                        Amount = part.Amount,
-                        Price = part.Price,
-                        MOQ = part.MOQ
-                    };
-
-                    db.P_ORDER_PARTS.Add(newPart);
-                }
-
-                db.SaveChanges();
-
-                if (Request.Files["partPhotoUpload"].ContentLength > 0)
-                {
-                    if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
-                    {
-                        P_ORDER_DOCS contractDoc = new P_ORDER_DOCS();
-                        byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                        Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                        contractDoc.OrderID = newOrder.ID;
-                        contractDoc.Doc = avatar;
-
-                        db.P_ORDER_DOCS.Add(contractDoc);
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
-                        throw new RetryLimitExceededException();
+                        if (contractParts[i].PartID == orderPart.PartID)
+                            if (orderPart.Amount > contractParts[i].Quantity)
+                                contractExceedingParts.Add(contractParts[i].PART.PNo);
                     }
                 }
-                return RedirectToAction("Index");
+                if (contractExceedingParts.Count > 0)
+                    return true;
+                else
+                    return false;
             }
         }
-
         public ActionResult GetContractsBySupplier(int supplierID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -412,7 +456,6 @@ namespace tahsinERP.Controllers
             ViewBag.partList = partList;
             return View(order);
         }
-
         public ActionResult Delete(int? Id)
         {
             if (Id == null)
@@ -505,61 +548,75 @@ namespace tahsinERP.Controllers
                 return View(orderPartToDelete);
             }
         }
+
         public ActionResult Edit(int? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var order = db.P_ORDERS.Find(ID);
+                var order = db.P_ORDERS.Include(x => x.P_ORDER_PARTS).Where(x => x.ID == ID && x.IsDeleted == false).FirstOrDefault();
                 if (order == null)
                 {
                     return HttpNotFound();
                 }
-
-                // Eager loading related entities
-                db.Entry(order).Reference(o => o.SUPPLIER).Load();
-                db.Entry(order).Reference(o => o.P_CONTRACTS).Load();
-                db.Entry(order).Collection(o => o.P_ORDER_PARTS).Query().Where(pc => pc.OrderID == order.ID).Load();
-
-                // Populate ViewBag for dropdowns or other data needed in the view
-                ViewBag.Supplier = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", order.SupplierID);
-                ViewBag.PContract = new SelectList(db.P_CONTRACTS.ToList(), "ID", "ContractNo", order.ContractID);
-                ViewBag.PartList = db.P_ORDER_PARTS
-                                .Include(pc => pc.PART)
-                                .Include(pc => pc.UNIT)
-                                .Where(pc => pc.OrderID == order.ID).ToList();
-
-                return View(order);
+                var model = new POrderViewModel
+                {
+                    ID = order.ID,
+                    OrderNo = order.OrderNo,
+                    SupplierID = order.SupplierID,
+                    ContractID = order.ContractID,
+                    Currency = order.Currency,
+                    Description = order.Description,
+                    IssuedDate = order.IssuedDate,
+                    Parts = order.P_ORDER_PARTS.Select(p => new POrderPart
+                    {
+                        ID = p.ID,
+                        OrderID = p.OrderID,
+                        Part = p.PART,
+                        PartID = p.PartID,
+                        UnitID = (int)p.UnitID,
+                        Amount = (int)p.Amount,
+                        MOQ = (int)p.MOQ,
+                        Price = (float)p.Price,
+                    }).ToList()
+                };
+                ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                ViewBag.Contracts = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+                ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
+                return View(model);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(P_ORDERS order)
+        public ActionResult Edit(POrderViewModel order)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (ModelState.IsValid)
-                {
+                /*if (ModelState.IsValid)
+                {*/
                     // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
-                    ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                    ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
                     ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
-                    ViewBag.partList = db.P_ORDER_PARTS
-                                                .Include(x => x.PART)
-                                                .Where(pc => pc.OrderID == order.ID).ToList();
+                    
                     ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                     var isSameContract = db.P_CONTRACTS
-                    .Include(x => x.SUPPLIER)
-                   .Where(p => p.IsDeleted == false && p.ID == order.ContractID).FirstOrDefault();
+                            .Include(x => x.SUPPLIER)
+                            .Where(p => p.IsDeleted == false && p.ID == order.ContractID)
+                            .FirstOrDefault();
 
                     if (order.SupplierID != isSameContract.SupplierID)
                     {
                         ModelState.AddModelError("", "Ta'minotchi and shartnomadagi ta'minotchi bir xil emas!");
+                        // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+                        ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                        ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+
+                        ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                     }
 
                     if (!ModelState.IsValid)
@@ -581,17 +638,59 @@ namespace tahsinERP.Controllers
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
                             LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");
-                            return RedirectToAction("Index");
+                            
                         }
                         catch (RetryLimitExceededException)
                         {
                             ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                            // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+                            ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                            ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+
+                            ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                         }
                     }
-                    return View(orderToUpdate);
-                }
 
-                return View(order);
+                    // Update ProductList
+                    foreach (var product in order.Parts)
+                    {
+                        var existingPart = db.P_ORDER_PARTS.Find(product.ID);
+                        if (existingPart != null)
+                        {
+                            existingPart.Price = product.Price;
+                            existingPart.UnitID = product.UnitID;
+                            existingPart.Amount = product.Amount;
+                            existingPart.MOQ = product.MOQ;
+
+                            db.Entry(existingPart).State = EntityState.Modified;
+                        }
+                    }
+
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Extiyot qism o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratsiyasiga muroaat qiling.");
+                        // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+                        ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                        ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+
+                        ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                    }
+
+                return RedirectToAction("Index");
+              /*  }
+                else
+                {*/
+                    // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+                    ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+
+                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                    return View(order);
+                
             }
         }
         public ActionResult EditPart(int? ID)

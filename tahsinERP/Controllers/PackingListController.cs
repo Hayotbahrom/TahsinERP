@@ -76,7 +76,7 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
                 // Populate the Invoice dropdown
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", invoiceId);
+                ViewBag.Invoice = db1.P_INVOICES.Where(p => p.IsDeleted == false && p.ID == invoiceId).Select(p => p.InvoiceNo).ToString();
 
                 // Populate the TransportType dropdown
                 ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
@@ -111,11 +111,11 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(PackingListViewModel model)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                model.TotalCBM = model.Parts.Sum(x => x.PrCBM);
-                model.TotalGrWeight = model.Parts.Sum(x => x.PrGrWeight);
-                model.TotalNetWeight = model.Parts.Sum(x => x.PrNetWeight);
+                double? TotalCBM = model.Parts.Sum(x => x.PrCBM);
+                double? TotalGrWeight = model.Parts.Sum(x => x.PrGrWeight);
+                double? TotalNetWeight = model.Parts.Sum(x => x.PrNetWeight);
 
                 try
                 {
@@ -131,14 +131,14 @@ namespace tahsinERP.Controllers
                         SealNo = model.SealNo,
                         Comment = model.Comment,
                         InTransit = false,
-                        TotalCBM = model.TotalCBM,
-                        TotalGrWeight = model.TotalGrWeight,
-                        TotalNetWeight = model.TotalNetWeight,
+                        TotalCBM = TotalCBM,
+                        TotalGrWeight = TotalGrWeight,
+                        TotalNetWeight = TotalNetWeight,
 
                         IsDeleted = false
                     };
-                    db1.P_INVOICE_PACKINGLISTS.Add(packingList);
-                    db1.SaveChanges();
+                    db.P_INVOICE_PACKINGLISTS.Add(packingList);
+                    db.SaveChanges();
                     var packinglistID = packingList.ID;
                     foreach (var item in model.Parts)
                     {
@@ -146,16 +146,16 @@ namespace tahsinERP.Controllers
                         {
                             PackingListID = packinglistID,
                             PartID = item.PartID,
+                            PieceWeight = db.PARTS.Where(p => p.ID == item.PartID).FirstOrDefault().PWeight,
                             PrLength = item.PrLength,
                             PrWidth = item.PrWidth,
                             PrHeight = item.PrHeight,
                             PrGrWeight = item.PrGrWeight,
-                            PrCBM = item.PrCBM,
                         };
-                        db1.P_PACKINGLIST_PARTS.Add(newPart);
+                        db.P_PACKINGLIST_PARTS.Add(newPart);
                     }
 
-                    db1.SaveChanges();
+                    db.SaveChanges();
                     return RedirectToAction("Index", "PInvoice");
 
                 }
@@ -165,12 +165,12 @@ namespace tahsinERP.Controllers
                 }
 
                 // Retain the dropdown lists if there's an error
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
-                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", model.TransportTypeID);
-                for (int i = 0; i < model.Parts.Count; i++)
-                {
-                    model.Parts[i].Part.PNo = db1.PARTS.Where(x => x.IsDeleted == false && x.ID == model.Parts[i].PartID).FirstOrDefault().PNo;
-                }
+                ViewBag.Invoice = new SelectList(db.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
+                ViewBag.FTransportType = new SelectList(db.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", model.TransportTypeID);
+                //for (int i = 0; i < model.Parts.Count; i++)
+                //{
+                //    model.Parts[i].Part.PNo = db1.PARTS.Where(x => x.IsDeleted == false && x.ID == model.Parts[i].PartID).FirstOrDefault().PNo;
+                //}
                 return View(model);
             }
         }
