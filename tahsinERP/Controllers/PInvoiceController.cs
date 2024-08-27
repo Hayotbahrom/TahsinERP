@@ -667,16 +667,10 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public async Task<ActionResult> Save(string dataTableModel)
         {
-            await Task.Run(() =>
-            {
-                // Perform CPU-bound work here
-                // For example, heavy computations or other synchronous tasks
-
-            });
             if (!string.IsNullOrEmpty(dataTableModel))
             {
 
-                var tableModel = JsonConvert.DeserializeObject<System.Data.DataTable>(dataTableModel);
+                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
 
                 try
                 {
@@ -689,10 +683,10 @@ namespace tahsinERP.Controllers
                             partNo = row["Part Number"].ToString();
                             invoiceNo = row["Invoice No."].ToString();
 
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                            P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                            P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
+                            SUPPLIER supplier = await db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefaultAsync();
+                            PART part = await db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefaultAsync();
+                            P_ORDERS order = await db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefaultAsync();
+                            P_INVOICES invoice = await db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefaultAsync();
 
                             if (invoice == null)
                             {
@@ -706,9 +700,9 @@ namespace tahsinERP.Controllers
                                 new_invoice.IsDeleted = false;
 
                                 db.P_INVOICES.Add(new_invoice);
-                                db.SaveChanges();
+                                await db.SaveChangesAsync();
 
-                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                P_INVOICE_PARTS invoicePart = await db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefaultAsync();
                                 if (invoicePart == null)
                                 {
                                     P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
@@ -719,12 +713,12 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
-                                    db.SaveChanges();
+                                    await db.SaveChangesAsync();
                                 }
                             }
                             else
                             {
-                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                P_INVOICE_PARTS invoicePart = await db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == invoice.ID && pcp.PartID == part.ID).FirstOrDefaultAsync();
                                 if (invoicePart == null)
                                 {
                                     P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
@@ -735,7 +729,7 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
-                                    db.SaveChanges();
+                                    await db.SaveChangesAsync();
                                 }
                             }
                         }

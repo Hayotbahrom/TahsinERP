@@ -192,7 +192,6 @@ namespace tahsinERP.Controllers
 
                             P_CONTRACTS contract = db.P_CONTRACTS.Where(pc => pc.ContractNo.CompareTo(contractNo) == 0 && pc.IsDeleted == false).FirstOrDefault();
 
-                            //
                             if (contract == null)
                             {
                                 P_CONTRACTS new_contract = new P_CONTRACTS();
@@ -248,6 +247,9 @@ namespace tahsinERP.Controllers
                             }
                         }
                     }
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "POrderController", "Save[Post]");
                 }
                 catch (Exception ex)
                 {
@@ -255,8 +257,6 @@ namespace tahsinERP.Controllers
                 }
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "PContractController", "Save[Post]");
             return RedirectToAction("Index");
         }
         public ActionResult Create()

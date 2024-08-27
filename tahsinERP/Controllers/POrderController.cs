@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Antlr.Runtime.Tree;
+using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -6,11 +8,13 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
@@ -66,6 +70,77 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
+
+        public async Task<JsonResult> GetPartList(int contractPartID)
+        {
+            try
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    // PartID larni olish
+                    var partIDsList = await db.P_CONTRACT_PARTS
+                                              .Where(p => p.ContractID == contractPartID)
+                                              .Select(p => p.PartID)
+                                              .ToListAsync();
+
+                    if (partIDsList == null || !partIDsList.Any())
+                    {
+                        return Json(new { success = false, message = "Berilgan 'ContractPartID' uchun hech qanday 'Part' topilmadi." }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    // PARTS jadvalidan ID va PNo ni olish
+                    var partList = await db.PARTS
+                                           .Where(p => partIDsList.Contains(p.ID))
+                                           .Select(p => new { p.ID, p.PNo })
+                                           .ToListAsync();
+
+                    if (partList == null || !partList.Any())
+                    {
+                        return Json(new { success = false, message = "'PARTS' jadvalida mos keladigan 'part' topilmadi." }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    // Muvaffaqiyatli natijani JSON formatida qaytarish
+                    return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Errorni JSON formatida qaytarish
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public async Task<JsonResult> GetPriceAndMOQ(int partID)
+        {
+            try
+            {
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    // partID bo'yicha Price va MOQ qiymatlarini olish
+                    var priceMoq = await db.P_CONTRACT_PARTS
+                                           .Where(p => p.PartID == partID)
+                                           .Select(x => new { x.Price, x.MOQ })
+                                           .FirstOrDefaultAsync();
+
+                    // Agar natija topilmasa
+                    if (priceMoq == null)
+                    {
+                        return Json(new { success = false, message = "Berilgan ID uchun narx yoki MOQ topilmadi" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    // Muvaffaqiyatli natijani JSON formatida qaytarish
+                    return Json(new { success = true, data = priceMoq }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Exceptionni JSON formatida qaytarish
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         public ActionResult Create()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -184,24 +259,6 @@ namespace tahsinERP.Controllers
                     .ToList();
 
                 return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.ContractNo }), JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public ActionResult GetPartsByContract(int contractID)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var partIDs = db.P_CONTRACT_PARTS
-                    .Where(x => x.ContractID == contractID)
-                    .Select(x => x.PartID)
-                    .ToList();
-
-                var parts = db.PARTS
-                    .Where(x => partIDs.Contains(x.ID) && x.IsDeleted == false)
-                    .Select(x => new { x.ID, x.PNo })
-                    .ToList();
-
-                return Json(parts.Select(p => new SelectListItem { Value = p.ID.ToString(), Text = p.PNo }), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -642,7 +699,7 @@ namespace tahsinERP.Controllers
                 {
                     try
                     {
-                        var dataTable = new System.Data.DataTable();
+                        var dataTable = new DataTable();
                         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
                         using (var package = new ExcelPackage(file.InputStream))
@@ -684,19 +741,29 @@ namespace tahsinERP.Controllers
                                 PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
                                 P_CONTRACTS contract = db.P_CONTRACTS.Where(p => p.ContractNo.CompareTo(contractNo) == 0 && p.IsDeleted == false).FirstOrDefault();
                                 P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.SupplierID == supplier.ID && po.ContractID == contract.ID && po.IsDeleted == false).FirstOrDefault();
-                                if (order != null)
+                                if (order != null && supplier != null && part != null)
                                 {
-                                    P_ORDER_PARTS orderPart = db.P_ORDER_PARTS.Where(pop => pop.PartID == part.ID && pop.OrderID == order.ID).FirstOrDefault();
+                                    P_ORDER_PARTS orderPart = db.P_ORDER_PARTS
+                                        .Where(pop => pop.PartID == part.ID && pop.OrderID == order.ID)
+                                        .FirstOrDefault();
                                     if (orderPart != null)
                                         ViewBag.ExistingRecordsCount = 1;
                                 }
-
+                                else
+                                {
+                                    ViewBag.Message = "Order/Supplier/Part topilmadi";
+                                    return View("UploadWithExcel");
+                                }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
                         ViewBag.Message = $"Faylni yuklashda quyidagicha muammo tug'ildi: {ex.Message}";
+                        if (ex.InnerException != null)
+                        {
+                            ViewBag.Message += $" - Ichki xato: {ex.InnerException.Message}";
+                        }
                         return View("UploadWithExcel");
                     }
                 }
@@ -721,92 +788,137 @@ namespace tahsinERP.Controllers
             ViewBag.Message = "Jadval ma'lumotlari o'chirib yuborildi.";
             return View("UploadWithExcel");
         }
+
         [HttpPost]
         public async Task<ActionResult> Save(string dataTableModel)
         {
-
-            // Perform CPU-bound work here
-            // For example, heavy computations or other synchronous tasks
-
             if (!string.IsNullOrEmpty(dataTableModel))
             {
-                await Task.Run(() =>
+                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
+
+                try
                 {
-                    var tableModel = JsonConvert.DeserializeObject<System.Data.DataTable>(dataTableModel);
-
-                    try
+                    using (DBTHSNEntities db = new DBTHSNEntities())
                     {
-                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        foreach (DataRow row in tableModel.Rows)
                         {
-                            foreach (DataRow row in tableModel.Rows)
+                            try
                             {
-                                orderNo = row["OrderNo"].ToString();
-                                contractNo = row["ContractNo"].ToString();
-                                supplierName = row["Supplier Name"].ToString();
-                                partNo = row["Part Number"].ToString();
+                                string orderNo = row["OrderNo"].ToString();
+                                string contractNo = row["ContractNo"].ToString();
+                                string supplierName = row["Supplier Name"].ToString();
+                                string partNo = row["Part Number"].ToString();
 
-                                SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                                PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                                P_CONTRACTS contract = db.P_CONTRACTS.Where(p => p.ContractNo.CompareTo(contractNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                SUPPLIER supplier = db.SUPPLIERS
+                                    .Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false)
+                                    .FirstOrDefault();
+                                //if (supplier == null)
+                                //{
+                                //    ModelState.AddModelError("Supplier", $"{supplierName} ga tegishli Yetkazib beruvchi topilmadi");
+                                //    //continue; // Proceed to the next row
+                                //    break; // Stop Loop
+                                //}
 
-                                P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
+                                PART part = db.PARTS
+                                    .Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false)
+                                    .FirstOrDefault();
+                                //if (part == null)
+                                //{
+                                //    ModelState.AddModelError("Part", $"{partNo} ga tegishli Qism topilmadi");
+                                //    //continue; // Proceed to the next row
+                                //    break; // Stop Loop
+                                //}
+
+                                P_CONTRACTS contract = db.P_CONTRACTS
+                                    .Where(p => p.ContractNo.CompareTo(contractNo) == 0 && p.IsDeleted == false)
+                                    .FirstOrDefault();
+
+                                if(contract == null)
+                                {
+                                    ModelState.AddModelError("", $"Xatolik: Kontrakt topilmadi");
+                                    break;
+                                }
+                                //if (contract == null)
+                                //{
+                                //    ModelState.AddModelError("Contract", $"{contractNo} ga tegishli Kontrakt topilmadi");
+                                //    //continue; // Proceed to the next row
+                                //    break; // Stop Loop
+                                //}
+
+                                P_ORDERS order = db.P_ORDERS
+                                    .Where(po => po.OrderNo == orderNo && po.IsDeleted == false)
+                                    .FirstOrDefault();
                                 if (order == null)
                                 {
-                                    P_ORDERS new_order = new P_ORDERS();
-                                    new_order.OrderNo = orderNo;
-                                    new_order.ContractID = contract.ID;
-                                    new_order.SupplierID = supplier.ID;
-                                    new_order.IssuedDate = DateTime.Parse(row["IssuedDate"].ToString());
-                                    new_order.Currency = row["Currency"].ToString();
-                                    new_order.CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]);
-                                    new_order.IsDeleted = false;
+                                    P_ORDERS new_order = new P_ORDERS
+                                    {
+                                        OrderNo = orderNo,
+                                        ContractID = contract.ID,
+                                        SupplierID = supplier.ID,
+                                        IssuedDate = DateTime.Parse(row["IssuedDate"].ToString()),
+                                        Currency = row["Currency"].ToString(),
+                                        CompanyID = Convert.ToInt32(ConfigurationManager.AppSettings["companyID"]),
+                                        IsDeleted = false
+                                    };
 
                                     db.P_ORDERS.Add(new_order);
-                                    db.SaveChanges();
+                                    await db.SaveChangesAsync();
 
-                                    P_ORDER_PARTS orderPart = db.P_ORDER_PARTS.Where(pcp => pcp.OrderID == new_order.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                    P_ORDER_PARTS orderPart = db.P_ORDER_PARTS
+                                        .Where(pcp => pcp.OrderID == new_order.ID && pcp.PartID == part.ID)
+                                        .FirstOrDefault();
                                     if (orderPart == null)
                                     {
-                                        P_ORDER_PARTS new_orderPart = new P_ORDER_PARTS();
-                                        new_orderPart.PartID = part.ID;
-                                        new_orderPart.OrderID = new_order.ID;
-                                        new_orderPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                        //new_orderPart.Unit = row["Unit"].ToString();
-                                        new_orderPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
-                                        new_orderPart.Amount = Convert.ToDouble(row["Amount"].ToString());
+                                        P_ORDER_PARTS new_orderPart = new P_ORDER_PARTS
+                                        {
+                                            PartID = part.ID,
+                                            OrderID = new_order.ID,
+                                            Price = Convert.ToDouble(row["Price"].ToString()),
+                                            MOQ = Convert.ToDouble(row["MOQ"].ToString()),
+                                            Amount = Convert.ToDouble(row["Amount"].ToString())
+                                        };
 
                                         db.P_ORDER_PARTS.Add(new_orderPart);
-                                        db.SaveChanges();
+                                        await db.SaveChangesAsync();
                                     }
                                 }
                                 else
                                 {
-                                    P_ORDER_PARTS orderPart = db.P_ORDER_PARTS.Where(pcp => pcp.OrderID == order.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                    P_ORDER_PARTS orderPart = db.P_ORDER_PARTS
+                                        .Where(pcp => pcp.OrderID == order.ID && pcp.PartID == part.ID)
+                                        .FirstOrDefault();
                                     if (orderPart == null)
                                     {
-                                        P_ORDER_PARTS new_orderPart = new P_ORDER_PARTS();
-                                        new_orderPart.PartID = part.ID;
-                                        new_orderPart.OrderID = order.ID;
-                                        new_orderPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                        //new_orderPart.Unit = row["Unit"].ToString();
-                                        new_orderPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
-                                        new_orderPart.Amount = Convert.ToDouble(row["Amount"].ToString());
+                                        P_ORDER_PARTS new_orderPart = new P_ORDER_PARTS
+                                        {
+                                            PartID = part.ID,
+                                            OrderID = order.ID,
+                                            Price = Convert.ToDouble(row["Price"].ToString()),
+                                            MOQ = Convert.ToDouble(row["MOQ"].ToString()),
+                                            Amount = Convert.ToDouble(row["Amount"].ToString())
+                                        };
 
                                         db.P_ORDER_PARTS.Add(new_orderPart);
-                                        db.SaveChanges();
+                                        await db.SaveChangesAsync();
                                     }
                                 }
                             }
-
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "POrderController", "Save[Post]");
+                            catch (Exception ex)
+                            {
+                                ModelState.AddModelError("", $"Xatolik: {ex.Message}");
+                                //continue; // Continue with the next row even if an error occurs
+                                //break; // Stop Loop
+                            }
                         }
+
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "POrderController", "Save[Post]");
                     }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", ex.Message);
-                    }
-                });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Xatolik: {ex.Message}");
+                }
             }
 
             return RedirectToAction("Index");
