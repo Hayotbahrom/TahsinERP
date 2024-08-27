@@ -373,6 +373,7 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var invoice = db.P_INVOICES.Find(Id);
@@ -474,6 +475,7 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
+
 
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
                 ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
@@ -618,7 +620,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefault();
+                SAMPLE_FILES invoys = await db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefaultAsync();
                 if (invoys != null)
                     return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
