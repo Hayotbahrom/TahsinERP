@@ -506,8 +506,8 @@ namespace tahsinERP.Controllers
                 {
                     ID = order.ID,
                     OrderNo = order.OrderNo,
-                    SupplierID = order.SupplierID,
-                    ContractID = order.ContractID,
+                    SupplierID = (int)order.SupplierID,
+                    ContractID = (int)order.ContractID,
                     Currency = order.Currency,
                     Description = order.Description,
                     IssuedDate = order.IssuedDate,
