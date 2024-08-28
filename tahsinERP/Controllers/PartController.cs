@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -126,30 +127,33 @@ namespace tahsinERP.Controllers
                     db.PARTS.Add(newPart);
                     db.SaveChanges();
 
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PartController", $"{partVM.ID} ID ga ega Partni yaratdi");
 
-                //    SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
-                //    if (pROD_SHOPS != null)
-                //    {
-                //        bool exists = db.Database.SqlQuery<int>(
-                //    "SELECT COUNT(*) FROM Prod_Shops_Parts WHERE ShopId = @ShopId AND PartId = @PartId",
-                //    new SqlParameter("@ShopId", pROD_SHOPS.ID),
-                //    new SqlParameter("@PartId", newPart.ID)
-                //).FirstOrDefault() > 0;
-                //        if (!exists)
-                //        {
 
-                //            int shopId = db.Database.SqlQuery<int>("Select shopId from Prod_Shops_Parts where ShopId=" + pROD_SHOPS.ID + "and PartId = " + newPart.ID + "").FirstOrDefault();
-                //            if (shopId != pROD_SHOPS.ID)
-                //            {
-                //                int noOfRowInserted = db.Database.ExecuteSqlCommand("Insert Into Prod_Shops_Parts ([ShopId],[PartId]) Values(" + pROD_SHOPS.ID + "," + newPart.ID + ")");
-                //                db.SaveChanges();
-                //            }
-                //        }
-                //        else
-                //        {
-                //            ModelState.AddModelError("", "Bu Shop va Part kombinatsiyasi allaqachon mavjud.");
-                //        }
-                //    }
+                    //    SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
+                    //    if (pROD_SHOPS != null)
+                    //    {
+                    //        bool exists = db.Database.SqlQuery<int>(
+                    //    "SELECT COUNT(*) FROM Prod_Shops_Parts WHERE ShopId = @ShopId AND PartId = @PartId",
+                    //    new SqlParameter("@ShopId", pROD_SHOPS.ID),
+                    //    new SqlParameter("@PartId", newPart.ID)
+                    //).FirstOrDefault() > 0;
+                    //        if (!exists)
+                    //        {
+
+                    //            int shopId = db.Database.SqlQuery<int>("Select shopId from Prod_Shops_Parts where ShopId=" + pROD_SHOPS.ID + "and PartId = " + newPart.ID + "").FirstOrDefault();
+                    //            if (shopId != pROD_SHOPS.ID)
+                    //            {
+                    //                int noOfRowInserted = db.Database.ExecuteSqlCommand("Insert Into Prod_Shops_Parts ([ShopId],[PartId]) Values(" + pROD_SHOPS.ID + "," + newPart.ID + ")");
+                    //                db.SaveChanges();
+                    //            }
+                    //        }
+                    //        else
+                    //        {
+                    //            ModelState.AddModelError("", "Bu Shop va Part kombinatsiyasi allaqachon mavjud.");
+                    //        }
+                    //    }
                     if (Request.Files["partPhotoUpload"].ContentLength > 0)
                     {
                         if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
@@ -180,8 +184,7 @@ namespace tahsinERP.Controllers
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS, "ID", "ShopName", partVM.ShopID);
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PartController", "Create[Post]");
+
                 return View(partVM);
             }
         }
@@ -267,6 +270,9 @@ namespace tahsinERP.Controllers
                     db.Entry(partToUpdate).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PartController", $"{partVM.ID} ID ga ega Partni tahrirladi");
+
                     // Update the many-to-many table Prod_Shop_Parts
                     db.Database.ExecuteSqlCommand("DELETE FROM Prod_Shops_Parts WHERE PartID = {0}", partToUpdate.ID);
                     db.Database.ExecuteSqlCommand(
@@ -297,8 +303,6 @@ namespace tahsinERP.Controllers
                         }
                     }
 
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartController", "Edit[Post]");
                     return RedirectToAction("GetAllParts");
                 }
                 catch (Exception ex)
@@ -344,8 +348,10 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "PartController", "Delete[Post]");
+                                LogHelper.LogToDatabase(userEmail, "PartController", $"{ID} ID ga ega Partni o'chirdi");
+
                                 return RedirectToAction("GetAllParts");
                             }
                             catch (RetryLimitExceededException)
@@ -587,13 +593,15 @@ namespace tahsinERP.Controllers
 
                                 db.PARTS.Add(newPart);
                                 db.SaveChanges();
+
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "PartController", $"{newPart.ID} ID ga ega Partni Excell orqali yaratdi");
                             }
                             else
                             {
                                 ViewBag.Message = "Muammo!. Yuklangan faylda ayni vaqtda ma'lumotlar bazasida bor ma'lumot kiritilishga harakat bo'lmoqda.";
                             }
                         }
-                        LogHelper.LogToDatabase(User.Identity.Name, "PartController", "UploadWithExcelSave");
                     }
                     catch (JsonReaderException jex)
                     {
@@ -608,8 +616,6 @@ namespace tahsinERP.Controllers
                     }
                 }
 
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PartController", "Save[Post]");
                 return RedirectToAction("GetAllParts");
             }
         }

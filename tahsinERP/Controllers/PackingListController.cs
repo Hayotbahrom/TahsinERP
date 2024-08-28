@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Infrastructure;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -137,9 +138,15 @@ namespace tahsinERP.Controllers
 
                         IsDeleted = false
                     };
+
                     db.P_INVOICE_PACKINGLISTS.Add(packingList);
                     db.SaveChanges();
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PackingListController", $"{packingList.ID} ID ga ega PackingList yaratdi");
+
                     var packinglistID = packingList.ID;
+
                     foreach (var item in model.Parts)
                     {
                         P_PACKINGLIST_PARTS newPart = new P_PACKINGLIST_PARTS
@@ -152,7 +159,9 @@ namespace tahsinERP.Controllers
                             PrHeight = item.PrHeight,
                             PrGrWeight = item.PrGrWeight,
                         };
+
                         db.P_PACKINGLIST_PARTS.Add(newPart);
+                        LogHelper.LogToDatabase(userEmail, "PackingListController", $"{newPart.ID} ID ga ega PackingListPart yaratdi");
                     }
 
                     db.SaveChanges();
@@ -230,8 +239,10 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PackingListController", "Delete[Post]");
+                            LogHelper.LogToDatabase(userEmail, "PackingListController", $"{ID} ID ga ega PackingListni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -290,8 +301,10 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "PackingListController", "Edit[Post]");
+                                LogHelper.LogToDatabase(userEmail, "PackingListController", $"{packingList.ID} ID ga ega PackingListni tahrirladi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)

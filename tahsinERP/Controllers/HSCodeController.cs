@@ -39,8 +39,10 @@ namespace tahsinERP.Controllers
                         db.HSCODES.Add(hsCode);
 
                         await db.SaveChangesAsync();
+
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "HSCodeController", "Create[Post]");
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{hsCode.ID} ID ga ega HSCodeni yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -90,8 +92,10 @@ namespace tahsinERP.Controllers
                     try
                     {
                         await db.SaveChangesAsync();
+
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "HSCodeController", "Delete[Post]");
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{id} ID ga ega HSCodeni o'chirdi");
+
                         return RedirectToAction("Index");
                     }
                     catch (RetryLimitExceededException)
@@ -119,22 +123,24 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(HSCODE hSCode)
+        public async Task<ActionResult> Edit(HSCODE hsCode)
         {
             using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                var hscodeToUpdate = await db.HSCODES.FindAsync(hSCode.ID);
+                var hscodeToUpdate = await db.HSCODES.FindAsync(hsCode.ID);
 
                 if (ModelState.IsValid)
                 {
-                    hscodeToUpdate.Description = hSCode.Description;
-                    hscodeToUpdate.HSCODE1 = hSCode.HSCODE1;
+                    hscodeToUpdate.Description = hsCode.Description;
+                    hscodeToUpdate.HSCODE1 = hsCode.HSCODE1;
 
                     try
                     {
                         await db.SaveChangesAsync();
+
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "HSCodeController", "Edit[Post]");
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{hsCode.ID} ID ga ega HSCodeni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
                     catch (RetryLimitExceededException)
