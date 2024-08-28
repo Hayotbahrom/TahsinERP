@@ -95,11 +95,12 @@ namespace tahsinERP.Controllers
 
         public async Task<ActionResult> Create()
         {
-
             LoadViewBags();
 
-            return View();
+            TRACING model = new TRACING();
+            model.IssueDateTime = DateTime.Now;
 
+            return View(model);
         }
         private void LoadViewBags()
         {

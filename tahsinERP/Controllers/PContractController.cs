@@ -408,9 +408,9 @@ namespace tahsinERP.Controllers
 
                     db.SaveChanges();
 
-                    if (Request.Files["partPhotoUpload"].ContentLength > 0)
+                    if (Request.Files["docUpload"].ContentLength > 0)
                     {
-                        if (Request.Files["partPhotoUpload"].InputStream.Length < contractDocMaxLength)
+                        if (Request.Files["docUpload"].InputStream.Length < 5242880)
                         {
                             P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
                             byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
@@ -444,6 +444,16 @@ namespace tahsinERP.Controllers
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "PContractController", "Create[Post]");
                 return RedirectToAction("Index");
+            }
+        }
+        public ActionResult DownloadDoc(int? contractID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var contractDoc = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == contractID);
+                if (contractDoc != null)
+                    return File(contractDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return HttpNotFound("Fayl yuklanmagan");
             }
         }
         public ActionResult Details(int? ID)

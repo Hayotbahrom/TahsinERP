@@ -299,7 +299,6 @@ namespace tahsinERP.Controllers
                 string packingListNo = null;
                 List<P_INVOICE_PACKINGLISTS> packingLists;
 
-
                 invoice = db.P_INVOICES
                     .Include(i => i.COMPANy)
                     .Include(i => i.SUPPLIER)
@@ -473,7 +472,7 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
                 ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
                 ViewBag.partList = db.P_INVOICE_PARTS.Include(x => x.UNIT).Where(x => x.InvoiceID == ID).ToList();
-
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 return View(invoice);
             }
         }

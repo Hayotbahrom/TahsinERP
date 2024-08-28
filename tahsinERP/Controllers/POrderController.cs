@@ -121,10 +121,10 @@ namespace tahsinERP.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-                        return View(model);
+                       /* return View(model);
                     }
                     if (ModelState.IsValid)
-                    {
+                    {*/
                         var newOrder = new P_ORDERS()
                         {
                             OrderNo = model.OrderNo,
@@ -179,8 +179,27 @@ namespace tahsinERP.Controllers
                             db.SaveChanges();
                             return View(model);
                         }
-
                         db.SaveChanges();
+
+                        if (Request.Files["docUpload"].ContentLength > 0)
+                        {
+                            if (Request.Files["docUpload"].InputStream.Length < 5242880)
+                            {
+                                P_ORDER_DOCS orderDoc = new P_ORDER_DOCS();
+                                byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                                Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                orderDoc.OrderID = newOrder.ID;
+                                orderDoc.Doc = avatar;
+
+                                db.P_ORDER_DOCS.Add(orderDoc);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                                throw new RetryLimitExceededException();
+                            }
+                        }
 
                         return RedirectToAction("Index");
                     }
@@ -192,6 +211,16 @@ namespace tahsinERP.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
             return View(model);
+        }
+        public ActionResult DownloadDoc(int? orderID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var orderDoc = db.P_ORDER_DOCS.FirstOrDefault(pi => pi.OrderID == orderID);
+                if (orderDoc != null)
+                    return File(orderDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return HttpNotFound("Fayl yuklanmagan");
+            }
         }
         private List<string> contractExceedingParts = new List<string>();
         private bool checkForContractPartsAmount(POrderViewModel model)
@@ -502,12 +531,13 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
+
                 var model = new POrderViewModel
                 {
                     ID = order.ID,
                     OrderNo = order.OrderNo,
-                    SupplierID = order.SupplierID,
-                    ContractID = order.ContractID,
+                    SupplierID = (int)order.SupplierID,
+                    ContractID = (int)order.ContractID,
                     Currency = order.Currency,
                     Description = order.Description,
                     IssuedDate = order.IssuedDate,
@@ -518,30 +548,35 @@ namespace tahsinERP.Controllers
                         Part = p.PART,
                         PartID = p.PartID,
                         UnitID = (int)p.UnitID,
-                        Amount = (int)p.Amount,
-                        MOQ = (int)p.MOQ,
+                        Amount = (double)p.Amount,
+                        MOQ = (double)p.MOQ,
                         Price = (float)p.Price,
                     }).ToList()
                 };
+
+                // Qismlar uchun SelectList yaratish
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+
                 ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
-                ViewBag.Contracts = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
                 ViewBag.Units = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
+
+                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+
                 return View(model);
             }
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(POrderViewModel order)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                /*if (ModelState.IsValid)
-                {*/
+            {                
                     // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
                     ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
                     ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
-                    
                     ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                     var isSameContract = db.P_CONTRACTS
@@ -577,8 +612,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");
-                            
+                            LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");     
                         }
                         catch (RetryLimitExceededException)
                         {
@@ -621,16 +655,6 @@ namespace tahsinERP.Controllers
                     }
 
                 return RedirectToAction("Index");
-              /*  }
-                else
-                {*/
-                    // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
-                    ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
-                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
-
-                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                    return View(order);
-                
             }
         }
         public ActionResult EditPart(int? ID)
