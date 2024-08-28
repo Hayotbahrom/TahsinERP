@@ -18,7 +18,7 @@ namespace tahsinERP.Controllers
             }
             else
             {
-                ViewBag.ShowCookieConsent = true;
+                ViewBag.ShowCookieConsent = false;
             }
             StatisticsVM model = new StatisticsVM();
             using (DBTHSNEntities db = new DBTHSNEntities())

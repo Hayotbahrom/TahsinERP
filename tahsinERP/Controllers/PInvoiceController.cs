@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -22,12 +26,17 @@ namespace tahsinERP.Controllers
     {
         private string supplierName, invoiceNo, orderNo, partNo = "";
         private string[] sources;
+
+        private List<string> missingOrders = new List<string>();
+        private List<string> missingSuppliers = new List<string>();
+        private List<string> missingParts = new List<string>();
+
         public PInvoiceController()
         {
             sources = ConfigurationManager.AppSettings["partTypes"].Split(',');
             sources = sources.Where(x => !x.Equals("InHouse", StringComparison.OrdinalIgnoreCase)).ToArray();
         }
-        
+
         // GET: PInvoice
         public ActionResult Index(string type, int? supplierID)
         {
@@ -38,7 +47,7 @@ namespace tahsinERP.Controllers
                 {
                     if (supplierID.HasValue)
                     {
-                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type)==0)).ToList();
+                        ViewBag.partList = db.P_INVOICES.Include(x => x.P_ORDERS).Where(s => s.IsDeleted == false && s.SupplierID == supplierID && (s.SUPPLIER.Type.CompareTo(type) == 0)).ToList();
                         ViewBag.SourceList = new SelectList(sources, type);
                         ViewBag.SupplierList = new SelectList(suppliers.Where(x => x.Type.CompareTo(type) == 0), "ID", "Name", supplierID);
                     }
@@ -67,7 +76,7 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-      
+
         /*
                 [HttpPost]
                 [ValidateAntiForgeryToken]
@@ -135,6 +144,18 @@ namespace tahsinERP.Controllers
                 return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.OrderNo }), JsonRequestBehavior.AllowGet);
             }
         }
+        public JsonResult GetPartsByOrder(int orderID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var parts = db.P_ORDER_PARTS
+                    .Where(po => po.OrderID == orderID)
+                    .Select(x => new { x.ID, x.PART.PNo })
+                    .ToList();
+
+                return Json(parts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.PNo }), JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult Create()
         {
             PopulateViewBags();
@@ -144,83 +165,146 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(PInvoiceViewModel model)
         {
-            using (DBTHSNEntities db = new DBTHSNEntities())
+            PopulateViewBags();
+            try
             {
-                var isSameContract = db.P_ORDERS
-                    .Include(x => x.SUPPLIER)
-                    .FirstOrDefault(p => p.IsDeleted == false && p.ID == model.OrderID);
-
-                if (isSameContract == null || model.SupplierID != isSameContract.SupplierID)
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    ModelState.AddModelError("", "Ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
-                    PopulateViewBags();
-                    return View(model);
-                }
+                    var isSameOrder = db.P_ORDERS
+                        .Include(x => x.SUPPLIER)
+                        .FirstOrDefault(p => p.IsDeleted == false && p.ID == model.OrderID);
 
-                P_INVOICES invoice = new P_INVOICES
-                {
-                    InvoiceNo = model.InvoiceNo,
-                    OrderID = model.OrderID,
-                    SupplierID = model.SupplierID,
-                    Currency = model.Currency,
-                    InvoiceDate = model.InvoiceDate,
-                    CompanyID = 1,
-                    IsDeleted = false
-                };
-
-                db.P_INVOICES.Add(invoice);
-                db.SaveChanges();
-
-                int newInvoiceID = invoice.ID;
-
-                foreach (var item in model.Parts)
-                {
-                    var newPart = new P_INVOICE_PARTS
+                    if (isSameOrder == null || model.SupplierID != isSameOrder.SupplierID)
                     {
-                        InvoiceID = newInvoiceID,
-                        PartID = item.PartID,
-                        Quantity = item.Quantuty,
-                        UnitID = item.UnitID,
-                        Price = item.Price
+                        ModelState.AddModelError("", "Siz tanlagan ta'minotchi va buyurtma ta'minotchisi bir xil emas!");
+                        PopulateViewBags();
+                        return View(model);
+                    }
+
+                    P_INVOICES invoice = new P_INVOICES
+                    {
+                        InvoiceNo = model.InvoiceNo,
+                        OrderID = model.OrderID,
+                        SupplierID = model.SupplierID,
+                        Currency = model.Currency,
+                        InvoiceDate = model.InvoiceDate,
+                        CompanyID = 1,
+                        IsDeleted = false
                     };
 
-                    db.P_INVOICE_PARTS.Add(newPart);
+                    db.P_INVOICES.Add(invoice);
+                    db.SaveChanges();
+
+                    List<P_ORDER_PARTS> orderParts = db.P_ORDER_PARTS.Where(po => po.OrderID == model.OrderID).ToList();
+                    List<string> notInOrderParts = new List<string>();
+
+                    foreach (var item in model.Parts)
+                    {
+                        var orderPart = orderParts.Where(p => p.PartID == item.PartID).FirstOrDefault();
+                        if (orderParts.Where(cp => cp.PartID == item.PartID).Any())
+                        {
+                            var newPart = new P_INVOICE_PARTS
+                            {
+                                InvoiceID = invoice.ID,
+                                PartID = item.PartID,
+                                Quantity = item.Quantity,
+                                UnitID = item.UnitID
+                            };
+
+                            newPart.Price = orderPart.Price;
+                            db.P_INVOICE_PARTS.Add(newPart);
+                        }
+                        else
+                        {
+                            PART paart = db.PARTS.Where(p => p.ID == item.PartID).FirstOrDefault();
+                            notInOrderParts.Add(paart.PNo);
+                        }
+                    }
+                    if (notInOrderParts.Count > 0)
+                    {
+                        var message = "";
+                        foreach (var word in notInOrderParts)
+                        {
+                            message += word + " ,";
+                        }
+                        ModelState.AddModelError("", "Ushbu ehtiyot qism(lar): " + message + " buyurtmadan topilmadi, buyurtmada yo'q narsaga invoys qilib bo'lmaydi! Qaytadan urinib ko'ring!");
+                        db.Entry(invoice).State = System.Data.Entity.EntityState.Deleted;
+                        db.SaveChanges();
+                        return View(model);
+                    }
+                    db.SaveChanges();
+
+
+                    if (Request.Files["docUpload"].ContentLength > 0)
+                    {
+                        if (Request.Files["docUpload"].InputStream.Length < 5242880)
+                        {
+                            P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
+                            byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                            Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                            invoiceDoc.InvoiceID = invoice.ID;
+                            invoiceDoc.Doc = avatar;
+
+                            db.P_INVOICE_DOCS.Add(invoiceDoc);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                            throw new RetryLimitExceededException();
+                        }
+                    }
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
+
+                    // Redirect to PackingList create view with necessary Invoice properties
+                    return RedirectToAction("Create", "PackingList", new { invoiceId = invoice.ID, invoiceNo = invoice.InvoiceNo });
                 }
-
-                db.SaveChanges();
-
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
-
-                // Redirect to PackingList create view with necessary Invoice properties
-                return RedirectToAction("Create", "PackingList", new { invoiceId = newInvoiceID, invoiceNo = invoice.InvoiceNo });
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            return View(model);
         }
-        
+
         private void PopulateViewBags()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
+                //ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
+                ViewBag.POrder = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+            }
+        }
+        public ActionResult DownloadDoc(int? invoiceID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var invoiceDoc = db.P_INVOICE_DOCS.FirstOrDefault(pi => pi.InvoiceID == invoiceID);
+                if (invoiceDoc != null)
+                    return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return HttpNotFound("Fayl yuklanmagan");
             }
         }
 
         public ActionResult Details(int? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-            P_INVOICES invoice;
-            List<P_INVOICE_PARTS> partList;
-            string transportNo = null;
-            string packingListNo = null;
-            List<P_INVOICE_PACKINGLISTS> packingLists;
-
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                if (id == null)
+                    return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+                P_INVOICES invoice;
+                List<P_INVOICE_PARTS> partList;
+                string transportNo = null;
+                string packingListNo = null;
+                List<P_INVOICE_PACKINGLISTS> packingLists;
+
+
                 invoice = db.P_INVOICES
                     .Include(i => i.COMPANy)
                     .Include(i => i.SUPPLIER)
@@ -230,18 +314,38 @@ namespace tahsinERP.Controllers
 
                 if (invoice == null)
                     return HttpNotFound();
+                else
+                {
+                    partList = db.P_INVOICE_PARTS
+                        .Include(ip => ip.PART)
+                        .Include(ip => ip.UNIT)
+                        .Where(ip => ip.InvoiceID == invoice.ID)
+                        .ToList();
 
-                partList = db.P_INVOICE_PARTS
-                    .Include(ip => ip.PART)
-                    .Include(ip => ip.UNIT)
-                    .Where(ip => ip.InvoiceID == invoice.ID)
-                    .ToList();
+                    packingLists = invoice.P_INVOICE_PACKINGLISTS.ToList();
+                    //packingLists = db.P_INVOICE_PACKINGLISTS
+                    //    .Include(p => p.F_TRANSPORT_TYPES)
+                    //    .Include(p => p.P_PACKINGLIST_PARTS)
+                    //    .Where(p => p.InvoiceID == invoice.ID)
+                    //    .ToList();
 
-                packingLists = db.P_INVOICE_PACKINGLISTS
-                    .Include(p => p.F_TRANSPORT_TYPES)
-                    .Where(p => p.InvoiceID == invoice.ID)
-                    .ToList();
+                    List<P_PACKINGLIST_PARTS> packingListParts = new List<P_PACKINGLIST_PARTS>();
+                    List<P_PACKINGLIST_PARTS> VP = new List<P_PACKINGLIST_PARTS>();
 
+                    for (int i = 0; i < packingLists.Count; i++)
+                    {
+                        VP = packingLists[i].P_PACKINGLIST_PARTS.ToList();
+                        for (int j = 0; j < VP.Count; j++)
+                        {
+                            packingListParts.Add(VP[j]);
+                        }
+                    }
+
+                    ViewBag.Invoice = invoice;
+                    ViewBag.PartList = partList;
+                    ViewBag.PackingLists = packingLists;
+                    ViewBag.PackingListParts = packingListParts;
+                }
                 var firstPackingList = invoice.P_INVOICE_PACKINGLISTS.FirstOrDefault();
                 if (firstPackingList != null)
                 {
@@ -249,29 +353,27 @@ namespace tahsinERP.Controllers
                     packingListNo = firstPackingList.PackingListNo;
                 }
 
-                foreach (var part in partList)
-                {
-                    db.Entry(part).Reference(p => p.PART).Load();
-                }
+                //foreach (var part in partList)
+                //{
+                //    db.Entry(part).Reference(p => p.PART).Load();
+                //}
 
-                ViewBag.Invoice = invoice;
-                ViewBag.PartList = partList;
-                ViewBag.PackingLists = packingLists;
+
+
+                ViewBag.packingListNo = packingListNo;
+                ViewBag.transportNo = transportNo;
+                ViewBag.partList = partList;
+
+                return View(invoice);
             }
-
-            ViewBag.packingListNo = packingListNo;
-            ViewBag.transportNo = transportNo;
-            ViewBag.partList = partList;
-
-            return View(invoice);
         }
-
         public ActionResult Delete(int? Id)
         {
             if (Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var invoice = db.P_INVOICES.Find(Id);
@@ -366,6 +468,7 @@ namespace tahsinERP.Controllers
                 var invoice = db.P_INVOICES
                                 .Include(i => i.P_INVOICE_PARTS.Select(pc => pc.PART))
                                 .Include(i => i.P_ORDERS)
+
                                 .FirstOrDefault(i => i.ID == ID);
 
                 if (invoice == null)
@@ -373,9 +476,10 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
+
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", invoice.SupplierID);
                 ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo", invoice.OrderID);
-                ViewBag.partList = invoice.P_INVOICE_PARTS.ToList();
+                ViewBag.partList = db.P_INVOICE_PARTS.Include(x => x.UNIT).Where(x => x.InvoiceID == ID).ToList();
 
                 return View(invoice);
             }
@@ -516,7 +620,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefault();
+                SAMPLE_FILES invoys = await db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("invoys.xlsx") == 0).FirstOrDefaultAsync();
                 if (invoys != null)
                     return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -528,8 +632,87 @@ namespace tahsinERP.Controllers
             ViewBag.IsFileUploaded = false;
             return View();
         }
+
+        private async Task<bool> CheckForExistenceOfOrders(DataTable dataTable)
+        {
+            if (dataTable == null)
+                return false;
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string orderNo = row["OrderNo"].ToString();
+
+                    bool orderExists = await db.P_CONTRACTS.AnyAsync(p => p.ContractNo.CompareTo(orderNo) == 0);
+                    if (!orderExists)
+                    {
+                        if (!missingOrders.Contains(orderNo))
+                        {
+                            missingOrders.Add(orderNo);
+                        }
+                        return false;  // Return false immediately if any contract is missing
+                    }
+                }
+            }
+
+            return true;  // Return true if all contracts exist
+        }
+
+        private async Task<bool> CheckForExistenceOfParts(DataTable dataTable)
+        {
+            if (dataTable == null)
+                return false;
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string partPNo = row["Part Number"].ToString();
+
+                    bool partExists = await db.PARTS.AnyAsync(p => p.PNo.CompareTo(partPNo) == 0);
+                    if (!partExists)
+                    {
+                        if (!missingParts.Contains(partPNo))
+                        {
+                            missingParts.Add(partPNo);
+                        }
+                        return false;  // Return false immediately if any part is missing
+                    }
+                }
+            }
+
+            return true;  // Return true if all parts exist
+        }
+
+        private async Task<bool> CheckForExistenceOfSuppliers(DataTable dataTable)
+        {
+            if (dataTable == null)
+                return false;
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string supplierName = row["Supplier Name"].ToString();
+
+                    bool supplierExists = await db.SUPPLIERS.AnyAsync(s => s.Name.CompareTo(supplierName) == 0);
+                    if (!supplierExists)
+                    {
+                        if (!missingSuppliers.Contains(supplierName))
+                        {
+                            missingSuppliers.Add(supplierName);
+                        }
+                        return false;  // Return false immediately if any supplier is missing
+                    }
+                }
+            }
+
+            return true;  // Return true if all suppliers exist
+        }
+
         [HttpPost]
-        public ActionResult UploadWithExcel(HttpPostedFileBase file)
+        public async Task<ActionResult> UploadWithExcel(HttpPostedFileBase file)
         {
             if (file != null && file.ContentLength > 0)
             {
@@ -562,31 +745,70 @@ namespace tahsinERP.Controllers
                             }
                         }
 
-                        ViewBag.DataTable = dataTable;
-                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
-                        ViewBag.IsFileUploaded = true;
-
-                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        if (await CheckForExistenceOfOrders(dataTable))
                         {
-                            foreach (DataRow row in dataTable.Rows)
+                            if (await CheckForExistenceOfSuppliers(dataTable))
                             {
-                                orderNo = row["OrderNo"].ToString();
-                                supplierName = row["Supplier Name"].ToString();
-                                partNo = row["Part Number"].ToString();
-                                invoiceNo = row["Invoice No."].ToString();
-
-                                SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                                PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                                P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                                P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
-
-                                if (invoice != null)
+                                if (await CheckForExistenceOfParts(dataTable))
                                 {
-                                    P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pop => pop.PartID == part.ID && pop.InvoiceID == invoice.ID).FirstOrDefault();
-                                    if (invoicePart != null)
-                                        ViewBag.ExistingRecordsCount = 1;
+                                    ViewBag.DataTable = dataTable;
+                                    ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                                    ViewBag.IsFileUploaded = true;
+
+                                    using (DBTHSNEntities db = new DBTHSNEntities())
+                                    {
+                                        foreach (DataRow row in dataTable.Rows)
+                                        {
+                                            orderNo = row["OrderNo"].ToString();
+                                            supplierName = row["Supplier Name"].ToString();
+                                            partNo = row["Part Number"].ToString();
+                                            invoiceNo = row["Invoice No."].ToString();
+
+                                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
+                                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+                                            P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
+                                            P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
+
+                                            if (invoice != null)
+                                            {
+                                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pop => pop.PartID == part.ID && pop.InvoiceID == invoice.ID).FirstOrDefault();
+                                                if (invoicePart != null)
+                                                    ViewBag.ExistingRecordsCount = 1;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    var message = "";
+                                    foreach (var word in missingParts)
+                                    {
+                                        message += word + ", ";
+                                    }
+                                    ViewBag.Message = "Ushbu fakturalar faylida kiritilgan ehtiyot qismlar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Fakturalar bazasiga kiritib keyin qayta urining.";
+                                    return View("UploadWithExcel");
                                 }
                             }
+                            else
+                            {
+                                var message = "";
+                                foreach (var word in missingSuppliers)
+                                {
+                                    message += word + ", ";
+                                }
+                                ViewBag.Message = "Ushbu fakturalar faylda kiritilgan ta'minotchilar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Fakturalar kiritib keyin qayta urining.";
+                                return View("UploadWithExcel");
+                            }
+                        }
+                        else
+                        {
+                            var message = "";
+                            foreach (var word in missingOrders)
+                            {
+                                message += word + ", ";
+                            }
+                            ViewBag.Message = "Ushbu faktura faylda kiritilgan buyurtmalar: " + message + " tizim bazasida mavjud emas. Qaytadan tekshiring, avval Buyurtmalar bazasiga kiritib keyin qayta urining.";
+                            return View("UploadWithExcel");
                         }
                     }
                     catch (Exception ex)
@@ -619,16 +841,10 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public async Task<ActionResult> Save(string dataTableModel)
         {
-            await Task.Run(() =>
-            {
-                // Perform CPU-bound work here
-                // For example, heavy computations or other synchronous tasks
-
-            });
             if (!string.IsNullOrEmpty(dataTableModel))
             {
 
-                var tableModel = JsonConvert.DeserializeObject<System.Data.DataTable>(dataTableModel);
+                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
 
                 try
                 {
@@ -641,10 +857,10 @@ namespace tahsinERP.Controllers
                             partNo = row["Part Number"].ToString();
                             invoiceNo = row["Invoice No."].ToString();
 
-                            SUPPLIER supplier = db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefault();
-                            PART part = db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-                            P_ORDERS order = db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefault();
-                            P_INVOICES invoice = db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefault();
+                            SUPPLIER supplier = await db.SUPPLIERS.Where(s => s.Name.CompareTo(supplierName) == 0 && s.IsDeleted == false).FirstOrDefaultAsync();
+                            PART part = await db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefaultAsync();
+                            P_ORDERS order = await db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefaultAsync();
+                            P_INVOICES invoice = await db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefaultAsync();
 
                             if (invoice == null)
                             {
@@ -658,9 +874,9 @@ namespace tahsinERP.Controllers
                                 new_invoice.IsDeleted = false;
 
                                 db.P_INVOICES.Add(new_invoice);
-                                db.SaveChanges();
+                                await db.SaveChangesAsync();
 
-                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                P_INVOICE_PARTS invoicePart = await db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefaultAsync();
                                 if (invoicePart == null)
                                 {
                                     P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
@@ -671,12 +887,12 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
-                                    db.SaveChanges();
+                                    await db.SaveChangesAsync();
                                 }
                             }
                             else
                             {
-                                P_INVOICE_PARTS invoicePart = db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == invoice.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                P_INVOICE_PARTS invoicePart = await db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == invoice.ID && pcp.PartID == part.ID).FirstOrDefaultAsync();
                                 if (invoicePart == null)
                                 {
                                     P_INVOICE_PARTS new_invoicePart = new P_INVOICE_PARTS();
@@ -687,11 +903,14 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
-                                    db.SaveChanges();
+                                    await db.SaveChangesAsync();
                                 }
                             }
                         }
                     }
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Save[Post]");
                 }
                 catch (Exception ex)
                 {
@@ -699,8 +918,6 @@ namespace tahsinERP.Controllers
                 }
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }

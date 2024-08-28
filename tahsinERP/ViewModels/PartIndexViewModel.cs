@@ -7,6 +7,5 @@
         public int PartID { get; set; }
         public double PrPackQty { get; set; }
         public string PrPackMaterial { get; set; }
-
     }
 }

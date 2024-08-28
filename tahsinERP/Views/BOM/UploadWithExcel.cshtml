@@ -48,7 +48,7 @@
                                                 </fieldset>
                                             </div>
                                             <div class="col-lg-6 col-md-12">
-                                                @using (Html.BeginForm("UploadWithExcel", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                @using (Html.BeginForm("UploadWithExcel", "BOM", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                                 {
                                                     <fieldset class="form-group">
                                                         <label for="basicInputFile">To'ldirilgan faylni yuklash uchun quyidagi tugmani bosing</label>
@@ -59,7 +59,7 @@
                                                     </fieldset>
                                                     <input type="submit" class="btn btn-light-primary mr-1 mb-1 round" value="Yuklash" />
                                                 }
-                                                @using (Html.BeginForm("ClearDataTable", "Product", FormMethod.Post))
+                                                @using (Html.BeginForm("ClearDataTable", "BOM", FormMethod.Post))
                                                 {
                                                     <fieldset class="form-group">
                                                         <div>
@@ -96,7 +96,7 @@
                                     <div class="card-header">
                                         <h4 class="card-title">Excel orqali yuklangan ma'lumot</h4>
                                     </div>
-                                    @using (Html.BeginForm("Save", "Product", FormMethod.Post))
+                                    @using (Html.BeginForm("Save", "BOM", FormMethod.Post))
                                     {
                                         <div class="card-content">
                                             <div class="card-body">

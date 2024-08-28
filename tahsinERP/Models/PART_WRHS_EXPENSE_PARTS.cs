@@ -21,10 +21,10 @@ namespace tahsinERP.Models
         public Nullable<double> PiecePrice { get; set; }
         public Nullable<double> TotalPrice { get; set; }
         public string Comment { get; set; }
-        public Nullable<int> UnitID { get; set; }
+        public int UnitID { get; set; }
     
         public virtual PART_WRHS_EXPENSES PART_WRHS_EXPENSES { get; set; }
-        public virtual UNIT UNIT { get; set; }
         public virtual PART PART { get; set; }
+        public virtual UNIT UNIT { get; set; }
     }
 }

@@ -2,8 +2,12 @@
 using OfficeOpenXml;
 using System;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
@@ -17,11 +21,168 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var list = db.SPLs.Where(x => x.IsDeleted == false).ToList();
+                var list = db.SPLs
+                    .Where(x => x.IsDeleted == false)
+                    .Include(x => x.PRODUCT)
+                    .ToList();
                 return View(list);
             }
         }
 
+        public async Task<ActionResult> Create()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.products = new SelectList(db.PRODUCTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+
+                return View();
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(SPL spl)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                try
+                {
+                    if (ModelState.IsValid)
+                    {
+                        // Set IsDeleted to false and save the spl to get the ID
+                        spl.IsDeleted = false;
+                        db.SPLs.Add(spl);
+                        await db.SaveChangesAsync();
+
+                        return RedirectToAction("Index");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error: " + ex.Message);
+                }
+
+            }
+
+            var userEmail = User.Identity.Name;
+            LogHelper.LogToDatabase(userEmail, "SPLController", "Create[Post]");
+            return View(spl);
+        }
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+
+                var spl = await db.SPLs.Where(x => x.IsDeleted == false && x.ID == id).FirstOrDefaultAsync();
+                if (spl == null)
+                    return HttpNotFound();
+                await db.Entry(spl).Reference(x => x.PRODUCT).LoadAsync();
+                return View(spl);
+            }
+        }
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                ViewBag.products = new SelectList(db.PRODUCTS.Where(x => x.IsDeleted == false).ToList(),"ID", "PNo");
+                var spl = await db.SPLs.Where(x => x.IsDeleted == false && x.ID == id).FirstOrDefaultAsync();
+                if (spl == null)
+                {
+                    return HttpNotFound();
+                }
+                await db.Entry(spl).Reference(x => x.PRODUCT).LoadAsync();
+                return View(spl);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(SPL spl)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+
+                if (ModelState.IsValid)
+                {
+                    var splToUpdate = await db.SPLs.FindAsync(spl.ID);
+                    if (splToUpdate != null)
+                    {
+                        splToUpdate.ProdID = spl.ProdID;
+                        splToUpdate.CarModel1 = spl.CarModel1;
+                        splToUpdate.Option1 = spl.Option1;
+                        splToUpdate.Option1UsageQty = spl.Option1UsageQty;
+                        splToUpdate.Option1UsageUnit = spl.Option1UsageUnit;
+
+                        db.Entry(splToUpdate).State = System.Data.Entity.EntityState.Modified;
+                        await db.SaveChangesAsync();
+
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "SPLController", "Edit[Post]");
+                        return RedirectToAction("Index");
+                    }
+
+                    return View(splToUpdate);
+                }
+                return View(spl);
+            }
+        }
+        public async Task<ActionResult> Delete(int? Id)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+
+                if (Id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var spl = await db.SPLs.Where(x => x.IsDeleted == false && x.ID == Id).FirstOrDefaultAsync();
+                if (spl == null)
+                {
+                    return HttpNotFound();
+                }
+                await db.Entry(spl).Reference(x => x.PRODUCT).LoadAsync();
+                return View(spl);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int? ID, FormCollection gfs)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                if (ModelState.IsValid)
+                {
+                    SPL splToDelete = await db.SPLs.Where(x => x.IsDeleted == false && x.ID == ID).FirstOrDefaultAsync();
+                    if (splToDelete != null)
+                    {
+                        splToDelete.IsDeleted = true;
+                        try
+                        {
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
+                    }
+                    else
+                        ModelState.AddModelError("", "Bunday spl ma'lumotlari topilmadi.");
+                }
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "SPLtController", "Delete[Post]");
+                return View();
+            }
+        }
+
+
+        //Related to excel upload
         public ActionResult Download()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -138,14 +299,7 @@ namespace tahsinERP.Controllers
                         foreach (DataRow row in tableModel.Rows)
                         {
                             string productNo = row["Product No."].ToString();
-                            var existingRecord = new SPL();
-                            if (db.SPLs.Where(x => x.IsDeleted == false).ToList().Count == 0)
-                            {
-                                existingRecord = null;
-                            }
-                            else
-                                existingRecord = db.SPLs.FirstOrDefault(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false);
-                            
+                           
                             var prodID = db.PRODUCTS.FirstOrDefault(x => x.IsDeleted == false && x.PNo.CompareTo(productNo) == 0)?.ID;
                             if (prodID is null)
                             {
@@ -158,7 +312,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
                                 prodID = db.PRODUCTS.Where(x => x.PNo.CompareTo(newProduct.PNo)==0 && x.Name.CompareTo(newProduct.Name)==0).FirstOrDefault().ID;
                             }
-                            if (existingRecord == null && prodID != null)
+                            if (prodID != null)
                             {
                                 SPL newSplRecord = new SPL
                                 {

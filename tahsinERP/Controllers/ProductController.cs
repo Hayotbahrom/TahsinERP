@@ -29,6 +29,8 @@ namespace tahsinERP.Controllers
             {
                 List<PRODUCT> list = db.PRODUCTS.Include(p => p.UNIT).Where(p => p.IsDeleted == false).ToList();
                 ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
+
                 return View(list);
             }
 
@@ -39,7 +41,7 @@ namespace tahsinERP.Controllers
             {
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 ViewBag.CustomerList = new SelectList(db.CUSTOMERS.Where(cs => cs.IsDeleted == false).ToList());
-                ViewBag.HSCODESS = new SelectList(db.HSCODES.Where(cs => cs.IsDeleted == false).ToList(),"ID", "HSCODE1");
+                ViewBag.HSCODESS = new SelectList(db.HSCODES.ToList(),"ID", "HSCODE1");
 
                 return View();
             }
@@ -363,8 +365,8 @@ namespace tahsinERP.Controllers
         {
             if (!string.IsNullOrEmpty(dataTableModel))
             {
-                await Task.Run(() =>
-                {
+                /*await Task.Run(() =>
+                {*/
                     var tableModel = JsonConvert.DeserializeObject<System.Data.DataTable>(dataTableModel);
 
                     try
@@ -391,6 +393,7 @@ namespace tahsinERP.Controllers
                                     newProduct.PNo2 = row["PNo2"].ToString();
                                     newProduct.PNo3 = row["PNo3"].ToString();
                                     newProduct.PNo4 = row["PNo4"].ToString();
+                                    newProduct.UnitID = 1;
                                     newProduct.IsDeleted = false;
                                     db.PRODUCTS.Add(newProduct);
                                     db.SaveChanges();
@@ -406,7 +409,7 @@ namespace tahsinERP.Controllers
                     {
                         ModelState.AddModelError("", ex.Message);
                     }
-                });
+                /*});*/
             }
             var userEmail = User.Identity.Name;
             LogHelper.LogToDatabase(userEmail, "ProductController", "Save[Post]");

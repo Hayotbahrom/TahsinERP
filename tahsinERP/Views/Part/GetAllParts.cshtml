@@ -2,16 +2,14 @@
 @{
     ViewBag.Title = "GetAllParts";
 }
-@*
-    <style>
-        /* Add a bottom border to each table row */
-        #myDataTable tr {
-            border-bottom: 1px solid #ccc;
-        }
-    </style>*@
 
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+    {
+        changePermit = true;
+    }
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -37,6 +35,17 @@
                 </div>
             </div>
 
+            <div class="invoice-create-btn mb-1">
+                @if (changePermit)
+                {
+                    <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Part/Create';">
+                        <span class="align-middle ml-25">Ehtiyot qismni qo'shish</span>
+                    </button>
+                    <a href="@Url.Action("UploadWithExcel", "Part")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
+                        Extiyot qismni excel orqali qo'shish
+                    </a>
+                }
+            </div>
             <div class="users-list-filter px-1">
                 <form>
                     <div class="row border rounded py-2 mb-2">

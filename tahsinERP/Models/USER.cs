@@ -18,20 +18,22 @@ namespace tahsinERP.Models
         public USER()
         {
             this.BLANKING_NORMS = new HashSet<BLANKING_NORMS>();
+            this.COOKIES_CONFIRMATION = new HashSet<COOKIES_CONFIRMATION>();
             this.PART_WRHS = new HashSet<PART_WRHS>();
             this.PART1738DOCS = new HashSet<PART1738DOCS>();
             this.PART1738DOCS1 = new HashSet<PART1738DOCS>();
             this.PROD_WRHS = new HashSet<PROD_WRHS>();
             this.PRODUCT1738DOCS = new HashSet<PRODUCT1738DOCS>();
             this.PRODUCT1738DOCS1 = new HashSet<PRODUCT1738DOCS>();
+            this.PURCHASING_ORDERS = new HashSet<PURCHASING_ORDERS>();
+            this.PURCHASING_ORDERS1 = new HashSet<PURCHASING_ORDERS>();
             this.SLITTING_NORMS = new HashSet<SLITTING_NORMS>();
             this.STAMPING_NORMS = new HashSet<STAMPING_NORMS>();
             this.TEMPORARY_BOMS = new HashSet<TEMPORARY_BOMS>();
             this.USER_ENTRIES = new HashSet<USER_ENTRIES>();
             this.USERIMAGES = new HashSet<USERIMAGE>();
-            this.ROLES = new HashSet<ROLE>();
             this.USERLOGS = new HashSet<USERLOG>();
-            this.COOKIES_CONFIRMATION = new HashSet<COOKIES_CONFIRMATION>();
+            this.ROLES = new HashSet<ROLE>();
         }
     
         public int ID { get; set; }
@@ -48,6 +50,8 @@ namespace tahsinERP.Models
         public virtual ICollection<BLANKING_NORMS> BLANKING_NORMS { get; set; }
         public virtual COMPANy COMPANy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<COOKIES_CONFIRMATION> COOKIES_CONFIRMATION { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_WRHS> PART_WRHS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART1738DOCS> PART1738DOCS { get; set; }
@@ -60,6 +64,10 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRODUCT1738DOCS> PRODUCT1738DOCS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PURCHASING_ORDERS> PURCHASING_ORDERS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PURCHASING_ORDERS> PURCHASING_ORDERS1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SLITTING_NORMS> SLITTING_NORMS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<STAMPING_NORMS> STAMPING_NORMS { get; set; }
@@ -70,10 +78,8 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<USERIMAGE> USERIMAGES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ROLE> ROLES { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<USERLOG> USERLOGS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<COOKIES_CONFIRMATION> COOKIES_CONFIRMATION { get; set; }
+        public virtual ICollection<ROLE> ROLES { get; set; }
     }
 }

@@ -49,16 +49,6 @@
                                                     <span><b>DUNS</b>: @Html.DisplayFor(model => model.SUPPLIER.DUNS, new { @class = "form-control" })</span>
                                                     <hr />
                                                 </div>
-                                                <div class="col-sm-6 col-12 order-1 order-sm-1 d-flex justify-content-end" style="text-align: center">
-                                                    <div class="col-md-4 col-sm-6 col-12 fonticon-container">
-                                                        <div class="fonticon-wrap">
-                                                            <a href="@ViewBag.Base64String" download="fayl.pdf">
-                                                                <i class="bx bxs-download">faylni yuklash</i>
-                                                            </a>
-                                                        </div>
-                                                        <label>shartnoma fayli</label>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div>
                                                 <h4 class="text-primary">Shartnoma  ma'lumotlari</h4>
@@ -71,9 +61,7 @@
                                                 <hr />
                                                 <span><b>Amal qilish sanasi</b>: @Model.DueDate.ToString("dd.MM.yyyy")</span>
                                                 <hr />
-                                                <span><b>Umumiy summasi</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" })</span>
-                                                <hr />
-                                                <span><b>Valyuta</b>: @Html.DisplayFor(model => model.Currency, new { @class = "form-control" })</span>
+                                                <span><b>Umumiy summasi</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
                                                 <hr />
                                                 <span><b>Incoterms</b>: @Html.DisplayFor(model => model.Incoterms, new { @class = "form-control" })</span>
                                                 <hr />
@@ -99,10 +87,11 @@
                                                                         <tr>
                                                                             <th>Detal raqami</th>
                                                                             <th>Detal nomi</th>
+                                                                            <th>MOQ</th>
                                                                             <th>Miqdori</th>
                                                                             <th>O'lchov birligi</th>
                                                                             <th>Birlik narxi</th>
-                                                                            <th>MOQ</th>
+                                                                            <th>Summa narxi</th>
                                                                             <th>Faolligi</th>
                                                                         </tr>
                                                                     </thead>
@@ -114,10 +103,11 @@
                                                                                     <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
                                                                                 </td>
                                                                                 <td>@item.PART.PName</td>
-                                                                                <td>@item.Amount</td>
-                                                                                <td>@item.UNIT.UnitName</td>
-                                                                                <td>@item.Price</td>
                                                                                 <td>@item.MOQ</td>
+                                                                                <td>@item.Quantity</td>
+                                                                                <td>@item.UNIT.UnitName</td>
+                                                                                <td>@item.Price @Model.Currency</td>
+                                                                                <td>@item.Amount @Model.Currency</td>
                                                                                 @if (item.ActivePart)
                                                                                 {
                                                                                     <td><span class="badge badge-light-success">Faol</span></td>

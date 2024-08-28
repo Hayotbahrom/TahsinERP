@@ -1,4 +1,4 @@
-﻿@model tahsinERP.Models.P_ORDERS
+﻿@model tahsinERP.ViewModels.POrderViewModel
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,7 +6,6 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
-
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -55,13 +54,13 @@
 
                                                 <h6 class="invoice-to">Ta'minotchi</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.DropDownListFor(model => model.SupplierID, ViewBag.Supplier as SelectList, new { @class = "form-control select2" })
+                                                    @Html.DropDownListFor(model => model.SupplierID, ViewBag.Suppliers as SelectList, new { @class = "form-control select2" })
                                                     @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                 </fieldset>
 
                                                 <h6 class="invoice-to">Shartnoma raqami</h6>
                                                 <fieldset class="invoice-address form-group">
-                                                    @Html.DropDownListFor(model => model.ContractID, ViewBag.PContract as SelectList, new { @class = "form-control select2" })
+                                                    @Html.DropDownListFor(model => model.ContractID, ViewBag.Contracts as SelectList, new { @class = "form-control select2" })
                                                     @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                 </fieldset>
 
@@ -73,6 +72,7 @@
                                                         <i class='bx bx-calendar'></i>
                                                     </div>
                                                 </fieldset>
+
                                                 <h6 class="invoice-to">Valyuta</h6>
                                                 <fieldset class="invoice-address form-group">
                                                     @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
@@ -110,23 +110,33 @@
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            @foreach (var item in ViewBag.partList)
+                                                                            @for (int i = 0; i < Model.Parts.Count; i++)
                                                                             {
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                        <a href="~/Part/Details/@Model.Parts[i].PartID">@Model.Parts[i].Part.PNo</a>
+                                                                                        @Html.HiddenFor(model => model.Parts[i].PartID)
+                                                                                        @Html.HiddenFor(model => model.Parts[i].ID)
                                                                                     </td>
-                                                                                    <td>@item.PART.PName</td>
-                                                                                    <td>@item.Price</td>
-                                                                                    <td>@item.UnitID</td>
-                                                                                    <td>@item.Amount</td>
-                                                                                    <td>@item.MOQ</td>
                                                                                     <td>
-                                                                                        <!-- Delete button -->
-                                                                                        <a href="@Url.Action("EditPart", "POrder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
-                                                                                        <a href="~/POrder/DeletePart/@item.ID" onclick="return confirm('Ushbu detalni  o`chirib yuborishga ishonchingiz komilmi?')">
-                                                                                            <i class="bx bx-trash"></i>
-                                                                                        </a>
+                                                                                        @Model.Parts[i].Part.PName
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].Price, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.DropDownListFor(model => model.Parts[i].UnitID, (SelectList)ViewBag.Units, new { @class = "form-control", @value = Model.Parts[i].UnitID })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].Amount, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>@Html.TextBoxFor(model => model.Parts[i].MOQ, new { @class = "form-control"})</td>
+                                                                                    <td>
+                                                                                        <div>
+                                                                                            <a href="~/PContract/DeletePart/@Model.Parts[i].ID" onclick="return confirm('Ushbu shartnoma maxsulotini ochirib yuborishga ishonchingiz komilmi?')">
+                                                                                                <i class="bx bx-trash"></i>
+                                                                                            </a>
+                                                                                        </div>
                                                                                     </td>
                                                                                 </tr>
                                                                             }

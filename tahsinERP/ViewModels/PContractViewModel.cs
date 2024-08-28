@@ -25,6 +25,7 @@ namespace tahsinERP.ViewModels
         [Required]
         public string Currency { get; set; }
         public double Amount { get; set; }
+        [Required]
         public string IDN { get; set; }
         public List<PContractPart> Parts { get; set; }
         public PContractViewModel()
@@ -38,11 +39,12 @@ namespace tahsinERP.ViewModels
         //public int ID { set; get; } // Auto Increment in DB
        // public int ContractID { get; set; } // User dan olinmaydi
         public int PartID { get; set; }
+        [Required]
         public int UnitID { get; set; }
         [Required]
-        public int Price { get; set; }
+        public float Price { get; set; }
         [Required]
-        public int Quantity { get; set; }
+        public float Quantity { get; set; }
         // public float Amount { get; set; } // Trigger in DB
         [Required]
         public float MOQ { get; set; } 

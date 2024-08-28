@@ -23,14 +23,14 @@ namespace tahsinERP.Models
     
         public int ID { get; set; }
         public string ContractNo { get; set; }
-        public DateTime IssuedDate { get; set; }
+        public System.DateTime IssuedDate { get; set; }
         public int CompanyID { get; set; }
         public int CustomerID { get; set; }
         public string Currency { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Incoterms { get; set; }
         public string PaymentTerms { get; set; }
-        public DateTime DueDate { get; set; }
+        public System.DateTime DueDate { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }

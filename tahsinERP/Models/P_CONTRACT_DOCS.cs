@@ -15,7 +15,7 @@ namespace tahsinERP.Models
     public partial class P_CONTRACT_DOCS
     {
         public int ID { get; set; }
-        public Nullable<int> ContractID { get; set; }
+        public int ContractID { get; set; }
         public byte[] Doc { get; set; }
     
         public virtual P_CONTRACTS P_CONTRACTS { get; set; }

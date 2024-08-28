@@ -26,8 +26,8 @@ namespace tahsinERP.Models
         public System.DateTime IssuedDateTime { get; set; }
         public int IssuedByUserID { get; set; }
     
-        public virtual USER USER { get; set; }
         public virtual PART PART { get; set; }
         public virtual PART PART1 { get; set; }
+        public virtual USER USER { get; set; }
     }
 }

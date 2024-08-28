@@ -89,7 +89,7 @@ namespace tahsinERP.Controllers
                 PartViewModel partVM = new PartViewModel();
                 ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
                 ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
-                ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
+                ViewBag.HsCode = new SelectList(db.HSCODES.ToList(), "ID", "HSCODE1");
                 ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "ShortName");
                 return View(partVM);
             }
@@ -127,29 +127,29 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
 
 
-                    SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
-                    if (pROD_SHOPS != null)
-                    {
-                        bool exists = db.Database.SqlQuery<int>(
-                    "SELECT COUNT(*) FROM Prod_Shops_Parts WHERE ShopId = @ShopId AND PartId = @PartId",
-                    new SqlParameter("@ShopId", pROD_SHOPS.ID),
-                    new SqlParameter("@PartId", newPart.ID)
-                ).FirstOrDefault() > 0;
-                        if (!exists)
-                        {
+                //    SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
+                //    if (pROD_SHOPS != null)
+                //    {
+                //        bool exists = db.Database.SqlQuery<int>(
+                //    "SELECT COUNT(*) FROM Prod_Shops_Parts WHERE ShopId = @ShopId AND PartId = @PartId",
+                //    new SqlParameter("@ShopId", pROD_SHOPS.ID),
+                //    new SqlParameter("@PartId", newPart.ID)
+                //).FirstOrDefault() > 0;
+                //        if (!exists)
+                //        {
 
-                            int shopId = db.Database.SqlQuery<int>("Select shopId from Prod_Shops_Parts where ShopId=" + pROD_SHOPS.ID + "and PartId = " + newPart.ID + "").FirstOrDefault();
-                            if (shopId != pROD_SHOPS.ID)
-                            {
-                                int noOfRowInserted = db.Database.ExecuteSqlCommand("Insert Into Prod_Shops_Parts ([ShopId],[PartId]) Values(" + pROD_SHOPS.ID + "," + newPart.ID + ")");
-                                db.SaveChanges();
-                            }
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Bu Shop va Part kombinatsiyasi allaqachon mavjud.");
-                        }
-                    }
+                //            int shopId = db.Database.SqlQuery<int>("Select shopId from Prod_Shops_Parts where ShopId=" + pROD_SHOPS.ID + "and PartId = " + newPart.ID + "").FirstOrDefault();
+                //            if (shopId != pROD_SHOPS.ID)
+                //            {
+                //                int noOfRowInserted = db.Database.ExecuteSqlCommand("Insert Into Prod_Shops_Parts ([ShopId],[PartId]) Values(" + pROD_SHOPS.ID + "," + newPart.ID + ")");
+                //                db.SaveChanges();
+                //            }
+                //        }
+                //        else
+                //        {
+                //            ModelState.AddModelError("", "Bu Shop va Part kombinatsiyasi allaqachon mavjud.");
+                //        }
+                //    }
                     if (Request.Files["partPhotoUpload"].ContentLength > 0)
                     {
                         if (Request.Files["partPhotoUpload"].InputStream.Length < partPhotoMaxLength)
@@ -200,34 +200,36 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 }
-
-                PartViewModel partVM = new PartViewModel
+                else
                 {
-                    ID = part.ID,
-                    PNo = part.PNo,
-                    PName = part.PName,
-                    PWeight = part.PWeight,
-                    PLength = part.PLength,
-                    PWidth = part.PWidth,
-                    PHeight = part.PHeight,
-                    Units = part.UNIT,
-                    Type = part.Type,
-                    Description = part.Description,
-                    Grade = part.Grade,
-                    Gauge = part.Gauge,
-                    Pitch = part.Pitch,
-                    Coating = part.Coating,
-                    Marka = part.Marka,
-                    Standart = part.Standart,
-                    IsInHouse = part.IsInHouse,
-                    HSCodeD = (int)part.HSCodeID
-                };
+                    PartViewModel partVM = new PartViewModel
+                    {
+                        ID = part.ID,
+                        PNo = part.PNo,
+                        PName = part.PName,
+                        PWeight = part.PWeight,
+                        PLength = part.PLength,
+                        PWidth = part.PWidth,
+                        PHeight = part.PHeight,
+                        Units = part.UNIT,
+                        Type = part.Type,
+                        Description = part.Description,
+                        Grade = part.Grade,
+                        Gauge = part.Gauge,
+                        Pitch = part.Pitch,
+                        Coating = part.Coating,
+                        Marka = part.Marka,
+                        Standart = part.Standart,
+                        IsInHouse = part.IsInHouse,
+                        HSCodeD = (int)part.HSCodeID
+                    };
 
-                ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
-                ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
-                ViewBag.HsCode = new SelectList(db.HSCODES.Where(x => x.IsDeleted == false).ToList(), "ID", "HSCODE1");
-                ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                return View(partVM);
+                    ViewBag.PartTypes = ConfigurationManager.AppSettings["partTypes"]?.Split(',').ToList() ?? new List<string>();
+                    ViewBag.Prod_Shops = new SelectList(db.SHOPS.Where(s => s.IsDeleted == false).ToList(), "ID", "ShopName");
+                    ViewBag.HsCode = new SelectList(db.HSCODES.ToList(), "ID", "HSCODE1");
+                    ViewBag.UNIT = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                    return View(partVM);
+                }
             }
         }
 
@@ -553,7 +555,6 @@ namespace tahsinERP.Controllers
                     var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
                     try
                     {
-
                         foreach (DataRow row in tableModel.Rows)
                         {
                             partNo = row["Partnumber"].ToString();

@@ -23,7 +23,7 @@ namespace tahsinERP.Models
         public double Total { get; set; }
         public string Comment { get; set; }
     
-        public virtual SHOP SHOP { get; set; }
         public virtual PRODUCT PRODUCT { get; set; }
+        public virtual SHOP SHOP { get; set; }
     }
 }

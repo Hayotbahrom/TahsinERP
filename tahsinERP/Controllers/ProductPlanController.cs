@@ -16,7 +16,6 @@ namespace tahsinERP.Controllers
         // GET: ProductPlan
         public ActionResult Index(int? shopID)
         {
-            int pID = 0;
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var shops = db.SHOPS.Where(s => s.IsDeleted == false).ToList();
@@ -74,7 +73,7 @@ namespace tahsinERP.Controllers
         {
             int dayCount = 0;
             double dayPlanAmount;
-            DateTime startDate, endDate;
+            DateTime startDate;
             if (!CheckForPlanExistencePerProduct(productPlan))
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())

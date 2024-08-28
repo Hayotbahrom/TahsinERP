@@ -5,6 +5,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    /* Hide the default file input */
+    .custom-file-input {
+        display: none;
+    }
+
+    /* Style the custom button */
+    .custom-file-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+        /* Optional: Change button color on hover */
+        .custom-file-button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
     <div class="app-content content">
@@ -48,19 +73,27 @@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-md-6 col-12 form-group">
-                                                            <label for="OrderNo">Buyurtma raqam</label>
-                                                            @Html.TextBoxFor(model => model.OrderNo, new { @type = "text", @class = "form-control", id = "OrderNo" })
+                                                            <label for="OrderNo">Buyurtma raqami</label>
+                                                            @Html.TextBoxFor(model => model.OrderNo, new { @type = "text", @class = "form-control", @id = "OrderNo", @required = "required" })
                                                             @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control", id = "ContractID" })
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control ContractID", @id = "ContractID", onchange = "getPartList()", onclick = "getPartList()" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="form-group position-relative has-icon-left">
+                                                            <label>Buyurtma berilgan sanasi</label>
+                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma berilgan sanasi", @required = "required" })
+                                                            @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position mt-2">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -79,18 +112,20 @@
                                                             @Html.TextAreaFor(model => model.Description, new { @class = "form-control", id = "Description" })
                                                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                         </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <h6 class="invoice-to">Buyurtma berilgan sanasi</h6>
-                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Shartnoma tuzilgan sanasi", id = "IssuedDate" })
-                                                            @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
-                                                            <div class="form-control-position">
-                                                                <i class='bx bx-calendar'></i>
-                                                            </div>
-                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="col-md-6 col-12 form-group">
+                                                <hr />
+                                                <label>Buyurtma faylini yuklang</label>
+                                                <!-- Hidden file input -->
+                                                <input type="file" id="partPhotoUpload" name="partPhotoUpload" class="custom-file-input" />
+                                                <!-- Custom button -->
+                                                <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
+                                                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                <hr />
+                                            </div>
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">
@@ -99,7 +134,7 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control", id = "PartID" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndMOQ(this)", onclick = "getPriceAndMOQ(this)" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -109,17 +144,17 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount" />
+                                                            <input type="number" name="Amount" step="0.01" class="form-control" id="Part_Amount" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.01" class="form-control" id="Part_Price" />
+                                                            <input type="number" name="Price" step="0.01" class="form-control Part_Price" id="Part_Price" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_MOQ">MOQ</label>
-                                                            <input type="text" name="MOQ" class="form-control" id="Part_MOQ" />
+                                                            <input type="text" name="MOQ" class="form-control Part_MOQ" id="Part_MOQ" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
@@ -129,7 +164,7 @@
                                                     <hr>
                                                 </div>
                                             </div>
-                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi detal qo'shish</button>
+                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi qism qo'shish</button>
 
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
@@ -150,44 +185,80 @@
     </div>
 
     <script type="text/javascript">
-    function refreshdatatablesupplier() {
-        const supplierID = document.getElementById("SupplierID").value;
-        $.ajax({
-            url: '@Url.Action("GetContractsBySupplier", "POrder")',
-            type: 'GET',
-            data: { supplierID: supplierID },
-            success: function (data) {
-                var contractDropdown = $("#ContractID");
-                contractDropdown.empty();
-                $.each(data, function (index, item) {
-                    contractDropdown.append(new Option(item.Text, item.Value));
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching contracts:", error);
-            }
-        });
-    }
+        function getPartList() {
+            var contractID = document.getElementById("ContractID").value;
 
-    $('#ContractID').change(function () {
-        const contractID = $(this).val();
-        $.ajax({
-            url: '@Url.Action("GetPartsByContract", "POrder")',
-            type: 'GET',
-            data: { contractID: contractID },
-            success: function (data) {
-                var partDropdown = $("#PartID");
-                partDropdown.empty(); // Clear previous options
+            $.ajax({
+                url: '@Url.Action("GetPartList", "POrder")',
+                type: 'GET',
+                data: { contractPartID: contractID },
+                success: function(data) {
+                    if (data.success) {
+                        var PartID = $("#PartID");
 
-                $.each(data, function (index, item) {
-                    partDropdown.append(new Option(item.Text, item.Value));
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching parts:", error);
-            }
-        });
-    });
+                        // Clear previous options
+                        PartID.empty();
+
+                        // Append new options
+                        $.each(data.data, function (index, item) {
+                            PartID.append(new Option(item.PNo, item.ID));    
+                        });
+                    } else {
+                        console.error("Error: " + data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+
+
+        function getPriceAndMOQ() {
+            var PartID = document.getElementById("PartID").value;
+
+            $.ajax({
+                url: '@Url.Action("GetPriceAndMOQ", "POrder")',
+                type: 'GET',
+                data: { partID: PartID },
+                success: function(data) {
+                    if (data.success) {
+                        var Price = $(".Part_Price");
+                        var MOQ = $(".Part_MOQ");
+       
+                        Price.val(data.data.Price);
+                        MOQ.val(data.data.MOQ);
+                    } else {
+                        console.error("Error: " + data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching data: ", error);
+                }
+            });
+        }
+
+
+
+
+        
+        function refreshdatatablesupplier() {
+            const supplierID = document.getElementById("SupplierID").value;
+            $.ajax({
+                url: '@Url.Action("GetContractsBySupplier", "POrder")',
+                type: 'GET',
+                data: { supplierID: supplierID },
+                success: function (data) {
+                    var contractDropdown = $("#ContractID");
+                    contractDropdown.empty();
+                    $.each(data, function (index, item) {
+                        contractDropdown.append(new Option(item.Text, item.Value));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching contracts:", error);
+                }
+            });
+        }
     </script>
-
 }

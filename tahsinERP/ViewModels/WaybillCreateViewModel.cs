@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,6 +9,7 @@ namespace tahsinERP.ViewModels
 {
     public class WaybillCreateViewModel
     {
+        [Required]
         public string WaybillNo { get; set; }
         public int ContractID { get; set; }
         public int TransportTypeID { get; set; }

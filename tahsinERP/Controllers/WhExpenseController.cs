@@ -31,71 +31,6 @@ namespace tahsinERP.Controllers
                 return View(list);
             }
         }
-        /* public ActionResult Index(string type, int? supplierID)
-         {
-             this.warehouse = GetWarehouseOfMRP(User.Identity.Name);
-
-             using (DBTHSNEntities db = new DBTHSNEntities())
-             {
-                 if (warehouse is null)
-                 {
-                     ViewBag.SourceList = new SelectList(sources, type);
-                     ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
-                     List<PART_WRHS_EXPENSES> list = new List<PART_WRHS_EXPENSES>();
-                     return View(list);
-                 }
-                 if (!string.IsNullOrEmpty(type))
-                 {
-                     if (supplierID.HasValue)
-                     {
-                         List<PART_WRHS_EXPENSES> list = db.PART_WRHS_EXPENSES
-                             .Include(pr => pr.P_INVOICES)
-                             .Include(pr => pr.F_WAYBILLS)
-                             .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.P_INVOICES.SupplierID == supplierID && pi.PART_WRHS.ID == warehouse.ID)
-                             .ToList();
-                         ViewBag.SourceList = new SelectList(sources, type);
-                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
-                         return View(list);
-                     }
-                     else
-                     {
-                         List<PART_WRHS_EXPENSES> list = db.PART_WRHS_EXPENSES
-                             .Include(pr => pr.P_INVOICES)
-                             .Include(pr => pr.F_WAYBILLS)
-                             .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SUPPLIER.Type.CompareTo(type) == 0 && pi.PART_WRHS.ID == warehouse.ID)
-                             .ToList();
-                         ViewBag.SourceList = new SelectList(sources, type);
-                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.Type.CompareTo(type) == 0 && s.IsDeleted == false).ToList(), "ID", "Name");
-                         return View(list);
-                     }
-                 }
-                 else
-                 {
-                     if (supplierID.HasValue)
-                     {
-                         List<PART_WRHS_EXPENSES> list = db.PART_WRHS_EXPENSES
-                             .Include(pr => pr.P_INVOICES)
-                             .Include(pr => pr.F_WAYBILLS)
-                             .Where(pi => pi.IsDeleted == false && pi.P_INVOICES.SupplierID == supplierID && pi.PART_WRHS.ID == warehouse.ID)
-                             .ToList();
-                         ViewBag.SourceList = new SelectList(sources, type);
-                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name", supplierID);
-                         return View(list);
-                     }
-                     else
-                     {
-                         List<PART_WRHS_EXPENSES> list = db.PART_WRHS_EXPENSES
-                             .Include(pr => pr.P_INVOICES)
-                             .Include(pr => pr.F_WAYBILLS)
-                             .Where(pi => pi.IsDeleted == false && pi.PART_WRHS.ID == warehouse.ID)
-                             .ToList();
-                         ViewBag.SourceList = new SelectList(sources, type);
-                         ViewBag.SupplierList = new SelectList(db.SUPPLIERS.Where(s => s.IsDeleted == false).ToList(), "ID", "Name");
-                         return View(list);
-                     }
-                 }
-             }
-         }*/
         private PART_WRHS GetWarehouseOfMRP(string email)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -110,10 +45,15 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                var partInStock = from part in db.PARTS
+                                  join stock in db.PART_STOCKS on part.ID equals stock.PartID
+                                  where part.IsDeleted == false
+                                  select part;
+
                 // Populate dropdown lists
                 ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
                 ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.InComeParts = new SelectList(partInStock.ToList(), "ID", "PNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
                 // Initialize view model
@@ -151,7 +91,6 @@ namespace tahsinERP.Controllers
                     PopulateViewBags(db);
                     return View(model);
                 }
-
                 // Validate ReceiverWhID exists
                 var receiverWarehouse = db.PART_WRHS.FirstOrDefault(w => w.ID == model.RecieverWHID && w.IsDeleted == false);
                 if (receiverWarehouse == null)
@@ -178,9 +117,9 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
                 // Update SenderWHID with the newly created ExpenseID
-                newExpense.SenderWHID = newExpense.ID;
-                db.Entry(newExpense).State = EntityState.Modified;
-
+                 newExpense.SenderWHID = GetWarehouseOfMRP(User.Identity.Name).ID;
+                 db.Entry(newExpense).State = EntityState.Modified;
+                db.SaveChanges();
                 // Save parts
                 foreach (var part in model.Parts)
                 {
@@ -193,15 +132,7 @@ namespace tahsinERP.Controllers
                     }
                     else if (existStock.Amount >= part.Amount)
                     {
-                        PART_STOCKS newStock = new PART_STOCKS
-                        {
-                            WHID = (int)existStock.WHID,
-                            PartID = existStock.PartID,
-                            Unit = existStock.Unit,
-                            Amount = existStock.Amount - part.Amount
-                        };
-
-                        db.PART_STOCKS.Add(newStock);
+                        existStock.Amount = existStock.Amount-part.Amount;
                         db.SaveChanges();
                     }
                     else
@@ -212,160 +143,23 @@ namespace tahsinERP.Controllers
                     }
                 }
 
-               /* try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbUpdateException ex)
-                {
-                    var innerException = ex.InnerException?.InnerException as SqlException;
-                    if (innerException != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine(innerException.Message);
-                    }
-                    PopulateViewBags(db);
-                    ModelState.AddModelError("", "O‘zgarishlarni saqlab bo‘lmadi. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
-                    return View(model);
-                }*/
-
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
-
         private void PopulateViewBags(DBTHSNEntities db)
         {
+            var partInStock = from part in db.PARTS
+                              join stock in db.PART_STOCKS on part.ID equals stock.PartID
+                              where part.IsDeleted == false
+                              select part;
+
             ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
             ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-            ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+            ViewBag.InComeParts = new SelectList(partInStock.ToList(), "ID", "PNo");
             ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
         }
-
-        /*public ActionResult Create()
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
-                ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-
-                WrhsExpenseViewModel viewModel = new WrhsExpenseViewModel();
-                PART_WRHS_EXPENSES expense = db.PART_WRHS_EXPENSES.OrderByDescending(p => p.IssueDateTime).FirstOrDefault();
-                if (expense is null)
-                {
-                    viewModel.DocNo = DateTime.Now.Month + "_" + 1;
-                }
-                else
-                {
-                    var monthAndNumber = expense.DocNo.Split('_');
-
-                    if (int.Parse(monthAndNumber[0]) == int.Parse(DateTime.Now.Month.ToString()))
-                    {
-                        int docNoNumber = int.Parse(monthAndNumber[1]) + 1;
-                        viewModel.DocNo = DateTime.Now.Month + "_" + docNoNumber;
-                    }
-                    else
-                        viewModel.DocNo = DateTime.Now.Month + "_" + 1;
-                }
-
-                return View(viewModel);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Create(WrhsExpenseViewModel model)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                // Validate ReceiverWhID exists
-                var receiverWarehouse = db.PART_WRHS.FirstOrDefault(w => w.ID == model.RecieverWHID && w.IsDeleted == false);
-                if (receiverWarehouse == null)
-                {
-                    ModelState.AddModelError("ResieverWHID", "The selected warehouse does not exist.");
-                    ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
-                    ViewBag.InComes = new SelectList(db.PART_WRHS_EXPENSES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                    ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-
-                    return View(model);
-                }
-
-                // Create a new PART_WRHS_EXPENSES record
-                PART_WRHS_EXPENSES newExpense = new PART_WRHS_EXPENSES
-                {
-                    DocNo = model.DocNo,
-                    ReceiverWhID = model.RecieverWHID,
-                    Currency = model.Currency,
-                    IsDeleted = false,
-                    Description = model.Description,
-                    IssueDateTime = DateTime.Now,
-                    SendStatus = model.SendStatus,
-                    SenderWHID = 1
-                };
-
-                db.PART_WRHS_EXPENSES.Add(newExpense);
-                db.SaveChanges();
-
-                //newExpense.SenderWHID = newExpense.ID;
-                // Get the newly created ExpenseID
-                int newExpenseID = newExpense.ID;
-                newExpense.SenderWHID = newExpense.ID;
-                db.Entry(newExpense).State = EntityState.Modified;
-                //db.SaveChanges();
-                // Save parts
-                foreach (var part in model.Parts)
-                {
-                    PART_STOCKS existStock = db.PART_STOCKS.Where(x => x.PartID == part.PartID).FirstOrDefault();
-                    if (existStock is null)
-                    {
-                        PART_STOCKS newStock = new PART_STOCKS
-                        {
-                            PartID = part.PartID,
-                            Unit = db.UNITS.Where(x => x.ID == part.UnitID).FirstOrDefault().ShortName,
-                            WHID = 1
-                        };
-                        ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
-                        ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                        ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                        ModelState.AddModelError("", "Omborda bunday ehtiyot qism topilmadi.");
-                        return View(model);
-                    }
-                    else
-                    {
-                        if (existStock.Amount>=part.Amount)
-                        {
-                            existStock.Amount -= part.Amount;
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
-                            ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                            ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                            ModelState.AddModelError("", "Kiritilgan miqdor CHIQIM qilish uchun ombordagi bor imkoniyatdan oshib ketdi.");
-                            return View(model);
-                        }
-                    }
-                }
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.PartWrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
-                    ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                    ModelState.AddModelError(ex.Message, "O‘zgarishlarni saqlab bo‘lmadi. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
-                    return View(model);
-                }
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
-                return RedirectToAction("Index");
-            }
-        }*/
         public ActionResult Details(int? ID)
         {
             if (ID == null)

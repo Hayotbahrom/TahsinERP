@@ -25,7 +25,7 @@ namespace tahsinERP.Models
         public Nullable<int> UnitID { get; set; }
     
         public virtual P_CONTRACTS P_CONTRACTS { get; set; }
-        public virtual UNIT UNIT { get; set; }
         public virtual PART PART { get; set; }
+        public virtual UNIT UNIT { get; set; }
     }
 }

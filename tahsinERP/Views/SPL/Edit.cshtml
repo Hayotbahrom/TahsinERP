@@ -1,0 +1,151 @@
+﻿
+
+@model tahsinERP.Models.SPL
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Edit", "SPL", FormMethod.Post, new { enctype = "multipart/form-data" }))  // Ensure enctype is set
+    {
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/SPL/Index">Maxsulotlar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Yangi maxsulot qo'shish
+                                        </li>
+                                    </ol>
+                                    <div class="invoice-create-btn mb-1">
+                                        <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/SPL/UploadWithExcel'">
+                                            <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali maxsulotlar qo'shish</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <section class="basic-select2">
+                        <div class="row">
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+                                                    <h6 class="invoice-to">Maxsulotni tanlang</h6>
+                                                    <fieldset class="invoice-to form-check">
+                                                        @Html.DropDownListFor(model => model.ProdID, ViewBag.products as SelectList, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.ProdID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <div>
+                                                        <h6 class="invoice-to">Mashina modeli 1</h6>
+                                                        <fieldset class="form-group">
+                                                            @Html.TextBoxFor(model => model.CarModel1, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.CarModel1, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant1</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option1, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option1, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant1 foydalanish soni</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option1UsageQty, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option1UsageQty, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant1 foydalanish birligi</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option1UsageUnit, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option1UsageUnit, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="invoice-to">Mashina modeli 2</h6>
+                                                        <fieldset class="form-group">
+                                                            @Html.TextBoxFor(model => model.CarModel2, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.CarModel2, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant2</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option2, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option2, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant2 foydalanish soni</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option2UsageQty, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option2UsageUnit, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant2 foydalanish birligi</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option2UsageQty, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option2UsageUnit, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="invoice-to">Mashina modeli 3</h6>
+                                                        <fieldset class="form-group">
+                                                            @Html.TextBoxFor(model => model.CarModel3, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.CarModel3, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant3</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option3, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option3, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant3 foydalanish soni</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option3UsageQty, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option3UsageUnit, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                        <h6 class="invoice-to">Variant3 foydalanish birligi</h6>
+                                                        <fieldset class="invoice-address form-group">
+                                                            @Html.TextBoxFor(model => model.Option1UsageQty, new { @class = "form-control round" })
+                                                            @Html.ValidationMessageFor(model => model.Option1UsageUnit, "", new { @class = "text-danger" })
+                                                        </fieldset>
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                                <i class='bx bx-save'></i>
+                                                                Saqlash
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

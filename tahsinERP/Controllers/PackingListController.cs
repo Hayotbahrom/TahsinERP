@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
+using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -70,21 +71,37 @@ namespace tahsinERP.Controllers
             return View(packingList);
         }
         */
-        public ActionResult Create(int? invoiceId)
+        public ActionResult Create(int invoiceId)
         {
             using (DBTHSNEntities db1 = new DBTHSNEntities())
             {
                 // Populate the Invoice dropdown
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", invoiceId);
+                ViewBag.Invoice = db1.P_INVOICES.Where(p => p.IsDeleted == false && p.ID == invoiceId).Select(p => p.InvoiceNo).ToString();
 
                 // Populate the TransportType dropdown
                 ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
 
-                // If an invoice ID is provided, create a new PackingList model with it
-                var model = new P_INVOICE_PACKINGLISTS
+                var invoice = db1.P_INVOICES.Where(x => x.IsDeleted == false && x.ID == invoiceId).FirstOrDefault();
+
+                // Create a new PackingList model
+                var model = new PackingListViewModel
                 {
-                    InvoiceID = invoiceId ?? 0 // Use the invoiceId if provided, otherwise default to 0
+                    InvoiceID = invoiceId, // Use the invoiceId if provided, otherwise default to 0
+                    Parts = new List<PackingListPart>() // Initialize the Parts list
                 };
+
+                // Get the parts associated with the invoice
+                var invoiceParts = db1.P_INVOICE_PARTS.Where(x => x.InvoiceID == invoice.ID).ToList();
+
+                // Populate the model.Parts list
+                foreach (var invoicePart in invoiceParts)
+                {
+                    model.Parts.Add(new PackingListPart
+                    {
+                        PartID = invoicePart.PartID,
+                        Part = invoicePart.PART
+                    });
+                }
 
                 return View(model);
             }
@@ -92,21 +109,55 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(P_INVOICE_PACKINGLISTS packingList)
+        public ActionResult Create(PackingListViewModel model)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
+                double? TotalCBM = model.Parts.Sum(x => x.PrCBM);
+                double? TotalGrWeight = model.Parts.Sum(x => x.PrGrWeight);
+                double? TotalNetWeight = model.Parts.Sum(x => x.PrNetWeight);
+
                 try
                 {
-                    if (ModelState.IsValid)
+                    /*if (ModelState.IsValid)
+                    {*/
+                    // Save the PackingList entity
+                    var packingList = new P_INVOICE_PACKINGLISTS
                     {
-                        // Save the PackingList entity
-                        packingList.IsDeleted = false;
-                        db1.P_INVOICE_PACKINGLISTS.Add(packingList);
-                        db1.SaveChanges();
+                        InvoiceID = model.InvoiceID,
+                        TransportNo = model.TransportNo,
+                        TransportTypeID = model.TransportTypeID,
+                        PackingListNo = model.PackingListNo,
+                        SealNo = model.SealNo,
+                        Comment = model.Comment,
+                        InTransit = false,
+                        TotalCBM = TotalCBM,
+                        TotalGrWeight = TotalGrWeight,
+                        TotalNetWeight = TotalNetWeight,
 
-                        return RedirectToAction("Index");
+                        IsDeleted = false
+                    };
+                    db.P_INVOICE_PACKINGLISTS.Add(packingList);
+                    db.SaveChanges();
+                    var packinglistID = packingList.ID;
+                    foreach (var item in model.Parts)
+                    {
+                        P_PACKINGLIST_PARTS newPart = new P_PACKINGLIST_PARTS
+                        {
+                            PackingListID = packinglistID,
+                            PartID = item.PartID,
+                            PieceWeight = db.PARTS.Where(p => p.ID == item.PartID).FirstOrDefault().PWeight,
+                            PrLength = item.PrLength,
+                            PrWidth = item.PrWidth,
+                            PrHeight = item.PrHeight,
+                            PrGrWeight = item.PrGrWeight,
+                        };
+                        db.P_PACKINGLIST_PARTS.Add(newPart);
                     }
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "PInvoice");
+
                 }
                 catch (Exception ex)
                 {
@@ -114,10 +165,13 @@ namespace tahsinERP.Controllers
                 }
 
                 // Retain the dropdown lists if there's an error
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", packingList.InvoiceID);
-                ViewBag.FTransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", packingList.TransportTypeID);
-
-                return View(packingList);
+                ViewBag.Invoice = new SelectList(db.P_INVOICES.Where(p => p.IsDeleted == false).ToList(), "ID", "InvoiceNo", model.InvoiceID);
+                ViewBag.FTransportType = new SelectList(db.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType", model.TransportTypeID);
+                //for (int i = 0; i < model.Parts.Count; i++)
+                //{
+                //    model.Parts[i].Part.PNo = db1.PARTS.Where(x => x.IsDeleted == false && x.ID == model.Parts[i].PartID).FirstOrDefault().PNo;
+                //}
+                return View(model);
             }
         }
 
@@ -143,7 +197,7 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Delete(int? Id)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (Id == null)
                 {
@@ -225,13 +279,14 @@ namespace tahsinERP.Controllers
                     P_INVOICE_PACKINGLISTS packingListToUpdate = db.P_INVOICE_PACKINGLISTS.Find(packingList.ID);
                     if (packingListToUpdate != null)
                     {
-                        
+
                         if (TryUpdateModel(packingListToUpdate, "", new string[]
                         {
                             "InvoiceID", "PackingListNo", "PartID", "PrLength", "PrWidth", "PrHeight",
                             "PrCMB", "PrGrWeight", "PrPackMaterial", "ScLength", "ScWidth", "ScHeight",
                             "ScCMB", "ScGrWeight", "ScPackMaterial", "PltType", "IsDeleted"
-                        })) { 
+                        }))
+                        {
                             try
                             {
                                 db.SaveChanges();

@@ -42,7 +42,7 @@ namespace tahsinERP.Controllers
         {
             try
             {
-                using(DBTHSNEntities db = new DBTHSNEntities())
+                using(DBTHSNEntities db = new DBTHSNEntities()) 
                 {
                     if (ModelState.IsValid)
                     {

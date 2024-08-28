@@ -1,0 +1,95 @@
+﻿
+
+@model  tahsinERP.Models.SPL
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/SPL/Index">SPL lar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        detallni o'chirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-xl-9 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            <hr />
+                                            <span><b>Maxsulotni tanlang</b>: @Model.ProdID</span>
+                                            <hr />
+
+                                            <div>
+                                                <span><b>Mashina modeli 1</b>: @Model.CarModel1</span>
+                                                <hr />
+                                                <span><b>Variant1</b>: @Model.Option1</span>
+                                                <hr />
+                                                <span><b>Variant1 foydalanish soni</b>: @Model.Option1UsageQty</span>
+                                                <hr />
+                                                <span><b>Variant1 foydalanish birligi</b>: @Model.Option1UsageUnit</span>
+                                                <hr />
+                                            </div>
+
+                                            <div>
+                                                <span><b>Mashina modeli 2</b>: @Model.CarModel2</span>
+                                                <hr />
+                                                <span><b>Variant2</b>: @Model.Option2</span>
+                                                <hr />
+                                                <span><b>Variant2 foydalanish soni</b>: @Model.Option2UsageQty</span>
+                                                <hr />
+                                                <span><b>Variant2 foydalanish birligi</b>: @Model.Option2UsageUnit</span>
+                                                <hr />
+                                            </div>
+
+                                            <div>
+                                                <span><b>Mashina modeli 3</b>: @Model.CarModel3</span>
+                                                <hr />
+                                                <span><b>Variant3</b>: @Model.Option3</span>
+                                                <hr />
+                                                <span><b>Variant3 foydalanish soni</b>: @Model.Option3UsageQty</span>
+                                                <hr />
+                                                <span><b>Variant3 foydalanish birligi</b>: @Model.Option3UsageUnit</span>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+
+
+
