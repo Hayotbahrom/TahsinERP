@@ -25,13 +25,13 @@ namespace tahsinERP.Models
         public int ID { get; set; }
         public string OrderNo { get; set; }
         public System.DateTime IssuedDate { get; set; }
-        public Nullable<int> CompanyID { get; set; }
-        public Nullable<int> SupplierID { get; set; }
-        public Nullable<int> ContractID { get; set; }
+        public int CompanyID { get; set; }
+        public int SupplierID { get; set; }
+        public int ContractID { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual COMPANy COMPANy { get; set; }
         public virtual P_CONTRACTS P_CONTRACTS { get; set; }
