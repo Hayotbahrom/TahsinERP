@@ -59,58 +59,64 @@ namespace tahsinERP.Controllers
                 return View(model);
             }
 
-            using (DBTHSNEntities db = new DBTHSNEntities())
+            try
             {
-                // Add New S_CONTRACT
-                S_CONTRACTS newContract = new S_CONTRACTS
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    ContractNo = model.ContractNo,
-                    IssuedDate = DateTime.Now,
-                    CompanyID = int.Parse(ConfigurationManager.AppSettings["companyID"]),
-                    CustomerID = (int)model.CustomerID,
-                    Currency = model.Currency,
-                    Amount = (int)model.Amount,
-                    Incoterms = model.Incoterms,
-                    PaymentTerms = model.PaymentTerms,
-                    DueDate = model.DueDate,
-                    IsDeleted = false,
-                };
-
-                db.S_CONTRACTS.Add(newContract);
-                db.SaveChanges();
-
-                // Yangi Contract ning ID sini olish
-                int newContractID = newContract.ID;
-
-                // Yangi Product lar ni saqlash
-                foreach (var item in model.ProductList)
-                {
-                    if (item == null)
+                    // Add New S_CONTRACT
+                    S_CONTRACTS newContract = new S_CONTRACTS
                     {
-                        ModelState.AddModelError("Products", "Mahsulot bo'sh boʻlishi mumkin emas");
-                        ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
-                        ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
-                        return View(model);
-                    }
-
-                    S_CONTRACT_PRODUCTS newProduct = new S_CONTRACT_PRODUCTS
-                    {
-                        ContractID = newContractID,
-                        ProductID = item.ProductID,
-                        PiecePrice = (int)item.PiecePrice,
-                        UnitID = item.UnitID,
-                        Amount = item.Amount
+                        ContractNo = model.ContractNo,
+                        IssuedDate = DateTime.Now,
+                        CompanyID = int.Parse(ConfigurationManager.AppSettings["companyID"]),
+                        CustomerID = (int)model.CustomerID,
+                        Currency = model.Currency,
+                        Amount = (int)model.Amount,
+                        Incoterms = model.Incoterms,
+                        PaymentTerms = model.PaymentTerms,
+                        DueDate = model.DueDate,
+                        IsDeleted = false,
                     };
 
-                    db.S_CONTRACT_PRODUCTS.Add(newProduct);
+                    db.S_CONTRACTS.Add(newContract);
+                    db.SaveChanges();
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{newContract.ID} ID ga ega SContractni yaratdi");
+
+                    // Yangi Contract ning ID sini olish
+                    int newContractID = newContract.ID;
+
+                    // Yangi Product lar ni saqlash
+                    foreach (var item in model.ProductList)
+                    {
+                        if (item == null)
+                        {
+                            ModelState.AddModelError("Products", "Mahsulot bo'sh boʻlishi mumkin emas");
+                            ViewBag.Customers = new SelectList(db.CUSTOMERS.Where(c => c.IsDeleted == false).ToList(), "ID", "Name");
+                            ViewBag.Products = new SelectList(db.PRODUCTS.Where(p => p.IsDeleted == false).ToList(), "ID", "PNo");
+                            return View(model);
+                        }
+
+                        S_CONTRACT_PRODUCTS newProduct = new S_CONTRACT_PRODUCTS
+                        {
+                            ContractID = newContractID,
+                            ProductID = item.ProductID,
+                            PiecePrice = (int)item.PiecePrice,
+                            UnitID = item.UnitID,
+                            Amount = item.Amount
+                        };
+
+                        db.S_CONTRACT_PRODUCTS.Add(newProduct);
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{newProduct.ID} ID ga ega SContractProductni yaratdi");
+                    }
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-
-                db.SaveChanges();
-
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "SContractController", "Create[Post]");
-
-                return RedirectToAction("Index");
+            } catch(Exception ex)
+            {
+                ModelState.AddModelError("", $"{ex.Message}");
             }
         }
         // __________
@@ -233,6 +239,8 @@ namespace tahsinERP.Controllers
                     try
                     {
                         db.SaveChanges();
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractToUpdate.ID} ID ga ega SContractni tahrirladi");
                     }
                     catch (RetryLimitExceededException)
                     {
@@ -251,6 +259,8 @@ namespace tahsinERP.Controllers
                             existingProduct.Amount = product.Amount;
 
                             db.Entry(existingProduct).State = EntityState.Modified;
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{existingProduct.ID} ID ga ega SContractProductni tahrirladi");
                         }
                     }
 
@@ -328,13 +338,11 @@ namespace tahsinERP.Controllers
                         foreach (var contractProduct in contractProducts)
                         {
                             db.S_CONTRACT_PRODUCTS.Remove(contractProduct);
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractProduct.ID} ID ga ega SContractni o'chirdi");
                         }
 
                         db.SaveChanges();
-
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "SContractController", "Delete[Post]");
-
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -364,6 +372,9 @@ namespace tahsinERP.Controllers
                         {
                             db.S_CONTRACT_PRODUCTS.Remove(contractProductToDelete);
                             db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractProductToDelete.ID} ID ga ega SContractProductni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -376,9 +387,6 @@ namespace tahsinERP.Controllers
                         ModelState.AddModelError("", "Bunday shartnoma topilmadi.");
                     }
                 }
-
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "SContractController", "DeleteProduct[Post]");
 
                 return View(contractProductToDelete);
             }

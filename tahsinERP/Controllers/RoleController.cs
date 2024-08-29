@@ -27,31 +27,38 @@ namespace tahsinERP.Controllers
         {
             try
             {
-                ROLE roles = new ROLE();
-                roles.RName = role.RName;
-                roles.Description = role.Description;
-                roles.IsDeleted = false;
-
-                db.ROLES.Add(roles);
-
-                var length = db.PERMISSIONMODULES.ToList().Count;
-                int[] permissionModulesID = new int[length];
-                int i = 0;
-                foreach (var item in db.PERMISSIONMODULES.ToList())
+                using(DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    permissionModulesID[i] = item.ID;
+                    ROLE newRole = new ROLE();
+                    newRole.RName = role.RName;
+                    newRole.Description = role.Description;
+                    newRole.IsDeleted = false;
 
-                    PERMISSION newPermission = new PERMISSION();
-                    newPermission.PermissionModuleID = permissionModulesID[i];
-                    newPermission.ChangePermit = false;
-                    newPermission.ViewPermit = true;
-                    newPermission.RoleID = role.ID;
-                    db.PERMISSIONS.Add(newPermission);
-                    i++;
+                    db.ROLES.Add(newRole);
+                    LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{newRole.ID} ID ga ega Roleni yaratdi");
+
+                    var length = db.PERMISSIONMODULES.ToList().Count;
+                    int[] permissionModulesID = new int[length];
+                    int i = 0;
+                    foreach (var item in db.PERMISSIONMODULES.ToList())
+                    {
+                        permissionModulesID[i] = item.ID;
+
+                        PERMISSION newPermission = new PERMISSION();
+                        newPermission.PermissionModuleID = permissionModulesID[i];
+                        newPermission.ChangePermit = false;
+                        newPermission.ViewPermit = true;
+                        newPermission.RoleID = role.ID;
+                        db.PERMISSIONS.Add(newPermission);
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{newPermission.ID} ID ga ega Permissionni yaratdi");
+
+                        i++;
+                    }
+
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "RoleController", "Create[Post]");
+                
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -83,28 +90,31 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                var roleToUpdate = db.ROLES.Find(id);
-
-                //Developer rolini faqat developer o`zgartirishga tekshirish
-                var currentUserRole = User.Identity.Name;
-                if (currentUserRole != "developer" && roleToUpdate.RName == "developer")
+                using(DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Only developers can edit the developer role.");
-                }
+                    var roleToUpdate = db.ROLES.Find(id);
 
-                if (TryUpdateModel(roleToUpdate, "", new string[] { "RName", "Description" }))
-                {
-                    try
+                    //Developer rolini faqat developer o`zgartirishga tekshirish
+                    var currentUserRole = User.Identity.Name;
+                    if (currentUserRole != "developer" && roleToUpdate.RName == "developer")
                     {
-                        db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "RoleController", "Edit[Post]");
-                        return RedirectToAction("Index");
+                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Only developers can edit the developer role.");
                     }
-                    catch (RetryLimitExceededException)
-                    {
 
-                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    if (TryUpdateModel(roleToUpdate, "", new string[] { "RName", "Description" }))
+                    {
+                        try
+                        {
+                            db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{roleToUpdate.ID} ID ga ega Roleni tahrirladi");
+
+                            return RedirectToAction("Index");
+                        }
+                        catch (RetryLimitExceededException)
+                        {
+                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        }
                     }
                 }
             }
@@ -132,8 +142,9 @@ namespace tahsinERP.Controllers
                 try
                 {
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "RoleController", "Delete[Post]");
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{role.ID} ID ga ega Roleni o'chirdi");
+
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)
@@ -206,10 +217,10 @@ namespace tahsinERP.Controllers
                         existingPermission.ChangePermit = permission.ChangePermit;
                     }
                     db.SaveChanges();
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{existingPermission.ID} ID ga ega Permissioni tahrirladi");
                 }
 
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "RoleController", "Permissions[Post]");
                 return RedirectToAction("Edit", new { id = role.ID });
             }
         }

@@ -79,12 +79,12 @@ namespace tahsinERP.Controllers
                                 IssuedDateTime = DateTime.Now,
                                 IssuedByUserID = userID
                             };
+
                             db.SLITTING_NORMS.Add(slitting_process);
                         }
 
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "SlittingController", "Create[Post]");
+                        LogHelper.LogToDatabase(User.Identity.Name, "SlittingController", $"{slitting_process.ID} ID ga ega SlittingNormni yaratdi");
                         return RedirectToAction("Index");
                     }
                 }
@@ -98,6 +98,7 @@ namespace tahsinERP.Controllers
             }
             return View(model);
         }
+
         private int? GetUserID(string email)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -166,8 +167,9 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "SlittingController", "Edit[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "SlittingController", $"{slittingNorm.ID} ID ga ega SlittingNormni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -220,8 +222,7 @@ namespace tahsinERP.Controllers
 
                 slittingNorm.IsDeleted = true;
                 db.SaveChanges();
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "SlittingController", "Delete[Post]");
+                LogHelper.LogToDatabase(User.Identity.Name, "SlittingController", $"{slittingNorm.ID} ID ga ega SlittingNormni o'chirdi");
                 return RedirectToAction("Index");
             }
         }
