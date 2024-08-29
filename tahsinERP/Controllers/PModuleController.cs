@@ -12,7 +12,6 @@ namespace tahsinERP.Controllers
 {
     public class PModuleController : Controller
     {
-
         // GET: PModule
         [HttpGet]
         public ActionResult Index()
