@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -18,7 +19,7 @@ namespace tahsinERP.Controllers
         {
             return View();
         }
-        public ActionResult InTransit()
+        public ActionResult InTransit(string startDate, string endDate)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -26,11 +27,22 @@ namespace tahsinERP.Controllers
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
-                    command.Parameters["@TodayDate"].Value = "2024-08-01";
+                    if (startDate == null && endDate == null)
+                    {
+                        command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@TodayDate"].Value = "2024-08-26";
 
-                    command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
-                    command.Parameters["@EndDate"].Value = "2024-12-31";
+                        command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@EndDate"].Value = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@TodayDate"].Value = startDate;
+
+                        command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@EndDate"].Value = endDate;
+                    }
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -43,7 +55,7 @@ namespace tahsinERP.Controllers
             }
         }
 
-        public ActionResult PartRequirement()
+        public ActionResult PartRequirement(string startDate, string endDate)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -51,11 +63,22 @@ namespace tahsinERP.Controllers
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
-                    command.Parameters["@TodayDate"].Value = "2024-08-01";
+                    if (startDate == null && endDate == null)
+                    {
+                        command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@TodayDate"].Value = "2024-08-26";
 
-                    command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
-                    command.Parameters["@EndDate"].Value = "2024-12-31";
+                        command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@EndDate"].Value = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@TodayDate"].Value = startDate;
+
+                        command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@EndDate"].Value = endDate;
+                    }
 
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
@@ -76,11 +99,50 @@ namespace tahsinERP.Controllers
                 using (SqlCommand command = new SqlCommand("WeeklyCoverage", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
+
                     command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
                     command.Parameters["@TodayDate"].Value = "2024-08-26";
 
                     command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
                     command.Parameters["@EndDate"].Value = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
+
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+                        ViewBag.DataTable = dataTable;
+                        return View();
+                    }
+                }
+            }
+        }
+        [HttpPost]
+        public ActionResult Coverage(string startDate, string endDate)
+        {
+            DateTime a = Convert.ToDateTime(startDate);
+            DateTime b = Convert.ToDateTime(endDate);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("WeeklyCoverage", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    if (startDate == null && endDate == null)
+                    {
+                        command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@TodayDate"].Value = "2024-08-26";
+
+                        command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@EndDate"].Value = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@TodayDate"].Value = a.ToString("yyyy-MM-dd");
+
+                        command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                        command.Parameters["@EndDate"].Value = b.ToString("yyyy-MM-dd");
+                    }
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {

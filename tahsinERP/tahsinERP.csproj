@@ -684,6 +684,7 @@
     <Compile Include="ViewModels\PurchasingContractViewModel.cs" />
     <Compile Include="ViewModels\PurchasingItemViewModel.cs" />
     <Compile Include="ViewModels\PurchasingOrderViewModel.cs" />
+    <Compile Include="ViewModels\Reports\CoverageViewModel.cs" />
     <Compile Include="ViewModels\SOrderViewModel.cs" />
     <Compile Include="ViewModels\ContractsOfPartsViewModel.cs" />
     <Compile Include="ViewModels\PackingListViewModel.cs" />
