@@ -196,10 +196,10 @@ namespace tahsinERP.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-                       /* return View(model);
-                    }
-                    if (ModelState.IsValid)
-                    {*/
+                        /* return View(model);
+                     }
+                     if (ModelState.IsValid)
+                     {*/
                         var newOrder = new P_ORDERS()
                         {
                             OrderNo = model.OrderNo,
@@ -639,12 +639,12 @@ namespace tahsinERP.Controllers
         public ActionResult Edit(POrderViewModel order)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
-            {                
-                    // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
-                    ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
-                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
-                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             {
+                // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+                ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+
                 /*if (ModelState.IsValid)
                 {*/
                 // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
@@ -672,6 +672,7 @@ namespace tahsinERP.Controllers
                 {
                     return View(order);
                 }
+
                 P_ORDERS orderToUpdate = db.P_ORDERS.Find(order.ID);
                 if (orderToUpdate != null)
                 {
@@ -682,18 +683,6 @@ namespace tahsinERP.Controllers
                     orderToUpdate.Currency = order.Currency;
                     orderToUpdate.Description = order.Description;
 
-                        try
-                        {
-                            db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "POrderController", "Edit[Post]");     
-                        }
-                        catch (RetryLimitExceededException)
-                        {
-                            ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
-                            // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
-                            ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
-                            ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
                     try
                     {
                         db.SaveChanges();
@@ -706,45 +695,46 @@ namespace tahsinERP.Controllers
                         // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
                         ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
                         ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
+                    }
+
+                    // Update ProductList
+                    foreach (var product in order.Parts)
+                    {
+                        var existingPart = db.P_ORDER_PARTS.Find(product.ID);
+                        if (existingPart != null)
+                        {
+                            existingPart.Price = product.Price;
+                            existingPart.UnitID = product.UnitID;
+                            existingPart.Amount = product.Amount;
+                            existingPart.MOQ = product.MOQ;
+
+                            db.Entry(existingPart).State = EntityState.Modified;
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{existingPart.ID} ID ga ega POrderPartni tahrirladi");
+                        }
+                    }
+
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (RetryLimitExceededException)
+                    {
+                        ModelState.AddModelError("", "Extiyot qism o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratsiyasiga muroaat qiling.");
+                        // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
+                        ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
+                        ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
 
                         ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                     }
+
+                    return RedirectToAction("Index");
                 }
 
-                // Update ProductList
-                foreach (var product in order.Parts)
-                {
-                    var existingPart = db.P_ORDER_PARTS.Find(product.ID);
-                    if (existingPart != null)
-                    {
-                        existingPart.Price = product.Price;
-                        existingPart.UnitID = product.UnitID;
-                        existingPart.Amount = product.Amount;
-                        existingPart.MOQ = product.MOQ;
-
-                        db.Entry(existingPart).State = EntityState.Modified;
-
-                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{existingPart.ID} ID ga ega POrderPartni tahrirladi");
-                    }
-                }
-
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (RetryLimitExceededException)
-                {
-                    ModelState.AddModelError("", "Extiyot qism o'zgarishlarini saqlab bo'lmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratsiyasiga muroaat qiling.");
-                    // Re-populate the ViewBag.Supplier to ensure the dropdown list is available in case of an error
-                    ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name", order.SupplierID);
-                    ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo", order.ContractID);
-
-                    ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                }
-
-                return RedirectToAction("Index");
+                return View();
             }
         }
+
         public ActionResult EditPart(int? ID)
         {
             if (ID == null)
@@ -768,6 +758,7 @@ namespace tahsinERP.Controllers
                 return View(orderPart);
             }
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditPart(P_ORDER_PARTS orderPart)
@@ -923,7 +914,6 @@ namespace tahsinERP.Controllers
             return true;  // Return true if all suppliers exist
         }
 
-
         [HttpPost]
         public async Task<ActionResult> UploadWithExcel(HttpPostedFileBase file)
         {
@@ -1053,6 +1043,7 @@ namespace tahsinERP.Controllers
             }
             return View("UploadWithExcel");
         }
+
         public ActionResult ClearDataTable()
         {
             ViewBag.DataTable = null;

@@ -81,10 +81,10 @@ namespace tahsinERP.Controllers
                             };
 
                             db.SLITTING_NORMS.Add(slitting_process);
+                            LogHelper.LogToDatabase(User.Identity.Name, "SlittingController", $"{slitting_process.ID} ID ga ega SlittingNormni yaratdi");
                         }
 
                         db.SaveChanges();
-                        LogHelper.LogToDatabase(User.Identity.Name, "SlittingController", $"{slitting_process.ID} ID ga ega SlittingNormni yaratdi");
                         return RedirectToAction("Index");
                     }
                 }

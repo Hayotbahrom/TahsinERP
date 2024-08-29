@@ -51,7 +51,7 @@ namespace tahsinERP.Controllers
         {
             if (model == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Shartnoma bekor bo'lishi mumkin emas");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Shartnoma bo'sh bo'lishi mumkin emas");
             }
 
             if (model.ProductList == null || !model.ProductList.Any())
@@ -117,6 +117,7 @@ namespace tahsinERP.Controllers
             } catch(Exception ex)
             {
                 ModelState.AddModelError("", $"{ex.Message}");
+                return View(model);
             }
         }
         // __________
