@@ -194,7 +194,7 @@ namespace tahsinERP.Controllers
                         //TotalPrice = part.TotalPrice,
                         Comment = part.Comment
                     };
-                    PART_STOCKS existStock = db.PART_STOCKS.Where(s => s.WHID == newIncome.WHID && s.PartID == part.PartID && s.ToDate == toDate).FirstOrDefault();
+                    PART_STOCKS existStock = db.PART_STOCKS.Where(s => s.WHID == newIncome.WHID && s.PartID == part.PartID).FirstOrDefault();
                     if (existStock == null)
                     {
                         PART_STOCKS newPartStock = new PART_STOCKS
@@ -202,8 +202,7 @@ namespace tahsinERP.Controllers
                             WHID = (int)newIncome.WHID,
                             PartID = part.PartID,
                             Unit = db.UNITS.Where(x => x.ID == part.UnitID).FirstOrDefault().ShortName,
-                            Amount = part.Amount,
-                            ToDate = DateTime.Now.Date
+                            Amount = part.Amount
                         };
                         db.PART_STOCKS.Add(newPartStock);
 
