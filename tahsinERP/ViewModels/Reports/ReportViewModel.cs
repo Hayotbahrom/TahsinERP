@@ -5,7 +5,7 @@ using System.Web;
 
 namespace tahsinERP.ViewModels.Reports
 {
-    public class CoverageViewModel
+    public class ReportViewModel
     {
         public string StartDate { get; set; }
         public string EndDate { get; set; }
