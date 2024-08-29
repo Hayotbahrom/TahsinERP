@@ -95,11 +95,12 @@ namespace tahsinERP.Controllers
 
         public async Task<ActionResult> Create()
         {
-
             LoadViewBags();
 
-            return View();
+            TRACING model = new TRACING();
+            model.IssueDateTime = DateTime.Now;
 
+            return View(model);
         }
         private void LoadViewBags()
         {
@@ -141,8 +142,8 @@ namespace tahsinERP.Controllers
                         setPackingListInTransit(tracing.PackingListID);
                         await db.SaveChangesAsync();
 
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "TracingController", "Create[Post]");
+                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracing.ID} ID ga ega Tracingni yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -163,8 +164,10 @@ namespace tahsinERP.Controllers
                 if (packingList != null)
                 {
                     packingList.InTransit = true;
-                    db.Entry(packingList).State = System.Data.Entity.EntityState.Modified;
+                    db.Entry(packingList).State = EntityState.Modified;
                     db.SaveChanges();
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{packingList.ID} ID ga ega PInvoicePackingListning InTransitni yoqdi");
                 }
             }
         }
@@ -248,7 +251,6 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                
                 if (ModelState.IsValid)
                 {
                     var tracingToUpdate = await db.TRACINGS.FindAsync(tracing.ID);
@@ -260,10 +262,11 @@ namespace tahsinERP.Controllers
                         tracingToUpdate.IssueDateTime = tracing.IssueDateTime;
                         tracingToUpdate.ETA = tracing.ETA;
 
-                        db.Entry(tracingToUpdate).State = System.Data.Entity.EntityState.Modified;
+                        db.Entry(tracingToUpdate).State = EntityState.Modified;
                         await db.SaveChangesAsync();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "TracingController", "Edit[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracingToUpdate.ID} ID ga ega Tracingni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
 
@@ -308,8 +311,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "TracingController", "Delete[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracingToDelete.ID} ID ga ega Tracingni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

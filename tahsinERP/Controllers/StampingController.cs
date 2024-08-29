@@ -77,8 +77,9 @@ namespace tahsinERP.Controllers
 
                         db.STAMPING_NORMS.Add(stamping_norms);
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "StampingController", "Create[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "StampingController", $"{stamping_norms.ID} ID ga ega StampingNormni yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -146,8 +147,9 @@ namespace tahsinERP.Controllers
 
                         db.Entry(stampingNorm).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "StampingController", "Edit[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "StampingController", $"{stampingNorm.ID} ID ga ega StampingNormni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -199,8 +201,9 @@ namespace tahsinERP.Controllers
 
                 stampingNorm.IsDeleted = true;
                 db.SaveChanges();
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "StampingController", "Delete[Post]");
+
+                LogHelper.LogToDatabase(User.Identity.Name, "StampingController", $"{stampingNorm.ID} ID ga ega StampingNormni o'chirdi");
+
                 return RedirectToAction("Index");
             }
         }

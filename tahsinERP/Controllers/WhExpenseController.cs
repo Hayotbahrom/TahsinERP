@@ -117,9 +117,12 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
                 // Update SenderWHID with the newly created ExpenseID
-                 newExpense.SenderWHID = GetWarehouseOfMRP(User.Identity.Name).ID;
-                 db.Entry(newExpense).State = EntityState.Modified;
+                newExpense.SenderWHID = GetWarehouseOfMRP(User.Identity.Name).ID;
+                db.Entry(newExpense).State = EntityState.Modified;
                 db.SaveChanges();
+
+                LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{newExpense.ID} ID ga ega PartWrhsExpenseni yaratdi");
+
                 // Save parts
                 foreach (var part in model.Parts)
                 {
@@ -132,7 +135,7 @@ namespace tahsinERP.Controllers
                     }
                     else if (existStock.Amount >= part.Amount)
                     {
-                        existStock.Amount = existStock.Amount-part.Amount;
+                        existStock.Amount = existStock.Amount - part.Amount;
                         db.SaveChanges();
                     }
                     else
@@ -167,9 +170,9 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var wrhsExpense = db1.PART_WRHS_EXPENSES
+                var wrhsExpense = db.PART_WRHS_EXPENSES
                                   .Include(x => x.PART_WRHS)
                                   .FirstOrDefault(p => p.ID == ID);
 
@@ -178,7 +181,7 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                var partList = db1.PART_WRHS_EXPENSE_PARTS
+                var partList = db.PART_WRHS_EXPENSE_PARTS
                                   .Include(pc => pc.PART)
                                   .Include(pc => pc.UNIT)
                                   .Where(pc => pc.ExpenseID == wrhsExpense.ID)
@@ -200,9 +203,9 @@ namespace tahsinERP.Controllers
             PART_WRHS_EXPENSES wrhsExpense;
             List<PART_WRHS_EXPENSE_PARTS> partList;
 
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                wrhsExpense = db1.PART_WRHS_EXPENSES
+                wrhsExpense = db.PART_WRHS_EXPENSES
                     .FirstOrDefault(p => p.ID == ID);
 
                 if (wrhsExpense == null)
@@ -210,17 +213,17 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                // suppliers = new SelectList(db1.SUPPLIERS.ToList(), "ID", "Name", wrhsExpense.SupplierID);
+                // suppliers = new SelectList(db.SUPPLIERS.ToList(), "ID", "Name", wrhsExpense.SupplierID);
 
-                partList = db1.PART_WRHS_EXPENSE_PARTS
+                partList = db.PART_WRHS_EXPENSE_PARTS
                     .Include(whp => whp.PART)
                     .Include(pc => pc.UNIT)
                     .Where(whp => whp.ExpenseID == ID)
                     .ToList();
-                //ViewBag.PartList = new SelectList(db1.PART_WRHS_EXPENSE_PARTS.Include(p => p.PART).ToList(),"ID","PName");
-               // ViewBag.Invoices = new SelectList(db1.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
-                ViewBag.PartWhrs = new SelectList(db1.PART_WRHS.Where(i => i.IsDeleted == false).ToList(), "ID", "WHName");
-                ViewBag.units = new SelectList(db1.UNITS.ToList(), "ID", "UnitName");
+                //ViewBag.PartList = new SelectList(db.PART_WRHS_EXPENSE_PARTS.Include(p => p.PART).ToList(),"ID","PName");
+               // ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                ViewBag.PartWhrs = new SelectList(db.PART_WRHS.Where(i => i.IsDeleted == false).ToList(), "ID", "WHName");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
 
             }
 
@@ -236,9 +239,9 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (DBTHSNEntities db1 = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    PART_WRHS_EXPENSES wrhsExpenseToUpdate = db1.PART_WRHS_EXPENSES.Find(wrhsExpense.ID);
+                    PART_WRHS_EXPENSES wrhsExpenseToUpdate = db.PART_WRHS_EXPENSES.Find(wrhsExpense.ID);
                     if (wrhsExpenseToUpdate != null)
                     {
                         wrhsExpenseToUpdate.DocNo = wrhsExpense.DocNo;
@@ -253,9 +256,10 @@ namespace tahsinERP.Controllers
 
                         try
                         {
-                            db1.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Edit[Post]");
+                            db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{wrhsExpenseToUpdate.ID} ID ga ega PartWrhsExpenseni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -322,8 +326,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "EditPart[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpensePartToUpdate.ID} ID ga ega PartWrhsExpensePartni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -377,8 +382,9 @@ namespace tahsinERP.Controllers
                             db.Entry(whExpenseToDelete).State = System.Data.Entity.EntityState.Modified;
                             
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Delete[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpenseToDelete.ID} ID ga ega PartWrhsExpenseni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -407,8 +413,9 @@ namespace tahsinERP.Controllers
                         {
                             db.PART_WRHS_EXPENSE_PARTS.Remove(whExpensePartToDelete);
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhExpenseController", "DeletePart[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpensePartToDelete.ID} ID ga ega PartWrhsExpensePartni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

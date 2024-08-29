@@ -50,8 +50,11 @@ namespace tahsinERP.Controllers
                     {
                         // Set IsDeleted to false and save the spl to get the ID
                         spl.IsDeleted = false;
+
                         db.SPLs.Add(spl);
                         await db.SaveChangesAsync();
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{spl.ID} ID ga ega SPLni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -121,8 +124,8 @@ namespace tahsinERP.Controllers
                         db.Entry(splToUpdate).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
 
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "SPLController", "Edit[Post]");
+                        LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{splToUpdate.ID} ID ga ega SPLni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
 
@@ -164,6 +167,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{splToDelete.ID} ID ga ega SPLni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -175,8 +181,6 @@ namespace tahsinERP.Controllers
                         ModelState.AddModelError("", "Bunday spl ma'lumotlari topilmadi.");
                 }
 
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "SPLtController", "Delete[Post]");
                 return View();
             }
         }
@@ -310,6 +314,9 @@ namespace tahsinERP.Controllers
                                 };
                                 db.PRODUCTS.Add(newProduct);
                                 db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newProduct.ID} ID ga ega Productni Excell orqali yaratdi");
+
                                 prodID = db.PRODUCTS.Where(x => x.PNo.CompareTo(newProduct.PNo)==0 && x.Name.CompareTo(newProduct.Name)==0).FirstOrDefault().ID;
                             }
                             if (prodID != null)
@@ -327,6 +334,8 @@ namespace tahsinERP.Controllers
 
                                 db.SPLs.Add(newSplRecord);
                                 db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newSplRecord.ID} ID ga ega SPLni Excell orqali yaratdi");
                             }
                         }
                     }
@@ -337,8 +346,6 @@ namespace tahsinERP.Controllers
                 }
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "SPLController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }

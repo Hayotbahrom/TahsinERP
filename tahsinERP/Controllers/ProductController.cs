@@ -61,6 +61,8 @@ namespace tahsinERP.Controllers
                         db.PRODUCTS.Add(product);
                         db.SaveChanges();
 
+                        LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{product.ID} ID ga ega Productni yaratdi");
+
                         // Handle image upload
                         var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
                         if (imageFile != null && imageFile.ContentLength > 0)
@@ -72,13 +74,14 @@ namespace tahsinERP.Controllers
                                     ProdID = product.ID, // Use the product ID
                                     Image = new byte[imageFile.ContentLength],
                                     IsDeleted = false
-
                                 };
 
                                 imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
 
                                 db.PRODUCTIMAGES.Add(photoImage);
                                 db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{photoImage.ID} ID ga ega ProductImageni yaratdi");
                             }
                             else
                             {
@@ -87,8 +90,6 @@ namespace tahsinERP.Controllers
                             }
                         }
 
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ProductController", "Create[Post]");
                         return RedirectToAction("Index");
                     }
                 }
@@ -179,6 +180,8 @@ namespace tahsinERP.Controllers
                                     // Update existing image
                                     existingImage.Image = new byte[imageFile.ContentLength];
                                     imageFile.InputStream.Read(existingImage.Image, 0, existingImage.Image.Length);
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{existingImage.ID} ID ga ega ProductImageni tahrirladi");
                                 }
                                 else
                                 {
@@ -192,9 +195,11 @@ namespace tahsinERP.Controllers
 
                                     imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
                                     db.PRODUCTIMAGES.Add(photoImage);
+                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{photoImage} ID ga ega ProductImageni yaratdi");
                                 }
 
                                 db.SaveChanges();
+
                             }
                             else
                             {
@@ -205,8 +210,9 @@ namespace tahsinERP.Controllers
 
                         db.Entry(productToUpdate).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ProductController", "Edit[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{productToUpdate.ID} ID ga ega Productni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
 
@@ -253,8 +259,9 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "ProductController", "Delete[Post]");
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{productToUpdate.ID} ID ga ega Productni o'chirdi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -382,6 +389,7 @@ namespace tahsinERP.Controllers
                                 if (product == null)
                                 {
                                     PRODUCT newProduct = new PRODUCT();
+
                                     newProduct.PNo = Pno;
                                     newProduct.Name = row["Name"].ToString();
                                     newProduct.Weight = Double.Parse(row["Weight"].ToString());
@@ -395,8 +403,11 @@ namespace tahsinERP.Controllers
                                     newProduct.PNo4 = row["PNo4"].ToString();
                                     newProduct.UnitID = 1;
                                     newProduct.IsDeleted = false;
+
                                     db.PRODUCTS.Add(newProduct);
                                     db.SaveChanges();
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{newProduct.ID} ID ga ega Productni Excell orqali yaratdi");
                                 }
                                 else
                                 {
@@ -411,8 +422,7 @@ namespace tahsinERP.Controllers
                     }
                 /*});*/
             }
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "ProductController", "Save[Post]");
+
             return RedirectToAction("Index");
         }
     }

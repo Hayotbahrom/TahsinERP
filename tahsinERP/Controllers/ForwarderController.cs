@@ -1,7 +1,9 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -45,6 +47,9 @@ namespace tahsinERP.Controllers
                         db.FORWARDERS.Add(forwarder);
                         await db.SaveChangesAsync();
 
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{forwarder.ID} ID ga ega Forwarderni yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -55,8 +60,6 @@ namespace tahsinERP.Controllers
                 
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "ForwarderController", "Create[Post]");
             return View(forwarder);
         }
         public async Task<ActionResult> Details(int? id)
@@ -112,7 +115,8 @@ namespace tahsinERP.Controllers
                         await db.SaveChangesAsync();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "FContractController", "Edit[Post]");
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{forwarder.ID} ID ga ega Forwarderni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
 
@@ -156,6 +160,10 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{ID} ID ga ega Forwarderni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -166,8 +174,6 @@ namespace tahsinERP.Controllers
                     }
                 }
 
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "FContractController", "Delete[Post]");
                 return View();
             }
         }

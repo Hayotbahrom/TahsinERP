@@ -13,9 +13,9 @@ namespace tahsinERP.Controllers
         // GET: Shop
         public ActionResult Index()
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var prod_shop = db1.SHOPS.Where(x => x.IsDeleted == false).ToList();
+                var prod_shop = db.SHOPS.Where(x => x.IsDeleted == false).ToList();
 
                 return View(prod_shop);
             }
@@ -28,7 +28,7 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Create([Bind(Include = "ShopName,CompanyID,Description,Isdeleted")] SHOP prod_shop)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 try
                 {
@@ -36,10 +36,11 @@ namespace tahsinERP.Controllers
                     {
                         prod_shop.IsDeleted = false;
                         prod_shop.CompanyID = 1;
-                        db1.SHOPS.Add(prod_shop);
-                        db1.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ShopController", "Create[Post]");
+                        db.SHOPS.Add(prod_shop);
+                        db.SaveChanges();
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop.ID} ID ga ega Shopni yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -53,13 +54,13 @@ namespace tahsinERP.Controllers
 
         public ActionResult Delete(int? id)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db1.SHOPS.Find(id);
+                var prod_shop = db.SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();
@@ -70,11 +71,11 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Delete(SHOP prod_shop)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    var prod_shop_deleted = db1.SHOPS.Find(prod_shop.ID);
+                    var prod_shop_deleted = db.SHOPS.Find(prod_shop.ID);
                     if (prod_shop_deleted != null)
                     {
                         prod_shop_deleted.IsDeleted = true;
@@ -82,9 +83,10 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
-                                db1.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "ShopController", "Delete[Post]");
+                                db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop_deleted.ID} ID ga ega Shopni o'chirdi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -102,13 +104,13 @@ namespace tahsinERP.Controllers
 
         public ActionResult Edit(int? id)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db1.SHOPS.Find(id);
+                var prod_shop = db.SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();
@@ -119,11 +121,11 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Edit(SHOP prod_shop)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    var prod_shop_Update = db1.SHOPS.Find(prod_shop.ID);
+                    var prod_shop_Update = db.SHOPS.Find(prod_shop.ID);
                     if (prod_shop_Update != null)
                     {
                         prod_shop_Update.IsDeleted = false;
@@ -131,9 +133,10 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
-                                db1.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "ShopController", "Edit[Post]");
+                                db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop_Update.ID} ID ga ega Shopni tahrirladi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -149,13 +152,13 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Details(int? id)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var prod_shop = db1.SHOPS.Find(id);
+                var prod_shop = db.SHOPS.Find(id);
                 if (prod_shop == null)
                 {
                     return HttpNotFound();

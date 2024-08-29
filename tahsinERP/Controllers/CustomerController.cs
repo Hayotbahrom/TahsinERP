@@ -67,6 +67,10 @@ namespace tahsinERP.Controllers
                         customer.IsDeleted = false;
                         db.CUSTOMERS.Add(customer);
                         db.SaveChanges();
+
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.ID} ID ga ega bo'lgan Mijoz yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -74,9 +78,8 @@ namespace tahsinERP.Controllers
                 {
                     ModelState.AddModelError(ex.Message, ex);
                 }
+
                 ViewBag.Customer = ConfigurationManager.AppSettings["Customer"]?.Split(',').ToList() ?? new List<string>();
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "CustomerController", "Create[Post]");
                 return View(customer);
             }
         }
@@ -112,13 +115,15 @@ namespace tahsinERP.Controllers
                     customer.IsDeleted = false;
                     db.Entry(customer).State = EntityState.Modified;
                     db.SaveChanges();
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.ID} ID ga ega bo'lgan Mijoz ni tahrirladi");
+
                     return RedirectToAction("Index");
                 }
             }
 
             ViewBag.Customer = ConfigurationManager.AppSettings["Customer"]?.Split(',').ToList() ?? new List<string>();
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "CustomerController", "Edit[Post]");
             return View(customer);
         }
         public ActionResult Delete(int? id)
@@ -154,7 +159,8 @@ namespace tahsinERP.Controllers
                 }
 
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "CustomerController", "Delete[Post]");
+                LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.ID} ID ga ega bo'lgan Mijozni o'chirdi");
+
                 return RedirectToAction("Index");
             }
         }
@@ -287,9 +293,10 @@ namespace tahsinERP.Controllers
                                 new_supplier.IsDeleted = false;
 
                                 db.SUPPLIERS.Add(new_supplier);
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "CustomerController", "Save[Post]");
                                 db.SaveChanges();
+
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "CustomerController", $"{new_supplier.ID} ID ga ega bo'lgan Mijozni Excell orqali yaratdi");
                             }
                         }
                     }

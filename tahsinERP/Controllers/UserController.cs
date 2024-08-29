@@ -86,6 +86,8 @@ namespace tahsinERP.Controllers
                 db.USERS.Add(user);
                 db.SaveChanges();
 
+                LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.ID} ID ga ega Foydalanuvchini yaratdi");
+
                 ROLE selectedRole = db.ROLES.Where(r => r.ID.Equals(userVM.RoleID)).FirstOrDefault();
                 if (selectedRole != null && selectedRole.RName != "Developer" || selectedRole.ID != 1)
                 {
@@ -113,6 +115,8 @@ namespace tahsinERP.Controllers
 
                         db.USERIMAGES.Add(userImage);
                         db.SaveChanges();
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{userImage.ID} ID ga ega Foydalanuvchini-Rasmini yaratdi");
                     }
                     else
                     {
@@ -181,6 +185,7 @@ namespace tahsinERP.Controllers
             userToUpdate.HashCode = keyNew;
             userToUpdate.Password = password;
             userToUpdate.IsActive = uvm.IsActive;
+
             if (TryUpdateModel(userToUpdate, "", new string[] { "UName", "Email", "FullName", "IsActive", "IsDeleted" }))
             {
                 try
@@ -216,6 +221,8 @@ namespace tahsinERP.Controllers
 
                                 db.Entry(uImage).State = System.Data.Entity.EntityState.Modified;
                                 db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{uImage.ID} ID ga ega Foydalanuvchini-Rasmini tahrirladi");
                             }
                         }
                         else
@@ -225,8 +232,9 @@ namespace tahsinERP.Controllers
                         }
                     }
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "UserController", "Edit[Post]");
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{userToUpdate.ID} ID ga ega Foydalanuvchini tahrirladi");
+
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)
@@ -235,6 +243,7 @@ namespace tahsinERP.Controllers
                     ModelState.AddModelError("", "O‘zgarishlarni saqlab bo‘lmadi. Qayta urinib ko'ring va muammo davom etsa, tizim administratoriga murojaat qiling.");
                 }
             }
+
             ViewBag.RoleID = new SelectList(db.ROLES, "ID", "RName");
             return View();
         }
@@ -313,8 +322,9 @@ namespace tahsinERP.Controllers
                 try
                 {
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "UserController", "Delete[Post]");
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.ID} ID ga ega Foydalanuvchini o'chiridi");
+
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException /* dex */)
