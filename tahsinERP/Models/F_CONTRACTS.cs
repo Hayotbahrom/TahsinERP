@@ -11,7 +11,8 @@ namespace tahsinERP.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class F_CONTRACTS
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,12 +23,15 @@ namespace tahsinERP.Models
         }
     
         public int ID { get; set; }
+        [Required]
         public string ContractNo { get; set; }
         public int CompanyID { get; set; }
         public int ForwarderID { get; set; }
         public System.DateTime IssueDate { get; set; }
         public System.DateTime DueDate { get; set; }
+        [Required]
         public double Amount { get; set; }
+        [Required]
         public string Currency { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }

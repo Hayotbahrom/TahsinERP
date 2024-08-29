@@ -12,7 +12,6 @@ namespace tahsinERP.Controllers
 {
     public class PModuleController : Controller
     {
-
         // GET: PModule
         [HttpGet]
         public ActionResult Index()
@@ -75,8 +74,9 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "PModuleController", "Create[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permissions.ID} ID ga ega Permission yaratdi");
+
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
@@ -174,8 +174,9 @@ namespace tahsinERP.Controllers
                         }
 
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "PModuleController", "Edit[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permissions.ID} ID ga ega Permissionni tahrirladi");
+
                         return RedirectToAction("Index");
                     }
                     catch (DbUpdateConcurrencyException)
@@ -296,6 +297,8 @@ namespace tahsinERP.Controllers
 
                 db.PERMISSIONMODULES.Remove(permissionModule);
                 db.SaveChanges();
+
+                LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{Id} ID ga ega PermissionModuleni o'chirdi");
             }
 
             var userEmail = User.Identity.Name;

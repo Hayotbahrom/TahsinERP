@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -175,6 +176,8 @@ namespace tahsinERP.Controllers
                 db.PART_WRHS_INCOMES.Add(newIncome);
                 db.SaveChanges();
 
+                LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newIncome.ID} ID ga ega PartWrhsIncomeni yaratdi");
+
                 // Yangi yozuvning IncomeID sini olish
                 int newIncomeID = newIncome.ID;
                 DateTime toDate = DateTime.Now.Date;
@@ -203,6 +206,8 @@ namespace tahsinERP.Controllers
                             ToDate = DateTime.Now.Date
                         };
                         db.PART_STOCKS.Add(newPartStock);
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPartStock.ID} ID ga ega PartStockni yaratdi");
                     }
                     else
                     {
@@ -210,11 +215,11 @@ namespace tahsinERP.Controllers
                     }
 
                     db.PART_WRHS_INCOME_PARTS.Add(newPart);
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPart.ID} ID ga ega PartWrhsIncomePartni yaratdi");
                 }
 
                 db.SaveChanges();
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -363,8 +368,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db1.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Edit[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{wrhsIncomeToUpdate} ID ga ega PartWrhsIncomeni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -431,8 +437,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "EditPart[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{whIncomePartToUpdate} ID ga ega PartWrhsIncomePartni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -491,8 +498,9 @@ namespace tahsinERP.Controllers
                                 db.PART_WRHS_INCOME_PARTS.Remove(whIncomePart);
                             }*/
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Delete[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{whIncomeToDelete} ID ga ega partWrhsIncomeni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -521,8 +529,9 @@ namespace tahsinERP.Controllers
                         {
                             db.PART_WRHS_INCOME_PARTS.Remove(contractPartToDelete);
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WhIncomeController", "Delete[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{contractPartToDelete} ID ga ega PartWrhsIncomePartni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

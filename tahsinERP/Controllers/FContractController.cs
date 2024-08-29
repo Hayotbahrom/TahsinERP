@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.EMMA;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -51,8 +53,13 @@ namespace tahsinERP.Controllers
                         await db.SaveChangesAsync();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "FContractController", "Create[Post]");
+                        LogHelper.LogToDatabase(userEmail, "FContractController", $"{contract.ID} ID ga ega FContractni yaratdi");
+
                         return RedirectToAction("Index"); 
+                    }
+                    else
+                    {
+                        ViewBag.Forwarder = new SelectList(await db.FORWARDERS.Where(fc => fc.IsDeleted == false).ToListAsync(), "ID", "ForwarderName");
                     }
                 }
             }
@@ -111,9 +118,9 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (DBTHSNEntities db1 = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    var contractToUpdate = await db1.F_CONTRACTS.FindAsync(contract.ID);
+                    var contractToUpdate = await db.F_CONTRACTS.FindAsync(contract.ID);
                     if (contractToUpdate != null)
                     {
                         contractToUpdate.ContractNo = contract.ContractNo;
@@ -127,7 +134,11 @@ namespace tahsinERP.Controllers
 
                         try
                         {
-                            await db1.SaveChangesAsync();
+                            await db.SaveChangesAsync();
+
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{contract.ID} ID ga ega FContratni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -136,8 +147,6 @@ namespace tahsinERP.Controllers
                         }
                     }
 
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "FContractController", "Edit[Post]");
                     return View(contractToUpdate);
                 }
             }
@@ -175,8 +184,12 @@ namespace tahsinERP.Controllers
                         contractToDelete.IsDeleted = true;
                         try
                         {
-                            db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
-                             await db.SaveChangesAsync();
+                            db.Entry(contractToDelete).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+
+                            var userEmail = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{ID} ID ga ega FContratni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -191,10 +204,7 @@ namespace tahsinERP.Controllers
                 }
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "FContractController", "Delete[Post]");
             return View();
         }
-
     }
 }

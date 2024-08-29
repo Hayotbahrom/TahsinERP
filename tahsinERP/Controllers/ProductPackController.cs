@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.EMMA;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -47,8 +48,9 @@ namespace tahsinERP.Controllers
 
                     db.PRODUCTPACKS.Add(model);
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "ProductPackController", "Create[Post]");
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "ProductPackController", $"{model.ID} ID ga ega ProductPackni yaratdi");
+
                     return RedirectToAction("Index");
                 }
 
@@ -108,9 +110,10 @@ namespace tahsinERP.Controllers
                         db.Entry(productPack).State = EntityState.Modified;
                         db.Entry(productPack).Property(p => p.ProdID).IsModified = true; // ProdID ni modified deb belgilash
                         db.SaveChanges();
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "ProductPackController", $"{productPack.ID} ID ga ega ProductPackni tahrirladi");
                     }
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "ProductPackController", "Edit[Post]");
+
                     return RedirectToAction("Index");
                 }
 
@@ -191,9 +194,10 @@ namespace tahsinERP.Controllers
                     prodPack.IsDeleted = true;
                     db.Entry(prodPack).State = EntityState.Modified;
                     db.SaveChanges();
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "ProductPackController", $"{prodPack.ID} ID ga ega ProductPackni o'chirdi");
                 }
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "ProductPackController", "Edit[Post]");
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

@@ -41,10 +41,13 @@ namespace tahsinERP.Controllers
 
                     db.PARTPACKS.Add(model);
                     db.SaveChanges();
+
                     var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartPackController", "Create[Post]");
+                    LogHelper.LogToDatabase(userEmail, "PartPackController", $"{partID} ID ga ega PartPackni yaratdi");
+
                     return RedirectToAction("Index");
                 }
+
                 var parts = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.PartsList = new SelectList(parts, "ID", "PNo", model.PartID);
 
@@ -99,8 +102,10 @@ namespace tahsinERP.Controllers
                         db.Entry(model).Property(p => p.PartID).IsModified = true;
                         db.SaveChanges();
                     }
+
                     var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
+                    LogHelper.LogToDatabase(userEmail, "PartPackController", $"{partId} ID ga ega PartPackni tahrirladi");
+
                     return RedirectToAction("Index");
                 }
 
@@ -163,8 +168,10 @@ namespace tahsinERP.Controllers
                         db.Entry(partpack).State = EntityState.Modified;
                         db.SaveChanges();
                     }
+
                     var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartPackController", "Edit[Post]");
+                    LogHelper.LogToDatabase(userEmail, "PartPackController", $"{id} ID ga ega PartPackni o'chirdi");
+
                     return RedirectToAction("Index");
                 }
             }

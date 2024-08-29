@@ -80,6 +80,9 @@ namespace tahsinERP.Controllers
 
                         db.SaveChanges();
 
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "BlankingController", $"{blanking_norms.ID} ID ega Normani yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -92,8 +95,6 @@ namespace tahsinERP.Controllers
                 ViewBag.Part = new SelectList(partList, "ID", "PNo");
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "BlankingController", "Create[Post]");
             return View(model);
         }
         public ActionResult Edit(int id)
@@ -108,9 +109,6 @@ namespace tahsinERP.Controllers
 
                 var partList = db.PARTS.Where(x => x.IsDeleted == false).ToList();
                 ViewBag.Part = new SelectList(partList, "ID", "PNo");
-
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "BlankingController", "Create[Get]");
                 return View(blankingNorm);
             }
         }
@@ -152,6 +150,9 @@ namespace tahsinERP.Controllers
                         db.Entry(blankingNorm).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
 
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "BlankingController", $"{model.ID} ID ega Normani yangiladi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -164,8 +165,6 @@ namespace tahsinERP.Controllers
                 ViewBag.Part = new SelectList(partList, "ID", "PNo");
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "BlankingController", "Edit[Post]");
             return View(model);
         }
 
@@ -210,7 +209,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "BlankingController", "Delete[Post]");
+                LogHelper.LogToDatabase(userEmail, "BlankingController", $"{id} ID ga ega Normani o'chirdi");
                 return RedirectToAction("Index");
             }
         }

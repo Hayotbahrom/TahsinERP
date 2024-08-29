@@ -64,8 +64,9 @@ namespace tahsinERP.Controllers
                         supplier.IsDeleted = false;
                         db.SUPPLIERS.Add(supplier);
                         db.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "SupplierController", "Create[Post]");
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplier.ID} ID ga ega Supplierni yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -145,8 +146,9 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "SupplierController", "Edit[Post]");
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplierToUpdate.ID} ID ga ega Supplierni tahrirladi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -186,17 +188,18 @@ namespace tahsinERP.Controllers
             {
                 using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    SUPPLIER supplierToUpdate = db.SUPPLIERS.Find(ID);
-                    if (supplierToUpdate != null)
+                    SUPPLIER supplierToDelete = db.SUPPLIERS.Find(ID);
+                    if (supplierToDelete != null)
                     {
-                        supplierToUpdate.IsDeleted = true;
-                        if (TryUpdateModel(supplierToUpdate, "", new string[] { "IsDeleted" }))
+                        supplierToDelete.IsDeleted = true;
+                        if (TryUpdateModel(supplierToDelete, "", new string[] { "IsDeleted" }))
                         {
                             try
                             {
                                 db.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "SupplierController", "Delete[Post]");
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplierToDelete.ID} ID ga ega Supplierni o'chirdi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -336,6 +339,8 @@ namespace tahsinERP.Controllers
 
                                 db.SUPPLIERS.Add(new_supplier);
                                 db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{new_supplier.ID} ID ga ega Supplierni Excell orqali yaratdi");
                             }
                         }
                     }
@@ -346,8 +351,6 @@ namespace tahsinERP.Controllers
                 }
             }
 
-            var userEmail = User.Identity.Name;
-            LogHelper.LogToDatabase(userEmail, "SupplierController", "Save[Post]");
             return RedirectToAction("Index");
         }
     }
