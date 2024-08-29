@@ -33,25 +33,29 @@ namespace tahsinERP.Controllers
             {
                 var viewModel = new WaybillCreateViewModel
                 {
-                    Contracts = db.F_CONTRACTS.Select(c => new SelectListItem
+                    Contracts = db.F_CONTRACTS
+                    .Where(x => x.IsDeleted == false)
+                    .Select(c => new SelectListItem
                     {
                         Value = c.ID.ToString(),
                         Text = c.ContractNo
                     }).ToList(),
 
-                    TransportTypes = db.F_TRANSPORT_TYPES.Select(t => new SelectListItem
+                    TransportTypes = db.F_TRANSPORT_TYPES
+                    .Select(t => new SelectListItem
                     {
                         Value = t.ID.ToString(),
                         Text = t.TransportType
                     }).ToList(),
 
-                    Invoices = db.P_INVOICES.Select(i => new SelectListItem
+                    Invoices = db.P_INVOICES
+                    .Where(x => x.IsDeleted == false).Select(i => new SelectListItem
                     {
                         Value = i.ID.ToString(),
                         Text = i.InvoiceNo
                     }).ToList(),
 
-                    PackingLists = db.P_INVOICE_PACKINGLISTS.Select(p => new SelectListItem
+                    PackingLists = db.P_INVOICE_PACKINGLISTS.Where(x => x.IsDeleted == false).Select(p => new SelectListItem
                     {
                         Value = p.ID.ToString(),
                         Text = p.PackingListNo
@@ -94,7 +98,7 @@ namespace tahsinERP.Controllers
             // Repopulate dropdown lists if validation fails
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                viewModel.Contracts = db.F_CONTRACTS.Select(c => new SelectListItem
+                viewModel.Contracts = db.F_CONTRACTS.Where(x => x.IsDeleted == false).Select(c => new SelectListItem
                 {
                     Value = c.ID.ToString(),
                     Text = c.ContractNo
@@ -106,13 +110,13 @@ namespace tahsinERP.Controllers
                     Text = t.TransportType
                 }).ToList();
 
-                viewModel.Invoices = db.P_INVOICES.Select(i => new SelectListItem
+                viewModel.Invoices = db.P_INVOICES.Where(x => x.IsDeleted == false).Select(i => new SelectListItem
                 {
                     Value = i.ID.ToString(),
                     Text = i.InvoiceNo
                 }).ToList();
 
-                viewModel.PackingLists = db.P_INVOICE_PACKINGLISTS.Select(p => new SelectListItem
+                viewModel.PackingLists = db.P_INVOICE_PACKINGLISTS.Where(x => x.IsDeleted == false).Select(p => new SelectListItem
                 {
                     Value = p.ID.ToString(),
                     Text = p.PackingListNo

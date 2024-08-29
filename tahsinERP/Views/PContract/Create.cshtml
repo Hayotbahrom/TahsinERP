@@ -170,7 +170,7 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_MOQ">MOQ</label>
-                                                            <input type="text" name="MOQ" class="form-control" id="Part_MOQ" />
+                                                            <input type="text" name="MOQ" step="0.001" class="form-control" id="Part_MOQ" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">

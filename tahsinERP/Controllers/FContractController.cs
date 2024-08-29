@@ -57,6 +57,10 @@ namespace tahsinERP.Controllers
 
                         return RedirectToAction("Index"); 
                     }
+                    else
+                    {
+                        ViewBag.Forwarder = new SelectList(await db.FORWARDERS.Where(fc => fc.IsDeleted == false).ToListAsync(), "ID", "ForwarderName");
+                    }
                 }
             }
             catch (Exception ex)
