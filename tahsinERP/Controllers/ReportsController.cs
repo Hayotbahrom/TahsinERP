@@ -13,7 +13,7 @@ namespace tahsinERP.Controllers
     public class ReportsController : Controller
     {
         // GET: Reports
-        //private string connectionString = ConfigurationManager.ConnectionStrings["SqlConnectionString"].ConnectionString;
+        private string connectionString = ConfigurationManager.AppSettings["SqlConnectionString"];
         public ActionResult Index()
         {
             return View();
@@ -24,7 +24,7 @@ namespace tahsinERP.Controllers
             //{
             //    ViewBag.DataTable = db.Database.SqlQuery("EXEC InTransitView").ToList();
             //}
-            using (SqlConnection connection = new SqlConnection("Data Source=192.168.100.14;Initial Catalog=DBTHSN-TEST;User ID=sa;Password=Sch@2024;"))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand("InTransitView", connection))
                 {
@@ -43,7 +43,7 @@ namespace tahsinERP.Controllers
 
         public ActionResult PartRequirement()
         {
-            using (SqlConnection connection = new SqlConnection("Data Source=192.168.100.14;Initial Catalog=DBTHSN-TEST;User ID=sa;Password=Sch@2024;"))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand("WeeklyPartRequirementByProductPlan", connection))
                 {
@@ -62,7 +62,7 @@ namespace tahsinERP.Controllers
 
         public ActionResult Coverage()
         {
-            using (SqlConnection connection = new SqlConnection("Data Source=192.168.100.14;Initial Catalog=DBTHSN-TEST;User ID=sa;Password=Sch@2024;"))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand("WeeklyCoverage", connection))
                 {
