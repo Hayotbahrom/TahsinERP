@@ -100,13 +100,40 @@ namespace tahsinERP.Controllers
                 return his_warehouse;
             }
         }
+        public JsonResult GetInvoicesBySupplier(int supplierID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var invoices = db.P_INVOICES
+                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
+                    .Select(x => new
+                    {
+                        x.ID,
+                        x.InvoiceNo,
+                        x.Currency // Include Currency in the response
+                    })
+                    .ToList();
+
+                return Json(invoices.Select(i => new
+                {
+                    Value = i.ID.ToString(),
+                    Text = i.InvoiceNo,
+                    Currency = i.Currency
+                }), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
         public ActionResult Create()
         {
             string month = "";
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                //ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
-                ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
+                //ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                ViewBag.Invoices = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
@@ -190,7 +217,7 @@ namespace tahsinERP.Controllers
                         PartID = part.PartID,
                         UnitID = part.UnitID,
                         Amount = part.Amount,
-                        PiecePrice = part.PiecePrice,
+                        PiecePrice = (double)part.PiecePrice,
                         //TotalPrice = part.TotalPrice,
                         Comment = part.Comment
                     };
@@ -236,7 +263,6 @@ namespace tahsinERP.Controllers
 
             }
         }
-
 
         public async Task<ActionResult> Download()
         {

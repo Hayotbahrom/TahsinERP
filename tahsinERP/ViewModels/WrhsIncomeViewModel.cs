@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.Web.Mvc;
 
 namespace tahsinERP.ViewModels
 {
@@ -37,6 +38,9 @@ namespace tahsinERP.ViewModels
 
         public bool RecieveStatus { get; set; } // Receive status
 
+        // New property for selected Supplier ID
+        public int? SupplierID { get; set; }
+
         // Parts associated with the warehouse income
         public List<WhrsIncomePart> Parts { get; set; }
 
@@ -58,9 +62,8 @@ namespace tahsinERP.ViewModels
         [Range(1, int.MaxValue, ErrorMessage = "Amount must be a positive number.")]
         public int Amount { get; set; }
 
-        
         [Range(0.01, double.MaxValue, ErrorMessage = "Piece price must be a positive number.")]
-        public int PiecePrice { get; set; }
+        public decimal PiecePrice { get; set; }
 
         public string Comment { get; set; } // Optional comment
     }
