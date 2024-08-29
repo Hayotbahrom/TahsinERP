@@ -84,8 +84,9 @@ namespace tahsinERP.Controllers
 
                     db.F_WAYBILLS.Add(waybill);
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "WaybillController", "Create[Post]");
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybill.ID} ID ga ega FWaybillni yaratdi");
+
                     return RedirectToAction("Index");
                 }
             }
@@ -150,9 +151,9 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var waybill = db1.F_WAYBILLS
+                var waybill = db.F_WAYBILLS
                                 .Include(w => w.F_CONTRACTS)
                                 .Include(w => w.P_INVOICES)
                                 .Include(w => w.F_TRANSPORT_TYPES)
@@ -162,10 +163,10 @@ namespace tahsinERP.Controllers
                 {
                     return HttpNotFound();
                 };
-                ViewBag.Invoice = new SelectList(db1.P_INVOICES.Where(fc => fc.IsDeleted == false).ToList(), "ID", "InvoiceNo");
-                ViewBag.Contract = new SelectList(db1.F_CONTRACTS.Where(fc => fc.IsDeleted == false).ToList(), "ID", "ContractNo");
-                ViewBag.TransportType = new SelectList(db1.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
-                ViewBag.PackingList = new SelectList(db1.P_INVOICE_PACKINGLISTS.Where(fc => fc.IsDeleted == false).ToList(), "ID", "PackingListNo");
+                ViewBag.Invoice = new SelectList(db.P_INVOICES.Where(fc => fc.IsDeleted == false).ToList(), "ID", "InvoiceNo");
+                ViewBag.Contract = new SelectList(db.F_CONTRACTS.Where(fc => fc.IsDeleted == false).ToList(), "ID", "ContractNo");
+                ViewBag.TransportType = new SelectList(db.F_TRANSPORT_TYPES.ToList(), "ID", "TransportType");
+                ViewBag.PackingList = new SelectList(db.P_INVOICE_PACKINGLISTS.Where(fc => fc.IsDeleted == false).ToList(), "ID", "PackingListNo");
 
                 return View(waybill);
             }
@@ -177,9 +178,9 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (DBTHSNEntities db1 = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
-                    var  waybillToUpdate = db1.F_WAYBILLS.Find(waybill.ID);
+                    var  waybillToUpdate = db.F_WAYBILLS.Find(waybill.ID);
                     if (waybillToUpdate != null)
                     {
                         waybillToUpdate.WaybillNo = waybill.WaybillNo;
@@ -193,9 +194,10 @@ namespace tahsinERP.Controllers
 
                         try
                         {
-                            db1.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WaybillController", "Edit[Post]");
+                            db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybill.ID} ID ga ega FWaybillni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -249,10 +251,11 @@ namespace tahsinERP.Controllers
                         waybillToDelete.IsDeleted = true;
                         try
                         {
-                            db.Entry(waybillToDelete).State = System.Data.Entity.EntityState.Modified;
+                            db.Entry(waybillToDelete).State = EntityState.Modified;
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "WaybillController", "Delete[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybillToDelete.ID} ID ga ega FWaybillni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
