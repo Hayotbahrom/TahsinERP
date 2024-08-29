@@ -44,17 +44,23 @@
                                     <div class="col-md-4 col-sm-8" style="float: right;">
                                         <div class="form-group">
                                             <label for="startDate">Dan:</label>
-                                            @Html.TextBox("startDate", null, new { @class = "form-control datetimepicker round", @id="fromDate", @placeholder = "Boshlanish sanasi", @required = "required", @type = "date" })
+                                            @Html.TextBox("startDate", null, new { @class = "form-control datetimepicker round", @id = "startDate", @placeholder = "Boshlanish sanasi", @required = "required", @type = "date" })
                                         </div>
                                         <div class="form-group">
                                             <label for="endDate">Gacha:</label>
-                                            @Html.TextBox("endDate", null, new { @class = "form-control datetimepicker round", @id = "toDate", @placeholder = "Tugash sanasi", @required = "required", @type = "date" })
+                                            @Html.TextBox("endDate", null, new { @class = "form-control datetimepicker round", @id = "endDate", @placeholder = "Tugash sanasi", @required = "required", @type = "date" })
                                         </div>
+
+                                        <button class="btn btn-success" style="float: right;" onclick="sendDate()">
+                                            Hisoblash
+                                        </button>
                                     </div>
 
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
+                                        @*<table id="myDataTable" class="table table-striped table-bordered complex-headers dataex-html5-selector" style="width:100%">*@
+                                        <table class="table table-striped table-bordered dataex-html5-selectors" id="myDataTable" style="width:100%">
+
                                             <thead>
                                                 <tr>
                                                     @foreach (var col in ViewBag.DataTable.Columns)
@@ -119,3 +125,25 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+<script type="text/javascript">
+    function sendDate() {
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+        
+        $.ajax({
+            url: '@Url.Action("Coverage", "Reports")',
+            type: 'GET',
+            data: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            success: function(response) {
+                console.log("Ishladi, Covarage");
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+</script>
