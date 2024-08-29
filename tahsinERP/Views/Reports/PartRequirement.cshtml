@@ -143,7 +143,13 @@ else
             "autoWidth": false,       // Avtomatik kenglikni o'chirish
             "dom": 'Bfrtip',          // Boshqa qismlar bilan birga eksport tugmalarini joylashtirish
             "buttons": [
-                'excel', 'pdf', 'print' // Eksport tugmalari
+                'excel',
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape', // PDFni landscape rejimida qilish
+                    pageSize: 'A0', // A4 o'lchamida qilish
+                },
+                'print'
             ],
             "scrollX": true           // Gorizontal skrollni yoqish
         });
