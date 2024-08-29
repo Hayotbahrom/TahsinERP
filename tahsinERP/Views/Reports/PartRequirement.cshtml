@@ -1,6 +1,6 @@
-﻿
+﻿@model tahsinERP.ViewModels.Reports.ReportViewModel
 @{
-    ViewBag.Title = "PartRequirement";
+    ViewBag.Title = "Ehtiyot qismga talab - Haftalik";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @if (!tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
@@ -27,7 +27,7 @@
                                         Xisobotlar
                                     </li>
                                     <li class="breadcrumb-item active">
-                                        Yo'lda
+                                        Ehtiyot qismga talab - Haftalik
                                     </li>
                                 </ol>
                             </div>
@@ -42,76 +42,76 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <!-- datatable start -->
-                                    <div class="table-responsive table-responsivetable-responsive">
-                                        <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width: 100%;">
-                                            <thead>
-                                                @*<tr>
-                                                    @{
-                                                        int countCol = 0;
-                                                    }
-                                                    @foreach (var col in ViewBag.DataTable.Columns)
-                                                    {
-                                                        if (countCol >= 1)
-                                                        {
-                                                            <th class="rotate-45-inverse" style="padding: 40px 0px; margin: 0px !important;">@col.ColumnName</th>
-                                                        }
-                                                        else
+                                    @using (Html.BeginForm("PartRequirement", "Reports", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="col-md-3 col-sm-8" style="float: right;">
+                                            <div class="form-group position-relative has-icon-left">
+                                                @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control pickadate-months-year round", @id = "startDate", @placeholder = "Boshlanish sanasi", @required = "required", @type = "date" })
+                                            </div>
+                                            <div class="form-group form-group position-relative has-icon-left">
+                                                @Html.TextBoxFor(model => model.EndDate, new { @class = "form-control pickadate-months-year round", @id = "endDate", @placeholder = "Tugash sanasi", @required = "required", @type = "date" })
+                                            </div>
+                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Coverage">
+                                                <i class='bx bx-book'></i>
+                                                Hisoblash
+                                            </button>
+                                        </div>
+
+                                        <!-- datatable start -->
+                                        <div class="table-responsive table-responsivetable-responsive">
+                                            <table class="table table-striped table-bordered complex-headers dataex-html5-selector" id="myDataTable" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        @foreach (var col in ViewBag.DataTable.Columns)
                                                         {
                                                             <th>@col.ColumnName</th>
-
-                                                        }
-                                                        countCol += 1;
-                                                    }
-                                                </tr>*@
-                                                <tr>
-                                                    @foreach (var col in ViewBag.DataTable.Columns)
-                                                    {
-                                                        <th>@col.ColumnName</th>
-                                                    }
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var row in ViewBag.DataTable.Rows)
-                                                {
-                                                    int countRow = 0;
-                                                    <tr>
-                                                        @foreach (var item in row.ItemArray)
-                                                        {
-                                                            // Convert item to string and then to integer if possible
-                                                            int number;
-                                                            string displayText = item.ToString();
-                                                            string cellClass = "";
-
-                                                            // Try converting the item to an integer
-                                                            if (int.TryParse(displayText, out number))
-                                                            {
-                                                                // Apply conditional formatting based on integer value
-                                                                if (number <= 0 && countRow >= 1)
-                                                                {
-                                                                    cellClass = "text-danger";
-                                                                }
-                                                                else if (number >= 1 && countRow >= 1)
-                                                                {
-                                                                    cellClass = "text-success";
-                                                                }
-                                                                else
-                                                                {
-                                                                    cellClass = "text-bold-700";
-                                                                }
-
-                                                                displayText = number.ToString(); // Update display text with the integer value
-                                                            }
-                                                            countRow += 1;
-
-                                                            <td class="@cellClass">@displayText</td>
                                                         }
                                                     </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <!-- datatable ends -->
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var row in ViewBag.DataTable.Rows)
+                                                    {
+                                                        int countRow = 0;
+                                                        <tr>
+                                                            @foreach (var item in row.ItemArray)
+                                                            {
+                                                                // Convert item to string and then to integer if possible
+                                                                int number;
+                                                                string displayText = item.ToString();
+                                                                string cellClass = "";
+
+                                                                // Try converting the item to an integer
+                                                                if (int.TryParse(displayText, out number))
+                                                                {
+                                                                    // Apply conditional formatting based on integer value
+                                                                    if (number <= 0 && countRow >= 1)
+                                                                    {
+                                                                        cellClass = "text-danger";
+                                                                    }
+                                                                    else if (number >= 1 && countRow >= 1)
+                                                                    {
+                                                                        cellClass = "text-success";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        cellClass = "text-bold-700";
+                                                                    }
+
+                                                                    displayText = number.ToString(); // Update display text with the integer value
+                                                                }
+                                                                countRow += 1;
+
+                                                                <td class="@cellClass">@displayText</td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- datatable ends -->
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -127,3 +127,25 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+<!-- jQuery v3.6.0 -->
+<script src="~/assets/js/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#myDataTable').DataTable({
+            "paging": true,           // Pagingni yoqish
+            "pageLength": 1000,        // Default "Show Entries"ni 1000 ga sozlash
+            "lengthChange": true,     // "Show Entries" dropdown menyusini ko'rsatish
+            "searching": true,        // Qidirish qutisini yoqish
+            "ordering": true,         // Ustunlar bo'yicha saralashni yoqish
+            "info": true,             // Jadval haqida ma'lumot ko'rsatish
+            "autoWidth": false,       // Avtomatik kenglikni o'chirish
+            "dom": 'Bfrtip',          // Boshqa qismlar bilan birga eksport tugmalarini joylashtirish
+            "buttons": [
+                'excel', 'pdf', 'print' // Eksport tugmalari
+            ],
+            "scrollX": true           // Gorizontal skrollni yoqish
+        });
+    });
+</script>

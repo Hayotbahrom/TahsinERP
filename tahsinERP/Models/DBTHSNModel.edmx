@@ -420,7 +420,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="PartID" Type="int" Nullable="false" />
           <Property Name="Unit" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Amount" Type="float" Nullable="false" />
-          <Property Name="ToDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="PART_WASTE_WRHS_EXPENSE_WASTES">
           <Key>
@@ -3286,6 +3285,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
         <Function Name="InTransitView" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="WeeklyCoverage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TodayDate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
         </Function>
         <Function Name="WeeklyPartRequirementByProductPlan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="DBTHSNModelStoreContainer">
@@ -4565,19 +4565,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="PART" Relationship="Self.FK_PART_PRODUCTION_PARTS" FromRole="PART_PRODUCTION" ToRole="PARTS" />
           <NavigationProperty Name="SHOP" Relationship="Self.FK_PART_PRODUCTION_SHOPS" FromRole="PART_PRODUCTION" ToRole="SHOPS" />
         </EntityType>
-        <EntityType Name="PART_STOCKS">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="WHID" Type="Int32" Nullable="false" />
-          <Property Name="PartID" Type="Int32" Nullable="false" />
-          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <NavigationProperty Name="PART_WRHS" Relationship="Self.FK_PART_STOCKS_PART_WRHS" FromRole="PART_STOCKS" ToRole="PART_WRHS" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_PART_STOCKS_PARTS" FromRole="PART_STOCKS" ToRole="PARTS" />
-          <Property Name="ToDate" Type="DateTime" Nullable="false" Precision="0" />
-        </EntityType>
         <EntityType Name="PART_WASTE_WRHS_EXPENSE_WASTES">
           <Key>
             <PropertyRef Name="ID" />
@@ -4659,7 +4646,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <Property Name="MRP" Type="Int32" Nullable="false" />
           <Property Name="ShopID" Type="Int32" Nullable="false" />
           <Property Name="Account" Type="Int32" />
-          <NavigationProperty Name="PART_STOCKS" Relationship="Self.FK_PART_STOCKS_PART_WRHS" FromRole="PART_WRHS" ToRole="PART_STOCKS" />
           <NavigationProperty Name="PART_WASTE_WRHS_EXPENSES" Relationship="Self.FK_PART_WASTE_WRHS_EXPENSES_PART_WRHS" FromRole="PART_WRHS" ToRole="PART_WASTE_WRHS_EXPENSES" />
           <NavigationProperty Name="PART_WASTE_WRHS_EXPENSES1" Relationship="Self.FK_PART_WASTE_WRHS_EXPENSES_PART_WRHS1" FromRole="PART_WRHS" ToRole="PART_WASTE_WRHS_EXPENSES" />
           <NavigationProperty Name="PART_WASTE_WRHS_INCOMES" Relationship="Self.FK_PART_WASTE_WRHS_INCOMES" FromRole="PART_WRHS" ToRole="PART_WASTE_WRHS_INCOMES" />
@@ -4671,6 +4657,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="SHOP" Relationship="Self.FK_PART_WRHS_PROD_SHOPS" FromRole="PART_WRHS" ToRole="SHOPS" />
           <NavigationProperty Name="USER" Relationship="Self.FK_PART_WRHS_USERS" FromRole="PART_WRHS" ToRole="USERS" />
           <NavigationProperty Name="WASTE_STOCKS" Relationship="Self.FK_WASTE_STOCKS_PART_WRHS" FromRole="PART_WRHS" ToRole="WASTE_STOCKS" />
+          <NavigationProperty Name="PART_STOCKS" Relationship="DBTHSNModel.FK_PART_STOCKS_PART_WRHS" FromRole="PART_WRHS" ToRole="PART_STOCKS" />
         </EntityType>
         <EntityType Name="PART_WRHS_EXPENSE_DOCS">
           <Key>
@@ -4886,7 +4873,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="P_ORDER_PARTS" Relationship="Self.FK_P_ORDER_PARTS_PARTS" FromRole="PARTS" ToRole="P_ORDER_PARTS" />
           <NavigationProperty Name="P_PACKINGLIST_PARTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="PARTS" ToRole="P_PACKINGLIST_PARTS" />
           <NavigationProperty Name="PART_PRODUCTION" Relationship="Self.FK_PART_PRODUCTION_PARTS" FromRole="PARTS" ToRole="PART_PRODUCTION" />
-          <NavigationProperty Name="PART_STOCKS" Relationship="Self.FK_PART_STOCKS_PARTS" FromRole="PARTS" ToRole="PART_STOCKS" />
           <NavigationProperty Name="PART_WRHS_EXPENSE_PARTS" Relationship="Self.FK_P_WRHS_EXPENSE_PARTS_PARTS" FromRole="PARTS" ToRole="PART_WRHS_EXPENSE_PARTS" />
           <NavigationProperty Name="PART_WRHS_INCOME_PARTS" Relationship="Self.FK_P_WRHS_INCOME_PARTS_PARTS" FromRole="PARTS" ToRole="PART_WRHS_INCOME_PARTS" />
           <NavigationProperty Name="PARTIMAGES" Relationship="Self.FK_PARTIMAGES_PARTS" FromRole="PARTS" ToRole="PARTIMAGES" />
@@ -4900,6 +4886,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="SLITTING_NORMS1" Relationship="Self.FK_SLITTING_NORMS_PARTS1" FromRole="PARTS" ToRole="SLITTING_NORMS" />
           <NavigationProperty Name="STAMPING_NORMS" Relationship="Self.FK_STAMPING_NORMS_PARTS" FromRole="PARTS" ToRole="STAMPING_NORMS" />
           <NavigationProperty Name="STAMPING_NORMS1" Relationship="Self.FK_STAMPING_NORMS_PARTS1" FromRole="PARTS" ToRole="STAMPING_NORMS" />
+          <NavigationProperty Name="PART_STOCKS" Relationship="DBTHSNModel.FK_PART_STOCKS_PARTS" FromRole="PART" ToRole="PART_STOCKS" />
         </EntityType>
         <EntityType Name="PERMISSIONMODULE">
           <Key>
@@ -6411,30 +6398,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PART_STOCKS_PART_WRHS">
-          <End Role="PART_WRHS" Type="Self.PART_WRHS" Multiplicity="1" />
-          <End Role="PART_STOCKS" Type="Self.PART_STOCKS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PART_WRHS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PART_STOCKS">
-              <PropertyRef Name="WHID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PART_STOCKS_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
-          <End Role="PART_STOCKS" Type="Self.PART_STOCKS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PART_STOCKS">
-              <PropertyRef Name="PartID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PART_WASTE_WRHS_EXPENSE_WASTE_WASTES">
           <End Role="WASTES" Type="Self.WASTE" Multiplicity="1" />
           <End Role="PART_WASTE_WRHS_EXPENSE_WASTES" Type="Self.PART_WASTE_WRHS_EXPENSE_WASTES" Multiplicity="*" />
@@ -7627,7 +7590,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySet Name="P_PACKINGLIST_PARTS" EntityType="Self.P_PACKINGLIST_PARTS" />
           <EntitySet Name="P_PROFORMA_INVOICES" EntityType="Self.P_PROFORMA_INVOICES" />
           <EntitySet Name="PART_PRODUCTION" EntityType="Self.PART_PRODUCTION" />
-          <EntitySet Name="PART_STOCKS" EntityType="Self.PART_STOCKS" />
           <EntitySet Name="PART_WASTE_WRHS_EXPENSE_WASTES" EntityType="Self.PART_WASTE_WRHS_EXPENSE_WASTES" />
           <EntitySet Name="PART_WASTE_WRHS_EXPENSES" EntityType="Self.PART_WASTE_WRHS_EXPENSES" />
           <EntitySet Name="PART_WASTE_WRHS_INCOME_WASTES" EntityType="Self.PART_WASTE_WRHS_INCOME_WASTES" />
@@ -7938,14 +7900,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <AssociationSet Name="FK_PART_PRODUCTION_SHOPS" Association="Self.FK_PART_PRODUCTION_SHOPS">
             <End Role="SHOPS" EntitySet="SHOPS" />
             <End Role="PART_PRODUCTION" EntitySet="PART_PRODUCTION" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PART_STOCKS_PART_WRHS" Association="Self.FK_PART_STOCKS_PART_WRHS">
-            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
-            <End Role="PART_STOCKS" EntitySet="PART_STOCKS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PART_STOCKS_PARTS" Association="Self.FK_PART_STOCKS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="PART_STOCKS" EntitySet="PART_STOCKS" />
           </AssociationSet>
           <AssociationSet Name="FK_PART_WASTE_WRHS_EXPENSE_WASTE_WASTES" Association="Self.FK_PART_WASTE_WRHS_EXPENSE_WASTE_WASTES">
             <End Role="WASTES" EntitySet="WASTES" />
@@ -8362,8 +8316,18 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <FunctionImport Name="WeeklyPartRequirementByProductPlan" />
           <FunctionImport Name="InTransitView" />
           <FunctionImport Name="WeeklyCoverage">
-          <Parameter Name="TodayDate" Mode="In" Type="DateTime" />
+            <Parameter Name="TodayDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="PART_STOCKS" EntityType="DBTHSNModel.PART_STOCKS" />
+          <AssociationSet Name="FK_PART_STOCKS_PART_WRHS" Association="DBTHSNModel.FK_PART_STOCKS_PART_WRHS">
+            <End Role="PART_WRHS" EntitySet="PART_WRHS" />
+            <End Role="PART_STOCKS" EntitySet="PART_STOCKS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PART_STOCKS_PARTS" Association="DBTHSNModel.FK_PART_STOCKS_PARTS">
+            <End Role="PART" EntitySet="PARTS" />
+            <End Role="PART_STOCKS" EntitySet="PART_STOCKS" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetCarPlanRequirements_Result">
           <Property Type="String" Name="PNo" Nullable="false" MaxLength="15" />
@@ -8425,6 +8389,42 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <Property Type="Int32" Name="ImageID" Nullable="false" />
           <Property Type="Binary" Name="Image" Nullable="true" MaxLength="Max" />
         </ComplexType>
+        <EntityType Name="PART_STOCKS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WHID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="Unit" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <NavigationProperty Name="PART_WRHS" Relationship="DBTHSNModel.FK_PART_STOCKS_PART_WRHS" FromRole="PART_STOCKS" ToRole="PART_WRHS" />
+          <NavigationProperty Name="PART" Relationship="DBTHSNModel.FK_PART_STOCKS_PARTS" FromRole="PART_STOCKS" ToRole="PART" />
+        </EntityType>
+        <Association Name="FK_PART_STOCKS_PART_WRHS">
+          <End Type="DBTHSNModel.PART_WRHS" Role="PART_WRHS" Multiplicity="1" />
+          <End Type="DBTHSNModel.PART_STOCKS" Role="PART_STOCKS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART_WRHS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART_STOCKS">
+              <PropertyRef Name="WHID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PART_STOCKS_PARTS">
+          <End Type="DBTHSNModel.PART" Role="PART" Multiplicity="1" />
+          <End Type="DBTHSNModel.PART_STOCKS" Role="PART_STOCKS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PART_STOCKS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -8853,18 +8853,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
                 <ScalarProperty Name="NightShift" ColumnName="NightShift" />
                 <ScalarProperty Name="Total" ColumnName="Total" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PART_STOCKS">
-            <EntityTypeMapping TypeName="DBTHSNModel.PART_STOCKS">
-              <MappingFragment StoreEntitySet="PART_STOCKS">
-                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="WHID" ColumnName="WHID" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9906,6 +9894,17 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <FunctionImportMapping FunctionImportName="WeeklyPartRequirementByProductPlan" FunctionName="DBTHSNModel.Store.WeeklyPartRequirementByProductPlan" />
           <FunctionImportMapping FunctionImportName="InTransitView" FunctionName="DBTHSNModel.Store.InTransitView" />
           <FunctionImportMapping FunctionImportName="WeeklyCoverage" FunctionName="DBTHSNModel.Store.WeeklyCoverage" />
+          <EntitySetMapping Name="PART_STOCKS">
+            <EntityTypeMapping TypeName="DBTHSNModel.PART_STOCKS">
+              <MappingFragment StoreEntitySet="PART_STOCKS">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="WHID" ColumnName="WHID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -58,7 +58,6 @@ namespace tahsinERP.Models
         public virtual DbSet<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
         public virtual DbSet<P_PROFORMA_INVOICES> P_PROFORMA_INVOICES { get; set; }
         public virtual DbSet<PART_PRODUCTION> PART_PRODUCTION { get; set; }
-        public virtual DbSet<PART_STOCKS> PART_STOCKS { get; set; }
         public virtual DbSet<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
         public virtual DbSet<PART_WASTE_WRHS_EXPENSES> PART_WASTE_WRHS_EXPENSES { get; set; }
         public virtual DbSet<PART_WASTE_WRHS_INCOME_WASTES> PART_WASTE_WRHS_INCOME_WASTES { get; set; }
@@ -126,6 +125,7 @@ namespace tahsinERP.Models
         public virtual DbSet<PROD_SHOPS_PARTS> PROD_SHOPS_PARTS { get; set; }
         public virtual DbSet<CarPlanRequirement> CarPlanRequirements { get; set; }
         public virtual DbSet<MaterialRequirement> MaterialRequirements { get; set; }
+        public virtual DbSet<PART_STOCKS> PART_STOCKS { get; set; }
     
         public virtual ObjectResult<GetCarPlanRequirements_Result> GetCarPlanRequirements(string optionCode)
         {
@@ -200,13 +200,17 @@ namespace tahsinERP.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InTransitView");
         }
     
-        public virtual int WeeklyCoverage(Nullable<System.DateTime> todayDate)
+        public virtual int WeeklyCoverage(Nullable<System.DateTime> todayDate, Nullable<System.DateTime> endDate)
         {
             var todayDateParameter = todayDate.HasValue ?
                 new ObjectParameter("TodayDate", todayDate) :
                 new ObjectParameter("TodayDate", typeof(System.DateTime));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WeeklyCoverage", todayDateParameter);
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WeeklyCoverage", todayDateParameter, endDateParameter);
         }
     }
 }
