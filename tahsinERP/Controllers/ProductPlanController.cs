@@ -92,6 +92,8 @@ namespace tahsinERP.Controllers
                             db.PRODUCTPLANS.Add(plan);
                             db.SaveChanges();
 
+                            LogHelper.LogToDatabase(User.Identity.Name, "ProductPlanController", $"{productPlan.ID} ID ga ega ProductPlanni yaratdi");
+
                             dayCount = productPlan.DueDate.Subtract(productPlan.StartDate).Days;
                             dayPlanAmount = Math.Ceiling(plan.Amount / dayCount);
                             startDate = productPlan.StartDate;
@@ -109,10 +111,11 @@ namespace tahsinERP.Controllers
                                 dailyPlan.Day = startDate;
                                 startDate = startDate.AddDays(1);
                                 db.PRODUCTPLANS_DAILY.Add(dailyPlan);
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductPlanController", $"{dailyPlan.ID} ID ga ega ProductPlanDailyni yaratdi");
                             }
+
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "ProductPlanController", "Create[Post]");
                             return RedirectToAction("Index");
                         }
                     }
@@ -186,9 +189,10 @@ namespace tahsinERP.Controllers
 
                             db.Entry(existingProductPlan).State = EntityState.Modified;
                             db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "ProductPlanController", $"{productPlan.ID} ID ga ega ProductPlanni tahrirladi");
                         }
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ProductPlanController", "Edit[Post]");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -238,8 +242,9 @@ namespace tahsinERP.Controllers
                     productPlan.IsDeleted = true;
                     db.Entry(productPlan).State = EntityState.Modified;
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "ProductPlanController", "Delete[Post]");
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "ProductPlanController", $"{productPlan.ID} ID ga ega ProductPlanni o'chirdi");
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)

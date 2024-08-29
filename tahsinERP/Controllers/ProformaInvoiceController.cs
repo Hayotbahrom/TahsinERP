@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -58,10 +59,11 @@ namespace tahsinERP.Controllers
                 db.P_PROFORMA_INVOICES.Add(invoice);
                 await db.SaveChangesAsync();
 
+                LogHelper.LogToDatabase(User.Identity.Name, "ProformaInvoiceController", $"{model.ID} ID ga ega PProformaInvoiceni yaratdi");
+
                 ViewBag.Supplier = new SelectList(await db.SUPPLIERS.Where(x => x.IsDeleted == false).ToListAsync(), "ID", "Name");
                 ViewBag.PInvoices = new SelectList(await db.P_INVOICES.Where(x => x.IsDeleted == false).ToListAsync(), "ID", "InvoiceNo");
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "ProformaInvoiceController", "Create[Post]");
+
                 return RedirectToAction("Index");
             }
         }
@@ -116,8 +118,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             await db.SaveChangesAsync();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "ProformaInvoiceController", "Delete[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "ProformaInvoiceController", $"{ID} ID ga ega PProformaInvoiceni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -178,8 +181,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "ProformaInvoiceController", "Edit[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "ProformaInvoiceController", $"{invoiceToUpdate.ID} ID ga ega PProformaInvoiceni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (DbUpdateException ex)

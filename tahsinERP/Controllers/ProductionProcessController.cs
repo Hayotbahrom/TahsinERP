@@ -27,17 +27,18 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Create(PRODUCTIONPROCESS productionProcess)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 try
                 {
                     if (ModelState.IsValid)
                     {
                         productionProcess.IsDeleted = false;
-                        db1.PRODUCTIONPROCESSES.Add(productionProcess);
-                        db1.SaveChanges();
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "ProductionProcessController", "Create[Post]");
+                        db.PRODUCTIONPROCESSES.Add(productionProcess);
+                        db.SaveChanges();
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{productionProcess.ID} ID ga ega ProductProccessni yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -51,13 +52,13 @@ namespace tahsinERP.Controllers
 
         public ActionResult Delete(int? id)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var process = db1.PRODUCTIONPROCESSES.Find(id);
+                var process = db.PRODUCTIONPROCESSES.Find(id);
                 if (process == null)
                 {
                     return HttpNotFound();
@@ -68,11 +69,11 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Delete(PRODUCTIONPROCESS pRODUCTIONPROCESS)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    var productionProcess_deleted = db1.PRODUCTIONPROCESSES.Find(pRODUCTIONPROCESS.ID);
+                    var productionProcess_deleted = db.PRODUCTIONPROCESSES.Find(pRODUCTIONPROCESS.ID);
                     if (productionProcess_deleted != null)
                     {
                         productionProcess_deleted.IsDeleted = true;
@@ -80,9 +81,10 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
-                                db1.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "ProductionProcessController", "Delete[Post]");
+                                db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{productionProcess_deleted.ID} ID ga ega ProductProccessni o'chirdi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -100,13 +102,13 @@ namespace tahsinERP.Controllers
 
         public ActionResult Edit(int? id)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var process = db1.PRODUCTIONPROCESSES.Find(id);
+                var process = db.PRODUCTIONPROCESSES.Find(id);
                 if (process == null)
                 {
                     return HttpNotFound();
@@ -117,11 +119,11 @@ namespace tahsinERP.Controllers
         [HttpPost]
         public ActionResult Edit(PRODUCTIONPROCESS pRODUCTIONPROCESS)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (ModelState.IsValid)
                 {
-                    var process_update = db1.PRODUCTIONPROCESSES.Find(pRODUCTIONPROCESS.ID);
+                    var process_update = db.PRODUCTIONPROCESSES.Find(pRODUCTIONPROCESS.ID);
                     if (process_update != null)
                     {
                         process_update.IsDeleted = false;
@@ -129,9 +131,10 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
-                                db1.SaveChanges();
-                                var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "ProductionProcessController", "Edit[Post]");
+                                db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{process_update.ID} ID ga ega ProductProccessni tahrirladi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -147,13 +150,13 @@ namespace tahsinERP.Controllers
         }
         public ActionResult Details(int? id)
         {
-            using (DBTHSNEntities db1 = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var process = db1.PRODUCTIONPROCESSES.Find(id);
+                var process = db.PRODUCTIONPROCESSES.Find(id);
                 if (process == null)
                 {
                     return HttpNotFound();
