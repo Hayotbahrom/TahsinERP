@@ -772,7 +772,6 @@
             });
         </script>
 
-
         <!-- Cookie -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -813,19 +812,15 @@
         <!-- REPEATER -->
         <script src="~/assets/js/jquery.repeater.min.js"></script>
         <script>
-            @* General: using two jQuery version *@
-            var $j = jQuery.noConflict(true); // Ikkita JS ni birga ishlatish
-            // 'j' => (just name)using for last added jQuery(v3.0.6)
+            // Using jQuery noConflict for multiple versions
+            var $j = jQuery.noConflict(true); // Two JS libraries being used
 
             $j(document).ready(function () {
                 $j('.repeater-default').repeater({
                     show: function () {
                         $j(this).slideDown();
 
-                        //$(this).find('.select').select2({
-                        //    width: '100%'
-                        //});
-
+                        // Select2 uchun qayta ishga tushirish
                         $(this).find('.select').each(function () {
                             if ($(this).hasClass("select2-hidden-accessible")) {
                                 $(this).select2('destroy');  // Select2'ni yo'q qilish
@@ -835,7 +830,6 @@
                                 width: '100%'
                             });
                         });
-
                     },
                     hide: function (deleteElement) {
                         if (confirm('Are you sure you want to delete this element?')) {
@@ -843,9 +837,8 @@
                         }
                     }
                 });
-            });
 
-            $(document).ready(function () {
+                // Select2 initialization for existing elements
                 $('.select').select2({
                     width: '100%'
                 });

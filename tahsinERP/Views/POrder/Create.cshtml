@@ -84,7 +84,7 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control", id = "ContractID" })
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control ContractID", @id = "ContractID", onchange = "getPartList()", onclick = "getPartList()" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="form-group position-relative has-icon-left">
@@ -126,7 +126,6 @@
                                                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
                                                 <hr />
                                             </div>
-
                                             <br />
                                             <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">
@@ -135,7 +134,7 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select", id = "PartID" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndMOQ(this)", onclick = "getPriceAndMOQ(this)" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -145,17 +144,17 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" step="0.001" class="form-control" id="Part_Amount" />
+                                                            <input type="number" name="Amount" step="0.01" class="form-control" id="Part_Amount" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.001" class="form-control" id="Part_Price" disabled="disabled"/>
+                                                            <input type="number" name="Price" step="0.01" class="form-control Part_Price" id="Part_Price" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_MOQ">MOQ</label>
-                                                            <input type="text" name="MOQ" class="form-control" id="Part_MOQ" disabled="disabled"/>
+                                                            <input type="text" name="MOQ" class="form-control Part_MOQ" id="Part_MOQ" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
@@ -186,6 +185,63 @@
     </div>
 
     <script type="text/javascript">
+        function getPartList() {
+            var contractID = document.getElementById("ContractID").value;
+
+            $.ajax({
+                url: '@Url.Action("GetPartList", "POrder")',
+                type: 'GET',
+                data: { contractPartID: contractID },
+                success: function(data) {
+                    if (data.success) {
+                        var PartID = $("#PartID");
+
+                        // Clear previous options
+                        PartID.empty();
+
+                        // Append new options
+                        $.each(data.data, function (index, item) {
+                            PartID.append(new Option(item.PNo, item.ID));    
+                        });
+                    } else {
+                        console.error("Error: " + data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+
+
+        function getPriceAndMOQ() {
+            var PartID = document.getElementById("PartID").value;
+
+            $.ajax({
+                url: '@Url.Action("GetPriceAndMOQ", "POrder")',
+                type: 'GET',
+                data: { partID: PartID },
+                success: function(data) {
+                    if (data.success) {
+                        var Price = $(".Part_Price");
+                        var MOQ = $(".Part_MOQ");
+       
+                        Price.val(data.data.Price);
+                        MOQ.val(data.data.MOQ);
+                    } else {
+                        console.error("Error: " + data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching data: ", error);
+                }
+            });
+        }
+
+
+
+
+        
         function refreshdatatablesupplier() {
             const supplierID = document.getElementById("SupplierID").value;
             $.ajax({
@@ -204,37 +260,5 @@
                 }
             });
         }
-
-        $('#ContractID').change(function () {
-            const contractID = $(this).val();
-            $.ajax({
-                url: '@Url.Action("GetPartsByContract", "POrder")',
-                type: 'GET',
-                data: { contractID: contractID },
-                success: function (data) {
-                    var partDropdown = $("#PartID");
-                    partDropdown.empty(); // Clear previous options
-
-                    $.each(data, function (index, item) {
-                        partDropdown.append(new Option(item.Text, item.Value));
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching parts:", error);
-                }
-            });
-        });
-
-
-        $('.pickadate-months-year').pickadate({
-            selectYears: true,       // Yillar tanlashni yoqish
-            selectMonths: true,      // Oylik tanlashni yoqish
-            format: 'mm, yyyy',      // Faqat oy va yilni ko'rsatish uchun format
-            formatSubmit: 'yyyy-mm', // Faqat oy va yilni submit qilish uchun format
-            onSet: function(context) {
-                this.close();        // Tanlashdan keyin datepicker'ni yopish
-            }
-        });
     </script>
-
 }

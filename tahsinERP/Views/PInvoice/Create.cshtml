@@ -136,12 +136,12 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Quantuty">Miqdori</label>
-                                                            <input type="number" name="Quantity" step="0.0001" class="form-control" id="Part_Quantuty" />
+                                                            <input type="number" name="Quantity" step="0.001" class="form-control" id="Part_Quantuty" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Quantity, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.0001" class="form-control" id="Part_Price" disabled="disabled" />
+                                                            <input type="number" name="Price" step="0.001" class="form-control" id="Part_Price" disabled="disabled" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
 
@@ -173,9 +173,14 @@
             </div>
         </div>
     </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
 
-    <script type="text/javascript">
-        function refreshOrderListbySupplier() {
+<script type="text/javascript">
+    function refreshOrderListbySupplier() {
         const supplierID = document.getElementById("SupplierID").value;
         $.ajax({
             url: '@Url.Action("GetOrdersBySupplier", "PInvoice")',
@@ -193,53 +198,4 @@
             }
         });
     }
-    </script>
-    @*function refreshpartListbyOrder() {
-        const orderID = document.getElementById("OrderID").value;
-        $.ajax({
-            url: '@Url.Action("GetPartsByOrder", "PInvoice")',
-            type: 'GET',
-            data: { orderID: orderID },
-            success: function (data) {
-                var partDropDown = $("#PartID");
-                partDropDown.empty();
-                $.each(data, function (index, item) {
-                    partDropDown.append(new Option(item.Text, item.Value));
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching contracts:", error);
-            }
-        });*@
-}
-
-@*$('#OrderID').change(function () {
-        const contractID = $(this).val();
-        console.log("Selected order ID:", orderID); // Debugging purpose
-
-        $.ajax({
-            url: '@Url.Action("GetPartsByOrder", "POrder")',
-            type: 'GET',
-            data: { contractID: contractID },
-            success: function (data) {
-                var partDropdown = $("#PartID");
-                partDropdown.empty(); // Clear previous options
-
-                $.each(data, function (index, item) {
-                    partDropdown.append(new Option(item.Text, item.Value));
-                });
-
-                console.log("Parts dropdown updated successfully."); // Debugging purpose
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching parts:", error);
-            }
-        });
-    });*@
-
-
-}
-else
-{
-    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
-}
+</script>
