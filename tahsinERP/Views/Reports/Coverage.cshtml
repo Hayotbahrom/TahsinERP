@@ -44,11 +44,11 @@
                                     <div class="col-md-4 col-sm-8" style="float: right;">
                                         <div class="form-group">
                                             <label for="startDate">Dan:</label>
-                                            @Html.TextBox("startDate", null, new { @class = "form-control datetimepicker round", @placeholder = "Boshlanish sanasi", @required = "required", @type = "date" })
+                                            @Html.TextBox("startDate", null, new { @class = "form-control datetimepicker round", @id="fromDate", @placeholder = "Boshlanish sanasi", @required = "required", @type = "date" })
                                         </div>
                                         <div class="form-group">
                                             <label for="endDate">Gacha:</label>
-                                            @Html.TextBox("endDate", null, new { @class = "form-control datetimepicker round", @placeholder = "Tugash sanasi", @required = "required", @type = "date" })
+                                            @Html.TextBox("endDate", null, new { @class = "form-control datetimepicker round", @id = "toDate", @placeholder = "Tugash sanasi", @required = "required", @type = "date" })
                                         </div>
                                     </div>
 

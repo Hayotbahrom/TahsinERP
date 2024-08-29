@@ -20,15 +20,17 @@ namespace tahsinERP.Controllers
         }
         public ActionResult InTransit()
         {
-            //using (DBTHSNEntities db = new DBTHSNEntities())
-            //{
-            //    ViewBag.DataTable = db.Database.SqlQuery("EXEC InTransitView").ToList();
-            //}
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand("InTransitView", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                    command.Parameters["@TodayDate"].Value = "2024-08-01";
+
+                    command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                    command.Parameters["@EndDate"].Value = "2024-12-31";
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -45,9 +47,16 @@ namespace tahsinERP.Controllers
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand("WeeklyPartRequirementByProductPlan", connection))
+                using (SqlCommand command = new SqlCommand("WeeklyPartRequirement", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
+                    command.Parameters["@TodayDate"].Value = "2024-08-01";
+
+                    command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
+                    command.Parameters["@EndDate"].Value = "2024-12-31";
+
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
