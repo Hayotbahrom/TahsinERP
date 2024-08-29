@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "UploadWithExcel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}@*
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{*@
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/Tracing">Tracing lar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Excel orqali yuklash
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section id="input-file-browser">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Excel orqali yuklash</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-12">
+                                                <fieldset class="form-group">
+                                                    <label>Shablon faylni yuklab oling</label>
+                                                    <br />
+                                                    @Html.ActionLink("tracings.xlsx", "download")
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12">
+                                                @using (Html.BeginForm("UploadWithExcel", "Tracing", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                {
+                                                    <fieldset class="form-group">
+                                                        <label for="basicInputFile">To'ldirilgan faylni yuklash uchun quyidagi tugmani bosing</label>
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="inputGroupFile01" name="file">
+                                                            <label class="custom-file-label" for="inputGroupFile01">Faylni tanlang</label>
+                                                        </div>
+                                                    </fieldset>
+                                                    <input type="submit" class="btn btn-light-primary mr-1 mb-1 round" value="Yuklash" />
+                                                }
+                                                @using (Html.BeginForm("ClearDataTable", "Tracing", FormMethod.Post))
+                                                {
+                                                    <fieldset class="form-group">
+                                                        <div>
+                                                            <label for="basicInputFile">Jadval ma'lumotlarini tozalash uchun esa quyidagi tugmani bosing:</label>
+                                                        </div>
+                                                        <input type="submit" value="Tozalash" class="btn btn-outline-danger round" />
+                                                    </fieldset>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                @if (ViewBag.Message != null)
+                                {
+                                    <div class="alert border-danger alert-dismissible mb-2" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bx bx-error"></i>
+                                            <span>
+                                                @ViewBag.Message
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            @if (ViewBag.DataTable != null)
+                            {
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Excel orqali yuklangan ma'lumot</h4>
+                                    </div>
+                                    @using (Html.BeginForm("Save", "Tracing", FormMethod.Post))
+                                    {
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <!-- datatable start -->
+                                                <div class="table-responsive">
+
+
+                                                    <table class="table zero-configuration" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                @foreach (var col in ViewBag.DataTable.Columns)
+                                                                {
+                                                                    <th>@col.ColumnName</th>
+                                                                }
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var row in ViewBag.DataTable.Rows)
+                                                            {
+                                                                <tr>
+                                                                    @foreach (var item in row.ItemArray)
+                                                                    {
+                                                                        <td>@item</td>
+                                                                    }
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                @if (ViewBag.IsFileUploaded != null)
+                                                {
+                                                    <br />
+                                                    <h6>
+                                                        Agar ma'lumotlar to'g'riliga ishonch xosil qilgan bo'lsangiz quyidagi tugma orqali ma'lumotlar bazasiga saqlashingiz mumkin.
+                                                    </h6>
+                                                    <input type="hidden" name="dataTableModel" value='@Html.Raw(ViewBag.DataTableModel)' />
+                                                    <input type="submit" value="Saqlash" class="btn btn-outline-success round mr-1 mb-1" onclick="return confirmSave()" />
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+        function confirmSave() {
+            console.log("Save button clicked!"); // Check if this message appears in the console
+            var duplicateRecords = @ViewBag.ExistingRecordsCount;
+            if (duplicateRecords > 0) {
+                alert("Siz yuklagan fayldagi ma'lumotlar tizimning ma'lumotlar bazasida mavjud. Yuklayotgan ma'lumotingizni sinchkovlik bilan tekshirib qayta urinib ko'ring.");
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+        </script>
+    }
+@*}
+
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+*@
