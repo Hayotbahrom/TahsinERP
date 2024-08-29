@@ -131,7 +131,7 @@ else
 <script src="~/assets/js/jquery.min.js"></script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#myDataTable').DataTable({
             "paging": true,           // Pagingni yoqish
             "pageLength": 1000,        // Default "Show Entries"ni 1000 ga sozlash
@@ -142,7 +142,13 @@ else
             "autoWidth": false,       // Avtomatik kenglikni o'chirish
             "dom": 'Bfrtip',          // Boshqa qismlar bilan birga eksport tugmalarini joylashtirish
             "buttons": [
-                'excel', 'pdf', 'print' // Eksport tugmalari
+                'excel',
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape', // PDFni landscape rejimida qilish
+                    pageSize: 'A0', // A4 o'lchamida qilish
+                },
+                'print'
             ],
             "scrollX": true           // Gorizontal skrollni yoqish
         });
