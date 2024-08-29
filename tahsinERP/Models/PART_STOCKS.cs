@@ -19,7 +19,6 @@ namespace tahsinERP.Models
         public int PartID { get; set; }
         public string Unit { get; set; }
         public double Amount { get; set; }
-        public System.DateTime ToDate { get; set; }
     
         public virtual PART_WRHS PART_WRHS { get; set; }
         public virtual PART PART { get; set; }
