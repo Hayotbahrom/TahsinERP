@@ -11,12 +11,14 @@ namespace tahsinERP.Controllers
 {
     public class RoleController : Controller
     {
-        private DBTHSNEntities db = new DBTHSNEntities();
         // GET: Role
         public ActionResult Index()
         {
-            var roles = db.ROLES.Where(r => r.IsDeleted == false).ToList();
-            return View(roles);
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var roles = db.ROLES.Where(r => r.IsDeleted == false).ToList();
+                return View(roles);
+            }
         }
         public ActionResult Create()
         {
@@ -70,19 +72,22 @@ namespace tahsinERP.Controllers
         [HttpGet]
         public ActionResult Edit(ROLE role)
         {
-            var roles = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(x => x.ID == role.ID);
-            if (role == null)
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
-            }
-            //Developer rolini faqat developer o`zgartirishga tekshirish
-            var currentUserRole = User.Identity.Name;
-            if (currentUserRole != "developer" && role.RName == "developer")
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Only developers can edit the developer role.");
-            }
+                var roles = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(x => x.ID == role.ID);
+                if (role == null)
+                {
+                    return HttpNotFound();
+                }
+                //Developer rolini faqat developer o`zgartirishga tekshirish
+                var currentUserRole = User.Identity.Name;
+                if (currentUserRole != "developer" && role.RName == "developer")
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Only developers can edit the developer role.");
+                }
 
-            return View(roles);
+                return View(roles);
+            }
         }
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
@@ -124,34 +129,42 @@ namespace tahsinERP.Controllers
         [HttpGet]
         public ActionResult Delete(ROLE roles)
         {
-            var role = db.ROLES.FirstOrDefault(x => x.ID == roles.ID);
-            if (role == null)
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                return HttpNotFound();
+                var role = db.ROLES.FirstOrDefault(x => x.ID == roles.ID);
+                if (role == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(role);
             }
-            return View(role);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID)
         {
-            ROLE role = db.ROLES.Find(ID);
-            role.IsDeleted = true;
-            if (TryUpdateModel(role, "", new string[] { "IsDeleted" }))
+            using(DBTHSNEntities db = new DBTHSNEntities())
             {
-                try
+                ROLE role = db.ROLES.Find(ID);
+                role.IsDeleted = true;
+                if (TryUpdateModel(role, "", new string[] { "IsDeleted" }))
                 {
-                    db.SaveChanges();
+                    try
+                    {
+                        db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{role.ID} ID ga ega Roleni o'chirdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{role.ID} ID ga ega Roleni o'chirdi");
 
-                    return RedirectToAction("Index");
-                }
-                catch (RetryLimitExceededException /* dex */)
-                {
-                    ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                        return RedirectToAction("Index");
+                    }
+                    catch (RetryLimitExceededException /* dex */)
+                    {
+                        ModelState.AddModelError("", "Oʻzgarishlarni saqlab boʻlmadi. Qayta urinib ko'ring va agar muammo davom etsa, tizim administratoriga murojaat qiling.");
+                    }
                 }
             }
+
             return View();
         }
         public ActionResult Details(int? ID)
@@ -160,14 +173,18 @@ namespace tahsinERP.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var role = db.ROLES.Find(ID);
-            ROLE roles = new ROLE();
 
-            roles.ID = role.ID;
-            roles.RName = role.RName;
-            roles.Description = role.Description;
-            roles.PERMISSIONS = role.PERMISSIONS;
-            return View(roles);
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var role = db.ROLES.Find(ID);
+                ROLE roles = new ROLE();
+
+                roles.ID = role.ID;
+                roles.RName = role.RName;
+                roles.Description = role.Description;
+                roles.PERMISSIONS = role.PERMISSIONS;
+                return View(roles);
+            }
         }
         public ActionResult Permissions(int id)
         {
@@ -198,32 +215,43 @@ namespace tahsinERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult Permissions(ROLE role)
+        public ActionResult Permissions(RolePermissionsViewModel model)
         {
+            if (model == null || model.Role == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid data.");
+            }
+
             using (var db = new DBTHSNEntities())
             {
-                var existingRole = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(r => r.ID == role.ID);
+                var existingRole = db.ROLES.Include(r => r.PERMISSIONS)
+                                           .FirstOrDefault(r => r.ID == model.Role.ID);
+
                 if (existingRole == null)
                 {
                     return HttpNotFound();
                 }
 
-                foreach (var permission in existingRole.PERMISSIONS)
+                foreach (var permission in model.Permissions)
                 {
-                    var existingPermission = existingRole.PERMISSIONS.FirstOrDefault(p => p.ID == permission.ID);
+                    var existingPermission = existingRole.PERMISSIONS
+                                                       .FirstOrDefault(p => p.ID == permission.ID);
+
                     if (existingPermission != null)
                     {
                         existingPermission.ViewPermit = permission.ViewPermit;
                         existingPermission.ChangePermit = permission.ChangePermit;
                     }
-                    db.SaveChanges();
-
-                    LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{existingPermission.ID} ID ga ega Permissioni tahrirladi");
                 }
 
-                return RedirectToAction("Edit", new { id = role.ID });
+                db.SaveChanges();
+
+                LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"Permissions updated for Role ID {model.Role.ID}");
+
+                return RedirectToAction("Edit", new { id = model.Role.ID });
             }
         }
+
 
     }
 }
