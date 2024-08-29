@@ -66,8 +66,10 @@ namespace tahsinERP.Controllers
                             try
                             {
                                 db.SaveChanges();
+
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Edit[Post]");
+                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.ID} ID ga ega Nuqson Turini tahrirladi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)
@@ -97,8 +99,10 @@ namespace tahsinERP.Controllers
                         model.IsDeleted = false;
                         db.DEFECT_TYPES.Add(model);
                         db.SaveChanges();
+
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Create[Post]");
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.ID} ID ga ega Nuqson Turini yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -136,13 +140,16 @@ namespace tahsinERP.Controllers
                     if (Defect_type_delete != null)
                     {
                         Defect_type_delete.IsDeleted = true;
+
                         if (TryUpdateModel(Defect_type_delete, "", new string[] { "IsDeleted" }))
                         {
                             try
                             {
                                 db.SaveChanges();
+
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Delete[Post]");
+                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.ID} ID ga ega Nuqson Turini o'chirdi");
+
                                 return RedirectToAction("Index");
                             }
                             catch (RetryLimitExceededException)

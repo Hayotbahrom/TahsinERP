@@ -50,6 +50,9 @@ namespace tahsinERP.Controllers
                     db.CAR_PLANS.Add(newPlan);
                     db.SaveChanges();
 
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "CarPlanController", $"{newPlan.ID} ID ega CarPlan yaratdi");
+
                     ViewBag.DataTable = db.Database.SqlQuery<GetCarPlanRequirements_Result>("EXEC GetCarPlanRequirements @OptionCode", new SqlParameter("@OptionCode", tempoCar.OptionCode)).ToList();
                     ViewBag.DataTableModel = JsonConvert.SerializeObject(ViewBag.DataTable);
                     ViewBag.IsFileUploaded = true;
@@ -98,9 +101,13 @@ namespace tahsinERP.Controllers
                                 db.PRODUCTPLANS.Add(plan);
                                 db.SaveChanges();
 
+                                var userEmail1 = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail1, "CarPlanController", $"{plan.ID} ID ega ProductPlan Excel orqali qo'shdi");
+
                                 dayCount = plan.DueDate.Subtract(plan.StartDate).Days;
                                 dayPlanAmount = Math.Ceiling(plan.Amount / dayCount);
                                 startDate = plan.StartDate;
+
                                 for (int i = 0; i < dayCount; i++)
                                 {
                                     PRODUCTPLANS_DAILY dailyPlan = new PRODUCTPLANS_DAILY();
@@ -116,12 +123,9 @@ namespace tahsinERP.Controllers
                                     startDate = startDate.AddDays(1);
                                     db.PRODUCTPLANS_DAILY.Add(dailyPlan);
                                 }
+
                                 db.SaveChanges();
                             }
-
-
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "ProductPlanController", "Save[Post]");
                         }
                     }
                     catch (Exception ex)

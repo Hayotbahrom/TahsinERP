@@ -238,8 +238,10 @@ namespace tahsinERP.Controllers
                                 }
                             }
                         db.SaveChanges();
+
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "AccountController", "SaveSettings[Post]");
+                        LogHelper.LogToDatabase(userEmail, "AccountController", $"{uImage.UserID} dagi foydalanuvchi ma'lumotlarini saqladi");
+
                         return Redirect("/Home");
                     }
                     catch (RetryLimitExceededException /* dex */)

@@ -614,10 +614,9 @@ namespace tahsinERP.Controllers
                 _tempbom.NormConfirmed = true;
                 db.SaveChanges();
 
-
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "BOMController", "CreateWizard[Post]");
-                db.SaveChanges();
+
                 return RedirectToAction("CompletionStatus", vmodel);
             }
         }
@@ -674,6 +673,7 @@ namespace tahsinERP.Controllers
 
             var userEmail = User.Identity.Name;
             LogHelper.LogToDatabase(userEmail, "BOMController", "SaveBom[Post]");
+
             return RedirectToAction("CompletionStatus", model);
         }
 
@@ -719,12 +719,14 @@ namespace tahsinERP.Controllers
                     var selectedProcesses = db.PRODUCTIONPROCESSES
                                               .Where(x => processID.Contains(x.ID) && x.IsDeleted == false)
                                               .ToList();
+
                     model.Process = string.Join(", ", selectedProcesses.Select(p => p.ProcessName));
                     model.SelectedProcessIds = processID;
                 }
 
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "BOMController", "BomCreate[Post]");
+
                 return RedirectToAction("CreateWizard", model);
             }
 
@@ -790,14 +792,15 @@ namespace tahsinERP.Controllers
                     }
                     db.BOMS.Add(bom);
                     db.SaveChanges();
-
-
                 }
+
                 var tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userID && x.IsDeleted == false).ToList();
                 db.TEMPORARY_BOMS.RemoveRange(tempbom);
                 db.SaveChanges();
+
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "BOMController", "CreateBom[Post]");
+                LogHelper.LogToDatabase(userEmail, "BOMController", $"{model.ID} ID ga ega BOM yaratdi");
+
                 return RedirectToAction("Index");
             }
         }
@@ -884,8 +887,10 @@ namespace tahsinERP.Controllers
                 TEMPORARY_BOMS _tempbom = db.TEMPORARY_BOMS.Where(x => x.UserID == userId && x.IsDeleted == false && x.ChildPNo == model.PartPno && x.ParentPNo == model.ProductPNo).FirstOrDefault();
                 _tempbom.NormConfirmed = true;
                 db.SaveChanges();
+
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
+                LogHelper.LogToDatabase(userEmail, "BOMController", $"{model1.ID} ID ga ega BOM ni tahrirladi");
+
                 return RedirectToAction("CompletionStatus", model1);
             }
         }
@@ -1074,6 +1079,8 @@ namespace tahsinERP.Controllers
                         product.IsDeleted = true;
                         db.SaveChanges();
 
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "BOMController", $"{ID} ID ga ega Maxsulotni o'chirdi");
                     }
                     else if (part != null)
                     {
@@ -1082,7 +1089,10 @@ namespace tahsinERP.Controllers
                         part.IsDeleted = true;
                         db.SaveChanges();
 
+                        var userEmail = User.Identity.Name;
+                        LogHelper.LogToDatabase(userEmail, "BOMController", $"{ID} ID ga ega Qismni o'chirdi");
                     }
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -1341,11 +1351,11 @@ namespace tahsinERP.Controllers
 
                                 db.BOMS.Add(bom);
                                 db.SaveChanges();
+
+                                var userEmail = User.Identity.Name;
+                                LogHelper.LogToDatabase(userEmail, "BOMController", $"{bom.ID} ID ga ega BOM ni Excell orqali qo'shdi");
                             }
 
-
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "BOMController", "Save[Post]");
                         }
                     }
                     catch (Exception ex)
@@ -1432,8 +1442,10 @@ namespace tahsinERP.Controllers
                 EditStamping(model.Stamping_After_ID, model.Stamping_Before_ID, model);
 
                 db.SaveChanges();
+
                 var userEmail = User.Identity.Name;
                 LogHelper.LogToDatabase(userEmail, "BOMController", "EditBom[Post]");
+
                 return RedirectToAction("Index");
             }
         }

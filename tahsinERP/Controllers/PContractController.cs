@@ -290,6 +290,8 @@ namespace tahsinERP.Controllers
                                 db.P_CONTRACTS.Add(new_contract);
                                 db.SaveChanges();
 
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contract.ID} ID ga ega PContractni Excell orqali yaratdi");
+
                                 P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == new_contract.ID && pcp.PartID == part.ID).FirstOrDefault();
                                 if (contractPart == null)
                                 {
@@ -310,6 +312,7 @@ namespace tahsinERP.Controllers
                                     //int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + new_contract.ID + " AND PartID =" + part.ID + "");
 
                                     db.SaveChanges();
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contractPart.ID} ID ga ega PContractPartni Excell orqali yaratdi");
                                 }
                             }
                             else
@@ -334,13 +337,12 @@ namespace tahsinERP.Controllers
                                     int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + contract.ID + " AND PartID =" + part.ID + "");
 
                                     db.SaveChanges();
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contractPart.ID} ID ga ega PContractPartni Excell orqali yaratdi");
                                 }
                             }
                         }
                     }
-
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "POrderController", "Save[Post]");
                 }
                 catch (Exception ex)
                 {
@@ -386,6 +388,8 @@ namespace tahsinERP.Controllers
                     db.P_CONTRACTS.Add(newContract);
                     db.SaveChanges();
 
+                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newContract.ID} ID ga ega PContractni yaratdi");
+
                     // Yangi yozuvning IncomeID sini olish
                     int newContractID = newContract.ID;
 
@@ -404,6 +408,7 @@ namespace tahsinERP.Controllers
                         };
 
                         db.P_CONTRACT_PARTS.Add(newPart);
+                        LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.ID} ID ga ega PContractPartni yaratdi");
                     }
 
                     db.SaveChanges();
@@ -561,6 +566,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractToUpdate.ID} ID ga ega PContractni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -625,8 +633,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PContractController", "EditPart[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPartToUpdate.ID} ID ga ega PContractPartni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -676,18 +685,23 @@ namespace tahsinERP.Controllers
                     P_CONTRACTS contractToDelete = db.P_CONTRACTS.Find(ID);
                     if (contractToDelete != null)
                     {
-                        contractToDelete.IsDeleted = true;
                         try
                         {
-                            db.Entry(contractToDelete).State = System.Data.Entity.EntityState.Modified;
+                            contractToDelete.IsDeleted = true;
+                            db.SaveChanges();
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractToDelete.ID} ID ga ega PContractni o'chirdi");
+
+                            db.Entry(contractToDelete).State = EntityState.Modified;
                             var contractParts = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
+
                             foreach (var contractPart in contractParts)
                             {
                                 db.P_CONTRACT_PARTS.Remove(contractPart);
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPart.ID} ID ga ega PContractPartni o'chirdi");
                             }
+
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PContractController", "Delete[Post]");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -716,8 +730,9 @@ namespace tahsinERP.Controllers
                         {
                             db.P_CONTRACT_PARTS.Remove(contractPartToDelete);
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PContractController", "DeletePart[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{id} ID ga ega PContractPartni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)

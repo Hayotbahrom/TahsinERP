@@ -195,6 +195,8 @@ namespace tahsinERP.Controllers
                     db.P_INVOICES.Add(invoice);
                     db.SaveChanges();
 
+                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoice.ID} ID ga ega PInvoiceni yaratdi");
+
                     List<P_ORDER_PARTS> orderParts = db.P_ORDER_PARTS.Where(po => po.OrderID == model.OrderID).ToList();
                     List<string> notInOrderParts = new List<string>();
 
@@ -213,6 +215,8 @@ namespace tahsinERP.Controllers
 
                             newPart.Price = orderPart.Price;
                             db.P_INVOICE_PARTS.Add(newPart);
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.ID} ID ga ega PInvoicenPartni yaratdi");
                         }
                         else
                         {
@@ -228,10 +232,11 @@ namespace tahsinERP.Controllers
                             message += word + " ,";
                         }
                         ModelState.AddModelError("", "Ushbu ehtiyot qism(lar): " + message + " buyurtmadan topilmadi, buyurtmada yo'q narsaga invoys qilib bo'lmaydi! Qaytadan urinib ko'ring!");
-                        db.Entry(invoice).State = System.Data.Entity.EntityState.Deleted;
+                        db.Entry(invoice).State = EntityState.Deleted;
                         db.SaveChanges();
                         return View(model);
                     }
+
                     db.SaveChanges();
 
 
@@ -247,6 +252,8 @@ namespace tahsinERP.Controllers
 
                             db.P_INVOICE_DOCS.Add(invoiceDoc);
                             db.SaveChanges();
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.ID} ID ga ega PInvoiceDocni yaratdi");
                         }
                         else
                         {
@@ -254,9 +261,6 @@ namespace tahsinERP.Controllers
                             throw new RetryLimitExceededException();
                         }
                     }
-
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Create[Post]");
 
                     // Redirect to PackingList create view with necessary Invoice properties
                     return RedirectToAction("Create", "PackingList", new { invoiceId = invoice.ID, invoiceNo = invoice.InvoiceNo });
@@ -407,8 +411,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Delete[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{ID} ID ga ega PInvoiceni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -437,8 +442,9 @@ namespace tahsinERP.Controllers
                         {
                             db.P_INVOICE_PARTS.Remove(invoicePartToDelete);
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "DeletePart[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{id} ID ga ega PInvoicePartni o'chirdi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -506,8 +512,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "Edit[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoice.ID} ID ga ega PInvoiceni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (DbUpdateException ex)
@@ -600,8 +607,9 @@ namespace tahsinERP.Controllers
                         try
                         {
                             db.SaveChanges();
-                            var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PInvoiceController", "EditPart[Post]");
+
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoicePart.ID} ID ga ega PInvoicePartni tahrirladi");
+
                             return RedirectToAction("Index");
                         }
                         catch (RetryLimitExceededException)
@@ -875,6 +883,8 @@ namespace tahsinERP.Controllers
                                 db.P_INVOICES.Add(new_invoice);
                                 await db.SaveChangesAsync();
 
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoice.ID} ID ga ega PInvoiceni Excell orqali yaratdi");
+
                                 P_INVOICE_PARTS invoicePart = await db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefaultAsync();
                                 if (invoicePart == null)
                                 {
@@ -887,6 +897,8 @@ namespace tahsinERP.Controllers
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
                                     await db.SaveChangesAsync();
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.ID} ID ga ega PInvoicePartni Excell orqali yaratdi");
                                 }
                             }
                             else
@@ -903,6 +915,8 @@ namespace tahsinERP.Controllers
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
                                     await db.SaveChangesAsync();
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.ID} ID ga ega PInvoicePartni Excell orqali yaratdi");
                                 }
                             }
                         }

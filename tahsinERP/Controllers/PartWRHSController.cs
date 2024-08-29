@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.EMMA;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -51,9 +52,13 @@ namespace tahsinERP.Controllers
 
                     db.PART_WRHS.Add(model);
                     db.SaveChanges();
-                    return RedirectToAction("Index"); 
+                    
+                    LogHelper.LogToDatabase(User.Identity.Name, "PartWRHSController", $"{model.ID} ID ga ega PartWRHSni yaratdi");
+                    
+                    return RedirectToAction("Index");
                 }
-                LogHelper.LogToDatabase(User.Identity.Name, "PartWRHSController", "Create[Post]");
+
+
                 return RedirectToAction("Index");
             }
         }
@@ -97,8 +102,9 @@ namespace tahsinERP.Controllers
                     partWRHS.IsDeleted = false;
                     db.Entry(partWRHS).State = EntityState.Modified;
                     db.SaveChanges();
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Edit[Post]");
+
+                    LogHelper.LogToDatabase(User.Identity.Name, "PartWRHSController", $"{partWRHS.ID} ID ga ega PartWRHSni tahrirladi");
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -139,9 +145,11 @@ namespace tahsinERP.Controllers
                     partWRHS.IsDeleted = true;
                     db.Entry(partWRHS).State = EntityState.Modified;
                     db.SaveChanges();
+                    
+                    LogHelper.LogToDatabase(User.Identity.Name, "PartWRHSController", $"{id} ID ga ega PartWRHS o'chirdi");
                 }
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PartWRHSController", "Delete[Post]");
+
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

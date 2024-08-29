@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DocumentFormat.OpenXml.EMMA;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using tahsinERP.Models;
-using tahsinERP.ViewModels;
 
 namespace tahsinERP.Controllers
 {
@@ -50,8 +49,10 @@ namespace tahsinERP.Controllers
                         model.IssueDateTime = DateTime.Now;
                         db.DAMAGED_PARTS.Add(model);
                         db.SaveChanges();
+
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", "Create[Post]");
+                        LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{model.ID} ID ga ega bo'lgan Buzilgan Qism yaratdi");
+
                         return RedirectToAction("Index");
                     }
                 }
@@ -97,6 +98,10 @@ namespace tahsinERP.Controllers
                     damaged_part.DefectTypeID = damagedPart.DefectTypeID;
                     damaged_part.Quantity = damagedPart.Quantity;
                     db.SaveChanges();
+
+                    var userEmail = User.Identity.Name;
+                    LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{damagedPart.ID} ID ga ega bo'lgan Buzilgan Qismni tahrirladi");
+
                     return RedirectToAction("Index");
                 }
                 var part = db.PARTS.Where(x => x.IsDeleted == false).ToList();
@@ -146,6 +151,9 @@ namespace tahsinERP.Controllers
                 damagedPart.IsDeleted = true;
                 db.Entry(damagedPart).State = EntityState.Modified;
                 db.SaveChanges();
+
+                var userEmail = User.Identity.Name;
+                LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{id} ID ga ega bo'lgan Buzilgan Qismni o'chirdi");
 
                 return RedirectToAction("Index");
             }
