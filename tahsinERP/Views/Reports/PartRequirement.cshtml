@@ -52,15 +52,14 @@
                                             @Html.TextBox("endDate", null, new { @class = "form-control pickadate-months-year round", @id = "endDate", @placeholder = "Tugash sanasi", @required = "required", @type = "date" })
                                         </div>
 
-                                        <button class="btn btn-success" style="float: right;" onclick="sendDate()">
+                                        <button class="btn btn-success" style="float: right;" onclick="sendDate()"> 
                                             Hisoblash
                                         </button>
                                      </div>
 
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        @*<table id="myDataTable" class="table table-striped table-bordered complex-headers dataex-html5-selector" style="width:100%">*@
-                                        <table class="table table-striped table-bordered dataex-html5-selectors" id="myDataTable" style="width:100%">
+                                            <table class="table table-striped table-bordered complex-headers dataex-html5-selector" id="myDataTable" style="width:100%">
                                             <thead>
                                                 @*<tr>
                                                     @{
@@ -144,24 +143,24 @@ else
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
 
-<script type="text/javascript">
-    function sendDate() {
-        var startDate = document.getElementById("startDate").value;
-        var endDate = document.getElementById("endDate").value;
+<!-- jQuery v3.6.0 -->
+<script src="~/assets/js/jquery.min.js"></script>
 
-        $.ajax({
-            url: '@Url.Action("InTransit", "Reports")',
-            type: 'GET',
-            data: {
-                startDate: startDate,
-                endDate: endDate
-            },
-            success: function(response) {
-                console.log("Ishladi, PartRequirenment");
-            },
-            error: function(xhr, status, error) {
-                console.error("Error fetching data:", error);
-            }
+<script>
+    $(document).ready(function() {
+        $('#myDataTable').DataTable({
+            "paging": true,           // Pagingni yoqish
+            "pageLength": 1000,        // Default "Show Entries"ni 1000 ga sozlash
+            "lengthChange": true,     // "Show Entries" dropdown menyusini ko'rsatish
+            "searching": true,        // Qidirish qutisini yoqish
+            "ordering": true,         // Ustunlar bo'yicha saralashni yoqish
+            "info": true,             // Jadval haqida ma'lumot ko'rsatish
+            "autoWidth": false,       // Avtomatik kenglikni o'chirish
+            "dom": 'Bfrtip',          // Boshqa qismlar bilan birga eksport tugmalarini joylashtirish
+            "buttons": [
+                'excel', 'pdf', 'print' // Eksport tugmalari
+            ],
+            "scrollX": true           // Gorizontal skrollni yoqish
         });
-    }
+    });
 </script>
