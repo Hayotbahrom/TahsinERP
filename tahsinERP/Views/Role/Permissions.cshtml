@@ -6,11 +6,11 @@
 }
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
-
 {
-    using (Html.BeginForm("Permissions", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Permissions", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))    
     {
         @Html.AntiForgeryToken()
+
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="content-wrapper">
@@ -95,17 +95,6 @@
                                                             </button>
                                                         </li>
                                                     </ul>
-
-                                                    <div class="row">
-                                                        <div class="col-lg-12 col-md-12 mt-25">
-                                                            <button class="open-modal btn btn-primary round" type="button" id="button2">
-
-                                                                <i class='bx bx-save'></i>
-                                                                Saqlash
-                                                            </button>
-                                                            <a href="~/Role/Index" class="btn btn-danger round">Bekor qilish</a>
-                                                        </div>
-                                                    </div>
                                                     <br />
                                                 </div>
                                             </div>
