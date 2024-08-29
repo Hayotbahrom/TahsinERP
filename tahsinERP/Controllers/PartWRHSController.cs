@@ -46,20 +46,21 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (ModelState.IsValid)
+                try
                 {
                     model.IsDeleted = false;
 
                     db.PART_WRHS.Add(model);
                     db.SaveChanges();
-                    
+
                     LogHelper.LogToDatabase(User.Identity.Name, "PartWRHSController", $"{model.ID} ID ga ega PartWRHSni yaratdi");
-                    
+
                     return RedirectToAction("Index");
                 }
-
-
-                return RedirectToAction("Index");
+                catch (Exception)
+                {
+                    return View(model);
+                }
             }
         }
         private readonly DBTHSNEntities db = new DBTHSNEntities();
