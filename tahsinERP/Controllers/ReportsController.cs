@@ -27,7 +27,7 @@ namespace tahsinERP.Controllers
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
-                    command.Parameters["@TodayDate"].Value = "2024-08-26";
+                    command.Parameters["@TodayDate"].Value = DateTime.Now.ToString("yyyy-MM-dd");
 
                     command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
                     command.Parameters["@EndDate"].Value = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
@@ -79,7 +79,7 @@ namespace tahsinERP.Controllers
                     command.CommandType = CommandType.StoredProcedure;
 
                     command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
-                    command.Parameters["@TodayDate"].Value = "2024-08-26";
+                    command.Parameters["@TodayDate"].Value = DateTime.Now.ToString("yyyy-MM-dd");
 
                     command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
                     command.Parameters["@EndDate"].Value = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
@@ -132,7 +132,7 @@ namespace tahsinERP.Controllers
                     command.CommandType = CommandType.StoredProcedure;
 
                     command.Parameters.Add("@TodayDate", SqlDbType.VarChar, 10);
-                    command.Parameters["@TodayDate"].Value = "2024-08-26";
+                    command.Parameters["@TodayDate"].Value = DateTime.Now.ToString("yyyy-MM-dd");
 
                     command.Parameters.Add("@EndDate", SqlDbType.VarChar, 10);
                     command.Parameters["@EndDate"].Value = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd");
