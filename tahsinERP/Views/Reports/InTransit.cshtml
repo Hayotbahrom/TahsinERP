@@ -41,6 +41,17 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
+                                     <div class="col-md-4 col-sm-8" style="float: right;">
+                                        <div class="form-group">
+                                            <label for="startDate">Dan:</label>
+                                            @Html.TextBox("startDate", null, new { @class = "form-control datetimepicker round", @placeholder = "Boshlanish sanasi", @required = "required", @type = "date" })
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="endDate">Gacha:</label>
+                                            @Html.TextBox("endDate", null, new { @class = "form-control datetimepicker round", @placeholder = "Tugash sanasi", @required = "required", @type = "date" })
+                                        </div>
+                                    </div>
+
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
                                         <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
