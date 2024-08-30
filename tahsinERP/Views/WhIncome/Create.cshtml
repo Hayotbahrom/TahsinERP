@@ -1,4 +1,5 @@
 ﻿@model tahsinERP.ViewModels.WrhsIncomeViewModel
+
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -43,61 +44,59 @@
                                             @Html.AntiForgeryToken()
                                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                                            // WRHS_InComes
-                                            <div class="row justify-content-around d-flex align-items-start">
-                                                @*Left Part*@
-                                                <div class="col-lg-6 col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="DocNo">Kirim hujjat raqami</label>
-                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disabled" })
-                                                        </div>
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="InvoiceId">Invoys</label>
-                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, new { @id = "InvoiceId", @class = "form-control select2", @required = "required" })
-                                                            @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
-                                                        </div>
+                                        <div class="row justify-content-around d-flex align-items-start">
+                                            <!-- Left Part -->
+                                            <div class="col-lg-6 col-sm-12">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-12 form-group">
+                                                        <label for="DocNo">Kirim hujjat raqami</label>
+                                                        @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disabled" })
                                                     </div>
-                                                </div>
 
-                                                @*Right Part*@
-                                                <div class="col-lg-6 col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Description">Batafsil ma'lumot</label>
-                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @placeholder = "Batafsil ma'lumot kiriting" })
-                                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                                                        </div>
+                                                    <div class="col-md-6 col-12 form-group">
+                                                        <label for="SupplierID">Ta`minotchi</label>
+                                                        @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Suppliers, "", new { @class = "form-control select2", id = "SupplierID", @required = "required", onchange = "refreshInvoiceListbySupplier()" })
+                                                        @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                    </div>
 
-                                                        <div class="col-md-6 col-12 form-group">
-                                                            <label for="Currency">Valyuta</label>
-                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Valyutani kiriting" })
-                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
-                                                        </div>
+                                                    <div class="col-md-6 col-12 form-group">
+                                                        <label for="InvoiceID">Invoys</label>
+                                                        @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, "", new { @class = "form-control select2", id = "InvoiceID", @required = "required", onchange = "refreshCurrencyByInvoice()" })
+                                                        @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            // WRHS_InCome_Parts
+                                            <!-- Right Part -->
+                                            <div class="col-lg-6 col-sm-12">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-12 form-group">
+                                                        <label for="Description">Batafsil ma'lumot</label>
+                                                        @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @placeholder = "Batafsil ma'lumot kiriting" })
+                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div class="col-md-6 col-12 form-group">
+                                                        <label for="Currency">Valyuta</label>
+                                                        @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Valyutani kiriting", @readonly = "readonly" })
+                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <!-- Parts Section -->
                                             <br />
-                                            <h4>
-                                                Invoys dagi ehtiyot qismlar
-                                            </h4>
+                                            <h4>Invoys dagi ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <input type="hidden" name="ID" />
-                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                        <div class="col-md-3 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
                                                             @Html.DropDownList("PartID", (SelectList)ViewBag.InComeParts, new { @class = "form-control select" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
-                                                       @* <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Unit">O'lchov birligi</label>
-                                                            @Html.DropDownListFor(model => model.Parts[0].UnitID, ViewBag.units as SelectList, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
-                                                        </div>*@
-                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                        <div class="col-md-3 col-sm-12 form-group">
                                                             <label for="Part_Unit">Birligi</label>
                                                             @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
@@ -126,7 +125,8 @@
                                             </div>
 
                                             <button data-repeater-create type="button" class="btn btn-primary">Yangi detal qo`shish</button>
-                                            // Save button
+
+                                            <!-- Save button -->
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
                                                     <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
@@ -150,4 +150,92 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+    
+<script>
+    function refreshInvoiceListbySupplier() {
+    const supplierID = document.getElementById("SupplierID").value;
+    $.ajax({
+        url: '@Url.Action("GetInvoicesBySupplier", "WhIncome")', // Update "YourControllerName" with the actual controller name
+        type: 'GET',
+        data: { supplierID: supplierID },
+        success: function (data) {
+            var invoiceDropdown = $("#InvoiceID");
+            invoiceDropdown.empty();
+
+            $.each(data, function (index, item) {
+                invoiceDropdown.append(new Option(item.Text, item.Value));
+            });
+
+            // Auto-populate currency field based on the first invoice's currency
+            if (data.length > 0) {
+                $("#Currency").val(data[0].Currency);
+            } else {
+                $("#Currency").val('');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching invoices:", error);
+        }
+    });
+}
+
+</script>
+    
+    
+@*<script type="text/javascript">
+    function refreshInvoiceListbySupplier() {
+        const supplierID = document.getElementById("SupplierID").value;
+        $.ajax({
+            url: '@Url.Action("GetInvoicesBySupplier", "WhIncome")',
+            type: 'GET',
+            data: { supplierID: supplierID },
+            success: function (data) {
+                var invoiceDropdown = $("#InvoiceID");
+                invoiceDropdown.empty();
+
+                $.each(data, function (index, item) {
+                    invoiceDropdown.append(new Option(item.Text, item.Value));
+                });
+
+                // Trigger the currency update when the invoice list changes
+                refreshCurrencyByInvoice();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching invoices:", error);
+            }
+        });
+    }
+
+    function refreshCurrencyByInvoice() {
+        const invoiceID = document.getElementById("InvoiceID").value;
+        const selectedInvoice = $("#InvoiceID option:selected").data("currency");
+
+        if (selectedInvoice) {
+            $("#Currency").val(selectedInvoice);
+        } else {
+            $("#Currency").val('');
+        }
+    }
+</script>*@
+    @*
+<script type="text/javascript">
+    function refreshInvoiceListbySupplier() {
+        const supplierID = document.getElementById("SupplierID").value;
+        $.ajax({
+            url: '@Url.Action("GetInvoicesBySupplier", "WhIncome")',
+            type: 'GET',
+            data: { supplierID: supplierID },
+            success: function (data) {
+                var contractDropdown = $("#InvoiceID");
+                contractDropdown.empty();
+                $.each(data, function (index, item) {
+                    contractDropdown.append(new Option(item.Text, item.Value));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching contracts:", error);
+            }
+        });
+    }
+</script>*@
 

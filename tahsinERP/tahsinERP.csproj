@@ -2727,6 +2727,7 @@
     <Content Include="Views\Reports\InTransit.cshtml" />
     <Content Include="Views\Reports\PartRequirement.cshtml" />
     <Content Include="Views\Reports\Coverage.cshtml" />
+    <Content Include="Views\Tracing\UploadWithExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

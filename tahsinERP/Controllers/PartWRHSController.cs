@@ -46,7 +46,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                if (ModelState.IsValid)
+                try
                 {
                     model.IsDeleted = false;
 
@@ -57,9 +57,10 @@ namespace tahsinERP.Controllers
                     
                     return RedirectToAction("Index");
                 }
-
-
-                return RedirectToAction("Index");
+                catch (Exception)
+                {
+                    return View(model);
+                }
             }
         }
         private readonly DBTHSNEntities db = new DBTHSNEntities();
