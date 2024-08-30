@@ -75,7 +75,7 @@ namespace tahsinERP.Controllers
 
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permissions.ID} ID ga ega Permission yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permissions.Module} - Permission yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -175,7 +175,7 @@ namespace tahsinERP.Controllers
 
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permissions.ID} ID ga ega Permissionni tahrirladi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permissions.Module} - Permissionni tahrirladi");
 
                         return RedirectToAction("Index");
                     }
@@ -285,6 +285,7 @@ namespace tahsinERP.Controllers
                 foreach (var permission in permissions)
                 {
                     db.PERMISSIONS.Remove(permission);
+                    LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permission.ROLE.RName} - uchun Permissionni o'chirdi");
                 }
 
                 foreach (var role in roles)
@@ -292,13 +293,15 @@ namespace tahsinERP.Controllers
                     if (!db.PERMISSIONS.Any(p => p.RoleID == role.ID))
                     {
                         db.ROLES.Remove(role);
+
+                        LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{role.RName} - Roleni o'chirdi");
                     }
                 }
 
                 db.PERMISSIONMODULES.Remove(permissionModule);
                 db.SaveChanges();
 
-                LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{Id} ID ga ega PermissionModuleni o'chirdi");
+                LogHelper.LogToDatabase(User.Identity.Name, "PModuleController", $"{permissionModule.Module} ID ga ega PermissionModuleni o'chirdi");
             }
 
             var userEmail = User.Identity.Name;

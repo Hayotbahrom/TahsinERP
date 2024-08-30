@@ -41,7 +41,7 @@ namespace tahsinERP.Controllers
                         await db.SaveChangesAsync();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{hsCode.ID} ID ga ega HSCodeni yaratdi");
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{hsCode.HSCODE1} - HSCodeni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -93,8 +93,7 @@ namespace tahsinERP.Controllers
                     {
                         await db.SaveChangesAsync();
 
-                        var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{id} ID ga ega HSCodeni o'chirdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "HSCodeController", $"{hscodeToDelete.HSCODE1} - HSCodeni o'chirdi");
 
                         return RedirectToAction("Index");
                     }
@@ -139,7 +138,7 @@ namespace tahsinERP.Controllers
                         await db.SaveChangesAsync();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{hsCode.ID} ID ga ega HSCodeni tahrirladi");
+                        LogHelper.LogToDatabase(userEmail, "HSCodeController", $"{hsCode.HSCODE1} - HSCodeni tahrirladi");
 
                         return RedirectToAction("Index");
                     }

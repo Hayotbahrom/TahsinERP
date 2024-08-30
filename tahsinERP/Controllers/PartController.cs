@@ -127,8 +127,7 @@ namespace tahsinERP.Controllers
                     db.PARTS.Add(newPart);
                     db.SaveChanges();
 
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartController", $"{partVM.ID} ID ga ega Partni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "PartController", $"{partVM.PNo} - Partni yaratdi");
 
 
                     //    SHOP pROD_SHOPS = db.SHOPS.Where(x => x.ID.Equals(partVM.ShopID)).FirstOrDefault();
@@ -271,7 +270,7 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
 
                     var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartController", $"{partVM.ID} ID ga ega Partni tahrirladi");
+                    LogHelper.LogToDatabase(userEmail, "PartController", $"{partVM.PNo} - Partni tahrirladi");
 
                     // Update the many-to-many table Prod_Shop_Parts
                     db.Database.ExecuteSqlCommand("DELETE FROM Prod_Shops_Parts WHERE PartID = {0}", partToUpdate.ID);
@@ -350,7 +349,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
 
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "PartController", $"{ID} ID ga ega Partni o'chirdi");
+                                LogHelper.LogToDatabase(userEmail, "PartController", $"{partToDelete.PNo} - Partni o'chirdi");
 
                                 return RedirectToAction("GetAllParts");
                             }
@@ -595,7 +594,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
 
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "PartController", $"{newPart.ID} ID ga ega Partni Excell orqali yaratdi");
+                                LogHelper.LogToDatabase(userEmail, "PartController", $"{newPart.PNo} - Partni Excell orqali yaratdi");
                             }
                             else
                             {

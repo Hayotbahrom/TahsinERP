@@ -176,7 +176,7 @@ namespace tahsinERP.Controllers
                 db.PART_WRHS_INCOMES.Add(newIncome);
                 db.SaveChanges();
 
-                LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newIncome.ID} ID ga ega PartWrhsIncomeni yaratdi");
+                LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newIncome.DocNo} - PartWrhsIncomeni yaratdi");
 
                 // Yangi yozuvning IncomeID sini olish
                 int newIncomeID = newIncome.ID;
@@ -206,7 +206,7 @@ namespace tahsinERP.Controllers
                         };
                         db.PART_STOCKS.Add(newPartStock);
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPartStock.ID} ID ga ega PartStockni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPartStock.PART.PNo} - PartStockni yaratdi");
                     }
                     else
                     {
@@ -215,7 +215,7 @@ namespace tahsinERP.Controllers
 
                     db.PART_WRHS_INCOME_PARTS.Add(newPart);
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPart.ID} ID ga ega PartWrhsIncomePartni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPart.PART.PNo} - PartWrhsIncomePartni yaratdi");
                 }
 
                 db.SaveChanges();
@@ -368,7 +368,7 @@ namespace tahsinERP.Controllers
                         {
                             db1.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{wrhsIncomeToUpdate} ID ga ega PartWrhsIncomeni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{wrhsIncomeToUpdate.DocNo} - PartWrhsIncomeni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -437,7 +437,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{whIncomePartToUpdate} ID ga ega PartWrhsIncomePartni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{whIncomePartToUpdate.PART.PNo} - PartWrhsIncomePartni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -498,7 +498,7 @@ namespace tahsinERP.Controllers
                             }*/
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{whIncomeToDelete} ID ga ega partWrhsIncomeni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{whIncomeToDelete.DocNo} - partWrhsIncomeni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
@@ -529,7 +529,7 @@ namespace tahsinERP.Controllers
                             db.PART_WRHS_INCOME_PARTS.Remove(contractPartToDelete);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{contractPartToDelete} ID ga ega PartWrhsIncomePartni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{contractPartToDelete.PART.PNo} - PartWrhsIncomePartni o'chirdi");
 
                             return RedirectToAction("Index");
                         }

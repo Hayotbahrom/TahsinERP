@@ -68,7 +68,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
 
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.ID} ID ga ega Nuqson Turini tahrirladi");
+                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.DefectType} - Nuqson Turini tahrirladi");
 
                                 return RedirectToAction("Index");
                             }
@@ -101,7 +101,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.ID} ID ga ega Nuqson Turini yaratdi");
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.DefectType} - Nuqson Turini yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -148,7 +148,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
 
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.ID} ID ga ega Nuqson Turini o'chirdi");
+                                LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{model.DefectType} - Nuqson Turini o'chirdi");
 
                                 return RedirectToAction("Index");
                             }
@@ -164,7 +164,5 @@ namespace tahsinERP.Controllers
 
             return View();
         }
-
-
     }
 }

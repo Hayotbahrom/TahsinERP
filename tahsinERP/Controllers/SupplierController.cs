@@ -65,7 +65,7 @@ namespace tahsinERP.Controllers
                         db.SUPPLIERS.Add(supplier);
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplier.ID} ID ga ega Supplierni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplier.Name} - Supplierni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -147,7 +147,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplierToUpdate.ID} ID ga ega Supplierni tahrirladi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplierToUpdate.Name} - Supplierni tahrirladi");
 
                                 return RedirectToAction("Index");
                             }
@@ -198,7 +198,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplierToDelete.ID} ID ga ega Supplierni o'chirdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplierToDelete.Name} - Supplierni o'chirdi");
 
                                 return RedirectToAction("Index");
                             }
@@ -340,7 +340,7 @@ namespace tahsinERP.Controllers
                                 db.SUPPLIERS.Add(new_supplier);
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{new_supplier.ID} ID ga ega Supplierni Excell orqali yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{new_supplier.Name} - Supplierni Excell orqali yaratdi");
                             }
                         }
                     }

@@ -81,7 +81,7 @@ namespace tahsinERP.Controllers
                     db.S_CONTRACTS.Add(newContract);
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{newContract.ID} ID ga ega SContractni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{newContract.ContractNo} - SContractni yaratdi");
 
                     // Yangi Contract ning ID sini olish
                     int newContractID = newContract.ID;
@@ -108,7 +108,7 @@ namespace tahsinERP.Controllers
 
                         db.S_CONTRACT_PRODUCTS.Add(newProduct);
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{newProduct.ID} ID ga ega SContractProductni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{newProduct.PRODUCT.PNo} - SContractProductni yaratdi");
                     }
 
                     db.SaveChanges();
@@ -241,7 +241,7 @@ namespace tahsinERP.Controllers
                     {
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractToUpdate.ID} ID ga ega SContractni tahrirladi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractToUpdate.ContractNo} - SContractni tahrirladi");
                     }
                     catch (RetryLimitExceededException)
                     {
@@ -261,7 +261,7 @@ namespace tahsinERP.Controllers
 
                             db.Entry(existingProduct).State = EntityState.Modified;
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{existingProduct.ID} ID ga ega SContractProductni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{existingProduct.PRODUCT.PNo} - SContractProductni tahrirladi");
                         }
                     }
 
@@ -340,7 +340,7 @@ namespace tahsinERP.Controllers
                         {
                             db.S_CONTRACT_PRODUCTS.Remove(contractProduct);
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractProduct.ID} ID ga ega SContractni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractProduct.PRODUCT.PNo} - SContractni o'chirdi");
                         }
 
                         db.SaveChanges();
@@ -374,7 +374,7 @@ namespace tahsinERP.Controllers
                             db.S_CONTRACT_PRODUCTS.Remove(contractProductToDelete);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractProductToDelete.ID} ID ga ega SContractProductni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "SContractController", $"{contractProductToDelete.PRODUCT.PNo} - SContractProductni o'chirdi");
 
                             return RedirectToAction("Index");
                         }

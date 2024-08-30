@@ -86,7 +86,7 @@ namespace tahsinERP.Controllers
                 db.USERS.Add(user);
                 db.SaveChanges();
 
-                LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.ID} ID ga ega Foydalanuvchini yaratdi");
+                LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.Uname} - Foydalanuvchini yaratdi");
 
                 ROLE selectedRole = db.ROLES.Where(r => r.ID.Equals(userVM.RoleID)).FirstOrDefault();
                 if (selectedRole != null && selectedRole.RName != "Developer" || selectedRole.ID != 1)
@@ -116,7 +116,7 @@ namespace tahsinERP.Controllers
                         db.USERIMAGES.Add(userImage);
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{userImage.ID} ID ga ega Foydalanuvchini-Rasmini yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.Uname} uchun Foydalanuvchini-Rasmini yaratdi");
                     }
                     else
                     {
@@ -213,6 +213,8 @@ namespace tahsinERP.Controllers
 
                                 db.USERIMAGES.Add(uImageNew);
                                 db.SaveChanges();
+
+                                LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.Uname} uchun Foydalanuvchini-Rasmini yaratdi");
                             }
                             else
                             {
@@ -233,7 +235,7 @@ namespace tahsinERP.Controllers
                     }
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{userToUpdate.ID} ID ga ega Foydalanuvchini tahrirladi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{userToUpdate.Uname} - Foydalanuvchini tahrirladi");
 
                     return RedirectToAction("Index");
                 }
@@ -323,7 +325,7 @@ namespace tahsinERP.Controllers
                 {
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.ID} ID ga ega Foydalanuvchini o'chiridi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.Uname} - Foydalanuvchini o'chiridi");
 
                     return RedirectToAction("Index");
                 }

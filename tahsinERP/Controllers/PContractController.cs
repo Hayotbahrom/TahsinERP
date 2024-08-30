@@ -290,7 +290,7 @@ namespace tahsinERP.Controllers
                                 db.P_CONTRACTS.Add(new_contract);
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contract.ID} ID ga ega PContractni Excell orqali yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contract.ContractNo} - PContractni Excell orqali yaratdi");
 
                                 P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == new_contract.ID && pcp.PartID == part.ID).FirstOrDefault();
                                 if (contractPart == null)
@@ -312,7 +312,7 @@ namespace tahsinERP.Controllers
                                     //int noOfRowUpdated = db.Database.ExecuteSqlCommand("UPDATE P_CONTRACT_PARTS SET ActivePart =" + 0 + " WHERE ContractID !=" + new_contract.ID + " AND PartID =" + part.ID + "");
 
                                     db.SaveChanges();
-                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contractPart.ID} ID ga ega PContractPartni Excell orqali yaratdi");
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contractPart.PART.PNo} - PContractPartni Excell orqali yaratdi");
                                 }
                             }
                             else
@@ -388,7 +388,7 @@ namespace tahsinERP.Controllers
                     db.P_CONTRACTS.Add(newContract);
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newContract.ID} ID ga ega PContractni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newContract.ContractNo} - PContractni yaratdi");
 
                     // Yangi yozuvning IncomeID sini olish
                     int newContractID = newContract.ID;
@@ -408,7 +408,7 @@ namespace tahsinERP.Controllers
                         };
 
                         db.P_CONTRACT_PARTS.Add(newPart);
-                        LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.ID} ID ga ega PContractPartni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.PART.PNo} - PContractPartni yaratdi");
                     }
 
                     db.SaveChanges();
@@ -445,9 +445,6 @@ namespace tahsinERP.Controllers
                     }
                 }
 
-
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "PContractController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -567,7 +564,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractToUpdate.ID} ID ga ega PContractni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractToUpdate.ContractNo} - PContractni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -634,7 +631,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPartToUpdate.ID} ID ga ega PContractPartni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPartToUpdate.PART.PNo} - PContractPartni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -689,7 +686,7 @@ namespace tahsinERP.Controllers
                         {
                             contractToDelete.IsDeleted = true;
                             db.SaveChanges();
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractToDelete.ID} ID ga ega PContractni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractToDelete.ContractNo} - PContractni o'chirdi");
 
                             db.Entry(contractToDelete).State = EntityState.Modified;
                             var contractParts = db.P_CONTRACT_PARTS.Where(pc => pc.ContractID == contractToDelete.ID).ToList();
@@ -697,7 +694,7 @@ namespace tahsinERP.Controllers
                             foreach (var contractPart in contractParts)
                             {
                                 db.P_CONTRACT_PARTS.Remove(contractPart);
-                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPart.ID} ID ga ega PContractPartni o'chirdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPart.PART.PNo} - PContractPartni o'chirdi");
                             }
 
                             db.SaveChanges();
@@ -731,7 +728,7 @@ namespace tahsinERP.Controllers
                             db.P_CONTRACT_PARTS.Remove(contractPartToDelete);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{id} ID ga ega PContractPartni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPartToDelete.PART.PNo} - PContractPartni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
