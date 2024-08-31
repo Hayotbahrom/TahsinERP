@@ -37,7 +37,7 @@ namespace tahsinERP.Controllers
                     newRole.IsDeleted = false;
 
                     db.ROLES.Add(newRole);
-                    LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{newRole.ID} ID ga ega Roleni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{newRole.RName} - Roleni yaratdi");
 
                     var length = db.PERMISSIONMODULES.ToList().Count;
                     int[] permissionModulesID = new int[length];
@@ -53,7 +53,7 @@ namespace tahsinERP.Controllers
                         newPermission.RoleID = role.ID;
                         db.PERMISSIONS.Add(newPermission);
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{newPermission.ID} ID ga ega Permissionni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{newPermission.ROLE.RName} uchun - {newPermission.PERMISSIONMODULE.Module} Permissionni yaratdi");
 
                         i++;
                     }
@@ -112,7 +112,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{roleToUpdate.ID} ID ga ega Roleni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{roleToUpdate.RName} - Roleni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -154,7 +154,7 @@ namespace tahsinERP.Controllers
                     {
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{role.ID} ID ga ega Roleni o'chirdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{role.RName} - Roleni o'chirdi");
 
                         return RedirectToAction("Index");
                     }
@@ -246,12 +246,10 @@ namespace tahsinERP.Controllers
 
                 db.SaveChanges();
 
-                LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"Permissions updated for Role ID {model.Role.ID}");
+                LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{model.Role.RName} uchun Permissionni tahrirladi");
 
                 return RedirectToAction("Edit", new { id = model.Role.ID });
             }
         }
-
-
     }
 }

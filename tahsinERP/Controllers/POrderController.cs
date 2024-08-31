@@ -214,7 +214,7 @@ namespace tahsinERP.Controllers
 
                         db.P_ORDERS.Add(newOrder);
                         db.SaveChanges();
-                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newOrder.ID} ID ga ega POrderni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newOrder.OrderNo} - POrderni yaratdi");
 
 
                         List<P_CONTRACT_PARTS> contractParts = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == model.ContractID).ToList();
@@ -237,7 +237,7 @@ namespace tahsinERP.Controllers
                                 newPart.Price = contractPart.Price;
 
                                 db.P_ORDER_PARTS.Add(newPart);
-                                LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newPart.ID} ID ga ega POrderPartni yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newPart.PART.PNo} - POrderPartni yaratdi");
                             }
                             else
                             {
@@ -387,7 +387,7 @@ namespace tahsinERP.Controllers
                     db.P_ORDERS.Add(newOrder);
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newOrder.ID} ID ga ega POrderni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newOrder.OrderNo} - POrderni yaratdi");
 
                     // Yangi yozuvning IncomeID sini olish
                     int newOrderID = newOrder.ID;
@@ -417,7 +417,7 @@ namespace tahsinERP.Controllers
                             db.PARTS.Add(newPartInsert);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newPartInsert.ID} ID ga ega Partni yaratdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newPartInsert.PNo} - Partni yaratdi");
 
                             var newOrderPart = new P_ORDER_PARTS
                             {
@@ -429,7 +429,7 @@ namespace tahsinERP.Controllers
                             db.P_ORDER_PARTS.Add(newOrderPart);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newOrderPart.ID} ID ga ega POrderPartni yaratdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{newOrderPart.PART.PNo} - POrderPartni yaratdi");
                         }
                         else
                         {
@@ -535,7 +535,7 @@ namespace tahsinERP.Controllers
 
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{ID} ID ga ega POrderni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{orderToDelete.OrderNo} - POrderni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
@@ -566,7 +566,7 @@ namespace tahsinERP.Controllers
                             db.P_ORDER_PARTS.Remove(orderPartToDelete);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{id} ID ga ega POrderPartni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{orderPartToDelete.PART.PNo} - POrderPartni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
@@ -687,7 +687,7 @@ namespace tahsinERP.Controllers
                     {
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{orderToUpdate.ID} ID ga ega POrderni tahrirladi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{orderToUpdate.OrderNo} - POrderni tahrirladi");
                     }
                     catch (RetryLimitExceededException)
                     {
@@ -710,7 +710,7 @@ namespace tahsinERP.Controllers
 
                             db.Entry(existingPart).State = EntityState.Modified;
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{existingPart.ID} ID ga ega POrderPartni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{existingPart.PART.PNo} - POrderPartni tahrirladi");
                         }
                     }
 
@@ -804,7 +804,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{orderPartToUpdate.ID} ID ga ega POrderPartni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{orderPartToUpdate.PART.PNo} - POrderPartni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -1104,7 +1104,7 @@ namespace tahsinERP.Controllers
                                     db.P_ORDERS.Add(new_order);
                                     await db.SaveChangesAsync();
 
-                                    LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_order.ID} ID ga ega POrderni Excell orqali yaratdi");
+                                    LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_order.OrderNo} - POrderni Excell orqali yaratdi");
 
                                     P_ORDER_PARTS orderPart = db.P_ORDER_PARTS
                                         .Where(pcp => pcp.OrderID == new_order.ID && pcp.PartID == part.ID)
@@ -1123,7 +1123,7 @@ namespace tahsinERP.Controllers
                                         db.P_ORDER_PARTS.Add(new_orderPart);
                                         await db.SaveChangesAsync();
 
-                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_orderPart.ID} ID ga ega POrderPartni Excell orqali yaratdi");
+                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_orderPart.PART.PNo} - POrderPartni Excell orqali yaratdi");
                                     }
                                 }
                                 else
@@ -1145,7 +1145,7 @@ namespace tahsinERP.Controllers
                                         db.P_ORDER_PARTS.Add(new_orderPart);
                                         await db.SaveChangesAsync();
 
-                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_orderPart.ID} ID ga ega POrderPartni Excell orqali yaratdi");
+                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_orderPart.PART.PNo} - POrderPartni Excell orqali yaratdi");
                                     }
                                 }
                             }

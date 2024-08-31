@@ -37,7 +37,7 @@ namespace tahsinERP.Controllers
                         db.PRODUCTIONPROCESSES.Add(productionProcess);
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{productionProcess.ID} ID ga ega ProductProccessni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{productionProcess.ProcessName} - ProductProccessni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -83,7 +83,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{productionProcess_deleted.ID} ID ga ega ProductProccessni o'chirdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{productionProcess_deleted.ProcessName} - ProductProccessni o'chirdi");
 
                                 return RedirectToAction("Index");
                             }
@@ -133,7 +133,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{process_update.ID} ID ga ega ProductProccessni tahrirladi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductionProccessController", $"{process_update.ProcessName} - ProductProccessni tahrirladi");
 
                                 return RedirectToAction("Index");
                             }

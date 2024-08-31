@@ -57,7 +57,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "FTransportTypeController", $"{viewModel.ID} ID ga ega TransPortTypeni yaratdi");
+                        LogHelper.LogToDatabase(userEmail, "FTransportTypeController", $"{viewModel.TransportType} - TransPortTypeni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -190,7 +190,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "FTransportTypeController", $"{viewModel.ID} ID ga ega TransportTypeni tahrirladi");
+                        LogHelper.LogToDatabase(userEmail, "FTransportTypeController", $"{viewModel.TransportType} - TransportTypeni tahrirladi");
 
                         return RedirectToAction("Index");
                     }
@@ -231,17 +231,17 @@ namespace tahsinERP.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var  forwarderToDelete = db.F_TRANSPORT_TYPES.Find(ID);
-                    if (forwarderToDelete != null)
+                    var  transportTypeToDelete = db.F_TRANSPORT_TYPES.Find(ID);
+                    if (transportTypeToDelete != null)
                     {
-                        db.F_TRANSPORT_TYPES.Remove(forwarderToDelete);
+                        db.F_TRANSPORT_TYPES.Remove(transportTypeToDelete);
 
                         try
                         {
                             db.SaveChanges();
 
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "FTransportTypeController", $"{ID} ID ga ega TransportTypeni o'chirdi");
+                            LogHelper.LogToDatabase(userEmail, "FTransportTypeController", $"{transportTypeToDelete.TransportType} - TransportTypeni o'chirdi");
 
                             return RedirectToAction("Index");
                         }

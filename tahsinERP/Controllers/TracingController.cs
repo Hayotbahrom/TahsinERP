@@ -147,7 +147,7 @@ namespace tahsinERP.Controllers
                         setPackingListInTransit(tracing.PackingListID);
                         await db.SaveChangesAsync();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracing.ID} ID ga ega Tracingni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracing.P_INVOICE_PACKINGLISTS.PackingListNo} uchun Tracking {tracing.ID} ID ga ega Tracingni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -172,7 +172,7 @@ namespace tahsinERP.Controllers
                     db.Entry(packingList).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{packingList.ID} ID ga ega PInvoicePackingListning InTransitni yoqdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{packingList.PackingListNo} - PInvoicePackingListning InTransitni yoqdi");
                 }
             }
         }
@@ -270,7 +270,7 @@ namespace tahsinERP.Controllers
                         db.Entry(tracingToUpdate).State = EntityState.Modified;
                         await db.SaveChangesAsync();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracingToUpdate.ID} ID ga ega Tracingni tahrirladi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracing.P_INVOICE_PACKINGLISTS.PackingListNo} uchun Tracking {tracing.ID} ID ga ega Tracingni tahrirladi");
 
                         return RedirectToAction("Index");
                     }
@@ -317,7 +317,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracingToDelete.ID} ID ga ega Tracingni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracingToDelete.P_INVOICE_PACKINGLISTS.PackingListNo} uchun Tracking {tracingToDelete.ID} ID ga ega Tracingnini o'chirdi");
 
                             return RedirectToAction("Index");
                         }

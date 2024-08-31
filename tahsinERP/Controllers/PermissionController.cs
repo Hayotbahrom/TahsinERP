@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
@@ -25,11 +26,13 @@ namespace tahsinERP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Permissions(int? roleID, FormCollection fvm)
+        public async Task<ActionResult> Permissions(int? roleID, FormCollection fvm)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var permissions = db.PERMISSIONS.Where(pr => pr.RoleID == roleID).ToList();
+                var role = await db.ROLES.FindAsync(roleID);
+                var permissions = await db.PERMISSIONS.Where(pr => pr.RoleID == roleID).ToListAsync();
+
                 foreach (var permission in permissions)
                 {
                     bool changePermit = permission.ChangePermit;
@@ -44,7 +47,7 @@ namespace tahsinERP.Controllers
                         db.Entry(perm).State = EntityState.Modified;
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "PermissionController", $"{roleID} ID ga ega Foydalanuvching {perm.ID} ga Ruxsatini tahrirladi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "PermissionController", $"{role.RName} - Ruxsatini tahrirladi");
                     }
                 }
             }

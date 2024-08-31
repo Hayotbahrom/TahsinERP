@@ -39,7 +39,7 @@ namespace tahsinERP.Controllers
                         db.SHOPS.Add(prod_shop);
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop.ID} ID ga ega Shopni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop.ShopName} - Shopni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -85,7 +85,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop_deleted.ID} ID ga ega Shopni o'chirdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop_deleted.ShopName} - Shopni o'chirdi");
 
                                 return RedirectToAction("Index");
                             }
@@ -135,7 +135,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop_Update.ID} ID ga ega Shopni tahrirladi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "ShopController", $"{prod_shop_Update.ShopName} - Shopni tahrirladi");
 
                                 return RedirectToAction("Index");
                             }

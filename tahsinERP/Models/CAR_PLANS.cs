@@ -10,7 +10,6 @@
 namespace tahsinERP.Models
 {
     using System;
-    using System.Collections.Generic;
     
     public partial class CAR_PLANS
     {
@@ -18,8 +17,8 @@ namespace tahsinERP.Models
         public int CarID { get; set; }
         public double Amount { get; set; }
         public bool IsDeleted { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public System.DateTime DueDate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime DueDate { get; set; }
     
         public virtual CAR CAR { get; set; }
     }

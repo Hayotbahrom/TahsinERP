@@ -48,7 +48,7 @@ namespace tahsinERP.Controllers
                         await db.SaveChangesAsync();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{forwarder.ID} ID ga ega Forwarderni yaratdi");
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{forwarder.ForwarderName} - Forwarderni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -115,7 +115,7 @@ namespace tahsinERP.Controllers
                         await db.SaveChangesAsync();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{forwarder.ID} ID ga ega Forwarderni tahrirladi");
+                        LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{forwarder.ForwarderName} - Forwarderni tahrirladi");
 
                         return RedirectToAction("Index");
                     }
@@ -162,7 +162,7 @@ namespace tahsinERP.Controllers
                             db.SaveChanges();
 
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{ID} ID ga ega Forwarderni o'chirdi");
+                            LogHelper.LogToDatabase(userEmail, "DefectTypeController", $"{forwarderToDelete.ForwarderName} - Forwarderni o'chirdi");
 
                             return RedirectToAction("Index");
                         }

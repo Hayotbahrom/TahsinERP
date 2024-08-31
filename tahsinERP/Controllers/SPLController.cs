@@ -33,7 +33,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.products = new SelectList(db.PRODUCTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.products = new SelectList(await db.PRODUCTS.Where(x => x.IsDeleted == false).ToListAsync(), "ID", "PNo");
 
                 return View();
             }
@@ -54,7 +54,7 @@ namespace tahsinERP.Controllers
                         db.SPLs.Add(spl);
                         await db.SaveChangesAsync();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{spl.ID} ID ga ega SPLni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{spl.PRODUCT.PNo} ga ega {spl.CarModel1} ni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -124,7 +124,7 @@ namespace tahsinERP.Controllers
                         db.Entry(splToUpdate).State = System.Data.Entity.EntityState.Modified;
                         await db.SaveChangesAsync();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{splToUpdate.ID} ID ga ega SPLni tahrirladi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{spl.PRODUCT.PNo} ga ega {spl.CarModel1} ni tahrirladi");
 
                         return RedirectToAction("Index");
                     }
@@ -168,7 +168,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{splToDelete.ID} ID ga ega SPLni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{splToDelete.PRODUCT.PNo} ga ega {splToDelete.CarModel1} ni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
@@ -315,7 +315,7 @@ namespace tahsinERP.Controllers
                                 db.PRODUCTS.Add(newProduct);
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newProduct.ID} ID ga ega Productni Excell orqali yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newProduct.PNo} - Productni Excell orqali yaratdi");
 
                                 prodID = db.PRODUCTS.Where(x => x.PNo.CompareTo(newProduct.PNo)==0 && x.Name.CompareTo(newProduct.Name)==0).FirstOrDefault().ID;
                             }
@@ -335,7 +335,7 @@ namespace tahsinERP.Controllers
                                 db.SPLs.Add(newSplRecord);
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newSplRecord.ID} ID ga ega SPLni Excell orqali yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newSplRecord.PRODUCT.PNo} ga ega {newSplRecord.CarModel1} ni Excell orqali yaratdi");
                             }
                         }
                     }

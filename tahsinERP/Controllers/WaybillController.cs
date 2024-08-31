@@ -89,7 +89,7 @@ namespace tahsinERP.Controllers
                     db.F_WAYBILLS.Add(waybill);
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybill.ID} ID ga ega FWaybillni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybill.WaybillNo} - FWaybillni yaratdi");
 
                     return RedirectToAction("Index");
                 }
@@ -200,7 +200,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybill.ID} ID ga ega FWaybillni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybill.WaybillNo} - FWaybillni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -258,7 +258,7 @@ namespace tahsinERP.Controllers
                             db.Entry(waybillToDelete).State = EntityState.Modified;
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybillToDelete.ID} ID ga ega FWaybillni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WaybillController", $"{waybillToDelete.WaybillNo} - FWaybillni o'chirdi");
 
                             return RedirectToAction("Index");
                         }

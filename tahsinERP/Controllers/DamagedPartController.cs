@@ -51,7 +51,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{model.ID} ID ga ega bo'lgan Buzilgan Qism yaratdi");
+                        LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{model.PART.PNo} - Buzilgan Qism yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -100,7 +100,7 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
 
                     var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{damagedPart.ID} ID ga ega bo'lgan Buzilgan Qismni tahrirladi");
+                    LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{damagedPart.PART.PNo} - Buzilgan Qismni tahrirladi");
 
                     return RedirectToAction("Index");
                 }
@@ -153,7 +153,7 @@ namespace tahsinERP.Controllers
                 db.SaveChanges();
 
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{id} ID ga ega bo'lgan Buzilgan Qismni o'chirdi");
+                LogHelper.LogToDatabase(userEmail, "DamagedPartController", $"{damagedPart.PART.PNo} Buzilgan Qismni o'chirdi");
 
                 return RedirectToAction("Index");
             }

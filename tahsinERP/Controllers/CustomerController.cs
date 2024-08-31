@@ -69,7 +69,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.ID} ID ga ega bo'lgan Mijoz yaratdi");
+                        LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.Name} Mijozni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -117,7 +117,7 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
 
                     var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.ID} ID ga ega bo'lgan Mijoz ni tahrirladi");
+                    LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.Name} Mijoz ni tahrirladi");
 
                     return RedirectToAction("Index");
                 }
@@ -159,7 +159,7 @@ namespace tahsinERP.Controllers
                 }
 
                 var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.ID} ID ga ega bo'lgan Mijozni o'chirdi");
+                LogHelper.LogToDatabase(userEmail, "CustomerController", $"{customer.Name} Mijozni o'chirdi");
 
                 return RedirectToAction("Index");
             }
@@ -296,7 +296,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
 
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "CustomerController", $"{new_supplier.ID} ID ga ega bo'lgan Mijozni Excell orqali yaratdi");
+                                LogHelper.LogToDatabase(userEmail, "CustomerController", $"{new_supplier.Name} Mijozni Excell orqali yaratdi");
                             }
                         }
                     }

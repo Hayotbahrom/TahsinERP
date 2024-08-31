@@ -143,7 +143,7 @@ namespace tahsinERP.Controllers
                     db.SaveChanges();
 
                     var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PackingListController", $"{packingList.ID} ID ga ega PackingList yaratdi");
+                    LogHelper.LogToDatabase(userEmail, "PackingListController", $"{packingList.PackingListNo} - PInvoicePackingList yaratdi");
 
                     var packinglistID = packingList.ID;
 
@@ -161,7 +161,7 @@ namespace tahsinERP.Controllers
                         };
 
                         db.P_PACKINGLIST_PARTS.Add(newPart);
-                        LogHelper.LogToDatabase(userEmail, "PackingListController", $"{newPart.ID} ID ga ega PackingListPart yaratdi");
+                        LogHelper.LogToDatabase(userEmail, "PackingListController", $"{newPart.PART.PNo} - PackingListPart yaratdi");
                     }
 
                     db.SaveChanges();
@@ -241,7 +241,7 @@ namespace tahsinERP.Controllers
                             db.SaveChanges();
 
                             var userEmail = User.Identity.Name;
-                            LogHelper.LogToDatabase(userEmail, "PackingListController", $"{ID} ID ga ega PackingListni o'chirdi");
+                            LogHelper.LogToDatabase(userEmail, "PackingListController", $"{packingListToDelete.PackingListNo} - PackingListni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
@@ -303,7 +303,7 @@ namespace tahsinERP.Controllers
                                 db.SaveChanges();
 
                                 var userEmail = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail, "PackingListController", $"{packingList.ID} ID ga ega PackingListni tahrirladi");
+                                LogHelper.LogToDatabase(userEmail, "PackingListController", $"{packingList.PackingListNo} - PackingListni tahrirladi");
 
                                 return RedirectToAction("Index");
                             }

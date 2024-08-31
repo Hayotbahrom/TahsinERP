@@ -61,7 +61,7 @@ namespace tahsinERP.Controllers
                         db.PRODUCTS.Add(product);
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{product.ID} ID ga ega Productni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{product.PNo} - Productni yaratdi");
 
                         // Handle image upload
                         var imageFile = Request.Files["productPhotoUpload"]; // Ensure name matches
@@ -81,7 +81,7 @@ namespace tahsinERP.Controllers
                                 db.PRODUCTIMAGES.Add(photoImage);
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{photoImage.ID} ID ga ega ProductImageni yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{photoImage.PRODUCT.PNo} - uchun ProductImageni yaratdi");
                             }
                             else
                             {
@@ -181,7 +181,7 @@ namespace tahsinERP.Controllers
                                     existingImage.Image = new byte[imageFile.ContentLength];
                                     imageFile.InputStream.Read(existingImage.Image, 0, existingImage.Image.Length);
 
-                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{existingImage.ID} ID ga ega ProductImageni tahrirladi");
+                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{existingImage.PRODUCT.PNo} uchun - ProductImageni tahrirladi");
                                 }
                                 else
                                 {
@@ -195,11 +195,11 @@ namespace tahsinERP.Controllers
 
                                     imageFile.InputStream.Read(photoImage.Image, 0, photoImage.Image.Length);
                                     db.PRODUCTIMAGES.Add(photoImage);
-                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{photoImage} ID ga ega ProductImageni yaratdi");
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{photoImage.PRODUCT.PNo} - uchun ProductImageni yaratdi");
                                 }
 
                                 db.SaveChanges();
-
                             }
                             else
                             {
@@ -211,7 +211,7 @@ namespace tahsinERP.Controllers
                         db.Entry(productToUpdate).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{productToUpdate.ID} ID ga ega Productni tahrirladi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{productToUpdate.PNo} - Productni tahrirladi");
 
                         return RedirectToAction("Index");
                     }
@@ -260,7 +260,7 @@ namespace tahsinERP.Controllers
                             {
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{productToUpdate.ID} ID ga ega Productni o'chirdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{productToUpdate.PNo} - Productni o'chirdi");
 
                                 return RedirectToAction("Index");
                             }
@@ -278,7 +278,7 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                SAMPLE_FILES maxsulot = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("maxsulot.xlsx") == 0).FirstOrDefault();
+                SAMPLE_FILES maxsulot = await db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("maxsulot.xlsx") == 0).FirstOrDefaultAsync();
                 if (maxsulot != null)
                     return File(maxsulot.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 return View();
@@ -407,7 +407,7 @@ namespace tahsinERP.Controllers
                                     db.PRODUCTS.Add(newProduct);
                                     db.SaveChanges();
 
-                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{newProduct.ID} ID ga ega Productni Excell orqali yaratdi");
+                                    LogHelper.LogToDatabase(User.Identity.Name, "ProductController", $"{newProduct.PNo} - Productni Excell orqali yaratdi");
                                 }
                                 else
                                 {

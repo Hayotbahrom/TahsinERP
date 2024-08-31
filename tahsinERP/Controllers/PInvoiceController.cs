@@ -195,7 +195,7 @@ namespace tahsinERP.Controllers
                     db.P_INVOICES.Add(invoice);
                     db.SaveChanges();
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoice.ID} ID ga ega PInvoiceni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoice.InvoiceNo} - PInvoiceni yaratdi");
 
                     List<P_ORDER_PARTS> orderParts = db.P_ORDER_PARTS.Where(po => po.OrderID == model.OrderID).ToList();
                     List<string> notInOrderParts = new List<string>();
@@ -216,7 +216,7 @@ namespace tahsinERP.Controllers
                             newPart.Price = orderPart.Price;
                             db.P_INVOICE_PARTS.Add(newPart);
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.ID} ID ga ega PInvoicenPartni yaratdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.PART.PNo} - PInvoicenPartni yaratdi");
                         }
                         else
                         {
@@ -253,7 +253,7 @@ namespace tahsinERP.Controllers
                             db.P_INVOICE_DOCS.Add(invoiceDoc);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.ID} ID ga ega PInvoiceDocni yaratdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.P_INVOICES.InvoiceNo} - uchun PInvoiceDocni yaratdi");
                         }
                         else
                         {
@@ -412,7 +412,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{ID} ID ga ega PInvoiceni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceToDelete.InvoiceNo} - PInvoiceni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
@@ -513,7 +513,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoice.ID} ID ga ega PInvoiceni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoice.InvoiceNo} - PInvoiceni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -608,7 +608,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoicePart.ID} ID ga ega PInvoicePartni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoicePart.PART.PNo} - InvoicePartni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -883,7 +883,7 @@ namespace tahsinERP.Controllers
                                 db.P_INVOICES.Add(new_invoice);
                                 await db.SaveChangesAsync();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoice.ID} ID ga ega PInvoiceni Excell orqali yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoice.InvoiceNo} - PInvoiceni Excell orqali yaratdi");
 
                                 P_INVOICE_PARTS invoicePart = await db.P_INVOICE_PARTS.Where(pcp => pcp.InvoiceID == new_invoice.ID && pcp.PartID == part.ID).FirstOrDefaultAsync();
                                 if (invoicePart == null)
@@ -898,7 +898,7 @@ namespace tahsinERP.Controllers
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
                                     await db.SaveChangesAsync();
 
-                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.ID} ID ga ega PInvoicePartni Excell orqali yaratdi");
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.PART.PNo} - PInvoicePartni Excell orqali yaratdi");
                                 }
                             }
                             else
@@ -916,7 +916,7 @@ namespace tahsinERP.Controllers
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
                                     await db.SaveChangesAsync();
 
-                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.ID} ID ga ega PInvoicePartni Excell orqali yaratdi");
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.PART.PNo} - PInvoicePartni Excell orqali yaratdi");
                                 }
                             }
                         }

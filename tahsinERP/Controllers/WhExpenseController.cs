@@ -121,7 +121,7 @@ namespace tahsinERP.Controllers
                 db.Entry(newExpense).State = EntityState.Modified;
                 db.SaveChanges();
 
-                LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{newExpense.ID} ID ga ega PartWrhsExpenseni yaratdi");
+                LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{newExpense.DocNo} - PartWrhsExpenseni yaratdi");
 
                 // Save parts
                 foreach (var part in model.Parts)
@@ -146,8 +146,6 @@ namespace tahsinERP.Controllers
                     }
                 }
 
-                var userEmail = User.Identity.Name;
-                LogHelper.LogToDatabase(userEmail, "WhExpenseController", "Create[Post]");
                 return RedirectToAction("Index");
             }
         }
@@ -258,7 +256,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{wrhsExpenseToUpdate.ID} ID ga ega PartWrhsExpenseni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{wrhsExpenseToUpdate.DocNo} - PartWrhsExpenseni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -327,7 +325,7 @@ namespace tahsinERP.Controllers
                         {
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpensePartToUpdate.ID} ID ga ega PartWrhsExpensePartni tahrirladi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpensePartToUpdate.PART.PNo} - PartWrhsExpensePartni tahrirladi");
 
                             return RedirectToAction("Index");
                         }
@@ -383,7 +381,7 @@ namespace tahsinERP.Controllers
                             
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpenseToDelete.ID} ID ga ega PartWrhsExpenseni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpenseToDelete.DocNo} - PartWrhsExpenseni o'chirdi");
 
                             return RedirectToAction("Index");
                         }
@@ -414,7 +412,7 @@ namespace tahsinERP.Controllers
                             db.PART_WRHS_EXPENSE_PARTS.Remove(whExpensePartToDelete);
                             db.SaveChanges();
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpensePartToDelete.ID} ID ga ega PartWrhsExpensePartni o'chirdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "WhExpenseController", $"{whExpensePartToDelete.PART.PNo} - PartWrhsExpensePartni o'chirdi");
 
                             return RedirectToAction("Index");
                         }

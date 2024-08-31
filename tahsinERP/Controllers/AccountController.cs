@@ -240,7 +240,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
 
                         var userEmail = User.Identity.Name;
-                        LogHelper.LogToDatabase(userEmail, "AccountController", $"{uImage.UserID} dagi foydalanuvchi ma'lumotlarini saqladi");
+                        LogHelper.LogToDatabase(userEmail, "AccountController", $"{uImage.USER.Uname} dagi foydalanuvchi ma'lumotlarini saqladi");
 
                         return Redirect("/Home");
                     }

@@ -42,8 +42,7 @@ namespace tahsinERP.Controllers
                     db.PARTPACKS.Add(model);
                     db.SaveChanges();
 
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartPackController", $"{partID} ID ga ega PartPackni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "PartPackController", $"{model.PART.PNo} - PartPackni yaratdi");
 
                     return RedirectToAction("Index");
                 }
@@ -103,8 +102,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
                     }
 
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartPackController", $"{partId} ID ga ega PartPackni tahrirladi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "PartPackController", $"{model.PART.PNo} - PartPackni tahrirladi");
 
                     return RedirectToAction("Index");
                 }
@@ -169,8 +167,7 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
                     }
 
-                    var userEmail = User.Identity.Name;
-                    LogHelper.LogToDatabase(userEmail, "PartPackController", $"{id} ID ga ega PartPackni o'chirdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "PartPackController", $"{partpack.PART.PNo} - PartPackni o'chirdi");
 
                     return RedirectToAction("Index");
                 }
