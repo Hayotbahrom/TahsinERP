@@ -367,14 +367,26 @@ namespace tahsinERP.Controllers
                             var rowCount = worksheet.Dimension.Rows;
                             var colCount = worksheet.Dimension.Columns;
 
+                            // Add columns to DataTable
                             for (int col = 1; col <= colCount; col++)
                             {
                                 dataTable.Columns.Add(worksheet.Cells[1, col].Text);
                             }
 
+                            // Add rows to DataTable
                             for (int row = 2; row <= rowCount; row++)
                             {
                                 var dataRow = dataTable.NewRow();
+
+                                // Parse IssuedDate
+                                DateTime issueDate;
+                                if (!DateTime.TryParse(worksheet.Cells[row, 4].Text, out issueDate))
+                                {
+                                    ViewBag.Message = $"Invalid date format in row {row}. Please check the IssuedDate column.";
+                                    return View("UploadWithExcel");
+                                }
+
+                                // Fill the DataRow
                                 for (int col = 1; col <= colCount; col++)
                                 {
                                     dataRow[col - 1] = worksheet.Cells[row, col].Text;
@@ -387,26 +399,14 @@ namespace tahsinERP.Controllers
                         ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                         ViewBag.IsFileUploaded = true;
 
-                        int duplicateCount = 0;
                         using (DBTHSNEntities db = new DBTHSNEntities())
                         {
-                            foreach (DataRow row in dataTable.Rows)
-                            {
-                                string productNo = row["Product No."].ToString();
-
-                                SPL existingRecord = db.SPLs.FirstOrDefault(s => s.ProdID.CompareTo(productNo) == 0 && s.IsDeleted == false);
-                                if (existingRecord != null)
-                                {
-                                    duplicateCount++;
-                                }
-                            }
+                            // Code for database operations, without duplicate check
                         }
-                        ViewBag.ExistingRecordsCount = duplicateCount;
-
                     }
                     catch (Exception ex)
                     {
-                        ViewBag.Message = $"Faylni yuklashda xatolik: {ex.Message}";
+                        ViewBag.Message = $"Error occurred while uploading the file: {ex.Message}";
                         return View("UploadWithExcel");
                     }
                 }
@@ -423,6 +423,8 @@ namespace tahsinERP.Controllers
             }
             return View("UploadWithExcel");
         }
+
+
 
         public ActionResult ClearDataTable()
         {
@@ -446,40 +448,37 @@ namespace tahsinERP.Controllers
                     {
                         foreach (DataRow row in tableModel.Rows)
                         {
-                            string productNo = row["Product No."].ToString();
-
-                            var prodID = db.PRODUCTS.FirstOrDefault(x => x.IsDeleted == false && x.PNo.CompareTo(productNo) == 0)?.ID;
-                            if (prodID is null)
+                            string transportNo = row["Transport No."].ToString();
+                            DateTime issueDate = DateTime.Parse(row["IssuedDate"].ToString());
+                            var packinglistID = db.P_INVOICE_PACKINGLISTS.Where(x => x.IsDeleted == false && x.TransportNo.CompareTo(transportNo)==0).FirstOrDefault().ID;
+                            if (db.P_INVOICE_PACKINGLISTS.Any(x => x.TransportNo == transportNo && x.IsDeleted == false))
                             {
-                                PRODUCT newProduct = new PRODUCT
+                                var existTracing = db.TRACINGS.FirstOrDefault(x => x.IsDeleted == false && x.P_INVOICE_PACKINGLISTS.TransportNo.CompareTo(transportNo) == 0 && x.IssueDateTime == issueDate);
+                                if (existTracing is null)
                                 {
-                                    PNo = productNo,
-                                    Name = row["Name"].ToString()
-                                };
-                                db.PRODUCTS.Add(newProduct);
-                                db.SaveChanges();
+                                    TRACING newTracing = new TRACING
+                                    {
+                                        PackingListID = packinglistID,
+                                        ActualLocation = Convert.ToString(row["Actual location"]),
+                                        ActualDistanceToDestination = Convert.ToDouble(row["ActualDistanceToDestination"]),
+                                        ETA = Convert.ToDateTime(row["ETA"]),
+                                        ETD = Convert.ToDateTime(row["ETD"]),
+                                        IssueDateTime = Convert.ToDateTime(row["IssuedDate"])
+                                    };
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newProduct.ID} ID ga ega Productni Excell orqali yaratdi");
+                                    db.TRACINGS.Add(newTracing);
+                                    db.SaveChanges();
 
-                                prodID = db.PRODUCTS.Where(x => x.PNo.CompareTo(newProduct.PNo) == 0 && x.Name.CompareTo(newProduct.Name) == 0).FirstOrDefault().ID;
+                                    LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{newTracing.ID} ID ga ega Productni Excell orqali yaratdi");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "bunday transportNo kiritilgan sanada mavjud.");
+                                }
                             }
-                            if (prodID != null)
+                            else
                             {
-                                SPL newSplRecord = new SPL
-                                {
-                                    ProdID = (int)prodID,
-                                    CarModel1 = row["Model"].ToString(),
-                                    Option1 = row["OptionID"].ToString(),
-                                    Option1UsageQty = Convert.ToInt32(row["Usage"]),
-                                    Option1UsageUnit = row["Unit"].ToString(),
-                                    IsActive = true,  // Assuming new entries are active by default
-                                    IsDeleted = false // Assuming new entries are not deleted by default
-                                };
-
-                                db.SPLs.Add(newSplRecord);
-                                db.SaveChanges();
-
-                                LogHelper.LogToDatabase(User.Identity.Name, "SPLController", $"{newSplRecord.ID} ID ga ega SPLni Excell orqali yaratdi");
+                                ModelState.AddModelError("", "bunday transportNo packinglist da topilmadi, ma'lumotlarni qaytadan ko'rib chiqing.");
                             }
                         }
                     }
