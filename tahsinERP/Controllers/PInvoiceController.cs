@@ -582,6 +582,7 @@ namespace tahsinERP.Controllers
                 }).ToList();
 
 
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 ViewBag.PartList = allParts;
 
                 return View(invoicePart);
