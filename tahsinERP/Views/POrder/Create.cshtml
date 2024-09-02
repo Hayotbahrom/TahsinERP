@@ -87,8 +87,7 @@
                                                             @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control ContractID", @id = "ContractID", onchange = "getContractDetails()" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
-
-                                                        <div class="form-group position-relative has-icon-left">
+                                                        <div class="col-md-6 col-12 form-group position-relative has-icon-left">
                                                             <label>Buyurtma berilgan sanasi</label>
                                                             @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma berilgan sanasi", @required = "required" })
                                                             @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
@@ -131,7 +130,7 @@
                                             <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
-                                                    <div class="row justify-content-between">
+                                                    <div class="row col-12 justify-content-between">
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Qismni tanlang</label>
