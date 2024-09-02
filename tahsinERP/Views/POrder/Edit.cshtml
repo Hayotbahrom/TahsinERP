@@ -150,42 +150,6 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <div data-repeater-list="Parts">
-                                            <div data-repeater-item>
-                                                <div class="row justify-content-between">
-                                                    <input type="hidden" name="ID" />
-                                                    <div class="col-md-2 col-sm-12 form-group">
-                                                        <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                        @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndMOQ(this)", onclick = "getPriceAndMOQ(this)" })
-                                                        @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-2 col-sm-12 form-group">
-                                                        <label for="Part_Unit">Birligi</label>
-                                                        @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control", id = "UnitID" })
-                                                        @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-2 col-sm-12 form-group">
-                                                        <label for="Part_Amount">Miqdori</label>
-                                                        <input type="number" name="Amount" step="0.01" class="form-control" id="Part_Amount" />
-                                                        @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-2 col-sm-12 form-group">
-                                                        <label for="Part_Price">Narx</label>
-                                                        <input type="number" name="Price" step="0.01" class="form-control Part_Price" id="Part_Price" />
-                                                        @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-2 col-sm-12 form-group">
-                                                        <label for="Part_MOQ">MOQ</label>
-                                                        <input type="text" name="MOQ" class="form-control Part_MOQ" id="Part_MOQ" />
-                                                        @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
-                                                        <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                            </div>
-                                        </div>
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item border-0 pb-0">
                                                 <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
