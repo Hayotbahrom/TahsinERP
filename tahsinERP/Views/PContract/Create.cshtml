@@ -147,7 +147,7 @@
                                                     <div class="row justify-content-between">
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_PartID">Ehtiyot qismni tanlang</label>
+                                                            <label for="Part_PartID">Qismni tanlang</label>
                                                             @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select", @id = "select2" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
