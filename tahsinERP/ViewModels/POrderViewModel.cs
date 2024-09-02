@@ -42,9 +42,8 @@ namespace tahsinERP.ViewModels
         public double Price { get; set; }
         [Required]
         public double Amount { get; set; }
-        
+        [Required]
         public double MOQ { get; set; }
-        
         public int UnitID { get; set; }
     }
 }
