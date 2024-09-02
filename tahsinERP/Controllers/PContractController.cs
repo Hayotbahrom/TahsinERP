@@ -408,23 +408,38 @@ namespace tahsinERP.Controllers
                         };
 
                         db.P_CONTRACT_PARTS.Add(newPart);
-                        LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.PART.PNo} - PContractPartni yaratdi");
+                        //LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.PART.PNo} - PContractPartni yaratdi");
                     }
 
                     db.SaveChanges();
 
-                    if (Request.Files["docUpload"].ContentLength > 0)
+                    if (Request.Files["docUpload"] != null && Request.Files["docUpload"].ContentLength > 0)
                     {
                         if (Request.Files["docUpload"].InputStream.Length < 5242880)
                         {
-                            P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
-                            byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                            Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                            contractDoc.ContractID = newContract.ID;
-                            contractDoc.Doc = avatar;
+                            if (Request.Files["partPhotoUpload"] != null)
+                            {
+                                P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
+                                byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
+                                Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
 
-                            db.P_CONTRACT_DOCS.Add(contractDoc);
-                            db.SaveChanges();
+                                if (newContract != null)
+                                {
+                                    contractDoc.ContractID = newContract.ID;
+                                    contractDoc.Doc = avatar;
+
+                                    db.P_CONTRACT_DOCS.Add(contractDoc);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "Yangi shartnoma mavjud emas.");
+                                }
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Shartnoma yuklanmadi. Iltimos, qayta urinib ko'ring.");
+                            }
                         }
                         else
                         {
@@ -432,6 +447,11 @@ namespace tahsinERP.Controllers
                             throw new RetryLimitExceededException();
                         }
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "Hujjat yuklanmadi. Iltimos, qayta urinib ko'ring.");
+                    }
+
                 }
                 catch
                 {
