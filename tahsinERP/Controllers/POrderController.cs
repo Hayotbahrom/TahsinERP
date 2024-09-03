@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
@@ -73,45 +74,69 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-
-        public async Task<JsonResult> GetPartList(int contractPartID)
+        public JsonResult GetContractDetails(int contractID)
         {
-            try
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                using (DBTHSNEntities db = new DBTHSNEntities())
+                var contract = db.P_CONTRACTS
+                                 .Where(c => c.ID == contractID && c.IsDeleted == false)
+                                 .Select(c => new
+                                 {
+                                     c.ID,
+                                     c.Currency
+                                 })
+                                 .FirstOrDefault();
+
+                if (contract != null)
                 {
-                    // PartID larni olish
-                    var partIDsList = await db.P_CONTRACT_PARTS
-                                              .Where(p => p.ContractID == contractPartID)
-                                              .Select(p => p.PartID)
-                                              .ToListAsync();
-
-                    if (partIDsList == null || !partIDsList.Any())
-                    {
-                        return Json(new { success = false, message = "Berilgan 'ContractPartID' uchun hech qanday 'Part' topilmadi." }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    // PARTS jadvalidan ID va PNo ni olish
-                    var partList = await db.PARTS
-                                           .Where(p => partIDsList.Contains(p.ID))
-                                           .Select(p => new { p.ID, p.PNo })
-                                           .ToListAsync();
-
-                    if (partList == null || !partList.Any())
-                    {
-                        return Json(new { success = false, message = "'PARTS' jadvalida mos keladigan 'part' topilmadi." }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    // Muvaffaqiyatli natijani JSON formatida qaytarish
-                    return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, data = contract }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Contract not found." }, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception ex)
-            {
-                // Errorni JSON formatida qaytarish
-                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
-            }
         }
+
+
+        /* public async Task<JsonResult> GetPartList(int contractPartID)
+         {
+             try
+             {
+                 using (DBTHSNEntities db = new DBTHSNEntities())
+                 {
+                     // PartID larni olish
+                     var partIDsList = await db.P_CONTRACT_PARTS
+                                               .Where(p => p.ContractID == contractPartID)
+                                               .Select(p => p.PartID)
+                                               .ToListAsync();
+
+                     if (partIDsList == null || !partIDsList.Any())
+                     {
+                         return Json(new { success = false, message = "Berilgan 'ContractPartID' uchun hech qanday 'Part' topilmadi." }, JsonRequestBehavior.AllowGet);
+                     }
+
+                     // PARTS jadvalidan ID va PNo ni olish
+                     var partList = await db.PARTS
+                                            .Where(p => partIDsList.Contains(p.ID))
+                                            .Select(p => new { p.ID, p.PNo })
+                                            .ToListAsync();
+
+                     if (partList == null || !partList.Any())
+                     {
+                         return Json(new { success = false, message = "'PARTS' jadvalida mos keladigan 'part' topilmadi." }, JsonRequestBehavior.AllowGet);
+                     }
+
+                     // Muvaffaqiyatli natijani JSON formatida qaytarish
+                     return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
+                 }
+             }
+             catch (Exception ex)
+             {
+                 // Errorni JSON formatida qaytarish
+                 return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+             }
+         }*/
 
 
         public async Task<JsonResult> GetPriceAndMOQ(int partID)
@@ -143,6 +168,28 @@ namespace tahsinERP.Controllers
             }
         }
 
+        public JsonResult GetOrdersBySupplier(int supplierID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var orders = db.P_ORDERS
+                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
+                    .Select(x => new
+                    {
+                        x.ID,
+                        x.OrderNo,
+                        x.Currency // Include Currency in the response
+                    })
+                    .ToList();
+
+                return Json(orders.Select(i => new
+                {
+                    Value = i.ID.ToString(),
+                    Text = i.OrderNo,
+                    Currency = i.Currency
+                }), JsonRequestBehavior.AllowGet);
+            }
+        }
 
         public ActionResult Create()
         {

@@ -84,7 +84,7 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control ContractID", @id = "ContractID", onchange = "getPartList()", onclick = "getPartList()" })
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control ContractID", @id = "ContractID", onchange = "getContractDetails()" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group position-relative has-icon-left">
@@ -112,7 +112,7 @@
                                                             @Html.TextAreaFor(model => model.Description, new { @class = "form-control", id = "Description" })
                                                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -183,6 +183,35 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        function getContractDetails() {
+        var contractID = document.getElementById("ContractID").value;
+
+        $.ajax({
+            url: '@Url.Action("GetContractDetails", "POrder")',
+            type: 'GET',
+            data: { contractID: contractID },
+            success: function(data) {
+                if (data.success) {
+                    var contract = data.data;
+
+                    // Update the currency field
+                    $("#Currency").val(contract.Currency || '');
+                } else {
+                    console.error("Error: " + data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching contract details:", error);
+            }
+        });
+
+        // Fetch parts list based on the selected contract
+        getPartList(contractID);
+    }
+
+    </script>
+
 
     <script type="text/javascript">
         function getPartList() {
@@ -201,7 +230,7 @@
 
                         // Append new options
                         $.each(data.data, function (index, item) {
-                            PartID.append(new Option(item.PNo, item.ID));    
+                            PartID.append(new Option(item.PNo, item.ID));
                         });
                     } else {
                         console.error("Error: " + data.message);
@@ -225,7 +254,7 @@
                     if (data.success) {
                         var Price = $(".Part_Price");
                         var MOQ = $(".Part_MOQ");
-       
+
                         Price.val(data.data.Price);
                         MOQ.val(data.data.MOQ);
                     } else {
@@ -238,10 +267,6 @@
             });
         }
 
-
-
-
-        
         function refreshdatatablesupplier() {
             const supplierID = document.getElementById("SupplierID").value;
             $.ajax({
