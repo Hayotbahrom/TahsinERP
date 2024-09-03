@@ -332,14 +332,23 @@ namespace tahsinERP.Controllers
                         {
                             if (Request.Files["docUpload"].InputStream.Length < 5242880)
                             {
-                                P_ORDER_DOCS orderDoc = new P_ORDER_DOCS();
-                                byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
-                                Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                                orderDoc.OrderID = newOrder.ID;
-                                orderDoc.Doc = avatar;
+                                if(Path.GetExtension(model.File.FileName).ToLower() == ".pdf")
+                                {
+                                    P_ORDER_DOCS orderDoc = new P_ORDER_DOCS();
+                                    byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                                    Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                    orderDoc.OrderID = newOrder.ID;
+                                    orderDoc.Doc = avatar;
 
-                                db.P_ORDER_DOCS.Add(orderDoc);
-                                db.SaveChanges();
+                                    db.P_ORDER_DOCS.Add(orderDoc);
+                                    db.SaveChanges();
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{orderDoc.P_ORDERS.OrderNo} - uchun POrderDocni yaratdi");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "Format noto'g'ri. Faqat .pdf fayllarni yuklash mumkin.");
+                                }
                             }
                             else
                             {
