@@ -139,34 +139,31 @@ namespace tahsinERP.Controllers
          }*/
 
 
-        public async Task<JsonResult> GetPriceAndMOQ(int partID)
+        public JsonResult GetPriceAndMOQ(int partID)
         {
-            try
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                using (DBTHSNEntities db = new DBTHSNEntities())
+                var contractPart = db.P_CONTRACT_PARTS
+                                     .Where(cp => cp.PartID == partID)
+                                     .Select(cp => new
+                                     {
+                                         Price = cp.Price,
+                                         MOQ = cp.MOQ,
+                                         Amount = cp.Amount
+                                     })
+                                     .FirstOrDefault();
+
+                if (contractPart != null)
                 {
-                    // partID bo'yicha Price va MOQ qiymatlarini olish
-                    var priceMoq = await db.P_CONTRACT_PARTS
-                                           .Where(p => p.PartID == partID)
-                                           .Select(x => new { x.Price, x.MOQ })
-                                           .FirstOrDefaultAsync();
-
-                    // Agar natija topilmasa
-                    if (priceMoq == null)
-                    {
-                        return Json(new { success = false, message = "Berilgan ID uchun narx yoki MOQ topilmadi" }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    // Muvaffaqiyatli natijani JSON formatida qaytarish
-                    return Json(new { success = true, data = priceMoq }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, data = contractPart }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Part not found in contract." }, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception ex)
-            {
-                // Exceptionni JSON formatida qaytarish
-                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
-            }
         }
+
 
         public JsonResult GetOrdersBySupplier(int supplierID)
         {
@@ -190,6 +187,24 @@ namespace tahsinERP.Controllers
                 }), JsonRequestBehavior.AllowGet);
             }
         }
+        
+        // Bu method tanlangan shartnomaga tegishli qismlar ro'yxatini qaytaradi
+        public ActionResult GetPartList(int contractID)
+        {
+            using (var db = new DBTHSNEntities())
+            {
+                var partList = db.P_CONTRACT_PARTS
+                    .Where(cp => cp.ContractID == contractID )
+                    .Select(cp => new
+                    {
+                        cp.PartID,
+                        cp.PART.PNo
+                    })
+                    .ToList();
+
+                return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         public ActionResult Create()
         {
@@ -198,10 +213,17 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+
+                // Create a list of SelectListItem manually for parts
+                ViewBag.partList = db.PARTS.Where(c => c.IsDeleted == false)
+                                           .Select(p => new SelectListItem
+                                           {
+                                               Value = p.ID.ToString(),
+                                               Text = p.PNo
+                                           }).ToList();
             }
 
-            return View();
+            return View();  
         }
 
         [HttpPost]
