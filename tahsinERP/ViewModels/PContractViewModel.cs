@@ -11,7 +11,7 @@ namespace tahsinERP.ViewModels
         [Required]
         public string ContractNo { get; set; }
         [DataType(DataType.Upload)]
-        public HttpPostedFileBase File;
+        public HttpPostedFileBase File { get; set; }
         [Required]
         public DateTime IssuedDate { get; set; }
         [Required]

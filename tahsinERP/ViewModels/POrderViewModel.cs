@@ -13,7 +13,7 @@ namespace tahsinERP.ViewModels
         [Required]
         public string OrderNo { get; set; }
         [DataType(DataType.Upload)]
-        public HttpPostedFileBase File;
+        public HttpPostedFileBase File { get; set; }
         public DateTime IssuedDate { get; set; }
         [Required(ErrorMessage = "Shartnoma tarkibidagi ta'minotchi va belgilangan ta'minotchi bir xil emas!")]
         public int SupplierID { get; set; }

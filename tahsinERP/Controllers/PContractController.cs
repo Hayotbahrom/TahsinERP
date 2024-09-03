@@ -11,8 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Services.Description;
-using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -363,111 +361,95 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(PContractViewModel model)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var newContract = new P_CONTRACTS()
+                    try
                     {
-                        ContractNo = model.ContractNo,
-                        IssuedDate = model.IssuedDate,
-                        CompanyID = 1,
-                        SupplierID = model.SupplierID,
-                        Currency = model.Currency,
-                        Amount = model.Amount,
-                        Incoterms = model.Incoterms,
-                        PaymentTerms = model.PaymentTerms,
-                        DueDate = model.DueDate,
-                        IsDeleted = false,
-                        IDN = model.IDN,
-                    };
-                    db.P_CONTRACTS.Add(newContract);
-                    db.SaveChanges();
-
-                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newContract.ContractNo} - PContractni yaratdi");
-
-                    // Yangi yozuvning IncomeID sini olish
-                    int newContractID = newContract.ID;
-
-                    // Parts ni saqlash
-                    foreach (var part in model.Parts)
-                    {
-                        var newPart = new P_CONTRACT_PARTS
+                        var newContract = new P_CONTRACTS()
                         {
-                            ContractID = newContractID, // part.IncomeID emas, yangi yaratilgan IncomeID ishlatiladi
-                            PartID = part.PartID,
-                            UnitID = part.UnitID,
-                            Price = part.Price,
-                            Quantity = part.Quantity,
-                            ActivePart = true,
-                            MOQ = part.MOQ
+                            ContractNo = model.ContractNo,
+                            IssuedDate = model.IssuedDate,
+                            CompanyID = 1,
+                            SupplierID = model.SupplierID,
+                            Currency = model.Currency,
+                            Amount = model.Amount,
+                            Incoterms = model.Incoterms,
+                            PaymentTerms = model.PaymentTerms,
+                            DueDate = model.DueDate,
+                            IsDeleted = false,
+                            IDN = model.IDN,
                         };
+                        db.P_CONTRACTS.Add(newContract);
+                        db.SaveChanges();
 
-                        db.P_CONTRACT_PARTS.Add(newPart);
-                        //LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.PART.PNo} - PContractPartni yaratdi");
-                    }
+                        int newContractID = newContract.ID;
 
-                    db.SaveChanges();
-
-                    if (Request.Files["docUpload"] != null && Request.Files["docUpload"].ContentLength > 0)
-                    {
-                        if (Request.Files["docUpload"].InputStream.Length < 5242880)
+                        foreach (var part in model.Parts)
                         {
-                            if (Request.Files["partPhotoUpload"] != null)
+                            var newPart = new P_CONTRACT_PARTS
+                            {
+                                ContractID = newContractID,
+                                PartID = part.PartID,
+                                UnitID = part.UnitID,
+                                Price = part.Price,
+                                Quantity = part.Quantity,
+                                ActivePart = true,
+                                MOQ = part.MOQ
+                            };
+                            db.P_CONTRACT_PARTS.Add(newPart);
+                        }
+
+                        db.SaveChanges();
+
+                        // Handle file upload
+                        if (model.File != null && model.File.ContentLength > 0)
+                        {
+                            if (model.File.ContentLength < 5242880)
                             {
                                 P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
-                                byte[] avatar = new byte[Request.Files["partPhotoUpload"].InputStream.Length];
-                                Request.Files["partPhotoUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                byte[] fileData = new byte[model.File.InputStream.Length];
+                                model.File.InputStream.Read(fileData, 0, fileData.Length);
 
-                                if (newContract != null)
-                                {
-                                    contractDoc.ContractID = newContract.ID;
-                                    contractDoc.Doc = avatar;
+                                contractDoc.ContractID = newContract.ID;
+                                contractDoc.Doc = fileData;
 
-                                    db.P_CONTRACT_DOCS.Add(contractDoc);
-                                    db.SaveChanges();
-                                }
-                                else
-                                {
-                                    ModelState.AddModelError("", "Yangi shartnoma mavjud emas.");
-                                }
+                                db.P_CONTRACT_DOCS.Add(contractDoc);
+                                db.SaveChanges();
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Shartnoma yuklanmadi. Iltimos, qayta urinib ko'ring.");
+                                ModelState.AddModelError("", "The file is too large. Please upload a file smaller than 5MB.");
+                                throw new RetryLimitExceededException();
                             }
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
-                            throw new RetryLimitExceededException();
+                            ModelState.AddModelError("", "No file uploaded. Please try again.");
                         }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Hujjat yuklanmadi. Iltimos, qayta urinib ko'ring.");
-                    }
 
-                }
-                catch
-                {
-                    if (!ModelState.IsValid && Request.Files["partPhotoUpload"].ContentLength <= 0)
+                        return RedirectToAction("Index");
+                    }
+                    catch
                     {
-                        ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                        ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-                        ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-
-                        return View(model);
+                        ModelState.AddModelError("", "An error occurred while creating the contract.");
                     }
                 }
 
-                return RedirectToAction("Index");
+                ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
+                ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
+                return View(model);
             }
         }
+
+
         public ActionResult DownloadDoc(int? contractID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
