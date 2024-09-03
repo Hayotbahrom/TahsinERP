@@ -214,7 +214,7 @@ namespace tahsinERP.Controllers
                                 db.USERIMAGES.Add(uImageNew);
                                 db.SaveChanges();
 
-                                LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{user.Uname} uchun Foydalanuvchini-Rasmini yaratdi");
+                                LogHelper.LogToDatabase(User.Identity.Name, "UserController", $"{userToUpdate.Uname} uchun Foydalanuvchini-Rasmini yaratdi");
                             }
                             else
                             {
