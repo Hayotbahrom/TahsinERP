@@ -53,7 +53,7 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, DUNS, Type, Country, City, Address, Telephone, E_mail, ContactPerson, Director, IsDeleted")] SUPPLIER supplier)
+        public ActionResult Create(/*[Bind(Include = "Name, DUNS, Type, Country, City, Address, Telephone, E_mail, ContactPerson, Director, IsDeleted")]*/ SUPPLIER supplier)
         {
             using(DBTHSNEntities db = new DBTHSNEntities())
             {

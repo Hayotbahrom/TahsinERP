@@ -92,7 +92,7 @@
 
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
-                                                        <div class="form-group position-relative has-icon-left">
+                                                        <div class="col-md-6 col-12 form-group position-relative has-icon-left">
                                                             <label>invoice sanasi</label>
                                                             @Html.TextBoxFor(model => model.InvoiceDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Invoice sanasi", @required = "required" })
                                                             @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
@@ -122,10 +122,10 @@
                                             <h4>Ehtiyot qismlar</h4>
                                             <div data-repeater-list="Parts">
                                                 <div data-repeater-item>
-                                                    <div class="row justify-content-between">
+                                                    <div class="row col-12 justify-content-between">
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_PartID">Ehtiyot qismni tanlang</label>
+                                                            <label for="Part_PartID">Qismni tanlang</label>
                                                             @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select", id = "PartID" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>

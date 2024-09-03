@@ -13,7 +13,7 @@ using tahsinERP.ViewModels;
 namespace tahsinERP.Controllers
 {
     public class UserController : Controller
-    {
+    {   
         private DBTHSNEntities db = new DBTHSNEntities();
         private byte[] avatar;
         private int userPhotoMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);

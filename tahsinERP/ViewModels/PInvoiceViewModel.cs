@@ -19,7 +19,7 @@ namespace tahsinERP.ViewModels
         public string Currency { get; set; }
         public int CompanyID { get; set; }
         [DataType(DataType.Upload)]
-        public HttpPostedFileBase File;
+        public HttpPostedFileBase File { get; set; }
         public bool IsDeleted { get; set; }
         public List<PInvoicePartViewModel> Parts { get; set; }
         public PInvoiceViewModel()

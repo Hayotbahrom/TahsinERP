@@ -118,6 +118,9 @@
                                                                                     <td>@item.UNIT.UnitName</td>
                                                                                     <td>
                                                                                         <!-- Delete button -->
+                                                                                        <a href="~/PInvoice/DeletePart/@item.ID" onclick="return confirm('Ushbu invoys ehtiyot qismini o\'chirib yuborishga ishonchingiz komilmi?')">
+                                                                                            <i class="bx bx-trash"></i>
+                                                                                        </a>
                                                                                         <a href="@Url.Action("EditPart", "PInvoice", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
                                                                                     </td>
                                                                                 </tr>
