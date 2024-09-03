@@ -244,16 +244,23 @@ namespace tahsinERP.Controllers
                     {
                         if (Request.Files["docUpload"].InputStream.Length < 5242880)
                         {
-                            P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
-                            byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
-                            Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                            invoiceDoc.InvoiceID = invoice.ID;
-                            invoiceDoc.Doc = avatar;
+                            if (Path.GetExtension(model.File.FileName).ToLower() == ".pdf")
+                            {
+                                P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
+                                byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                                Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                invoiceDoc.InvoiceID = invoice.ID;
+                                invoiceDoc.Doc = avatar;
 
-                            db.P_INVOICE_DOCS.Add(invoiceDoc);
-                            db.SaveChanges();
+                                db.P_INVOICE_DOCS.Add(invoiceDoc);
+                                db.SaveChanges();
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.P_INVOICES.InvoiceNo} - uchun PInvoiceDocni yaratdi");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Format noto'g'ri. Faqat .pdf fayllarni yuklash mumkin.");
+                            }
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.P_INVOICES.InvoiceNo} - uchun PInvoiceDocni yaratdi");
                         }
                         else
                         {
