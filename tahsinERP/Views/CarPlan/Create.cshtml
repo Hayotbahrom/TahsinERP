@@ -42,7 +42,12 @@
                                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                         <h6 class="invoice-to">Avtomobileni tanlang</h6>
                                         <fieldset class="invoice-address form-group">
-                                            @Html.DropDownList("CarID", (SelectList)ViewBag.CarList, "--tanlang--", new { @class = "form-control select2" })
+                                            @Html.DropDownList("CarID", (SelectList)ViewBag.CarModelList, "--tanlang--", new { @class = "form-control select2", @id = "carModel", onchange = "getOptionCodes()" })
+                                            @Html.ValidationMessageFor(model => model.CarID, "", new { @class = "text-danger" })
+                                        </fieldset>
+                                        <h6 class="invoice-to">Avtomobileni variantini tanlang</h6>
+                                        <fieldset class="invoice-address form-group">
+                                            @Html.DropDownList("CarID", (SelectList)ViewBag.CarOptionList, "--tanlang--", new { @class = "form-control select2", @id = "optionCode" })
                                             @Html.ValidationMessageFor(model => model.CarID, "", new { @class = "text-danger" })
                                         </fieldset>
                                         <h6 class="invoice-to">Rejadagi mahsulot miqdori</h6>
@@ -142,4 +147,25 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+        function getOptionCodes() {
+            alert("kirdi");
+            var carModel = document.getElementById("optionCode").value;
+            $.ajax({
+                url: '@Url.Action("GetOptionCode", "CarPlan")',
+                type: 'GET',
+                data: { modelName: carModel },
+                succes: function (data) {
+                    var optionCodes = $("optionCode");
+                    optionCodes.empty();
+                    $.each(data, function (index, item) {
+                        optionCodes.append(new Option(item.text, item.value);
+                    });
+                },
+                error: function (xhr, status, erorr) {
+                    console.error("Error fetching OptionCodes: ", error);
+                }
+            });
+        }
+    </script>
 </body>

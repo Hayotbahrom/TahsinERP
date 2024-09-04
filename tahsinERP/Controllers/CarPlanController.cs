@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,11 +25,28 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.CarList = new SelectList(db.CARS.ToList(), "ID", "OptionCode");
+                ViewBag.CarModelList = new SelectList(db.CARS.Distinct().ToList(), "ID", "Model");
+                ViewBag.CarOptionList = new SelectList(db.CARS.ToList(), "ID", "OptionCode");
                 return View();
             }
-        }   
+        }
 
+        public async Task<JsonResult> GetOptionCode(string modelName)
+        {
+            using(DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var optionCodes = await db.CARS.Where(c => c.Model == modelName)
+                                               .Select(x => new { x.ID, x.OptionCode })
+                                               .ToListAsync();
+
+                if (optionCodes.Count <= 0)
+                {
+                    return Json(new { success = false, message = "Berilgan Model bo'yicha OptionCode topilmadi" }, JsonRequestBehavior.AllowGet);
+                }
+
+                return Json(new { success = true, data = optionCodes }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
 
         [HttpPost]
