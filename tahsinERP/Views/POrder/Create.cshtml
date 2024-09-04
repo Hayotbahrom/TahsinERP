@@ -199,8 +199,17 @@
                     // Valyutani yangilash
                     $("#Currency").val(contract.Currency || '');
 
-                    // Yangi qism qo‘shilganda qismlar ro‘yxatini yangilash
+                    // Qismlar ro'yxatini yangilash
                     updatePartList(contractID);
+
+                    // Qismlar ro'yxatini yangilashdan keyin birinchi qismini avtomatik tanlash
+                    setTimeout(function () {
+                        var firstPartDropdown = $('[data-repeater-item]').first().find('.PartID');
+                        if (firstPartDropdown.length > 0) {
+                            firstPartDropdown.val(firstPartDropdown.find('option:first').val()).trigger('change');
+                        }
+                    }, 100); // Qismlar ro'yxatini yangilash jarayoni tugaguncha kutib turish uchun setTimeout ishlatiladi
+
                 } else {
                     console.error("Xatolik: " + data.message);
                 }
@@ -210,6 +219,7 @@
             }
         });
     }
+
 
     function updatePartList(contractID) {
         $.ajax({
@@ -285,12 +295,18 @@
                 $.each(data, function (index, item) {
                     contractDropdown.append(new Option(item.Text, item.Value));
                 });
+
+                // Default shartnomani tanlab olamiz
+                if (data.length > 0) {
+                    contractDropdown.val(data[0].Value).trigger('change');
+                }
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching contracts:", error);
             }
         });
     }
+
     </script>
     
 
