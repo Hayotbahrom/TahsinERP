@@ -66,7 +66,8 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">Parametr</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.Parameter, new SelectList(ViewBag.Parametr, "Select Part Type"), new { @class = "form-control" })
+                                                        @Html.TextBoxFor(model => model.Parameter, new { @class = "form-control", @placeholder = "Parametrlarini kiriting" })
+                                                        @*@Html.DropDownListFor(model => model.Parameter, new SelectList(ViewBag.Parametr, "Select Part Type"), new { @class = "form-control" })*@
                                                         @Html.ValidationMessageFor(model => model.Parameter, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Rollarga birikishi</h6>
