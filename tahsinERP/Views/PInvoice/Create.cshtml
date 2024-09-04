@@ -83,7 +83,7 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Buyurtma raqami</label>
-                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control select2", id = "OrderID", @required = "required", onchange = "refreshpartListbyOrder()" })
+                                                            @Html.DropDownListFor(model => model.OrderID, (SelectList)ViewBag.POrder, "", new { @class = "form-control select2", id = "OrderID", @required = "required", onchange = "getOrderDetails()" })
                                                             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
                                                         </div>
 
@@ -126,7 +126,7 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select", id = "PartID" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndQuantity(this)", onclick = "getPriceAndQuantity(this)" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -136,12 +136,17 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Quantuty">Miqdori</label>
-                                                            <input type="number" name="Quantity" step="0.001" class="form-control" id="Part_Quantuty" />
+                                                            <input type="number" name="Quantity" step="0.000001" class="form-control" id="Part_Quantuty" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Quantity, "", new { @class = "text-danger" })
-                                                        </div>
+                                                        </div>@*
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
                                                             <input type="number" name="Price" step="0.001" class="form-control" id="Part_Price" disabled="disabled" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
+                                                        </div>*@
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Price">Narx</label>
+                                                            <input type="number" name="Price" step="0.000001" class="form-control Part_Price" id="Part_Price" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
 
@@ -153,7 +158,7 @@
                                                 </div>
                                             </div>
 
-                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi qism qo'shish</button>
+                                            <button data-repeater-create type="button" class="btn btn-primary" onclick="getOrderDetails()">Yangi qism qo'shish</button>
 
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
@@ -173,13 +178,8 @@
             </div>
         </div>
     </div>
-}
-else
-{
-    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
-}
 
-<script type="text/javascript">
+    <script type="text/javascript">
     function refreshOrderListbySupplier() {
         const supplierID = document.getElementById("SupplierID").value;
         $.ajax({
@@ -198,4 +198,96 @@ else
             }
         });
     }
-</script>
+    function getOrderDetails() {
+        var orderID = $("#OrderID").val();
+
+        $.ajax({
+            url: '@Url.Action("GetOrderDetails", "PInvoice")',
+            type: 'GET',
+            data: { orderID: orderID },
+            success: function (data) {
+                if (data.success) {
+                    var order = data.data;
+
+                    // Valyutani yangilash
+                    $("#Currency").val(order.Currency || '');
+
+                    // Yangi qism qo‘shilganda qismlar ro‘yxatini yangilash
+                    updatePartList(orderID);
+                } else {
+                    console.error("Xatolik: " + data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Shartnoma tafsilotlarini olishda xatolik:", error);
+            }
+        });
+    }
+
+
+    function updatePartList(orderID) {
+        $.ajax({
+            url: '@Url.Action("GetPartList", "PInvoice")',
+            type: 'GET',
+            data: { orderID: orderID },
+            success: function (data) {
+                if (data.success) {
+                    var lastPartDropdown = $('[data-repeater-item]').last().find('select[id^=PartID]');
+                    lastPartDropdown.empty();
+
+                    $.each(data.data, function (index, item) {
+                        lastPartDropdown.append(new Option(item.PNo, item.PartID));
+                    });
+                } else {
+                    console.error("Xatolik: " + data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Qism ro‘yxatini olishda xatolik:", error);
+            }
+        });
+    }
+
+
+        $(document).on('click', '[data-repeater-create]', function () {
+        setTimeout(function () {
+            var orderID = $("#OrderID").val(); // OrderID qiymatini olamiz
+            if (orderID) {
+                updatePartList(orderID); // To'g'ri OrderID bilan yangilash
+            } else {
+                console.error("Order ID aniqlanmagan!");
+            }
+        }, 100);
+    });
+
+    function getPriceAndQuantity(partDropdown) {
+        var partID = $(partDropdown).val();
+
+        $.ajax({
+            url: '@Url.Action("GetPriceAndQuantity", "PInvoice")',
+            type: 'GET',
+            data: { partID: partID },
+            success: function(data) {
+                if (data.success) {
+                    var parent = $(partDropdown).closest("[data-repeater-item]");
+                    var Price = parent.find("#Part_Price");
+                    var Quantity = parent.find("#Part_Quantuty");
+                    Price.val(data.data.Price);
+                    Quantity.val(data.data.Quantity); // Agar kerak bo'lsa, miqdorini ham yangilash
+                } else {
+                    console.error("Error: " + data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching data: ", error);
+            }
+        });
+    }
+    </script>
+
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+

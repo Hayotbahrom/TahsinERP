@@ -130,7 +130,8 @@
                                                 <hr />
                                                 <label>Buyurtma faylini yuklang</label>
                                                 <!-- Hidden file input -->
-                                                <input type="file" id="partPhotoUpload" name="File" class="custom-file-input" />
+                                                @*<input type="file" id="partPhotoUpload" name="File" class="custom-file-input" />*@
+                                                <input type="file" accept=".pdf" id="partPhotoUpload" name="File" class="custom-file-input" />
                                                 <!-- Custom button -->
                                                 <label for="partPhotoUpload" class="custom-file-button">Yuklash fayli</label>
                                                 @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })

@@ -409,19 +409,30 @@ namespace tahsinERP.Controllers
                         db.SaveChanges();
 
                         // Handle file upload
+
+
                         if (model.File != null && model.File.ContentLength > 0)
                         {
                             if (model.File.ContentLength < 5242880)
                             {
-                                P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
-                                byte[] fileData = new byte[model.File.InputStream.Length];
-                                model.File.InputStream.Read(fileData, 0, fileData.Length);
+                                if (Path.GetExtension(model.File.FileName).ToLower() == ".pdf")
+                                {
+                                    P_CONTRACT_DOCS contractDoc = new P_CONTRACT_DOCS();
+                                    byte[] fileData = new byte[model.File.InputStream.Length];
+                                    model.File.InputStream.Read(fileData, 0, fileData.Length);
 
-                                contractDoc.ContractID = newContract.ID;
-                                contractDoc.Doc = fileData;
+                                    contractDoc.ContractID = newContract.ID;
+                                    contractDoc.Doc = fileData;
 
-                                db.P_CONTRACT_DOCS.Add(contractDoc);
-                                db.SaveChanges();
+                                    db.P_CONTRACT_DOCS.Add(contractDoc);
+                                    db.SaveChanges();
+
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractDoc.P_CONTRACTS.ContractNo} - uchun PContractDocni yaratdi");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "Format noto'g'ri. Faqat .pdf fayllarni yuklash mumkin.");
+                                }
                             }
                             else
                             {
@@ -436,9 +447,9 @@ namespace tahsinERP.Controllers
 
                         return RedirectToAction("Index");
                     }
-                    catch
+                    catch(Exception ex)
                     {
-                        ModelState.AddModelError("", "An error occurred while creating the contract.");
+                        ModelState.AddModelError("", $"Error: {ex.Message}");
                     }
                 }
 
@@ -452,14 +463,20 @@ namespace tahsinERP.Controllers
 
         public ActionResult DownloadDoc(int? contractID)
         {
+            if (contractID == null)
+            {
+                return HttpNotFound("Shartnoma ID ko'rsatilmagan.");
+            }
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var contractDoc = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == contractID);
                 if (contractDoc != null)
                     return File(contractDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                return HttpNotFound("Fayl yuklanmagan");
+                return HttpNotFound("Fayl yuklanmagan.");
             }
         }
+
         public ActionResult Details(int? ID)
         {
             if (ID == null)
@@ -696,7 +713,7 @@ namespace tahsinERP.Controllers
                             foreach (var contractPart in contractParts)
                             {
                                 db.P_CONTRACT_PARTS.Remove(contractPart);
-                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPart.PART.PNo} - PContractPartni o'chirdi");
+                                //LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{contractPart.PART.PNo} - PContractPartni o'chirdi");
                             }
 
                             db.SaveChanges();

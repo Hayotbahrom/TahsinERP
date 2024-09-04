@@ -144,16 +144,67 @@ namespace tahsinERP.Controllers
                 return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.OrderNo }), JsonRequestBehavior.AllowGet);
             }
         }
-        public JsonResult GetPartsByOrder(int orderID)
+        public ActionResult GetPartList(int orderID)
+        {
+            using (var db = new DBTHSNEntities())
+            {
+                var partList = db.P_ORDER_PARTS
+                    .Where(cp => cp.OrderID == orderID)
+                    .Select(cp => new
+                    {
+                        cp.PartID,
+                        cp.PART.PNo
+                    })
+                    .ToList();
+
+                return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //Invoice currency ni Orderdan olish
+        public JsonResult GetOrderDetails(int orderID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var parts = db.P_ORDER_PARTS
-                    .Where(po => po.OrderID == orderID)
-                    .Select(x => new { x.ID, x.PART.PNo })
-                    .ToList();
+                var order = db.P_ORDERS
+                                 .Where(c => c.ID == orderID && c.IsDeleted == false)
+                                 .Select(c => new
+                                 {
+                                     c.ID,
+                                     c.Currency
+                                 })
+                                 .FirstOrDefault();
 
-                return Json(parts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.PNo }), JsonRequestBehavior.AllowGet);
+                if (order != null)
+                {
+                    return Json(new { success = true, data = order }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Contract not found." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        public JsonResult GetPriceAndQuantity(int partID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var orderPart = db.P_ORDER_PARTS
+                                     .Where(cp => cp.PartID == partID)
+                                     .Select(cp => new
+                                     {
+                                         Price = cp.Price,
+                                         Quantity = cp.Amount
+                                     })
+                                     .FirstOrDefault();
+
+                if (orderPart != null)
+                {
+                    return Json(new { success = true, data = orderPart }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Part not found in contract." }, JsonRequestBehavior.AllowGet);
+                }
             }
         }
         public ActionResult Create()
@@ -244,16 +295,23 @@ namespace tahsinERP.Controllers
                     {
                         if (Request.Files["docUpload"].InputStream.Length < 5242880)
                         {
-                            P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
-                            byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
-                            Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                            invoiceDoc.InvoiceID = invoice.ID;
-                            invoiceDoc.Doc = avatar;
+                            if (Path.GetExtension(model.File.FileName).ToLower() == ".pdf")
+                            {
+                                P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
+                                byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                                Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                invoiceDoc.InvoiceID = invoice.ID;
+                                invoiceDoc.Doc = avatar;
 
-                            db.P_INVOICE_DOCS.Add(invoiceDoc);
-                            db.SaveChanges();
+                                db.P_INVOICE_DOCS.Add(invoiceDoc);
+                                db.SaveChanges();
+                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.P_INVOICES.InvoiceNo} - uchun PInvoiceDocni yaratdi");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Format noto'g'ri. Faqat .pdf fayllarni yuklash mumkin.");
+                            }
 
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.P_INVOICES.InvoiceNo} - uchun PInvoiceDocni yaratdi");
                         }
                         else
                         {
