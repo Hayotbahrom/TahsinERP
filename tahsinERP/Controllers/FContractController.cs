@@ -49,6 +49,7 @@ namespace tahsinERP.Controllers
                     if (ModelState.IsValid)
                     {
                         contract.IsDeleted = false;
+                        contract.CompanyID = 1;
                         db.F_CONTRACTS.Add(contract);
                         await db.SaveChangesAsync();
 
@@ -65,7 +66,11 @@ namespace tahsinERP.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(ex.Message, ex);
+                using(DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    ModelState.AddModelError(ex.Message, ex);
+                    ViewBag.Forwarder = new SelectList(await db.FORWARDERS.Where(fc => fc.IsDeleted == false).ToListAsync(), "ID", "ForwarderName");
+                }
             }
             return View(contract);
         }
