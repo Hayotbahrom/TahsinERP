@@ -257,385 +257,390 @@
             <div class="shadow-bottom"></div>
             <div class="main-menu-content">
                 <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
-                    <li class="nav-item">
-                        <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2"></span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Sotuv</span></a>
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Dashboards"))
+                    {
+                        <li class="nav-item">
+                            <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2"></span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Sotuv</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Coverage</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Biznes reja</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SRM-reports"))
+                        {
+                            <li class="nav-item">
+                                <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Xisobotlar</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2">HOT</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/Reports/Coverage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Coverage</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Reports/PartRequirement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Part Requierement</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Reports/InTransit"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">InTransit</span></a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Coverage</span></a>
+                        }
+                        <li class=" navigation-header">
+                            <span>SRM</span>
+                        </li>
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Suppliers"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
+                                <ul class="menu-content">
+
+                                    <li>
+                                        <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Supplier")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Supplier")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Supplier")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Biznes reja</span></a>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PContract"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-book-bookmark"></i><span class="menu-title" data-i18n="Content">Shartnomalar</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/PContract"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "PContract")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "PContract")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "PContract")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                    </li>
+                                </ul>
                             </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Xisobotlar</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2">HOT</span></a>
-                        <ul class="menu-content">
-                            <li>
-                                <a href="~/Reports/Coverage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Coverage</span></a>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "POrder"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-book"></i><span class="menu-title" data-i18n="Colors">Buyurtmalar</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/POrder"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "POrder")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "POrder")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "POrder")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="~/Reports/PartRequirement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Part Requierement</span></a>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Barchasi</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "PInvoice")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "PInvoice")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "PInvoice")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a href="~/Reports/InTransit"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">InTransit</span></a>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forwarder"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#">
+                                    <i class="bx bxs-right-arrow-circle"></i><span class="menu-title" data-i18n="Icons">Logistika</span>
+                                </a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/Forwarder/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Forwarderlar</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/FContract/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Shartnomalar</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Waybill/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Aktlar</span></a>
+                                    </li>
+
+                                    <li>
+                                        <a href="~/Tracing"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
+                                    </li>
+
+                                    <li>
+                                        <a href="~/FTransportType/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Transport turlari</span></a>
+                                    </li>
+                                </ul>
                             </li>
-                        </ul>
-                    </li>
-                    <li class=" navigation-header">
-                        <span>SRM</span>
-                    </li>
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Suppliers"))
-                    {
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/PartStock/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        <li class=" navigation-header">
+                            <span>Engineering</span>
+                        </li>
 
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
-                            <ul class="menu-content">
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#">
+                                    <i class="bx bx-git-compare"></i><span class="menu-title" data-i18n="Form Elements">BOM</span>
+                                </a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/BOM?IsParentProduct=true"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">BOM</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">Нормы расхода</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Slitting normalari</span></a>
+                                            </li>
+                                            <li>
+                                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Blanking normalari</span></a>
+                                            </li>
+                                            <li>
+                                                <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Stamping normalari</span></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SPL"))
+                        {
+                            <li class=" nav-item">
+                                <a href="/SPL">
+                                    <i class="bx bx-car"></i><span class="menu-item" data-i18n="Indirect">SPL</span>
+                                </a>
+                            </li>
+                        }
 
-                                <li>
-                                    <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "Supplier")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "Supplier")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "Supplier")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
-                                </li>
-                            </ul>
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Product"))
+                        {
+                            <li class=" nav-item">
+                                <a href="/Product">
+                                    <i class="bx bxl-product-hunt"></i><span class="menu-title" data-i18n="File Manager">Tayyor maxsulot</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Parts"))
+                        {
+                            <li class=" nav-item">
+                                <a href="/Part/GetAllParts">
+                                    <i class="bx bxl-pocket"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span>
+                                </a>
+                            </li>
+                        }
+
+
+                        <li class=" navigation-header">
+                            <span>MES</span>
                         </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PContract"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-book-bookmark"></i><span class="menu-title" data-i18n="Content">Shartnomalar</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/PContract"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "PContract")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "PContract")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "PContract")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
-                                </li>
-                            </ul>
+
+
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "ProductPlanIndex"))
+                        {
+                            <li class=" nav-item">
+                                <a href="~/ProductPlan/Index">
+                                    <i class="bx bx-line-chart"></i><span class="menu-title" data-i18n="File Manager">Rejalashtirish</span>
+                                </a>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Production"))
+                        {
+
+                            <li class=" nav-item">
+                                <a href="~/ComingSoon/Index">
+                                    <i class="bx bx-magnet"></i><span class="menu-title" data-i18n="File Manager">Ishlab chiqarish</span>
+                                </a>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Prod_Wrhs"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Equipment"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#">
+                                    <i class="bx bxs-server"></i><span class="menu-title" data-i18n="Form Elements">Uskunalar</span>
+                                </a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">Ro'yxati</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">Мошность</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">OEE</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Quality"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#">
+                                    <i class="bx bxs-server"></i><span class="menu-title" data-i18n="Form Elements">Sifat</span>
+                                </a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">DRR</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">DRL</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">FTQ</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        <li class=" navigation-header">
+                            <span>CRM</span>
                         </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "POrder"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-book"></i><span class="menu-title" data-i18n="Colors">Buyurtmalar</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/POrder"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "POrder")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "POrder")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "POrder")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
-                                </li>
-                            </ul>
+
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SContract"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-smiley-happy"></i><span class="menu-title" data-i18n="Sweet Alert">Xaridorlar</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/Customer/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Umumiy ma'lumot</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Shartnomalar</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forecast"))
+                        {
+                            <li class=" nav-item">
+                                <a href="~/ComingSoon/Index"><i class="bx bx-stats"></i><span class="menu-title" data-i18n="Toastr">Forecast reja</span></a>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SContract"))
+                        {
+
+                            <li class=" nav-item">
+                                <a href="~/ComingSoon/Index"><i class="bx bx-analyse"></i><span class="menu-title" data-i18n="NoUi Slider">Ishlab chiqarishga buyurtma</span></a>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SInvoice"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Ro'yxat</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice Edit">Invoice o'zgartirish</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice Add">Invoice qo'shish</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Sales_WRHS"))
+                        {
+
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        <li class=" navigation-header">
+                            <span>Sozlamalar</span>
                         </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
-                    {
                         <li class=" nav-item">
-                            <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Barchasi</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "PInvoice")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "PInvoice")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index", "PInvoice")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
-                                </li>
-                            </ul>
+                            <a href="~/ComingSoon/Index"><i class="bx bx-error-circle"></i><span class="menu-title" data-i18n="Knowledge Base">Qo'llanma</span></a>
                         </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forwarder"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#">
-                                <i class="bx bxs-right-arrow-circle"></i><span class="menu-title" data-i18n="Icons">Logistika</span>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })">
+                                <i class="bx bx-wrench"></i>
+                                <span class="menu-title" data-i18n="Account Settings">Akkaunt Sozlamalari</span>
                             </a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/Forwarder/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Forwarderlar</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/FContract/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Shartnomalar</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/Waybill/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Aktlar</span></a>
-                                </li>
-
-                                <li>
-                                    <a href="~/Tracing"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
-                                </li>
-
-                                <li>
-                                    <a href="~/FTransportType/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Transport turlari</span></a>
-                                </li>
-                            </ul>
                         </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/PartStock/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    <li class=" navigation-header">
-                        <span>Engineering</span>
-                    </li>
-
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#">
-                                <i class="bx bx-git-compare"></i><span class="menu-title" data-i18n="Form Elements">BOM</span>
-                            </a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/BOM?IsParentProduct=true"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">BOM</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">Нормы расхода</span></a>
-                                    <ul class="menu-content">
-                                        <li>
-                                            <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Slitting normalari</span></a>
-                                        </li>
-                                        <li>
-                                            <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Blanking normalari</span></a>
-                                        </li>
-                                        <li>
-                                            <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Stamping normalari</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SPL"))
-                    {
-                        <li class=" nav-item">
-                            <a href="/SPL">
-                                <i class="bx bx-car"></i><span class="menu-item" data-i18n="Indirect">SPL</span>
-                            </a>
-                        </li>
-                    }
-
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Product"))
-                    {
-                        <li class=" nav-item">
-                            <a href="/Product">
-                                <i class="bx bxl-product-hunt"></i><span class="menu-title" data-i18n="File Manager">Tayyor maxsulot</span>
-                            </a>
-                        </li>
-                    }
-
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Part"))
-                    {
-                        <li class=" nav-item">
-                            <a href="/Part/GetAllParts">
-                                <i class="bx bxl-pocket"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span>
-                            </a>
-                        </li>
-                    }
-
-
-                    <li class=" navigation-header">
-                        <span>MES</span>
-                    </li>
-
-
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "ProductPlan"))
-                    {
-                        <li class=" nav-item">
-                            <a href="~/ProductPlan/Index">
-                                <i class="bx bx-line-chart"></i><span class="menu-title" data-i18n="File Manager">Rejalashtirish</span>
-                            </a>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "ProductionPlan"))
-                    {
-
-                        <li class=" nav-item">
-                            <a href="~/ComingSoon/Index">
-                                <i class="bx bx-magnet"></i><span class="menu-title" data-i18n="File Manager">Ishlab chiqarish</span>
-                            </a>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Wrhs"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Option"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#">
-                                <i class="bx bxs-server"></i><span class="menu-title" data-i18n="Form Elements">Uskunalar</span>
-                            </a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">Ro'yxati</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">Мошность</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">OEE</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Quality"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#">
-                                <i class="bx bxs-server"></i><span class="menu-title" data-i18n="Form Elements">Sifat</span>
-                            </a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">DRR</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">DRL</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">FTQ</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    <li class=" navigation-header">
-                        <span>CRM</span>
-                    </li>
-
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Customer"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-smiley-happy"></i><span class="menu-title" data-i18n="Sweet Alert">Xaridorlar</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/Customer/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Umumiy ma'lumot</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Shartnomalar</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forecast"))
-                    {
-                        <li class=" nav-item">
-                            <a href="~/ComingSoon/Index"><i class="bx bx-stats"></i><span class="menu-title" data-i18n="Toastr">Forecast reja</span></a>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SContract"))
-                    {
-
-                        <li class=" nav-item">
-                            <a href="~/SContract/Index"><i class="bx bx-analyse"></i><span class="menu-title" data-i18n="NoUi Slider">Ishlab chiqarishga buyurtma</span></a>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
-                    {
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Ro'yxat</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice Edit">Invoice o'zgartirish</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice Add">Invoice qo'shish</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Wrhs"))
-                     {
-
-                        <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-
-                    <li class=" navigation-header">
-                        <span>Sozlamalar</span>
-                    </li>
-                    <li class=" nav-item">
-                        <a href="~/ComingSoon/Index"><i class="bx bx-error-circle"></i><span class="menu-title" data-i18n="Knowledge Base">Knowledge Base</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })">
-                            <i class="bx bx-wrench"></i>
-                            <span class="menu-title" data-i18n="Account Settings">Akkaunt Sozlamalari</span>
-                        </a>
-                    </li>
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "AdminPanel"))
-                    {
-                        <li class=" nav-item">
-                            <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
-                        </li>
-                    }
-                </ul>
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "AdminPanel"))
+                        {
+                            <li class=" nav-item">
+                                <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
+                            </li>
+                        }
+                    </ul>
             </div>
         </div>
         <!-- END: Main Menu-->
