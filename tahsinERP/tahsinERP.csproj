@@ -681,6 +681,7 @@
     <Compile Include="ViewModels\DamagedPartIndexViewModel.cs" />
     <Compile Include="ViewModels\Home\StatisticsVM.cs" />
     <Compile Include="ViewModels\POrderSteelViewModel.cs" />
+    <Compile Include="ViewModels\POrder\POrderCreateViewModel.cs" />
     <Compile Include="ViewModels\PurchasingContractViewModel.cs" />
     <Compile Include="ViewModels\PurchasingItemViewModel.cs" />
     <Compile Include="ViewModels\PurchasingOrderViewModel.cs" />
@@ -694,7 +695,7 @@
     <Compile Include="ViewModels\BOM\SlittingNormViewModel.cs" />
     <Compile Include="ViewModels\BOM\SlittingProcessViewModel.cs" />
     <Compile Include="ViewModels\PInvoiceViewModel.cs" />
-    <Compile Include="ViewModels\POrderViewModel.cs" />
+    <Compile Include="ViewModels\POrder\POrderViewModel.cs" />
     <Compile Include="ViewModels\ProductPlanVM.cs" />
     <Compile Include="ViewModels\RolePermissionsViewModel.cs" />
     <Compile Include="ViewModels\PermissionModuleViewModel.cs" />

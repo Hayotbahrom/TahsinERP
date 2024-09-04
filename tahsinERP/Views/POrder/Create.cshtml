@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.POrderViewModel
+﻿@model tahsinERP.ViewModels.POrder.POrderCreateViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -150,12 +150,12 @@
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
                                                             <input type="number" name="Price" step="0.001" class="form-control Part_Price" id="Part_Price" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger", @disabled = "disabled" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_MOQ">MOQ</label>
                                                             <input type="number" name="MOQ" class="form-control Part_MOQ" id="Part_MOQ" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger", @disabled = "true" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
                                                             <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
