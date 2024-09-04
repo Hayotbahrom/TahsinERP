@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.EMMA;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace tahsinERP.Controllers
         // GET: Role
         public ActionResult Index()
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var roles = db.ROLES.Where(r => r.IsDeleted == false).ToList();
                 return View(roles);
@@ -29,7 +30,7 @@ namespace tahsinERP.Controllers
         {
             try
             {
-                using(DBTHSNEntities db = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
                     ROLE newRole = new ROLE();
                     newRole.RName = role.RName;
@@ -60,7 +61,7 @@ namespace tahsinERP.Controllers
 
                     db.SaveChanges();
                 }
-                
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -72,7 +73,7 @@ namespace tahsinERP.Controllers
         [HttpGet]
         public ActionResult Edit(ROLE role)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var roles = db.ROLES.Include(r => r.PERMISSIONS).FirstOrDefault(x => x.ID == role.ID);
                 if (role == null)
@@ -95,7 +96,7 @@ namespace tahsinERP.Controllers
         {
             if (ModelState.IsValid)
             {
-                using(DBTHSNEntities db = new DBTHSNEntities())
+                using (DBTHSNEntities db = new DBTHSNEntities())
                 {
                     var roleToUpdate = db.ROLES.Find(id);
 
@@ -129,7 +130,7 @@ namespace tahsinERP.Controllers
         [HttpGet]
         public ActionResult Delete(ROLE roles)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var role = db.ROLES.FirstOrDefault(x => x.ID == roles.ID);
                 if (role == null)
@@ -144,7 +145,7 @@ namespace tahsinERP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int? ID)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ROLE role = db.ROLES.Find(ID);
                 role.IsDeleted = true;
@@ -174,7 +175,7 @@ namespace tahsinERP.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var role = db.ROLES.Find(ID);
                 ROLE roles = new ROLE();
@@ -190,7 +191,7 @@ namespace tahsinERP.Controllers
         {
             using (var db = new DBTHSNEntities())
             {
-                var role = db.ROLES
+                ROLE role = db.ROLES
                     .Include(r => r.PERMISSIONS.Select(p => p.PERMISSIONMODULE))
                     .FirstOrDefault(r => r.ID == id);
 
@@ -199,57 +200,58 @@ namespace tahsinERP.Controllers
                     return HttpNotFound();
                 }
 
-                var groupedPermissions = role.PERMISSIONS
-                    .GroupBy(p => p.PERMISSIONMODULE)
-                    .Select(g => g.First())
-                    .ToList();
-
                 var viewModel = new RolePermissionsViewModel
                 {
-                    Role = role,
-                    Permissions = groupedPermissions
+                    RoleID = role.ID,
+                    RoleName = role.RName,
+                    Description = role.Description,
+                    Permissions = role.PERMISSIONS.Select(p => new PermissionViewModel
+                    {
+                        ID = p.ID,
+                        PermissionModuleID = p.PermissionModuleID,
+                        Module = p.PERMISSIONMODULE.Module,
+                        Controller = p.PERMISSIONMODULE.Controller,
+                        Action = p.PERMISSIONMODULE.Action,
+                        ViewPermit = p.ViewPermit,
+                        ChangePermit = p.ChangePermit
+                    }).ToList()
                 };
 
                 return View(viewModel);
             }
         }
-
         [HttpPost]
         public ActionResult Permissions(RolePermissionsViewModel model)
         {
-            if (model == null || model.Role == null)
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid data.");
-            }
-
-            using (var db = new DBTHSNEntities())
-            {
-                var existingRole = db.ROLES.Include(r => r.PERMISSIONS)
-                                           .FirstOrDefault(r => r.ID == model.Role.ID);
-
-                if (existingRole == null)
+                using (var db = new DBTHSNEntities())
                 {
-                    return HttpNotFound();
-                }
+                    var role = db.ROLES.Include(r => r.PERMISSIONS)
+                                       .FirstOrDefault(r => r.ID == model.RoleID);
 
-                foreach (var permission in model.Permissions)
-                {
-                    var existingPermission = existingRole.PERMISSIONS
-                                                       .FirstOrDefault(p => p.ID == permission.ID);
-
-                    if (existingPermission != null)
+                    if (role != null)
                     {
-                        existingPermission.ViewPermit = permission.ViewPermit;
-                        existingPermission.ChangePermit = permission.ChangePermit;
+                        foreach (var permViewModel in model.Permissions)
+                        {
+                            var permission = role.PERMISSIONS
+                                                .FirstOrDefault(p => p.ID == permViewModel.ID);
+                            if (permission != null)
+                            {
+                                permission.ViewPermit = permViewModel.ViewPermit;
+                                permission.ChangePermit = permViewModel.ChangePermit;
+                            }
+                        }
+
+                        db.SaveChanges();
+                        LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{role.RName} uchun Permissionni tahrirladi");
+                        return RedirectToAction("Edit", new { id = role.ID });
                     }
                 }
-
-                db.SaveChanges();
-
-                LogHelper.LogToDatabase(User.Identity.Name, "RoleController", $"{model.Role.RName} uchun Permissionni tahrirladi");
-
-                return RedirectToAction("Edit", new { id = model.Role.ID });
             }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
     }
 }

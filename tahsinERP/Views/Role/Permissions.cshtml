@@ -7,75 +7,74 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
-    @using (Html.BeginForm("Permissions", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))    
-    {
-        @Html.AntiForgeryToken()
 
-        <div class="app-content content">
-            <div class="content-overlay"></div>
-            <div class="content-wrapper">
-                <div class="content-header row">
-                    <div class="content-header-left col-12 mb-2 mt-1">
-                        <div class="row breadcrumbs-top">
-                            <div class="col-12">
-                                <div class="breadcrumb-wrapper col-12">
-                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                                        <li class="breadcrumb-item">
-                                            <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
-                                        </li>
-                                        <li class="breadcrumb-item">
-                                            <a href="~/AdminPanel/Index">Admin Panel</a>
-                                        </li>
-                                        <li class="breadcrumb-item">
-                                            <a href="~/Role/Index">Roles</a>
-                                        </li>
-                                        <li class="breadcrumb-item active">
-                                            Edit Role Permissions
-                                        </li>
-                                    </ol>
-                                </div>
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index">Admin Panel</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Role/Index">Rollar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Ruxsatlarni o'zgartirish
+                                    </li>
+                                </ol>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="content-body">
-                    <section class="invoice-edit-wrapper">
-                        <div class="row">
-                            <div class="col-xl-11 col-md-8 col-12">
-                                <div class="card">
-                                    <div class="card-content">
-                                        <div class="card-body pb-0 mx-25">
-                                            <div class="row invoice-info">
+            </div>
+            <div class="content-body">
+                <section class="invoice-edit-wrapper">
+                    <div class="row">
+                        <div class="col-xl-11 col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row invoice-info">
+                                            @using (Html.BeginForm("Permissions", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.HiddenFor(model => model.RoleID)
+
                                                 <div class="col-lg-12 col-md-6 mt-25">
                                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                     <hr>
                                                     <h6 class="invoice-to">Permissions</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         <div class="table-responsive table-responsivetable-responsive">
-                                                            <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                                            <table class="table nowrap scroll-horizontal-vertical" style="width:100%">
                                                                 <thead>
                                                                     <tr>
                                                                         <th></th>
-                                                                        <th></th>
                                                                         <th>Module</th>
-                                                                        <th>Controller nomi</th>
-                                                                        <th>Action nomi</th>
-                                                                        <th>View Permission</th>
-                                                                        <th>Change Permission</th>
+                                                                        <th>Controller</th>
+                                                                        <th>Action</th>
+                                                                        <th>View Permit</th>
+                                                                        <th>Change Permit</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     @for (int i = 0; i < Model.Permissions.Count; i++)
                                                                     {
                                                                         <tr>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td>@Model.Permissions[i].PERMISSIONMODULE.Module</td>
-                                                                            <td>@Model.Permissions[i].PERMISSIONMODULE.Controller</td>
-                                                                            <td>@Model.Permissions[i].PERMISSIONMODULE.Action</td>
+                                                                            <td>@Html.HiddenFor(m => m.Permissions[i].ID)</td>
+                                                                            @Html.HiddenFor(m => m.Permissions[i].PermissionModuleID)
+                                                                            <td>@Model.Permissions[i].Module</td>
+                                                                            <td>@Model.Permissions[i].Controller</td>
+                                                                            <td>@Model.Permissions[i].Action</td>
                                                                             <td>
-                                                                                @Html.HiddenFor(m => m.Permissions[i].ID)
-                                                                                @Html.HiddenFor(m => m.Permissions[i].PermissionModuleID)
                                                                                 @Html.CheckBoxFor(m => m.Permissions[i].ViewPermit)
                                                                             </td>
                                                                             <td>
@@ -97,17 +96,18 @@
                                                     </ul>
                                                     <br />
                                                 </div>
-                                            </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                </div>
+                    </div>
+                </section>
             </div>
         </div>
-    }
+    </div>
+
 }
 else
 {

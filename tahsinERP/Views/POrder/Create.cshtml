@@ -79,12 +79,12 @@
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="SupplierID">Ta`minotchi</label>
-                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier,"Ta'minotchini tanlang", new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
                                                             @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="ContractID">Shartnoma raqami</label>
-                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, new { @class = "form-control ContractID", @id = "ContractID", onchange = "getContractDetails()" })
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, "Shartnomani tanlang", new { @class = "form-control ContractID", @id = "ContractID", onchange = "getContractDetails()" })
                                                             @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-6 col-12 form-group position-relative has-icon-left">
@@ -134,7 +134,7 @@
                                                         <input type="hidden" name="ID" />
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndMOQ(this)", onclick = "getPriceAndMOQ(this)" })
+                                                            @Html.DropDownList("PartID", (IEnumerable<SelectListItem>)ViewBag.partList, "", new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndMOQ(this)", onclick = "getPriceAndMOQ(this)" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -144,17 +144,17 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" step="0.01" class="form-control" id="Part_Amount" />
+                                                            <input type="number" name="Amount" step="0.0001" class="form-control" id="Part_Amount" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.01" class="form-control Part_Price" id="Part_Price" />
+                                                            <input type="number" name="Price" step="0.001" class="form-control Part_Price" id="Part_Price" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_MOQ">MOQ</label>
-                                                            <input type="text" name="MOQ" class="form-control Part_MOQ" id="Part_MOQ" />
+                                                            <input type="number" name="MOQ" class="form-control Part_MOQ" id="Part_MOQ" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
@@ -164,7 +164,7 @@
                                                     <hr>
                                                 </div>
                                             </div>
-                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi qism qo'shish</button>
+                                            <button data-repeater-create type="button" class="btn btn-primary" onclick="getContractDetails()">Yangi qism qo'shish</button>
 
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item border-0 pb-0">
@@ -183,107 +183,115 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
-        function getContractDetails() {
-        var contractID = document.getElementById("ContractID").value;
+    function getContractDetails() {
+        var contractID = $("#ContractID").val();
 
         $.ajax({
             url: '@Url.Action("GetContractDetails", "POrder")',
             type: 'GET',
             data: { contractID: contractID },
-            success: function(data) {
+            success: function (data) {
                 if (data.success) {
                     var contract = data.data;
 
-                    // Update the currency field
+                    // Valyutani yangilash
                     $("#Currency").val(contract.Currency || '');
+
+                    // Yangi qism qo‘shilganda qismlar ro‘yxatini yangilash
+                    updatePartList(contractID);
+                } else {
+                    console.error("Xatolik: " + data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Shartnoma tafsilotlarini olishda xatolik:", error);
+            }
+        });
+    }
+
+    function updatePartList(contractID) {
+        $.ajax({
+            url: '@Url.Action("GetPartList", "POrder")',
+            type: 'GET',
+            data: { contractID: contractID },
+            success: function (data) {
+                if (data.success) {
+                    // Faqat yangi qo‘shilgan qism uchun qismlar ro‘yxatini yangilaymiz
+                    var lastPartDropdown = $('[data-repeater-item]').last().find('.PartID');
+                    lastPartDropdown.empty(); // Eski qismlar variantlarini tozalash
+
+                    // Yangi qismlar variantlarini qo‘shish
+                    $.each(data.data, function (index, item) {
+                        lastPartDropdown.append(new Option(item.PNo, item.PartID));
+                    });
+                } else {
+                    console.error("Xatolik: " + data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Qism ro‘yxatini olishda xatolik:", error);
+            }
+        });
+    }
+
+
+
+    $(document).on('click', '[data-repeater-create]', function () {
+        // Yangi qism qo‘shilganda qismlar ro‘yxatini yangilash
+        setTimeout(function () {
+            var contractID = $("#ContractID").val();
+            updatePartList(contractID); // Faqat yangi qo‘shilgan qism uchun qismlar ro‘yxatini yangilash
+        }, 100); // DOM yangi qismni yaratishini kutish uchun setTimeout ishlatamiz
+    });
+
+    function getPriceAndMOQ(partDropdown) {
+        var partID = $(partDropdown).val();
+
+        $.ajax({
+            url: '@Url.Action("GetPriceAndMOQ", "POrder")',
+            type: 'GET',
+            data: { partID: partID },
+            success: function(data) {
+                if (data.success) {
+                    var parent = $(partDropdown).closest("[data-repeater-item]");
+                    var Price = parent.find(".Part_Price");
+                    var MOQ = parent.find(".Part_MOQ");
+                    var Amount = parent.find("#Part_Amount");
+                    Price.val(data.data.Price);
+                    MOQ.val(data.data.MOQ);
+                    Amount.val(data.data.Amount); // Agar kerak bo'lsa, miqdorini ham yangilash
                 } else {
                     console.error("Error: " + data.message);
                 }
             },
             error: function(xhr, status, error) {
-                console.error("Error fetching contract details:", error);
+                console.error("Error fetching data: ", error);
             }
         });
-
-        // Fetch parts list based on the selected contract
-        getPartList(contractID);
     }
 
+
+    function refreshdatatablesupplier() {
+        const supplierID = $("#SupplierID").val();
+        $.ajax({
+            url: '@Url.Action("GetContractsBySupplier", "POrder")',
+            type: 'GET',
+            data: { supplierID: supplierID },
+            success: function (data) {
+                var contractDropdown = $("#ContractID");
+                contractDropdown.empty();
+                $.each(data, function (index, item) {
+                    contractDropdown.append(new Option(item.Text, item.Value));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching contracts:", error);
+            }
+        });
+    }
     </script>
+    
 
-
-    <script type="text/javascript">
-        function getPartList() {
-            var contractID = document.getElementById("ContractID").value;
-
-            $.ajax({
-                url: '@Url.Action("GetPartList", "POrder")',
-                type: 'GET',
-                data: { contractPartID: contractID },
-                success: function(data) {
-                    if (data.success) {
-                        var PartID = $("#PartID");
-
-                        // Clear previous options
-                        PartID.empty();
-
-                        // Append new options
-                        $.each(data.data, function (index, item) {
-                            PartID.append(new Option(item.PNo, item.ID));
-                        });
-                    } else {
-                        console.error("Error: " + data.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error fetching data:", error);
-                }
-            });
-        }
-
-
-        function getPriceAndMOQ() {
-            var PartID = document.getElementById("PartID").value;
-
-            $.ajax({
-                url: '@Url.Action("GetPriceAndMOQ", "POrder")',
-                type: 'GET',
-                data: { partID: PartID },
-                success: function(data) {
-                    if (data.success) {
-                        var Price = $(".Part_Price");
-                        var MOQ = $(".Part_MOQ");
-
-                        Price.val(data.data.Price);
-                        MOQ.val(data.data.MOQ);
-                    } else {
-                        console.error("Error: " + data.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error fetching data: ", error);
-                }
-            });
-        }
-
-        function refreshdatatablesupplier() {
-            const supplierID = document.getElementById("SupplierID").value;
-            $.ajax({
-                url: '@Url.Action("GetContractsBySupplier", "POrder")',
-                type: 'GET',
-                data: { supplierID: supplierID },
-                success: function (data) {
-                    var contractDropdown = $("#ContractID");
-                    contractDropdown.empty();
-                    $.each(data, function (index, item) {
-                        contractDropdown.append(new Option(item.Text, item.Value));
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching contracts:", error);
-                }
-            });
-        }
-    </script>
 }

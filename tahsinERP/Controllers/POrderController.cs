@@ -97,97 +97,57 @@ namespace tahsinERP.Controllers
                 }
             }
         }
-
-
-        /* public async Task<JsonResult> GetPartList(int contractPartID)
-         {
-             try
-             {
-                 using (DBTHSNEntities db = new DBTHSNEntities())
-                 {
-                     // PartID larni olish
-                     var partIDsList = await db.P_CONTRACT_PARTS
-                                               .Where(p => p.ContractID == contractPartID)
-                                               .Select(p => p.PartID)
-                                               .ToListAsync();
-
-                     if (partIDsList == null || !partIDsList.Any())
-                     {
-                         return Json(new { success = false, message = "Berilgan 'ContractPartID' uchun hech qanday 'Part' topilmadi." }, JsonRequestBehavior.AllowGet);
-                     }
-
-                     // PARTS jadvalidan ID va PNo ni olish
-                     var partList = await db.PARTS
-                                            .Where(p => partIDsList.Contains(p.ID))
-                                            .Select(p => new { p.ID, p.PNo })
-                                            .ToListAsync();
-
-                     if (partList == null || !partList.Any())
-                     {
-                         return Json(new { success = false, message = "'PARTS' jadvalida mos keladigan 'part' topilmadi." }, JsonRequestBehavior.AllowGet);
-                     }
-
-                     // Muvaffaqiyatli natijani JSON formatida qaytarish
-                     return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
-                 }
-             }
-             catch (Exception ex)
-             {
-                 // Errorni JSON formatida qaytarish
-                 return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
-             }
-         }*/
-
-
-        public async Task<JsonResult> GetPriceAndMOQ(int partID)
-        {
-            try
-            {
-                using (DBTHSNEntities db = new DBTHSNEntities())
-                {
-                    // partID bo'yicha Price va MOQ qiymatlarini olish
-                    var priceMoq = await db.P_CONTRACT_PARTS
-                                           .Where(p => p.PartID == partID)
-                                           .Select(x => new { x.Price, x.MOQ })
-                                           .FirstOrDefaultAsync();
-
-                    // Agar natija topilmasa
-                    if (priceMoq == null)
-                    {
-                        return Json(new { success = false, message = "Berilgan ID uchun narx yoki MOQ topilmadi" }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    // Muvaffaqiyatli natijani JSON formatida qaytarish
-                    return Json(new { success = true, data = priceMoq }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Exceptionni JSON formatida qaytarish
-                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public JsonResult GetOrdersBySupplier(int supplierID)
+        public JsonResult GetPriceAndMOQ(int partID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var orders = db.P_ORDERS
-                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
-                    .Select(x => new
+                var contractPart = db.P_CONTRACT_PARTS
+                                     .Where(cp => cp.PartID == partID)
+                                     .Select(cp => new
+                                     {
+                                         Price = cp.Price,
+                                         MOQ = cp.MOQ,
+                                         Amount = cp.Amount
+                                     })
+                                     .FirstOrDefault();
+
+                if (contractPart != null)
+                {
+                    return Json(new { success = true, data = contractPart }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Part not found in contract." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        // Bu method tanlangan shartnomaga tegishli qismlar ro'yxatini qaytaradi
+        public ActionResult GetPartList(int contractID)
+        {
+            using (var db = new DBTHSNEntities())
+            {
+                var partList = db.P_CONTRACT_PARTS
+                    .Where(cp => cp.ContractID == contractID )
+                    .Select(cp => new
                     {
-                        x.ID,
-                        x.OrderNo,
-                        x.Currency // Include Currency in the response
+                        cp.PartID,
+                        cp.PART.PNo
                     })
                     .ToList();
 
-                return Json(orders.Select(i => new
-                {
-                    Value = i.ID.ToString(),
-                    Text = i.OrderNo,
-                    Currency = i.Currency
-                }), JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult GetContractsBySupplier(int supplierID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var contracts = db.P_CONTRACTS
+                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
+                    .Select(x => new { x.ID, x.ContractNo })
+                    .ToList();
+
+                return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.ContractNo }), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -198,10 +158,12 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                ViewBag.partList = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+
+                // Create a list of SelectListItem manually for parts
+                ViewBag.partList = new SelectList(Enumerable.Empty<SelectListItem>());
             }
 
-            return View();
+            return View();  
         }
 
         [HttpPost]
@@ -215,7 +177,8 @@ namespace tahsinERP.Controllers
                     ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                     ViewBag.PContract = new SelectList(db.P_CONTRACTS.Where(x => x.IsDeleted == false).ToList(), "ID", "ContractNo");
                     ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                    ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                    //ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                    ViewBag.partList = new SelectList(Enumerable.Empty<SelectList>());
 
                     var isSameContract = db.P_CONTRACTS.Where(p => p.IsDeleted == false && p.SupplierID == model.SupplierID && p.ID == model.ContractID).FirstOrDefault();
 
@@ -378,18 +341,7 @@ namespace tahsinERP.Controllers
                     return false;
             }
         }
-        public ActionResult GetContractsBySupplier(int supplierID)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var contracts = db.P_CONTRACTS
-                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
-                    .Select(x => new { x.ID, x.ContractNo })
-                    .ToList();
-
-                return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.ContractNo }), JsonRequestBehavior.AllowGet);
-            }
-        }
+       
 
         //steel coil uchun Create Actoin method
         public ActionResult CreateSteel(int? supplierID)

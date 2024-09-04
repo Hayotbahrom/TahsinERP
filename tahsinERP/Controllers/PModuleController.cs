@@ -153,7 +153,7 @@ namespace tahsinERP.Controllers
 
                         foreach (var permission in existingPermissions)
                         {
-                            if (!RoleID.Contains(permission.RoleID ?? 0))
+                            if (!RoleID.Contains(permission.RoleID))
                             {
                                 db.PERMISSIONS.Remove(permission);
                             }
