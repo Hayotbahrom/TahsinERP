@@ -193,6 +193,24 @@
         <script src="~/app-assets/js/scripts/datatables/datatable.js"></script>
         <script src="~/app-assets/js/scripts/modal/components-modal.js"></script>
         <!-- END: Page JS-->
+
+        <!-- Show-Entries default: 1000 in All DataTables -->
+        <script type="text/javascript">
+            // DataTables uchun umumiy sozlamalar
+            $.extend($.fn.dataTable.defaults, {
+                "pageLength": 1000,  // Default ko'rsatiladigan entries sonini 1000 ga o'zgartirish
+                "lengthMenu": [[1000, 2000, 5000, -1], [1000, 2000, 5000, "All"]],  // Menyuga yangi entries opsiyalarini qo'shish
+                "language": {
+                    "lengthMenu": "Show _MENU_ entries"
+                }
+            });
+
+            $(document).ready(function () {
+                // Barcha jadval elementlarini DataTable'ga aylantirish
+                $('table').DataTable();
+            });
+        </script>
+        <!-- __________ -->
     }
     else
     {
