@@ -316,13 +316,14 @@ namespace tahsinERP.Controllers
                             else
                             {
                                 P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == contract.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                string unitName = row["Unit"].ToString();
                                 if (contractPart == null)
                                 {
                                     P_CONTRACT_PARTS new_contractPart = new P_CONTRACT_PARTS();
                                     new_contractPart.PartID = part.ID;
                                     new_contractPart.ContractID = contract.ID;
                                     new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(row["Unit"].ToString()) == 0).FirstOrDefault();
+                                    UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(unitName) == 0).FirstOrDefault();
                                     if (unit != null)
                                         new_contractPart.UNIT = unit;
                                     else
@@ -344,6 +345,7 @@ namespace tahsinERP.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewBag.Message = $"Faylni yuklashda quyidagicha muammo tug'ildi: {ex.Message}";
                     ModelState.AddModelError("", ex.Message);
                 }
             }
@@ -361,7 +363,6 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(PContractViewModel model)
@@ -447,7 +448,7 @@ namespace tahsinERP.Controllers
 
                         return RedirectToAction("Index");
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         ModelState.AddModelError("", $"Error: {ex.Message}");
                     }

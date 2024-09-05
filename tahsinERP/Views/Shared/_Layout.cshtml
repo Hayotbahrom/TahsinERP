@@ -609,38 +609,34 @@
                     @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Sales_WRHS"))
                     {
 
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                         <li class=" nav-item">
-                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
-                            <ul class="menu-content">
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
-                                </li>
-                                <li>
-                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
-                                </li>
-                            </ul>
+                            <a href="~/ComingSoon/Index"><i class="bx bx-error-circle"></i><span class="menu-title" data-i18n="Knowledge Base">Qo'llanma</span></a>
                         </li>
-                    }
-
-                    <li class=" navigation-header">
-                        <span>Sozlamalar</span>
-                    </li>
-                    <li class=" nav-item">
-                        <a href="~/ComingSoon/Index"><i class="bx bx-error-circle"></i><span class="menu-title" data-i18n="Knowledge Base">Qo'llanma</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })">
-                            <i class="bx bx-wrench"></i>
-                            <span class="menu-title" data-i18n="Account Settings">Akkaunt Sozlamalari</span>
-                        </a>
-                    </li>
-                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "AdminPanel"))
-                    {
-                        <li class=" nav-item">
-                            <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })">
+                                <i class="bx bx-wrench"></i>
+                                <span class="menu-title" data-i18n="Account Settings">Akkaunt Sozlamalari</span>
+                            </a>
                         </li>
-                    }
-                </ul>
+                        @if (RoleHelper.IsViewPermitted(User.Identity.Name, "AdminPanel"))
+                        {
+                            <li class=" nav-item">
+                                <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
+                            </li>
+                        }
+                    </ul>
             </div>
         </div>
         <!-- END: Main Menu-->
@@ -656,7 +652,7 @@
         <!-- BEGIN: Footer-->
         <footer class="footer footer-static footer-light">
             <p class="clearfix mb-0">
-                <span class="float-left d-inline-block">@DateTime.Now.Year &copy; tahsin ERP</span>
+                <span class="float-left d-inline-block">@DateTime.Now.Year &copy; tahsinERP</span>
             </p>
         </footer>
         <!-- END: Footer-->
