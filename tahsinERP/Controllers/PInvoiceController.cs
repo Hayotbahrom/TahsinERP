@@ -19,6 +19,7 @@ using System.Web.Services.Description;
 using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
+using tahsinERP.ViewModels.PInvoice;
 
 namespace tahsinERP.Controllers
 {
@@ -214,7 +215,7 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PInvoiceViewModel model)
+        public ActionResult Create(PInvoiceCreateViewModel model)
         {
             PopulateViewBags();
             try
@@ -338,7 +339,8 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 //ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
                 ViewBag.POrder = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                //ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.partList = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
         }
