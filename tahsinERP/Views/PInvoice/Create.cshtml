@@ -1,4 +1,4 @@
-﻿@model tahsinERP.ViewModels.PInvoiceViewModel
+﻿@model tahsinERP.ViewModels.PInvoice.PInvoiceCreateViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -135,15 +135,15 @@
                                                             @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Quantuty">Miqdori</label>
-                                                            <input type="number" name="Quantity" step="0.000001" class="form-control" id="Part_Quantuty" />
+                                                            <label for="Part_Quantity">Miqdori</label>
+                                                            <input type="number" name="Quantity" step="0.000001" class="form-control" id="Part_Quantity" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Quantity, "", new { @class = "text-danger" })
                                                         </div>@*
-                                                        <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_Price">Narx</label>
-                                                            <input type="number" name="Price" step="0.001" class="form-control" id="Part_Price" disabled="disabled" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
-                                                        </div>*@
+                                                            <div class="col-md-2 col-sm-12 form-group">
+                                                                <label for="Part_Price">Narx</label>
+                                                                <input type="number" name="Price" step="0.001" class="form-control" id="Part_Price" disabled="disabled" />
+                                                                @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
+                                                            </div>*@
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Narx</label>
                                                             <input type="number" name="Price" step="0.000001" class="form-control Part_Price" id="Part_Price" />
@@ -178,8 +178,8 @@
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
+    // Supplier tanlanganda orderlarni yangilash va valyutani to'ldirish
     function refreshOrderListbySupplier() {
         const supplierID = document.getElementById("SupplierID").value;
         $.ajax({
@@ -189,15 +189,25 @@
             success: function (data) {
                 var contractDropdown = $("#OrderID");
                 contractDropdown.empty();
+
+                // Order dropdown ni yangilash
                 $.each(data, function (index, item) {
                     contractDropdown.append(new Option(item.Text, item.Value));
                 });
+
+                // Birinchi order tanlanadi va tafsilotlari avtomatik ko'rinadi
+                if (data.length > 0) {
+                    contractDropdown.val(data[0].Value).trigger('change');
+                    getOrderDetails(); // Birinchi orderning tafsilotlarini olamiz
+                }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching contracts:", error);
+                console.error("Orderlarni olishda xatolik:", error);
             }
         });
     }
+
+    // Order tanlanganda tafsilotlarni olish va valyutani yangilash
     function getOrderDetails() {
         var orderID = $("#OrderID").val();
 
@@ -212,8 +222,17 @@
                     // Valyutani yangilash
                     $("#Currency").val(order.Currency || '');
 
-                    // Yangi qism qo‘shilganda qismlar ro‘yxatini yangilash
+                    // Qismlar ro'yxatini yangilash
                     updatePartList(orderID);
+
+                    // Qismlar ro'yxatini yangilashdan keyin birinchi qismini avtomatik tanlash
+                    setTimeout(function () {
+                        var firstPartDropdown = $('[data-repeater-item]').first().find('.PartID');
+                        if (firstPartDropdown.length > 0) {
+                            firstPartDropdown.val(firstPartDropdown.find('option:first').val()).trigger('change');
+                        }
+                    }, 100); // Qismlar ro'yxatini yangilash jarayoni tugaguncha kutib turish uchun setTimeout ishlatiladi
+
                 } else {
                     console.error("Xatolik: " + data.message);
                 }
@@ -224,7 +243,7 @@
         });
     }
 
-
+    // Qismlar ro'yxatini yangilash
     function updatePartList(orderID) {
         $.ajax({
             url: '@Url.Action("GetPartList", "PInvoice")',
@@ -235,9 +254,16 @@
                     var lastPartDropdown = $('[data-repeater-item]').last().find('select[id^=PartID]');
                     lastPartDropdown.empty();
 
+                    // Qismlar variantlarini yangilash
                     $.each(data.data, function (index, item) {
                         lastPartDropdown.append(new Option(item.PNo, item.PartID));
                     });
+
+                    // Birinchi qism tanlanadi va narxi va miqdori avtomatik keladi
+                    if (data.data.length > 0) {
+                        lastPartDropdown.val(data.data[0].PartID).trigger('change');
+                    }
+
                 } else {
                     console.error("Xatolik: " + data.message);
                 }
@@ -248,18 +274,7 @@
         });
     }
 
-
-        $(document).on('click', '[data-repeater-create]', function () {
-        setTimeout(function () {
-            var orderID = $("#OrderID").val(); // OrderID qiymatini olamiz
-            if (orderID) {
-                updatePartList(orderID); // To'g'ri OrderID bilan yangilash
-            } else {
-                console.error("Order ID aniqlanmagan!");
-            }
-        }, 100);
-    });
-
+    // Qism tanlanganda uning narxi va miqdorini olish
     function getPriceAndQuantity(partDropdown) {
         var partID = $(partDropdown).val();
 
@@ -271,9 +286,9 @@
                 if (data.success) {
                     var parent = $(partDropdown).closest("[data-repeater-item]");
                     var Price = parent.find("#Part_Price");
-                    var Quantity = parent.find("#Part_Quantuty");
+                    var Quantity = parent.find("#Part_Quantity");
                     Price.val(data.data.Price);
-                    Quantity.val(data.data.Quantity); // Agar kerak bo'lsa, miqdorini ham yangilash
+                    Quantity.val(data.data.Quantity); // Miqdor va narxni yangilash
                 } else {
                     console.error("Error: " + data.message);
                 }
@@ -283,7 +298,21 @@
             }
         });
     }
+
+    // Yangi qism qo'shilganda qismlar ro'yxatini yangilash
+    $(document).on('click', '[data-repeater-create]', function () {
+        setTimeout(function () {
+            var orderID = $("#OrderID").val(); // OrderID qiymatini olamiz
+            if (orderID) {
+                updatePartList(orderID); // Yangilangan qismlar ro'yxati
+            } else {
+                console.error("Order ID aniqlanmagan!");
+            }
+        }, 100);
+    });
+
     </script>
+
 
 }
 else

@@ -19,6 +19,7 @@ using System.Web.Services.Description;
 using System.Web.UI.WebControls.WebParts;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
+using tahsinERP.ViewModels.PInvoice;
 
 namespace tahsinERP.Controllers
 {
@@ -214,7 +215,7 @@ namespace tahsinERP.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PInvoiceViewModel model)
+        public ActionResult Create(PInvoiceCreateViewModel model)
         {
             PopulateViewBags();
             try
@@ -266,8 +267,8 @@ namespace tahsinERP.Controllers
 
                             newPart.Price = orderPart.Price;
                             db.P_INVOICE_PARTS.Add(newPart);
-
-                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{newPart.PART.PNo} - PInvoicenPartni yaratdi");
+                            var logPart = db.PARTS.Find(item.PartID);
+                            LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{logPart.PNo} - PInvoicenPartni yaratdi");
                         }
                         else
                         {
@@ -275,6 +276,7 @@ namespace tahsinERP.Controllers
                             notInOrderParts.Add(paart.PNo);
                         }
                     }
+                    
                     if (notInOrderParts.Count > 0)
                     {
                         var message = "";
@@ -290,33 +292,35 @@ namespace tahsinERP.Controllers
 
                     db.SaveChanges();
 
-
-                    if (Request.Files["docUpload"].ContentLength > 0)
+                    if (model.File != null)
                     {
-                        if (Request.Files["docUpload"].InputStream.Length < 5242880)
+                        if (Request.Files["docUpload"].ContentLength > 0)
                         {
-                            if (Path.GetExtension(model.File.FileName).ToLower() == ".pdf")
+                            if (Request.Files["docUpload"].InputStream.Length < 5242880)
                             {
-                                P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
-                                byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
-                                Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
-                                invoiceDoc.InvoiceID = invoice.ID;
-                                invoiceDoc.Doc = avatar;
+                                if (Path.GetExtension(model.File.FileName).ToLower() == ".pdf")
+                                {
+                                    P_INVOICE_DOCS invoiceDoc = new P_INVOICE_DOCS();
+                                    byte[] avatar = new byte[Request.Files["docUpload"].InputStream.Length];
+                                    Request.Files["docUpload"].InputStream.Read(avatar, 0, avatar.Length);
+                                    invoiceDoc.InvoiceID = invoice.ID;
+                                    invoiceDoc.Doc = avatar;
 
-                                db.P_INVOICE_DOCS.Add(invoiceDoc);
-                                db.SaveChanges();
-                                LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.P_INVOICES.InvoiceNo} - uchun PInvoiceDocni yaratdi");
+                                    db.P_INVOICE_DOCS.Add(invoiceDoc);
+                                    db.SaveChanges();
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{invoiceDoc.P_INVOICES.InvoiceNo} - uchun PInvoiceDocni yaratdi");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "Format noto'g'ri. Faqat .pdf fayllarni yuklash mumkin.");
+                                }
+
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Format noto'g'ri. Faqat .pdf fayllarni yuklash mumkin.");
+                                ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
+                                throw new RetryLimitExceededException();
                             }
-
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Faylni yuklab bo'lmadi, u 2MBdan kattaroq. Qayta urinib ko'ring, agar muammo yana qaytarilsa, tizim administratoriga murojaat qiling.");
-                            throw new RetryLimitExceededException();
                         }
                     }
 
@@ -338,7 +342,8 @@ namespace tahsinERP.Controllers
                 ViewBag.Supplier = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 //ViewBag.POrder = new SelectList(db.P_ORDERS.Where(x => x.IsDeleted == false).ToList(), "ID", "OrderNo");
                 ViewBag.POrder = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                //ViewBag.partList = new SelectList(db.PARTS.Where(x => x.IsDeleted == false).ToList(), "ID", "PNo");
+                ViewBag.partList = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
             }
         }
