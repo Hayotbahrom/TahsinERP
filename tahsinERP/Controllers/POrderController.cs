@@ -1135,7 +1135,8 @@ namespace tahsinERP.Controllers
                                         db.P_ORDER_PARTS.Add(new_orderPart);
                                         await db.SaveChangesAsync();
 
-                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_orderPart.PART.PNo} - POrderPartni Excell orqali yaratdi");
+                                        var logPart = db.PARTS.Find(new_orderPart.PartID);
+                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{logPart.PNo} - POrderPartni Excell orqali yaratdi");
                                     }
                                 }
                                 else
@@ -1156,8 +1157,8 @@ namespace tahsinERP.Controllers
 
                                         db.P_ORDER_PARTS.Add(new_orderPart);
                                         await db.SaveChangesAsync();
-
-                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_orderPart.PART.PNo} - POrderPartni Excell orqali yaratdi");
+                                        var logPart = db.PARTS.Find(new_orderPart.PartID);
+                                        LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{logPart.PNo} - POrderPartni Excell orqali yaratdi");
                                     }
                                 }
                             }

@@ -290,16 +290,18 @@ namespace tahsinERP.Controllers
 
                                 LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_contract.ContractNo} - PContractni Excell orqali yaratdi");
 
+                                //var unitname = db.UNITS.Where(x => x.ShortName.CompareTo(row["Unit"].ToString()) == 0).FirstOrDefault();
                                 P_CONTRACT_PARTS contractPart = db.P_CONTRACT_PARTS.Where(pcp => pcp.ContractID == new_contract.ID && pcp.PartID == part.ID).FirstOrDefault();
+                                string unitName = row["Unit"].ToString();
                                 if (contractPart == null)
                                 {
                                     P_CONTRACT_PARTS new_contractPart = new P_CONTRACT_PARTS();
                                     new_contractPart.PartID = part.ID;
                                     new_contractPart.ContractID = new_contract.ID;
                                     new_contractPart.Price = Convert.ToDouble(row["Price"].ToString());
-                                    UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(row["Unit"].ToString()) == 0).FirstOrDefault();
+                                    UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(unitName) == 0).FirstOrDefault();
                                     if (unit != null)
-                                        new_contractPart.UNIT = unit;
+                                        new_contractPart.UnitID = unit.ID;
                                     else
                                         new_contractPart.UnitID = 1;
                                     new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
@@ -328,8 +330,8 @@ namespace tahsinERP.Controllers
                                         new_contractPart.UNIT = unit;
                                     else
                                         new_contractPart.UnitID = 1;
-                                    new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                     new_contractPart.Quantity = Convert.ToDouble(row["Amount"].ToString());
+                                    new_contractPart.MOQ = Convert.ToDouble(row["MOQ"].ToString());
                                     new_contractPart.ActivePart = true;
 
                                     db.P_CONTRACT_PARTS.Add(new_contractPart);

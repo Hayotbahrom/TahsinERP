@@ -932,7 +932,7 @@ namespace tahsinERP.Controllers
                             PART part = await db.PARTS.Where(p => p.PNo.CompareTo(partNo) == 0 && p.IsDeleted == false).FirstOrDefaultAsync();
                             P_ORDERS order = await db.P_ORDERS.Where(po => po.OrderNo.CompareTo(orderNo) == 0 && po.IsDeleted == false).FirstOrDefaultAsync();
                             P_INVOICES invoice = await db.P_INVOICES.Where(pi => pi.InvoiceNo.CompareTo(invoiceNo) == 0 && pi.SupplierID == supplier.ID && pi.OrderID == order.ID && pi.IsDeleted == false).FirstOrDefaultAsync();
-
+                            string unitName = row["Unit"].ToString();
                             if (invoice == null)
                             {
                                 P_INVOICES new_invoice = new P_INVOICES();
@@ -957,12 +957,19 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.InvoiceID = new_invoice.ID;
                                     new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
                                     //new_invoicePart.Unit = row["Unit"].ToString();
+                                    UNIT unit = db.UNITS.Where(x => x.ShortName == unitName).FirstOrDefault();
+                                    if (unit is null)
+                                        new_invoicePart.UnitID = 1;
+                                    else
+                                        new_invoicePart.UnitID = unit.ID;
+
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
 
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
                                     await db.SaveChangesAsync();
 
-                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.PART.PNo} - PInvoicePartni Excell orqali yaratdi");
+                                    var logPart = db.PARTS.Find(new_invoicePart.PartID);
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{logPart.PNo} - PInvoicePartni Excell orqali yaratdi");
                                 }
                             }
                             else
@@ -976,11 +983,17 @@ namespace tahsinERP.Controllers
                                     new_invoicePart.Price = Convert.ToDouble(row["Price"].ToString());
                                     //new_invoicePart.Unit = row["Unit"].ToString();
                                     new_invoicePart.Quantity = Convert.ToDouble(row["Amount"].ToString());
-
+                                    
+                                    UNIT unit = db.UNITS.Where(x => x.ShortName == unitName).FirstOrDefault();
+                                    if (unit is null)
+                                        new_invoicePart.UnitID = 1;
+                                    else
+                                        new_invoicePart.UnitID = unit.ID;
                                     db.P_INVOICE_PARTS.Add(new_invoicePart);
                                     await db.SaveChangesAsync();
 
-                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{new_invoicePart.PART.PNo} - PInvoicePartni Excell orqali yaratdi");
+                                    var logPart = db.PARTS.Find(new_invoicePart.PartID);
+                                    LogHelper.LogToDatabase(User.Identity.Name, "PContractController", $"{logPart.PNo} - PInvoicePartni Excell orqali yaratdi");
                                 }
                             }
                         }
