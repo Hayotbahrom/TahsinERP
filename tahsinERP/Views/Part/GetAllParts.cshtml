@@ -72,11 +72,9 @@
                                 <div class="card-body">
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                        <table class="table table-striped dataex-html5-selectors" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
-                                                    <th></th>
                                                     <th>Detal Raqami</th>
                                                     <th>Nomi</th>
                                                     <th>Marka</th>
@@ -90,8 +88,6 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <tr>
-                                                        <td></td>
-                                                        <td></td>
                                                         <td>
                                                             <a href="~/Part/Details/@item.ID">@item.PNo</a>
                                                         </td>
@@ -131,6 +127,5 @@ else
         //const supplierID = document.getElementById("SupplierID").value;
         window.location.href = '@Url.Action("GetAllParts", "Part")?type=' + source;
         @*////window.location.href = '@Url.Action("GetAllParts", "Part")*@
-
-        };
+    };
 </script>
