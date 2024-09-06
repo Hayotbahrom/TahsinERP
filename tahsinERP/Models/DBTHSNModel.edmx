@@ -386,6 +386,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="TotalPrPacks" Type="int" />
           <Property Name="TotalGrWeight" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="TotalNetWeight" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="TotalPrCBM" Type="float" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -4540,6 +4541,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <Property Name="TotalPrPacks" Type="Int32" />
           <Property Name="TotalGrWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="TotalNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TotalPrCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -8813,6 +8815,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySetMapping Name="P_PACKINGLIST_PARTS">
             <EntityTypeMapping TypeName="DBTHSNModel.P_PACKINGLIST_PARTS">
               <MappingFragment StoreEntitySet="P_PACKINGLIST_PARTS">
+                <ScalarProperty Name="TotalPrCBM" ColumnName="TotalPrCBM" />
                 <ScalarProperty Name="TotalNetWeight" ColumnName="TotalNetWeight" />
                 <ScalarProperty Name="TotalGrWeight" ColumnName="TotalGrWeight" />
                 <ScalarProperty Name="TotalPrPacks" ColumnName="TotalPrPacks" />

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -697,15 +698,18 @@ namespace tahsinERP.Controllers
                 foreach (DataRow row in dataTable.Rows)
                 {
                     string orderNo = row["OrderNo"].ToString();
-
-                    bool orderExists = await db.P_CONTRACTS.AnyAsync(p => p.ContractNo.CompareTo(orderNo) == 0);
-                    if (!orderExists)
+                    if (!orderNo.IsNullOrWhiteSpace())
                     {
-                        if (!missingOrders.Contains(orderNo))
+
+                        bool orderExists = await db.P_ORDERS.AnyAsync(p => p.OrderNo.CompareTo(orderNo) == 0);
+                        if (!orderExists)
                         {
-                            missingOrders.Add(orderNo);
+                            if (!missingOrders.Contains(orderNo))
+                            {
+                                missingOrders.Add(orderNo);
+                            }
+                            return false;  // Return false immediately if any contract is missing
                         }
-                        return false;  // Return false immediately if any contract is missing
                     }
                 }
             }
@@ -929,13 +933,17 @@ namespace tahsinERP.Controllers
 
                                 P_INVOICE_PACKINGLISTS newPackingList = new P_INVOICE_PACKINGLISTS();
                                 newPackingList.PackingListNo = packinglistNo;
+                                newPackingList.TransportNo = transportNo;
                                 newPackingList.InvoiceID = new_invoice.ID;
+                                newPackingList.SealNo = "";
                                 F_TRANSPORT_TYPES transport = db.F_TRANSPORT_TYPES.Where(t => t.TransportType.CompareTo(transportType) == 0).FirstOrDefault();
                                 if (transport != null)
                                     newPackingList.TransportTypeID = transport.ID;
                                 else
                                     newPackingList.TransportTypeID = 1;
                                 newPackingList.InTransit = true;
+                                newPackingList.IsDeleted = false;
+                                db.P_INVOICE_PACKINGLISTS.Add(newPackingList);
                                 await db.SaveChangesAsync();
 
                                 LogHelper.LogToDatabase(User.Identity.Name, "PInvoiceController", $"{new_invoice.InvoiceNo} - invoiceni Excel orqali yaratdi");
@@ -962,11 +970,13 @@ namespace tahsinERP.Controllers
                                     P_PACKINGLIST_PARTS newPackingListPart = new P_PACKINGLIST_PARTS();
 
                                     newPackingListPart.PackingListID = newPackingList.ID;
+                                    newPackingListPart.PartID = part.ID;
                                     newPackingListPart.PrLength = Convert.ToDouble(row["Length"].ToString());
                                     newPackingListPart.PrWidth = Convert.ToDouble(row["Width"].ToString());
                                     newPackingListPart.PrHeight = Convert.ToDouble(row["Height"].ToString());
                                     newPackingListPart.PrAmount = Convert.ToDouble(row["Box Amount"].ToString());
                                     newPackingListPart.PieceWeight = Convert.ToDouble(row["Piece weight"].ToString());
+                                    newPackingListPart.PrNetWeight = Convert.ToDouble(row["NetWeight"].ToString());
                                     newPackingListPart.PrGrWeight = Convert.ToDouble(row["GrWeight"].ToString());
                                     newPackingListPart.TotalPrPacks = Convert.ToInt32(row["Box quantity"].ToString());
                                     newPackingListPart.TotalNetWeight = Convert.ToDouble(row["TotalNetWeight"].ToString());
@@ -1002,13 +1012,15 @@ namespace tahsinERP.Controllers
                                         P_PACKINGLIST_PARTS newPackingListPart = new P_PACKINGLIST_PARTS();
 
                                         newPackingListPart.PackingListID = packingList.ID;
+                                        newPackingListPart.PartID = part.ID;
                                         newPackingListPart.PrLength = Convert.ToDouble(row["Length"].ToString());
                                         newPackingListPart.PrWidth = Convert.ToDouble(row["Width"].ToString());
                                         newPackingListPart.PrHeight = Convert.ToDouble(row["Height"].ToString());
                                         newPackingListPart.PrAmount = Convert.ToDouble(row["Box Amount"].ToString());
                                         newPackingListPart.PieceWeight = Convert.ToDouble(row["Piece weight"].ToString());
+                                        newPackingListPart.PrNetWeight = Convert.ToDouble(row["NetWeight"].ToString());
                                         newPackingListPart.PrGrWeight = Convert.ToDouble(row["GrWeight"].ToString());
-                                        newPackingListPart.TotalPrPacks = Convert.ToInt32(row["Box quantity"].ToString());
+                                        newPackingListPart.TotalPrPacks = Convert.ToInt32(row["Box Quantity"].ToString());
                                         newPackingListPart.TotalNetWeight = Convert.ToDouble(row["TotalNetWeight"].ToString());
                                         newPackingListPart.TotalGrWeight = Convert.ToDouble(row["TotalGrWeight"].ToString());
 

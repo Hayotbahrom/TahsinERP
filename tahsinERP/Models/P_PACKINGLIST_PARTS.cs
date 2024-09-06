@@ -39,6 +39,7 @@ namespace tahsinERP.Models
         public Nullable<int> TotalPrPacks { get; set; }
         public Nullable<double> TotalGrWeight { get; set; }
         public Nullable<double> TotalNetWeight { get; set; }
+        public Nullable<double> TotalPrCBM { get; set; }
     
         public virtual P_INVOICE_PACKINGLISTS P_INVOICE_PACKINGLISTS { get; set; }
         public virtual PART PART { get; set; }
