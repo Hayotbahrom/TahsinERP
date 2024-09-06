@@ -383,6 +383,9 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="PackingListID" Type="int" Nullable="false" />
           <Property Name="PrCBM" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="ScCBM" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="TotalPrPacks" Type="int" />
+          <Property Name="TotalGrWeight" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="TotalNetWeight" Type="float" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -3282,12 +3285,14 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
         <Function Name="GetSupplierParts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SupplierID" Type="int" Mode="In" />
         </Function>
-        <Function Name="InTransitView" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="InTransitView" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TodayDate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
+        </Function>
         <Function Name="WeeklyCoverage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TodayDate" Type="date" Mode="In" />
           <Parameter Name="EndDate" Type="date" Mode="In" />
         </Function>
-        <Function Name="WeeklyPartRequirementByProductPlan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="DBTHSNModelStoreContainer">
           <EntitySet Name="BLANKING_NORMS" EntityType="Self.BLANKING_NORMS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BOMS" EntityType="Self.BOMS" Schema="dbo" store:Type="Tables" />
@@ -4532,6 +4537,9 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <Property Name="ScCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" FromRole="P_PACKINGLIST_PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
           <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="P_PACKINGLIST_PARTS" ToRole="PARTS" />
+          <Property Name="TotalPrPacks" Type="Int32" />
+          <Property Name="TotalGrWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TotalNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -8314,7 +8322,10 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <Parameter Name="SupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="WeeklyPartRequirementByProductPlan" />
-          <FunctionImport Name="InTransitView" />
+          <FunctionImport Name="InTransitView" >
+            <Parameter Name="TodayDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
           <FunctionImport Name="WeeklyCoverage">
             <Parameter Name="TodayDate" Mode="In" Type="DateTime" />
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
@@ -8802,6 +8813,9 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySetMapping Name="P_PACKINGLIST_PARTS">
             <EntityTypeMapping TypeName="DBTHSNModel.P_PACKINGLIST_PARTS">
               <MappingFragment StoreEntitySet="P_PACKINGLIST_PARTS">
+                <ScalarProperty Name="TotalNetWeight" ColumnName="TotalNetWeight" />
+                <ScalarProperty Name="TotalGrWeight" ColumnName="TotalGrWeight" />
+                <ScalarProperty Name="TotalPrPacks" ColumnName="TotalPrPacks" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="PieceWeight" ColumnName="PieceWeight" />
@@ -9891,7 +9905,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="WeeklyPartRequirementByProductPlan" FunctionName="DBTHSNModel.Store.WeeklyPartRequirementByProductPlan" />
           <FunctionImportMapping FunctionImportName="InTransitView" FunctionName="DBTHSNModel.Store.InTransitView" />
           <FunctionImportMapping FunctionImportName="WeeklyCoverage" FunctionName="DBTHSNModel.Store.WeeklyCoverage" />
           <EntitySetMapping Name="PART_STOCKS">

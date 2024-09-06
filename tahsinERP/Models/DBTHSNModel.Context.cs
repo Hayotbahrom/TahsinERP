@@ -195,9 +195,17 @@ namespace tahsinERP.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WeeklyPartRequirementByProductPlan");
         }
     
-        public virtual int InTransitView()
+        public virtual int InTransitView(Nullable<System.DateTime> todayDate, Nullable<System.DateTime> endDate)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InTransitView");
+            var todayDateParameter = todayDate.HasValue ?
+                new ObjectParameter("TodayDate", todayDate) :
+                new ObjectParameter("TodayDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InTransitView", todayDateParameter, endDateParameter);
         }
     
         public virtual int WeeklyCoverage(Nullable<System.DateTime> todayDate, Nullable<System.DateTime> endDate)
