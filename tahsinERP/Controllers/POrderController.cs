@@ -26,6 +26,7 @@ namespace tahsinERP.Controllers
         private string supplierName, contractNo, orderNo, partNo = "";
         private string[] sources;
         private int contractDocMaxLength = Convert.ToInt32(ConfigurationManager.AppSettings["photoMaxSize"]);
+        private int unitID = 1;
 
         private List<string> missingContracts = new List<string>();
         private List<string> missingSuppliers = new List<string>();
@@ -128,7 +129,7 @@ namespace tahsinERP.Controllers
             using (var db = new DBTHSNEntities())
             {
                 var partList = db.P_CONTRACT_PARTS
-                    .Where(cp => cp.ContractID == contractID )
+                    .Where(cp => cp.ContractID == contractID)
                     .Select(cp => new
                     {
                         cp.PartID,
@@ -165,7 +166,7 @@ namespace tahsinERP.Controllers
                 ViewBag.partList = new SelectList(Enumerable.Empty<SelectListItem>());
             }
 
-            return View();  
+            return View();
         }
 
         [HttpPost]
@@ -292,7 +293,7 @@ namespace tahsinERP.Controllers
                                 }
                             }
                         }
-                        
+
                         return RedirectToAction("Index");
                     }
                     else
@@ -345,7 +346,7 @@ namespace tahsinERP.Controllers
                     return false;
             }
         }
-       
+
 
         //steel coil uchun Create Actoin method
         public ActionResult CreateSteel(int? supplierID)
@@ -1118,6 +1119,11 @@ namespace tahsinERP.Controllers
 
                                     LogHelper.LogToDatabase(User.Identity.Name, "POrderController", $"{new_order.OrderNo} - POrderni Excell orqali yaratdi");
 
+                                    string unitFromFile = row["Unit"].ToString();
+                                    UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(unitFromFile) == 0).FirstOrDefault();
+                                    if (unit != null)
+                                        unitID = unit.ID;
+
                                     P_ORDER_PARTS orderPart = db.P_ORDER_PARTS
                                         .Where(pcp => pcp.OrderID == new_order.ID && pcp.PartID == part.ID)
                                         .FirstOrDefault();
@@ -1129,7 +1135,8 @@ namespace tahsinERP.Controllers
                                             OrderID = new_order.ID,
                                             Price = Convert.ToDouble(row["Price"].ToString()),
                                             MOQ = Convert.ToDouble(row["MOQ"].ToString()),
-                                            Amount = Convert.ToDouble(row["Amount"].ToString())
+                                            Amount = Convert.ToDouble(row["Amount"].ToString()),
+                                            UnitID = unitID
                                         };
 
                                         db.P_ORDER_PARTS.Add(new_orderPart);
@@ -1146,13 +1153,19 @@ namespace tahsinERP.Controllers
                                         .FirstOrDefault();
                                     if (orderPart == null)
                                     {
+                                        string unitFromFile = row["Unit"].ToString();
+                                        UNIT unit = db.UNITS.Where(u => u.ShortName.CompareTo(unitFromFile) == 0).FirstOrDefault();
+                                        if (unit != null)
+                                            unitID = unit.ID;
+
                                         P_ORDER_PARTS new_orderPart = new P_ORDER_PARTS
                                         {
                                             PartID = part.ID,
                                             OrderID = order.ID,
                                             Price = Convert.ToDouble(row["Price"].ToString()),
                                             MOQ = Convert.ToDouble(row["MOQ"].ToString()),
-                                            Amount = Convert.ToDouble(row["Amount"].ToString())
+                                            Amount = Convert.ToDouble(row["Amount"].ToString()),
+                                            UnitID = unitID
                                         };
 
                                         db.P_ORDER_PARTS.Add(new_orderPart);
