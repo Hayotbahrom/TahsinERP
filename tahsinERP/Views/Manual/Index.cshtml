@@ -1,0 +1,2926 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Manual</title>
+
+
+    <link rel="stylesheet" href="./style.css">
+
+    <!-- Boostrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"
+          rel="stylesheet">
+    <style>
+
+        body {
+            font-size: 12px;
+            line-height: 1.5;
+            font-family: Arial, sans-serif;
+        }
+
+        code {
+            font-size: 12px;
+            line-height: 1.5;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-container">
+
+        <aside class="sidebar">
+
+
+
+
+            <ul class="sidebar-sub-headers">
+                <li>
+                    <a style="margin-left: -10px" href="#ERPbilanIshlash" aria-current="page" class="sidebar-link">
+                        1. Login qilish
+                    </a>
+                    <ul class="sidebar-sub-headers">
+
+                        <li class="sidebar-sub-header">
+                            <a href="#profilSozlamalari" aria-current="page" class="sidebar-link">
+                                1.1 E-mail ni o'rniga boshqa narsa yozsa nima chiqadi?
+                            </a>
+                        </li>
+                        <li class="sidebar-sub-header">
+                            <a href="#logout" aria-current="page" class="sidebar-link">
+                                1.2 Kalit so'zini unutilsa?
+                            </a>
+                        </li>
+
+                </li>
+
+
+                <li class="sidebar-sub-header">
+                    <a href="#Logout" aria-current="page" class="sidebar-link">
+                        1.3 Nofaol foydalanuvchi kirmoqchi bo'lsa
+                    </a>
+                </li>
+
+                <li class="sidebar-sub-header">
+                    <a href="#Logou" aria-current="page" class="sidebar-link">
+                        1.4 Adminga murojaat
+                    </a>
+                </li>
+            </ul>
+
+
+
+
+            <ul style="margin-left: -25px" class="sidebar-sub-headers">
+                <li>
+                    <a href="#ehtiyotQismlar" aria-current="page" class="sidebar-link">
+                        2 Ehtiyot qismlar
+                    </a>
+            </ul>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#ehtiyotQismlarr" aria-current="page" class="sidebar-link">
+                    2.01 Umumiy jadval haqida
+                </a>
+
+            </li>
+
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#saralash" aria-current="page" class="sidebar-link">
+                    2.02 Jadvalni mahsulot turiga qarab saralash
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#extiyotqismqidirish" aria-current="page" class="sidebar-link">
+                    2.03 Jadval ichidan ehtiyot qismni qidirish
+                </a>
+
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#Extiyotqismqoshish" aria-current="page" class="sidebar-link">
+                    2.04 Ehtiyot qismni qo'shish oynasi
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#extiyotqismraqami" aria-current="page" class="sidebar-link">
+                    2.05 Ehtiyot qism raqami (Partnumber) 8 ta dan iborat
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#30" aria-current="page" class="sidebar-link">
+                    2.06 To'ldirish majburiy bo'lgan maydonlar
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#majburiymaydon" aria-current="page" class="sidebar-link">
+                    2.07 Duplikat (bir xil) bo'lgan ehtiyot qism raqamini kiritsa bo'ladimi?
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#rasm" aria-current="page" class="sidebar-link">
+                    2.08 Ehtiyot qism rasmini joylash tartibi
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#extiyotwismexcel" aria-current="page" class="sidebar-link">
+                    2.09 Excel dagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#excelfayl" aria-current="page" class="sidebar-link">
+                    2.10 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#excel" aria-current="page" class="sidebar-link">
+                    2.11 Shablon faylni to'ldirish
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#faylniyuklash" aria-current="page" class="sidebar-link">
+                    2.12 To'ldirilgan shablon faylni yuklash
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#xatolarnitekshirish" aria-current="page" class="sidebar-link">
+                    2.13 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#xatoqayerdachiqadi" aria-current="page" class="sidebar-link">
+                    2.14 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#xato" aria-current="page" class="sidebar-link">
+                    2.15 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#saqlash" aria-current="page" class="sidebar-link">
+                    2.16 Barchasi to'g'riligiga ishonch hosil qilgandan so'ng Saqlashni bosing
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#tahrirlash" aria-current="page" class="sidebar-link">
+                    2.17 Ehtiyot qismni o'zgartirish
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Etiborliboling" aria-current="page" class="sidebar-link">
+                    2.18 Ehtiyot qismni o'zgartirishda majburiy qismlarga e'tibor bering
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#qismmajburiy" aria-current="page" class="sidebar-link">
+                    2.19 Ehtiyot qism raqami (Partnumber) ni o'zgartirishdan oldin yaxshilab o'ylaning
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#o'chirish" aria-current="page" class="sidebar-link">
+                    2.20 Ehtiyot qismni o'chirib yuborish
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#ogohboling" aria-current="page" class="sidebar-link">
+                    2.21 Ehtiyot qismni o'chirishdan oldin yaxshilab o'ylaning
+                </a>
+
+            </li>
+
+
+
+            <ul style="margin-left: -25px" class="sidebar-sub-headers">
+                <li>
+                    <a href="#Shartnomalar_bilan_ishlash" aria-current="page" class="sidebar-link">
+                        3  Shartnomalar
+                    </a>
+            </ul>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Shartnoma_bo'limi" aria-current="page" class="sidebar-link">
+                    3.01 Umumiy jadval haqida
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Mahsulot_turiga_qarab_saralash" aria-current="page" class="sidebar-link">
+                    3.02 Jadvalni maxsulot turiga qarab saralash
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Shartnomani" aria-current="page" class="sidebar-link">
+                    3.03 Jadvalni ta'minotchiga nisbatan saralash
+                </a>
+
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#Ta'minotchi_qosh" aria-current="page" class="sidebar-link">
+                    3.04 Yangi shartnomani qo'shish oynasi
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Majburiimaydon" aria-current="page" class="sidebar-link">
+                    3.05 To'ldirish majburiy bo'lgan maydonlar
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Shartnoma_qo'shish_qoidasi" aria-current="page" class="sidebar-link">
+                    3.06 Shartnoma predmetidagi ehtiyot qismlarga doir majburiy maydonlar
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Ta'minotchi_qidirish" aria-current="page" class="sidebar-link">
+                    3.07 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Shartnomani_pdf_variant_qo'shish" aria-current="page" class="sidebar-link">
+                    3.08 Shartnomani PDF variantda yuklash
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Ex" aria-current="page" class="sidebar-link">
+                    3.09 Ehtiyot qismni tanlashda qidirish imkoniyatidan foydalaning
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Exxcel" aria-current="page" class="sidebar-link">
+                    3.1 Excel dagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Exceldafaylyuklash" aria-current="page" class="sidebar-link">
+                    3.11 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Exceldanamuna" aria-current="page" class="sidebar-link">
+                    3.12 Shablon faylni to'ldirish
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Exceldafayltanlash" aria-current="page" class="sidebar-link">
+                    3.13 To'ldirilgan shablon faylni yuklash
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Exceldahatoqoyilganfayl" aria-current="page" class="sidebar-link">
+                    3.14 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+
+                </a>
+
+            </li>
+
+
+
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#Shartnomalarnitahrirlash" aria-current="page" class="sidebar-link">
+                    3.15 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#tahrirlashdagiqoidalar" aria-current="page" class="sidebar-link">
+                    3.16 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#.shartnomapredmeti" aria-current="page" class="sidebar-link">
+                    3.17  Barchasi to'g'riligiga ishonch hosil qilgandan so'ng Saqlashni bosing
+
+
+                </a>
+
+            </li>
+
+
+
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#shartnomapredmetidagiqidirish" aria-current="page" class="sidebar-link">
+                    3.18   Umumiy shartnomani tahrirlash oynasi
+
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Shartnomapredmetiniochirish" aria-current="page" class="sidebar-link">
+                    3.19 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Shartnomapredmet" aria-current="page" class="sidebar-link">
+                    3.20 O'zgartirishda o'zgartirishda majburiy maydonlarga e'tibor bering
+
+
+
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#ochirishshartnoma" aria-current="page" class="sidebar-link">
+                    3.21 Shartnoma predmetidagi ehtiyot qismlarni qidirish imkoniyati
+
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#keyinochiring" aria-current="page" class="sidebar-link">
+                    3.22  Shartnoma tarkibidagi ehtiyot qismlarni tahrirlash oynasiga o'tish
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#predmetochirish" aria-current="page" class="sidebar-link">
+                    3.23 Shartnoma tarkibidagi ehtiyot qismni tahrirlash oynasi
+
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#ochibyubor" aria-current="page" class="sidebar-link">
+                    3.24 Shartnomani tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirib yuborsa bo'ladi
+
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#25" aria-current="page" class="sidebar-link">
+                    3.25 Shartnoma predmetidagi qismlarni Excel, PDF holatda ko'chirib olish yoki chop etish imkoniyati
+
+
+
+                </a>
+
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#26" aria-current="page" class="sidebar-link">
+                    3.26 Shartnomani o'chirish oynasiga o'tish
+
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#27" aria-current="page" class="sidebar-link">
+                    3.27  Shartnoma ma'lumotlarini yaxshilab tekshirib ishonch hosil qilganingizdan so'ng uni o'chirib yuboring
+
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#28" aria-current="page" class="sidebar-link">
+                    3.28  Shartnomani o'chirish oynasida uning predmetidagi qismni o'chirib yuborsa ham bo'ladi
+
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#29" aria-current="page" class="sidebar-link">
+                    3.29 Shartnoma o'chirib yuborilsa unga tegishli uni predmetidagi ehtiyot qismlar ham o'chib ketadi
+
+
+                </a>
+
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#buyurtma" aria-current="page" class="sidebar-link">
+                    3.30 Buyurtma va uning oynasi
+
+
+
+
+                </a>
+
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+            <ul style="margin-left: -25px" class="sidebar-sub-headers">
+                <li>
+                    <a href="#buyurtmalar" aria-current="page" class="sidebar-link">
+                        4. Buyurtmalar
+                    </a>
+            </ul>
+
+            <li class="sidebar-sub-headers">
+                <a href="#60" aria-current="page" class="sidebar-link">
+                    4.01   Umumiy jadval haqida
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#turigaqarabtanlash" aria-current="page" class="sidebar-link">
+                    4.02 Menyuda qism turiga qarab umumiy jadvalga kirishingiz mumkin
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#turgaqarabsaralash" aria-current="page" class="sidebar-link">
+                    4.03 Jadvalni mahsulot turiga qarab saralash
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#taminotchigasaralash" aria-current="page" class="sidebar-link">
+                    4.04 Jadvalni ta'minotchiga nisbatan saralash
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#buyurtmaqoshish" aria-current="page" class="sidebar-link">
+                    4.05 Yangi buyurtmani qo'shish oynasi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#majburiymaydonn" aria-current="page" class="sidebar-link">
+                    4.06 To'ldirish majburiy bo'lgan maydonlar
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#buyurtmamajbur" aria-current="page" class="sidebar-link">
+                    4.07 Buyurtma predmetidagi ehtiyot qismlarga doir majburiy maydonlar
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#2" aria-current="page" class="sidebar-link">
+                    4.08 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#qidirish" aria-current="page" class="sidebar-link">
+                    4.09 Shartnomani tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#shartnomaraqam" aria-current="page" class="sidebar-link">
+                    4.10 Shartnomalar ro'yxatida siz tanlagan ta'minotchi bilan tuzilganlarigina chiqadi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#taminotchi" aria-current="page" class="sidebar-link">
+                    4.11   Ta'minotchi bilan shartnoma raqami ta'minotchiga tegishli bo'lishi kerak
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#pdf" aria-current="page" class="sidebar-link">
+                    4.12 Buyurtmani PDF variantda qo'shish
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#extiyot" aria-current="page" class="sidebar-link">
+                    4.13 Ehtiyot qismni tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#excelqosh" aria-current="page" class="sidebar-link">
+                    4.14 Excel fayldagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#excelfayll" aria-current="page" class="sidebar-link">
+                    4.15 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#excell" aria-current="page" class="sidebar-link">
+                    4.16 Shablon faylni to'ldirish
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#shablonfayl" aria-current="page" class="sidebar-link">
+                    4.17 To'ldirilgan shablon faylni yuklash
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#jadval" aria-current="page" class="sidebar-link">
+                    4.18 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#xatochiqsa" aria-current="page" class="sidebar-link">
+                    4.19 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#ma'lumotlarchala" aria-current="page" class="sidebar-link">
+                    4.20 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#saqlashnibosing" aria-current="page" class="sidebar-link">
+                    4.21 Barchasi to'g'riligiga ishonch hosil qilgandan so'ng Saqlashni bosing
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#tahrirlashh" aria-current="page" class="sidebar-link">
+                    4.22 Umumiy buyurtmani tahrirlash oynasi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#buyurtmadagitahrirlash" aria-current="page" class="sidebar-link">
+                    4.23 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#shartnomaniqidirish" aria-current="page" class="sidebar-link">
+                    4.24 Shartnomani tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#majburtahrirlash" aria-current="page" class="sidebar-link">
+                    4.25 O'zgartirishda o'zgartirishda majburiy maydonlarga e'tibor bering
+                </a>
+            </li>
+
+
+
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#predmetqidirish" aria-current="page" class="sidebar-link">
+                    4.26 Buyurtma predmetidagi ehtiyot qismlarni qidirish imkoniyati
+
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#predmettahrirlash" aria-current="page" class="sidebar-link">
+                    4.27 Buyurtma tarkibidagi ehtiyot qismlarni tahrirlash oynasiga o'tish
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#tahrirlashoynasi" aria-current="page" class="sidebar-link">
+                    4.28 Buyurtma tarkibidagi ehtiyot qismni tahrirlash oynasi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#predmetniiochirish" aria-current="page" class="sidebar-link">
+                    4.29 Buyurtmani tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirib yuborsa bo'ladi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#predmetnikochirish" aria-current="page" class="sidebar-link">
+                    4.30 Buyurtma predmetidagi qismlarni Excel, PDF holatda ko'chirib olish yoki chop etish imkoniyati
+
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#buyurtmaniochirishoynasi" aria-current="page" class="sidebar-link">
+                    4.31 Buyurtmani o'chirish oynasiga o'tish
+
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#hosilqilibochiring" aria-current="page" class="sidebar-link">
+                    4.32 Buyurtma ma'lumotlarini yaxshilab tekshirib ishonch hosil qilganingizdan so'ng uni o'chirib yuboring
+
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#predmetniochir" aria-current="page" class="sidebar-link">
+                    4.33 Buyurtmani o'chirish oynasida uning predmetidagi qismni o'chirib yuborsa ham bo'ladi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Ogoxboling" aria-current="page" class="sidebar-link">
+                    4.34 Buyurtma o'chirib yuborilsa unga tegishli uni predmetidagi ehtiyot qismlar ham o'chib ketadi
+
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#polatoram" aria-current="page" class="sidebar-link">
+                    4.35 Po'lat o'ramlari uchun yangi buyurtmani qo'shish oynasi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#polat" aria-current="page" class="sidebar-link">
+                    4.36 Bu oynada faqat turi Steel bo'lgan ehtiyot qismlarga qilingan shartnomalar uchungina buyurtma beriladi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#polatmajburiraqam" aria-current="page" class="sidebar-link">
+                    4.37 To'ldirish majburiy bo'lgan maydonlar
+
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#etiborbilantoldiring" aria-current="page" class="sidebar-link">
+                    4.38 Marka, Standart, Coating, Thickness va Eni maydonlarini e'tibor bilan to'ldiring
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#malumotlarini_korish" aria-current="page" class="sidebar-link">
+                    4.39 Buyurtma va uning ma'lumotlarni ko'rish oynasi
+                </a>
+            </li>
+
+
+
+            <ul style="margin-left: -25px" class="sidebar-sub-headers">
+                <li>
+                    <a href="#invoysboyicha" aria-current="page" class="sidebar-link">
+                        5. Invoyslar
+                    </a>
+            </ul>
+
+            <li class="sidebar-sub-headers">
+                <a href="#50" aria-current="page" class="sidebar-link">
+                    5.01 Umumiy jadval haqida
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#menyugaqarabsaralash" aria-current="page" class="sidebar-link">
+                    5.02 Menyuda qism turiga qarab umumiy jadvalga kirishingiz mumkin
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#maxxsulotturigaqarabsaralash" aria-current="page" class="sidebar-link">
+                    5.03 Jadvalni mahsulot turiga qarab saralash
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#taminotchisaralash" aria-current="page" class="sidebar-link">
+                    5.04 Jadvalni ta'minotchiga saralash
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invoysqoshish" aria-current="page" class="sidebar-link">
+                    5.05 Yangi invoysni qo'shish oynasi
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#Invoiceqoshishdamaydonlar" aria-current="page" class="sidebar-link">
+                    5.06 To'ldirish majburiy bo'lgan maydonlar
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Invoicepredmet" aria-current="page" class="sidebar-link">
+                    5.07 Invoys predmetidagi ehtiyot qismlarga doir majburiy maydonlar
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#qidirishtaminot" aria-current="page" class="sidebar-link">
+                    5.08 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Invoiceqidirish" aria-current="page" class="sidebar-link">
+                    5.09 Buyurtma tanlashda qidirish imkoniyatidan foydalanish
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#buyurtmalarroyxati" aria-current="page" class="sidebar-link">
+                    5.10 Buyurtmalar ro'yxatida siz tanlagan ta'minotchi bilan tuzilganlarigina chiqadi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invospdf" aria-current="page" class="sidebar-link">
+                    5.11 Invoys qo'shishda shartnoma faylini yuklash (PDF)
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invoiceextiyotqismqidirish" aria-current="page" class="sidebar-link">
+                    5.12 Ehtiyot qismni tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invoiceexcel" aria-current="page" class="sidebar-link">
+                    5.13 Excel fayldagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Ehcelorqaliqoshish" aria-current="page" class="sidebar-link">
+                    5.14 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#exelnifayltoldirish" aria-current="page" class="sidebar-link">
+                    5.15 Shablon faylni to'ldirish
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invostoldirilganfaylyuklash" aria-current="page" class="sidebar-link">
+                    5.16 To'ldirilgan shablon faylini yuklash
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Invoiceexcelhatotekshirish" aria-current="page" class="sidebar-link">
+                    5.17 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#xatolikinvoice" aria-current="page" class="sidebar-link">
+                    5.18 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invosehtiyotqisimi" aria-current="page" class="sidebar-link">
+                    5.19 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invoicesaqlash" aria-current="page" class="sidebar-link">
+                    5.20 Barchasi to'g'riligiga ishonch hosil qilgandan so'ng Saqlashni bosing
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#invostahrirlash" aria-current="page" class="sidebar-link">
+                    5.21 Umumiy invoysni tahrirlash oynasi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#tahrirlashdata'minot" aria-current="page" class="sidebar-link">
+                    5.22 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invosbuyurtmaqidirish" aria-current="page" class="sidebar-link">
+                    5.23 Buyurtmani tanlashda qidirish imkoniyatidan foydalaning
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#ozgartir" aria-current="page" class="sidebar-link">
+                    5.24 O'zgartirishda o'zgartirishda majburiy maydonlarga e'tibor bering
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Invostarkibidaehtiyotqismlarqidirish" aria-current="page" class="sidebar-link">
+                    5.25 Invoys predmetidagi ehtiyot qismlarni qidirish imkoniyati
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#innvostarkibidatahrirlash" aria-current="page" class="sidebar-link">
+                    5.26 Invoys tarkibidagi ehtiyot qismlarni tahrirlash oynasiga o'tish
+                </a>
+            </li>
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#innnvostarkibi" aria-current="page" class="sidebar-link">
+                    5.27  Invoys tarkibidagi ehtiyot qismni tahrirlash oynasi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#innvosdaehtiyotqismochir" aria-current="page" class="sidebar-link">
+                    5.28 Invoysni tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirib yuborsa bo'ladi
+                </a>
+            </li>
+
+
+
+            <li class="sidebar-sub-headers">
+                <a href="#PDFPrintexcel" aria-current="page" class="sidebar-link">
+                    5.29 Invoys predmetidagi qismlarni Excel, PDF holatda ko'chirib olish yoki chop etish imkoniyati
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invosochirish" aria-current="page" class="sidebar-link">
+                    5.30 Invoysni o'chirish oynasiga o'tish
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#ochirishetiborlibolinginvos" aria-current="page" class="sidebar-link">
+                    5.31 Invoys ma'lumotlarini yaxshilab tekshirib ishonch xosil qilganingizdan so'ng uni o'chirib yuboring
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#invospretmetochirishi" aria-current="page" class="sidebar-link">
+                    5.32 Invoysni o'chirish oynasida uning predmetidagi qismni o'chirib yuborsa ham bo'ladi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Ogoxbolingg" aria-current="page" class="sidebar-link">
+                    5.33 Invoys o'chirib yuborilsa unga tegishli uni predmetidagi ehtiyot qismlar ham o'chib ketadi
+                </a>
+            </li>
+
+            <li class="sidebar-sub-headers">
+                <a href="#Invoiceoynasiii" aria-current="page" class="sidebar-link">
+                    5.34  Invoice va ma'lumotlar oynasiga o'tish
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class="sidebar-sub-header">
+                <ul class="sidebar-sub-headers">
+                    <li>
+                        <a href="./pages/2.html" aria-current="page" class="sidebar-link">
+                            10. 'BOM' bilan ishlash
+                        </a>
+                        <ul class="sidebar-sub-headers">
+                            <li class="sidebar-sub-header">
+                                <a href="#ishlash-printsiplari" aria-current="page" class="sidebar-link">
+                                    10.1 Xarajatlar stavkasi
+                                </a>
+                            </li>
+                            <li class="sidebar-sub-header">
+                                <a href="#fulfilment-qanday-ishlaydi" aria-current="page" class="sidebar-link">
+                                    10.2 Sayanso
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            </ul>
+
+
+            <ul class="sidebar-links">
+                <li>
+                    <ul class="sidebar-sub-headers">
+                        <li>
+                            <a href="./pages/2.html" aria-current="page" class="sidebar-link">
+                                11. 'Tayyor maxsulot' bilan ishlash
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="page">
+            <!-- 1 -->
+            <div class="theme-default-content content__default">
+                <h1>
+
+
+
+            </div>
+
+            <!-- 2 -->
+            <div class="theme-default-content content__default">
+                <h3 id="ERPbilanIshlash">
+                    <a href="#ERPbilanIshlash" class="header-anchor">#</a>
+                    1. Login qilish
+                    <h4 id="profilSozlamalari">
+                        <a href="#profilSozlamalari" class="header-anchor">#</a>
+                        1.1   E-mail ni o'rniga boshqa narsa yozsa nima chiqadi?
+                        <p>
+                            <img src="./images//eh/eeh.jpg" alt="img">
+                        <p style="font-size: 20px">
+                            Sayitga kirganingizda E-mail to'ldirish joyiga albatta email kiritilishi kerak, aks holda ekranda ko'rsatilgan qizil ramka ichidagi yozuv paydo bo'ladi, bunday holatda sizni kirishingiz imkonsiz
+                        </p>
+                        </p>
+                    </h4>
+
+
+
+                    <h4 id="logout">
+                        <a href="#logout" class="header-anchor">#</a>
+                        1.2   Kalit so'zini unutilsa?
+                    </h4>
+                    <p>
+                        <img src="./images/ehh/99.jpg" alt="img">
+                    <p style="font-size: 20px">
+                        Kalit so'z unutilsa   ekranda ko'rsatilgan (Parolni unutdinggizmi) ustiga bosing
+                    </p>
+                    </p>
+
+                    <br>
+                    <br>
+                    <h4 id="Logout">
+                        <a href="#Logout" class="header-anchor">#</a>
+                        1.3 Nofaol foydalanuvchi kirmoqchi bo'lsa
+                        <img src="./images/ehh/Снимок экрана 2024-09-02 185849.jpg" alt="img">
+                        <p style="font-size: 20px">
+                            Nofaol foydalanuvchi bu saytga kira olmaydi,
+                        </p>
+
+                    </h4>
+
+                    <h4 id="Logou">
+                        <a href="#Logou" class="header-anchor">#</a>
+                        1.4 Adminga murojaat
+                        <img src="." alt="img">
+                        <p style="font-size: 20px">
+                            Kalit so‘zi unutilsa yoki faollik o‘chirilsa, Adminga murojaat qilishingiz mumkin
+                        </p>
+
+                    </h4>
+
+
+
+
+
+
+
+
+                    <br>
+                    <br>
+                    <h4 id="ehtiyotQismlar">
+
+                        <a href="#ehtiyotQismlar" class="header-anchor">#</a>
+                        2 Ehtiyot qismlar
+
+                    </h4>
+
+
+
+
+
+
+
+                    <h4 id="ehtiyotQismlarr">
+                        <a href="#ehtiyotQismlarr" class="header-anchor">#</a>
+                        2.01 Umumiy jadval haqida
+                        <p>
+                            <img src="./images/eh/eht.jpg" alt="img">
+                        <p style="font-size: 20px"> Bu ehtiyot qismlar bo'limi, Bu bo'limda siz ehtiyot qismlar qo'shishingiz mumkin, jadvalda esa ehtiyot qismlar haqida ma'lumotlar mavjud </p>
+                        </p>
+                        <br>
+                        <br>
+
+
+
+                        <h4 id="saralash">
+                            <a href="#saralash" class="header-anchor">#</a>
+                            2.02 Jadvalni maxsulot turiga qarab saralash
+
+                            <p>
+                                <img src="./images/eh/eh.1.jpg" alt="img">
+                            <p style="font-size: 20px">Jadvalni mahsulot turiga qarab tanlash uchun rasmda ko'rsatilgan qizil ramka ichidagi KD, Steel, Mahalliy, InHouse turlariga qarab saralash mumkin</p>
+                            </p>
+                            <br>
+                            <br>
+
+
+
+                        </h4>
+                        <br>
+                        <br>
+                        <h4 id="extiyotqismqidirish">
+                            <a href="#extiyotqismqidirish" class="header-anchor">#</a>
+                            2.03 Jadval ichidan ehtiyot qismni qidirish
+
+                            <p>
+                                <img src="./images/eh/eh.2.jpg" alt="img">
+                            <p style="font-size: 20px">Jadvaldagi ehtiyot qismlarni  qidirish uchun (Search) dan foydalaning, bunda siz jadvaldagi barcha ma’lumotlarni qidirishingiz mumkin </p>
+                            </p>
+
+                        </h4>
+                        <br>
+                        <br>
+                        <h4 id="Extiyotqismqoshish">
+                            <a href="#Extiyotqismqoshish" class="header-anchor">#</a>
+                            2.04 Ehtiyot qismni qo'shish oynasi
+                            <img src="./images//eh/eh.3.jpg" alt="img">
+                            <p style="font-size: 20px"> Ehtiyot qism qo‘shish uchun rasmda ko‘rsatilgan (Ehtiyot qism qo‘shish)ga kirib qo‘shishingiz mumkin </p>
+
+                        </h4>
+                        <br>
+                        <br>
+
+
+
+
+
+
+
+                        <h4 id="extiyotqismraqami">
+                            <a href="#extiyotqismraqami" class="header-anchor">#</a>
+                            2.05 Ehtiyot qism raqami (Partnumber) 8 ta dan iborat
+                            <p>
+
+
+                                <img src="./images/eh/eh.13.jpg" alt="img">
+                            <p style="font-size: 20px"> Ehtiyot qism raqami 8 tadan iborat bo‘lishi zarur aks holda ehtiyot qism qo‘shilmaydi, Ehtiyot qism uchun faqat raqam yozilishi  kerak aks holda ehtiyot qism to‘g‘ri qo‘shilmaydi</p>
+
+                            </p>
+
+                            <br>
+                            <br>
+                            <h4 id="30">
+                                <a href="#30" class="header-anchor">#</a>
+                                2.06 To'ldirish majburiy bo'lgan maydonlar
+                                <p>
+                                    <img src="./images/EhtiyotQismlar/0.jpg" alt="img">
+                                <p style="font-size: 20px"> To'ldirish majburiy maydonlar detal raqami, nomi, tsex nomi, HSCODE,turi, bu joylar to'g'ri to'ldirilmasa ehtiyot qism qo'shilmaydi</p>
+                                </p>
+
+                            </h4>
+
+
+
+
+                        </h4>
+                        <br>
+                        <br>
+                        <h4 id="majburiymaydon">
+                            <a href="#majburiymaydon" class="header-anchor">#</a>
+                            2.07 Duplikat (bir xil) bo'lgan ehtiyot qism raqamini kiritsa bo'ladimi?
+                            <img src="./images/eh/xa..jpg" alt="img">
+                            <p style="font-size: 20px"> Ehtiyot qism qo‘shish uchun majburiy to‘ldirish kerak bo‘lgan maydonlar mavjud, detal raqami, nomi, Tsex nomi, HSCODE, hamda mahsulot turi, yodda tuting oldin kiritgan ehtiyot qism raqami kiritilmasligi zarur, aks holda ehtiyot qism qo‘shilmaydi </p>
+
+                        </h4>
+
+                        <br>
+                        <br>
+                        <h4 id="rasm">
+                            <a href="#rasm" class="header-anchor">#</a>
+                            2.08 Ehtiyot qism rasmini joylash tartibi
+                            <img src="./images/eh/eh.14.jpg" alt="img">
+                            <p style="font-size: 20px">Ehtiyot qismga rasmni ekranda ko'rsatilgan qizil ramka o'rniga qo'yish mumkin, buning uchun strelka tepasidagi <Strong>(Выберите файл) </Strong>ustiga bosib bironta rasm tanlaysiz va rasm qo'yiladi</p>
+                        </h4>
+                        <br>
+                        <br>
+
+
+
+
+
+
+
+
+
+
+                        <h4 id="extiyotwismexcel">
+                            <a href="#extiyotwismexcel" class="header-anchor">#</a>
+                            2.09 Excel dagi jadval orqali ko'pkina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+                            <img src="./images/eh/eh.5.jpg" alt="img">
+                            <p style="font-size: 20px">Ehtiyot qismni excel orqali ham qo‘shishingiz mumkin, buning uchun ekranda ko‘rsatilgan qizil ramka ichidagi (Ehtiyot qismni Excel orqali qo‘shish) ga kirasiz </p>
+
+
+                        </h4>
+
+                        <br>
+                        <br>
+                        <h4 id="excelfayl">
+                            <a href="#excelfayl" class="header-anchor">#</a>
+
+                            2.10 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+                            <img src="./images/eh/eh.6.jpg" alt="img">
+                            <p style="font-size: 20px">Excel orqali ehtiyot qism qo'shish uchun rasmda ko'rsatilgan qizil ramka ichidagi faylni yuklash kerak, yuklab bo'lib faylga kirasiz va excelga o'tasiz</p>
+
+                        </h4>
+                        <br>
+                        <br>
+                        <h4 id="excel">
+                            <a href="#excel" class="header-anchor">#</a>
+                            2.11 Shablon faylni to'ldirish
+                            <img src="./images/eh/eh.7.jpg" alt="img">
+                            <p style="font-size: 20px">Excelda ehtiyot qismni quyidagicha qo'shish mumkin</p>
+
+                        </h4>
+                        <br>
+                        <br>
+                        <h4 id="faylniyuklash">
+                            <a href="#faylniyuklash" class="header-anchor">#</a>
+                            2.12 To'ldirilgan shablon faylni yuklash
+                            <img src="./images/eh/eh.8.jpg" alt="img">
+                            <p style="font-size: 20px">Excelda to'ldirilgan faylni yuklash uchun  (Faylni tanlang) ga kirib saqlagan excel faylingizni tanlab  (Yuklash)  ni bosib faylni yuklab olish mumkin </p>
+
+
+
+                        </h4>
+                        <br>
+                        <br>
+                        <h4 id="xatolarnitekshirish">
+                            <a href="#xatolarnitekshirish" class="header-anchor">#</a>
+                            2.13 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+                            <p>
+                                <img src="./images/eh/eh.9.jpg" alt="img">
+
+
+
+                            <p style="font-size: 20px">Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rishingiz mumkin</p>
+
+
+                            </p>
+                        </h4>
+
+                        <br>
+                        <br>
+                        <h4 id="xatoqayerdachiqadi">
+                            <a href="#xatoqayerdachiqadi" class="header-anchor">#</a>
+                            2.14 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+                            <p>
+                                <img src="./images/eh/eh.10.jpg" alt="img">
+                            <p style="font-size: 20px">Agar yuklashga boshqa faylni yoki hech qanday faylni yuklamasdan  (Yuklash) tugmasi bosilsa ekranda ko‘rsatilgan qizil ramka ichidagi yozuv paydo bo‘ladi, Bunday xato bo‘lmasligi uchun siz qo‘shgan ma’lumotlar saqlangan excel faylni kiritishingiz kerak</p>
+                            </p>
+                            <br>
+                            <br>
+                            <h4 id="xato">
+                                <a href="#xato" class="header-anchor">#</a>
+                                2.15 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+                                <p>
+                                    <img src="./images/eh/eh15.jpg" alt="img">
+                                <p style="font-size: 20px">Agar ehtiyot qism maydonlari to'liq bo'lmasa ekranda ko'rsatilgan qizil ramka ichidagi yozuv kelib chiqadi bunday holatda ehtiyot qism qo'shish mumkin emas</p>
+                                </p>
+
+                            </h4>
+                            <br>
+                            <br>
+                            <h4 id="saqlash">
+                                <a href="#saqlash" class="header-anchor">#</a>
+                                2.16 Barchasi to‘g‘riligiga ishonch hosil qilgandan so‘ng Saqlashni bosing
+                                <p>
+                                    <img src="./images/eh/212.jpg" alt="img">
+                                    <img src="./images/eh/211.jpg" alt="img">
+                                <p style="font-size: 20px">Ehtiyot qism qo'shishdagi barcha ma'lumotlar to'liq va to'g'ri kiritilganligiga ishonch hosil qilganingizdan keyin ekran pastida turgan ( <strong>Saqlash</strong> )  tugmasini bosing</p>
+                                </p>
+
+                            </h4>
+
+                            <br>
+                            <br>
+                            <h4 id="tahrirlash">
+                                <a href="#tahrirlash" class="header-anchor">#</a>
+                                2.17 Ehtiyot qismni o'zgartirish
+                                <p>
+                                    <img src="./images/eh/eh.17.jpg" alt="img">
+                                <p style="font-size: 20px">Jadvaldagi ehtiyot qismlarni ma'lumotlarini  tahrirlash uchun  ekranda ko'rsatilgan qalam ustiga bosish kerak  </p>
+                                </p>
+
+                            </h4>
+                            <br>
+                            <br>
+                            <h4 id="Etiborliboling">
+                                <a href="#Etiborliboling" class="header-anchor">#</a>
+                                2.18  Ehtiyot qismni o'zgartirishda majburiy qismlarga e'tibor bering
+                                <img src="./images/eh/ex.jpg" alt="img">
+                                <p style="font-size: 20px">Ehtiyot qism tahrirlashda majburiy to'ldirilishi kerak bo'lgan maydonlar mavjud, ehtiyot qism raqami, task nomi, HSCODE, mahsulot turi</p>
+
+                            </h4>
+                            <br>
+                            <br>
+                            <h4 id="qismmajburiy">
+                                <a href="#qismmajburiy" class="header-anchor">#</a>
+                                2.19 Ehtiyot qism raqami (Partnumber) ni o'zgartirishdan oldin yaxshilab o'ylaning
+                                <img src="./images/eh//eh.26.jpg" alt="img">
+                                <p style="font-size: 20px">Ehtiyot qism o'zgartirishdan oldin yaxshilab o'ylab ko'ring, ishonch hosil qilganinggizdan so'ng tahrirlang </p>
+
+
+
+                            </h4>
+
+
+
+
+
+
+
+
+
+
+
+
+                            <h4 id="o'chirish">
+                                <a href="#o'chirish" class="header-anchor">#</a>
+                                2.20 Ehtiyot qismni o'chirib yuborish
+                                <img src="./images/eh/eh11.jpg" alt="img">
+                                <p style="font-size: 20px"> Ehtiyot qismni o'chirib yuborish uchun ekranda ko'rsatilgan strelka tepasidagi axlat qutisiga kirish kerak</p>
+
+                            </h4>
+
+
+
+
+                            <br>
+                            <br>
+
+                            <h4 id="ogohboling">
+                                <a href="#ogohboling" class="header-anchor">#</a>
+                                2.21 Ehtiyot qismni o'chirishdan oldin yaxshilab o'ylaning
+
+                                <p>
+                                    <img src="./images/eh/eh.12.jpg" alt="img">
+                                <p style="font-size: 20px">Shartnomani o'chirishdan oldin yaxshilab o'ylab ko'ring,  agar o'chirishga ishonchingiz komil bo'lsa (o'chirish) tugmasini bosing</p>
+                                </p>
+
+                            </h4>
+
+                            <br>
+                            <br>
+                            <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <h4 id="Shartnomalar_bilan_ishlash">
+                                <a href="#Shartnomalar_bilan_ishlash" class="header-anchor">#</a>
+                                3  Shartnomalar
+                                <br>
+                                <br>
+
+                                <h4 id="Shartnoma_bo'limi">
+                                    <a href="#Shartnoma_bo'limi" class="header-anchor">#</a>
+                                    3.01 Umumiy jadval haqida
+
+                                    <p>
+                                        <img src="./images/shart/shart.png" alt="img">
+
+                                    <p style="font-size: 20px">Bu bo'limda siz mahsulotlar uchun shartnoma qo'shishingiz mumkin, jadvalda esa qo'shilgan shartnomalar haqida ma'lumotlar ko'rsatilgan</p>
+
+                                    </p>
+
+
+
+
+
+
+
+
+
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Mahsulot_turiga_qarab_saralash">
+                                    <a href="#Mahsulot_turiga_qarab_saralash" class="header-anchor">#</a>
+                                    3.02 Jadvalni mahsulot turiga qarab saralash.
+
+                                </h4>
+
+                                <br>
+                                <br>
+                                <p>
+
+
+                                    <img src="./images/shart/shart.1.png" alt="img">
+                                <p style="font-size: 20px">Jadvalni mahsulot turiga qarab saralash uchun ekranda ko'rsatilgan qizil ramka ichidan bittasini tanlashingiz mumkin</p>
+                                </p>
+                                <br>
+                                <br>
+
+                                <h4 id="Shartnomani">
+                                    <a href="#Shartnomani">#</a>
+                                    3.03 Jadvalni ta'minotchiga nisbatan saralash
+
+
+                                    <p>
+                                        <img src="./images/shart//Снимок экрана 2024-08-30 152626.jpg" alt="img">
+                                    <p style="font-size: 20px;">  Jadvalni Ta'minotchiga saralash uchun ekranda ko'rsatilgan (Ta'minotchi) ustiga bosing </p>
+                                    </p>
+
+
+
+
+
+                                </h4>
+
+
+
+
+
+
+                                <br>
+                                <br>
+
+
+
+                                <h4 id="Ta'minotchi_qosh">
+                                    <a href="#Ta'minotchi_qosh" class="header-anchor">#</a>
+                                    3.04 Yangi shartnomani qo'shish oynasi
+                                    <p>
+                                        <img src="./images/shart/sa.jpg" alt="img">
+                                    <p style="font-size: 20px"> Yangi shartnoma qo'shish uchun (Shartnoma qo'shish) ustiga bosing  </p>
+                                    </p>
+
+                                </h4>
+
+
+                                <br>
+                                <br>
+
+
+
+                                <h4 id="Majburiimaydon">
+                                    <a href="#Majburiimaydon">#</a>
+                                    3.05 To'ldirish majburiy bo'lgan maydonlar
+                                    <p>
+                                        <img src="./images/shart//shaa2.jpg" alt="img">
+                                    <p style="font-size: 20px">To'ldirilishi majbur bo'lgan maydonlar Shartnoma raqami,incoterms, tuzilgan va tugash sanasi, bu maydonlar to'g'ri hamda to'liq amalga oshirilmasa shartnoma qo'shilmaydi   </p>
+                                    </p>
+                                </h4>
+                                <br>
+                                <br>
+
+                                <h4 id="Shartnoma_qo'shish_qoidasi">
+                                    <a href="#Shartnoma_qo'shish_qoidasi">#</a>
+
+                                    3.06 Shartnoma predmetidagi ehtiyot qismlarga doir majburiy maydonlar
+                                    <p>
+                                        <img src="./images/shart/sha2.jpg" alt="img">
+                                    <p style="font-size: 20px">Shartnoma tarkibidagi ehtiyot qismni to'ldirilish shart bo'lgan bo'sh maydonlar mavjud. ehtiyot qism raqami, miqdori, narxi, hamda MOQ shulardan iborat agar bular to'g'ri to'ldirilmasa ehtiyot qism  qo'shilmaydi </p>
+                                    </p>
+
+                                </h4>
+
+
+
+                                <br>
+                                <br>
+                                <h4 id="Ta'minotchi_qidirish">
+                                    <a href="#Ta'minotchi_qidirish">#</a>
+                                    3.07 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+
+                                    <p>
+                                        <img src="./images/shart//Снимок экрана 2024-08-30 152311.jpg" alt="img">
+                                    <p style="font-size: 20px">Ta'minotchini qidirish uchun rasmdagi  ( <strong>Ta'minotchisi</strong> ) orqali izlash mumkin </p>
+                                    </p>
+
+                                </h4>
+
+
+
+
+
+                                <br>
+                                <br>
+
+                                <br>
+                                <br>
+
+
+
+                                <h4 id="Shartnomani_pdf_variant_qo'shish">
+                                    <a href="#Shartnomani_pdf_variant_qo'shish">#</a>
+                                    3.08 Shartnomani PDF variantda yuklash
+
+
+                                    <p>
+                                        <img src="./images/./shart//shart.22.jpg" alt="img">
+                                    <p style="font-size: 20px;">  Shartnoma qo'shishda shartnoma faylini yuklash (PDF),  bunda ushbu faylni yuklab olib shu faylga kirasiz  </p>
+                                    </p>
+                                    <br>
+                                    <br>
+
+
+                                    <h4 id="Ex">
+                                        <a href="#Ex" class="header-anchor">#</a>
+                                        3.09 Ehtiyot qismni tanlashda qidirish imkoniyatidan foydalaning
+
+
+
+                                        <p>
+                                            <img src="./images/shart//Снимок.jpg" alt="img">
+                                        <p style="font-size: 20px">Excel dagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati uchun <Strong>(Excel orqali qo'shish)</Strong> dan foydalaning</p>
+
+                                        </p>
+
+                                    </h4>
+                                    <br>
+                                    <br>
+                                    <h4 id="Exxcel">
+                                        <a href="#Exxcel" class="header-anchor">#</a>
+                                        3.1 Excel dagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+                                        <p>
+                                            <img src="./images/shart/shart.6.png" alt="img">
+                                        <p style="font-size: 20px">Shartnomalarni excel orqali qo'shish uchun (Excel orqali shartnoma qo'shish) </p>
+                                        </p>
+
+
+
+
+
+                                    </h4>
+
+
+
+                                    <br>
+                                    <br>
+
+
+                                    <h4 id="Exceldafaylyuklash">
+                                        <a href="#Exceldafaylyuklash" class="header-anchor">#</a>
+                                        3.11 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+
+                                        <p>
+                                            <img src="./images/shart/shart.7.png" alt="img">
+                                        <p style="font-size: 20px">Excel da ehtiyot qismlarni ushbu fayl orqali yuklab olib, yuklangan faylga kirishingiz kerak</p>
+                                        </p>
+
+                                    </h4>
+
+
+
+
+
+
+
+
+
+
+                                    <br>
+                                    <br>
+
+
+
+
+                                    <h4 id="Exceldanamuna">
+                                        <a href="#Exceldanamuna" class="header-anchor">#</a>
+                                        3.12  Shablon faylni to'ldirish
+
+
+
+
+
+                                        <p>
+                                            <img src="./images/shart/shar.7.png" alt="img">
+                                        <p style="font-size: 20px">Ehtiyot qismlarni excel da  namunada ko'rsatilganidek qo'shiladi</p>
+                                        </p>
+
+
+                                    </h4>
+                                    <br>
+                                    <br>
+
+
+                                    <h4 id="Exceldafayltanlash">
+                                        <a href="#Exceldafayltanlash" class="header-anchor">#</a>
+                                        3.13 To'ldirilgan shablon faylni yuklash
+
+
+
+
+                                        <p>
+                                            <img src="./images/shart/shart.8.png" alt="img">
+                                        <p style="font-size: 20px">To'ldirilgan faylni quyidagi ko'rsatilgan rasmda <strong>Faylni tanlang </strong> ga kirib kiritgan excel faylingizni  tanlab <strong> (Yuklash) </strong>ni bosib faylni yuklab olasiz.       </p>
+                                        </p>
+
+                                    </h4>
+                                    <br>
+                                    <br>
+
+                                    <h4 id="Exceldahatoqoyilganfayl">
+                                        <a href="#Exceldahatoqoyilganfayl" class="header-anchor">#</a>
+                                        3.14 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+
+
+
+
+                                        <p>
+                                            <img src="images/buy/.3.png" alt="img">
+                                        <p style="font-size: 20px"> </p>
+                                        </p>Xatolarni tekshirish uchun yuklab olingan faylni  jadval ko‘rinishida ko‘rib olish, agar xato chiqsa rasmda ko‘rsatilgan joyda xato haqida sizga xabar beriladi
+
+                                    </h4>
+
+
+
+
+
+
+
+                                    <br>
+                                    <br>
+
+
+                                </h4>
+
+
+                                <br>
+                                <br>
+
+
+
+
+                                <h4 id="Shartnomalarnitahrirlash">
+                                    <a href="#Shartnomalarnitahrirlash" class="header-anchor">#</a>
+                                    3.15 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+                                    <p>
+                                        <img src="images/buy/.4.png" alt="img">
+                                    <p style="font-size: 20px">Ma'lumotda xatolik chiqsa ekranda ko'rsatilgan joyda xabar beriladi </p>
+                                    </p>
+
+
+
+
+
+                                </h4>
+
+                                <br>
+                                <br>
+
+                                <h4 id="tahrirlashdagiqoidalar">
+                                    <a href="#tahrirlashdagiqoidalar" class="header-anchor">#</a>
+                                    3.16 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+
+                                    <p>
+                                        <img src="./images/shart/shart.25.jpg" alt="img">
+                                    <p style="font-size: 20px">Shartnoma tahrirlashida maydoni to'ldirilishi majbur bo'lgan bo'sh joylar mavjud bular shartnoma raqami, Incoterm, payment term, tuzilgan va tugash sanasi shulardan iborat, </p>
+
+                                    </p>
+
+
+                                </h4>
+
+
+
+
+
+                                <br>
+                                <br>
+                                <h4 id=".shartnomapredmeti">
+                                    <a href="#.shartnomapredmeti" class="header-anchor">#</a>
+                                    3.17  Barchasi to‘g‘riligiga ishonch hosil qilgandan so‘ng Saqlashni bosing
+                                    <p>
+                                        <img src="./images///shart/5.jpg" alt="img">
+                                    <p style="font-size: 20px">Ekranda ko'rsatilgan maydonlar to'g'ri hamda to'liq ekanligiga ishonch hosil qilganingizdan so'ng ekran pastida turgan (Saqlash) tugmasini bosing</p>
+                                    </p>
+
+                                </h4>
+
+
+
+
+                                <h4 id="shartnomapredmetidagiqidirish">
+                                    <a href="#shartnomapredmetidagiqidirish" class="header-anchor">#</a>
+                                    3.18  Umumiy shartnomani tahrirlash oynasi
+
+
+                                    <p>
+                                        <img src="./images/shart/6.jpg" alt="img">
+                                    <p style="font-size: 20px">Jadvalni umumiy tahrirlash oynasiga o'tish uchun ekranda ko'rsatilgan qalam ustiga bosing </p>
+                                    </p>
+
+
+
+
+
+                                </h4>
+
+
+
+                                <br>
+                                <br>
+
+                                <h4 id="Shartnomapredmetiniochirish">
+                                    <a href="#Shartnomapredmetiniochirish" class="header-anchor">#</a>
+                                    3.19 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+
+
+
+
+                                    <p>
+                                        <img src="./images/shart/7.jpg" alt="img">
+                                    <p style="font-size: 20px">Tahrirlash oynasida Ta'minotchini ekranda ko'rsatilgan qizil ramka ichidan topishingiz mumkin</p>
+                                    </p>
+
+
+                                </h4>
+
+
+
+                                <br>
+                                <br>
+
+
+
+                                <h4 id="Shartnomapredmet">
+                                    <a href="#Shartnomapredmet" class="header-anchor">#</a>
+                                    3.20 O'zgartirishda o'zgartirishda majburiy maydonlarga e'tibor bering
+
+
+                                    <p>
+                                        <img src="./images/shart//8.jpg" alt="img">
+                                    <p style="font-size: 20px"> shartnoma raqami, Incoterm, payment term, tuzilgan va tugash sanasi </p>
+                                    </p>
+
+                                </h4>
+
+                                <br>
+                                <br>
+
+
+
+
+                                <h4 id="ochirishshartnoma">
+                                    <a href="#ochirishshartnoma" class="header-anchor">#</a>
+                                    3.21 Shartnoma predmetidagi ehtiyot qismlarni qidirish imkoniyati
+
+
+
+                                    <p>
+
+                                        <img src="./images/shart/9.jpg" alt="img">
+                                    <p style="font-size: 20px"> Shartnoma predmetida ehtiyot qismlarni qidirish uchun (search)dan foydalaning </p>
+                                    </p>
+
+                                </h4>
+
+
+
+
+
+
+                                <br>
+                                <br>
+
+                                <h4 id="keyinochiring">
+                                    <a href="#keyinochiring" class="header-anchor">#</a>
+                                    3.22  Shartnoma tarkibidagi ehtiyot qismlarni tahrirlash oynasiga o'tish
+
+                                    <p>
+                                        <img src="./images/shart//10.jpg" alt="img">
+                                    <p style="font-size: 20px">shartnoma predmetidagi ehtiyot qismlarni tahrirlash uchun ekran chetida turgan qalamcha ustiga bosing, kerakli maydonlarni o'zgartirib , saqlash tugmasini bosing </p>
+                                    </p>
+
+
+                                </h4>
+                                <br>
+                                <br>
+
+
+                                <h4 id="predmetochirish">
+                                    <a href="#predmetochirish" class="header-anchor">#</a>
+                                    3.23 Shartnoma tarkibidagi ehtiyot qismni tahrirlash oynasi
+
+                                    <p>
+                                        <img src="./images/shart/" alt="img">
+                                    <p style="font-size: 20px">   </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="ochibyubor">
+                                    <a href="#ochibyubor" class="header-anchor">#</a>
+                                    3.24 Shartnomani tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirib yuborsa bo'ladi
+                                    <p>
+                                        <img src="./images/shart//11.jpg" alt="img">
+                                    <p style="font-size: 20px">Shartnoma tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirish uchun rasmda ko'rsatilgan axlat qutisi ustiga bosasiz</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="25">
+                                    <a href="#25" class="header-anchor">#</a>
+                                    3.25 Shartnoma predmetidagi qismlarni Excel, PDF holatda ko'chirib olish yoki chop etish imkoniyati
+                                    <img src="./images/shart/12.jpg" alt="img">
+                                    <p style="font-size: 20px"> Shartnoma predmetini ko'chirib olish uchun ekranda ko'rsatilgan Excel, PDF Print dan birini ustiga bosib faylni yuklab olib unga kirasiz </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="26">
+                                    <a href="#26" class="header-anchor">#</a>
+                                    3.26 Shartnomani o'chirish oynasiga o'tish
+                                    <img src="./images/shart//shart.17.png" alt="img">
+                                    <p style="font-size: 20px">  Shartnomani o'chirish oynasiga o'tish uchun ekranda ko'rsatilgan axlat qutisi ustiga bosing </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="27">
+                                    <a href="#27" class="header-anchor">#</a>
+                                    3.27  Shartnoma ma'lumotlarini yaxshilab tekshirib ishonch hosil qilganingizdan so'ng uni o'chirib yuboring
+                                    <img src="./images/shart//shart.18.png" alt="img">
+                                    <p style="font-size: 20px">Shartnoma ma'lumotlarini yaxhshilab tekshirib ko'rib keyin o'chiring</p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="28">
+                                    <a href="#28" class="header-anchor">#</a>
+                                    3.28   Shartnomani o'chirish oynasida uning predmetidagi qismni o'chirib yuborsa ham bo'ladi
+                                    <img src="./images/shart/shart.19.png" alt="img">
+                                    <p style="font-size: 20px"> Bunda umumiy shartnoma o'chirilmaydi va faqat uning predmetidagi qism o'chadi </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="29">
+                                    <a href="#29" class="header-anchor">#</a>
+                                    3.29 Shartnoma o'chirib yuborilsa unga tegishli uni predmetidagi ehtiyot qismlar ham o'chib ketadi
+                                    <img src="./images/shart//23.jpg" alt="img">
+                                    <p style="font-size: 20px">Ogoh bo'ling, shartnoma o'chirilib yuborgandan keyin uning tarkibidagi ehtiyot qismlar ham o'chib ketadi</p>
+
+                                </h4>
+
+
+
+
+
+
+                                <br>
+                                <br>
+
+                                <h4 id="buyurtma">
+                                    <a href="#buyurtma" class="header-anchor">#</a>
+                                    3.30 Buyurtma va uning oynasi
+
+                                    <p>
+                                        <img src="./images/buy/Снимок экрана 2024-09-02 135134.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Buyurtma va uning ma'lumotlarni ko'rish oynasi, Shartnoma raqamini ustiga bosib kirasiz
+
+
+                                    </p>
+                                    </p>
+
+                                </h4>
+
+                                <br>
+                                <br>
+                                <h3 id="buyurtmalar">
+                                    <a href="#buyurtmalar" class="header-anchor">#</a>
+                                    4. Buyurtmalar
+
+
+                                </h3>
+                                <br>
+                                <br>
+                                <h4 id="60">
+                                    <a href="#60" class="header-anchor">#</a>
+                                    4.01 Umumiy jadval haqida
+                                    <p>
+                                        <img src="./images//eh/m.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtmalar ro'yxatida siz mahsulotlar uchun buyurtma qo'shishingiz mumkin</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="turigaqarabtanlash">
+                                    <a href="#turigaqarabtanlash" class="header-anchor">#</a>
+                                    4.02 Menyuda qism turiga qarab umumiy jadvalga kirishingiz mumkin
+                                    <p>
+                                        <img src="./images/eh/l.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Menyuda qism turiga qarab umumiy jadvalga kirishingiz mumkin
+                                    </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="turgaqarabsaralash">
+                                    <a href="#turgaqarabsaralash" class="header-anchor">#</a>
+                                    4.03 Jadvalni mahsulot turiga qarab saralash
+                                    <p>
+                                        <img src="./images/buy/buy.1.jpg" alt="img">
+                                    <p style="font-size: 20px">Mahsulotni turiga qarab saralash uchun rasmda ko'rsatilgan qizil ramka ichidagi (Turi) ga kirib o'zingizga kerakli mahsulot turini tanlashingiz mumkin</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="taminotchigasaralash">
+                                    <a href="#taminotchigasaralash" class="header-anchor">#</a>
+                                    4.04 Jadvalni ta'minotchiga nisbatan saralash
+                                    <p>
+                                        <img src="./images/buy/buy.2.jpg" alt="img">
+                                    <p style="font-size: 20px">Mahsulotni Ta'minotchiga saralash uchun rasmda ko'rsatilgan Ta'minotchilardan birini tanlashingiz mumkin</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="buyurtmaqoshish">
+                                    <a href="#buyurtmaqoshish" class="header-anchor">#</a>
+                                    4.05 Yangi buyurtmani qo'shish oynasi
+                                    <p>
+                                        <img src="./images/buy/buy.3.jpg" alt="img">
+                                    <p style="font: 20px">Mahsulotga buyurtma qo'shish uchun (Yangi buyurtma qo'shish) oynasiga kiring</p>
+                                    </p>
+
+                                </h4>
+
+                                <br>
+                                <br>
+                                <h4 id="majburiymaydonn">
+                                    <a href="#majburiymaydonn" class="header-anchor">#</a>
+                                    4.06 To'ldirish majburiy bo'lgan maydonlar
+                                    <p>
+                                        <img src="./images/buy//buy.4.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Buyurtma qo'shishda to'ldirilishi shart bo'lgan maydonlar mavjud, shartnoma raqami, Incoterm, payment term, tuzilgan sanasi, bular to'g'ri to'ldirilmasa buyurtma amalga  oshmaydi
+                                    </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="buyurtmamajbur">
+                                    <a href="#buyurtmamajbur" class="header-anchor">#</a>
+                                    4.07 Buyurtma predmetidagi ehtiyot qismlarga doir majburiy maydonlar
+                                    <p>
+                                        <img src="./images/buy//buy.5.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Buyurtma predmetida ham to'ldirish majbur bo'lgan maydonlar mavjud narxi, miqdori, MOQ shulardan iborat. bu maydonlar to'g'ri hamda to'liq to'ldirilmasa ehtiyot qism qo'shilmaydi
+                                    </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <h4 id="2">
+                                    <a href="#2" class="header-anchor">#</a>
+                                    4.08 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images//EhtiyotQismlar/buyrtma/1.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtma predmetida Ta'minotchi tanlash uchun, Ta'minotchi ustiga bosasiz</p>
+                                    </p>
+
+                                </h4>
+                                <h4 id="qidirish">
+                                    <a href="#qidirish" class="header-anchor">#</a>
+                                    4.09 Shartnomani tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images///EhtiyotQismlar/3.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtma qo'shish tarkibida  shartnomani qidirish uchun (Shartnoma raqami) ustiga bosing </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="shartnomaraqam">
+                                    <a href="#shartnomaraqam" class="header-anchor">#</a>
+                                    4.10 Shartnomalar ro'yxatida siz tanlagan ta'minotchi bilan tuzilganlarigina chiqadi
+                                    <p>
+                                        <img src="./images/invos/XAXA.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Shartnomalar ro'yxatida siz tanlagan ta'minotchi bilan tuzilganlarigina chiqadi
+                                    </p>
+
+                                    </p>
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="taminotchi">
+                                    <a href="#taminotchi" class="header-anchor">#</a>
+                                    4.11   Ta'minotchi va tanlangan shartnoma ayni ta'minotchiga tegishli bo'lishi kerak
+                                    <p>
+                                        <img src="./images//buy/buy.7.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Ta’minotchi bilan u tanlangan shartnoma ta’minotchi bilan bir xil bo‘lishi kerak, aks holda buyurtma qabul qilinmaydi, ekranda qizil ramkalarga olingan shu larga e’tibor qarating
+
+
+                                    </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="pdf">
+                                    <a href="#pdf" class="header-anchor">#</a>
+                                    4.12 Buyurtma qo'shishda shartnoma faylini yuklash (PDF)
+                                    <p>
+                                        <img src="./images//buy/bu..jpg" alt="img">
+                                    <p style="font-size: 20px"> Buyurtmani PDF variantda qo'shish uchun ekranda ko'rsatilgan qizil ramka ichidagi (faylni) ni  yuklab olasiz, so'ngra yuklangan faylga kirasiz,   </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="extiyot">
+                                    <a href="#extiyot" class="header-anchor">#</a>
+                                    4.13 Ehtiyot qismni tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images/buy/buyy.jpg" alt="img">
+                                    <p style="font-size: 20px">Ehtiyot qismni buyurtma qo'shish oynasidan qidirish uchun rasmda ko'rsatilgan joydan qidirish mumkin</p>
+                                    </p>
+
+                                </h4>
+
+
+                                <br>
+                                <br>
+                                <h4 id="excelqosh">
+                                    <a href="#excelqosh" class="header-anchor">#</a>
+                                    4.14 Excel fayldagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+                                    <p>
+                                        <img src="./images/buy//buy.10.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtmani excelda qo'shish uchun ekranda ko'rsatilgan rasm ichidagi (Excel orqali buyurtma qo'shish)  ga kirasiz  </p>
+                                    </p>
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="excelfayll">
+                                    <a href="#excelfayll" class="header-anchor">#</a>
+                                    4.15 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+                                    <p>
+                                        <img src="./images/buy/buy.11.jpg" alt="img">
+                                    <p style="font-size: 20px">Excelda buyurtma qo'shish uchun rasmda ko'rsatilgan faylni yuklab olib, uning ichiga kirasiz  </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="excell">
+                                    <a href="excell" class="header-anchor">#</a>
+                                    4.16 Shablon faylni to'ldirish
+                                    <p>
+                                        <img src="./images/buy/buy.12.jpg" alt="img">
+                                    <p style="font-size: 20px">Excelda buyurtma qo'shishda rasmda ko'rsatilgan usulda qo'shishingiz mumkin</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="shablonfayl">
+                                    <a href="#shablonfayl" class="header-anchor">#</a>
+                                    4.17 To'ldirilgan shablon faylni yuklash
+                                    <p>
+                                        <img src="./images/buy/buy.13.jpg" alt="img">
+                                    <p style="font-size: 20px">To'ldirilgan shablon faylni yuklash uchun ekranda ko'rsatilgan qizil ramka ichidagi (Fayl tanlang) ga kirib kiritgan excel faylingizni  tanlaysiz, so'ngra (Yuklash) tugmasini bosib faylni yuklab olasiz  </p>
+                                    </p>
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="jadval">
+                                    <a href="#jadval" class="header-anchor">#</a>
+                                    4.18 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+                                    <p>
+                                        <img src="./images/buy//buy.14.jpg" alt="img">
+                                    <p style="font-size: 20px">Xatolarni tekshirish uchun yuklangan faylni  tanlab  (Yuklash) ni bosasiz va ma'lumotlar rasmda ko'rsatilgan jadval shaklida chiqadi </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="xatochiqsa">
+                                    <a href="#xatochiqsa" class="header-anchor">#</a>
+                                    4.19 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+                                    <p>
+                                        <img src="./images/buy/buy.15.jpg" alt="img">
+                                    <p style="font-size: 20px"> Agar ma'lumotlarda xatolik bo'lsa ekranda ko'rsatilgandek xabar beriladi</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="ma'lumotlarchala">
+                                    <a href="#ma'lumotlarchala" class="header-anchor">#</a>
+                                    4.20 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+                                    <p>
+                                        <img src="./images/buy//buy.16.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtma berishda ma'lumotlar chala kiritilgan bo'lsa ekranda ko'rsatilgandek xatolik chiqadi, bunday holatda buyurtma qo'shilmaydi</p>
+                                    </p>
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="saqlashnibosing">
+                                    <a href="#saqlashnibosing" class="header-anchor">#</a>
+                                    4.21 Barchasi to'g'riligiga ishonch hosil qilgandan so'ng Saqlashni bosing
+                                    <p>
+                                        <img src="./images//buy/buy.17.jpg" alt="img">
+                                    <p style="font-size: 20px">Barchasi to'liq hamda to'g'ri  ekanligiga ishonch hosil qilganingizdan so'ng Ekran pastidagi (Saqlash) ni bosing </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="tahrirlashh">
+                                    <a href="#tahrirlashh" class="header-anchor">#</a>
+                                    4.22 Umumiy buyurtmani tahrirlash oynasi
+                                    <p>
+                                        <img src="./images/buy//buy.18.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtmani tahrirlash uchun jadval chekasidagi qalam ustiga bosib ma'lumotlarni tahrirlashingiz mumkin</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+
+                                <h4 id="buyurtmadagitahrirlash">
+                                    <a href="#buyurtmadagitahrirlash" class="header-anchor">#</a>
+                                    4.23 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images/buy/buy.19.jpg" alt="img">
+                                    <p style="font-size: 20px">Agar siz buyurtma ichidagi ta'minotchini topishni istasangiz ekranda ko'rsatilgan strelka tepasidagi (Ta'minotchi) ustiga bosasiz</p>
+
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+
+
+                                <h4 id="shartnomaniqidirish">
+                                    <a href="#shartnomaniqidirish" class="header-anchor">#</a>
+                                    4.24 Shartnomani tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images/buy/buy.20.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtma ichidan shartnomani qidirish uchun ekranda ko'rsatilgan qizil ramka ichidagi (Shartnoma raqami) ustiga bosish orqali topishingiz mumkin </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="majburtahrirlash">
+                                    <a href="#majburtahrirlash" class="header-anchor">#</a>
+                                    4.25 O'zgartirishda o'zgartirishda majburiy maydonlarga e'tibor bering
+                                    <p>
+                                        <img src="./images/buy//buy.21.jpg" alt="img">
+                                    <p style="font-size: 20px"> Buyurtmani tahrirlashda to'ldirilishi kerak bo'lgan maydonlar mavjud. Bular buyurtma raqami, Incoterm, payment term, tuzilgan sanasi    </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="predmetqidirish">
+                                    <a href="#predmetqidirish" class="header-anchor">#</a>
+                                    4.26 Buyurtma predmetidagi ehtiyot qismlarni qidirish imkoniyati
+                                    <p>
+                                        <img src="./images/buy/buy.22.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtma predmetida ehtiyot qismlarni qidirish uchun ekran chetida turgan strelka yonidagi (Search) dan foydalaning </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="predmettahrirlash">
+                                    <a href="#predmettahrirlash" class="header-anchor">#</a>
+                                    4.27 Buyurtma tarkibidagi ehtiyot qismlarni tahrirlash oynasiga o'tish
+                                    <p>
+                                        <img src="./images/buy/buy.23.jpg" alt="img">
+                                    <p style="font-size: 20px"> Buyurtma predmetidagi ehtiyot qismlarni tahrirlash uchun qalamcha ustiga bosasiz kerakli maydonlarni o'zgartirib, ekran pastidagi (Saqlash) ni bosing </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="tahrirlashoynasi">
+                                    <a href="#tahrirlashoynasi" class="header-anchor">#</a>
+                                    4.28 Buyurtma tarkibidagi ehtiyot qismni tahrirlash oynasi
+                                    <p>
+                                        <img src="./images/buy/buy.24.jpg" alt="img">
+                                    <p style="font-size: 20px">Rasmda ko'rsatilgan bo'lim buyurtmadagi tahrirlash oynasi</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="predmetniiochirish">
+                                    <a href="#predmetniiochirish" class="header-anchor">#</a>
+                                    4.29 Buyurtmani tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirib yuborsa bo'ladi
+                                    <p>
+                                        <img src="./images/buy//buy.25.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Buyurtmani tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirib yuborsa bo'ladi, buning uchun ekranda ko'rsatilgan axlat qutisini bosasiz
+                                    </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="predmetnikochirish">
+                                    <a href="#predmetnikochirish" class="header-anchor">#</a>
+                                    4.30 Buyurtma predmetidagi qismlarni Excel, PDF holatda ko'chirib olish yoki chop etish imkoniyati
+                                    <p>
+                                        <img src="./images/buy//buy.26.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtma predmetidagi qismlarni Excel, PDF, Print yordamida ko'chirish uchun ushbu fayldan o'zingizga keraklisi ustiga bosib faylni yuklab olasiz</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="buyurtmaniochirishoynasi">
+                                    <a href="#buyurtmaniochirishoynasi" class="header-anchor">#</a>
+                                    4.31 Buyurtmani o'chirish oynasiga o'tish
+                                    <p>
+                                        <img src="./images/buy/buy.27.jpg" alt="img">
+                                    <p style="font-size: 20px">Rasmda buyurtmaning o'chirish oynasi ko'rsatilgan</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="hosilqilibochiring">
+                                    <a href="#hosilqilibochiring" class="header-anchor">#</a>
+                                    4.32 Buyurtma ma'lumotlarini yaxshilab tekshirib ishonch hosil qilganingizdan so'ng uni o'chirib yuboring
+                                    <p>
+                                        <img src="./images/buy/buy.28.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtmani barcha ma'lumotlarini yaxshilab tekshirib ko'rib, ishonch hosil qilganingizdan keyin o'chiring, buning uchun ekran pastida turgan (O'chirish) tugmasini bosing</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="predmetniochir">
+                                    <a href="#predmetniochir" class="header-anchor">#</a>
+                                    4.33 Buyurtmani o'chirish oynasida uning predmetidagi qismni o'chirib yuborsa ham bo'ladi
+                                    <p>
+                                        <img src="./images/buy/buy.29.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtmani o'chirish oynasida uning predmetidagi qismni o'chirib yuborsa ham bo'ladi. Bunda umumiy shartnoma o'chirilmaydi va faqat uning predmetidagi qism o'chadi </p>
+                                    </p>
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Ogoxboling">
+                                    <a href="#Ogoxboling" class="header-anchor">#</a>
+                                    4.34 Buyurtma o'chirib yuborilsa unga tegishli uni predmetidagi ehtiyot qismlar ham o'chib ketadi
+                                    <p>
+                                        <img src="./images/buy//buy.30.jpg" alt="img">
+                                    <p style="font-size: 20px"> Ogoh bo'ling, agar buyurtma o'chirib yuborilsa ekranda ko'rsatilgan ehtiyot qism ham o'chib ketadi</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="polatoram">
+                                    <a href="#polatoram" class="header-anchor">#</a>
+                                    4.35  Po'lat o'ramlari uchun yangi buyurtmani qo'shish oynasi
+                                    <p>
+                                        <img src="./images/buy/buy.32.jpg" alt="img">
+                                    <p style="font-size: 20px">Ekranda ko'rsatilgan buyurtmaning Po'lat o'ramlar qo'shish oynasi bo'limi hisoblanadi </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="polat">
+                                    <a href="#polat" class="header-anchor">#</a>
+                                    4.36 Bu oynada faqat turi Steel bo'lgan ehtiyot qismlarga qilingan shartnomalar uchungina buyurtma beriladi
+                                    <p>
+                                        <img src="./images/buy/buy.31.jpg" alt="img">
+                                    <p style="font-size: 20px">Bu oynada faqat turi Steel bo'lgan ehtiyot qismlarga qilingan shartnomalar uchungina buyurtma beriladi. Shuning uchun boshqa ta'minotchilar ko'rinmaydi </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="polatmajburiraqam">
+                                    <a href="#polatmajburiraqam" class="header-anchor">#</a>
+                                    4.37 To'ldirish majburiy bo'lgan maydonlar
+                                    <p>
+                                        <img src="./images/buy//buy.33.jpg" alt="img">
+                                    <p style="font-size: 20px">Po'lat o'ram qo'shishda majburiy to'ldirish maydonlari mavjud, Buyurtma raqami, Incoterm, payment term, tuzilgan sanasi </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="etiborbilantoldiring">
+                                    <a href="#etiborbilantoldiring" class="header-anchor">#</a>
+                                    4.38 Marka, Standart, Coating, Thickness va Eni maydonlarini e'tibor bilan to'ldiring
+                                    <p>
+                                        <img src="./images/buy/buy.34.jpg" alt="img">
+                                    <p style="font-size: 20px;"> Marka, Standart, Coating, Thickness va Eni maydonlarini e'tibor bilan to'ldiring </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="malumotlarini_korish">
+                                    <a href="#malumotlarini_korish" class="header-anchor">#</a>
+                                    4.39 Buyurtma va uning ma'lumotlarni ko'rish oynasi
+                                    <p>
+                                        <img src="./images/buy//buy.43.8.jpg" alt="img">
+                                    <p style="font-size: 20px">
+                                        Buyurtma va uning ma'lumotlarini ko'rish uchun jadvalning INDEX qismida (Buyurtma raqami) ustiga bosib kirishingiz  mumkin
+                                    </p>
+                                    </p>
+
+                                </h4>
+
+
+                                <br>
+                                <br>
+                                <h3 id="invoysboyicha">
+                                    <a href="#invoysboyicha" class="header-anchor">#</a>
+                                    5. Invoyslar
+
+
+
+                                </h3>
+                                <br>
+                                <br>
+                                <h4 id="50">
+                                    <a href="#50" class="header-anchor">#</a>
+                                    5.01 Umumiy jadval haqida
+                                    <p>
+                                        <img src="./images/invos/invos-0.jpg" alt="img">
+                                    <p style="font-size: 20px">Index</p>
+                                    </p>
+
+                                </h4>
+
+
+                                <br>
+                                <br>
+                                <h4 id="menyugaqarabsaralash">
+                                    <a href="#menyugaqarabsaralash" class="header-anchor">#</a>
+                                    5.02 Menyuda qism turiga qarab umumiy jadvalga kirishingiz mumkin
+                                    <p>
+                                        <img src="./images//invos/80.jpg" alt="img">
+                                    <p style="font-size: 20px"> Ekranda ko'rsatilgan qizil ramka ichidagilar menyuni qism turiga qarab tanlash mumkin </p>
+                                    </p>
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="maxxsulotturigaqarabsaralash">
+                                    <a href="#maxxsulotturigaqarabsaralash" class="header-anchor">#</a>
+                                    5.03 Jadvalni mahsulot turiga qarab saralash
+                                    <p>
+                                        <img src="./images//invos/invos.3.jpg" alt="img">
+                                    <p style="font-size: 20px">Jadvalni mahsulot turiga qarab saralash uchun ekranda ko'rsatilgan (Turi) ustiga bosib kerakli mahsulot turiga o'tishingiz mumkin </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="taminotchisaralash">
+                                    <a href="#taminotchisaralash" class="header-anchor">#</a>
+                                    5.04 Jadvalni ta'minotchiga saralash
+                                    <p>
+                                        <img src="./images/invos//invos.4.jpg" alt="img">
+                                    <p style="font-size: 20px">Jadvalni Ta'minotchiga nisbatan saralash uchun (Ta'minotchisi) degan joydan o'zingizga kerakli ta'minotchini tanlashingiz mumkin</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invoysqoshish">
+                                    <a href="#invoysqoshish" class="header-anchor">#</a>
+                                    5.05 Yangi invoysni qo'shish oynasi
+                                    <p>
+                                        <img src="./images/invos//invos.5.jpg" alt="img">
+                                    <p style="font-size: 20px">Yangi Invoice qo'shish uchun ( Yangi  Invoice Qo'shish ) ustiga bosish orqali yangi Invoice qo'shish mumkin </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Invoiceqoshishdamaydonlar">
+                                    <a href="#Invoiceqoshishdamaydonlar" class="header-anchor">#</a>
+                                    5.06 To'ldirish majburiy bo'lgan maydonlar
+                                    <p>
+                                        <img src="./images/invos//invos.6.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice qo'shishda to'ldirilishi majbur bo'lgan maydonlar mavjud, invoys raqami, ta'minotchisi, buyurtma raqami, Incoterm, payment term, tuzilgan sanasi  </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Invoicepredmet">
+                                    <a href="#Invoicepredmet" class="header-anchor">#</a>
+                                    5.07 Invoys predmetidagi ehtiyot qismlarga doir majburiy maydonlar
+                                    <p>
+                                        <img src="./images/invos/invos.7.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice predmetida Ehtiyot qism qo'shishda ham majburiy to'ldirish maydonlari mavjud. Narxi, miqdori, MOQ </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="qidirishtaminot">
+                                    <a href="#qidirishtaminot" class="header-anchor">#</a>
+                                    5.08 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images/invos/invos.8.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice qo'shish oynasida Ta'minotchi qidirish uchun ekranda qizil ramka ichida ko'rsatilgan</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Invoiceqidirish">
+                                    <a href="#Invoiceqidirish">#</a>
+                                    5.09 Buyurtma tanlashda qidirish imkoniyatidan foydalanish
+                                    <p>
+                                        <img src="./images/invos/90.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtma tanlashda qidirish imkoniyatidan foydalanish uchun   (Buyurtma raqami) ustiga bosing  </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="buyurtmalarroyxati">
+                                    <a href="#buyurtmalarroyxati" class="header-anchor">#</a>
+                                    5.10 Buyurtmalar ro'yxatida siz tanlagan ta'minotchi bilan tuzilganlarigina chiqadi
+                                    <p>
+                                        <img src="./images//invos/100.jpg" alt="img">
+                                    <p style="font-size: 20px">Buyurtmalar ro'yxatida, siz tanlagan ta'minotchi bilan tuzilganlarigina chiqadi. qolgan ta'minotchiga aloqador bo'lmaganlari esa chiqmaydi </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invospdf">
+                                    <a href="#invospdf" class="header-anchor">#</a>
+                                    5.11 Invoys qo'shishda shartnoma faylini yuklash (PDF)
+                                    <p>
+                                        <img src="images/invos/invos.11.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice qo'shishda shartnoma faylini yuklash uchun ekranda ko'rsatilgan qizil ramka ichidagi (Yuklash fayli) ustiga bosib buyurtma faylini kiritasiz  </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invoiceextiyotqismqidirish">
+                                    <a href="#invoiceextiyotqismqidirish" class="header-anchor">#</a>
+                                    5.12 Ehtiyot qismni tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images//invos/invos.12.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice qo'shish oynasida ehtiyot qism qidirish uchun (Ehtiyot qismmi tanlang) ustiga bosib qidirishingiz mumkin </p>
+                                    </p>
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invoiceexcel">
+                                    <a href="#invoiceexcel" class="header-anchor">#</a>
+                                    5.13 Excel fayldagi jadval orqali ko'pgina ehtiyot qismlarni bir amaldayoq qo'shish imkoniyati
+                                    <p>
+                                        <img src="./images/invos/invos.13.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoiceni excel orqali qo'shish uchun (Invoiceni Excel orqali qo'shish) ga kirasiz </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Ehcelorqaliqoshish">
+                                    <a href="#Ehcelorqaliqoshish" class="header-anchor">#</a>
+                                    5.14 Ehtiyot qismlar.xlsx shablon faylini yuklab olish
+                                    <p>
+                                        <img src="./images//invos/invos.14.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoiceni Excelda qo'shish uchun rasmda ko'rsatilgan faylni yuklab olib yuklangan faylga kirib excel qismiga o'tishingiz mumkin</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="exelnifayltoldirish">
+                                    <a href="#exelnifayltoldirish" class="header-anchor">#</a>
+                                    5.15 Shablon faylni to'ldirish
+                                    <p>
+                                        <img src="./images/invos//invos.15.jpg" alt="img">
+                                    <p style="font-size: 20px">Shablon faylni excelda to'ldirish, qanday bo'lishi rasmda ko'rsatilib qo'yilgan</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invostoldirilganfaylyuklash">
+                                    <a href="#invostoldirilganfaylyuklash" class="header-acnhor">#</a>
+                                    5.16 To'ldirilgan shablon faylni yuklash
+                                    <p>
+                                        <img src="./images/invos//invos.16.jpg" alt="img">
+                                    <p style="font-size: 20px">To'ldirilgan shablon faylni yuklash uchun ekranda ko'rsatilgan joydagi  (Faylni tanlang) ga kirib excelda kiritgan faylni kiritib, (Yuklash) tugmasini bosasiz </p>
+
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Invoiceexcelhatotekshirish">
+                                    <a href="#Invoiceexcelhatotekshirish" class="header-anchor">#</a>
+                                    5.17 Xatolarni tekshirish uchun yuklangan faylni jadval ko'rinishida ko'rib olish
+                                    <p>
+                                        <img src="./images/invos/invos.17.jpg" alt="img">
+                                    <p style="font-size: 20px">Excelda to'ldirilgan shablon faylni xatolarini tekshirish uchun jadval korinishida ko'rib olish uchun yuklangan faylni tanlab (Yuklash) tugmasini bossangiz shu ko'rinish kelib chiqadi </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="xatolikinvoice">
+                                    <a href="#xatolikinvoice" class="header-anchor">#</a>
+                                    5.18 Agar ma'lumotda xatolik bo'lsa xato xabari qayerda chiqadi?
+                                    <p>
+                                        <img src="./images//invos/invos.18.jpg" alt="img">
+                                    <p style="font-size: 20px">Yuklangan faylda xatolik chiqsa ekranda ko'rsatilgan joyda qizil yozuvda xabar beriladi</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invosehtiyotqisimi">
+                                    <a href="#invosehtiyotqisimi" class="header-anchor">#</a>
+                                    5.19 Ehtiyot qismlar ma'lumoti chala bo'lsa umumiy jadvalda hech bir ma'lumot bazaga kiritilmaydi
+                                    <p>
+                                        <img src="./images/invos//invos.19.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice qo'shishda ehtiyot qismlar ma'lumotlari chala kiritilgan bo'lsa bazaga hech qanday ma'lumotlar kiritilmaydi, rasmda ko'rsatilgandek qizil yozuvlar paydo bo'ladi</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invoicesaqlash">
+                                    <a href="#invoicesaqlash" class="header-anchor">#</a>
+                                    5.20 Barchasi to'g'riligiga ishonch hosil qilgandan so'ng Saqlashni bosing
+                                    <p>
+                                        <img src="./images/invos/invos.6.jpg" alt="img">
+                                    <p style="font-size: 20px">Barchasi to'liq hamda to'g'ri ekanligiga ishonch hosil qilganingizdan so'ng ekran pastidagi (Saqlash) tugmasini bosing </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invostahrirlash">
+                                    <a href="#invostahrirlash" class="header-anchor">#</a>
+                                    5.21 Umumiy invoysni tahrirlash oynasi
+                                    <p>
+                                        <img src="./images/invos/invos.21.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoiceni  ma'lumotlarini tahrirlash uchun  jadval chetida turgan qalam ustiga bosish orqali tahrirlashingiz mumkin</p>
+
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="tahrirlashdata'minot">
+                                    <a href="#tahrirlashdata'minot" class="header-anchor">#</a>
+                                    5.22 Ta'minotchini tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images/invos/invos.22.jpg" alt="img">
+                                    <p style="font-size: 20px">Tahrirlash oynasida Ta'minotchi qidirish uchun ekranda ko'rsatilgan (Ta'minotchi) ustiga bosish orqali qidirish mumkin </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invosbuyurtmaqidirish">
+                                    <a href="#invosbuyurtmaqidirish" class="header-anchor">#</a>
+                                    5.23 Buyurtmani tanlashda qidirish imkoniyatidan foydalaning
+                                    <p>
+                                        <img src="./images/invos/110.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoicening tahrirlash oynasida buyurtmani qidirish uchun ekrandagi (Buyurtma raqami) ustiga bosasiz </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="ozgartir">
+                                    <a href="#ozgartir" class="header-anchor">#</a>
+                                    5.24 O'zgartirishda o'zgartirishda majburiy maydonlarga e'tibor bering
+                                    <p>
+                                        <img src="./images/invos//invos.24.jpg" alt="img">
+                                    <p style="font-size: 20px">O'zgartirishda majburiy to'ldirish maydonlariga e'tibor bering, buyurtma raqami, Incoterms, payment term, tuzilgan sanasi,   </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Invostarkibidaehtiyotqismlarqidirish">
+                                    <a href="#Invostarkibidaehtiyotqismlarqidirish" class="header-anchor">#</a>
+                                    5.25 Invoys predmetidagi ehtiyot qismlarni qidirish imkoniyati
+                                    <p>
+                                        <img src="./images/invos/invos.25.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoicening tahrirlash oynasida ehtiyot qismlarni qidirish uchun ekran chetidagi (Search) dan foydalaning </p>
+                                    </p>
+
+                                    <h4 id="innvostarkibidatahrirlash">
+                                        <a href="#innvostarkibidatahrirlash" class="header-anchor">#</a>
+                                        5.26 Invoys tarkibidagi ehtiyot qismlarni tahrirlash oynasiga o'tish
+                                        <p>
+                                            <img src="./images/invos/invos.0.jpg" alt="img">
+                                        <p style="font-size: 20px"> shartnoma predmeti qismida qalam tugmani bosing, kerakli maydonlarni o'zgartirib , saqlash tugmasini bosing </p>
+                                        </p>
+
+                                    </h4>
+                                    <br>
+                                    <br>
+
+                                    <h4 id="innnvostarkibi">
+                                        <a href="#innnvostarkibi" class="header-anchor">#</a>
+                                        5.27 Invoys tarkibidagi ehtiyot qismni tahrirlash oynasi
+                                        <p>
+                                            <img src="./images/invos//photo_2024-08-29_17-08-21.jpg" alt="img">
+                                        <p style="font-size: 20px"> Invoys tarkibida ehtiyot qismlarni tahrirlash oynasi rasmda ko'rsatilgan</p>
+
+                                        </p>
+
+                                    </h4>
+                                    <br>
+                                    <br>
+                                    <h4 id="innvosdaehtiyotqismochir">
+                                        <a href="#innvosdaehtiyotqismochir" class="header-anchor">#</a>
+                                        5.28 Invoysni tahrirlash oynasida uni predmetidagi ehtiyot qismni o'chirib yuborsa bo'ladi
+                                        <p>
+                                            <img src="./img" alt="">
+                                        </p>
+
+                                    </h4>
+
+
+
+
+
+
+
+
+
+
+
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="PDFPrintexcel">
+                                    <a href="#PDFPrintexcel" class="header-acnhor">#</a>
+                                    5.29 Invoys predmetidagi qismlarni Excel, PDF holatda ko'chirib olish yoki chop etish imkoniyati
+                                    <p>
+                                        <img src="./images/invos/invos.26.jpg" alt="img">
+                                    <p style="font-size: 20px">PDF, Print, Excel buyurtma predmetlari hisoblanadi, buni ko'chirib olish uchun istalgan predmet ustiga bosib faylni ko'chirib olasiz, bu predmetlarni topish uchun tahrirlash, o'chirish, ehtiyot qismlardan topish mumkin </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invosochirish">
+                                    <a href="#invosochirish" class="header-anchor">#</a>
+                                    5.30 Invoysni o'chirish oynasiga o'tish
+                                    <p>
+                                        <img src="./images/invos//invos.30.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoiceni o'chirish uchun ekran chetida ko'rsatilgan axlat qutisini bosish orqali o'chirish oynasiga o'tasiz</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="ochirishetiborlibolinginvos">
+                                    <a href="#ochirishetiborlibolinginvos" class="header-anchor">#</a>
+                                    5.31 Invoys ma'lumotlarini yaxshilab tekshirib ishonch hosil qilganingizdan so'ng uni o'chirib yuboring
+                                    <p>
+                                        <img src="./images/invos//invoss30.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoiceni o'chirishdan oldin yaxshilab o'ylab ko'ring, ishonch hosil qilganingizdan so'ng o'chiring</p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="invospretmetochirishi">
+                                    <a href="#invospretmetochirishi" class="header-anchor">#</a>
+                                    5.32 Invoysni o'chirish oynasida uning predmetidagi qismni o'chirib yuborsa ham bo'ladi
+                                    <p>
+                                        <img src="./images/invos/invos.32.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoiceni o'chirish oynasida uning pretmetidagi ehtiyot qismni ham o'chirsa bo'ladi, buning uchun ekranda ko'rsatilgan axlat qutisi ustiga bosing, Bunda umumiy shartnoma o'chirilmaydi va faqat uning predmetidagi qism o'chadi   </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Ogoxbolingg">
+                                    <a href="#Ogoxbolingg" class="header-anchor">#</a>
+                                    5.33 Invoys o'chirib yuborilsa unga tegishli uni predmetidagi ehtiyot qismlar ham o'chib ketadi
+                                    <p>
+                                        <img src="./images/invos//invos.33.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice o'chirilsa uning tarkibidagi ehtiyot qismlar ham o'chib ketadi, shuning uchun ogoh bo'ling </p>
+                                    </p>
+
+                                </h4>
+                                <br>
+                                <br>
+                                <h4 id="Invoiceoynasiii">
+                                    <a href="#Invoiceoynasiii" class="header-anchor">#</a>
+                                    5.34  Invoice va ma'lumotlar oynasiga o'tish
+                                    <p>
+                                        <img src="./images/invos/iiinvos.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoys va ma'lumotlariga o'tish uchun rasmda ko'rsatilgan (Invoys raqami) ustiga bosib kirasiz  </p>
+                                    <br>
+                                    <br>
+
+
+
+
+                                    <img src="./images///invos/Снимок экрана 2024-09-02 163957.jpg" alt="img">
+                                    <p style="font-size: 20px">Invoice va uning ma'lumotlar  oynasi</p>
+                                    </p>
+
+                                </h4>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    </main>
+    </div>
+
+
+
+    <script src="./app.js"></script>
+
+    <!-- Boostrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+            crossorigin="anonymous"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>*@
+</body>
+
+</html>

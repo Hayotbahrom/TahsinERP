@@ -68,13 +68,15 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-        public ActionResult Download()
+        public ActionResult Download(int contractID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                SAMPLE_FILES shartnoma = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("shartnoma.xlsx") == 0).FirstOrDefault();
-                if (shartnoma != null)
-                    return File(shartnoma.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                var contractFile = db.P_CONTRACT_DOCS.Where(x => x.ContractID == contractID).FirstOrDefault();
+                if (contractFile != null)
+                    return File(contractFile.Doc, ".pdf");
+                else
+                    ModelState.AddModelError("", "Sahrtnoma fayli yuklanmagan!");
                 return View();
             }
         }

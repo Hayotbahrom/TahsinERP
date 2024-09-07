@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -316,6 +317,10 @@ namespace tahsinERP.Controllers
         }
         public ActionResult DownloadDoc(int? orderID)
         {
+            if (orderID == null)
+            {
+                return HttpNotFound("Shartnoma ID ko'rsatilmagan.");
+            }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var orderDoc = db.P_ORDER_DOCS.FirstOrDefault(pi => pi.OrderID == orderID);

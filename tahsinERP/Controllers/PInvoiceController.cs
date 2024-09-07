@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -345,6 +346,10 @@ namespace tahsinERP.Controllers
         }
         public ActionResult DownloadDoc(int? invoiceID)
         {
+            if (invoiceID == null)
+            {
+                return HttpNotFound("Shartnoma ID ko'rsatilmagan.");
+            }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var invoiceDoc = db.P_INVOICE_DOCS.FirstOrDefault(pi => pi.InvoiceID == invoiceID);
