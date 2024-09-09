@@ -25,7 +25,8 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                ViewBag.CarModelList = new SelectList(db.CARS.Distinct().ToList(), "ID", "Model");
+                List<string> models = db.CARS.Select(c => c.Model).Distinct().ToList();
+                ViewBag.CarModelList = models;//new SelectList(db.CARS.Distinct().ToList(), "ID", "Model");
                 ViewBag.CarOptionList = new SelectList(db.CARS.ToList(), "ID", "OptionCode");
                 return View();
             }
@@ -33,7 +34,7 @@ namespace tahsinERP.Controllers
 
         public async Task<JsonResult> GetOptionCode(string modelName)
         {
-            using(DBTHSNEntities db = new DBTHSNEntities())
+            using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var optionCodes = await db.CARS.Where(c => c.Model == modelName)
                                                .Select(x => new { x.ID, x.OptionCode })
@@ -94,62 +95,62 @@ namespace tahsinERP.Controllers
             {
                 //await Task.Run(() =>
                 //{
-                    var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
+                var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
 
-                    try
+                try
+                {
+                    using (DBTHSNEntities db = new DBTHSNEntities())
                     {
-                        using (DBTHSNEntities db = new DBTHSNEntities())
+                        foreach (DataRow row in tableModel.Rows)
                         {
-                            foreach (DataRow row in tableModel.Rows)
+                            string PNo = row["PNo"].ToString();
+                            string Requirement = row["Requirement"].ToString();
+                            string StartDate = row["StartDate"].ToString();
+                            string DueDate = row["DueDate"].ToString();
+
+                            PRODUCTPLAN plan = new PRODUCTPLAN();
+                            PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(PNo) == 0 && p.IsDeleted == false).FirstOrDefault();
+
+                            plan.ProductID = product.ID;
+                            plan.Amount = Convert.ToDouble(Requirement);
+                            plan.StartDate = Convert.ToDateTime(StartDate);
+                            plan.DueDate = Convert.ToDateTime(DueDate);
+                            plan.IsDeleted = false;
+
+                            db.PRODUCTPLANS.Add(plan);
+                            db.SaveChanges();
+
+                            var userEmail1 = User.Identity.Name;
+                            LogHelper.LogToDatabase(userEmail1, "CarPlanController", $"{plan.ID} ID ega ProductPlan Excel orqali qo'shdi");
+
+                            dayCount = plan.DueDate.Subtract(plan.StartDate).Days;
+                            dayPlanAmount = Math.Ceiling(plan.Amount / dayCount);
+                            startDate = plan.StartDate;
+
+                            for (int i = 0; i < dayCount; i++)
                             {
-                                string PNo = row["PNo"].ToString();
-                                string Requirement = row["Requirement"].ToString();
-                                string StartDate = row["StartDate"].ToString();
-                                string DueDate = row["DueDate"].ToString();
-
-                                PRODUCTPLAN plan = new PRODUCTPLAN();
-                                PRODUCT product = db.PRODUCTS.Where(p => p.PNo.CompareTo(PNo) == 0 && p.IsDeleted == false).FirstOrDefault();
-
-                                plan.ProductID = product.ID;
-                                plan.Amount = Convert.ToDouble(Requirement);
-                                plan.StartDate = Convert.ToDateTime(StartDate);
-                                plan.DueDate = Convert.ToDateTime(DueDate);
-                                plan.IsDeleted = false;
-
-                                db.PRODUCTPLANS.Add(plan);
-                                db.SaveChanges();
-
-                                var userEmail1 = User.Identity.Name;
-                                LogHelper.LogToDatabase(userEmail1, "CarPlanController", $"{plan.ID} ID ega ProductPlan Excel orqali qo'shdi");
-
-                                dayCount = plan.DueDate.Subtract(plan.StartDate).Days;
-                                dayPlanAmount = Math.Ceiling(plan.Amount / dayCount);
-                                startDate = plan.StartDate;
-
-                                for (int i = 0; i < dayCount; i++)
-                                {
-                                    PRODUCTPLANS_DAILY dailyPlan = new PRODUCTPLANS_DAILY();
-                                    //if (!productPlan.IsTwoShiftPlan)
-                                    dailyPlan.DayShift = dayPlanAmount;
-                                    //else
-                                    //{
-                                    //    dailyPlan.DayShift = Math.Ceiling(dayPlanAmount / 2);
-                                    //    dailyPlan.NightShift = dayPlanAmount - dailyPlan.DayShift;
-                                    //}
-                                    dailyPlan.PlanID = plan.ID;
-                                    dailyPlan.Day = startDate;
-                                    startDate = startDate.AddDays(1);
-                                    db.PRODUCTPLANS_DAILY.Add(dailyPlan);
-                                }
-
-                                db.SaveChanges();
+                                PRODUCTPLANS_DAILY dailyPlan = new PRODUCTPLANS_DAILY();
+                                //if (!productPlan.IsTwoShiftPlan)
+                                dailyPlan.DayShift = dayPlanAmount;
+                                //else
+                                //{
+                                //    dailyPlan.DayShift = Math.Ceiling(dayPlanAmount / 2);
+                                //    dailyPlan.NightShift = dayPlanAmount - dailyPlan.DayShift;
+                                //}
+                                dailyPlan.PlanID = plan.ID;
+                                dailyPlan.Day = startDate;
+                                startDate = startDate.AddDays(1);
+                                db.PRODUCTPLANS_DAILY.Add(dailyPlan);
                             }
+
+                            db.SaveChanges();
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", ex.Message);
-                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
                 //});
             }
             return RedirectToAction("Index");
