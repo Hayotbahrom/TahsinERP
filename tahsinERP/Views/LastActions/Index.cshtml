@@ -36,6 +36,29 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
+                                    @using (Html.BeginForm("Index", "LastActions", FormMethod.Get, new { enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="row col-4 mb-1" style="float: right;">
+                                            <div class="col-12">
+                                                <label>Foydalanuvchini tanlang</label>
+                                                @Html.DropDownList("userId", (SelectList)ViewBag.Users, "Foydalanuvchini tanlang", new { @class = "form-control" })
+                                            </div>
+                                            <div class="col-12">
+                                                <label>Dan:</label>
+                                                @Html.TextBox("StartDate", (string)ViewBag.StartDate, new { @class = "form-control pickadate-months-year round", @type = "date" })
+                                            </div>
+                                            <div class="col-12">
+                                                <label>Gacha:</label>
+                                                @Html.TextBox("EndDate", (string)ViewBag.EndDate, new { @class = "form-control pickadate-months-year round", @type = "date" })
+                                            </div>
+                                            <div class="col-12">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-primary form-control">Filterlash</button>
+                                            </div>
+                                        </div>
+                                    }
+
+
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
                                         <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
