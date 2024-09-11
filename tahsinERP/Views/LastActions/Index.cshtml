@@ -61,11 +61,9 @@
 
                                     <!-- datatable start -->
                                     <div class="table-responsive table-responsivetable-responsive">
-                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                        <table class="table table-striped dataex-html5-selectors scroll-horizontal-vertical" id="DataTable" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
-                                                    <th></th>
                                                     <th>F.I.Sh</th>
                                                     <th>Controller nomi</th>
                                                     <th>Amal</th>
@@ -78,8 +76,6 @@
                                                 @foreach (var item in Model)
                                                 {
                                                     <tr>
-                                                        <td></td>
-                                                        <td></td>
                                                         <td>@tahsinERP.Controllers.UserHelper.GetFullName(userID: item.UserID)</td>
                                                         <td>@item.ControllerName</td>
                                                         <td>@item.ActionName</td>
