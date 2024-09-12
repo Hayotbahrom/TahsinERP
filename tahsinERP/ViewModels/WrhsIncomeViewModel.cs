@@ -43,7 +43,7 @@ namespace tahsinERP.ViewModels
 
         // Parts associated with the warehouse income
         public List<WhrsIncomePart> Parts { get; set; }
-
+        public string WHName { get; set; }
         public WrhsIncomeViewModel()
         {
             Parts = new List<WhrsIncomePart>();

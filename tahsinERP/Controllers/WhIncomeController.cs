@@ -186,18 +186,7 @@ namespace tahsinERP.Controllers
                 return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
             }
         }
-       /* public ActionResult GetInvoicesBySupplier(int supplierID)
-        {
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var contracts = db.P_CONTRACTS
-                    .Where(x => x.IsDeleted == false && x.SupplierID == supplierID)
-                    .Select(x => new { x.ID, x.ContractNo })
-                    .ToList();
-
-                return Json(contracts.Select(c => new SelectListItem { Value = c.ID.ToString(), Text = c.ContractNo }), JsonRequestBehavior.AllowGet);
-            }
-        }*/
+      
         public ActionResult Create()
         {
             string month = "";
@@ -206,9 +195,14 @@ namespace tahsinERP.Controllers
                 ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.Invoices = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.InComeParts = new SelectList(Enumerable.Empty<SelectListItem>());
-
+                ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 WrhsIncomeViewModel model = new WrhsIncomeViewModel();
                 PART_WRHS_INCOMES income = db.PART_WRHS_INCOMES.OrderByDescending(w => w.IssueDateTime).FirstOrDefault();
+                warehouse = GetWarehouseOfMRP(User.Identity.Name);
+                if (warehouse is null)
+                    model.WHName = "Siz uchun ombor biriktirilmagan.";
+                else
+                    model.WHName = warehouse.WHName;
                 if (income != null)
                 {
                     month = income.DocNo.Substring(0, 1);
@@ -255,6 +249,11 @@ namespace tahsinERP.Controllers
                     }
                 }
                 warehouse = GetWarehouseOfMRP(User.Identity.Name);
+                if (warehouse is null)
+                {
+                    ModelState.AddModelError("", "Sizga tegishli ombor topilmadi.");
+                    return View(model);
+                }
                 PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
                 {
                     DocNo = model.DocNo,
