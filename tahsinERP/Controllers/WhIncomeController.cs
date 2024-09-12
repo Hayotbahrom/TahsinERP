@@ -123,24 +123,86 @@ namespace tahsinERP.Controllers
             }
         }
 
+        public JsonResult GetInvoicesDetails(int invoiceID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var invoice = db.P_INVOICES
+                                 .Where(c => c.ID == invoiceID && c.IsDeleted == false)
+                                 .Select(c => new
+                                 {
+                                     c.ID,
+                                     c.Currency
+                                 })
+                                 .FirstOrDefault();
 
+                if (invoice != null)
+                {
+                    return Json(new { success = true, data = invoice }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Invoice not found." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        public JsonResult GetPriceAndMOQ(int partID)
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var invoicePart = db.P_INVOICE_PARTS
+                                     .Where(cp => cp.PartID == partID)
+                                     .Select(cp => new
+                                     {
+                                         Price = cp.Price,
+                                         Amount = cp.Quantity
+                                     })
+                                     .FirstOrDefault();
 
+                if (invoicePart != null)
+                {
+                    return Json(new { success = true, data = invoicePart }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Part not found in contract." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        // Bu method tanlangan shartnomaga tegishli qismlar ro'yxatini qaytaradi
+        public ActionResult GetPartList(int invoiceID)
+        {
+            using (var db = new DBTHSNEntities())
+            {
+                var partList = db.P_INVOICE_PARTS
+                    .Where(cp => cp.InvoiceID == invoiceID)
+                    .Select(cp => new
+                    {
+                        cp.PartID,
+                        cp.PART.PNo
+                    })
+                    .ToList();
+
+                return Json(new { success = true, data = partList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+      
         public ActionResult Create()
         {
             string month = "";
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
-                ViewBag.Wrhs = new SelectList(db.PART_WRHS.Where(w => w.IsDeleted == false).ToList(), "ID", "WHName");
-                //ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
                 ViewBag.Invoices = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
+                ViewBag.InComeParts = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
-
                 WrhsIncomeViewModel model = new WrhsIncomeViewModel();
                 PART_WRHS_INCOMES income = db.PART_WRHS_INCOMES.OrderByDescending(w => w.IssueDateTime).FirstOrDefault();
+                warehouse = GetWarehouseOfMRP(User.Identity.Name);
+                if (warehouse is null)
+                    model.WHName = "Siz uchun ombor biriktirilmagan.";
+                else
+                    model.WHName = warehouse.WHName;
                 if (income != null)
                 {
                     month = income.DocNo.Substring(0, 1);
@@ -187,6 +249,11 @@ namespace tahsinERP.Controllers
                     }
                 }
                 warehouse = GetWarehouseOfMRP(User.Identity.Name);
+                if (warehouse is null)
+                {
+                    ModelState.AddModelError("", "Sizga tegishli ombor topilmadi.");
+                    return View(model);
+                }
                 PART_WRHS_INCOMES newIncome = new PART_WRHS_INCOMES
                 {
                     DocNo = model.DocNo,

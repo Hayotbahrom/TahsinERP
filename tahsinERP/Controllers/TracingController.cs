@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -101,13 +102,12 @@ namespace tahsinERP.Controllers
             }
         }
 
-
         public async Task<ActionResult> Create()
         {
             LoadViewBags();
 
             TRACING model = new TRACING();
-            model.IssueDateTime = DateTime.Now;
+            model.IssueDateTime = DateTime.Now.ToShortDateString().AsDateTime();
 
             return View(model);
         }
@@ -137,6 +137,7 @@ namespace tahsinERP.Controllers
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 bool checkExistTracing = checkForTodaysInput(tracing.PackingListID, tracing.IssueDateTime); //await db.TRACINGS.Where(x => x.PackingListID == tracing.PackingListID && x.IssueDateTime.ToShortDateString().CompareTo(tracing.IssueDateTime.ToShortDateString()) == 0).FirstOrDefaultAsync();
+                string transportNo = db.P_INVOICE_PACKINGLISTS.Where(pck => pck.ID == tracing.PackingListID).Select(pck => pck.TransportNo).FirstOrDefault();
                 if (checkExistTracing)
                 {
                     ModelState.AddModelError("", "Bu sana bilan ma'lumot allaqachon kiritilgan. Qaytadan urunib ko'ring!");
@@ -151,7 +152,7 @@ namespace tahsinERP.Controllers
                         setPackingListInTransit(tracing.PackingListID);
                         await db.SaveChangesAsync();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{tracing.P_INVOICE_PACKINGLISTS.PackingListNo} uchun Tracking {tracing.ID} ID ga ega Tracingni yaratdi");
+                        LogHelper.LogToDatabase(User.Identity.Name, "TracingController", $"{transportNo} uchun Tracking {tracing.ID} ID ga ega Tracingni yaratdi");
 
                         return RedirectToAction("Index");
                     }
@@ -216,25 +217,6 @@ namespace tahsinERP.Controllers
                 return View(tracingList);
             }
         }
-        /*public async Task<ActionResult> Details(string transportNo)
-        {
-            if (string.IsNullOrEmpty(transportNo))
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-
-                var tracingList = await db.TRACINGS
-                    .Include(p => p.P_INVOICE_PACKINGLISTS)
-                    .Where(p => p.IsDeleted == false && p.P_INVOICE_PACKINGLISTS.TransportNo == transportNo)
-                    .ToListAsync();
-
-                if (tracingList == null || tracingList.Count == 0)
-                    return HttpNotFound();
-
-                return View(tracingList);   
-            }
-        }*/
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -397,15 +379,43 @@ namespace tahsinERP.Controllers
                                 }
                                 dataTable.Rows.Add(dataRow);
                             }
-                        }
+                            if (CheckForExstenceOfTransportNo(dataTable))
+                            {
+                                if (CheckForExistenceOfSameTracingInOneDay(dataTable))
+                                {
+                                    ViewBag.DataTable = dataTable;
+                                    ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
+                                    ViewBag.IsFileUploaded = true;
 
-                        ViewBag.DataTable = dataTable;
-                        ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
-                        ViewBag.IsFileUploaded = true;
+                                    /*using (DBTHSNEntities db = new DBTHSNEntities())
+                                    {
+                                        foreach (DataRow row in dataTable.Rows) 
+                                        {
 
-                        using (DBTHSNEntities db = new DBTHSNEntities())
-                        {
-                            // Code for database operations, without duplicate check
+                                        }
+                                    }*/
+                                }
+                                else
+                                {
+                                    var message = "";
+                                    foreach (KeyValuePair<string, DateTime> word in transportRecords)
+                                    {
+                                        message += (word.Key + word.Value.ToString());
+                                        ViewBag.Message = "Ushbu tracing faylida kiritilgan transportNo va IssueDate" + message + "bir sanada ko'p marta kiritib bo'lmaydi";
+                                    }
+                                    return View("UploadWithExcel");
+                                }
+                            }
+                            else
+                            {
+                                var message = "";
+                                foreach (var word in missingTransportNos)
+                                {
+                                    message += word + ", ";
+                                }
+                                ViewBag.Message = "Ushbu tracing faylida kiritilgan TransportNo lar: " + message + " tizim bazasida mavjud emas, avval Packinglistlar ichida borligiga ishonch hosil qiling.";
+                                return View("UploadWithExcel");
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -427,8 +437,60 @@ namespace tahsinERP.Controllers
             }
             return View("UploadWithExcel");
         }
+        private Dictionary<string, DateTime> transportRecords = new Dictionary<string, DateTime>();
+        private bool CheckForExistenceOfSameTracingInOneDay(DataTable dataTable)
+        {
+            bool flag = false;
+            if (dataTable != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        string transportNo = row["Transport No."].ToString();
+                        DateTime issueDate = Convert.ToDateTime(row["IssuedDate"]);
+
+                        // Agar transport raqami va issue date kombinatsiyasi allaqachon bor bo'lsa, true qaytaramiz
+                        if (transportRecords.ContainsKey(transportNo) && transportRecords[transportNo] == issueDate)
+                        {
+                            flag = true;
+                        }
+                        // Agar hali yo'q bo'lsa, yangi entry qo'shamiz
+                        else
+                        {
+                            transportRecords[transportNo] = issueDate;
+                        }
+                        //todo logic
+                    }
+                }
+
+            return flag;
+        }
 
 
+        private List<string> missingTransportNos = new List<string>();
+        private bool CheckForExstenceOfTransportNo(DataTable dataTable)
+        {
+            bool flag = false;
+            if (dataTable != null)
+                using (DBTHSNEntities db = new DBTHSNEntities())
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        string transportNo = row["Transport No."].ToString();
+                        if (db.P_INVOICE_PACKINGLISTS.Where(x => x.IsDeleted == false && x.TransportNo.CompareTo(transportNo) == 0).Any())
+                            flag = true;
+                        else
+                            if (!missingTransportNos.Contains(transportNo))
+                            missingTransportNos.Add(transportNo);
+                    }
+                    if (missingTransportNos.Count > 0)
+                        return false;
+                    else
+                        return flag;
+                }
+            else
+                return flag;
+        }
 
         public ActionResult ClearDataTable()
         {
@@ -454,7 +516,7 @@ namespace tahsinERP.Controllers
                         {
                             string transportNo = row["Transport No."].ToString();
                             DateTime issueDate = DateTime.Parse(row["IssuedDate"].ToString());
-                            var packinglistID = db.P_INVOICE_PACKINGLISTS.Where(x => x.IsDeleted == false && x.TransportNo.CompareTo(transportNo)==0).FirstOrDefault().ID;
+                            var packinglistID = db.P_INVOICE_PACKINGLISTS.Where(x => x.IsDeleted == false && x.TransportNo.CompareTo(transportNo) == 0).FirstOrDefault().ID;
                             if (db.P_INVOICE_PACKINGLISTS.Any(x => x.TransportNo == transportNo && x.IsDeleted == false))
                             {
                                 var existTracing = db.TRACINGS.FirstOrDefault(x => x.IsDeleted == false && x.P_INVOICE_PACKINGLISTS.TransportNo.CompareTo(transportNo) == 0 && x.IssueDateTime == issueDate);
