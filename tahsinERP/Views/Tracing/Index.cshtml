@@ -50,6 +50,19 @@
                     }
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
+                            @using (Html.BeginForm("Index", "Tracing", FormMethod.Get, new { enctype = "multipart/form-data" }))
+                            {
+                                <div class="row col-4 mb-1" style="float: right;">
+                                    <div class="col-12">
+                                        <label>Sana:</label>
+                                        @Html.TextBox("Date", (string)ViewBag.Date, new { @class = "form-control pickadate-months-year round", @type = "date" })
+                                    </div>
+                                    <div class="col-12">    
+                                        <label>&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary form-control">Filterlash</button>
+                                    </div>
+                                </div>
+                            }
                             <div class="card-content">
                                 <div class="card-body">
                                     <div class="table-responsive table-responsivetable-responsive">
