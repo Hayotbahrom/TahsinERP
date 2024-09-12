@@ -275,7 +275,6 @@ namespace tahsinERP.Controllers
             }
             return View(model);
         }
-
         private void PopulateViewBags()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -358,7 +357,6 @@ namespace tahsinERP.Controllers
                     transportNo = firstPackingList.TransportNo;
                     packingListNo = firstPackingList.PackingListNo;
                 }
-
 
                 ViewBag.packingListNo = packingListNo;
                 ViewBag.transportNo = transportNo;
@@ -620,7 +618,6 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-
         public async Task<ActionResult> Download()
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
@@ -843,9 +840,7 @@ namespace tahsinERP.Controllers
         {
             if (!string.IsNullOrEmpty(dataTableModel))
             {
-
                 var tableModel = JsonConvert.DeserializeObject<DataTable>(dataTableModel);
-
                 try
                 {
                     using (DBTHSNEntities db = new DBTHSNEntities())
