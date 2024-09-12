@@ -377,27 +377,19 @@ namespace tahsinERP.Controllers
                             }
                             if (CheckForExstenceOfTransportNo(dataTable))
                             {
-                                if (CheckForExistenceOfSameTracingInOneDay(dataTable))
+                                if (!CheckForExistenceOfSameTracingInOneDay(dataTable))
                                 {
                                     ViewBag.DataTable = dataTable;
                                     ViewBag.DataTableModel = JsonConvert.SerializeObject(dataTable);
                                     ViewBag.IsFileUploaded = true;
-
-                                    /*using (DBTHSNEntities db = new DBTHSNEntities())
-                                    {
-                                        foreach (DataRow row in dataTable.Rows) 
-                                        {
-
-                                        }
-                                    }*/
                                 }
                                 else
                                 {
                                     var message = "";
                                     foreach (KeyValuePair<string, DateTime> word in transportRecords)
                                     {
-                                        message += (word.Key + word.Value.ToString());
-                                        ViewBag.Message = "Ushbu tracing faylida kiritilgan transportNo va IssueDate" + message + "bir sanada ko'p marta kiritib bo'lmaydi";
+                                        message += (word.Key + "  "+ word.Value.ToString("dd.MM.yyyy"));
+                                        ViewBag.Message = "Ushbu tracing faylida kiritilgan transportNo va IssueDate  " + message + "  bir sanada ko'p marta kiritib bo'lmaydi";
                                     }
                                     return View("UploadWithExcel");
                                 }
