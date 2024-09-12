@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using tahsinERP.Models;
 using tahsinERP.ViewModels;
 
@@ -102,7 +103,7 @@ namespace tahsinERP.Controllers
             LoadViewBags();
 
             TRACING model = new TRACING();
-            model.IssueDateTime = DateTime.Now;
+            model.IssueDateTime = DateTime.Now.ToShortDateString().AsDateTime();
 
             return View(model);
         }
