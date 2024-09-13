@@ -142,6 +142,13 @@ namespace tahsinERP.Controllers
                 {
                     if (ModelState.IsValid)
                     {
+                        if (tracing.IssueDateTime > DateTime.Now)
+                        {
+                            LoadViewBags();
+
+                            ModelState.AddModelError("", "Kelajakdagi sanani kiritib bo'lmaydi, e'tiborli bo'ling.");
+                            return View(tracing);
+                        }
                         // Set IsDeleted to false and save the tracing to get the ID
                         tracing.IsDeleted = false;
                         db.TRACINGS.Add(tracing);

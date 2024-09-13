@@ -47,7 +47,7 @@
                                                     <hr>
                                                     <h6 class="invoice-to">Transport raqami</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.DropDownListFor(model => model.PackingListID, ViewBag.packingList as SelectList, new { @class = "form-control select2", @id = "packingList", onchange = "getInfo()" })
+                                                        @Html.DropDownListFor(model => model.PackingListID, ViewBag.packingList as SelectList, "Transport raqamini tanlang: ",new { @class = "form-control select2", @id = "packingList", onchange = "getInfo()" })
                                                         @Html.ValidationMessageFor(model => model.PackingListID, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <fieldset class="d-flex justify-content-between mb-1">
@@ -72,7 +72,7 @@
                                                         @Html.ValidationMessageFor(model => model.ActualDistanceToDestination, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6>Sana:</h6>
-                                                    <fieldset class="form-group position-relative has-icon-left">   
+                                                    <fieldset class="form-group position-relative has-icon-left">
                                                         @Html.TextBoxFor(model => model.IssueDateTime, new { @class = "form-control pickadate-months-year round", @placeholder = "Ma'lumot kirgizilayotgan sana" })
                                                         @Html.ValidationMessageFor(model => model.IssueDateTime, "", new { @class = "text-danger" })
                                                         <div class="form-control-position">
@@ -118,29 +118,38 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
-
 <script type="text/javascript">
     function getInfo() {
         var packingList = document.getElementById("packingList").value;
 
-        $.ajax({
-            url: '@Url.Action("GetInvoiceNo_Supplier", "Tracing")',
-            type: 'GET',
-            data: { packingListID: packingList },
-            success: function(data) {
-                if (data.success) {
-                    var InvoiceNo = $("#InvoiceNo");
-                    InvoiceNo.val(data.invoiceNo);
+        if (packingList) {
+            $.ajax({
+                url: '@Url.Action("GetInvoiceNo_Supplier", "Tracing")',
+                type: 'GET',
+                data: { packingListID: packingList },
+                success: function(data) {
+                    if (data.success) {
+                        var InvoiceNo = $("#InvoiceNo");
+                        InvoiceNo.val(data.invoiceNo);
 
-                    var Supplier = $("#Supplier");
-                    Supplier.val(data.supplierName);
-                } else {
-                    console.error("Error: " + data.message);
+                        var Supplier = $("#Supplier");
+                        Supplier.val(data.supplierName);
+                    } else {
+                        console.error("Error: " + data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching data:", error);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error("Error fetching data:", error);
-            }
-        });
+            });
+        }
     }
+
+    // Sahifa yuklanganda avtomatik ravishda getInfo() ni chaqiramiz
+    $(document).ready(function() {
+        if ($("#transportNo option").length == 1) {
+            getInfo(); // Faqat bitta element bo'lsa, avtomatik tarzda ma'lumotni olish
+        }
+    });
 </script>
+
