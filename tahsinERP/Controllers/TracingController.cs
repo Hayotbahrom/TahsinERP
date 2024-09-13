@@ -20,13 +20,15 @@ namespace tahsinERP.Controllers
     public class TracingController : Controller
     {
         // GET: Tracing
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(DateTime? date = null)
         {
+            date = date ?? DateTime.Now.Date;
+
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 var list = await db.TRACINGS
                     .Include(p => p.P_INVOICE_PACKINGLISTS)
-                    .Where(p => p.IsDeleted == false)
+                    .Where(p => p.IsDeleted == false && p.IssueDateTime == date)
                     .GroupBy(t => t.P_INVOICE_PACKINGLISTS.TransportNo)
                     .Select(g => new TracingViewModel
                     {
@@ -42,6 +44,8 @@ namespace tahsinERP.Controllers
                 {
                     list = new List<TracingViewModel>();
                 }
+
+                ViewBag.Date = date.Value.ToString("dd-MM-yyyy");
 
                 return View(list);
             }
