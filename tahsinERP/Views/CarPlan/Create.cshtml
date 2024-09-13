@@ -3,169 +3,173 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<body>
 
-    @Html.AntiForgeryToken()
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
-                <div class="content-header-left col-12 mb-2 mt-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <div class="breadcrumb-wrapper col-12">
-                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
-                                    <li class="breadcrumb-item">
-                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="~/CarPlan/Index">Rejalashtirish</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">
-                                        Avtomobilga reja berish
-                                    </li>
-                                </ol>
-                            </div>
+@Html.AntiForgeryToken()
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="~/CarPlan/Index">Rejalashtirish</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    Avtomobilga reja berish
+                                </li>
+                            </ol>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="content-body">
-                <section class="basic-select2">
-                    <div class="row">
-                        <div class="col-xl-12 col-md-12 col-12">
-                            <div class="card">
-
-                                @using (Html.BeginForm("Create", "CarPlan", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                                {
-                                    <div class="col-lg-12 col-md-6 mt-25">
-                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                        <h6 class="invoice-to">Avtomobileni tanlang</h6>
-                                        <fieldset class="invoice-address form-group">
-                                            @Html.DropDownList("CarID", (SelectList)ViewBag.CarModelList, "--tanlang--", new { @class = "form-control select2", @id = "carModel", onchange = "getOptionCodes()" })
-                                            @Html.ValidationMessageFor(model => model.CarID, "", new { @class = "text-danger" })
-                                        </fieldset>
-                                        <h6 class="invoice-to">Avtomobileni variantini tanlang</h6>
-                                        <fieldset class="invoice-address form-group">
-                                            @Html.DropDownList("CarID", (SelectList)ViewBag.CarOptionList, "--tanlang--", new { @class = "form-control select2", @id = "optionCode" })
-                                            @Html.ValidationMessageFor(model => model.CarID, "", new { @class = "text-danger" })
-                                        </fieldset>
-                                        <h6 class="invoice-to">Rejadagi mahsulot miqdori</h6>
-                                        <fieldset class="form-group">
-                                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-                                        </fieldset>
-                                        <h6 class="invoice-to">Boshlanish sana</h6>
-                                        <fieldset class="invoice-address form-group">
-                                            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
-                                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-                                        </fieldset>
-                                        <h6 class="invoice-to">Tugash sana </h6>
-                                        <fieldset class="invoice-address form-group">
-                                            @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
-                                            @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
-                                        </fieldset>
-
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item border-0 pb-0">
-                                                <button class="btn btn-light-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
-                                                    <i class='bx bx-save'></i>
-                                                    Xisoblash
-                                                </button>
-                                            </li>
-                                        </ul>
-                                        <br />
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section>
-                    @if (ViewBag.DataTable != null)
-                    {
+        </div>
+        <div class="content-body">
+            <section class="basic-select2">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">SPL orqali maxsulotlarga chochilgan reja:</h4>
-                            </div>
-                            @using (Html.BeginForm("Save", "CarPlan", FormMethod.Post))
+
+                            @using (Html.BeginForm("Create", "CarPlan", FormMethod.Post, new { enctype = "multipart/form-data" }))
                             {
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <!-- datatable start -->
-                                        <div class="table-responsive">
+                                <div class="col-lg-12 col-md-6 mt-25">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <h6 class="invoice-to">Avtomobileni tanlang</h6>
+                                    <fieldset class="invoice-address form-group">
+                                        @Html.DropDownList("CarID", (SelectList)ViewBag.CarModelList, "--tanlang--", new { @class = "form-control select2", @id = "carModel" })
+                                        @Html.ValidationMessageFor(model => model.CarID, "", new { @class = "text-danger" })
+                                    </fieldset>
+                                    <h6 class="invoice-to">Avtomobileni variantini tanlang</h6>
+                                    <fieldset class="invoice-address form-group">
+                                        @Html.DropDownList("OptionID", (SelectList)ViewBag.CarOptionList, "--tanlang--", new { @class = "form-control select2", @id = "optionCode" })
+                                        @Html.ValidationMessageFor(model => model.CarID, "", new { @class = "text-danger" })
+                                    </fieldset>
+                                    <h6 class="invoice-to">Rejadagi mahsulot miqdori</h6>
+                                    <fieldset class="form-group">
+                                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                    </fieldset>
+                                    <h6 class="invoice-to">Boshlanish sana</h6>
+                                    <fieldset class="invoice-address form-group">
+                                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
+                                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                                    </fieldset>
+                                    <h6 class="invoice-to">Tugash sana </h6>
+                                    <fieldset class="invoice-address form-group">
+                                        @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control pickadate-months-year " } })
+                                        @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
+                                    </fieldset>
 
-
-                                            <table class="table zero-configuration" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Maxsulot raqami</th>
-                                                        <th>Reja qiymati</th>
-                                                        <th>Boshlanish sanasi</th>
-                                                        <th>Tugash sanasi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var row in ViewBag.DataTable)
-                                                    {
-                                                        <tr>
-                                                            <td>@row.PNo</td>
-                                                            <td>@row.Requirement</td>
-                                                            <td>@row.StartDate.ToString("dd.MM.yyyy")</td>
-                                                            <td>@row.DueDate.ToString("dd.MM.yyyy")</td>
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                        @if (ViewBag.IsFileUploaded != null)
-                                        {
-                                            <br />
-                                            <h6>
-                                                Agar ma'lumotlar to'g'riliga ishonch xosil qilgan bo'lsangiz quyidagi tugma orqali ma'lumotlar bazasiga saqlashingiz mumkin.
-                                            </h6>
-                                            <input type="hidden" name="dataTableModel" value='@Html.Raw(ViewBag.DataTableModel)' />
-                                            <hr />
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item border-0 pb-0">
-                                                    <button class="btn btn-outline-success round mr-1 mb-1" type="submit" value="Maxsulotlarga reja berish" onclick="return confirmSave()">
-                                                        <i class='bx bx-save'></i>
-                                                        Saqlash
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                            @*<input type="submit" value="Maxsulotlarga reja berish" class="btn btn-outline-success round mr-1 mb-1" onclick="return confirmSave()" />*@
-                                        }
-                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item border-0 pb-0">
+                                            <button class="btn btn-light-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                <i class='bx bx-save'></i>
+                                                Xisoblash
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <br />
                                 </div>
                             }
                         </div>
-                    }
-                </section>
-            </div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                @if (ViewBag.DataTable != null)
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">SPL orqali maxsulotlarga chochilgan reja:</h4>
+                        </div>
+                        @using (Html.BeginForm("Save", "CarPlan", FormMethod.Post))
+                        {
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <!-- datatable start -->
+                                    <div class="table-responsive">
+
+
+                                        <table class="table zero-configuration" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Maxsulot raqami</th>
+                                                    <th>Reja qiymati</th>
+                                                    <th>Boshlanish sanasi</th>
+                                                    <th>Tugash sanasi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var row in ViewBag.DataTable)
+                                                {
+                                                    <tr>
+                                                        <td>@row.PNo</td>
+                                                        <td>@row.Requirement</td>
+                                                        <td>@row.StartDate.ToString("dd.MM.yyyy")</td>
+                                                        <td>@row.DueDate.ToString("dd.MM.yyyy")</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    @if (ViewBag.IsFileUploaded != null)
+                                    {
+                                        <br />
+                                        <h6>
+                                            Agar ma'lumotlar to'g'riliga ishonch xosil qilgan bo'lsangiz quyidagi tugma orqali ma'lumotlar bazasiga saqlashingiz mumkin.
+                                        </h6>
+                                        <input type="hidden" name="dataTableModel" value='@Html.Raw(ViewBag.DataTableModel)' />
+                                        <hr />
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item border-0 pb-0">
+                                                <button class="btn btn-outline-success round mr-1 mb-1" type="submit" value="Maxsulotlarga reja berish" onclick="return confirmSave()">
+                                                    <i class='bx bx-save'></i>
+                                                    Saqlash
+                                                </button>
+                                            </li>
+                                        </ul>
+                                        @*<input type="submit" value="Maxsulotlarga reja berish" class="btn btn-outline-success round mr-1 mb-1" onclick="return confirmSave()" />*@
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
         </div>
     </div>
+</div>
 
-    <script type="text/javascript">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
         function getOptionCodes() {
-            alert("kirdi");
-            var carModel = document.getElementById("optionCode").value;
+            var carModel = document.getElementById("carModel").value;
+
             $.ajax({
                 url: '@Url.Action("GetOptionCode", "CarPlan")',
                 type: 'GET',
                 data: { modelName: carModel },
-                succes: function (data) {
-                    var optionCodes = $("optionCode");
+                success: function (data) {
+                    var optionCodes = $("#optionCode");
                     optionCodes.empty();
-                    $.each(data, function (index, item) {
-                        optionCodes.append(new Option(item.text, item.value);
+                    $.each(data.data, function (index, item) {
+                        optionCodes.append(new Option(item.OptionCode, item.ID));
                     });
                 },
-                error: function (xhr, status, erorr) {
+                error: function (xhr, status, error) {
                     console.error("Error fetching OptionCodes: ", error);
                 }
             });
         }
-    </script>
-</body>
+
+        $('#carModel').on('change', getOptionCodes);
+    });
+</script>
