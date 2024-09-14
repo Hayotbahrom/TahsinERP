@@ -315,20 +315,8 @@ namespace tahsinERP.Controllers
             }
             return View(model);
         }
-        public ActionResult DownloadDoc(int? orderID)
-        {
-            if (orderID == null)
-            {
-                return HttpNotFound("Shartnoma ID ko'rsatilmagan.");
-            }
-            using (DBTHSNEntities db = new DBTHSNEntities())
-            {
-                var orderDoc = db.P_ORDER_DOCS.FirstOrDefault(pi => pi.OrderID == orderID);
-                if (orderDoc != null)
-                    return File(orderDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                return HttpNotFound("Fayl yuklanmagan");
-            }
-        }
+        
+
         private List<string> contractExceedingParts = new List<string>();
         private bool checkForContractPartsAmount(POrderCreateViewModel model)
         {
@@ -479,9 +467,30 @@ namespace tahsinERP.Controllers
                 return RedirectToAction("Index");
             }
         }
+        public ActionResult DownloadDoc(int? orderID)
+        {
+            if (orderID == null)
+            {
+                return Json(new { success = false, message = "Buyurtma ID ko'rsatilmagan." }, JsonRequestBehavior.AllowGet);
+            }
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                var orderDoc = db.P_ORDER_DOCS
+                                    .Include(x => x.P_ORDERS)
+                                    .FirstOrDefault(pi => pi.OrderID == orderID);
+                if (orderDoc != null)
+                {
+                    string orderNo = orderDoc.P_ORDERS.OrderNo;
+                    return File(orderDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", orderNo + "_OrderDoocument.pdf");
+                }
+                else
+                {
+                    return Json(new { success = false, message = "buyurtma uchun fayl yuklanmagan." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
         public ActionResult Details(int? id)
         {
-
             if (id == null)
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
