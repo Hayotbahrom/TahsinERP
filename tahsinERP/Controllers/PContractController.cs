@@ -9,6 +9,7 @@ using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
@@ -68,7 +69,7 @@ namespace tahsinERP.Controllers
                 return View();
             }
         }
-        public ActionResult Download(int contractID)
+       /* public ActionResult Download(int? contractID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -77,6 +78,17 @@ namespace tahsinERP.Controllers
                     return File(contractFile.Doc, ".pdf");
                 else
                     ModelState.AddModelError("", "Sahrtnoma fayli yuklanmagan!");
+                return View();
+            }
+        }*/
+        public async Task<ActionResult> Download()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                SAMPLE_FILES contract = await db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("shartnoma.xlsx") == 0).FirstOrDefaultAsync();
+                if (contract != null)
+                    return File(contract.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
                 return View();
             }
         }
@@ -464,23 +476,31 @@ namespace tahsinERP.Controllers
                 return View(model);
             }
         }
-
-
         public ActionResult DownloadDoc(int? contractID)
         {
             if (contractID == null)
             {
-                return HttpNotFound("Shartnoma ID ko'rsatilmagan.");
+                return Json(new { success = false, message = "Shartnoma ID ko'rsatilmagan." }, JsonRequestBehavior.AllowGet);
             }
 
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var contractDoc = db.P_CONTRACT_DOCS.FirstOrDefault(pi => pi.ContractID == contractID);
+                var contractDoc = db.P_CONTRACT_DOCS
+                                .Include(x => x.P_CONTRACTS)
+                                .FirstOrDefault(pi => pi.ContractID == contractID);
                 if (contractDoc != null)
-                    return File(contractDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                return HttpNotFound("Fayl yuklanmagan.");
+                {
+                    var contractNo = contractDoc.P_CONTRACTS.ContractNo;
+                    // Returning the file for download via AJAX can be handled differently, so return success here
+                    return File(contractDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", contractNo + "_ContractDocument.pdf");
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Fayl yuklanmagan." }, JsonRequestBehavior.AllowGet);
+                }
             }
         }
+
 
         public ActionResult Details(int? ID)
         {

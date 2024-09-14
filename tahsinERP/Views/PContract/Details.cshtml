@@ -4,6 +4,23 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var type = ViewBag.Type;
 }
+
+<style>
+    #alertMessage {
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        padding: 15px;
+        background-color: #f44336; /* Red */
+        color: white;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
 
@@ -50,10 +67,20 @@
                                                     <hr />
                                                 </div>
                                             </div>
-                                            <button class="btn btn-outline-warning buttons-pdf buttons-html5 color-warning">
-                                                <i class='bx bx-save'></i>
-                                                @Html.ActionLink("Original fayl", "DownloadDoc", "PContract", new { contractID = Model.ID }, new { @class = "text-warning" })
+
+                                            <button id="downloadFileBtn" class="btn btn-outline-warning" onclick="downloadFile()">
+                                                <i class='bx bx-save'></i> Original fayl yuklash
                                             </button>
+
+
+                                                <div id="errorMessage" class="alert alert-danger" style="display: none;">
+                                                    Fayl yuklanmagan.
+                                                </div>
+
+                                            <div id="alertMessage"  class="alert alert-danger" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999;">
+                                                Fayl yuklanmagan.
+                                            </div>
+
                                             <div>
                                                 <h4 class="text-primary">Shartnoma  ma'lumotlari</h4>
                                                 <hr />
@@ -145,3 +172,60 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function downloadFile() {
+        var contractID = @Model.ID; // Assuming Model.ID is the contract ID
+
+        $.ajax({
+            url: '@Url.Action("DownloadDoc", "PContract")',
+            type: 'GET',
+            data: { contractID: contractID },
+            success: function (response) {
+                if (response.success === false) {
+                    $('#errorMessage').text(response.message).show();
+                } else {
+                    window.location.href = '@Url.Action("DownloadDoc", "PContract")' + "?contractID=" + contractID;
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#errorMessage').text("Xatolik yuz berdi, fayl yuklanmadi.").show();
+            }
+        });
+    }
+    $(document).ready(function() {
+        $('#downloadFileBtn').click(function(e) {
+            e.preventDefault(); // Prevent default behavior
+
+            var contractID = @Model.ID; // Get the contract ID dynamically
+
+            $.ajax({
+                url: '@Url.Action("DownloadDoc", "PContract")',
+                type: 'GET',
+                data: { contractID: contractID },
+                success: function(response) {
+                    if (response.success === false) {
+                        showAlert(response.message); // Show the alert if the file is not found
+                    } else {
+                        $('#alertMessage').hide(); // Hide the alert if the file exists
+                        window.location.href = '@Url.Action("DownloadDoc", "PContract")' + "?contractID=" + contractID;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showAlert("Xatolik yuz berdi, fayl yuklanmadi.");
+                }
+            });
+        });
+
+        // Function to show the alert message and hide it after 5 seconds
+        function showAlert(message) {
+            $('#alertMessage').text(message).fadeIn(); // Show the alert
+            setTimeout(function() {
+                $('#alertMessage').fadeOut(); // Hide the alert after 5 seconds
+            }, 5000); // 5000 ms = 5 seconds
+        }
+    });
+
+
+</script>
