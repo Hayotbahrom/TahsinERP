@@ -17,8 +17,8 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public P_INVOICE_PACKINGLISTS()
         {
-            this.P_PACKINGLIST_PARTS = new HashSet<P_PACKINGLIST_PARTS>();
             this.TRACINGS = new HashSet<TRACING>();
+            this.P_PACKINGLIST_PARTS = new HashSet<P_PACKINGLIST_PARTS>();
         }
     
         public int ID { get; set; }
@@ -37,8 +37,8 @@ namespace tahsinERP.Models
         public virtual F_TRANSPORT_TYPES F_TRANSPORT_TYPES { get; set; }
         public virtual P_INVOICES P_INVOICES { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TRACING> TRACINGS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
     }
 }

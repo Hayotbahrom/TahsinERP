@@ -211,6 +211,8 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="GrWeight" Type="float" />
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="IssueDate" Type="date" />
         </EntityType>
         <EntityType Name="FORWARDERS">
           <Key>
@@ -384,9 +386,9 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="PrCBM" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="ScCBM" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="TotalPrPacks" Type="int" />
-          <Property Name="TotalGrWeight" Type="float" StoreGeneratedPattern="Computed" />
-          <Property Name="TotalNetWeight" Type="float" StoreGeneratedPattern="Computed" />
-          <Property Name="TotalPrCBM" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="TotalGrWeight" Type="float" />
+          <Property Name="TotalNetWeight" Type="float" />
+          <Property Name="TotalPrCBM" Type="float" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -4325,6 +4327,8 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="F_WAYBILL_DOCS" Relationship="Self.FK_F_WAYBILL_DOCS_F_WAYBILLS" FromRole="F_WAYBILLS" ToRole="F_WAYBILL_DOCS" />
           <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_F_WAYBILLS_P_INVOICES" FromRole="F_WAYBILLS" ToRole="P_INVOICES" />
           <NavigationProperty Name="PART_WRHS_INCOMES" Relationship="Self.FK_P_WRHS_INCOMES_F_WAYBILLS" FromRole="F_WAYBILLS" ToRole="PART_WRHS_INCOMES" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="IssueDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="FORWARDER">
           <Key>
@@ -4423,8 +4427,8 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <Property Name="TotalNetWeight" Type="Double" />
           <NavigationProperty Name="F_TRANSPORT_TYPES" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_F_TRANSPORT_TYPES" FromRole="P_INVOICE_PACKINGLISTS" ToRole="F_TRANSPORT_TYPES" />
           <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_P_INVOICES" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_INVOICES" />
-          <NavigationProperty Name="P_PACKINGLIST_PARTS" Relationship="Self.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_PACKINGLIST_PARTS" />
           <NavigationProperty Name="TRACINGS" Relationship="Self.FK_TRACINGS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="TRACINGS" />
+          <NavigationProperty Name="P_PACKINGLIST_PARTS" Relationship="DBTHSNModel.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" FromRole="P_INVOICE_PACKINGLISTS" ToRole="P_PACKINGLIST_PARTS" />
         </EntityType>
         <EntityType Name="P_INVOICE_PARTS">
           <Key>
@@ -4509,39 +4513,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="P_ORDER_DOCS" Relationship="Self.FK_P_ORDER_DOCS_P_ORDERS" FromRole="P_ORDERS" ToRole="P_ORDER_DOCS" />
           <NavigationProperty Name="P_ORDER_PARTS" Relationship="Self.FK_P_ORDER_PARTS_P_ORDERS" FromRole="P_ORDERS" ToRole="P_ORDER_PARTS" />
           <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_P_ORDERS_SUPPLIERS" FromRole="P_ORDERS" ToRole="SUPPLIERS" />
-        </EntityType>
-        <EntityType Name="P_PACKINGLIST_PARTS">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartID" Type="Int32" Nullable="false" />
-          <Property Name="PieceWeight" Type="Double" />
-          <Property Name="PrLength" Type="Double" />
-          <Property Name="PrWidth" Type="Double" />
-          <Property Name="PrHeight" Type="Double" />
-          <Property Name="PrAmount" Type="Double" />
-          <Property Name="PrNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="PrGrWeight" Type="Double" />
-          <Property Name="PrPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ScPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ScLength" Type="Double" />
-          <Property Name="ScWidth" Type="Double" />
-          <Property Name="ScHeight" Type="Double" />
-          <Property Name="NoOfBoxes" Type="Double" />
-          <Property Name="SchedPack" Type="Double" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="ScNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="ScGrWeight" Type="Double" />
-          <Property Name="PalletType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="PackingListID" Type="Int32" Nullable="false" />
-          <Property Name="PrCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="ScCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="Self.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" FromRole="P_PACKINGLIST_PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
-          <NavigationProperty Name="PART" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="P_PACKINGLIST_PARTS" ToRole="PARTS" />
-          <Property Name="TotalPrPacks" Type="Int32" />
-          <Property Name="TotalGrWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="TotalNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="TotalPrCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -4881,7 +4852,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="P_CONTRACT_PARTS" Relationship="Self.FK_P_CONTRACT_PARTS_PARTS" FromRole="PARTS" ToRole="P_CONTRACT_PARTS" />
           <NavigationProperty Name="P_INVOICE_PARTS" Relationship="Self.FK_P_INVOICE_PARTS_PARTS" FromRole="PARTS" ToRole="P_INVOICE_PARTS" />
           <NavigationProperty Name="P_ORDER_PARTS" Relationship="Self.FK_P_ORDER_PARTS_PARTS" FromRole="PARTS" ToRole="P_ORDER_PARTS" />
-          <NavigationProperty Name="P_PACKINGLIST_PARTS" Relationship="Self.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="PARTS" ToRole="P_PACKINGLIST_PARTS" />
           <NavigationProperty Name="PART_PRODUCTION" Relationship="Self.FK_PART_PRODUCTION_PARTS" FromRole="PARTS" ToRole="PART_PRODUCTION" />
           <NavigationProperty Name="PART_WRHS_EXPENSE_PARTS" Relationship="Self.FK_P_WRHS_EXPENSE_PARTS_PARTS" FromRole="PARTS" ToRole="PART_WRHS_EXPENSE_PARTS" />
           <NavigationProperty Name="PART_WRHS_INCOME_PARTS" Relationship="Self.FK_P_WRHS_INCOME_PARTS_PARTS" FromRole="PARTS" ToRole="PART_WRHS_INCOME_PARTS" />
@@ -4897,6 +4867,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="STAMPING_NORMS" Relationship="Self.FK_STAMPING_NORMS_PARTS" FromRole="PARTS" ToRole="STAMPING_NORMS" />
           <NavigationProperty Name="STAMPING_NORMS1" Relationship="Self.FK_STAMPING_NORMS_PARTS1" FromRole="PARTS" ToRole="STAMPING_NORMS" />
           <NavigationProperty Name="PART_STOCKS" Relationship="DBTHSNModel.FK_PART_STOCKS_PARTS" FromRole="PART" ToRole="PART_STOCKS" />
+          <NavigationProperty Name="P_PACKINGLIST_PARTS" Relationship="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="PART" ToRole="P_PACKINGLIST_PARTS" />
         </EntityType>
         <EntityType Name="PERMISSIONMODULE">
           <Key>
@@ -6192,18 +6163,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS">
-          <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="1" />
-          <End Role="P_PACKINGLIST_PARTS" Type="Self.P_PACKINGLIST_PARTS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="P_INVOICE_PACKINGLISTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_PACKINGLIST_PARTS">
-              <PropertyRef Name="PackingListID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_TRACINGS_P_INVOICE_PACKINGLISTS">
           <End Role="P_INVOICE_PACKINGLISTS" Type="Self.P_INVOICE_PACKINGLISTS" Multiplicity="1" />
           <End Role="TRACINGS" Type="Self.TRACING" Multiplicity="*" />
@@ -6357,18 +6316,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             </Principal>
             <Dependent Role="P_ORDERS">
               <PropertyRef Name="SupplierID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_P_INVOICE_PACKINGLISTS_PARTS">
-          <End Role="PARTS" Type="Self.PART" Multiplicity="1" />
-          <End Role="P_PACKINGLIST_PARTS" Type="Self.P_PACKINGLIST_PARTS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PARTS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="P_PACKINGLIST_PARTS">
-              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7597,7 +7544,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySet Name="P_ORDER_DOCS" EntityType="Self.P_ORDER_DOCS" />
           <EntitySet Name="P_ORDER_PARTS" EntityType="Self.P_ORDER_PARTS" />
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" />
-          <EntitySet Name="P_PACKINGLIST_PARTS" EntityType="Self.P_PACKINGLIST_PARTS" />
           <EntitySet Name="P_PROFORMA_INVOICES" EntityType="Self.P_PROFORMA_INVOICES" />
           <EntitySet Name="PART_PRODUCTION" EntityType="Self.PART_PRODUCTION" />
           <EntitySet Name="PART_WASTE_WRHS_EXPENSE_WASTES" EntityType="Self.PART_WASTE_WRHS_EXPENSE_WASTES" />
@@ -7839,10 +7785,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
             <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
           </AssociationSet>
-          <AssociationSet Name="FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" Association="Self.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS">
-            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
-            <End Role="P_PACKINGLIST_PARTS" EntitySet="P_PACKINGLIST_PARTS" />
-          </AssociationSet>
           <AssociationSet Name="FK_TRACINGS_P_INVOICE_PACKINGLISTS" Association="Self.FK_TRACINGS_P_INVOICE_PACKINGLISTS">
             <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
             <End Role="TRACINGS" EntitySet="TRACINGS" />
@@ -7894,10 +7836,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <AssociationSet Name="FK_P_ORDERS_SUPPLIERS" Association="Self.FK_P_ORDERS_SUPPLIERS">
             <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
             <End Role="P_ORDERS" EntitySet="P_ORDERS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_PARTS" Association="Self.FK_P_INVOICE_PACKINGLISTS_PARTS">
-            <End Role="PARTS" EntitySet="PARTS" />
-            <End Role="P_PACKINGLIST_PARTS" EntitySet="P_PACKINGLIST_PARTS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_PROFORMA_INVOICES_SUPPLIERS" Association="Self.FK_P_PROFORMA_INVOICES_SUPPLIERS">
             <End Role="SUPPLIERS" EntitySet="SUPPLIERS" />
@@ -8341,6 +8279,15 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             <End Role="PART" EntitySet="PARTS" />
             <End Role="PART_STOCKS" EntitySet="PART_STOCKS" />
           </AssociationSet>
+          <EntitySet Name="P_PACKINGLIST_PARTS" EntityType="DBTHSNModel.P_PACKINGLIST_PARTS" />
+          <AssociationSet Name="FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" Association="DBTHSNModel.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS">
+            <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
+            <End Role="P_PACKINGLIST_PARTS" EntitySet="P_PACKINGLIST_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_INVOICE_PACKINGLISTS_PARTS" Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_PARTS">
+            <End Role="PART" EntitySet="PARTS" />
+            <End Role="P_PACKINGLIST_PARTS" EntitySet="P_PACKINGLIST_PARTS" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetCarPlanRequirements_Result">
           <Property Type="String" Name="PNo" Nullable="false" MaxLength="15" />
@@ -8434,6 +8381,63 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="PART_STOCKS">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="P_PACKINGLIST_PARTS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="PieceWeight" Type="Double" />
+          <Property Name="PrLength" Type="Double" />
+          <Property Name="PrWidth" Type="Double" />
+          <Property Name="PrHeight" Type="Double" />
+          <Property Name="PrAmount" Type="Double" />
+          <Property Name="PrNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="PrGrWeight" Type="Double" />
+          <Property Name="PrPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScPackMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScLength" Type="Double" />
+          <Property Name="ScWidth" Type="Double" />
+          <Property Name="ScHeight" Type="Double" />
+          <Property Name="NoOfBoxes" Type="Double" />
+          <Property Name="SchedPack" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ScNetWeight" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ScGrWeight" Type="Double" />
+          <Property Name="PalletType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PackingListID" Type="Int32" Nullable="false" />
+          <Property Name="PrCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ScCBM" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TotalPrPacks" Type="Int32" />
+          <Property Name="TotalGrWeight" Type="Double" />
+          <Property Name="TotalNetWeight" Type="Double" />
+          <Property Name="TotalPrCBM" Type="Double" />
+          <NavigationProperty Name="P_INVOICE_PACKINGLISTS" Relationship="DBTHSNModel.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" FromRole="P_PACKINGLIST_PARTS" ToRole="P_INVOICE_PACKINGLISTS" />
+          <NavigationProperty Name="PART" Relationship="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_PARTS" FromRole="P_PACKINGLIST_PARTS" ToRole="PART" />
+        </EntityType>
+        <Association Name="FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS">
+          <End Type="DBTHSNModel.P_INVOICE_PACKINGLISTS" Role="P_INVOICE_PACKINGLISTS" Multiplicity="1" />
+          <End Type="DBTHSNModel.P_PACKINGLIST_PARTS" Role="P_PACKINGLIST_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_INVOICE_PACKINGLISTS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_PACKINGLIST_PARTS">
+              <PropertyRef Name="PackingListID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_INVOICE_PACKINGLISTS_PARTS">
+          <End Type="DBTHSNModel.PART" Role="PART" Multiplicity="1" />
+          <End Type="DBTHSNModel.P_PACKINGLIST_PARTS" Role="P_PACKINGLIST_PARTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_PACKINGLIST_PARTS">
               <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
@@ -8643,6 +8647,8 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySetMapping Name="F_WAYBILLS">
             <EntityTypeMapping TypeName="DBTHSNModel.F_WAYBILLS">
               <MappingFragment StoreEntitySet="F_WAYBILLS">
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="WaybillNo" ColumnName="WaybillNo" />
                 <ScalarProperty Name="ContractID" ColumnName="ContractID" />
@@ -8809,38 +8815,6 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="P_PACKINGLIST_PARTS">
-            <EntityTypeMapping TypeName="DBTHSNModel.P_PACKINGLIST_PARTS">
-              <MappingFragment StoreEntitySet="P_PACKINGLIST_PARTS">
-                <ScalarProperty Name="TotalPrCBM" ColumnName="TotalPrCBM" />
-                <ScalarProperty Name="TotalNetWeight" ColumnName="TotalNetWeight" />
-                <ScalarProperty Name="TotalGrWeight" ColumnName="TotalGrWeight" />
-                <ScalarProperty Name="TotalPrPacks" ColumnName="TotalPrPacks" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="PartID" ColumnName="PartID" />
-                <ScalarProperty Name="PieceWeight" ColumnName="PieceWeight" />
-                <ScalarProperty Name="PrLength" ColumnName="PrLength" />
-                <ScalarProperty Name="PrWidth" ColumnName="PrWidth" />
-                <ScalarProperty Name="PrHeight" ColumnName="PrHeight" />
-                <ScalarProperty Name="PrAmount" ColumnName="PrAmount" />
-                <ScalarProperty Name="PrNetWeight" ColumnName="PrNetWeight" />
-                <ScalarProperty Name="PrGrWeight" ColumnName="PrGrWeight" />
-                <ScalarProperty Name="PrPackMaterial" ColumnName="PrPackMaterial" />
-                <ScalarProperty Name="ScPackMaterial" ColumnName="ScPackMaterial" />
-                <ScalarProperty Name="ScLength" ColumnName="ScLength" />
-                <ScalarProperty Name="ScWidth" ColumnName="ScWidth" />
-                <ScalarProperty Name="ScHeight" ColumnName="ScHeight" />
-                <ScalarProperty Name="NoOfBoxes" ColumnName="NoOfBoxes" />
-                <ScalarProperty Name="SchedPack" ColumnName="SchedPack" />
-                <ScalarProperty Name="ScNetWeight" ColumnName="ScNetWeight" />
-                <ScalarProperty Name="ScGrWeight" ColumnName="ScGrWeight" />
-                <ScalarProperty Name="PalletType" ColumnName="PalletType" />
-                <ScalarProperty Name="PackingListID" ColumnName="PackingListID" />
-                <ScalarProperty Name="PrCBM" ColumnName="PrCBM" />
-                <ScalarProperty Name="ScCBM" ColumnName="ScCBM" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9917,6 +9891,38 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
                 <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="WHID" ColumnName="WHID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_PACKINGLIST_PARTS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_PACKINGLIST_PARTS">
+              <MappingFragment StoreEntitySet="P_PACKINGLIST_PARTS">
+                <ScalarProperty Name="TotalPrCBM" ColumnName="TotalPrCBM" />
+                <ScalarProperty Name="TotalNetWeight" ColumnName="TotalNetWeight" />
+                <ScalarProperty Name="TotalGrWeight" ColumnName="TotalGrWeight" />
+                <ScalarProperty Name="TotalPrPacks" ColumnName="TotalPrPacks" />
+                <ScalarProperty Name="ScCBM" ColumnName="ScCBM" />
+                <ScalarProperty Name="PrCBM" ColumnName="PrCBM" />
+                <ScalarProperty Name="PackingListID" ColumnName="PackingListID" />
+                <ScalarProperty Name="PalletType" ColumnName="PalletType" />
+                <ScalarProperty Name="ScGrWeight" ColumnName="ScGrWeight" />
+                <ScalarProperty Name="ScNetWeight" ColumnName="ScNetWeight" />
+                <ScalarProperty Name="SchedPack" ColumnName="SchedPack" />
+                <ScalarProperty Name="NoOfBoxes" ColumnName="NoOfBoxes" />
+                <ScalarProperty Name="ScHeight" ColumnName="ScHeight" />
+                <ScalarProperty Name="ScWidth" ColumnName="ScWidth" />
+                <ScalarProperty Name="ScLength" ColumnName="ScLength" />
+                <ScalarProperty Name="ScPackMaterial" ColumnName="ScPackMaterial" />
+                <ScalarProperty Name="PrPackMaterial" ColumnName="PrPackMaterial" />
+                <ScalarProperty Name="PrGrWeight" ColumnName="PrGrWeight" />
+                <ScalarProperty Name="PrNetWeight" ColumnName="PrNetWeight" />
+                <ScalarProperty Name="PrAmount" ColumnName="PrAmount" />
+                <ScalarProperty Name="PrHeight" ColumnName="PrHeight" />
+                <ScalarProperty Name="PrWidth" ColumnName="PrWidth" />
+                <ScalarProperty Name="PrLength" ColumnName="PrLength" />
+                <ScalarProperty Name="PieceWeight" ColumnName="PieceWeight" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

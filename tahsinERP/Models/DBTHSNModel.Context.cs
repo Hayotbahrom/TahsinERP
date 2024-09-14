@@ -55,7 +55,6 @@ namespace tahsinERP.Models
         public virtual DbSet<P_ORDER_DOCS> P_ORDER_DOCS { get; set; }
         public virtual DbSet<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         public virtual DbSet<P_ORDERS> P_ORDERS { get; set; }
-        public virtual DbSet<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
         public virtual DbSet<P_PROFORMA_INVOICES> P_PROFORMA_INVOICES { get; set; }
         public virtual DbSet<PART_PRODUCTION> PART_PRODUCTION { get; set; }
         public virtual DbSet<PART_WASTE_WRHS_EXPENSE_WASTES> PART_WASTE_WRHS_EXPENSE_WASTES { get; set; }
@@ -126,6 +125,7 @@ namespace tahsinERP.Models
         public virtual DbSet<CarPlanRequirement> CarPlanRequirements { get; set; }
         public virtual DbSet<MaterialRequirement> MaterialRequirements { get; set; }
         public virtual DbSet<PART_STOCKS> PART_STOCKS { get; set; }
+        public virtual DbSet<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
     
         public virtual ObjectResult<GetCarPlanRequirements_Result> GetCarPlanRequirements(string optionCode)
         {

@@ -30,6 +30,8 @@ namespace tahsinERP.Models
         public Nullable<double> GrWeight { get; set; }
         public string Description { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public Nullable<System.DateTime> IssueDate { get; set; }
     
         public virtual F_CONTRACTS F_CONTRACTS { get; set; }
         public virtual F_TRANSPORT_TYPES F_TRANSPORT_TYPES { get; set; }

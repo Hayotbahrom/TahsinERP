@@ -23,7 +23,6 @@ namespace tahsinERP.Models
             this.P_CONTRACT_PARTS = new HashSet<P_CONTRACT_PARTS>();
             this.P_INVOICE_PARTS = new HashSet<P_INVOICE_PARTS>();
             this.P_ORDER_PARTS = new HashSet<P_ORDER_PARTS>();
-            this.P_PACKINGLIST_PARTS = new HashSet<P_PACKINGLIST_PARTS>();
             this.PART_PRODUCTION = new HashSet<PART_PRODUCTION>();
             this.PART_WRHS_EXPENSE_PARTS = new HashSet<PART_WRHS_EXPENSE_PARTS>();
             this.PART_WRHS_INCOME_PARTS = new HashSet<PART_WRHS_INCOME_PARTS>();
@@ -36,6 +35,7 @@ namespace tahsinERP.Models
             this.STAMPING_NORMS = new HashSet<STAMPING_NORMS>();
             this.STAMPING_NORMS1 = new HashSet<STAMPING_NORMS>();
             this.PART_STOCKS = new HashSet<PART_STOCKS>();
+            this.P_PACKINGLIST_PARTS = new HashSet<P_PACKINGLIST_PARTS>();
         }
     
         public int ID { get; set; }
@@ -74,8 +74,6 @@ namespace tahsinERP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<P_ORDER_PARTS> P_ORDER_PARTS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_PRODUCTION> PART_PRODUCTION { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_WRHS_EXPENSE_PARTS> PART_WRHS_EXPENSE_PARTS { get; set; }
@@ -102,5 +100,7 @@ namespace tahsinERP.Models
         public virtual ICollection<STAMPING_NORMS> STAMPING_NORMS1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PART_STOCKS> PART_STOCKS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
     }
 }

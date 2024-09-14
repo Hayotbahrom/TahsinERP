@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9c53b072c0104a6d85ff48c76c4a7663" Name="Diagram1">
+      <Diagram DiagramId="9c53b072c0104a6d85ff48c76c4a7663" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="DBTHSNModel.BLANKING_NORMS" Width="1.5" PointX="14.25" PointY="77.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.BOM" Width="1.5" PointX="12" PointY="40.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.CAR_PLANS" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
@@ -33,7 +33,6 @@
         <EntityTypeShape EntityType="DBTHSNModel.P_ORDER_DOCS" Width="1.5" PointX="3" PointY="44.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.P_ORDER_PARTS" Width="1.5" PointX="3" PointY="67.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.P_ORDERS" Width="1.5" PointX="0.75" PointY="63.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTHSNModel.P_PACKINGLIST_PARTS" Width="1.5" PointX="17.25" PointY="72.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.P_PROFORMA_INVOICES" Width="1.5" PointX="19.75" PointY="64" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.PART_PRODUCTION" Width="1.5" PointX="20.25" PointY="73.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DBTHSNModel.PART_WASTE_WRHS_EXPENSE_WASTES" Width="1.5" PointX="6" PointY="67.875" IsExpanded="true" />
@@ -146,7 +145,6 @@
         <AssociationConnector Association="DBTHSNModel.FK_PCONTRACTS_SUPPLIERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_DOCS_P_INVOICES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_P_INVOICES" ManuallyRouted="false" />
-        <AssociationConnector Association="DBTHSNModel.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_TRACINGS_P_INVOICE_PACKINGLISTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PARTS_P_INVOICES" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PARTS_PARTS" ManuallyRouted="false" />
@@ -160,7 +158,6 @@
         <AssociationConnector Association="DBTHSNModel.FK_P_ORDER_PARTS_PARTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_ORDER_PARTS_UNITS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_ORDERS_SUPPLIERS" ManuallyRouted="false" />
-        <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_PARTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_P_PROFORMA_INVOICES_SUPPLIERS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_PART_PRODUCTION_PARTS" ManuallyRouted="false" />
         <AssociationConnector Association="DBTHSNModel.FK_PART_PRODUCTION_SHOPS" ManuallyRouted="false" />
@@ -265,6 +262,9 @@
         <EntityTypeShape EntityType="DBTHSNModel.PART_STOCKS" Width="1.5" PointX="17.25" PointY="62" />
         <AssociationConnector Association="DBTHSNModel.FK_PART_STOCKS_PART_WRHS" />
         <AssociationConnector Association="DBTHSNModel.FK_PART_STOCKS_PARTS" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_PACKINGLIST_PARTS" Width="1.5" PointX="17.25" PointY="73.125" />
+        <AssociationConnector Association="DBTHSNModel.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" />
+        <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_PARTS" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

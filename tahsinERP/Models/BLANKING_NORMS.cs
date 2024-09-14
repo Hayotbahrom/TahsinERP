@@ -10,6 +10,7 @@
 namespace tahsinERP.Models
 {
     using System;
+    using System.Collections.Generic;
     
     public partial class BLANKING_NORMS
     {
@@ -22,7 +23,7 @@ namespace tahsinERP.Models
         public double WeightOfCutWaste { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public DateTime IssuedDateTime { get; set; }
+        public System.DateTime IssuedDateTime { get; set; }
         public int IssuedByUserID { get; set; }
     
         public virtual PART PART { get; set; }

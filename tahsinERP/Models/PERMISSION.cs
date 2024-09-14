@@ -10,6 +10,7 @@
 namespace tahsinERP.Models
 {
     using System;
+    using System.Collections.Generic;
     
     public partial class PERMISSION
     {
@@ -18,6 +19,7 @@ namespace tahsinERP.Models
         public bool ChangePermit { get; set; }
         public int RoleID { get; set; }
         public int PermissionModuleID { get; set; }
+    
         public virtual PERMISSIONMODULE PERMISSIONMODULE { get; set; }
         public virtual ROLE ROLE { get; set; }
     }
