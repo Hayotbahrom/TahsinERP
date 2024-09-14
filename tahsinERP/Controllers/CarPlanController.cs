@@ -25,8 +25,8 @@ namespace tahsinERP.Controllers
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                List<string> models = db.CARS.Select(c => c.Model).Distinct().ToList();
-                ViewBag.CarModelList = models;//new SelectList(db.CARS.Distinct().ToList(), "ID", "Model");
+                var models = db.CARS.Select(c => c.Model).Distinct().ToList();
+                ViewBag.CarModelList = new SelectList(models);//new SelectList(db.CARS.Distinct().ToList(), "ID", "Model");
                 ViewBag.CarOptionList = new SelectList(db.CARS.ToList(), "ID", "OptionCode");
                 return View();
             }
@@ -151,7 +151,6 @@ namespace tahsinERP.Controllers
                 {
                     ModelState.AddModelError("", ex.Message);
                 }
-                //});
             }
             return RedirectToAction("Index");
         }
