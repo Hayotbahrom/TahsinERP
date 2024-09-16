@@ -61,13 +61,22 @@ namespace tahsinERP.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        supplier.IsDeleted = false;
-                        db.SUPPLIERS.Add(supplier);
-                        db.SaveChanges();
+                        var existSupplier = db.SUPPLIERS.Where(x => x.IsDeleted == false && x.Name.ToLower().CompareTo(supplier.Name.ToLower()) == 0).FirstOrDefault();
+                        if (existSupplier is null)
+                        {
+                            supplier.IsDeleted = false;
+                            db.SUPPLIERS.Add(supplier);
+                            db.SaveChanges();
 
-                        LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplier.Name} - Supplierni yaratdi");
+                            LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplier.Name} - Supplierni yaratdi");
 
-                        return RedirectToAction("Index");
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Bunday nom bilan Ta'minotchi kiritilgan, ma'lumotlarni qaytadan tekshiring.");
+                            return View(supplier);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -145,6 +154,7 @@ namespace tahsinERP.Controllers
                         {
                             try
                             {
+                                var existSupplier = db.SUPPLIERS.Where(x => x.IsDeleted == false && x.Name.ToLower().CompareTo(supplier.Name.ToLower()) == 0 && x.ID != supplierToUpdate.ID).FirstOrDefault();
                                 db.SaveChanges();
 
                                 LogHelper.LogToDatabase(User.Identity.Name, "SupplierController", $"{supplierToUpdate.Name} - Supplierni tahrirladi");

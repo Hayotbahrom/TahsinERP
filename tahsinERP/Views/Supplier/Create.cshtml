@@ -53,17 +53,17 @@
                                                     <hr>
                                                     <h6 class="invoice-to">Nomi</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control round", @placeholder = "Nomi" })
+                                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control round", @placeholder = "Nomi" , @required="required"  })
                                                         @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">DUNS</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.DUNS, new { @class = "form-control round", @placeholder = "DUNS" })
+                                                        @Html.TextBoxFor(model => model.DUNS, new { @class = "form-control round", @placeholder = "DUNS", @required = "required", @type = "number" })
                                                         @Html.ValidationMessageFor(model => model.DUNS, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Turi</h6>
                                                     <fieldset class="form-group">
-                                                        @Html.DropDownListFor(model => model.Type, new SelectList(new string[4] { "", "KD", "Steel", "Maxalliy" }), new { @class = "form-control round" })
+                                                        @Html.DropDownListFor(model => model.Type, new SelectList(new string[4] { "", "KD", "Steel", "Maxalliy" }), new { @class = "form-control round", @required = "required" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Mamlakat</h6>
                                                     <fieldset class="invoice-address form-group">
@@ -87,7 +87,7 @@
                                                     </fieldset>
                                                     <h6 class="invoice-to">E-mail</h6>
                                                     <fieldset class="invoice-address form-group">
-                                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control round", @placeholder = "Elektron manzil" })
+                                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control round", @placeholder = "Elektron manzil", @required = "required" })
                                                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                                                     </fieldset>
                                                     <h6 class="invoice-to">Aloqa uchun hodim</h6>

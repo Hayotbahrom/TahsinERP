@@ -19,6 +19,8 @@ namespace tahsinERP.ViewModels
         public double? GrWeight { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
+        public float Amount { get; set; }
+        public DateTime IssueDate { get; set; }
 
         // Dropdown lists
         public IEnumerable<SelectListItem> Contracts { get; set; }

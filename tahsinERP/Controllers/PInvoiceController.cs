@@ -291,17 +291,24 @@ namespace tahsinERP.Controllers
         {
             if (invoiceID == null)
             {
-                return HttpNotFound("Shartnoma ID ko'rsatilmagan.");
+                return Json(new { success = false, message = "Invoice ID ko'rsatilmagan."}, JsonRequestBehavior.AllowGet);
             }
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
-                var invoiceDoc = db.P_INVOICE_DOCS.FirstOrDefault(pi => pi.InvoiceID == invoiceID);
+                var invoiceDoc = db.P_INVOICE_DOCS
+                                        .Include(x => x.P_INVOICES)
+                                        .FirstOrDefault(pi => pi.InvoiceID == invoiceID);
                 if (invoiceDoc != null)
-                    return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-                return HttpNotFound("Fayl yuklanmagan");
+                {
+                    string invoiceNo = invoiceDoc.P_INVOICES.InvoiceNo;
+                    return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", invoiceNo + "_InvoiceDocument.pdf");
+                }
+                else
+                {
+                    return Json(new { success = false, message = "ushbu invoys uchun dokument yuklanmagan" }, JsonRequestBehavior.AllowGet);
+                }
             }
         }
-
         public ActionResult Details(int? id)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())

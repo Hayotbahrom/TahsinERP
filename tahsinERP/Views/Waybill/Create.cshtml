@@ -81,6 +81,20 @@
                                                         @Html.ValidationMessageFor(model => model.CBM, "", new { @class = "text-danger" })
                                                     </fieldset>
 
+                                                    <h6 class="invoice-to">Yo'l haqi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @placeholder = "birlik hajm o`lchovi" })
+                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <div class="col-md-6 col-12 form-group position-relative has-icon-left">
+                                                        <label>Sana</label>
+                                                        @Html.TextBoxFor(model => model.IssueDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Tuzilgan sanasi" })
+                                                        @Html.ValidationMessageFor(model => model.IssueDate, "", new { @class = "text-danger" })
+                                                        <div class="form-control-position mt-2">
+                                                            <i class='bx bx-calendar'></i>
+                                                        </div>
+                                                    </div>
                                                     <h6 class="invoice-to">Umumiy og`irligi</h6>
                                                     <fieldset class="invoice-address form-group">
                                                         @Html.TextBoxFor(model => model.GrWeight, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
