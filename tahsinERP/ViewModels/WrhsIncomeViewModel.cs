@@ -60,10 +60,10 @@ namespace tahsinERP.ViewModels
 
         [Required(ErrorMessage = "Amount is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Amount must be a positive number.")]
-        public int Amount { get; set; }
+        public float Amount { get; set; }
 
-        [Range(0.01, double.MaxValue, ErrorMessage = "Piece price must be a positive number.")]
-        public decimal PiecePrice { get; set; }
+        //[Range(0.01, double.MaxValue, ErrorMessage = "Piece price must be a positive number.")]
+        public float PiecePrice { get; set; }
 
         public string Comment { get; set; } // Optional comment
     }

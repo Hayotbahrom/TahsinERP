@@ -67,7 +67,7 @@
 
                                                         <div class="col-md-6 col-12 form-group">
                                                             <label for="InvoiceID">Invoys</label>
-                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, "", new { @class = "form-control select2", id = "InvoiceID", @required = "required", onchange = "getInvoiceDetailst()" })
+                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, "", new { @class = "form-control select2", id = "InvoiceID", @required = "required", onchange = "getInvoiceDetails()" })
                                                             @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
@@ -97,24 +97,24 @@
                                                 <div data-repeater-item>
                                                     <div class="row justify-content-between">
                                                         <input type="hidden" name="ID" />
-                                                        <div class="col-md-3 col-sm-12 form-group">
+                                                        <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_PartID">Ehtiyot qismni tanlang</label>
-                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.InComeParts, new { @class = "form-control select", id="PartID", onchange="getPriceAndQuantity(this)", onclick = "getPriceAndQuantity(this)" })
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select PartID", id="PartID", onchange="getPriceAndAmount(this)", onclick = "getPriceAndAmount(this)" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
                                                         </div>
-                                                        <div class="col-md-3 col-sm-12 form-group">
+                                                        <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Unit">Birligi</label>
                                                             @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount" required="required" placeholder="Miqdorini kiriting" />
+                                                            <input type="number" name="Amount" class="form-control Part_Amount" id="Part_Amount" required="required" placeholder="Miqdorini kiriting" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
-                                                            <label for="Part_PiecePrice">Narxi</label>
-                                                            <input type="number" name="PiecePrice" step="0.01" class="form-control" id="Part_PiecePrice" placeholder="Qism narxini kiriting" />
+                                                            <label for="Part_Price">Narxi</label>
+                                                            <input type="number" name="Price" step="0.001" class="form-control Part_Price" id="Part_Price" placeholder="Qism narxini kiriting" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].PiecePrice, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
@@ -157,39 +157,8 @@ else
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
 <script type="text/javascript">
-    // Invoyslar ro'yxatini ta'minotchiga qarab yangilash
-    function refreshInvoiceListbySupplier() {
-        const supplierID = $("#SupplierID").val();
-
-        $.ajax({
-            url: '@Url.Action("GetInvoicesBySupplier", "WhIncome")',
-            type: 'GET',
-            data: { supplierID: supplierID },
-            success: function (data) {
-                var invoiceDropdown = $("#InvoiceID");
-                invoiceDropdown.empty(); // Eski invoyslarni tozalash
-
-                // Yangi invoyslarni qo'shish
-                $.each(data, function (index, item) {
-                    invoiceDropdown.append(new Option(item.Text, item.Value));
-                });
-
-                // Avtomatik ravishda birinchi invoysni tanlash va valyutani yangilash
-                if (data.length > 0) {
-                    invoiceDropdown.val(data[0].Value).trigger('change');
-                    $("#Currency").val(data[0].Currency); // Birinchi invoysning valyutasini o'rnatish
-                } else {
-                    $("#Currency").val(''); // Agar invoys topilmasa valyutani tozalash
-                }
-                getInvoiceDetails();
-            },
-            error: function (xhr, status, error) {
-                console.error("Invoyslar olishda xatolik:", error);
-            }
-        });
-    }
-     function getInvoiceDetails() {
-     var orderID = $("#InvoiceID").val();
+  function getInvoiceDetails() {
+     var invoiceID = $("#InvoiceID").val();
 
      $.ajax({
          url: '@Url.Action("GetInvoiceDetails", "WhIncome")',
@@ -221,54 +190,37 @@ else
              console.error("Invoice tafsilotlarini olishda xatolik:", error);
          }
      });
- }
-    // Valyutani invoysga qarab yangilash
-   @* function refreshCurrencyByInvoice() {
-        var invoiceID = $("#InvoiceID").val();
-
-        $.ajax({
-            url: '@Url.Action("GetInvoiceDetails", "WhIncome")',
-            type: 'GET',
-            data: { invoiceID: invoiceID },
-            success: function (data) {
-                if (data.success) {
-                    $("#Currency").val(data.data.Currency); // Valyutani yangilash
-                } else {
-                    console.error("Xatolik: " + data.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("Valyuta yangilashda xatolik:", error);
-            }
-        });
-    }*@
-
-    // Qism narxi va miqdorini yangilash
-    function getPriceAndAmount(partDropdown) {
-        var partID = $(partDropdown).val();
-
-        $.ajax({
-            url: '@Url.Action("GetPartDetails", "WhIncome")',
-            type: 'GET',
-            data: { partID: partID },
-            success: function (data) {
-                if (data.success) {
-                    var parent = $(partDropdown).closest("[data-repeater-item]");
-                    var price = parent.find("#Part_PiecePrice");
-                    var amount = parent.find("#Part_Amount");
-                    price.val(data.data.Price); // Qism narxini o'rnatish
-                    amount.val(data.data.Amount); // Miqdorini o'rnatish
-                } else {
-                    console.error("Xatolik: " + data.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("Narx va miqdor olishda xatolik:", error);
-            }
-        });
     }
+  // Qismlar ro'yxatini yangilash
+     function updatePartList(invoiceID) {
+         $.ajax({
+             url: '@Url.Action("GetPartList", "WhIncome")',
+             type: 'GET',
+             data: { invoiceID: invoiceID },
+             success: function (data) {
+                 if (data.success) {
+                     var lastPartDropdown = $('[data-repeater-item]').last().find('.PartID');
+                     lastPartDropdown.empty();
 
-    // Yangi qism qo'shilganda qismlar ro'yxatini yangilash
+                     // Qismlar variantlarini yangilash
+                     $.each(data.data, function (index, item) {
+                         lastPartDropdown.append(new Option(item.PNo, item.PartID));
+                     });
+
+                     // Birinchi qism tanlanadi va narxi va miqdori avtomatik keladi
+                     if (data.data.length > 0) {
+                         lastPartDropdown.val(data.data[0].PartID).trigger('change');
+                     }
+
+                 } else {
+                     console.error("Xatolik: " + data.message);
+                 }
+             },
+             error: function (xhr, status, error) {
+                 console.error("Qismlar ro'yxatini olishda xatolik:", error);
+             }
+         });
+    }
     $(document).on('click', '[data-repeater-create]', function () {
         setTimeout(function () {
             var invoiceID = $("#InvoiceID").val(); // OrderID qiymatini olamiz
@@ -280,33 +232,54 @@ else
         }, 100);
     });
 
-    // Qismlar ro'yxatini yangilash
-    function updatePartList(invoiceID) {
+    // Qism narxi va miqdorini yangilash
+    function getPriceAndAmount(partDropdown) {
+        var partID = $(partDropdown).val();
+
         $.ajax({
-            url: '@Url.Action("GetPartList", "WhIncome")',
+            url: '@Url.Action("GetPriceAndMOQ", "WhIncome")',
             type: 'GET',
-            data: { invoiceID: invoiceID },
+            data: { partID: partID },
             success: function (data) {
                 if (data.success) {
-                    var lastPartDropdown = $('[data-repeater-item]').last().find('select[id^=PartID]');
-                    lastPartDropdown.empty();
-
-                    // Qismlar variantlarini yangilash
-                    $.each(data.data, function (index, item) {
-                        lastPartDropdown.append(new Option(item.PNo, item.PartID));
-                    });
-
-                    // Birinchi qism tanlanadi va narxi va miqdori avtomatik keladi
-                    if (data.data.length > 0) {
-                        lastPartDropdown.val(data.data[0].PartID).trigger('change');
-                    }
-
+                    var parent = $(partDropdown).closest("[data-repeater-item]");
+                    var Price = parent.find(".Part_Price");
+                    var Amount = parent.find(".Part_Amount");
+                    Price.val(data.data.Price); // Qism narxini o'rnatish
+                    Amount.val(data.data.Amount); // Miqdorini o'rnatish
                 } else {
                     console.error("Xatolik: " + data.message);
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Qismlar ro'yxatini olishda xatolik:", error);
+                console.error("Narx va miqdor olishda xatolik:", error);
+            }
+        });
+    }
+    // Invoyslar ro'yxatini ta'minotchiga qarab yangilash
+    function refreshInvoiceListbySupplier() {
+        const supplierID = $("#SupplierID").val();
+        $.ajax({
+            url: '@Url.Action("GetInvoicesBySupplier", "WhIncome")',
+            type: 'GET',
+            data: { supplierID: supplierID },
+            success: function (data) {
+                var invoiceDropdown = $("#InvoiceID");
+                invoiceDropdown.empty(); // Eski invoyslarni tozalash
+                $.each(data, function (index, item) {
+                    invoiceDropdown.append(new Option(item.Text, item.Value));
+                });
+
+                // Avtomatik ravishda birinchi invoysni tanlash va valyutani yangilash
+                if (data.length > 0) {
+                    invoiceDropdown.val(data[0].Value).trigger('change');
+                    $("#Currency").val(data[0].Currency); // Birinchi invoysning valyutasini o'rnatish
+                } else {
+                    $("#Currency").val(''); // Agar invoys topilmasa valyutani tozalash
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Invoyslar olishda xatolik:", error);
             }
         });
     }

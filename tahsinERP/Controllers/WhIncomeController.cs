@@ -123,7 +123,7 @@ namespace tahsinERP.Controllers
             }
         }
 
-        public JsonResult GetInvoicesDetails(int invoiceID)
+        public JsonResult GetInvoiceDetails(int invoiceID)
         {
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
@@ -188,13 +188,13 @@ namespace tahsinERP.Controllers
         }
       
         public ActionResult Create()
-        {
+            {
             string month = "";
             using (DBTHSNEntities db = new DBTHSNEntities())
             {
                 ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
                 ViewBag.Invoices = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.InComeParts = new SelectList(Enumerable.Empty<SelectListItem>());
+                ViewBag.partList = new SelectList(Enumerable.Empty<SelectListItem>());
                 ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
                 WrhsIncomeViewModel model = new WrhsIncomeViewModel();
                 PART_WRHS_INCOMES income = db.PART_WRHS_INCOMES.OrderByDescending(w => w.IssueDateTime).FirstOrDefault();
@@ -212,10 +212,14 @@ namespace tahsinERP.Controllers
                         doc_No_number++;
                         model.DocNo = DateTime.Now.Month + "_" + doc_No_number;
                     }
+                    else
+                    {
+                        model.DocNo = DateTime.Now.Month.ToString() + "_1";
+                    }
                 }
                 else
                 {
-                    model.DocNo = DateTime.Now.Month + "_" + 1;
+                    model.DocNo = DateTime.Now.Month.ToString() + "_1";
                 }
 
                 return View(model);
@@ -238,11 +242,10 @@ namespace tahsinERP.Controllers
                         sumOfInvoiceAmount += invoicePart.Quantity;
                     if (sumModelPartsQuantity > sumOfInvoiceAmount)
                     {
-                        ViewBag.Invoices = new SelectList(db.P_INVOICES.Where(i => i.IsDeleted == false).ToList(), "ID", "InvoiceNo");
-                        ViewBag.Waybills = new SelectList(db.F_WAYBILLS.Where(w => w.IsDeleted == false).ToList(), "ID", "WaybillNo");
+                        ViewBag.Invoices = new SelectList(Enumerable.Empty<SelectListItem>());
                         ViewBag.units = new SelectList(db.UNITS.ToList(), "ID", "UnitName");
-                        ViewBag.InComes = new SelectList(db.PART_WRHS_INCOMES.Where(wi => wi.IsDeleted == false).ToList(), "ID", "DocNo");
-                        ViewBag.InComeParts = new SelectList(db.PARTS.Where(c => c.IsDeleted == false).ToList(), "ID", "PNo");
+                        ViewBag.partList = new SelectList(Enumerable.Empty<SelectListItem>());
+                        ViewBag.Suppliers = new SelectList(db.SUPPLIERS.Where(x => x.IsDeleted == false).ToList(), "ID", "Name");
 
                         ModelState.AddModelError("", "Invoice dan ortiqcha hajmni kirim qilib bo'lmaydi.");
                         return View(model);
@@ -289,6 +292,7 @@ namespace tahsinERP.Controllers
                         Comment = part.Comment
                     };
                     PART_STOCKS existStock = db.PART_STOCKS.Where(s => s.WHID == newIncome.WHID && s.PartID == part.PartID).FirstOrDefault();
+                    string partNo;
                     if (existStock == null)
                     {
                         PART_STOCKS newPartStock = new PART_STOCKS
@@ -299,17 +303,18 @@ namespace tahsinERP.Controllers
                             Amount = part.Amount
                         };
                         db.PART_STOCKS.Add(newPartStock);
-
-                        LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPartStock.PART.PNo} - PartStockni yaratdi");
+                         partNo = db.PARTS.Where(x => x.ID == newPartStock.PartID).FirstOrDefault().PNo;
+                        LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{partNo} - PartStockni yaratdi");
                     }
                     else
                     {
                         existStock.Amount = existStock.Amount + part.Amount;
+                        partNo = db.PARTS.Where(x => x.ID == existStock.PartID).FirstOrDefault().PNo;
                     }
 
                     db.PART_WRHS_INCOME_PARTS.Add(newPart);
 
-                    LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{newPart.PART.PNo} - PartWrhsIncomePartni yaratdi");
+                    LogHelper.LogToDatabase(User.Identity.Name, "WhIncomeController", $"{partNo} - PartWrhsIncomePartni yaratdi");
                 }
 
                 db.SaveChanges();

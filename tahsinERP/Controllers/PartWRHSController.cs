@@ -35,7 +35,7 @@ namespace tahsinERP.Controllers
                 var mrpUsers = db.USERS
                                     .Where(u => u.ROLES.Any(r => r.RName == "MRP"))
                                     .ToList();
-                ViewBag.MRPUsers = new SelectList(mrpUsers, "ID", "FullName");
+                ViewBag.MRPUsers = new SelectList(mrpUsers.Where(x => x.IsDeleted == false ).ToList(), "ID", "FullName");
 
                 return View();
             }
@@ -49,7 +49,8 @@ namespace tahsinERP.Controllers
                 try
                 {
                     model.IsDeleted = false;
-
+                    //account nimalini , nima uchun ishlatilishini tushunmadim, xatolik bermasligi uchun shunday yozildi.
+                   // model.Account = model.MRP;
                     db.PART_WRHS.Add(model);
                     db.SaveChanges();
                     
@@ -59,6 +60,11 @@ namespace tahsinERP.Controllers
                 }
                 catch (Exception)
                 {
+                    ViewBag.ShopList = new SelectList(db.SHOPS.ToList(), "ID", "ShopName");
+                    var mrpUsers = db.USERS
+                                   .Where(u => u.ROLES.Any(r => r.RName == "MRP"))
+                                   .ToList();
+                    ViewBag.MRPUsers = new SelectList(mrpUsers.Where(x => x.IsDeleted == false).ToList(), "ID", "FullName");
                     return View(model);
                 }
             }
