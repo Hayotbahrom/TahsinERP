@@ -63,7 +63,9 @@ namespace tahsinERP.ViewModels
         public float Amount { get; set; }
 
         //[Range(0.01, double.MaxValue, ErrorMessage = "Piece price must be a positive number.")]
-        public float PiecePrice { get; set; }
+        //public float PiecePrice { get; set; }
+        [Required]
+        public float Price { get; set; }
 
         public string Comment { get; set; } // Optional comment
     }

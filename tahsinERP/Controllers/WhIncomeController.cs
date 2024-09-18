@@ -287,7 +287,7 @@ namespace tahsinERP.Controllers
                         PartID = part.PartID,
                         UnitID = part.UnitID,
                         Amount = part.Amount,
-                        PiecePrice = (double)part.PiecePrice,
+                        PiecePrice = (double)part.Price,
                         //TotalPrice = part.TotalPrice,
                         Comment = part.Comment
                     };
