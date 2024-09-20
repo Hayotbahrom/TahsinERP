@@ -2926,6 +2926,8 @@
     <Content Include="Views\Reports\Coverage.cshtml" />
     <Content Include="Views\Tracing\UploadWithExcel.cshtml" />
     <Content Include="Views\Manual\Index.cshtml" />
+    <Content Include="Views\WhIncome\UploadWithExcel.cshtml" />
+    <Content Include="Views\WhExpense\UploadWithExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

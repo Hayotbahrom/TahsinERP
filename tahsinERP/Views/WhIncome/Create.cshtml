@@ -109,7 +109,7 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Amount">Miqdori</label>
-                                                            <input type="number" name="Amount" class="form-control Part_Amount" id="Part_Amount" required="required" placeholder="Miqdorini kiriting" />
+                                                            <input type="number" name="Amount" step="0.01" class="form-control Part_Amount" id="Part_Amount" required="required" placeholder="Miqdorini kiriting" />
                                                             @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
