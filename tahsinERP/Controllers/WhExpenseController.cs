@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using tahsinERP.Models;
@@ -59,6 +61,12 @@ namespace tahsinERP.Controllers
                 // Initialize view model
                 WrhsExpenseViewModel viewModel = new WrhsExpenseViewModel();
                 PART_WRHS_EXPENSES expense = db.PART_WRHS_EXPENSES.OrderByDescending(p => p.IssueDateTime).FirstOrDefault();
+
+                warehouse = GetWarehouseOfMRP(User.Identity.Name);
+                if (warehouse is null)
+                    viewModel.WHName = "Siz uchun ombor biriktirilmagan.";
+                else
+                    viewModel.WHName = warehouse.WHName;
                 if (expense == null)
                 {
                     viewModel.DocNo = DateTime.Now.Month + "_" + 1;
@@ -429,6 +437,30 @@ namespace tahsinERP.Controllers
                 return View(whExpensePartToDelete);
             }
         }
+        public async Task<ActionResult> Download()
+        {
+            using (DBTHSNEntities db = new DBTHSNEntities())
+            {
+                SAMPLE_FILES invoys = db.SAMPLE_FILES.Where(s => s.FileName.CompareTo("ombor_chiqim.xlsx") == 0).FirstOrDefault();
+                if (invoys != null)
+                    return File(invoys.File, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
+                return View();
+            }
+        }
+
+        public ActionResult UploadWithExcel()
+        {
+            ViewBag.IsFileUploaded = false;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UploadWithExcel(HttpPostedFileBase file)
+        {
+            // Process uploaded file
+            // ...
+            return View();
+        }
     }
 }

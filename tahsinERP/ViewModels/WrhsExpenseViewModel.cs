@@ -18,6 +18,7 @@ namespace tahsinERP.ViewModels
         [DataType(DataType.Text)]
         public string Description { get; set; }
         public bool SendStatus { get; set; }
+        public string WHName { get; set; }
         public List<WhrsExpensePart> Parts { get; set; }
         public WrhsExpenseViewModel()
         {

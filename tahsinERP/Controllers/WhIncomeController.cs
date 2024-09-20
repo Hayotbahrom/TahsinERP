@@ -508,6 +508,7 @@ namespace tahsinERP.Controllers
                                 }).ToList();
 
                 ViewBag.PartList = allParts;
+                ViewBag.units = new SelectList( db.UNITS.ToList(), "ID", "UnitName");
 
                 return View(whIncomePart);
             }
