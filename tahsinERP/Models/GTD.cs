@@ -12,28 +12,20 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_PROFORMA_INVOICES
+    public partial class GTD
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public P_PROFORMA_INVOICES()
+        public GTD()
         {
-            this.P_PROFORMA_INVOICE_DOCS = new HashSet<P_PROFORMA_INVOICE_DOCS>();
+            this.GTD_DOCS = new HashSet<GTD_DOCS>();
         }
     
         public int ID { get; set; }
-        public string PrInvoiceNo { get; set; }
-        public int InvoiceID { get; set; }
-        public int SupplierID { get; set; }
-        public double Amount { get; set; }
-        public System.DateTime InvoiceDate { get; set; }
-        public string Currency { get; set; }
-        public Nullable<int> CompanyID { get; set; }
-        public Nullable<bool> IsDeleted { get; set; }
+        public string GTD_No { get; set; }
+        public double Sum { get; set; }
+        public bool IsDeleted { get; set; }
     
-        public virtual COMPANy COMPANy { get; set; }
-        public virtual P_INVOICES P_INVOICES { get; set; }
-        public virtual SUPPLIER SUPPLIER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<P_PROFORMA_INVOICE_DOCS> P_PROFORMA_INVOICE_DOCS { get; set; }
+        public virtual ICollection<GTD_DOCS> GTD_DOCS { get; set; }
     }
 }

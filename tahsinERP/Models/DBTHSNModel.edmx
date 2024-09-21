@@ -225,6 +225,30 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="Description" Type="text" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <EntityType Name="GTD_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GtdID" Type="int" Nullable="false" />
+          <Property Name="Doc" Type="varbinary(max)" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'DBTHSN-TEST.dbo.GTD_INVOICES' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="GTD_INVOICES">
+          <Property Name="InvoiceID" Type="int" />
+          <Property Name="GtdID" Type="int" />
+        </EntityType>-->
+        <EntityType Name="GTDS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GTD_No" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sum" Type="float" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="HSCODES">
           <Key>
             <PropertyRef Name="ID" />
@@ -389,6 +413,15 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.BOMS_AND_NORMS' does not have a pr
           <Property Name="TotalGrWeight" Type="float" />
           <Property Name="TotalNetWeight" Type="float" />
           <Property Name="TotalPrCBM" Type="float" />
+        </EntityType>
+        <EntityType Name="P_PROFORMA_INVOICE_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Doc" Type="varbinary(max)" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="ProformaID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="P_PROFORMA_INVOICES">
           <Key>
@@ -1552,6 +1585,24 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GTD_DOCS_GTDS">
+          <End Role="GTDS" Type="Self.GTDS" Multiplicity="1" />
+          <End Role="GTD_DOCS" Type="Self.GTD_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GTDS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="GTD_DOCS">
+              <PropertyRef Name="GtdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+error 6004: The table 'DBTHSN-TEST.dbo.GTD_INVOICES' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_GTD_INVOICES_GTDS" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'DBTHSN-TEST.dbo.GTD_INVOICES' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_GTD_INVOICES_P_INVOICES" />-->
         <Association Name="FK_P_CONTRACT_DOCS_P_CONTRACTS">
           <End Role="P_CONTRACTS" Type="Self.P_CONTRACTS" Multiplicity="1" />
           <End Role="P_CONTRACT_DOCS" Type="Self.P_CONTRACT_DOCS" Multiplicity="*" />
@@ -1813,6 +1864,18 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             </Principal>
             <Dependent Role="P_PACKINGLIST_PARTS">
               <PropertyRef Name="PackingListID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES">
+          <End Role="P_PROFORMA_INVOICES" Type="Self.P_PROFORMA_INVOICES" Multiplicity="1" />
+          <End Role="P_PROFORMA_INVOICE_DOCS" Type="Self.P_PROFORMA_INVOICE_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_PROFORMA_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_PROFORMA_INVOICE_DOCS">
+              <PropertyRef Name="ProformaID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3314,6 +3377,8 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySet Name="F_WAYBILL_DOCS" EntityType="Self.F_WAYBILL_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="F_WAYBILLS" EntityType="Self.F_WAYBILLS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FORWARDERS" EntityType="Self.FORWARDERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GTD_DOCS" EntityType="Self.GTD_DOCS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GTDS" EntityType="Self.GTDS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HSCODES" EntityType="Self.HSCODES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_CONTRACT_DOCS" EntityType="Self.P_CONTRACT_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_CONTRACT_PARTS" EntityType="Self.P_CONTRACT_PARTS" Schema="dbo" store:Type="Tables" />
@@ -3326,6 +3391,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <EntitySet Name="P_ORDER_PARTS" EntityType="Self.P_ORDER_PARTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_ORDERS" EntityType="Self.P_ORDERS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_PACKINGLIST_PARTS" EntityType="Self.P_PACKINGLIST_PARTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="P_PROFORMA_INVOICE_DOCS" EntityType="Self.P_PROFORMA_INVOICE_DOCS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="P_PROFORMA_INVOICES" EntityType="Self.P_PROFORMA_INVOICES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PART_PRODUCTION" EntityType="Self.PART_PRODUCTION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PART_STOCKS" EntityType="Self.PART_STOCKS" Schema="dbo" store:Type="Tables" />
@@ -3514,6 +3580,10 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             <End Role="P_INVOICES" EntitySet="P_INVOICES" />
             <End Role="F_WAYBILLS" EntitySet="F_WAYBILLS" />
           </AssociationSet>
+          <AssociationSet Name="FK_GTD_DOCS_GTDS" Association="Self.FK_GTD_DOCS_GTDS">
+            <End Role="GTDS" EntitySet="GTDS" />
+            <End Role="GTD_DOCS" EntitySet="GTD_DOCS" />
+          </AssociationSet>
           <AssociationSet Name="FK_P_CONTRACT_DOCS_P_CONTRACTS" Association="Self.FK_P_CONTRACT_DOCS_P_CONTRACTS">
             <End Role="P_CONTRACTS" EntitySet="P_CONTRACTS" />
             <End Role="P_CONTRACT_DOCS" EntitySet="P_CONTRACT_DOCS" />
@@ -3601,6 +3671,10 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <AssociationSet Name="FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" Association="Self.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS">
             <End Role="P_INVOICE_PACKINGLISTS" EntitySet="P_INVOICE_PACKINGLISTS" />
             <End Role="P_PACKINGLIST_PARTS" EntitySet="P_PACKINGLIST_PARTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES" Association="Self.FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES">
+            <End Role="P_PROFORMA_INVOICES" EntitySet="P_PROFORMA_INVOICES" />
+            <End Role="P_PROFORMA_INVOICE_DOCS" EntitySet="P_PROFORMA_INVOICE_DOCS" />
           </AssociationSet>
           <AssociationSet Name="FK_P_PROFORMA_INVOICES_COMPANIES" Association="Self.FK_P_PROFORMA_INVOICES_COMPANIES">
             <End Role="COMPANIES" EntitySet="COMPANIES" />
@@ -4530,6 +4604,7 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
           <NavigationProperty Name="COMPANy" Relationship="Self.FK_P_PROFORMA_INVOICES_COMPANIES" FromRole="P_PROFORMA_INVOICES" ToRole="COMPANIES" />
           <NavigationProperty Name="P_INVOICES" Relationship="Self.FK_P_PROFORMA_INVOICES_P_INVOICES" FromRole="P_PROFORMA_INVOICES" ToRole="P_INVOICES" />
           <NavigationProperty Name="SUPPLIER" Relationship="Self.FK_P_PROFORMA_INVOICES_SUPPLIERS" FromRole="P_PROFORMA_INVOICES" ToRole="SUPPLIERS" />
+          <NavigationProperty Name="P_PROFORMA_INVOICE_DOCS" Relationship="DBTHSNModel.FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES" FromRole="P_PROFORMA_INVOICES" ToRole="P_PROFORMA_INVOICE_DOCS" />
         </EntityType>
         <EntityType Name="PART_PRODUCTION">
           <Key>
@@ -8288,6 +8363,17 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             <End Role="PART" EntitySet="PARTS" />
             <End Role="P_PACKINGLIST_PARTS" EntitySet="P_PACKINGLIST_PARTS" />
           </AssociationSet>
+          <EntitySet Name="GTD_DOCS" EntityType="DBTHSNModel.GTD_DOCS" />
+          <EntitySet Name="GTDS" EntityType="DBTHSNModel.GTD" />
+          <EntitySet Name="P_PROFORMA_INVOICE_DOCS" EntityType="DBTHSNModel.P_PROFORMA_INVOICE_DOCS" />
+          <AssociationSet Name="FK_GTD_DOCS_GTDS" Association="DBTHSNModel.FK_GTD_DOCS_GTDS">
+            <End Role="GTD" EntitySet="GTDS" />
+            <End Role="GTD_DOCS" EntitySet="GTD_DOCS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES" Association="DBTHSNModel.FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES">
+            <End Role="P_PROFORMA_INVOICES" EntitySet="P_PROFORMA_INVOICES" />
+            <End Role="P_PROFORMA_INVOICE_DOCS" EntitySet="P_PROFORMA_INVOICE_DOCS" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetCarPlanRequirements_Result">
           <Property Type="String" Name="PNo" Nullable="false" MaxLength="15" />
@@ -8439,6 +8525,60 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
             </Principal>
             <Dependent Role="P_PACKINGLIST_PARTS">
               <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="GTD_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GtdID" Type="Int32" Nullable="false" />
+          <Property Name="Doc" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="GTD" Relationship="DBTHSNModel.FK_GTD_DOCS_GTDS" FromRole="GTD_DOCS" ToRole="GTD" />
+        </EntityType>
+        <EntityType Name="GTD">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GTD_No" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Sum" Type="Double" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="GTD_DOCS" Relationship="DBTHSNModel.FK_GTD_DOCS_GTDS" FromRole="GTD" ToRole="GTD_DOCS" />
+        </EntityType>
+        <EntityType Name="P_PROFORMA_INVOICE_DOCS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Doc" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="ProformaID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="P_PROFORMA_INVOICES" Relationship="DBTHSNModel.FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES" FromRole="P_PROFORMA_INVOICE_DOCS" ToRole="P_PROFORMA_INVOICES" />
+        </EntityType>
+        <Association Name="FK_GTD_DOCS_GTDS">
+          <End Type="DBTHSNModel.GTD" Role="GTD" Multiplicity="1" />
+          <End Type="DBTHSNModel.GTD_DOCS" Role="GTD_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GTD">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="GTD_DOCS">
+              <PropertyRef Name="GtdID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES">
+          <End Type="DBTHSNModel.P_PROFORMA_INVOICES" Role="P_PROFORMA_INVOICES" Multiplicity="1" />
+          <End Type="DBTHSNModel.P_PROFORMA_INVOICE_DOCS" Role="P_PROFORMA_INVOICE_DOCS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="P_PROFORMA_INVOICES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="P_PROFORMA_INVOICE_DOCS">
+              <PropertyRef Name="ProformaID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9923,6 +10063,36 @@ warning 6002: The table/view 'DBTHSN-TEST.dbo.MaterialRequirement' does not have
                 <ScalarProperty Name="PrLength" ColumnName="PrLength" />
                 <ScalarProperty Name="PieceWeight" ColumnName="PieceWeight" />
                 <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GTD_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.GTD_DOCS">
+              <MappingFragment StoreEntitySet="GTD_DOCS">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+                <ScalarProperty Name="GtdID" ColumnName="GtdID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GTDS">
+            <EntityTypeMapping TypeName="DBTHSNModel.GTD">
+              <MappingFragment StoreEntitySet="GTDS">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Sum" ColumnName="Sum" />
+                <ScalarProperty Name="GTD_No" ColumnName="GTD_No" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="P_PROFORMA_INVOICE_DOCS">
+            <EntityTypeMapping TypeName="DBTHSNModel.P_PROFORMA_INVOICE_DOCS">
+              <MappingFragment StoreEntitySet="P_PROFORMA_INVOICE_DOCS">
+                <ScalarProperty Name="ProformaID" ColumnName="ProformaID" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -54,17 +54,13 @@ namespace tahsinERP.ViewModels
     public class WhrsIncomePart
     {
         public int PartID { get; set; }
-
         [Required(ErrorMessage = "Unit ID is required.")]
         public int UnitID { get; set; }
 
         [Required(ErrorMessage = "Amount is required.")]
         public double Amount { get; set; }
-
-        //[Range(0.01, double.MaxValue, ErrorMessage = "Piece price must be a positive number.")]
-        //public float PiecePrice { get; set; }
         [Required]
-        public float Price { get; set; }
+        public double PiecePrice { get; set; }
 
         public string Comment { get; set; } // Optional comment
     }

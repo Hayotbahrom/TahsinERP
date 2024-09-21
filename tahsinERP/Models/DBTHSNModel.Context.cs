@@ -126,6 +126,9 @@ namespace tahsinERP.Models
         public virtual DbSet<MaterialRequirement> MaterialRequirements { get; set; }
         public virtual DbSet<PART_STOCKS> PART_STOCKS { get; set; }
         public virtual DbSet<P_PACKINGLIST_PARTS> P_PACKINGLIST_PARTS { get; set; }
+        public virtual DbSet<GTD_DOCS> GTD_DOCS { get; set; }
+        public virtual DbSet<GTD> GTDS { get; set; }
+        public virtual DbSet<P_PROFORMA_INVOICE_DOCS> P_PROFORMA_INVOICE_DOCS { get; set; }
     
         public virtual ObjectResult<GetCarPlanRequirements_Result> GetCarPlanRequirements(string optionCode)
         {

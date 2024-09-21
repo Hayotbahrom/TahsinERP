@@ -114,8 +114,8 @@
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Price">Birlik narxi</label>
-                                                            <input type="number" name="PiecePrice" step="0.01" class="form-control Part_Price" id="Part_Price" />
-                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger" })
+                                                            <input type="number" name="PiecePrice" step="0.01" class="form-control Part_PiecePrice" id="Part_PiecePrice" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].PiecePrice, "", new { @class = "text-danger" })
                                                         </div>
                                                         <div class="col-md-2 col-sm-12 form-group">
                                                             <label for="Part_Comment">Comment</label>
@@ -243,7 +243,7 @@ else
             success: function (data) {
                 if (data.success) {
                     var parent = $(partDropdown).closest("[data-repeater-item]");
-                    var Price = parent.find(".Part_Price");
+                    var Price = parent.find(".Part_PiecePrice");
                     var Amount = parent.find(".Part_Amount");
                     Price.val(data.data.Price); // Qism narxini o'rnatish
                     Amount.val(data.data.Amount); // Miqdorini o'rnatish

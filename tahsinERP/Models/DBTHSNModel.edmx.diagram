@@ -265,6 +265,11 @@
         <EntityTypeShape EntityType="DBTHSNModel.P_PACKINGLIST_PARTS" Width="1.5" PointX="17.25" PointY="73.125" />
         <AssociationConnector Association="DBTHSNModel.FK_P_PACKINGLIST_PARTS_P_INVOICE_PACKINGLISTS" />
         <AssociationConnector Association="DBTHSNModel.FK_P_INVOICE_PACKINGLISTS_PARTS" />
+        <EntityTypeShape EntityType="DBTHSNModel.GTD_DOCS" Width="1.5" PointX="3" PointY="7.875" />
+        <EntityTypeShape EntityType="DBTHSNModel.GTD" Width="1.5" PointX="0.75" PointY="7.875" />
+        <EntityTypeShape EntityType="DBTHSNModel.P_PROFORMA_INVOICE_DOCS" Width="1.5" PointX="22.375" PointY="64.75" />
+        <AssociationConnector Association="DBTHSNModel.FK_GTD_DOCS_GTDS" />
+        <AssociationConnector Association="DBTHSNModel.FK_P_PROFORMA_INVOICE_DOCS_P_PROFORMA_INVOICES" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

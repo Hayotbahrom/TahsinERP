@@ -6,7 +6,7 @@
 
 @if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
-    using (Html.BeginForm("Create", "Part", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("Create", "PurchasingItem", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
 
         @Html.AntiForgeryToken()
@@ -24,10 +24,10 @@
                                             <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
                                         </li>
                                         <li class="breadcrumb-item">
-                                            <a href="~/PurchoseItem/Index">Purchose Items</a>
+                                            <a href="~/PurchasingItem/Index">Xarid maxsulotlari</a>
                                         </li>
                                         <li class="breadcrumb-item active">
-                                            Yangi purchoseItem qo'shish
+                                            Yangi xarid qilish maxsulotini qo'shish
                                         </li>
                                     </ol>
                                 </div>

@@ -12,20 +12,13 @@ namespace tahsinERP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class P_CONTRACT_PARTS
+    public partial class P_PROFORMA_INVOICE_DOCS
     {
         public int ID { get; set; }
-        public int ContractID { get; set; }
-        public int PartID { get; set; }
-        public double Price { get; set; }
-        public double Quantity { get; set; }
-        public double Amount { get; set; }
-        public Nullable<double> MOQ { get; set; }
-        public Nullable<bool> ActivePart { get; set; }
-        public Nullable<int> UnitID { get; set; }
+        public byte[] Doc { get; set; }
+        public bool IsDeleted { get; set; }
+        public int ProformaID { get; set; }
     
-        public virtual P_CONTRACTS P_CONTRACTS { get; set; }
-        public virtual PART PART { get; set; }
-        public virtual UNIT UNIT { get; set; }
+        public virtual P_PROFORMA_INVOICES P_PROFORMA_INVOICES { get; set; }
     }
 }
