@@ -468,6 +468,7 @@
     <Content Include="assets\manual\style.css" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CarPlanController.cs" />
+    <Compile Include="Controllers\GTDController.cs" />
     <Compile Include="Controllers\LastActionsController.cs" />
     <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\BlankingController.cs" />
@@ -2934,6 +2935,7 @@
     <Content Include="Views\Manual\Index.cshtml" />
     <Content Include="Views\WhIncome\UploadWithExcel.cshtml" />
     <Content Include="Views\WhExpense\UploadWithExcel.cshtml" />
+    <Content Include="Views\GTD\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -422,6 +422,17 @@
                             </ul>
                         </li>
                     }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Proforma Invoys</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ProformaInvoice/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Barchasi</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
                     <li class=" navigation-header">
                         <span>Engineering</span>
                     </li>
@@ -619,7 +630,7 @@
                                 </li>
                             </ul>
                         </li>
-                     }
+                    }
 
                     <li class=" nav-item">
                         <a href="~/Manual/Index">
@@ -629,7 +640,7 @@
                             </span>
                         </a>
                     </li>
-                        
+
                     <li class="nav-item">
                         <a href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })">
                             <i class="bx bx-wrench"></i>
