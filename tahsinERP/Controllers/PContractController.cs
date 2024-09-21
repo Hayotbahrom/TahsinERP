@@ -492,7 +492,7 @@ namespace tahsinERP.Controllers
                 {
                     var contractNo = contractDoc.P_CONTRACTS.ContractNo;
                     // Returning the file for download via AJAX can be handled differently, so return success here
-                    return File(contractDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", contractNo + "_ContractDocument.pdf");
+                    return File(contractDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", contractNo + "_ContractDoc.pdf");
                 }
                 else
                 {

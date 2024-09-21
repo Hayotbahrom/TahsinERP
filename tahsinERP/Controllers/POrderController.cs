@@ -481,7 +481,7 @@ namespace tahsinERP.Controllers
                 if (orderDoc != null)
                 {
                     string orderNo = orderDoc.P_ORDERS.OrderNo;
-                    return File(orderDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", orderNo + "_OrderDoocument.pdf");
+                    return File(orderDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", orderNo + "_OrderDoc.pdf");
                 }
                 else
                 {

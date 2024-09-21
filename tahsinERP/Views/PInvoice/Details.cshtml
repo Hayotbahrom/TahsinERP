@@ -103,11 +103,21 @@
                                 PDF
                             </button>
                             <br />
-                            <button class="btn btn-outline-warning buttons-pdf buttons-html5 color-warning">
-                                <i class='bx bx-save'></i>
-                                @*<a href="~/PInvoice/DownloadDoc/@Model.ID">Invoys fayli</a>*@
-                                @Html.ActionLink("Original fayl", "DownloadDoc", "PInvoice", new { Model.ID }, new { @class = "text-warning" })
+                            <!--<button class="btn btn-outline-warning buttons-pdf buttons-html5 color-warning">
+        <i class='bx bx-save'></i>-->
+                            @*<a href="~/PInvoice/DownloadDoc/@Model.ID">Invoys fayli</a>*@
+                            <!--@Html.ActionLink("Original fayl", "DownloadDoc", "PInvoice", new { Model.ID }, new { @class = "text-warning" })
+    </button-->
+                            
+
+
+                            <button id="downloadFileBtn" class="btn btn-outline-warning" onclick="downloadFile()">
+                                <i class='bx bx-save'></i> Original fayl yuklash
                             </button>
+
+                            <div id="errorMessage" class="alert alert-danger" style="display: none;">
+                                Fayl yuklanmagan.
+                            </div>
                             <p>@ViewBag.DocNotFoundMessage</p>
                             <br />
                             <br />
@@ -315,3 +325,61 @@ else
 {
     Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
 }
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function downloadFile() {
+        var invoiceID = @Model.ID; // Assuming Model.ID is the contract ID
+
+        $.ajax({
+            url: '@Url.Action("DownloadDoc", "PInvoice")',
+            type: 'GET',
+            data: { invoiceID: invoiceID },
+            success: function (response) {
+                if (response.success === false) {
+                    $('#errorMessage').text(response.message).show();
+                } else {
+                    window.location.href = '@Url.Action("DownloadDoc", "PInvoice")' + "?invoiceID=" + invoiceID;
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#errorMessage').text("Xatolik yuz berdi, fayl yuklanmadi.").show();
+            }
+        });
+    }
+    $(document).ready(function() {
+        $('#downloadFileBtn').click(function(e) {
+            e.preventDefault(); // Prevent default behavior
+
+            var invoiceID = @Model.ID; // Get the contract ID dynamically
+
+            $.ajax({
+                url: '@Url.Action("DownloadDoc", "PInvoice")',
+                type: 'GET',
+                data: { invoiceID: invoiceID },
+                success: function(response) {
+                    if (response.success === false) {
+                        showAlert(response.message); // Show the alert if the file is not found
+                    } else {
+                        $('#alertMessage').hide(); // Hide the alert if the file exists
+                        window.location.href = '@Url.Action("DownloadDoc", "PInvoice")' + "?invoiceID=" + invoiceID;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showAlert("Xatolik yuz berdi, fayl yuklanmadi.");
+                }
+            });
+        });
+
+        // Function to show the alert message and hide it after 5 seconds
+        function showAlert(message) {
+            $('#alertMessage').text(message).fadeIn(); // Show the alert
+            setTimeout(function() {
+                $('#alertMessage').fadeOut(); // Hide the alert after 5 seconds
+            }, 5000); // 5000 ms = 5 seconds
+        }
+    });
+
+
+</script>

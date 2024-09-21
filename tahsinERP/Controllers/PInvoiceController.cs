@@ -301,7 +301,7 @@ namespace tahsinERP.Controllers
                 if (invoiceDoc != null)
                 {
                     string invoiceNo = invoiceDoc.P_INVOICES.InvoiceNo;
-                    return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", invoiceNo + "_InvoiceDocument.pdf");
+                    return File(invoiceDoc.Doc, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", invoiceNo + "_InvoiceDoc.pdf");
                 }
                 else
                 {

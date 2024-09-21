@@ -5,22 +5,6 @@
     var type = ViewBag.Type;
 }
 
-<style>
-    #alertMessage {
-        display: none;
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-        padding: 15px;
-        background-color: #f44336; /* Red */
-        color: white;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-</style>
-
-
 @if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
 {
 
@@ -72,12 +56,7 @@
                                                 <i class='bx bx-save'></i> Original fayl yuklash
                                             </button>
 
-
-                                                <div id="errorMessage" class="alert alert-danger" style="display: none;">
-                                                    Fayl yuklanmagan.
-                                                </div>
-
-                                            <div id="alertMessage"  class="alert alert-danger" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999;">
+                                            <div id="errorMessage" class="alert alert-danger" style="display: none;">
                                                 Fayl yuklanmagan.
                                             </div>
 
