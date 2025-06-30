@@ -10,12 +10,19 @@
 ## 📂 Project Structure
 
 tahsinERP/
+
 ├── Controllers/
+
 ├── Models/
+
 ├── Views/
+
 ├── Scripts/
+
 ├── Content/
+
 ├── App_Data/
+
 └── Web.config
 
 ---
