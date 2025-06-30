@@ -1,0 +1,102 @@
+﻿@model tahsinERP.Models.PERMISSIONMODULE
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    @Html.AntiForgeryToken()
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/AdminPanel/Index">Admin Panel</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/PModule/Index">Ruxsatlar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Ruxsat malumotlarini tahrirlash
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @using (Html.BeginForm("Edit", "PModule", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="content-body">
+                    <!-- app invoice View Page -->
+                    <section class="invoice-edit-wrapper">
+                        <div class="row">
+                            <!-- invoice view page -->
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <div class="row invoice-info">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+                                                    <h6 class="invoice-to">Modul nomi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Module, new { @class = "form-control", @placeholder = "Modul nomi" })
+                                                        @Html.ValidationMessageFor(model => model.Module, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <fieldset class="invoice-address form-group">
+                                                        <label>Controller</label>
+                                                        @Html.DropDownList("Controller", ViewBag.ControllerNames as SelectList, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.Controller, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <fieldset class="invoice-address form-group">
+                                                        <label>Action</label>
+                                                        @Html.TextBoxFor(model => model.Action, new { @class = "form-control", @placeholder = "action nomi" })
+                                                        @Html.ValidationMessageFor(model => model.Action, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Parametr</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Parameter, new { @class = "form-control", @placeholder = "Parametrlarini kiriting" })
+                                                        @*@Html.DropDownListFor(model => model.Parameter, new SelectList(ViewBag.Parametr, "Select Part Type"), new { @class = "form-control" })*@
+                                                        @Html.ValidationMessageFor(model => model.Parameter, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Rollarga birikishi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.ListBox("RoleID", ViewBag.Roles as MultiSelectList, new { @class = "select2 form-control", multiple = "multiple" })
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

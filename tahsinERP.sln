@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tahsinERP", "tahsinERP\tahsinERP.csproj", "{524032B1-5DF4-40FD-BCE8-D04FD72A79C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tahsinERP.Tests", "tahsinERP.Tests\tahsinERP.Tests.csproj", "{FFDB0077-8259-4A68-9DB0-60625634FE53}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{524032B1-5DF4-40FD-BCE8-D04FD72A79C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524032B1-5DF4-40FD-BCE8-D04FD72A79C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524032B1-5DF4-40FD-BCE8-D04FD72A79C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524032B1-5DF4-40FD-BCE8-D04FD72A79C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFDB0077-8259-4A68-9DB0-60625634FE53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFDB0077-8259-4A68-9DB0-60625634FE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFDB0077-8259-4A68-9DB0-60625634FE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFDB0077-8259-4A68-9DB0-60625634FE53}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E16D7D5F-111C-4D43-B18B-1F8DB8F80F66}
+	EndGlobalSection
+EndGlobal

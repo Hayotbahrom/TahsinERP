@@ -1,0 +1,385 @@
+﻿@model tahsinERP.Models.P_INVOICES
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    double totalAmount = 0;
+    int totalQty = 0;
+    string transportNo = ViewBag.transportNo as string;
+    string packingListNo = ViewBag.packingListNo as string;
+    var packingLists = ViewBag.PackingLists as List<tahsinERP.Models.P_INVOICE_PACKINGLISTS>;
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .invoice-container {
+        width: 90%;
+        margin: 0 auto;
+        border: 1px solid #000;
+        padding: 20px;
+    }
+
+    .header, .footer {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .header table, .content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header th, .header td, .content th, .content td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+    .content th {
+        background-color: #f2f2f2;
+    }
+
+    .footer {
+        margin-top: 20px;
+    }
+
+    .total {
+        font-weight: bold;
+    }
+</style>
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay">
+
+        </div>
+        <div class="content-wrapper">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="content-header row">
+                        <div class="content-header-left col-12 mb-2 mt-1">
+                            <div class="row breadcrumbs-top">
+                                <div class="col-12">
+                                    <div class="breadcrumb-wrapper col-12">
+                                        <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                            <li class="breadcrumb-item">
+                                                <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                            </li>
+                                            <li class="breadcrumb-item ">
+                                                <a href="~/PInvoice">Invoice lar</a>
+                                            </li>
+                                            <li class="breadcrumb-item active">
+                                                Invoice ma'lumotlari
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" aria-controls="home" role="tab" aria-selected="true">
+                                <!-- Remove the icon element -->
+                                <span class="align-middle">Invoice</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" aria-controls="about" role="tab" aria-selected="false">
+                                <!-- Remove the icon element -->
+                                <span class="align-middle">PackingList</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="home" aria-labelledby="home-tab" role="tabpanel">
+                            <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
+                                <i class='bx bx-save'></i>
+                                PDF
+                            </button>
+                            <br />
+                            <!--<button class="btn btn-outline-warning buttons-pdf buttons-html5 color-warning">
+        <i class='bx bx-save'></i>-->
+                            @*<a href="~/PInvoice/DownloadDoc/@Model.ID">Invoys fayli</a>*@
+                            <!--@Html.ActionLink("Original fayl", "DownloadDoc", "PInvoice", new { Model.ID }, new { @class = "text-warning" })
+    </button-->
+                            
+
+
+                            <button id="downloadFileBtn" class="btn btn-outline-warning" onclick="downloadFile()">
+                                <i class='bx bx-save'></i> Original fayl yuklash
+                            </button>
+
+                            <div id="errorMessage" class="alert alert-danger" style="display: none;">
+                                Fayl yuklanmagan.
+                            </div>
+                            <p>@ViewBag.DocNotFoundMessage</p>
+                            <br />
+                            <br />
+
+                            <div class="invoice-container" id="toPDF">
+                                <div class="header">
+                                    <table>
+                                        <tr>
+                                            <th>Shipper</th>
+                                            <th>Invoice No.</th>
+                                            <th>Issued Date</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Model.SUPPLIER.Name<br>
+                                                @Model.SUPPLIER.Address, @Model.SUPPLIER.City<br>
+                                                @Model.SUPPLIER.Country
+                                            </td>
+                                            <td>@Model.InvoiceNo</td>
+                                            <td>@Model.InvoiceDate.ToString("dd.MM.yyyy")</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Ship to</th>
+                                            <th>Bill to</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Transport & Vessel information</th>
+                                            <th>Departure date</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @transportNo<br>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Other references</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Terms of delivery and payment: @Model.P_ORDERS.P_CONTRACTS.Incoterms<br>
+                                                Payment: @Model.P_ORDERS.P_CONTRACTS.PaymentTerms
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br />
+                                    <table>
+                                        <tr>
+                                            <th>Part number</th>
+                                            <th>Part name</th>
+                                            <th>Quantity</th>
+                                            <th>Unit</th>
+                                            <th>Unit price</th>
+                                            <th>Amount (@Model.Currency)</th>
+                                        </tr>
+                                        @foreach (var item in ViewBag.partList)
+                                        {
+                                            totalAmount += item.TotalPrice;
+                                            totalQty += item.Quantity;
+                                            <tr>
+                                                <td>
+                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                </td>
+                                                <td>@item.PART.PName</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.UNIT.UnitName</td>
+                                                <td>@item.Price</td>
+                                                <td>@item.TotalPrice</td>
+                                            </tr>
+                                        }
+                                    </table>
+                                    <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
+                                        <div class="footer">
+                                            <p>Total Qty: <b>@totalQty</b> &nbsp;&nbsp;&nbsp;&nbsp; TOTAL Amount: <b> $@totalAmount.ToString("N2")</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="about" aria-labelledby="about-tab" role="tabpanel">
+                            <button id="generatePDF" class="btn btn-outline-danger buttons-pdf buttons-html5">
+                                <i class='bx bx-save'></i>
+                                PDF
+                            </button>
+                            <br />
+                            <br />
+
+                            <div class="invoice-container" id="toPDF">
+                                <div class="header">
+                                    <table>
+                                        <tr>
+                                            <th>Shipper</th>
+                                            <th>Invoice No.</th>
+                                            <th>Issued Date</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Model.SUPPLIER.Name<br>
+                                                @Model.SUPPLIER.Address, @Model.SUPPLIER.City<br>
+                                                @Model.SUPPLIER.Country
+                                            </td>
+                                            <td>@Model.InvoiceNo</td>
+                                            <td>@Model.InvoiceDate.ToString("dd.MM.yyyy")</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Ship to</th>
+                                            <th>Bill to</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                            <td>
+                                                @Model.COMPANy.Name<br>
+                                                @Model.COMPANy.DUNS, REPUBLIC OF @Model.COMPANy.Country,<br>
+                                                @Model.COMPANy.City, @Model.COMPANy.Address<br>
+                                                Tel: @Model.COMPANy.Telephone<br>
+                                                Email: @Model.COMPANy.Email
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <table>
+                                        <tr>
+                                            <th>Transport & Vessel information</th>
+                                            <th>Departure date</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @transportNo<br>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <br />
+                                    <table>
+                                        <tr>
+                                            <th>Part number</th>
+                                            <th>Part name</th>
+                                            <th>CBM</th>
+                                            <th>Net Wght</th>
+                                            <th>Gr. Wght</th>
+                                        </tr>
+                                        @foreach (var item in ViewBag.PackingListParts)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                </td>
+                                                <td>@item.PART.PName</td>
+                                                <td>@item.PrCBM</td>
+                                                <td>@item.PrNetWeight</td>
+                                                <td>@item.PrGrWeight</td>
+                                            </tr>
+                                        }
+                                    </table>
+                                    <div class="tab-pane active" id="home-fill" role="tabpanel" aria-labelledby="home-tab-fill">
+                                        <div class="footer">
+                                            <p>Total CBM: <b>@packingLists[0].TotalCBM</b>  Total NET Weight: <b>@packingLists[0].TotalNetWeight </b> Total Gross Weight: <b>@packingLists[0].TotalGrWeight</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function downloadFile() {
+        var invoiceID = @Model.ID; // Assuming Model.ID is the contract ID
+
+        $.ajax({
+            url: '@Url.Action("DownloadDoc", "PInvoice")',
+            type: 'GET',
+            data: { invoiceID: invoiceID },
+            success: function (response) {
+                if (response.success === false) {
+                    $('#errorMessage').text(response.message).show();
+                } else {
+                    window.location.href = '@Url.Action("DownloadDoc", "PInvoice")' + "?invoiceID=" + invoiceID;
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#errorMessage').text("Xatolik yuz berdi, fayl yuklanmadi.").show();
+            }
+        });
+    }
+    $(document).ready(function() {
+        $('#downloadFileBtn').click(function(e) {
+            e.preventDefault(); // Prevent default behavior
+
+            var invoiceID = @Model.ID; // Get the contract ID dynamically
+
+            $.ajax({
+                url: '@Url.Action("DownloadDoc", "PInvoice")',
+                type: 'GET',
+                data: { invoiceID: invoiceID },
+                success: function(response) {
+                    if (response.success === false) {
+                        showAlert(response.message); // Show the alert if the file is not found
+                    } else {
+                        $('#alertMessage').hide(); // Hide the alert if the file exists
+                        window.location.href = '@Url.Action("DownloadDoc", "PInvoice")' + "?invoiceID=" + invoiceID;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showAlert("Xatolik yuz berdi, fayl yuklanmadi.");
+                }
+            });
+        });
+
+        // Function to show the alert message and hide it after 5 seconds
+        function showAlert(message) {
+            $('#alertMessage').text(message).fadeIn(); // Show the alert
+            setTimeout(function() {
+                $('#alertMessage').fadeOut(); // Hide the alert after 5 seconds
+            }, 5000); // 5000 ms = 5 seconds
+        }
+    });
+
+
+</script>

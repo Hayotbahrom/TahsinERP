@@ -1,0 +1,132 @@
+﻿@model tahsinERP.ViewModels.UserViewModel
+@{
+    ViewBag.Title = "AccountSettings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h5 class="content-header-title float-left pr-1 mb-0">Akkaunt sozlamalari</h5>
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Sahifalar</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    Akkaunt sozlamalari
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @using (Html.BeginForm("SaveSettings", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="content-body">
+                <section id="page-account-settings">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <!-- right content section -->
+                                <div class="col-md-9">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="card-body">
+
+                                                <div class="media">
+                                                    <img src="@ViewBag.Base64String" class="rounded mr-75" alt="profile image" height="64" width="64" />
+                                                    <div class="media-body mt-25">
+                                                        <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                            <span>Yangi rasm yuklash</span>
+                                                            <input type="file" class="btn btn-sm btn-light-primary ml-50 mb-50 mb-sm-0" id="userPhotoUpload" name="userPhotoUpload" />
+                                                            @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+
+                                                @Html.AntiForgeryToken()
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="controls">
+                                                                <label>Foydalanuvchi username</label>
+                                                                @Html.TextBoxFor(model => model.UName, new { @class = "form-control", @type = "text", @placeholder = "Username" })
+                                                                @Html.ValidationMessageFor(model => model.UName, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="controls">
+                                                                <label>Foydalanuvchi F.I.Sh</label>
+                                                                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", @type = "text", @placeholder = "FISh" })
+                                                                @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="controls">
+                                                                <label>E-mail</label>
+                                                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @type = "text", @placeholder = "Email" })
+                                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="controls">
+                                                                <label>Amaldagi kalit so'zi</label>
+                                                                <input type="password" class="form-control" required placeholder="Kalit so'zi">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="controls">
+                                                                <label>Yangi kalit so'zi</label>
+                                                                @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Kalit so'zi", @required = "required" })
+                                                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="controls">
+                                                                <label>Yangi kalit so'zini qayta kiriting</label>
+                                                                @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Kalit so'zi", @required="required"})
+                                                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
+                                                        <button type="submit" class="btn btn-primary glow mr-sm-1 mb-1">
+                                                            Saqlash
+                                                        </button>
+                                                        <button type="reset" class="btn btn-light mb-1" onclick="location.href='/Home'">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        }
+        </div>
+</div>

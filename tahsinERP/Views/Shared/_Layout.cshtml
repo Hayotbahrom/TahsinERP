@@ -1,0 +1,938 @@
+﻿@using tahsinERP.Models;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>@ViewData["Title"] - tahsinERP</title>
+    <link rel="apple-touch-icon" href="~/app-assets/images/ico/apple-touch-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/app-assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    <!-- END: Custom CSS-->
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/charts/apexcharts.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/extensions/dragula.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/extensions/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/forms/select/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/pickers/pickadate/pickadate.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/pickers/daterange/daterangepicker.css">
+    <!-- END: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/extensions/sweetalert2.min.css">
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/semi-dark-layout.css">
+    <!-- END: Theme CSS-->
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/dashboard-analytics.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/dashboard-ecommerce.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-invoice.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/forms/wizard.css">
+
+    <link rel="stylesheet" type="text/css" href="~/assets/css/app.css" />
+    <!-- END: Page CSS-->
+
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body class="vertical-layout vertical-menu-modern boxicon-layout no-card-shadow 2-columns  navbar-sticky footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Layout"))
+    {
+        <!-- Begin Modal -->
+        @*<div id="cookieConsentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cookieConsentModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cookieConsentModalLabel">Cookie Consent</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="acceptCookiesBtn">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <!-- Ends Modal -->
+
+
+        <div class="header-navbar-shadow"></div>
+        <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top ">
+            <div class="navbar-wrapper">
+                <div class="navbar-container content">
+                    <div class="navbar-collapse" id="navbar-mobile">
+                        <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
+                            <ul class="nav navbar-nav">
+                                <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon bx bx-menu"></i></a></li>
+                            </ul>
+                            @*<ul class="nav navbar-nav bookmark-icons">
+                                    <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-chat.html" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon bx bx-chat"></i></a></li>
+                                    <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-todo.html" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon bx bx-check-circle"></i></a></li>
+                                    <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-calendar.html" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon bx bx-calendar-alt"></i></a></li>
+                                </ul>*@
+                        </div>
+                        <ul class="nav navbar-nav float-right">
+                            <li class="dropdown dropdown-language nav-item">
+                                <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-uz mr-50"></i><span class="selected-language" data-language="uz">O'zbekcha</span></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" href="" data-language="en"><i class="flag-icon flag-icon-us mr-50"></i>English</a><a class="dropdown-item" href="" data-language="ru"><i class="flag-icon flag-icon-ru mr-50"></i>Русский</a><a class="dropdown-item" href="" data-language="uz"><i class="flag-icon flag-icon-uz mr-50"></i>O'zbekcha</a></div>
+                            </li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon bx bx-fullscreen"></i></a></li>
+                            @*<li class="dropdown dropdown-notification nav-item">
+                                    <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i><span class="badge badge-pill badge-danger badge-up">5</span></a>
+                                    <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
+                                        <li class="dropdown-menu-header">
+                                            <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span class="notification-title">7 new Notification</span><span class="text-bold-400 cursor-pointer">Mark all as read</span></div>
+                                        </li>
+                                        <li class="scrollable-container media-list">
+                                            <a class="d-flex justify-content-between" href="javascript:void(0)">
+                                                <div class="media d-flex align-items-center">
+                                                    <div class="media-left pr-0">
+                                                        <div class="avatar mr-1 m-0"><img src="~/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="39" width="39"></div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">Congratulate Socrates Itumay</span> for work anniversaries</h6><small class="notification-text">Mar 15 12:32pm</small>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="d-flex justify-content-between read-notification cursor-pointer">
+                                                <div class="media d-flex align-items-center">
+                                                    <div class="media-left pr-0">
+                                                        <div class="avatar mr-1 m-0"><img src="~/app-assets/images/portrait/small/avatar-s-16.jpg" alt="avatar" height="39" width="39"></div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">New Message</span> received</h6><small class="notification-text">You have 18 unread messages</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between cursor-pointer">
+                                                <div class="media d-flex align-items-center py-0">
+                                                    <div class="media-left pr-0"><img class="mr-1" src="~/app-assets/images/icon/sketch-mac-icon.png" alt="avatar" height="39" width="39"></div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">Updates Available</span></h6><small class="notification-text">Sketch 50.2 is currently newly added</small>
+                                                    </div>
+                                                    <div class="media-right pl-0">
+                                                        <div class="row border-left text-center">
+                                                            <div class="col-12 px-50 py-75 border-bottom">
+                                                                <h6 class="media-heading text-bold-500 mb-0">Update</h6>
+                                                            </div>
+                                                            <div class="col-12 px-50 py-75">
+                                                                <h6 class="media-heading mb-0">Close</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between cursor-pointer">
+                                                <div class="media d-flex align-items-center">
+                                                    <div class="media-left pr-0">
+                                                        <div class="avatar bg-primary bg-lighten-5 mr-1 m-0 p-25"><span class="avatar-content text-primary font-medium-2">LD</span></div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">New customer</span> is registered</h6><small class="notification-text">1 hrs ago</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="cursor-pointer">
+                                                <div class="media d-flex align-items-center justify-content-between">
+                                                    <div class="media-left pr-0">
+                                                        <div class="media-body">
+                                                            <h6 class="media-heading">New Offers</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media-right">
+                                                        <div class="custom-control custom-switch">
+                                                            <input class="custom-control-input" type="checkbox" checked id="notificationSwtich">
+                                                            <label class="custom-control-label" for="notificationSwtich"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between cursor-pointer">
+                                                <div class="media d-flex align-items-center">
+                                                    <div class="media-left pr-0">
+                                                        <div class="avatar bg-danger bg-lighten-5 mr-1 m-0 p-25"><span class="avatar-content"><i class="bx bxs-heart text-danger"></i></span></div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">Application</span> has been approved</h6><small class="notification-text">6 hrs ago</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between read-notification cursor-pointer">
+                                                <div class="media d-flex align-items-center">
+                                                    <div class="media-left pr-0">
+                                                        <div class="avatar mr-1 m-0"><img src="~/app-assets/images/portrait/small/avatar-s-4.jpg" alt="avatar" height="39" width="39"></div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">New file</span> has been uploaded</h6><small class="notification-text">4 hrs ago</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between cursor-pointer">
+                                                <div class="media d-flex align-items-center">
+                                                    <div class="media-left pr-0">
+                                                        <div class="avatar bg-rgba-danger m-0 mr-1 p-25">
+                                                            <div class="avatar-content"><i class="bx bx-detail text-danger"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">Finance report</span> has been generated</h6><small class="notification-text">25 hrs ago</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between cursor-pointer">
+                                                <div class="media d-flex align-items-center border-0">
+                                                    <div class="media-left pr-0">
+                                                        <div class="avatar mr-1 m-0">
+                                                            <img src="~/app-assets/images/portrait/small/avatar-s-16.jpg" alt="avatar" height="39" width="39">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h6 class="media-heading"><span class="text-bold-500">New customer</span> comment recieved</h6><small class="notification-text">2 days ago</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown-menu-footer"><a class="dropdown-item p-50 text-primary justify-content-center" href="javascript:void(0)">Read all notifications</a></li>
+                                    </ul>
+                                </li>*@
+                            <li class="dropdown dropdown-user nav-item">
+                                <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                                    <div class="user-nav d-sm-flex d-none">
+                                        <span class="user-name">@User.Identity.Name</span>
+                                        @for (int i = 0; i < RoleHelper.GetUserRoles(User.Identity.Name).Length; i++)
+                                        {
+                                            <span class="user-status text-muted">@RoleHelper.GetUserRoles(User.Identity.Name)[i]</span>
+                                        }
+                                    </div>
+                                    @Html.Partial("_UserProfile")
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right pb-0">
+                                    <a class="dropdown-item" href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })"><i class="bx bx-user mr-50"></i> Profil sozlamalari</a>
+                                    @*<a class="dropdown-item" href="#"><i class="bx bx-envelope mr-50"></i> My Inbox</a>*@
+                                    @*<a class="dropdown-item" href="#"><i class="bx bx-check-square mr-50"></i> Topshiriqlar</a>*@
+                                    @*<a class="dropdown-item" href="#"><i class="bx bx-message mr-50"></i> Chats</a>*@
+                                    <div class="dropdown-divider mb-0"></div><a class="dropdown-item" href="~/Account/Logout"><i class="bx bx-power-off mr-50"></i> Tizimdan chiqish</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        @* <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+        <!-- END: Header-->
+
+        <!-- BEGIN: Main Menu-->
+        <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+            <div class="navbar-header">
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item mr-auto">
+                        <a class="navbar-brand" href="/Home">
+                            <div class="brand-logo"><img class="logo" src="~/app-assets/images/logo/logo-32x32.png" /></div>
+                            <h2 class="brand-text mb-0">tahsinERP</h2>
+                        </a>
+                    </li>
+                    <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="bx bx-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon bx bx-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="bx-disc"></i></a></li>
+                </ul>
+            </div>
+            <div class="shadow-bottom"></div>
+            <div class="main-menu-content">
+                <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="">
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Dashboards"))
+                    {
+                        <li class="nav-item">
+                            <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Dashboard</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2"></span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Sotuv</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Coverage</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Biznes reja</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SRM-reports"))
+                    {
+                        <li class="nav-item">
+                            <a href="/Index"><i class="bx bx-home-alt"></i><span class="menu-title" data-i18n="Dashboard">Xisobotlar</span><span class="badge badge-light-danger badge-pill badge-round float-right mr-2">HOT</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/Reports/Coverage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="eCommerce">Coverage</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/Reports/PartRequirement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">Part Requierement</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/Reports/InTransit"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Analytics">InTransit</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    <li class=" navigation-header">
+                        <span>SRM</span>
+                    </li>
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Supplier"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-factory"></i><span class="menu-title" data-i18n="Content">Ta'minotchilar</span></a>
+                            <ul class="menu-content">
+
+                                <li>
+                                    <a href="~/Supplier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "Supplier")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "Supplier")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "Supplier")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PContract"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-book-bookmark"></i><span class="menu-title" data-i18n="Content">Shartnomalar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/PContract"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PContract")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PContract")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PContract")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "POrder"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-book"></i><span class="menu-title" data-i18n="Colors">Buyurtmalar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/POrder"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Grid">Barchasi</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "POrder")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "POrder")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "POrder")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/PInvoice"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Barchasi</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PInvoice")?type=KD"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Typography">KD</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PInvoice")?type=Steel"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Po'lat o'ramlari</span></a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "PInvoice")?type=Maxalliy"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Indirect">Maxalliy</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forwarder"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#">
+                                <i class="bx bxs-right-arrow-circle"></i><span class="menu-title" data-i18n="Icons">Logistika</span>
+                            </a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/Forwarder/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Forwarderlar</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/FContract/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Shartnomalar</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/Waybill/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Aktlar</span></a>
+                                </li>
+
+                                <li>
+                                    <a href="~/Tracing"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Yo'ldagi yuklar</span></a>
+                                </li>
+
+                                <li>
+                                    <a href="~/FTransportType/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="LivIcons">Transport turlari</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/PartStock/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/WhIncome/"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/WhExpense/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/Partwrhs/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Ombor ma'lumotlari</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "PInvoice"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Proforma Invoys</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ProformaInvoice/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Barchasi</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    <li class=" navigation-header">
+                        <span>Engineering</span>
+                    </li>
+
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "BOM"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#">
+                                <i class="bx bx-git-compare"></i><span class="menu-title" data-i18n="Form Elements">BOM</span>
+                            </a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/BOM?IsParentProduct=true"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">BOM</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">Нормы расхода</span></a>
+                                    <ul class="menu-content">
+                                        <li>
+                                            <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Slitting normalari</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Blanking normalari</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Stamping normalari</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SPL"))
+                    {
+                        <li class=" nav-item">
+                            <a href="/SPL">
+                                <i class="bx bx-car"></i><span class="menu-item" data-i18n="Indirect">SPL</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Product"))
+                    {
+                        <li class=" nav-item">
+                            <a href="/Product">
+                                <i class="bx bxl-product-hunt"></i><span class="menu-title" data-i18n="File Manager">Tayyor maxsulot</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Parts"))
+                    {
+                        <li class=" nav-item">
+                            <a href="/Part/GetAllParts">
+                                <i class="bx bxl-pocket"></i><span class="menu-item" data-i18n="Indirect">Ehtiyot qismlar</span>
+                            </a>
+                        </li>
+                    }
+
+
+                    <li class=" navigation-header">
+                        <span>MES</span>
+                    </li>
+
+
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "ProductPlanIndex"))
+                    {
+                        <li class=" nav-item">
+                            <a href="~/ProductPlan/Index">
+                                <i class="bx bx-line-chart"></i><span class="menu-title" data-i18n="File Manager">Rejalashtirish</span>
+                            </a>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Production"))
+                    {
+
+                        <li class=" nav-item">
+                            <a href="~/ComingSoon/Index">
+                                <i class="bx bx-magnet"></i><span class="menu-title" data-i18n="File Manager">Ishlab chiqarish</span>
+                            </a>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Prod_Wrhs"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Chiqim</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Equipment"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#">
+                                <i class="bx bxs-server"></i><span class="menu-title" data-i18n="Form Elements">Uskunalar</span>
+                            </a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">Ro'yxati</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">Мошность</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">OEE</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Quality"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#">
+                                <i class="bx bxs-server"></i><span class="menu-title" data-i18n="Form Elements">Sifat</span>
+                            </a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input">DRR</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">DRL</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Input Groups">FTQ</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    <li class=" navigation-header">
+                        <span>CRM</span>
+                    </li>
+
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SContract"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-smiley-happy"></i><span class="menu-title" data-i18n="Sweet Alert">Xaridorlar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/Customer/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Umumiy ma'lumot</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Shartnomalar</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Forecast"))
+                    {
+                        <li class=" nav-item">
+                            <a href="~/ComingSoon/Index"><i class="bx bx-stats"></i><span class="menu-title" data-i18n="Toastr">Forecast reja</span></a>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SContract"))
+                    {
+
+                        <li class=" nav-item">
+                            <a href="~/ComingSoon/Index"><i class="bx bx-analyse"></i><span class="menu-title" data-i18n="NoUi Slider">Ishlab chiqarishga buyurtma</span></a>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "SInvoice"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bx-file"></i><span class="menu-title" data-i18n="Invoice">Invoice lar</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice List">Ro'yxat</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice Edit">Invoice o'zgartirish</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Invoice Add">Invoice qo'shish</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "Sales_WRHS"))
+                    {
+                        <li class=" nav-item">
+                            <a href="#"><i class="bx bxs-home"></i><span class="menu-title" data-i18n="Card">Omborlash</span></a>
+                            <ul class="menu-content">
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Basic">Qoldiq</span></a>
+                                </li>
+                                <li>
+                                    <a href="~/ComingSoon/Index"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Card Actions">Kirim</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    <li class=" nav-item">
+                        <a href="~/Manual/Index">
+                            <i class="bx bx-error-circle"></i>
+                            <span class="menu-title" data-i18n="Knowledge Base">
+                                Qo'llanma
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("Settings", "Account", new { eMail = this.User.Identity.Name })">
+                            <i class="bx bx-wrench"></i>
+                            <span class="menu-title" data-i18n="Account Settings">Akkaunt Sozlamalari</span>
+                        </a>
+                    </li>
+
+                    @if (RoleHelper.IsViewPermitted(User.Identity.Name, "AdminPanel"))
+                    {
+                        <li class=" nav-item">
+                            <a href="~/AdminPanel"><i class="bx bx-wrench"></i><span class="menu-title" data-i18n="Account Settings">Admin paneli</span></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <!-- END: Main Menu-->
+
+        <div>
+            @RenderBody()
+        </div>
+
+
+        <div class="sidenav-overlay"></div>
+        <div class="drag-target"></div>
+
+        <!-- BEGIN: Footer-->
+        <footer class="footer footer-static footer-light">
+            <p class="clearfix mb-0">
+                <span class="float-left d-inline-block">@DateTime.Now.Year &copy; tahsinERP</span>
+            </p>
+        </footer>
+        <!-- END: Footer-->
+
+        <!-- SweetAlert -->
+        // Pop-Up
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="warning.svg" alt="" />
+                <p class="pop-up__text">
+                    Tasdiqlaysizmi ?
+                </p>
+                <div class="pop-up__btns">
+                    <button class="pop-up__close" type="button" id="pop-up__close">
+                        Yo'q
+                    </button>
+                    <button class="pop-up__confirm" type="submit" id="pop-up__action">
+                        Ha !
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        // Alert-Error
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="error.svg" alt="" />
+                <p class="pop-up__text">
+                    Xatolik yuz berdi
+                </p>
+                <button class="success-btn error">Ok</button>
+            </div>
+        </div>
+
+        // Alert-Succes
+        <div id="pop-up" class="pop-up">
+            <div class="pop-up__content">
+                <img class="pop-up__img" src="success.svg" alt="" />
+                <p class="pop-up__text">
+                    O'zgarishlar saqlandi
+                </p>
+                <button class="success-btn">Ok</button>
+            </div>
+        </div>
+        <!-- __________ -->
+
+        // Cookie using(Modal)
+        <div id="cookieConsent" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cookie-fayllardan foydalanish</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeCookies">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Biz sizga veb-saytimizda eng yaxshi tajribani taqdim etishimiz uchun cookie-fayllardan foydalanamiz.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="acceptCookies">Qabul qilaman</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        // _______________
+
+
+        //v3.7.1
+        @Scripts.Render("~/bundles/jquery")
+        <script src="~/Scripts/bootstrap.bundle.js"></script>
+        //v5.3.3
+        @RenderSection("scripts", required: false)
+
+        <!-- BEGIN: Vendor JS-->
+        <script src="~/app-assets/vendors/js/vendors.min.js"></script>
+        <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>
+        <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.defaults.js"></script>
+        <script src="~/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.min.js"></script>
+        <!-- END Vendor JS-->
+
+
+
+        <!-- BEGIN: Page Vendor JS-->
+        <script src="~/app-assets/vendors/js/charts/apexcharts.min.js"></script>
+        <script src="~/app-assets/vendors/js/extensions/swiper.min.js"></script>
+        <script src="~/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+        <script src="~/app-assets/vendors/js/extensions/jquery.steps.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
+        <script src="~/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+        <script src="~/app-assets/js/scripts/forms/wizard-steps.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.bootstrap4.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+        <script src="~/app-assets/externalExport/js/jszip.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+        <script src="~/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+        <script src="~/app-assets/vendors/js/charts/gmaps.min.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/picker.time.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/daterange/moment.min.js"></script>
+        <script src="~/app-assets/vendors/js/pickers/daterange/daterangepicker.js"></script>
+        // Export PDF as View
+        <script src="~/app-assets/js/scripts/pdfMake/html2pdf.bundle.min.js"></script>
+        <!-- END: Page Vendor JS-->
+
+
+        <!-- BEGIN: Theme JS-->
+        <script src="~/app-assets/js/scripts/configs/vertical-menu-light.js"></script>
+        <script src="~/app-assets/js/core/app-menu.js"></script>
+        <script src="~/app-assets/js/core/app.js"></script>
+        <script src="~/app-assets/js/scripts/components.js"></script>
+        <script src="~/app-assets/js/scripts/footer.js"></script>
+        <!-- END: Theme JS-->
+
+        <!-- BEGIN: Page JS-->
+        <script src="~/app-assets/js/scripts/pages/dashboard-analytics.js"></script>
+        <script src="~/app-assets/js/scripts/pages/dashboard-ecommerce.js"></script>
+        <script src="~/app-assets/js/scripts/pages/app-invoice.js"></script>
+        <script src="~/app-assets/js/scripts/datatables/datatable.js"></script>
+        <script src="~/app-assets/js/scripts/forms/select/form-select2.js"></script>
+        <script src="~/app-assets/js/scripts/charts/gmaps/maps.js"></script>
+        <script src="~/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js"></script>
+        <script src="~/app-assets/js/scripts/forms/form-tooltip-valid.js"></script>
+        <!-- END: Page JS-->
+        // jQuery: v3.6.0
+        <script src="~/assets/js/jquery.min.js"></script>
+
+
+        // Additioanal(Custom) JSs(for SweetAlert)
+        <script src="~/assets/js/app.js"></script>
+
+
+
+        <!-- Cookie -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var showCookieConsent = @Html.Raw((ViewBag.ShowCookieConsent ?? false).ToString().ToLower());
+
+                if (showCookieConsent) {
+                    $("#cookieConsent").modal('show');
+                }
+
+                $j("#acceptCookies").on("click", function () {
+                    $.ajax({
+                        url: '@Url.Action("CookieConfirm", "Home")',
+                        type: 'POST',
+                        success: function (res) {
+                            if (res.success) {
+                                $("#cookieConsent").modal('hide');
+                            } else {
+                                alert("There was an error processing your request.");
+                            }
+                        },
+                        error: function () {
+                            alert("There was an error processing your request.");
+                        }
+                    });
+
+                    $("#cookieConsent").modal('hide');
+                });
+
+                $j("#closeCookies").on("click", function () {
+                    $("#cookieConsent").modal('hide');
+                });
+            });
+        </script>
+        <!-- __________ -->
+
+
+
+        <!-- REPEATER -->
+        <script src="~/assets/js/jquery.repeater.min.js"></script>
+        <script>
+            // Using jQuery noConflict for multiple versions
+            var $j = jQuery.noConflict(true); // Two JS libraries being used
+
+            $j(document).ready(function () {
+                $j('.repeater-default').repeater({
+                    show: function () {
+                        $j(this).slideDown();
+
+                        // Select2 uchun qayta ishga tushirish
+                        $(this).find('.select').each(function () {
+                            if ($(this).hasClass("select2-hidden-accessible")) {
+                                $(this).select2('destroy');  // Select2'ni yo'q qilish
+                                $(this).next('.select2').remove(); // Qoldiqlarni olib tashlash
+                            }
+                            $(this).select2({
+                                width: '100%'
+                            });
+                        });
+                    },
+                    hide: function (deleteElement) {
+                        if (confirm('Are you sure you want to delete this element?')) {
+                            $j(this).slideUp(deleteElement);
+                        }
+                    }
+                });
+
+                // Select2 initialization for existing elements
+                $('.select').select2({
+                    width: '100%'
+                });
+            });
+        </script>
+        <!-- __________ -->
+
+
+
+        <!-- Export PDF as View -->
+        <script>
+            $j(document).ready(function () {
+                $j('#generatePDF').click(function () {
+                    const element = document.getElementById('toPDF');
+                    const opt = {
+                        margin: 0.3,
+                        filename: 'fayl.pdf',
+                        image: { type: 'jpeg', quality: 1 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    // New Promise-based usage:
+                    html2pdf().set(opt).from(element).save();
+                });
+            });
+        </script>
+        <!-- __________ -->
+
+
+
+        <!-- Show-Entries default: 1000 in All DataTables -->
+        <script type="text/javascript">
+            // DataTables uchun umumiy sozlamalar
+            $.extend($.fn.dataTable.defaults, {
+                "pageLength": 1000,  // Default ko'rsatiladigan entries sonini 1000 ga o'zgartirish
+                "lengthMenu": [[1000, 2000, 5000, -1], [1000, 2000, 5000, "All"]],  // Menyuga yangi entries opsiyalarini qo'shish
+                "language": {
+                    "lengthMenu": "Show _MENU_ entries"
+                }
+            });
+
+            $(document).ready(function () {
+                // Barcha jadval elementlarini DataTable'ga aylantirish
+                $('table').DataTable();
+            });
+        </script>
+        <!-- __________ -->
+    }
+    else
+    {
+        Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+    }
+</body>
+</html>

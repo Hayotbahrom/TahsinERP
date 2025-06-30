@@ -1,0 +1,115 @@
+﻿@model List<tahsinERP.ViewModels.SlittingNormViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+    {
+        changePermit = true;
+    }
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+
+                                    <li class="breadcrumb-item active">
+                                        Slitting Processlar 
+                                    </li>
+
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- users list start -->
+                <section class="invoice-list-wrapper">
+                    @if (changePermit)
+                    {
+                        <div class="invoice-create-btn mb-1">
+
+                            <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Slitting/Create';">
+                                <span class="align-middle ml-25">
+                                    Yangi slitting Process qo'shish
+                                </span>
+                            </button>
+                        </div>
+                    }
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <!-- datatable start -->
+                                    <div class="card-datatable table-responsivetable-responsive">
+                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Detalni jarayondan oldingi raqami</th>
+                                                    <th>Detalni jarayondan keyingi raqami</th>
+                                                    <th>Bo'laklar soni</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="~/Part/Details/@item.PartBefore.ID">@item.PartBefore.PNo</a>
+                                                        </td>
+
+
+                                                        <td>
+                                                            <a href="~/Part/Details/@item.PartAfter.ID">@item.PartAfter.PNo</a>
+                                                        </td>
+
+                                                        <td>@item.SLITTING_NORMS.SlittingPieces</td>
+                                                        @if (changePermit)
+                                                        {
+                                                            <td>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "Slitting", new { id = item.SLITTING_NORMS.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "Slitting", new { id = item.SLITTING_NORMS.ID })"><i class="bx bx-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

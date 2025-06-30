@@ -1,0 +1,103 @@
+﻿@model tahsinERP.ViewModels.BOM.BOMCreateProductViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(),
+    ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/BOM/Index">Kirimlar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Yangi BOM yaratish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <section id="form-repeater-wrapper">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        @using (Html.BeginForm("Create", "BOM", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <br />
+                                            <h4>
+                                                Maxsulotni tanlang:
+                                            </h4>
+                                            <div class="col-md-2 col-sm-12 form-group">
+                                                <label for="ProductID">Maxsulot:</label>
+                                                @Html.DropDownListFor(model => model.ProductID, (SelectList)ViewBag.ProductList, new { @class = "form-control select2" })
+                                            </div>
+                                            <hr />
+                                            <h4>
+                                                Unga biriktirilgan ehtiyot qismlar:
+                                            </h4>
+                                            <div data-repeater-list="BomList">
+                                                <div data-repeater-item>
+                                                    <div class="row justify-content-between align-items-center">
+
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="PartID">Ehtiyot qismlar</label>
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.part, new { @class = "form-control", @id = "partList" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Quantity">Miqdori</label>
+                                                            <input type="number" name="Quantity" class="form-control" id="Quantity" placeholder="Miqdori" />
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            </div>
+
+                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi qo'shish</button>
+
+
+                                            // Save button
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

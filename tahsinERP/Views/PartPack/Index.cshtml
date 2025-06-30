@@ -1,0 +1,111 @@
+﻿@model List<tahsinERP.Models.PARTPACK>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+    {
+        changePermit = true;
+    }
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Ehtiyot qismlar qadoq malumotlari
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- users list start -->
+                <section class="invoice-list-wrapper">
+                    <div class="invoice-create-btn mb-1">
+                        <div class="invoice-create-btn mb-1">
+                            @if (changePermit)
+                            {
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/PartPack/Create';">
+                                    <span class="align-middle ml-25">Ehtiyot qismlar qadoq malumotlarini qo'shish</span>
+                                </button>
+                                <a href="@Url.Action("UploadWithExcel", "PartPack")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
+                                    Ehtiyot qismlar qadoq malumotlarini excel orqali qo'shish
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <!-- datatable start -->
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Mahsulot nomi</th>
+                                                    <th>Mahsulot qadoq materiali</th>
+                                                    <th>Mahsulot qadoq miqdori</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+
+                                                            <a href="~/Part/Details/@item.PART.ID">@item.PART.PNo</a>
+
+                                                        </td>
+                                                        <td> <a href="~/PartPack/Details/@item.ID">@item.PrPackMaterial</a></td>
+                                                        <td>@item.PrPackQty</td>
+
+                                                        @if (changePermit)
+                                                        {
+                                                            <td>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "PartPack", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "PartPack", new { id = item.ID})"><i class="bx bx-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

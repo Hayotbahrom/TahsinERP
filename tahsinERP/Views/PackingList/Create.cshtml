@@ -1,0 +1,205 @@
+﻿@model tahsinERP.ViewModels.PackingListViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Create", "PackingList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/PackingList/Index">PackingList</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            PackingList sahifasi
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-20">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 mt-25">
+
+                                                <h6 class="invoice-to">Packing List raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.PackingListNo, new { @class = "form-control round", @requires = "required", value = ViewBag.Invoice?.ToString() + "_PL" })
+                                                    @Html.HiddenFor(model => model.InvoiceID) <!-- Add this line -->
+                                                    @Html.ValidationMessageFor(model => model.PackingListNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Invoice raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.InvoiceID, new { @class = "form-control round", @disabled = "disabled", value = ViewBag.Invoice?.ToString()})
+                                                    @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Transport turi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.TransportTypeID, ViewBag.FTransportType as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.TransportTypeID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">TransportNo </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.TransportNo, new { @class = "form-control round", @placeholder = "TransportNo" })
+                                                    @Html.ValidationMessageFor(model => model.TransportNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">SealNo </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.SealNo, new { @class = "form-control round", @placeholder = "SealNo" })
+                                                    @Html.ValidationMessageFor(model => model.SealNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Izoh </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Comment, new { @class = "form-control round", @placeholder = "Izoh" })
+                                                    @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Umumiy CBM </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.TotalCBM, new { @class = "form-control round", @placeholder = "Umumiy CBM", @disabled = "disabled" })
+                                                    @Html.ValidationMessageFor(model => model.TotalCBM, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Umumiy og'irligi </h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.TotalGrWeight, new { @class = "form-control round", @placeholder = "Umumiy og'irligi", @disabled = "disabled" })
+                                                    @Html.ValidationMessageFor(model => model.TransportNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <section id="column-selectors">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h4 class="card-title">Invoysdagi ehtiyot qismlar</h4>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body card-dashboard">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Detal raqami</th>
+                                                                                <th>Uzunligi</th>
+                                                                                <th>Eni</th>
+                                                                                <th>Balandligi</th>
+                                                                                <th>CBM</th>
+                                                                                <th>Net og'irligi</th>
+                                                                                <th>Gr og'irligi</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @for (int i = 0; i < Model.Parts.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    @Html.HiddenFor(model => model.Parts[i].PartID) <!-- Add this line -->
+                                                                                    <td>
+                                                                                        <a href="~/PackingList/Details/@Model.Parts[i].PartID">@Model.Parts[i].Part.PNo</a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrLength, new { @class = "form-control", @id = $"PrLength_{i}", @oninput = "calculateCBM(this)" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrWidth, new { @class = "form-control", @id = $"PrWidth_{i}", @oninput = "calculateCBM(this)" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrHeight, new { @class = "form-control", @id = $"PrHeight_{i}", @oninput = "calculateCBM(this)" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrCBM, new { @class = "form-control", @id = $"PrCBM_{i}", @readonly = "readonly" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrNetWeight, new { @class = "form-control", @id = $"PrNetWeight_{i}", @readonly = "readonly", @oninput = "calculateTotals()" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.Parts[i].PrGrWeight, new { @class = "form-control", @id = $"PrGrWeight_{i}", @oninput = "calculateTotals()" })
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 mt-25">
+                        <button class="open-modal btn btn-primary round" type="button" id="button2">Saqlash</button>
+                        <a href="~/PackingList/Index" class="btn btn-danger round">Bekor qilish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<script>
+    $(document).ready(function () {
+        function updateTotals() {
+            var totalCBM = 0;
+            var totalNetWeight = 0;
+            var totalGrWeight = 0;
+
+            $('.part-row').each(function (index) {
+                var length = parseFloat($('#PrLength_' + index).val()) || 0;
+                var width = parseFloat($('#PrWidth_' + index).val()) || 0;
+                var height = parseFloat($('#PrHeight_' + index).val()) || 0;
+                var netWeight = parseFloat($('#PrNetWeight_' + index).val()) || 0;
+                var grWeight = parseFloat($('#PrGrWeight_' + index).val()) || 0;
+
+                var cbm = length * width * height;
+                $('#PrCBM_' + index).val(cbm.toFixed(2));
+
+                totalCBM += cbm;
+                totalNetWeight += netWeight;
+                totalGrWeight += grWeight;
+            });
+
+            $('#TotalCBM').val(totalCBM.toFixed(2));
+            $('#TotalNetWeight').val(totalNetWeight.toFixed(2));
+            $('#TotalGrWeight').val(totalGrWeight.toFixed(2));
+        }
+
+        // Attach updateTotals to input fields
+        $('.form-control').on('input', updateTotals);
+
+        // Call it once to initialize totals
+        updateTotals();
+    });
+</script>
+

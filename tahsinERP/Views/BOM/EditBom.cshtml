@@ -1,0 +1,137 @@
+﻿@model tahsinERP.ViewModels.BOM.BomEditViewModels
+@{
+    ViewBag.Title = "EditBom";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-body">
+                <section id="validation">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        @using (Html.BeginForm("EditBom", "BOM", FormMethod.Post, new { @class = "wizard-validation , form repeater-default", enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.HiddenFor(x => x.ProductPNo)
+                                            @Html.HiddenFor(model => model.PartPno)
+                                            @Html.HiddenFor(model => model.ProccessList)
+                                            @Html.AntiForgeryToken()
+                                            foreach (var processName in Model.ProccessList)
+                                            {
+                                                <h6>
+                                                    <i class="step-icon"></i>
+                                                    <span>@processName</span>
+                                                </h6>
+                                                switch (processName)
+                                                {
+                                                    case "Slitting":
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <h6>Ehtiyot qismni tanlang</h6>
+                                                                    <fieldset class="invoice-address form-group">
+                                                                        @Html.DropDownListFor(model => model.Slitting_Before_ID, (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2" })
+                                                                        @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <h6>Ehtiyot qismni tanlang</h6>
+                                                                    <fieldset class="invoice-address form-group">
+                                                                        @Html.DropDownListFor(model => model.Slitting_After_ID, (SelectList)ViewBag.Part, "Jarayondan keyingi holatini tanlang", new { @class = "form-control select2", @id = "slitDpDnA" })
+                                                                        @Html.ValidationMessageFor(model => model.SLITTING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                        break;
+                                                    case "Blanking":
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <fieldset class="invoice-address form-group">
+                                                                        @Html.DropDownListFor(model => model.Blanking_Before_ID, (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2", @id = "blankDpDnB" })
+                                                                        @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <fieldset class="invoice-address form-group">
+                                                                        @Html.DropDownListFor(model => model.Blanking_After_ID, (SelectList)ViewBag.Part, "Select Part", new { @class = "form-control select2", @id = "blankDpDnA" })
+                                                                        @Html.ValidationMessageFor(model => model.BLANKING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <fieldset class="invoice-address form-group">
+                                                                        @Html.TextBoxFor(model => model.BLANKING_NORMS.Density, new { @class = "form-control", @placeholder = "Density" })
+                                                                        @Html.ValidationMessageFor(model => model.BLANKING_NORMS.Density, "", new { @class = "text-danger" })
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                        break;
+
+                                                    case "Stamping":
+                                                        <fieldset>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <h6>Ehtiyot qismni tanlang</h6>
+                                                                    <fieldset class="invoice-address form-group">
+                                                                        @Html.DropDownListFor(model => model.Stamping_Before_ID, (SelectList)ViewBag.Part, "Jarayondan oldingi holatini tanlang", new { @class = "form-control select2", @id = "stampDpDnB" })
+                                                                        @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_before, "", new { @class = "text-danger" })
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <h6>Ehtiyot qismni tanlang</h6>
+                                                                    <fieldset class="invoice-address form-group">
+                                                                        @Html.DropDownListFor(model => model.Stamping_After_ID, (SelectList)ViewBag.Part, "Jarayondan keyingi holatini tanlang", new { @class = "form-control select2", @id = "stampDpDnA" })
+                                                                        @Html.ValidationMessageFor(model => model.STAMPING_NORMS.PartID_after, "", new { @class = "text-danger" })
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                        break;
+                                                    default:
+                                                        <p>No specific fields for this process.</p>
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script>
+        // Get Value from DropDownList
+        $(document).ready(function () {
+            // Slitting
+            $("#slitDpDnA").change(function () {
+                var selectedValue = $(this).val();
+                $("#blankDpDnB").val(selectedValue).change();
+            });
+
+            // Blanking
+            $("#blankDpDnA").change(function () {
+                var selectedValue = $(this).val();
+                $("#stampDpDnB").val(selectedValue).change();
+            });
+
+            // Stamping
+            $("#stampDpDnA").change(function () {
+                var selectedValue = $(this).val();
+            });
+        });
+    </script>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

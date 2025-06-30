@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var type = ViewBag.Type;
+}
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString(), type))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+    {
+        changePermit = true;
+    }
+
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        Sahifalar
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Buyurtmalar
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section class="invoice-list-wrapper">
+                    @if (changePermit)
+                    {
+                        <div class="invoice-create-btn mb-1">
+                            <div class="invoice-create-btn mb-1">
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" id="createButton" onclick="window.location.href='/POrder/Create';">
+                                    <span class="align-middle ml-25">Yangi Buyurtma qo'shish</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="uploadButton" onclick="window.location.href='/POrder/UploadWithExcel'">
+                                    <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali buyurtma qo'shish</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-success mr-1 mb-1" id="createSteelButton" style="display:none;" onclick="window.location.href='/POrder/CreateSteel';">
+                                    <span class="align-middle ml-25">Steel-Coil Buyurtma qo'shish</span>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <div class="users-list-filter px-1">
+                        <form>
+                            <div class="row border rounded py-2 mb-2">
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label>Turi</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", id = "SourceID", onchange = "refreshDataTable(); toggleButtons()" })
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-sm-12 col-lg-4">
+                                    <label>Ta'minotchisi</label>
+                                    <fieldset class="form-group">
+                                        @Html.DropDownList("SupplierID", ViewBag.SupplierList as SelectList, "", new { @class = "form-control", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                                    <a href="~/POrder" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                        Ro'yxatni yangilash
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table invoice-data-table dt-responsive nowrap" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Buyurtma raqami</th>
+                                                    <th>Shartnoma raqami</th>
+                                                    <th>Tuzilgan sanasi</th>
+                                                    <th>Ta'minotchi</th>
+                                                    <th>Turi</th>
+                                                    <th>Miqdori</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in ViewBag.partList)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="~/POrder/Details/@item.ID">@item.OrderNo</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="~/PContract/Details/@item.P_CONTRACTS.ID">@item.P_CONTRACTS.ContractNo</a>
+                                                        </td>
+                                                        <td>@item.IssuedDate.ToString("dd-MM-yyyy")</td>
+                                                        <td>
+                                                            <a href="~/Supplier/Details/@item.SupplierID">@item.SUPPLIER.Name</a>
+                                                        </td>
+                                                        <td>@item.SUPPLIER.Type</td>
+                                                        <td>@item.Amount</td>
+                                                        @if (changePermit)
+                                                        {
+                                                            <td>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "POrder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "POrder", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function refreshDataTable() {
+            var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "POrder")?type=' + source;
+            //window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
+        }
+
+        function refreshdatatablesupplier() {
+            var source = document.getElementById("SourceID").value;
+            const supplierID = document.getElementById("SupplierID").value;
+            window.location.href = '@Url.Action("Index", "POrder")?type=' + source + '&supplierID='+ supplierID;
+        }
+
+        function toggleButtons() {
+            var source = document.getElementById("SourceID").value;
+            if (source === "Steel") {
+                document.getElementById("createButton").style.display = "none";
+                document.getElementById("uploadButton").style.display = "none";
+                document.getElementById("createSteelButton").style.display = "inline-block";
+            } else {
+                document.getElementById("createButton").style.display = "inline-block";
+                document.getElementById("uploadButton").style.display = "inline-block";
+                document.getElementById("createSteelButton").style.display = "none";
+            }
+        }
+
+        // Initial call to set the correct button visibility on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            toggleButtons();
+        });
+    </script>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

@@ -1,0 +1,104 @@
+﻿@model List<tahsinERP.Models.USERLOG>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        Admin Panel
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Log lar
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section class="invoice-list-wrapper">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    @using (Html.BeginForm("Index", "LastActions", FormMethod.Get, new { enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="row col-4 mb-1" style="float: right;">
+                                            <div class="col-12">
+                                                <label>Foydalanuvchini tanlang</label>
+                                                @Html.DropDownList("userId", (SelectList)ViewBag.Users, "Foydalanuvchini tanlang", new { @class = "form-control" })
+                                            </div>
+                                            <div class="col-12">
+                                                <label>Dan:</label>
+                                                @Html.TextBox("StartDate", (string)ViewBag.StartDate, new { @class = "form-control pickadate-months-year round", @type = "date" })
+                                            </div>
+                                            <div class="col-12">
+                                                <label>Gacha:</label>
+                                                @Html.TextBox("EndDate", (string)ViewBag.EndDate, new { @class = "form-control pickadate-months-year round", @type = "date" })
+                                            </div>
+                                            <div class="col-12">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-primary form-control">Filterlash</button>
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                    <!-- datatable start -->
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table table-striped dataex-html5-selectors scroll-horizontal-vertical" id="DataTable" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>F.I.Sh</th>
+                                                    <th>Controller nomi</th>
+                                                    <th>Amal</th>
+                                                    <th>IP manzili</th>
+                                                    <th>Mac manzili</th>
+                                                    <th>Amal vaqti</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>@tahsinERP.Controllers.UserHelper.GetFullName(userID: item.UserID)</td>
+                                                        <td>@item.ControllerName</td>
+                                                        <td>@item.ActionName</td>
+                                                        <td>@item.IP</td>
+                                                        <td>@item.MacAddr</td>
+                                                        <td>@item.DateTime.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- datatable ends -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- users list ends -->
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

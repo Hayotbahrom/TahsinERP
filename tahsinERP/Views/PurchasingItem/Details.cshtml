@@ -1,0 +1,68 @@
+﻿
+@model tahsinERP.ViewModels.PurchasingItemViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Part/GetAllParts">Ehtiyot qismlar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        @Model.PNo ma'lumotlari
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row invoice-info">
+                                            <div class="col-lg-12 col-md-12 mt-25">
+                                                <hr />
+                                                <span><b>O'lchov birligi</b>: @Html.DisplayFor(model => model.UNIT.ShortName, new { @class = "form-control" })</span>
+                                                <hr>
+                                                <span><b>Item Code</b>: @Html.DisplayFor(model => model.ItemCode, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Item Name</b>: @Html.DisplayFor(model => model.ItemName, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Batafsil ma`lumot</b>: @Html.DisplayFor(model => model.Desciption, new { @class = "form-control" })</span>
+                                                <hr />
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

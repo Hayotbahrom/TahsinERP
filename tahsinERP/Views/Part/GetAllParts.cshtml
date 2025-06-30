@@ -1,0 +1,131 @@
+﻿@model List<tahsinERP.Models.PART>
+@{
+    ViewBag.Title = "GetAllParts";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+    {
+        changePermit = true;
+    }
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        Sahifalar
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Barcha ehtiyot qismlar
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-create-btn mb-1">
+                @if (changePermit)
+                {
+                    <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Part/Create';">
+                        <span class="align-middle ml-25">Ehtiyot qismni qo'shish</span>
+                    </button>
+                    <a href="@Url.Action("UploadWithExcel", "Part")" class="btn btn-outline-primary mr-1 mb-1" role="button" aria-pressed="true">
+                        Extiyot qismni excel orqali qo'shish
+                    </a>
+                }
+            </div>
+            <div class="users-list-filter px-1">
+                <form>
+                    <div class="row border rounded py-2 mb-2">
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <label for="users-list-role">Turi</label>
+                            <fieldset class="form-group">
+                                @Html.DropDownList("SourceID", ViewBag.SourceList as SelectList, new { @class = "form-control", onchange = "refreshDataTable()" })
+                            </fieldset>
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-4 d-flex align-items-center">
+                            <a href="~/Part/GetAllParts" class="btn btn-secondary bg-light invoice-create" role="button" aria-pressed="true">
+                                Ro'yxatni yangilash
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="content-body">
+                <!-- users list start -->
+                <section class="invoice-list-wrapper">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <!-- datatable start -->
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Detal Raqami</th>
+                                                    <th>Nomi</th>
+                                                    <th>Marka</th>
+                                                    <th>Standart</th>
+                                                    <th>Og`irligi</th>
+                                                    <th>O`lchov birligi</th>
+                                                    <th>Amallar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a href="~/Part/Details/@item.ID">@item.PNo</a>
+                                                        </td>
+                                                        <td><a href="~/Part/Details/@item.ID">@item.PName</a></td>
+                                                        <td>@item.Marka</td>
+                                                        <td>@item.Standart</td>
+                                                        <td>@item.PWeight</td>
+                                                        <td>@item.UNIT.ShortName</td>
+                                                        <td>
+                                                            <div>
+                                                                <a href="@Url.Action("Edit", "Part", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                <a href="@Url.Action("Delete", "Part", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+
+<script type="text/javascript">
+    function refreshDataTable() {
+        var source = document.getElementById("SourceID").value;
+        //const supplierID = document.getElementById("SupplierID").value;
+        window.location.href = '@Url.Action("GetAllParts", "Part")?type=' + source;
+        @*////window.location.href = '@Url.Action("GetAllParts", "Part")*@
+    };
+</script>

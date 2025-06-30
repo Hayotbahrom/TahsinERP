@@ -1,0 +1,117 @@
+﻿@model List<tahsinERP.Models.FORWARDER>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    bool changePermit = false;
+    if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+    {
+        changePermit = true;
+    }
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        Sahifalar
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Forwarder lar
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- users list start -->
+                <section class="invoice-list-wrapper">
+                    @if (changePermit)
+                    {
+                        <div class="invoice-create-btn mb-1">
+                            <button type="button" class="btn btn-outline-success mr-1 mb-1" onclick="window.location.href='/Forwarder/Create';">
+                                <span class="align-middle ml-25">Forwarder qo'shish</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary mr-1 mb-1" id="exportButton" onclick="window.location.href='/Forwarder/UploadWithExcel'">
+                                <i class="bx bx-file"></i><span class="align-middle ml-25">Excel orqali forwarder qo'shish</span>
+                            </button>
+                        </div>
+                    }
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <!-- datatable start -->
+                                    <div class="table-responsive table-responsivetable-responsive">
+                                        <table id="myDataTable" class="table table-striped table-bordered complex-headers" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>forwarder nomi</th>
+                                                    <th>Direktor </th>
+                                                    <th>Bog`lanish uchun</th>
+                                                    @if (changePermit)
+                                                    {
+                                                        <th>amallar</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                               @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a href="~/Forwarder/Details/@item.ID">@item.ForwarderName</a>
+                                                        </td>
+                                                        <td>@item.Director</td>
+                                                        <td>@item.ContactPerson</td>
+                                                        @if (changePermit)
+                                                         {
+                                                            <td>
+                                                                <div>
+                                                                    <a href="@Url.Action("Edit", "Forwarder", new { id = item.ID })"><i class="bx bx-edit-alt"></i></a>
+                                                                    <a href="@Url.Action("Delete", "Forwarder", new { id = item.ID })"><i class="bx bx-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- datatable ends -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- users list ends -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function refreshDataTable() {
+            const customer = document.getElementById("CustomerID").value;
+
+            window.location.href = '@Url.Action("Index", "Forwarder")?customerID=' + customer;
+        }
+    </script>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

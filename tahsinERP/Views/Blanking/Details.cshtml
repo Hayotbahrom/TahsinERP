@@ -1,0 +1,74 @@
+﻿@model tahsinERP.ViewModels.BOM.BlankingNormViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Blanking/Index">Blanking process</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Blanking Norm processni malumotlari
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row my-2 py-50">
+                                            <div class="col-sm-12 col-12 order-2 order-sm-1">
+                                                <h6>Blanking Norms Malumoti:</h6>
+                                                <hr />
+                                                <span><b>Part Before</b>: @Html.DisplayFor(model => model.PartBefore.PNo, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Part After</b>: @Html.DisplayFor(model => model.PartAfter.PNo, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Density</b>: @Html.DisplayFor(model => model.BLANKING_NORMS.Density, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Quantity Of Blanks</b>: @Html.DisplayFor(model => model.BLANKING_NORMS.QuantityOfBlanks, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Weight Of Blanks</b>: @Html.DisplayFor(model => model.BLANKING_NORMS.WeightOfBlanks, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <span><b>Weight Of Cut Waste</b>: @Html.DisplayFor(model => model.BLANKING_NORMS.WeightOfCutWaste, new { @class = "form-control" })</span>
+                                                <hr />
+                                                <br />
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+
+

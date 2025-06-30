@@ -1,0 +1,138 @@
+﻿@model  tahsinERP.Models.P_INVOICES
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/PInvoice">Invoice lar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        @Model.InvoiceNo raqamli invoice o'chirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-xl-11 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            <h4 class="text-primary">Invoice ma'lumotlari</h4>
+                                            <hr />
+                                            <span><b>Invoice raqami </b>: @Html.DisplayFor(model => model.InvoiceNo, new { @class = "form-control" })</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Hujjat berilgan sanasi </b>: @Model.InvoiceDate.ToString("dd.MM.yyyy")</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Ta'minotchi</b>: @Html.DisplayFor(model => model.SUPPLIER.Name, new { @class = "form-control" })</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Buyurtma raqami</b>: @Html.DisplayFor(model => model.P_ORDERS.OrderNo, new { @class = "form-control" })</span>
+                                            <br />
+                                            <hr />
+                                            <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Amount, new { @class = "form-control" }) @Model.Currency</span>
+                                            <br />
+                                            <hr />
+                                        </div>
+                                    </div>
+                                    <section id="column-selectors">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title">Invoice predmeti</h4>
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <div class="card-body card-dashboard">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Detall raqami</th>
+                                                                            <th>Detal nomi</th>
+                                                                            <th>Miqdori</th>
+                                                                            <th>Narxi</th>
+                                                                            <th>Umumiy narxi</th>
+                                                                            <th>O'lchov birligi</th>
+                                                                            <th>Amallar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach (var item in ViewBag.partList)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <a href="~/Part/Details/@item.PartID">@item.PART.PNo</a>
+                                                                                </td>
+                                                                                <td>@item.PART.PName</td>
+                                                                                <td>@item.Quantity</td>
+                                                                                <td>@item.Price</td>
+                                                                                <td>@item.TotalPrice</td>
+                                                                                <td>@item.UNIT.UnitName</td>
+                                                                                <td>
+                                                                                    <!-- Delete button -->
+                                                                                    <a href="~/PInvoice/DeletePart/@item.ID" onclick="return confirm('Ushbu detalni  o`chirib yuborishga ishonchingiz komilmi?')">
+                                                                                        <i class="bx bx-trash"></i>
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item border-0 pb-0">
+                                            @using (Html.BeginForm("Delete", "PInvoice", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu Invoice o\'chirib yuborishga ishonchingiz komilmi?')">
+                                                    <i class='bx bx-trash'></i>
+                                                    O'chirish
+                                                </button>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+

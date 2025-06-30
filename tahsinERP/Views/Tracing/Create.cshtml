@@ -1,0 +1,155 @@
+﻿@model tahsinERP.Models.TRACING
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Create", "Tracing", FormMethod.Post, new { enctype = "multipart/form-data" }))  // Ensure enctype is set
+    {
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Tracing/Index">Tracing lar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Yangi tracing qo'shish
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <section class="basic-select2">
+                        <div class="row">
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+                                                    <h6 class="invoice-to">Transport raqami</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownListFor(model => model.PackingListID, ViewBag.packingList as SelectList, "Transport raqamini tanlang: ",new { @class = "form-control select2", @id = "packingList", onchange = "getInfo()" })
+                                                        @Html.ValidationMessageFor(model => model.PackingListID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <fieldset class="d-flex justify-content-between mb-1">
+                                                        <fieldset class="w-50 mr-1">
+                                                            <h6 class="invoice-to">Invoice raqami</h6>
+                                                            @Html.TextBox("test", null, new { @class = "form-control", @id = "InvoiceNo", @disabled = "disabled" })
+                                                        </fieldset>
+
+                                                        <fieldset class="w-50">
+                                                            <h6 class="invoice-to">Yetkazib beruvchi</h6>
+                                                            @Html.TextBox("test", null, new { @class = "form-control", @id = "Supplier", @disabled = "disabled" })
+                                                        </fieldset>
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Hozirgi manzili</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.ActualLocation, new { @class = "form-control round", @placeholder = "hozirgi manzili" })
+                                                        @Html.ValidationMessageFor(model => model.ActualLocation, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6 class="invoice-to">Manzilgacha bo'lgan masofa</h6>
+                                                    <fieldset class="form-group">
+                                                        @Html.TextBoxFor(model => model.ActualDistanceToDestination, new { @class = "form-control round", type = "number", @placeholder = "Manzilgacha bo'lgan masofa" })
+                                                        @Html.ValidationMessageFor(model => model.ActualDistanceToDestination, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <h6>Sana:</h6>
+                                                    <fieldset class="form-group position-relative has-icon-left">
+                                                        @Html.TextBoxFor(model => model.IssueDateTime, new { @class = "form-control pickadate-months-year round", @placeholder = "Ma'lumot kirgizilayotgan sana" })
+                                                        @Html.ValidationMessageFor(model => model.IssueDateTime, "", new { @class = "text-danger" })
+                                                        <div class="form-control-position">
+                                                            <i class='bx bx-calendar'></i>
+                                                        </div>
+                                                    </fieldset>
+                                                    <h6>Taxminiy yetib kelish sanasi</h6>
+                                                    <fieldset class="form-group position-relative has-icon-left">
+                                                        @Html.TextBoxFor(model => model.ETA, new { @class = "form-control pickadate-months-year round", @placeholder = "Taxminiy kelish sanasi" })
+                                                        @Html.ValidationMessageFor(model => model.ETA, "", new { @class = "text-danger" })
+                                                        <div class="form-control-position">
+                                                            <i class='bx bx-calendar'></i>
+                                                        </div>
+                                                    </fieldset>
+                                                    <h6>Izoh</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Comment, new { @class = "form-control round", @placeholder = "Izohlar bo'lsa yozib qolding" })
+                                                        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                                                    </fieldset>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                                <i class='bx bx-save'></i>
+                                                                Save
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+<script type="text/javascript">
+    function getInfo() {
+        var packingList = document.getElementById("packingList").value;
+
+        if (packingList) {
+            $.ajax({
+                url: '@Url.Action("GetInvoiceNo_Supplier", "Tracing")',
+                type: 'GET',
+                data: { packingListID: packingList },
+                success: function(data) {
+                    if (data.success) {
+                        var InvoiceNo = $("#InvoiceNo");
+                        InvoiceNo.val(data.invoiceNo);
+
+                        var Supplier = $("#Supplier");
+                        Supplier.val(data.supplierName);
+                    } else {
+                        console.error("Error: " + data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+    }
+
+    // Sahifa yuklanganda avtomatik ravishda getInfo() ni chaqiramiz
+    $(document).ready(function() {
+        if ($("#transportNo option").length == 1) {
+            getInfo(); // Faqat bitta element bo'lsa, avtomatik tarzda ma'lumotni olish
+        }
+    });
+</script>
+

@@ -1,0 +1,113 @@
+﻿@model tahsinERP.Models.F_WAYBILLS
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Edit", "Waybill", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID) <!-- Hidden field for ID -->
+
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Waybill/Index">AKT lar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            AKT sahifasi
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="row">
+                        <!-- invoice view page -->
+                        <div class="col-xl-9 col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-6 mt-25">
+                                                <h6 class="invoice-to">AKT raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.WaybillNo, new { @class = "form-control round", @placeholder = "Waybill raqami" })
+                                                    @Html.ValidationMessageFor(model => model.WaybillNo, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Transport turi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.TransportTypeID, ViewBag.TransportType as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.TransportTypeID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Shartnoma raqami</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.ContractID, ViewBag.Contract as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Invoice</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.InvoiceID, ViewBag.Invoice as SelectList, new { @class = "form-control select2" })
+                                                    @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">CBM</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.CBM, new { @class = "form-control round", @placeholder = "birlik hajm o`lchovi" })
+                                                    @Html.ValidationMessageFor(model => model.CBM, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Umumiy og`irligi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.GrWeight, new { @class = "form-control round", @placeholder = "Foydalanilgan pul birligi" })
+                                                    @Html.ValidationMessageFor(model => model.GrWeight, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Batafsil ma`lumot</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control round", @placeholder = "Qisqacha tavsifi" })
+                                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item border-0 pb-0">
+                                                <button class="btn btn-primary btn-block subtotal-preview-btn" name="edit" type="submit" value="Edit">
+                                                    <i class='bx bx-save'></i>
+                                                    Saqlash
+                                                </button>
+                                            </li>
+                                        </ul>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

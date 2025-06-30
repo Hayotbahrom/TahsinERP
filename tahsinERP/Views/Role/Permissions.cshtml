@@ -1,0 +1,135 @@
+﻿@model tahsinERP.ViewModels.RolePermissionsViewModel
+
+@{
+    ViewBag.Title = "Permissions";
+    Layout = "~/Views/Shared/_AdminPanelLayout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/AdminPanel/Index">Admin Panel</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Role/Index">Rollar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Ruxsatlarni o'zgartirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section class="invoice-edit-wrapper">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body mx-25">
+                                        <div class="row invoice-info">
+                                            @using (Html.BeginForm("Permissions", "Role", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.HiddenFor(model => model.RoleID)
+
+                                                <div class="col-xl-12 col-md-12 col-12 col-lg-12 mt-25">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+                                                    <h6 class="invoice-to">Permissions</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        <div class="table-responsive table-responsivetable-responsive">
+                                                            <table class="table nowrap scroll-horizontal-vertical" id="DataTable" style="width:100%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Module</th>
+                                                                        <th>Controller</th>
+                                                                        <th>Action</th>
+                                                                        <th>View Permit</th>
+                                                                        <th>Change Permit</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @for (int i = 0; i < Model.Permissions.Count; i++)
+                                                                    {
+                                                                        <tr>
+                                                                            @Html.HiddenFor(m => m.Permissions[i].ID)
+                                                                            @Html.HiddenFor(m => m.Permissions[i].PermissionModuleID)
+                                                                            <td>@Model.Permissions[i].Module</td>
+                                                                            <td>@Model.Permissions[i].Controller</td>
+                                                                            <td>@Model.Permissions[i].Action</td>
+                                                                            <td>
+                                                                                @Html.CheckBoxFor(m => m.Permissions[i].ViewPermit)
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.CheckBoxFor(m => m.Permissions[i].ChangePermit)
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </fieldset>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="editPermissions" type="submit" value="Permissions">
+                                                                <i class='bx bx-save'></i>
+                                                                Save
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                    <br />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+
+<!-- jQuery v3.6.0 -->
+@*<script src="~/assets/js/jquery.min.js"></script>*@
+@*<script>
+    $(document).ready(function () {
+        $('#DataTable').DataTable({
+            "paging": true,           // Pagingni yoqish
+            "pageLength": 1000,        // Default "Show Entries"ni 1000 ga sozlash
+            "lengthChange": true,     // "Show Entries" dropdown menyusini ko'rsatish
+            "buttons": [
+                'excel',
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'portrait', // PDFni landscape rejimida qilish
+                    pageSize: 'A4', // A4 o'lchamida qilish
+                }
+            ],
+            "scrollX": true           // Gorizontal skrollni yoqish
+        });
+    });
+</script>*@

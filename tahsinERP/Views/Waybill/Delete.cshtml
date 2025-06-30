@@ -1,0 +1,84 @@
+﻿@model  tahsinERP.Models.F_WAYBILLS
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/Waybill">AKT lar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        @Model.WaybillNo raqamli AKT o'chirish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-xl-9 col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body pb-0 mx-25">
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-6 mt-25">
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            <h4 class="text-primary">AKT  ma'lumotlari</h4>
+                                            <hr />
+                                            <span><b>AKT raqami</b>: @Html.DisplayFor(model => model.WaybillNo, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Shartnoma raqami</b>:   @Model.F_CONTRACTS.ContractNo</span>
+                                            <hr />
+                                            <span><b>Transport turi</b>: @Html.DisplayFor(model => model.F_TRANSPORT_TYPES.TransportType, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Invoice</b>: @Html.DisplayFor(model => model.P_INVOICES.InvoiceNo, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>CBM</b>: @Html.DisplayFor(model => model.CBM, new { @class = "form-control" })</span>
+                                            <hr />
+                                            <span><b>Umumiy vazni</b>: @Html.DisplayFor(model => model.GrWeight, new { @class = "form-control" })</span>
+                                            <hr />
+                                        </div>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item border-0 pb-0">
+                                            @using (Html.BeginForm("Delete", "Waybill", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button class="btn btn-danger bg-light btn-block subtotal-preview-btn" name="delete" type="submit" value="Delete" onclick="return confirm('Ushbu shartnomani ochirib yuborishga ishonchingiz komilmi?')">
+                                                    <i class='bx bx-trash'></i>
+                                                    O'chirish
+                                                </button>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+

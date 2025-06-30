@@ -1,0 +1,315 @@
+﻿
+
+
+@model tahsinERP.ViewModels.POrder.POrderCreateViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Hide the default file input */
+    .custom-file-input {
+        display: none;
+    }
+
+    /* Style the custom button */
+    .custom-file-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+        /* Optional: Change button color on hover */
+        .custom-file-button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/POrder/Index">Buyurtmalar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Buyurtma yaratish
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section id="form-repeater-wrapper">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        @using (Html.BeginForm("Create", "POrder", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                            <div class="row justify-content-around d-flex align-items-start">
+                                                <!-- Left Part -->
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="OrderNo">Buyurtma raqami</label>
+                                                            @Html.TextBoxFor(model => model.OrderNo, new { @type = "text", @class = "form-control", @id = "OrderNo", @required = "required" })
+                                                            @Html.ValidationMessageFor(model => model.OrderNo, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="SupplierID">Ta`minotchi</label>
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Supplier, "Ta'minotchini tanlang", new { @class = "form-control select2", id = "SupplierID", onchange = "refreshdatatablesupplier()" })
+                                                            @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="ContractID">Shartnoma raqami</label>
+                                                            @Html.DropDownListFor(model => model.ContractID, (SelectList)ViewBag.PContract, "Shartnomani tanlang", new { @class = "form-control ContractID", @id = "ContractID", onchange = "getContractDetails()" })
+                                                            @Html.ValidationMessageFor(model => model.ContractID, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group position-relative has-icon-left">
+                                                            <label>Buyurtma berilgan sanasi</label>
+                                                            @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round", @placeholder = "Buyurtma berilgan sanasi", @required = "required" })
+                                                            @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+                                                            <div class="form-control-position mt-2">
+                                                                <i class='bx bx-calendar'></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Right Part -->
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Valyuta</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", id = "Currency" })
+                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Description">Qisqacha tavsifi</label>
+                                                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", id = "Description" })
+                                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-12 form-group">
+                                                <hr />
+                                                <label>Buyurtma faylini yuklang</label>
+                                                @Html.TextBoxFor(model => model.File, new { type = "file", @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                                                <hr />
+                                            </div>
+                                            <h4>Ehtiyot qismlar</h4>
+                                            <div data-repeater-list="Parts">
+                                                <div data-repeater-item>
+                                                    <div class="row col-12 justify-content-between">
+                                                        <input type="hidden" name="ID" />
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_PartID">Qismni tanlang</label>
+                                                            @Html.DropDownList("PartID", (IEnumerable<SelectListItem>)ViewBag.partList, "", new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndMOQ(this)", onclick = "getPriceAndMOQ(this)" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Unit">Birligi</label>
+                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control", id = "UnitID" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Amount">Miqdori</label>
+                                                            <input type="number" name="Amount" step="0.0001" class="form-control" id="Part_Amount" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Price">Narx</label>
+                                                            <input type="number" name="Price" step="0.001" class="form-control Part_Price" id="Part_Price" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Price, "", new { @class = "text-danger", @disabled = "disabled" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_MOQ">MOQ</label>
+                                                            <input type="number" name="MOQ" class="form-control Part_MOQ" id="Part_MOQ" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].MOQ, "", new { @class = "text-danger", @disabled = "true" })
+                                                        </div>
+                                                        <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">O'chirish</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                            <button data-repeater-create type="button" class="btn btn-primary" onclick="getContractDetails()">Yangi qism qo'shish</button>
+
+                                            <br />
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i> Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+function getContractDetails() {
+    var contractID = $("#ContractID").val();
+
+    $.ajax({
+        url: '@Url.Action("GetContractDetails", "POrder")',
+        type: 'GET',
+        data: { contractID: contractID },
+        success: function (data) {
+            if (data.success) {
+                var contract = data.data;
+
+                // Valyutani yangilash
+                $("#Currency").val(contract.Currency || '');
+
+                // Qismlar ro'yxatini yangilash
+                updatePartList(contractID);
+
+                // Qismlar ro'yxatini yangilashdan keyin birinchi qismini avtomatik tanlash
+                setTimeout(function () {
+                    var firstPartDropdown = $('[data-repeater-item]').first().find('.PartID');
+                    if (firstPartDropdown.length > 0) {
+                        firstPartDropdown.val(firstPartDropdown.find('option:first').val()).trigger('change');
+                    }
+                }, 100); // Qismlar ro'yxatini yangilash jarayoni tugaguncha kutib turish uchun setTimeout ishlatiladi
+
+            } else {
+                console.error("Xatolik: " + data.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Shartnoma tafsilotlarini olishda xatolik:", error);
+        }
+    });
+}
+
+
+function updatePartList(contractID) {
+    $.ajax({
+        url: '@Url.Action("GetPartList", "POrder")',
+        type: 'GET',
+        data: { contractID: contractID },
+        success: function (data) {
+            if (data.success) {
+                // Faqat yangi qo‘shilgan qism uchun qismlar ro‘yxatini yangilaymiz
+                var lastPartDropdown = $('[data-repeater-item]').last().find('.PartID');
+                lastPartDropdown.empty(); // Eski qismlar variantlarini tozalash
+
+                // Yangi qismlar variantlarini qo‘shish
+                $.each(data.data, function (index, item) {
+                    lastPartDropdown.append(new Option(item.PNo, item.PartID));
+                });
+            } else {
+                console.error("Xatolik: " + data.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Qism ro‘yxatini olishda xatolik:", error);
+        }
+    });
+}
+
+
+
+$(document).on('click', '[data-repeater-create]', function () {
+    // Yangi qism qo‘shilganda qismlar ro‘yxatini yangilash
+    setTimeout(function () {
+        var contractID = $("#ContractID").val();
+        updatePartList(contractID); // Faqat yangi qo‘shilgan qism uchun qismlar ro‘yxatini yangilash
+    }, 100); // DOM yangi qismni yaratishini kutish uchun setTimeout ishlatamiz
+});
+
+function getPriceAndMOQ(partDropdown) {
+    var partID = $(partDropdown).val();
+
+    $.ajax({
+        url: '@Url.Action("GetPriceAndMOQ", "POrder")',
+        type: 'GET',
+        data: { partID: partID },
+        success: function(data) {
+            if (data.success) {
+                var parent = $(partDropdown).closest("[data-repeater-item]");
+                var Price = parent.find(".Part_Price");
+                var MOQ = parent.find(".Part_MOQ");
+                var Amount = parent.find("#Part_Amount");
+                Price.val(data.data.Price);
+                MOQ.val(data.data.MOQ);
+                Amount.val(data.data.Amount); // Agar kerak bo'lsa, miqdorini ham yangilash
+            } else {
+                console.error("Error: " + data.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching data: ", error);
+        }
+    });
+}
+
+
+function refreshdatatablesupplier() {
+    const supplierID = $("#SupplierID").val();
+    $.ajax({
+        url: '@Url.Action("GetContractsBySupplier", "POrder")',
+        type: 'GET',
+        data: { supplierID: supplierID },
+        success: function (data) {
+            var contractDropdown = $("#ContractID");
+            contractDropdown.empty();
+            $.each(data, function (index, item) {
+                contractDropdown.append(new Option(item.Text, item.Value));
+            });
+
+            // Default shartnomani tanlab olamiz
+            if (data.length > 0) {
+                contractDropdown.val(data[0].Value).trigger('change');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching contracts:", error);
+        }
+    });
+}
+</script>
+

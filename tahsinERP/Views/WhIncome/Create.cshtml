@@ -1,0 +1,288 @@
+﻿@model tahsinERP.ViewModels.WrhsIncomeViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider d-flex align-items-center">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/WhIncome/Index">Kirimlar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Kirim qilish
+                                    </li>
+                                    <li class="col-md-6 col-12 form-group ms-auto">
+                                        <label for="DocNo">Ombor</label>
+                                        @Html.TextBoxFor(model => model.WHName, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disabled" })
+                                    </li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-body">
+                <section id="form-repeater-wrapper">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        @using (Html.BeginForm("Create", "WhIncome", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                        {
+                                            @Html.HiddenFor(model => model.DocNo)
+                                            @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                            <div class="row justify-content-around d-flex align-items-start">
+                                                <!-- Left Part -->
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="DocNo">Kirim hujjat raqami</label>
+                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disabled" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="SupplierID">Ta`minotchi</label>
+                                                            @Html.DropDownListFor(model => model.SupplierID, (SelectList)ViewBag.Suppliers, "", new { @class = "form-control select2", id = "SupplierID", @required = "required", onchange = "refreshInvoiceListbySupplier()" })
+                                                            @Html.ValidationMessageFor(model => model.SupplierID, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="InvoiceID">Invoys</label>
+                                                            @Html.DropDownListFor(model => model.InvoiceID, (SelectList)ViewBag.Invoices, "", new { @class = "form-control select2", id = "InvoiceID", @required = "required", onchange = "getInvoiceDetails()" })
+                                                            @Html.ValidationMessageFor(model => model.InvoiceID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Right Part -->
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Description">Batafsil ma'lumot</label>
+                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Description", @placeholder = "Batafsil ma'lumot kiriting" })
+                                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Valyuta</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency", @placeholder = "Valyutani kiriting", @readonly = "readonly" })
+                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Parts Section -->
+                                            <br />
+                                            <h4>Invoys dagi ehtiyot qismlar</h4>
+                                            <div data-repeater-list="Parts">
+                                                <div data-repeater-item>
+                                                    <div class="row justify-content-between">
+                                                        <input type="hidden" name="ID" />
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_PartID">Ehtiyot qismni tanlang</label>
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.partList, new { @class = "form-control select PartID", id = "PartID", onchange = "getPriceAndAmount(this)", onclick = "getPriceAndAmount(this)" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Unit">Birligi</label>
+                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Amount">Miqdori</label>
+                                                            <input type="number" name="Amount" step="0.01" class="form-control Part_Amount" id="Part_Amount" required="required" placeholder="Miqdorini kiriting" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Price">Birlik narxi</label>
+                                                            <input type="number" name="PiecePrice" step="0.01" class="form-control Part_PiecePrice" id="Part_PiecePrice" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].PiecePrice, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Comment">Comment</label>
+                                                            <input type="text" name="Comment" class="form-control" id="Part_Comment" placeholder="Izoh kiriting(ixtiyoriy)" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Comment, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">O`chirish</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            </div>
+
+                                            <button data-repeater-create type="button" class="btn btn-primary" onclick="getInvoiceDetails()">Yangi detal qo`shish</button>
+
+                                            <!-- Save button -->
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+<script type="text/javascript">
+  function getInvoiceDetails() {
+     var invoiceID = $("#InvoiceID").val();
+
+     $.ajax({
+         url: '@Url.Action("GetInvoiceDetails", "WhIncome")',
+         type: 'GET',
+         data: { invoiceID: invoiceID },
+         success: function (data) {
+             if (data.success) {
+                 var invoice = data.data;
+
+                 // Valyutani yangilash
+                 $("#Currency").val(invoice.Currency || '');
+
+                 // Qismlar ro'yxatini yangilash
+                 updatePartList(invoiceID);
+
+                 // Qismlar ro'yxatini yangilashdan keyin birinchi qismini avtomatik tanlash
+                 setTimeout(function () {
+                     var firstPartDropdown = $('[data-repeater-item]').first().find('.PartID');
+                     if (firstPartDropdown.length > 0) {
+                         firstPartDropdown.val(firstPartDropdown.find('option:first').val()).trigger('change');
+                     }
+                 }, 100); // Qismlar ro'yxatini yangilash jarayoni tugaguncha kutib turish uchun setTimeout ishlatiladi
+
+             } else {
+                 console.error("Xatolik: " + data.message);
+             }
+         },
+         error: function (xhr, status, error) {
+             console.error("Invoice tafsilotlarini olishda xatolik:", error);
+         }
+     });
+    }
+  // Qismlar ro'yxatini yangilash
+     function updatePartList(invoiceID) {
+         $.ajax({
+             url: '@Url.Action("GetPartList", "WhIncome")',
+             type: 'GET',
+             data: { invoiceID: invoiceID },
+             success: function (data) {
+                 if (data.success) {
+                     var lastPartDropdown = $('[data-repeater-item]').last().find('.PartID');
+                     lastPartDropdown.empty();
+
+                     // Qismlar variantlarini yangilash
+                     $.each(data.data, function (index, item) {
+                         lastPartDropdown.append(new Option(item.PNo, item.PartID));
+                     });
+
+                     // Birinchi qism tanlanadi va narxi va miqdori avtomatik keladi
+                     if (data.data.length > 0) {
+                         lastPartDropdown.val(data.data[0].PartID).trigger('change');
+                     }
+
+                 } else {
+                     console.error("Xatolik: " + data.message);
+                 }
+             },
+             error: function (xhr, status, error) {
+                 console.error("Qismlar ro'yxatini olishda xatolik:", error);
+             }
+         });
+    }
+    $(document).on('click', '[data-repeater-create]', function () {
+        setTimeout(function () {
+            var invoiceID = $("#InvoiceID").val(); // OrderID qiymatini olamiz
+            if (invoiceID) {
+                updatePartList(invoiceID); // Yangilangan qismlar ro'yxati
+            } else {
+                console.error("Invoice ID aniqlanmagan!");
+            }
+        }, 100);
+    });
+
+    // Qism narxi va miqdorini yangilash
+    function getPriceAndAmount(partDropdown) {
+        var partID = $(partDropdown).val();
+
+        $.ajax({
+            url: '@Url.Action("GetPriceAndMOQ", "WhIncome")',
+            type: 'GET',
+            data: { partID: partID },
+            success: function (data) {
+                if (data.success) {
+                    var parent = $(partDropdown).closest("[data-repeater-item]");
+                    var Price = parent.find(".Part_PiecePrice");
+                    var Amount = parent.find(".Part_Amount");
+                    Price.val(data.data.Price); // Qism narxini o'rnatish
+                    Amount.val(data.data.Amount); // Miqdorini o'rnatish
+                } else {
+                    console.error("Xatolik: " + data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Narx va miqdor olishda xatolik:", error);
+            }
+        });
+    }
+    // Invoyslar ro'yxatini ta'minotchiga qarab yangilash
+    function refreshInvoiceListbySupplier() {
+        const supplierID = $("#SupplierID").val();
+        $.ajax({
+            url: '@Url.Action("GetInvoicesBySupplier", "WhIncome")',
+            type: 'GET',
+            data: { supplierID: supplierID },
+            success: function (data) {
+                var invoiceDropdown = $("#InvoiceID");
+                invoiceDropdown.empty(); // Eski invoyslarni tozalash
+                $.each(data, function (index, item) {
+                    invoiceDropdown.append(new Option(item.Text, item.Value));
+                });
+
+                // Avtomatik ravishda birinchi invoysni tanlash va valyutani yangilash
+                if (data.length > 0) {
+                    invoiceDropdown.val(data[0].Value).trigger('change');
+                    $("#Currency").val(data[0].Currency); // Birinchi invoysning valyutasini o'rnatish
+                } else {
+                    $("#Currency").val(''); // Agar invoys topilmasa valyutani tozalash
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Invoyslar olishda xatolik:", error);
+            }
+        });
+    }
+</script>
+
+

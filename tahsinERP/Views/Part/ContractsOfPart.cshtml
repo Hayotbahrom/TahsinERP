@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+<div class="col-lg-12 col-md-6 mt-25">
+    <hr />
+    <br />
+    <br />
+    <h4 class="text-primary">Ushbu ehtiyot qism yetkazib beruvchi shartnoma lar</h4>
+    <div class="table-responsive">
+        <table class="table table-striped dataex-html5-selectors">
+            <thead>
+                <tr>
+                    <th>Shartnoma raqami</th>
+                    <th>Ta'minotchi</th>
+                    <th>Tuzilgan sana</th>
+                    <th>Tugaydigan sana</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.contractList)
+                {
+                    <tr>
+                        <td>
+                            <a href="~/PContract/Details/@item.ContractID">@item.ContractNo</a>
+                        </td>
+                        <td>
+                            <a href="~/Supplier/Details/@item.SupplierID">@item.SupplierName</a>
+                        </td>
+                        <td>
+                             @item.IssuedDate.ToString("dd-MM-yyyy")
+                        </td>
+                        <td>
+                            @item.DueDate.ToString("dd-MM-yyyy")
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

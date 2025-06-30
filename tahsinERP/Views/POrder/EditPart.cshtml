@@ -1,0 +1,114 @@
+﻿@model tahsinERP.Models.P_ORDER_PARTS
+
+@{
+    ViewBag.Title = "EditPart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("EditPart", "POrder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        @Html.AntiForgeryToken()
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/POrder/Index">Buyurtmalar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Buyurtma detallarini tahrirlash
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <!-- app invoice View Page -->
+                    <section class="basic-select2">
+                        <div class="row">
+                            <!-- invoice view page -->
+                            <div class="col-xl-9 col-md-8 col-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body pb-0 mx-25">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-6 mt-25">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <hr>
+
+                                                    <h6 class="invoice-to">Buyurtma raqami</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DisplayFor(model => model.P_ORDERS.OrderNo, new { htmlAttributes = new { @class = "form-control round", @disabled = "disabled" } })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Detal nomi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownListFor(model => model.PartID, ViewBag.partList as SelectList, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.PartID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Narxi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Price, new { @class = "form-control round", @placeholder = "Narxi" })
+                                                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Miqdori</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @placeholder = "Miqdori" })
+                                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">Minimum buyurtma miqdori</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.TextBoxFor(model => model.MOQ, new { @class = "form-control round", @placeholder = "Minimum buyurtma miqdori" })
+                                                        @Html.ValidationMessageFor(model => model.MOQ, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <h6 class="invoice-to">O'lchov birligi</h6>
+                                                    <fieldset class="invoice-address form-group">
+                                                        @Html.DropDownListFor(model => model.UnitID, (IEnumerable<SelectListItem>)ViewBag.units, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
+                                                    </fieldset>
+
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item border-0 pb-0">
+                                                            <button class="btn btn-primary btn-block subtotal-preview-btn" name="EditPart" type="submit" value="EditPart">
+                                                                <i class='bx bx-save'></i>
+                                                                Save
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+

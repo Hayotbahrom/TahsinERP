@@ -1,0 +1,68 @@
+﻿@model tahsinERP.Models.DAMAGED_PARTS
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsViewPermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item ">
+                                        <a href="~/DamagedPart">Brak ehtiyot qismlar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Brak ehtiyot qism ma'lumoti
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- app invoice View Page -->
+                <section class="invoice-edit-wrapper">
+                    <div class="row">
+                        <!-- invoice view page -->
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-25">
+                                        <div class="row invoice-info">
+                                            <div class="col-lg-12 col-md-12 mt-25">
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <h4 class="text-primary">Brak ehtiyot qism ma'lumotlari</h4>
+                                                <hr />
+                                                <span><b>Ehtiyot qism raqami</b>: @Html.DisplayFor(model => model.PART.PNo, new { @class = "form-control" })</span>
+                                                <br />
+                                                <span><b>Defect nomi</b>: @Html.DisplayFor(model => model.DEFECT_TYPES.DefectType, new { @class = "form-control" })</span>
+                                                <br />
+                                                <span><b>Miqdori</b>: @Html.DisplayFor(model => model.Quantity, new { @class = "form-control" })</span>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}
+

@@ -1,0 +1,156 @@
+﻿@model tahsinERP.ViewModels.WrhsExpenseViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                    <li class="breadcrumb-item">
+                                        <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="~/WhExpense/Index">Chiqimlar</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Chiqim qilish
+                                    </li>
+                                    <li class="col-md-6 col-12 form-group ms-auto">
+                                    <br /> Ombor: @Html.TextBoxFor(model => model.WHName, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disabled" })
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section id="form-repeater-wrapper">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        @using (Html.BeginForm("Create", "WhExpense", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form repeater-default" }))
+                                        {
+                                            @Html.HiddenFor(model => model.DocNo);
+                                            @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                            <div class="row justify-content-around d-flex align-items-start">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="DocNo">Hujjat raqami</label>
+                                                            @Html.TextBoxFor(model => model.DocNo, new { @type = "text", @class = "form-control", @id = "DocNo", @disabled = "disable" })
+                                                            @Html.ValidationMessageFor(model => model.DocNo, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="InvoiceId">Qabul qiluvchi</label>
+                                                            @Html.DropDownListFor(model => model.RecieverWHID, (SelectList)ViewBag.PartWrhs, new { @id = "RecieverWhID", @class = "form-control select2" })
+                                                            @Html.ValidationMessageFor(model => model.RecieverWHID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Valyuta</label>
+                                                            @Html.TextBoxFor(model => model.Currency, new { @type = "text", @class = "form-control", @id = "Currency" })
+                                                            @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <label for="Currency">Batafsil ma`lumot</label>
+                                                            @Html.TextBoxFor(model => model.Description, new { @type = "text", @class = "form-control", @id = "Currency" })
+                                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                        </div>
+@*
+                                                        <div class="col-md-6 col-12 form-group">
+                                                            <div class="checkbox checkbox-secondary checkbox-glow">
+                                                                @Html.CheckBoxFor(model => model.SendStatus, new { @type = "checkbox", @id = "RecieveStatus" })
+                                                                <label for="RecieveStatus">Jo'natilgan</label>
+                                                                @Html.ValidationMessageFor(model => model.SendStatus, "", new { @class = "text-warning" })
+                                                            </div>
+                                                        </div>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <br />
+                                            <h4>Ehtiyot qismlar</h4>
+                                            <div data-repeater-list="Parts">
+                                                <div data-repeater-item>
+                                                    <div class="row justify-content-between">
+                                                        <input type="hidden" name="ID" />
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_PartID">Ehtiyot qismni tanlang</label>
+                                                            @Html.DropDownList("PartID", (SelectList)ViewBag.IncomeParts, new { @class = "form-control select" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].PartID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Unit">Birligi</label>
+                                                            @Html.DropDownList("UnitID", (SelectList)ViewBag.units, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].UnitID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Amount">Miqdori</label>
+                                                            <input type="number" name="Amount" class="form-control" id="Part_Amount" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Amount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_PiecePrice">Birlik narxi</label>
+                                                            <input type="number" name="PiecePrice" step="0.01" class="form-control" id="Part_PiecePrice" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].PiecePrice, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-12 form-group">
+                                                            <label for="Part_Comment">Izoh</label>
+                                                            <input type="text" name="Comment" class="form-control" id="Part_Comment" />
+                                                            @Html.ValidationMessageFor(model => model.Parts[0].Comment, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-1 col-sm-12 form-group d-flex align-items-center pt-2">
+                                                            <button data-repeater-delete type="button" class="btn btn-danger">O`chirish</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            </div>
+
+                                            <button data-repeater-create type="button" class="btn btn-primary">Yangi qism qo`shish</button>
+
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 pb-0">
+                                                    <button class="btn btn-primary btn-block subtotal-preview-btn" name="create" type="submit" value="Create">
+                                                        <i class='bx bx-save'></i>
+                                                        Saqlash
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        
+        </div>
+    </div>
+}
+else
+{
+    Response.Redirect(Url.Action("Index", "ViewNotAuthorized"));
+}

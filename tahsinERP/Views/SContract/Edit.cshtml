@@ -1,0 +1,162 @@
+﻿@model tahsinERP.ViewModels.SContractViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (tahsinERP.Models.RoleHelper.IsChangePermitted(User.Identity.Name, ViewContext.RouteData.Values["controller"].ToString(), ViewContext.RouteData.Values["action"].ToString()))
+{
+    using (Html.BeginForm("Edit", "SContract", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID)
+        <div class="app-content content">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row">
+                    <div class="content-header-left col-12 mb-2 mt-1">
+                        <div class="row breadcrumbs-top">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrapper col-12">
+                                    <ol class="breadcrumb rounded-pill breadcrumb-divider">
+                                        <li class="breadcrumb-item">
+                                            <a href="~/Home"><i class="bx bx-home-alt"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a href="~/SContract/Index">Shartnomalar</a>
+                                        </li>
+                                        <li class="breadcrumb-item active">
+                                            Shartnoma sahifasi
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body pb-0 mx-20">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 mt-25">
+                                                <h5 class="invoice-to">Shartnoma raqami</h5>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.ContractNo, new { @class = "form-control round" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Mijoz</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.DropDownListFor(model => model.CustomerID, (SelectList)ViewBag.Customers, new { @id = "CustomerID", @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+                                                </fieldset>
+
+                                                <h6 class="invoice-to">Tuzilgan sanasi</h6>
+                                                <fieldset class="form-group position-relative has-icon-left">
+                                                    @Html.TextBoxFor(model => model.IssuedDate, new { @class = "form-control pickadate-months-year round" })
+                                                    <div class="form-control-position">
+                                                        <i class='bx bx-calendar'></i>
+                                                    </div>
+                                                </fieldset>
+                                                <h6 class="invoice-to">Tugaydigan sana</h6>
+                                                <fieldset class="form-group position-relative has-icon-left">
+                                                    @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control pickadate-months-year round" })
+                                                    <div class="form-control-position">
+                                                        <i class='bx bx-calendar'></i>
+                                                    </div>
+                                                </fieldset>
+                                                <h6 class="invoice-to">Incoterms</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Incoterms, new { @class = "form-control round" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">To'lov sharti</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.PaymentTerms, new { @class = "form-control round" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Valyuta</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Currency, new { @class = "form-control round" })
+                                                </fieldset>
+                                                <h6 class="invoice-to">Umumiy summasi</h6>
+                                                <fieldset class="invoice-address form-group">
+                                                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control round", @disabled = "disabled" })
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <section id="column-selectors">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h4 class="card-title">Shartnoma predmeti</h4>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body card-dashboard">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped dataex-html5-selectors" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Detal raqami</th>
+                                                                                <th>Detal nomi</th>
+                                                                                <th>Birlik narxi</th>
+                                                                                <th>O'lchov birligi</th>
+                                                                                <th>Miqdori</th>
+                                                                                <th>amallar</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @for (int i = 0; i < Model.ProductList.Count; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <a href="~/SContract/Details/@Model.ProductList[i].ProductID">@Model.ProductList[i].ProductPNo</a>
+                                                                                        @Html.HiddenFor(model => model.ProductList[i].ProductID)
+                                                                                        @Html.HiddenFor(Model => Model.ProductList[i].ID)
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Model.ProductList[i].PRODUCT.Name
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.ProductList[i].PiecePrice, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.DropDownListFor(model => model.ProductList[i].UnitID, (SelectList)ViewBag.Units, new { @class = "form-control", @value = Model.ProductList[i].UnitID })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.TextBoxFor(model => model.ProductList[i].Amount, new { @class = "form-control" })
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div>
+                                                                                            <a href="~/SContract/DeleteProduct/@Model.ProductList[i].ProductID" onclick="return confirm('Ushbu shartnoma maxsulotini ochirib yuborishga ishonchingiz komilmi?')">
+                                                                                                <i class="bx bx-trash"></i>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 mt-25">
+                        <button class="open-modal btn btn-primary round" type="button" id="button2">Saqlash</button>
+                        <a href="~/SContract/Index" class="btn btn-danger round">Bekor qilish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
